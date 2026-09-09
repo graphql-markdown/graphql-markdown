@@ -255,14 +255,10 @@ export type CustomSectionPosition =
  * Custom section configuration options.
  *
  * Declares a directive-driven, top-level section of a type page. The section is
- * rendered when the configured directive is present on the type being printed,
+ * rendered when the directive naming it is present on the type being printed,
  * and is skipped otherwise.
  */
 export interface TypeCustomSectionOption {
-  /** Section key, injected into the page sections map. Must not collide with a built-in section. */
-  name: string;
-  /** Name of the schema directive carrying the section data. */
-  directive: string;
   /** Optional heading for the section. Omit for an untitled section. */
   title?: Maybe<string>;
   /** Optional heading level, defaults to `3`. */
@@ -274,6 +270,15 @@ export interface TypeCustomSectionOption {
   /** Callback rendering the section content from the directive occurrences. */
   render: CustomSectionRenderer;
 }
+
+/**
+ * Map of directive names to their custom section options.
+ *
+ * The directive name is both the schema directive carrying the section data and
+ * the section key injected into the page sections map, so it must not collide
+ * with a built-in section.
+ */
+export type CustomSections = Record<DirectiveName, TypeCustomSectionOption>;
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
@@ -342,7 +347,7 @@ export interface ConfigPrintTypeOptions {
   /** How to handle deprecated items */
   deprecated?: TypeDeprecatedOption;
   /** Configuration for directive-driven custom sections */
-  customSections?: TypeCustomSectionOption[];
+  customSections?: Maybe<CustomSections>;
   /** Configuration for example sections */
   exampleSection?: TypeExampleSectionOption;
   /** Documentation hierarchy structure */
@@ -352,7 +357,6 @@ export interface ConfigPrintTypeOptions {
   /** Whether to show type badges */
   typeBadges?: boolean;
 }
-
 
 /**
  * Command line interface options.
@@ -405,7 +409,6 @@ export interface CliOptions {
   /** Temporary directory */
   tmp?: string;
 }
-
 
 /**
  * Core options type that combines config options with required fields.

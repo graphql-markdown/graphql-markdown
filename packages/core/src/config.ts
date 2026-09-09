@@ -27,6 +27,7 @@ import type {
   ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
+  CustomSections,
   DirectiveName,
   GroupByDirectiveOptions,
   Maybe,
@@ -678,78 +679,68 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
 /**
  * Validates the custom sections option.
  *
- * Each entry must declare a unique `name` that is neither a built-in section key
- * nor `__proto__`, a `directive` name, and a `render` callback. An invalid entry is a configuration
- * error rather than something to silently drop, as it would otherwise produce a
- * page missing a section without any indication why.
+ * The option is keyed by directive name, which is also the section key: it must
+ * be neither a built-in section key nor `__proto__`, and each entry must declare
+ * a `render` callback. An invalid entry is a configuration error rather than
+ * something to silently drop, as it would otherwise produce a page missing a
+ * section without any indication why.
  *
  * @param customSections - the custom sections declared in the config file.
  *
  * @returns the validated custom sections, or `undefined` when none is declared.
  *
- * @throws Error if an entry is malformed, duplicated, or claims a built-in section name.
+ * @throws Error if an entry is malformed or claims a built-in section name.
  *
  * @example
  * ```js
- * getCustomSectionsOption([
- *   {
- *     name: "httpResponses",
+ * getCustomSectionsOption({
+ *   httpResponse: {
  *     title: "Responses",
- *     directive: "httpResponse",
  *     position: { after: "metadata" },
  *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
  *   },
- * ]);
+ * });
  * ```
  */
 export const getCustomSectionsOption = (
-  customSections: Maybe<TypeCustomSectionOption[]>,
-): Maybe<TypeCustomSectionOption[]> => {
+  customSections: Maybe<CustomSections>,
+): Maybe<CustomSections> => {
   // Only an absent option selects the default: a configuration file is runtime
-  // JavaScript, so a falsy non-list such as `false` or `""` is a mistake worth
+  // JavaScript, so a falsy non-object such as `false` or `""` is a mistake worth
   // reporting rather than a silent way to disable the sections.
   if (customSections === null || customSections === undefined) {
     return DEFAULT_OPTIONS.printTypeOptions.customSections;
   }
 
-  if (!Array.isArray(customSections)) {
+  if (typeof customSections !== "object" || Array.isArray(customSections)) {
     throw new TypeError(
-      "Option 'printTypeOptions.customSections' must be a list.",
+      "Option 'printTypeOptions.customSections' must be a map of directive names.",
     );
   }
 
-  const names = new Set<string>();
+  // `Object.entries` skips the `__proto__` key of an object literal, which never
+  // becomes an own property, so a section cannot claim it here either.
+  Object.entries(customSections).forEach(
+    ([name, section]: [string, Maybe<TypeCustomSectionOption>]): void => {
+      if (name.length === 0) {
+        throw new TypeError(
+          "Option 'printTypeOptions.customSections' requires a directive name for each section.",
+        );
+      }
 
-  customSections.forEach((section: Maybe<TypeCustomSectionOption>): void => {
-    if (typeof section?.name !== "string" || section.name.length === 0) {
-      throw new TypeError(
-        "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
-      );
-    }
+      if (RESERVED_SECTION_NAMES.includes(name)) {
+        throw new Error(
+          `Custom section name '${name}' is reserved, please use another name.`,
+        );
+      }
 
-    if (RESERVED_SECTION_NAMES.includes(section.name)) {
-      throw new Error(
-        `Custom section name '${section.name}' is reserved, please use another name.`,
-      );
-    }
-
-    if (names.has(section.name)) {
-      throw new Error(`Custom section name '${section.name}' is duplicated.`);
-    }
-    names.add(section.name);
-
-    if (typeof section.directive !== "string" || !section.directive) {
-      throw new TypeError(
-        `Custom section '${section.name}' requires a 'directive' name.`,
-      );
-    }
-
-    if (typeof section.render !== "function") {
-      throw new TypeError(
-        `Custom section '${section.name}' requires a 'render' function.`,
-      );
-    }
-  });
+      if (typeof section?.render !== "function") {
+        throw new TypeError(
+          `Custom section '${name}' requires a 'render' function.`,
+        );
+      }
+    },
+  );
 
   return customSections;
 };

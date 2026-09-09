@@ -1,9 +1,9 @@
 import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
+  CustomSections,
   FrontMatterOptions,
   MetaInfo,
-  TypeCustomSectionOption,
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
@@ -103,7 +103,6 @@ export interface IPrintTypeEvent extends ICancellableEvent {
   output: Maybe<MDXString>;
 }
 
-
 /**
  * Data payload for compose page type events.
  */
@@ -202,7 +201,7 @@ export interface AdmonitionType {
  * Configuration options for printing type documentation
  */
 export interface PrinterConfigPrintTypeOptions {
-  customSections?: TypeCustomSectionOption[];
+  customSections?: CustomSections;
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption;
   hierarchy?: TypeHierarchyObjectType;
@@ -218,7 +217,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   collapsible?: Maybe<CollapsibleOption>;
   customDirectives?: Maybe<CustomDirectiveMap>;
-  customSections?: Maybe<TypeCustomSectionOption[]>;
+  customSections?: Maybe<CustomSections>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   /** The schema entity kind being printed, when known by the caller. */
   entity?: Maybe<SchemaEntity>;
@@ -364,10 +363,7 @@ export abstract class IPrinter {
    * @param options - Combined printer configuration and options
    * @returns Markdown string containing the code representation
    */
-  static printCode(
-    type: unknown,
-    options: PrintTypeOptions,
-  ): string;
+  static printCode(type: unknown, options: PrintTypeOptions): string;
 
   /**
    * Prints custom directives associated with a type

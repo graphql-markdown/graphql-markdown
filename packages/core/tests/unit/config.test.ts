@@ -3,12 +3,12 @@ import type {
   CliOptions,
   ConfigOptions,
   CustomDirective,
+  CustomSections,
   DirectiveName,
   ExtensionProjectConfig,
   GraphQLDirective,
   Maybe,
   PackageName,
-  TypeCustomSectionOption,
   TypeDeprecatedOption,
   TypeDiffMethod,
   TypeHierarchyType,
@@ -817,8 +817,6 @@ describe("config", () => {
 
   describe("getCustomSectionsOption", () => {
     const section = {
-      name: "httpResponses",
-      directive: "httpResponse",
       render: (): string => {
         return "content";
       },
@@ -834,17 +832,15 @@ describe("config", () => {
     );
 
     test.each([false, 0, ""])(
-      "throws a type error if the option is the falsy non-list %p",
+      "throws a type error if the option is the falsy non-object %p",
       (value) => {
         expect.assertions(1);
 
         expect(() => {
-          getCustomSectionsOption(
-            value as unknown as TypeCustomSectionOption[],
-          );
+          getCustomSectionsOption(value as unknown as CustomSections);
         }).toThrow(
           new TypeError(
-            "Option 'printTypeOptions.customSections' must be a list.",
+            "Option 'printTypeOptions.customSections' must be a map of directive names.",
           ),
         );
       },
@@ -853,82 +849,63 @@ describe("config", () => {
     test("returns the sections if valid", () => {
       expect.assertions(1);
 
-      expect(getCustomSectionsOption([section])).toStrictEqual([section]);
+      expect(
+        getCustomSectionsOption({ httpResponse: section } as CustomSections),
+      ).toStrictEqual({ httpResponse: section });
     });
 
-    test("throws a type error if not a list", () => {
+    test("throws a type error if the option is a list", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption(
-          section as unknown as TypeCustomSectionOption[],
-        );
+        getCustomSectionsOption([section] as unknown as CustomSections);
       }).toThrow(
         new TypeError(
-          "Option 'printTypeOptions.customSections' must be a list.",
+          "Option 'printTypeOptions.customSections' must be a map of directive names.",
         ),
       );
     });
 
-    test("throws a type error if a section has no name", () => {
+    test("throws a type error if a section has no directive name", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption([
-          { ...section, name: "" },
-        ] as TypeCustomSectionOption[]);
+        getCustomSectionsOption({ "": section } as CustomSections);
       }).toThrow(
         new TypeError(
-          "Option 'printTypeOptions.customSections' requires a 'name' for each section.",
+          "Option 'printTypeOptions.customSections' requires a directive name for each section.",
         ),
       );
     });
 
-    test.each(["metadata", "__proto__"])(
-      "throws an error if a section name is reserved (%s)",
-      (name) => {
-        expect.assertions(1);
-
-        expect(() => {
-          getCustomSectionsOption([{ ...section, name }]);
-        }).toThrow(
-          `Custom section name '${name}' is reserved, please use another name.`,
-        );
-      },
-    );
-
-    test("throws an error if a section name is duplicated", () => {
+    test("throws an error if a section name is reserved", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption([section, { ...section, title: "Other" }]);
-      }).toThrow("Custom section name 'httpResponses' is duplicated.");
+        getCustomSectionsOption({ metadata: section } as CustomSections);
+      }).toThrow(
+        "Custom section name 'metadata' is reserved, please use another name.",
+      );
     });
 
-    test("throws a type error if a section has no directive", () => {
+    test("ignores a section named '__proto__', which is not an own property", () => {
       expect.assertions(1);
 
-      expect(() => {
-        getCustomSectionsOption([
-          { ...section, directive: "" },
-        ] as TypeCustomSectionOption[]);
-      }).toThrow(
-        new TypeError(
-          "Custom section 'httpResponses' requires a 'directive' name.",
-        ),
-      );
+      expect(
+        getCustomSectionsOption({ __proto__: section } as CustomSections),
+      ).toStrictEqual({});
     });
 
     test("throws a type error if a section has no render function", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption([
-          { ...section, render: {} },
-        ] as unknown as TypeCustomSectionOption[]);
+        getCustomSectionsOption({
+          httpResponse: { render: {} },
+        } as unknown as CustomSections);
       }).toThrow(
         new TypeError(
-          "Custom section 'httpResponses' requires a 'render' function.",
+          "Custom section 'httpResponse' requires a 'render' function.",
         ),
       );
     });

@@ -48,14 +48,20 @@ export type SectionValuesResolver = (
 ) => Maybe<Record<string, unknown>[]>;
 
 /**
- * A custom section, optionally resolving its own values.
+ * A custom section, resolved from its declaration.
  *
- * The `resolve` callback is internal: a section declared through
- * `printTypeOptions.customSections` always reads directive occurrences.
+ * `printTypeOptions.customSections` is keyed by directive name, which is also
+ * the section key: both are carried here so the section can be printed on its
+ * own. The `resolve` callback is internal, as a declared section always reads
+ * directive occurrences.
  *
  * @internal
  */
 export type SectionDefinition = TypeCustomSectionOption & {
+  /** Section key, injected into the page sections map. */
+  name: string;
+  /** Name of the schema directive carrying the section data. */
+  directive: string;
   resolve?: SectionValuesResolver;
 };
 
@@ -287,10 +293,11 @@ export const printCustomSection = (
 /**
  * Returns the custom sections to build, in declaration order.
  *
- * Sections claiming a reserved name are dropped, and a name is kept only once:
- * the printer is reachable directly through its public API, bypassing the
- * configuration validation, and a repeated name would otherwise render the same
- * section twice on the page.
+ * The declaration is a map of directive name to section options, so the
+ * directive name is both the section key and the directive read off the type.
+ * Sections claiming a reserved name are dropped: the printer is reachable
+ * directly through its public API, bypassing the configuration validation, and
+ * such a section would otherwise overwrite a built-in one.
  *
  * @internal
  *
@@ -301,23 +308,20 @@ export const printCustomSection = (
  */
 const getDeclaredSections = (
   options: PrintTypeOptions,
-): TypeCustomSectionOption[] => {
-  if (!Array.isArray(options.customSections)) {
+): SectionDefinition[] => {
+  const customSections = options.customSections;
+
+  if (typeof customSections !== "object" || customSections === null) {
     return [];
   }
 
-  const names = new Set<string>();
-
-  return options.customSections.filter((section): boolean => {
-    if (
-      RESERVED_SECTION_NAMES.includes(section.name) ||
-      names.has(section.name)
-    ) {
-      return false;
-    }
-    names.add(section.name);
-    return true;
-  });
+  return Object.entries(customSections)
+    .filter(([name]): boolean => {
+      return !RESERVED_SECTION_NAMES.includes(name);
+    })
+    .map(([name, section]): SectionDefinition => {
+      return { ...section, name, directive: name };
+    });
 };
 
 /**
@@ -339,7 +343,8 @@ export const printCustomSections = (
 ): PageSections => {
   // Null-prototype map: a section named `__proto__` would otherwise reach the
   // prototype setter of an object literal and never become an own property.
-  // Configuration rejects that name, but the printer is also reachable directly.
+  // An object literal cannot declare that key, but the printer is also reachable
+  // directly, with a declaration built any other way.
   const sections = Object.create(null) as PageSections;
 
   getDeclaredSections(options).forEach((section): void => {
@@ -355,7 +360,6 @@ export const printCustomSections = (
  * A section is placed after or before the section named by its `position`, and
  * appended last when `position` is absent or names an unknown section. Sections
  * are placed in declaration order, so a section may target a previously placed one.
- * A repeated name is placed once, at its first declaration.
  *
  * @param sectionOrder - the built-in section order.
  * @param options - the print options in effect.
@@ -368,7 +372,7 @@ export const getCustomSectionsOrder = (
   options: PrintTypeOptions,
 ): string[] => {
   return getDeclaredSections(options).reduce(
-    (order: string[], section: TypeCustomSectionOption): string[] => {
+    (order: string[], section: SectionDefinition): string[] => {
       const position = section.position;
       const anchor =
         position && typeof position === "object"

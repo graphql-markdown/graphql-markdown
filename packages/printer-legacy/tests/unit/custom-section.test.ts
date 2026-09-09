@@ -1,12 +1,11 @@
 import { buildSchema } from "graphql/utilities";
 
-import type {
-  PrintTypeOptions,
-  TypeCustomSectionOption,
-} from "@graphql-markdown/types";
+import type { CustomSections, PrintTypeOptions } from "@graphql-markdown/types";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import { Printer } from "../../src/printer";
+
+import type { SectionDefinition } from "../../src/custom-section";
 
 import {
   getCustomSectionsOrder,
@@ -48,10 +47,10 @@ describe("custom-section", () => {
     schema,
   } as PrintTypeOptions;
 
-  const httpResponses: TypeCustomSectionOption = {
-    name: "httpResponses",
-    title: "Responses",
+  const httpResponses: SectionDefinition = {
+    name: "httpResponse",
     directive: "httpResponse",
+    title: "Responses",
     render: (values) => {
       return values
         .map((value) => {
@@ -229,44 +228,41 @@ describe("custom-section", () => {
   });
 
   describe("printCustomSections()", () => {
+    const declaration = { title: "Responses", render: httpResponses.render };
+
     test("returns an entry per declared section, including empty ones", () => {
       expect.assertions(2);
 
       const sections = printCustomSections(type, {
         ...options,
-        customSections: [
-          httpResponses,
-          { ...httpResponses, name: "absent", directive: "unknown" },
-        ],
+        customSections: {
+          httpResponse: declaration,
+          unknown: declaration,
+        } as CustomSections,
       });
 
-      expect(Object.keys(sections)).toStrictEqual(["httpResponses", "absent"]);
-      expect(sections["absent"]).toBeUndefined();
-    });
-
-    test("keeps a repeated section name only once", () => {
-      expect.assertions(1);
-
-      const sections = printCustomSections(type, {
-        ...options,
-        customSections: [httpResponses, { ...httpResponses, title: "Other" }],
-      });
-
-      expect(sections["httpResponses"]).toMatchObject({ title: "Responses" });
+      expect(Object.keys(sections)).toStrictEqual(["httpResponse", "unknown"]);
+      expect(sections["unknown"]).toBeUndefined();
     });
 
     test("keeps a section named __proto__ as an own entry", () => {
       expect.assertions(2);
 
+      // An object literal never makes `__proto__` an own property, so the name
+      // only reaches the printer when defined explicitly, bypassing the
+      // configuration validation.
+      const customSections = Object.defineProperty({}, "__proto__", {
+        value: declaration,
+        enumerable: true,
+      }) as CustomSections;
+
       const sections = printCustomSections(type, {
         ...options,
-        customSections: [{ ...httpResponses, name: "__proto__" }],
+        customSections,
       });
 
       expect(Object.hasOwn(sections, "__proto__")).toBe(true);
-      expect({ ...sections }["__proto__"]).toMatchObject({
-        title: "Responses",
-      });
+      expect({ ...sections }["__proto__"]).toBeUndefined();
     });
 
     test("drops sections claiming a reserved name", () => {
@@ -274,7 +270,7 @@ describe("custom-section", () => {
 
       const sections = printCustomSections(type, {
         ...options,
-        customSections: [{ ...httpResponses, name: "code" }],
+        customSections: { code: declaration } as CustomSections,
       });
 
       expect(Object.keys(sections)).toStrictEqual([]);
@@ -288,7 +284,7 @@ describe("custom-section", () => {
         Object.keys(
           printCustomSections(type, {
             ...options,
-            customSections: {} as unknown as TypeCustomSectionOption[],
+            customSections: {} as CustomSections,
           }),
         ),
       ).toStrictEqual([]);
@@ -381,12 +377,13 @@ describe("custom-section", () => {
 
       await Printer.init(schema, "schema", "/", {
         printTypeOptions: {
-          customSections: [
-            {
-              ...httpResponses,
+          customSections: {
+            httpResponse: {
+              title: httpResponses.title,
+              render: httpResponses.render,
               position: { after: "code" },
             },
-          ],
+          },
         },
       });
 
@@ -428,6 +425,7 @@ describe("custom-section", () => {
 
   describe("getCustomSectionsOrder()", () => {
     const order = ["description", "code", "metadata", "relations"];
+    const declaration = { title: "Responses", render: httpResponses.render };
 
     test("appends a section without position", () => {
       expect.assertions(1);
@@ -435,9 +433,9 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: [httpResponses],
+          customSections: { httpResponse: declaration } as CustomSections,
         }),
-      ).toStrictEqual([...order, "httpResponses"]);
+      ).toStrictEqual([...order, "httpResponse"]);
     });
 
     test("inserts a section after the named one", () => {
@@ -446,15 +444,15 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: [
-            { ...httpResponses, position: { after: "metadata" } },
-          ],
+          customSections: {
+            httpResponse: { ...declaration, position: { after: "metadata" } },
+          } as CustomSections,
         }),
       ).toStrictEqual([
         "description",
         "code",
         "metadata",
-        "httpResponses",
+        "httpResponse",
         "relations",
       ]);
     });
@@ -465,14 +463,14 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: [
-            { ...httpResponses, position: { before: "metadata" } },
-          ],
+          customSections: {
+            httpResponse: { ...declaration, position: { before: "metadata" } },
+          } as CustomSections,
         }),
       ).toStrictEqual([
         "description",
         "code",
-        "httpResponses",
+        "httpResponse",
         "metadata",
         "relations",
       ]);
@@ -484,9 +482,11 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: [{ ...httpResponses, position: { after: "nope" } }],
+          customSections: {
+            httpResponse: { ...declaration, position: { after: "nope" } },
+          } as CustomSections,
         }),
-      ).toStrictEqual([...order, "httpResponses"]);
+      ).toStrictEqual([...order, "httpResponse"]);
     });
 
     test("places sections in declaration order, so one can target another", () => {
@@ -495,40 +495,19 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: [
-            { ...httpResponses, position: { after: "code" } },
-            {
-              ...httpResponses,
-              name: "httpHeaders",
-              position: { after: "httpResponses" },
+          customSections: {
+            httpResponse: { ...declaration, position: { after: "code" } },
+            httpHeader: {
+              ...declaration,
+              position: { after: "httpResponse" },
             },
-          ],
+          } as CustomSections,
         }),
       ).toStrictEqual([
         "description",
         "code",
-        "httpResponses",
-        "httpHeaders",
-        "metadata",
-        "relations",
-      ]);
-    });
-
-    test("places a repeated section name once, at its first declaration", () => {
-      expect.assertions(1);
-
-      expect(
-        getCustomSectionsOrder(order, {
-          ...options,
-          customSections: [
-            { ...httpResponses, position: { after: "code" } },
-            { ...httpResponses, position: { after: "relations" } },
-          ],
-        }),
-      ).toStrictEqual([
-        "description",
-        "code",
-        "httpResponses",
+        "httpResponse",
+        "httpHeader",
         "metadata",
         "relations",
       ]);
@@ -541,7 +520,7 @@ describe("custom-section", () => {
       expect(
         getCustomSectionsOrder(order, {
           ...options,
-          customSections: {} as unknown as TypeCustomSectionOption[],
+          customSections: {} as CustomSections,
         }),
       ).toStrictEqual(order);
     });

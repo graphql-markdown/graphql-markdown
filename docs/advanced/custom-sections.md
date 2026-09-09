@@ -14,7 +14,7 @@ keywords:
 
 Schemas often carry documentation-only metadata that has no natural home on a type page: the HTTP status codes an operation can return, the headers it expects, or a description of a `meta` object returned alongside the data.
 
-The option [`printTypeOptions.customSections`](/docs/settings#printtypeoptions) turns such a directive into its own top-level section of the type page, rendered by a callback you provide.
+The option [`printTypeOptions.customSections`](/docs/settings#printtypeoptions) turns such a directive into its own top-level section of the type page, rendered by a callback you provide. It is a map of directive names, in the same shape as [`customDirective`](/docs/advanced/custom-directive).
 
 :::info
 
@@ -45,11 +45,9 @@ type Query {
 
 ```js title="docusaurus.config.js"
 printTypeOptions: {
-  customSections: [
-    {
-      name: "httpResponses",
+  customSections: {
+    httpResponse: {
       title: "Responses",
-      directive: "httpResponse",
       position: { after: "metadata" },
       appliesTo: ["queries", "mutations"],
       render: (values) => {
@@ -60,7 +58,7 @@ printTypeOptions: {
         ].join("\n");
       },
     },
-  ],
+  },
 }
 ```
 
@@ -77,15 +75,15 @@ printTypeOptions: {
 
 ## Options
 
+Each key is the name of the schema directive carrying the section data, and is also the section key on the page. It must not be one of the built-in keys (see [Position](#position)).
+
 | Option      | Required | Description                                                                                   |
 | ----------- | -------- | --------------------------------------------------------------------------------------------- |
-| `name`      | yes      | Section key. Must be unique, and must not be one of the built-in keys (see [Position](#position)). |
-| `directive` | yes      | Name of the schema directive carrying the section data.                                         |
-| `render`    | yes      | Callback returning the section content as Markdown (see [Render](#render)).                     |
-| `title`     | no       | Section heading. Omit for an untitled section.                                                  |
-| `level`     | no       | Heading level, defaults to `3`.                                                                 |
-| `position`  | no       | Placement relative to another section (see [Position](#position)). Defaults to last.            |
-| `appliesTo` | no       | Restricts the section to some schema entities (see [appliesTo](#appliesto)). Defaults to all.   |
+| `render`    | yes      | Callback returning the section content as Markdown (see [Render](#render)).                   |
+| `title`     | no       | Section heading. Omit for an untitled section.                                                |
+| `level`     | no       | Heading level, defaults to `3`.                                                               |
+| `position`  | no       | Placement relative to another section (see [Position](#position)). Defaults to last.          |
+| `appliesTo` | no       | Restricts the section to some schema entities (see [appliesTo](#appliesto)). Defaults to all. |
 
 A section is skipped, and no heading is printed, when the directive is absent from the schema or from the type, or when `render` returns nothing.
 
@@ -108,7 +106,7 @@ Optional directive arguments that were omitted are absent from the record rather
 
 `tags`, `description`, `code`, `customDirectives`, `metadata`, `example`, `relations`
 
-Another custom section can also be named, as long as it is declared earlier. A section whose `position` names an unknown section is appended last.
+Another custom section can also be named, by its directive name, as long as it is declared earlier. A section whose `position` names an unknown section is appended last.
 
 :::note
 
@@ -143,14 +141,14 @@ directive @httpHeader(
 
 ```js
 {
-  name: "httpHeaders",
-  title: "Headers",
-  directive: "httpHeader",
-  position: { after: "metadata" },
-  render: (values) => {
-    return values
-      .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
-      .join("\n");
+  httpHeader: {
+    title: "Headers",
+    position: { after: "metadata" },
+    render: (values) => {
+      return values
+        .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
+        .join("\n");
+    },
   },
 }
 ```
@@ -165,13 +163,13 @@ directive @meta(type: String!) on FIELD_DEFINITION
 
 ```js
 {
-  name: "meta",
-  title: "Meta",
-  directive: "meta",
-  position: { after: "code" },
-  render: ([value], options) => {
-    const slug = String(value.type).toLowerCase();
-    return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
+  meta: {
+    title: "Meta",
+    position: { after: "code" },
+    render: ([value], options) => {
+      const slug = String(value.type).toLowerCase();
+      return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
+    },
   },
 }
 ```
