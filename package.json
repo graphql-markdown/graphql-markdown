@@ -206,7 +206,7 @@
     "graphql-config": "catalog:",
     "husky": "9.1.7",
     "jsonc-eslint-parser": "3.3.0",
-    "knip": "6.35.0",
+    "knip": "6.35.1",
     "lodash.filter": "4.6.0",
     "memfs": "4.71.0",
     "mutation-testing-metrics": "3.9.0",
