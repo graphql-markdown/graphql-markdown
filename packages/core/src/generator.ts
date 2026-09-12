@@ -481,13 +481,13 @@ export const generateDocFromSchema = async ({
     mdxExtension = FILE_EXTENSION.MD;
   }
 
-  const renderer = await getRenderer(
+  const renderer = await getRenderer({
     printer,
     outputDir,
     baseURL,
-    groups,
+    group: groups,
     prettify,
-    {
+    docOptions: {
       ...docOptions,
       deprecated: printTypeOptions?.deprecated,
       force,
@@ -495,7 +495,7 @@ export const generateDocFromSchema = async ({
     },
     mdxExtension,
     outputAdapter,
-  );
+  });
 
   // Pre-collect all categories before rendering to ensure consistent positions
   renderer.preCollectCategories(Object.keys(rootTypes));

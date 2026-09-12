@@ -111,15 +111,15 @@ describe("renderer", () => {
     const baseURL: string = "graphql";
 
     beforeEach(async () => {
-      rendererInstance = await getRenderer(
-        Printer as unknown as typeof IPrinter,
-        "/output",
-        baseURL,
-        undefined,
-        DEFAULT_OPTIONS.pretty!,
-        DEFAULT_RENDERER_OPTIONS,
-        ".mdx",
-      );
+      rendererInstance = await getRenderer({
+        printer: Printer as unknown as typeof IPrinter,
+        outputDir: "/output",
+        baseURL: baseURL,
+        group: undefined,
+        prettify: DEFAULT_OPTIONS.pretty!,
+        docOptions: DEFAULT_RENDERER_OPTIONS,
+        mdxExtension: ".mdx",
+      });
 
       // silent console
       vi.spyOn(globalThis.console, "warn").mockImplementation(() => {});
@@ -325,18 +325,21 @@ describe("renderer", () => {
           },
         };
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          group as unknown as Record<SchemaEntity, Record<string, string>>,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: group as unknown as Record<
+            SchemaEntity,
+            Record<string, string>
+          >,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          ".mdx",
-        );
+          mdxExtension: ".mdx",
+        });
 
         // Generator pre-collects categories before rendering.
         renderer.preCollectCategories(["queries", "objects"]);
@@ -367,19 +370,19 @@ describe("renderer", () => {
       test("formats category folders by registration scope and falls back to slugify for unknown names", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          ".mdx",
-        );
+          mdxExtension: ".mdx",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories(["Query"]);
         renderer["rootLevelPositionManager"].computePositions();
@@ -1335,15 +1338,15 @@ describe("renderer", () => {
 
         const ensureDirSpy = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
 
-        await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          "graphql",
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: "graphql",
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
           forceEmpty: undefined,
@@ -1355,15 +1358,15 @@ describe("renderer", () => {
 
         const ensureDirSpy = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
 
-        await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          "graphql",
-          undefined,
-          false,
-          { ...DEFAULT_RENDERER_OPTIONS, force: true },
-          "mdx",
-        );
+        await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: "graphql",
+          group: undefined,
+          prettify: false,
+          docOptions: { ...DEFAULT_RENDERER_OPTIONS, force: true },
+          mdxExtension: "mdx",
+        });
 
         expect(ensureDirSpy).toHaveBeenCalledWith("/output", {
           forceEmpty: true,
@@ -1391,16 +1394,16 @@ describe("renderer", () => {
           const fsEnsureDir = vi.mocked(Utils.fsOutputAdapter.ensureDir!);
           fsEnsureDir.mockClear();
 
-          await getRenderer(
-            Printer as unknown as typeof IPrinter,
-            "/output",
-            "graphql",
-            undefined,
-            false,
-            { ...DEFAULT_RENDERER_OPTIONS, force: true },
-            ".mdx",
-            adapter,
-          );
+          await getRenderer({
+            printer: Printer as unknown as typeof IPrinter,
+            outputDir: "/output",
+            baseURL: "graphql",
+            group: undefined,
+            prettify: false,
+            docOptions: { ...DEFAULT_RENDERER_OPTIONS, force: true },
+            mdxExtension: ".mdx",
+            outputAdapter: adapter,
+          });
 
           expect(adapter.ensureDir).toHaveBeenCalledWith("/output", {
             forceEmpty: true,
@@ -1418,16 +1421,16 @@ describe("renderer", () => {
           const fsWriteFile = vi.mocked(Utils.fsOutputAdapter.writeFile);
           fsWriteFile.mockClear();
 
-          const renderer = await getRenderer(
-            Printer as unknown as typeof IPrinter,
-            "/output",
-            "graphql",
-            undefined,
-            false,
-            DEFAULT_RENDERER_OPTIONS,
-            ".mdx",
-            adapter,
-          );
+          const renderer = await getRenderer({
+            printer: Printer as unknown as typeof IPrinter,
+            outputDir: "/output",
+            baseURL: "graphql",
+            group: undefined,
+            prettify: false,
+            docOptions: DEFAULT_RENDERER_OPTIONS,
+            mdxExtension: ".mdx",
+            outputAdapter: adapter,
+          });
           await renderer.renderTypeEntities(
             "/output/foobar",
             "FooBar",
@@ -1452,16 +1455,16 @@ describe("renderer", () => {
           );
 
           const adapter = makeAdapter();
-          const renderer = await getRenderer(
-            Printer as unknown as typeof IPrinter,
-            "/output",
-            "graphql",
-            undefined,
-            true,
-            DEFAULT_RENDERER_OPTIONS,
-            ".mdx",
-            adapter,
-          );
+          const renderer = await getRenderer({
+            printer: Printer as unknown as typeof IPrinter,
+            outputDir: "/output",
+            baseURL: "graphql",
+            group: undefined,
+            prettify: true,
+            docOptions: DEFAULT_RENDERER_OPTIONS,
+            mdxExtension: ".mdx",
+            outputAdapter: adapter,
+          });
           await renderer.renderTypeEntities(
             "/output/foobar",
             "FooBar",
@@ -1485,16 +1488,16 @@ describe("renderer", () => {
           // collection - omits ensureDir entirely.
           const adapter = { writeFile: vi.fn() } as unknown as OutputAdapter;
 
-          const renderer = await getRenderer(
-            Printer as unknown as typeof IPrinter,
-            "/output",
-            "graphql",
-            undefined,
-            false,
-            { ...DEFAULT_RENDERER_OPTIONS, force: true },
-            ".mdx",
-            adapter,
-          );
+          const renderer = await getRenderer({
+            printer: Printer as unknown as typeof IPrinter,
+            outputDir: "/output",
+            baseURL: "graphql",
+            group: undefined,
+            prettify: false,
+            docOptions: { ...DEFAULT_RENDERER_OPTIONS, force: true },
+            mdxExtension: ".mdx",
+            outputAdapter: adapter,
+          });
           await renderer.renderTypeEntities(
             "/output/foobar",
             "FooBar",
@@ -1515,16 +1518,16 @@ describe("renderer", () => {
           );
           const adapter = makeAdapter();
 
-          const renderer = await getRenderer(
-            Printer as unknown as typeof IPrinter,
-            "/output",
-            "graphql",
-            undefined,
-            false,
-            DEFAULT_RENDERER_OPTIONS,
-            ".mdx",
-            adapter,
-          );
+          const renderer = await getRenderer({
+            printer: Printer as unknown as typeof IPrinter,
+            outputDir: "/output",
+            baseURL: "graphql",
+            group: undefined,
+            prettify: false,
+            docOptions: DEFAULT_RENDERER_OPTIONS,
+            mdxExtension: ".mdx",
+            outputAdapter: adapter,
+          });
           await renderer.renderHomepage("/assets/homepage.md");
 
           expect(adapter.writeFile).toHaveBeenCalledWith(
@@ -1539,15 +1542,15 @@ describe("renderer", () => {
       test("initializes renderer with correct parameters", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/custom-output",
-          "custom-base-url",
-          { objects: { TestType: "test-group" } },
-          true,
-          DEFAULT_RENDERER_OPTIONS,
-          "@graphql-markdown/mdx-parser" as PackageName,
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/custom-output",
+          baseURL: "custom-base-url",
+          group: { objects: { TestType: "test-group" } },
+          prettify: true,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "@graphql-markdown/mdx-parser" as PackageName,
+        });
 
         expect(renderer).toMatchObject({
           printer: Printer,
@@ -1566,15 +1569,15 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Pre-register all categories before generating files
         // This simulates knowing all categories upfront
@@ -1622,18 +1625,18 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories
         renderer["categoryPositionManager"].registerCategories([
@@ -1673,18 +1676,18 @@ describe("renderer", () => {
           return b.localeCompare(a);
         };
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: customSort,
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories
         renderer["categoryPositionManager"].registerCategories([
@@ -1730,15 +1733,15 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Provide explicit position (like for deprecated categories)
         await renderer.generateIndexMetafile("/output/special", "special", {
@@ -1759,15 +1762,15 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories to ensure consistent positions
         renderer["categoryPositionManager"].registerCategories([
@@ -1814,19 +1817,19 @@ describe("renderer", () => {
       test("prefixes folder names with order numbers when categorySort is set", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories
         renderer["rootLevelPositionManager"].registerCategories([
@@ -1862,19 +1865,19 @@ describe("renderer", () => {
       test("does not prefix folder names when categorySort is not set", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             // categorySort not set - no prefixing should happen
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories
         renderer["categoryPositionManager"].registerCategories([
@@ -1914,19 +1917,19 @@ describe("renderer", () => {
           return b.localeCompare(a); // reverse alphabetical
         };
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: customSort,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register categories
         renderer["rootLevelPositionManager"].registerCategories([
@@ -1963,19 +1966,19 @@ describe("renderer", () => {
       test("works correctly with groupByDirective when categorySort is set", async () => {
         expect.assertions(6);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "api-operations", Bar: "api-types" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "api-operations", Bar: "api-types" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register group categories
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2010,19 +2013,19 @@ describe("renderer", () => {
       test("respects hierarchy with categorySort set", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Pre-register the root type categories at ROOT level (entity hierarchy with no custom groups)
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2059,19 +2062,19 @@ describe("renderer", () => {
       test("automatically prefixes when categorySort is set", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "custom-group" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "custom-group" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer["categoryPositionManager"].registerCategories([
           "custom-group",
@@ -2092,19 +2095,19 @@ describe("renderer", () => {
       test("handles single category correctly with categorySort set", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register only one category
         renderer["rootLevelPositionManager"].registerCategories(["single"]);
@@ -2124,19 +2127,19 @@ describe("renderer", () => {
       test("handles many categories (10+) with correct padding in prefixes", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         const categories = [
           "alpha",
@@ -2192,19 +2195,19 @@ describe("renderer", () => {
           return b.localeCompare(a);
         };
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: reverseSort,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         const categories = ["alpha", "beta", "gamma"];
         renderer["rootLevelPositionManager"].registerCategories(categories);
@@ -2235,20 +2238,20 @@ describe("renderer", () => {
       test("deprecated folder gets last position when categorySort is set", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "md",
-        );
+          mdxExtension: "md",
+        });
 
         // Mock a deprecated type
         vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
@@ -2275,19 +2278,19 @@ describe("renderer", () => {
       test("handles hierarchical position management with multiple levels", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "api-ops", Bar: "api-types" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "api-ops", Bar: "api-types" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register root-level groups
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2323,19 +2326,19 @@ describe("renderer", () => {
       test("still applies root-category prefixes when categorySort is not set", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: undefined,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories([
           "alpha",
@@ -2363,22 +2366,22 @@ describe("renderer", () => {
       test("works with custom groups across multiple types", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: {
             objects: { User: "domain", Post: "domain" },
             interfaces: { Node: "system" },
           },
-          false,
-          {
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "md",
-        );
+          mdxExtension: "md",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories([
           "domain",
@@ -2407,19 +2410,19 @@ describe("renderer", () => {
       test("isRegistered() correctly identifies pre-registered categories", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Before registration, categories should not be registered
         expect(renderer["rootLevelPositionManager"].isRegistered("alpha")).toBe(
@@ -2447,19 +2450,19 @@ describe("renderer", () => {
       test("formatCategoryFolderName uses isRegistered to determine hierarchy level", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register at root level
         renderer["rootLevelPositionManager"].registerCategories(["Query"]);
@@ -2530,19 +2533,19 @@ describe("renderer", () => {
       test("registerCategoriesWithManagers registers both root and nested when categorySort is set", async () => {
         expect.assertions(6);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "md",
-        );
+          mdxExtension: "md",
+        });
 
         const rootCategories = new Set(["query", "mutation", "subscription"]);
         const nestedCategories = new Set(["objects", "enums", "scalars"]);
@@ -2576,19 +2579,19 @@ describe("renderer", () => {
       test("registerCategoriesWithManagers respects categorySort not set with empty nested", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set(["query"]);
         const nestedCategories = new Set<string>();
@@ -2614,19 +2617,19 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register and compute positions
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2654,19 +2657,19 @@ describe("renderer", () => {
       test("mutation test: category metadata with explicit field values", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Custom: "custom-group" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Custom: "custom-group" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register group categories
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2690,19 +2693,19 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
         renderer["rootLevelPositionManager"].computePositions();
@@ -2729,19 +2732,19 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register categories in specific order
         renderer["rootLevelPositionManager"].registerCategories([
@@ -2780,19 +2783,19 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories(["objects"]);
         renderer["rootLevelPositionManager"].computePositions();
@@ -2817,18 +2820,18 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.FLAT]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         const dirPath = await renderer.generateCategoryMetafileType(
           {},
@@ -2864,19 +2867,19 @@ describe("renderer", () => {
 
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer["rootLevelPositionManager"].registerCategories([
           "objects",
@@ -2906,15 +2909,15 @@ describe("renderer", () => {
       test("mutation test: position manager early exit on second computePositions call", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Register categories and compute positions
         renderer["categoryPositionManager"].registerCategories(["objects"]);
@@ -2935,18 +2938,18 @@ describe("renderer", () => {
       test("mutation test: position manager handles base position", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Register categories
         const categories = ["queries"];
@@ -2964,18 +2967,18 @@ describe("renderer", () => {
       test("mutation test: category path generation with different entity types", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Generate paths for different entity types
         const objectPath = await renderer.generateCategoryMetafileType(
@@ -2997,18 +3000,18 @@ describe("renderer", () => {
       test("mutation test: hierarchy option affects rendering", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: {},
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Verify hierarchy is defined
         expect(renderer.options).toBeDefined();
@@ -3017,28 +3020,28 @@ describe("renderer", () => {
       test("mutation test: category sort option validation", async () => {
         expect.assertions(2);
 
-        const renderer1 = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer1 = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
-        const renderer2 = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer2 = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Verify categorySort values are different
         expect(renderer1.options?.categorySort).toBe("natural");
@@ -3048,15 +3051,15 @@ describe("renderer", () => {
       test("mutation test: position retrieval without precomputed state", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Register categories
         renderer["categoryPositionManager"].registerCategories(["test"]);
@@ -3098,18 +3101,18 @@ describe("renderer", () => {
       test("mutation test: category folderName formatting edge cases", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Test multiple categories to verify all get prefixes when categorySort set
         renderer["rootLevelPositionManager"].registerCategories([
@@ -3143,15 +3146,15 @@ describe("renderer", () => {
       test("mutation test: boolean position cache state management", async () => {
         expect.assertions(5);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const posManager = renderer["categoryPositionManager"];
 
@@ -3184,19 +3187,19 @@ describe("renderer", () => {
         const mockGenerateIndexMetafile = vi.fn();
         mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
             categorySort: "natural",
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         // Generate metafiles for different entity types
         const objMetaPath = await renderer.generateCategoryMetafileType(
@@ -3224,15 +3227,15 @@ describe("renderer", () => {
       test("mutation test: collapsible option affects metadata generation", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Generate with collapsible true
         const pathWithCollapsible = await renderer.generateCategoryMetafileType(
@@ -3256,15 +3259,15 @@ describe("renderer", () => {
       test("mutation test: sidebarPosition configuration in metafile options", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         // Generate with explicit sidebarPosition
         const pathWithPosition = await renderer.generateCategoryMetafileType(
@@ -3287,15 +3290,15 @@ describe("renderer", () => {
       test("mutation test: positionsComputed flag is set correctly", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const posManager = renderer["categoryPositionManager"];
 
@@ -3318,18 +3321,18 @@ describe("renderer", () => {
       test("preCollectCategories skips registration for flat hierarchy", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             hierarchy: { [TypeHierarchy.FLAT]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         const rootTypeNames = ["queries", "mutations", "objects"];
         renderer.preCollectCategories(rootTypeNames);
@@ -3346,19 +3349,19 @@ describe("renderer", () => {
       test("preCollectCategories registers custom groups at root level", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "custom-group", Bar: "another-group" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "custom-group", Bar: "another-group" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["objects"]);
 
@@ -3373,19 +3376,19 @@ describe("renderer", () => {
       test("preCollectCategories registers API groups correctly with custom groups", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "custom" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "custom" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.API]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["objects"]);
 
@@ -3409,19 +3412,19 @@ describe("renderer", () => {
       test("preCollectCategories registers API groups at root without custom groups", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.API]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["objects"]);
 
@@ -3441,19 +3444,19 @@ describe("renderer", () => {
       test("preCollectCategories registers entity categories at root without custom groups", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["queries", "mutations"]);
 
@@ -3469,19 +3472,19 @@ describe("renderer", () => {
       test("preCollectCategories registers entity categories as nested with custom groups", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { queries: { Query: "api-ops" } },
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { queries: { Query: "api-ops" } },
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["queries"]);
 
@@ -3497,20 +3500,20 @@ describe("renderer", () => {
       test("preCollectCategories registers deprecated at root when grouped", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             deprecated: "group",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["objects"]);
 
@@ -3522,20 +3525,20 @@ describe("renderer", () => {
       test("preCollectCategories does not register deprecated when not grouped", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          {
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
             ...DEFAULT_RENDERER_OPTIONS,
             categorySort: "natural",
             deprecated: "default",
             hierarchy: { [TypeHierarchy.ENTITY]: {} },
           },
-          "mdx",
-        );
+          mdxExtension: "mdx",
+        });
 
         renderer.preCollectCategories(["objects"]);
 
@@ -3547,15 +3550,15 @@ describe("renderer", () => {
       test("registerCustomGroups handles empty group configuration", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         renderer["registerCustomGroups"](rootCategories);
@@ -3566,15 +3569,15 @@ describe("renderer", () => {
       test("registerCustomGroups handles group with empty values", async () => {
         expect.assertions(1);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          { objects: { Foo: "", Bar: "valid-group" } },
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: { objects: { Foo: "", Bar: "valid-group" } },
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         renderer["registerCustomGroups"](rootCategories);
@@ -3586,15 +3589,15 @@ describe("renderer", () => {
       test("registerApiGroupCategories with custom groups nests API groups", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         const nestedCategories = new Set<string>();
@@ -3614,15 +3617,15 @@ describe("renderer", () => {
       test("registerApiGroupCategories without custom groups puts API groups at root", async () => {
         expect.assertions(4);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         const nestedCategories = new Set<string>();
@@ -3642,15 +3645,15 @@ describe("renderer", () => {
       test("registerApiGroupCategories always nests entity categories", async () => {
         expect.assertions(3);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         const nestedCategories = new Set<string>();
@@ -3670,15 +3673,15 @@ describe("renderer", () => {
       test("registerEntityCategories with custom groups nests entity names", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         const nestedCategories = new Set<string>();
@@ -3697,15 +3700,15 @@ describe("renderer", () => {
       test("registerEntityCategories without custom groups puts entity names at root", async () => {
         expect.assertions(2);
 
-        const renderer = await getRenderer(
-          Printer as unknown as typeof IPrinter,
-          "/output",
-          baseURL,
-          undefined,
-          false,
-          DEFAULT_RENDERER_OPTIONS,
-          "mdx",
-        );
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
 
         const rootCategories = new Set<string>();
         const nestedCategories = new Set<string>();
