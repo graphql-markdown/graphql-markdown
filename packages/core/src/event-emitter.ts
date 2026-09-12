@@ -31,7 +31,7 @@ export interface EmitResult {
  *
  * @category Events
  */
-class CancellableEventEmitter extends EventEmitter {
+export class CancellableEventEmitter extends EventEmitter {
   private static toError(error: unknown): Error {
     return error instanceof Error ? error : new Error(String(error));
   }

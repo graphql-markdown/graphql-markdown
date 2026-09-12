@@ -14,7 +14,7 @@ strips file extensions from internal links to match Hugo's URL routing.
 const beforeGenerateIndexMetafileHook: GenerateIndexMetafileHook;
 ```
 
-Defined in: [hugo/index.ts:179](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L179)
+Defined in: [hugo/index.ts:178](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L178)
 
 Lifecycle hook that generates a Hugo-compatible `_index.md` section index file.
 The file is (re)created on every run with YAML frontmatter:
@@ -37,7 +37,7 @@ Hook event whose `data` contains `dirPath` (target directory) and `category` (se
 const mdxExtension: ".md";
 ```
 
-Defined in: [hugo/index.ts:169](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L169)
+Defined in: [hugo/index.ts:168](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L168)
 
 File extension used for generated pages — Hugo uses standard Markdown (.md) files.
 
@@ -49,7 +49,7 @@ File extension used for generated pages — Hugo uses standard Markdown (.md) fi
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [hugo/index.ts:155](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L155)
+Defined in: [hugo/index.ts:153](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L153)
 
 Creates a Hugo formatter.
 
@@ -72,21 +72,21 @@ A complete Formatter implementation for Hugo output
 ### formatMDXAdmonition()
 
 ```ts
-function formatMDXAdmonition(text, _meta): MDXString;
+function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [hugo/index.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L77)
+Defined in: [hugo/index.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L76)
 
 Formats an admonition using Hugo GitHub-style alert syntax (`> [!TYPE]`).
 Requires Hugo 0.132 or later.
 
 #### Parameters
 
-##### text
+##### admonition
 
 `AdmonitionType`
 
-The admonition body text
+Admonition data with text, optional title, and type (e.g. `note`, `warning`, `danger`) mapped via ALERT_TYPE_MAP
 
 ##### \_meta
 
@@ -108,7 +108,7 @@ Formatted blockquote alert string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [hugo/index.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L64)
+Defined in: [hugo/index.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L65)
 
 Formats a badge as a styled span element.
 
@@ -131,20 +131,20 @@ HTML `<span>` string with the `gqlmd-badge` class
 ### formatMDXDetails()
 
 ```ts
-function formatMDXDetails(dataOpen): MDXString;
+function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [hugo/index.ts:92](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L92)
+Defined in: [hugo/index.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L90)
 
 Formats a collapsible block as an HTML `<details>` element.
 
 #### Parameters
 
-##### dataOpen
+##### option
 
 `CollapsibleOption`
 
-Label shown when the section is collapsed (used as `<summary>` text)
+Configuration for open/close label text
 
 #### Returns
 
@@ -160,7 +160,7 @@ HTML `<details>`/`<summary>` block string
 function formatMDXFrontmatter(props, formatted): MDXString;
 ```
 
-Defined in: [hugo/index.ts:108](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L108)
+Defined in: [hugo/index.ts:106](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L106)
 
 Formats YAML front matter wrapped in `---` delimiters, with page title rendered as H1 heading.
 Falls back to serializing `props` via formatFrontMatterObject when `formatted` is not provided.
@@ -192,21 +192,21 @@ Formatted front matter block with H1 title heading, or empty string if no data
 ### formatMDXLink()
 
 ```ts
-function formatMDXLink(text): TypeLink;
+function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [hugo/index.ts:137](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L137)
+Defined in: [hugo/index.ts:134](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/index.ts#L134)
 
 Strips the `.md` extension from internal links.
 Hugo serves pages at extensionless URLs — links with `.md` would 404 in the built site.
 
 #### Parameters
 
-##### text
+##### link
 
 `TypeLink`
 
-Display text for the link
+Link data with text and URL; `.md` extension is removed from the URL if present
 
 #### Returns
 

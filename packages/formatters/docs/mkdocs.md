@@ -13,7 +13,7 @@ and visible page headings.
 const __default: object;
 ```
 
-Defined in: [mkdocs/index.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L34)
+Defined in: [mkdocs/index.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L35)
 
 #### Type Declaration
 
@@ -61,6 +61,32 @@ The `TypeLink` object to format
 
 The unmodified `TypeLink` object
 
+##### formatMDXPermalink
+
+```ts
+formatMDXPermalink: (id) => MDXString;
+```
+
+Formats a permalink for a section header using the classic `{#id}` syntax.
+
+This is the syntax supported by most Markdown-based generators (Hugo,
+mdBook, DocFX, MkDocs with `attr_list`). Presets targeting a framework that
+expects another syntax override this function.
+
+###### Parameters
+
+###### id
+
+`string`
+
+The ID of the section header
+
+###### Returns
+
+`MDXString`
+
+Formatted permalink string
+
 ---
 
 ### afterRenderTypeEntitiesHook
@@ -69,7 +95,7 @@ The unmodified `TypeLink` object
 const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook;
 ```
 
-Defined in: [mkdocs/index.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L154)
+Defined in: [mkdocs/index.ts:155](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L155)
 
 Lifecycle hook that rewrites generated absolute GraphQL-Markdown links
 into page-relative `.md` links compatible with MkDocs validation.
@@ -88,7 +114,7 @@ Hook payload containing the current file path and renderer output context
 const mdxExtension: ".md";
 ```
 
-Defined in: [mkdocs/index.ts:147](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L147)
+Defined in: [mkdocs/index.ts:148](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L148)
 
 File extension used for generated pages — MkDocs uses standard Markdown (.md) files.
 
@@ -100,7 +126,7 @@ File extension used for generated pages — MkDocs uses standard Markdown (.md) 
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [mkdocs/index.ts:183](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L183)
+Defined in: [mkdocs/index.ts:168](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L168)
 
 Creates an MkDocs Material formatter.
 
@@ -126,7 +152,7 @@ A complete Formatter implementation for MkDocs Material output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:88](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L88)
+Defined in: [mkdocs/index.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L90)
 
 Formats an admonition using MkDocs Material `!!!` block syntax.
 Content is indented by 4 spaces as required by the spec.
@@ -159,7 +185,7 @@ Formatted admonition string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L77)
+Defined in: [mkdocs/index.ts:79](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L79)
 
 Formats a badge as an inline HTML mark element.
 
@@ -185,7 +211,7 @@ Formatted badge string
 function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L102)
+Defined in: [mkdocs/index.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L104)
 
 Formats a collapsible block as an HTML `<details>` element.
 
@@ -211,7 +237,7 @@ Formatted collapsible string
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L115)
+Defined in: [mkdocs/index.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L117)
 
 Formats page title as a visible H1 heading.
 
@@ -243,7 +269,7 @@ Visible heading string, or empty string if no title is available
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L129)
+Defined in: [mkdocs/index.ts:130](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L130)
 
 Formats a named entity as a backtick code span.
 
@@ -275,7 +301,7 @@ Formatted entity reference string
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [mkdocs/index.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L142)
+Defined in: [mkdocs/index.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/index.ts#L143)
 
 Formats a "specified by" link as a standard Markdown link.
 

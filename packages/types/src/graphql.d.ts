@@ -201,7 +201,7 @@ export interface RelationOf<T> {
  * @typeParam T - Type to make writeable
  * @internal
  */
-type Writeable<T> = {
+export type Writeable<T> = {
   -readonly [P in keyof T]: T[P];
 };
 

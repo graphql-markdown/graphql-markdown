@@ -363,7 +363,7 @@ export const getTypeDirectiveValuesList = (
       return getDirectiveValues(directive, { directives: [directiveNode] });
     })
     .filter((values): values is Record<string, unknown> => {
-      return typeof values !== "undefined";
+      return values !== undefined;
     });
 };
 

@@ -4,7 +4,7 @@
  * @packageDocumentation
  */
 
-import type { GraphQLSchema, Maybe, SchemaMap } from "@graphql-markdown/types";
+import type { GraphQLSchema, SchemaMap } from "@graphql-markdown/types";
 import type { CancellableEventOptions } from "@graphql-markdown/utils";
 import { DataEvent } from "@graphql-markdown/utils";
 
@@ -15,14 +15,14 @@ import { DataEvent } from "@graphql-markdown/utils";
  */
 export class SchemaEvent extends DataEvent<{
   schemaLocation?: string;
-  schema?: Maybe<GraphQLSchema>;
-  rootTypes?: Maybe<SchemaMap>;
+  schema?: GraphQLSchema | null;
+  rootTypes?: SchemaMap;
 }> {
   constructor(
     data: {
       schemaLocation?: string;
-      schema?: Maybe<GraphQLSchema>;
-      rootTypes?: Maybe<SchemaMap>;
+      schema?: GraphQLSchema | null;
+      rootTypes?: SchemaMap;
     },
     options?: CancellableEventOptions,
   ) {

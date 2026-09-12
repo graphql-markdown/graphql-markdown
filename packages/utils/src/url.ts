@@ -27,6 +27,16 @@ const normalizeRelativePath = (path: string): string => {
     : `./${normalizedPath}`;
 };
 
+// Manual scan instead of a trailing `\/+$` regex, which is unanchored at the
+// start and so retries at every position with polynomial worst-case time.
+const stripTrailingSlashes = (value: string): string => {
+  let end = value.length;
+  while (end > 0 && value[end - 1] === "/") {
+    end--;
+  }
+  return value.slice(0, end);
+};
+
 /**
  * Converts a generated absolute GraphQL-Markdown doc URL into a page-relative file path.
  * Returns `undefined` when the target URL does not belong to the configured `baseURL`.
@@ -38,9 +48,9 @@ export const toRelativeGeneratedDocLink = ({
   outputDir,
   targetUrlPath,
 }: RelativeGeneratedDocLinkOptions): string | undefined => {
-  const normalizedBaseURL = baseURL
-    .replaceAll(/^\/+/g, "")
-    .replaceAll(/\/+$/g, "");
+  const normalizedBaseURL = stripTrailingSlashes(
+    baseURL.replaceAll(/^\/+/g, ""),
+  );
   const basePrefix = `/${normalizedBaseURL}/`;
 
   if (!targetUrlPath.startsWith(basePrefix)) {

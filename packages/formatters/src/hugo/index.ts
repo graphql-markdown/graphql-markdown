@@ -69,9 +69,7 @@ export const formatMDXBadge = ({ text }: Badge): MDXString => {
 /**
  * Formats an admonition using Hugo GitHub-style alert syntax (`> [!TYPE]`).
  * Requires Hugo 0.132 or later.
- * @param text - The admonition body text
- * @param title - Optional title rendered as bold text after the alert type line
- * @param type - Admonition type (e.g. `note`, `warning`, `danger`) mapped via {@link ALERT_TYPE_MAP}
+ * @param admonition - Admonition data with text, optional title, and type (e.g. `note`, `warning`, `danger`) mapped via {@link ALERT_TYPE_MAP}
  * @param _meta - Unused metadata parameter
  * @returns Formatted blockquote alert string
  */
@@ -86,8 +84,7 @@ export const formatMDXAdmonition = (
 
 /**
  * Formats a collapsible block as an HTML `<details>` element.
- * @param dataOpen - Label shown when the section is collapsed (used as `<summary>` text)
- * @param dataClose - Label shown inside the expanded section
+ * @param option - Configuration for open/close label text
  * @returns HTML `<details>`/`<summary>` block string
  */
 export const formatMDXDetails = ({
@@ -131,8 +128,7 @@ export const formatMDXFrontmatter = (
 /**
  * Strips the `.md` extension from internal links.
  * Hugo serves pages at extensionless URLs — links with `.md` would 404 in the built site.
- * @param text - Display text for the link
- * @param url - Link target URL, with `.md` extension removed if present
+ * @param link - Link data with text and URL; `.md` extension is removed from the URL if present
  * @returns Link object with the cleaned URL
  */
 export const formatMDXLink = ({ text, url }: TypeLink): TypeLink => {
