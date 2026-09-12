@@ -497,6 +497,27 @@ export const parseDeprecatedDocOptions = (
  * // }
  * ```
  */
+/**
+ * Resolves a boolean option that defaults to `true` and can only be turned off,
+ * either via a CLI negation flag (e.g. `--noParentType`) or an explicit `false`
+ * in the config file.
+ *
+ * @param cliNegated - the CLI negation flag value (e.g. `cliOpts.noParentType`)
+ * @param configValue - the corresponding config file option value
+ * @param defaultValue - the value used when neither source turns the option off
+ * @returns the resolved boolean value
+ */
+const resolveNegatableOption = (
+  cliNegated: Maybe<boolean>,
+  configValue: Maybe<boolean>,
+  defaultValue: boolean,
+): boolean => {
+  if (cliNegated === true) {
+    return false;
+  }
+  return typeof configValue === "boolean" ? configValue : defaultValue;
+};
+
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const getDocOptions = (
   cliOpts?: Maybe<CliOptions>,
@@ -508,12 +529,11 @@ export const getDocOptions = (
   const configIndex =
     typeof configOptions?.index === "boolean" ? configOptions.index : undefined;
   const index = cliIndex ?? configIndex ?? DEFAULT_OPTIONS.docOptions!.index;
-  const configSectionHeaderId =
-    typeof configOptions?.sectionHeaderId === "boolean"
-      ? configOptions.sectionHeaderId
-      : DEFAULT_OPTIONS.docOptions!.sectionHeaderId;
-  const sectionHeaderId =
-    cliOpts?.noSectionId === true ? false : configSectionHeaderId;
+  const sectionHeaderId = resolveNegatableOption(
+    cliOpts?.noSectionId,
+    configOptions?.sectionHeaderId,
+    DEFAULT_OPTIONS.docOptions!.sectionHeaderId!,
+  );
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
@@ -759,12 +779,16 @@ const getPrintTypeOptions = (
     exampleSection:
       configOptions?.exampleSection ??
       DEFAULT_OPTIONS.printTypeOptions.exampleSection,
-    parentTypePrefix:
-      (!cliOpts?.noParentType && configOptions?.parentTypePrefix) ??
+    parentTypePrefix: resolveNegatableOption(
+      cliOpts?.noParentType,
+      configOptions?.parentTypePrefix,
       DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix,
-    typeBadges:
-      (!cliOpts?.noTypeBadges && configOptions?.typeBadges) ??
+    ),
+    typeBadges: resolveNegatableOption(
+      cliOpts?.noTypeBadges,
+      configOptions?.typeBadges,
       DEFAULT_OPTIONS.printTypeOptions.typeBadges,
+    ),
     hierarchy: getTypeHierarchyOption(
       cliOpts?.hierarchy,
       configOptions?.hierarchy,
