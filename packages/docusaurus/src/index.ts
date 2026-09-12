@@ -3,7 +3,6 @@
  *
  * @packageDocumentation
  */
-/* istanbul ignore file */
 import type { LoadContext, Plugin, PluginOptions } from "@docusaurus/types";
 import type { GraphQLMarkdownCliOptions } from "@graphql-markdown/types";
 
