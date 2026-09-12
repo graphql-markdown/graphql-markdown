@@ -4,7 +4,13 @@ import pluginGraphQLDocGenerator from "../../src/index";
 
 vi.mock("@graphql-markdown/cli", () => {
   return {
-    getGraphQLMarkdownCli: vi.fn(),
+    getGraphQLMarkdownCli: vi.fn(() => {
+      return {
+        name: () => {
+          return "graphql-to-doc";
+        },
+      };
+    }),
   };
 });
 import { getGraphQLMarkdownCli } from "@graphql-markdown/cli";
@@ -114,6 +120,21 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+      );
+    });
+
+    test("throws when the CLI command is not commander-compatible", async () => {
+      vi.mocked(getGraphQLMarkdownCli).mockReturnValueOnce({} as never);
+
+      const plugin = await pluginGraphQLDocGenerator(
+        {} as LoadContext,
+        mockOptions,
+      );
+
+      expect(() => {
+        plugin.extendCli!(mockCli);
+      }).toThrow(
+        "GraphQL-Markdown CLI command is not compatible with Docusaurus commander interface.",
       );
     });
   });

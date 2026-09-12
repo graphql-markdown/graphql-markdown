@@ -17,6 +17,39 @@ const LOGGER_MODULE = "@docusaurus/logger" as const;
 const MDX_PACKAGE = "@graphql-markdown/docusaurus/mdx" as const;
 
 /**
+ * Minimal shape `extendCli`'s CLI command must satisfy at runtime.
+ *
+ * \@graphql-markdown/cli builds its command with commander v15, while
+ * \@docusaurus/types types `extendCli`'s parameter with commander v5's
+ * `Command`. The two are structurally compatible at runtime, but not
+ * assignable under TypeScript due to dual-version resolution — this type
+ * (and the guard below) narrows the unsafe cast to a single checked field.
+ */
+interface CommanderCompatibleCommand {
+  name: () => string;
+}
+
+const isCommanderCompatibleCommand = (
+  value: unknown,
+): value is CommanderCompatibleCommand => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    typeof (value as { name?: unknown }).name === "function"
+  );
+};
+
+const assertCommanderCompatibleCommand: (
+  value: unknown,
+) => asserts value is CommanderCompatibleCommand = (value) => {
+  if (!isCommanderCompatibleCommand(value)) {
+    throw new TypeError(
+      "GraphQL-Markdown CLI command is not compatible with Docusaurus commander interface.",
+    );
+  }
+};
+
+/**
  * Docusaurus plugin wrapper that wires GraphQL-Markdown into the build,
  * optionally running the CLI during `docusaurus build` and registering
  * the `graphql-to-doc` command on the local CLI.
@@ -43,22 +76,21 @@ export default async function pluginGraphQLDocGenerator(
      * @returns void
      */
     extendCli(cli): void {
-      // @graphql-markdown/cli uses commander v15; @docusaurus/types types extendCli
-      // with commander v5's Command. The two are structurally compatible at runtime
-      // but TypeScript sees them as different types due to dual-version resolution.
-      cli.addCommand(
-        getGraphQLMarkdownCli(
-          {
-            ...options,
-            docOptions: {
-              generatorFrameworkName: "docusaurus",
-              generatorFrameworkVersion: DOCUSAURUS_VERSION,
-              ...options.docOptions,
-            },
+      const command = getGraphQLMarkdownCli(
+        {
+          ...options,
+          docOptions: {
+            generatorFrameworkName: "docusaurus",
+            generatorFrameworkVersion: DOCUSAURUS_VERSION,
+            ...options.docOptions,
           },
-          LOGGER_MODULE,
-          options.formatter ?? options.mdxParser ?? MDX_PACKAGE, // NOSONAR typescript:S1874
-        ) as unknown as Parameters<typeof cli.addCommand>[0],
+        },
+        LOGGER_MODULE,
+        options.formatter ?? MDX_PACKAGE,
+      );
+      assertCommanderCompatibleCommand(command);
+      cli.addCommand(
+        command as unknown as Parameters<typeof cli.addCommand>[0],
       );
     },
   };
