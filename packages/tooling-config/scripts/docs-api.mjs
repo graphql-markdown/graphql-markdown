@@ -19,6 +19,7 @@ import { once } from "node:events";
 
 const API_DIR = "./api";
 const WORKSPACE = "@graphql-markdown";
+const CATEGORY_MAX_DEPTH = 3;
 
 const TYPEDOC_OPTIONS_PATH = fileURLToPath(
   import.meta.resolve("../typedoc/api.mjs"),
@@ -166,7 +167,11 @@ async function createCategoryFiles(
 async function writeAllCategoryFiles() {
   for (const entry of await readdir(API_DIR, { withFileTypes: true })) {
     if (entry.isDirectory()) {
-      await createCategoryFiles(join(API_DIR, entry.name), 1, 3);
+      await createCategoryFiles(
+        join(API_DIR, entry.name),
+        1,
+        CATEGORY_MAX_DEPTH,
+      );
     }
   }
 }
