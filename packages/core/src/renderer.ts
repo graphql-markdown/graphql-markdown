@@ -339,6 +339,28 @@ export const logHandlerErrors = (eventName: string, errors: Error[]): void => {
 };
 
 /**
+ * Constructor options for {@link Renderer}, and input to {@link getRenderer}.
+ */
+export interface RendererOptions {
+  /** The printer instance used to convert GraphQL types to markdown */
+  printer: typeof IPrinter;
+  /** Directory where documentation will be generated */
+  outputDir: string;
+  /** Base URL for the documentation */
+  baseURL: string;
+  /** Optional grouping configuration for schema entities */
+  group: Maybe<SchemaEntitiesGroupMap>;
+  /** Whether to format the generated markdown */
+  prettify: boolean;
+  /** Additional documentation options */
+  docOptions: Maybe<RendererDocOptions>;
+  /** Optional MDX file extension to use */
+  mdxExtension: string;
+  /** Destination for generated pages; defaults to the local filesystem */
+  outputAdapter?: Maybe<OutputAdapter>;
+}
+
+/**
  * Core renderer class responsible for generating documentation files from GraphQL schema entities.
  * Handles the conversion of schema types to markdown/MDX documentation with proper organization.
  *
@@ -367,26 +389,19 @@ export class Renderer {
   /**
    * Creates a new Renderer instance.
    *
-   * @param printer - The printer instance used to convert GraphQL types to markdown
-   * @param outputDir - Directory where documentation will be generated
-   * @param baseURL - Base URL for the documentation
-   * @param group - Optional grouping configuration for schema entities
-   * @param prettify - Whether to format the generated markdown
-   * @param docOptions - Additional documentation options
-   * @param mdxExtension - Optional MDX file extension to use
-   * @param outputAdapter - Destination for generated pages; defaults to the local filesystem
+   * @param options - Renderer construction options
    * @example
    */
-  constructor(
-    printer: typeof IPrinter,
-    outputDir: string,
-    baseURL: string,
-    group: Maybe<SchemaEntitiesGroupMap>,
-    prettify: boolean,
-    docOptions: Maybe<RendererDocOptions>,
-    mdxExtension: string,
-    outputAdapter: Maybe<OutputAdapter> = undefined,
-  ) {
+  constructor({
+    printer,
+    outputDir,
+    baseURL,
+    group,
+    prettify,
+    docOptions,
+    mdxExtension,
+    outputAdapter = undefined,
+  }: RendererOptions) {
     this.printer = printer;
 
     this.group = group;
@@ -1060,42 +1075,37 @@ export class Renderer {
  * Factory function to create and initialize a Renderer instance.
  * Creates the output directory and returns a configured renderer.
  *
- * @param printer - The printer instance to use for rendering types
- * @param outputDir - The output directory for generated documentation
- * @param baseURL - The base URL for the documentation
- * @param group - Optional grouping configuration
- * @param prettify - Whether to prettify the output markdown
- * @param docOptions - Additional documentation options
- * @param mdxExtension - Extension to use for MDX files
+ * @param options - Renderer construction options
  * @returns A configured Renderer instance
  *
  * @example
  * ```typescript
- * const renderer = await getRenderer(
- *   myPrinter,
- *   './docs',
- *   '/api',
- *   groupConfig,
- *   true,
- *   { force: true, index: true }
- * );
+ * const renderer = await getRenderer({
+ *   printer: myPrinter,
+ *   outputDir: './docs',
+ *   baseURL: '/api',
+ *   group: groupConfig,
+ *   prettify: true,
+ *   docOptions: { force: true, index: true },
+ *   mdxExtension: '.mdx',
+ * });
  * ```
  */
-export const getRenderer = async (
-  printer: typeof IPrinter,
-  outputDir: string,
-  baseURL: string,
-  group: Maybe<SchemaEntitiesGroupMap>,
-  prettify: boolean,
-  docOptions: Maybe<RendererDocOptions>,
-  mdxExtension: string,
-  outputAdapter: Maybe<OutputAdapter> = undefined,
-): Promise<InstanceType<typeof Renderer>> => {
+export const getRenderer = async ({
+  printer,
+  outputDir,
+  baseURL,
+  group,
+  prettify,
+  docOptions,
+  mdxExtension,
+  outputAdapter = undefined,
+}: RendererOptions): Promise<InstanceType<typeof Renderer>> => {
   const adapter = outputAdapter ?? fsOutputAdapter;
   // Optional on the interface: a destination with no directory concept (an
   // object store, a CMS collection) has nothing to prepare.
   await adapter.ensureDir?.(outputDir, { forceEmpty: docOptions?.force });
-  return new Renderer(
+  return new Renderer({
     printer,
     outputDir,
     baseURL,
@@ -1103,6 +1113,6 @@ export const getRenderer = async (
     prettify,
     docOptions,
     mdxExtension,
-    adapter,
-  );
+    outputAdapter: adapter,
+  });
 };

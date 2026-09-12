@@ -83,14 +83,14 @@ describe("generateCategoryMetafileType - focused tests", () => {
   test("throws when outputDir is empty", async () => {
     expect.assertions(1);
 
-    const renderer: any = await getRenderer(
-      Printer as unknown as typeof IPrinter,
-      "/output",
-      baseURL,
-      undefined,
-      false,
-      DEFAULT_RENDERER_OPTIONS,
-    );
+    const renderer: any = await getRenderer({
+      printer: Printer as unknown as typeof IPrinter,
+      outputDir: "/output",
+      baseURL: baseURL,
+      group: undefined,
+      prettify: false,
+      docOptions: DEFAULT_RENDERER_OPTIONS,
+    });
     replaceProperty(renderer, "outputDir", "");
 
     await expect(
@@ -103,18 +103,18 @@ describe("generateCategoryMetafileType - focused tests", () => {
 
     const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-    const renderer: any = await getRenderer(
-      Printer as unknown as typeof IPrinter,
-      "/output",
-      baseURL,
-      undefined,
-      false,
-      {
+    const renderer: any = await getRenderer({
+      printer: Printer as unknown as typeof IPrinter,
+      outputDir: "/output",
+      baseURL: baseURL,
+      group: undefined,
+      prettify: false,
+      docOptions: {
         ...DEFAULT_RENDERER_OPTIONS,
         hierarchy: { [TypeHierarchy.FLAT]: {} },
       },
-      undefined, // mdxModule not needed - using event system
-    );
+      mdxExtension: undefined, // mdxModule not needed - using event system
+    });
 
     const dir = await renderer.generateCategoryMetafileType(
       {},
@@ -131,15 +131,15 @@ describe("generateCategoryMetafileType - focused tests", () => {
 
     const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-    const renderer: any = await getRenderer(
-      Printer as unknown as typeof IPrinter,
-      "/output",
-      baseURL,
-      undefined,
-      false,
-      DEFAULT_RENDERER_OPTIONS,
-      undefined, // mdxModule not needed - using event system
-    );
+    const renderer: any = await getRenderer({
+      printer: Printer as unknown as typeof IPrinter,
+      outputDir: "/output",
+      baseURL: baseURL,
+      group: undefined,
+      prettify: false,
+      docOptions: DEFAULT_RENDERER_OPTIONS,
+      mdxExtension: undefined, // mdxModule not needed - using event system
+    });
 
     // enable MDX forwarding
     renderer.mdxModuleIndexFileSupport = true;
@@ -162,19 +162,19 @@ describe("generateCategoryMetafileType - focused tests", () => {
 
     const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-    const renderer: any = await getRenderer(
-      Printer as unknown as typeof IPrinter,
-      "/output",
-      baseURL,
-      undefined,
-      false,
-      {
+    const renderer: any = await getRenderer({
+      printer: Printer as unknown as typeof IPrinter,
+      outputDir: "/output",
+      baseURL: baseURL,
+      group: undefined,
+      prettify: false,
+      docOptions: {
         ...DEFAULT_RENDERER_OPTIONS,
         deprecated: "group",
         hierarchy: { [TypeHierarchy.ENTITY]: {} },
       },
-      undefined, // mdxModule not needed - using event system
-    );
+      mdxExtension: undefined, // mdxModule not needed - using event system
+    });
 
     renderer.mdxModuleIndexFileSupport = true;
     vi.spyOn(GraphQL, "isDeprecated").mockReturnValueOnce(true);
@@ -193,19 +193,19 @@ describe("generateCategoryMetafileType - focused tests", () => {
 
     const mockGenerateIndexMetafile = vi.fn();
     mockGenerateIndexMetafileHook(mockGenerateIndexMetafile);
-    const renderer: any = await getRenderer(
-      Printer as unknown as typeof IPrinter,
-      "/output",
-      baseURL,
-      undefined,
-      false,
-      {
+    const renderer: any = await getRenderer({
+      printer: Printer as unknown as typeof IPrinter,
+      outputDir: "/output",
+      baseURL: baseURL,
+      group: undefined,
+      prettify: false,
+      docOptions: {
         ...DEFAULT_RENDERER_OPTIONS,
         index: false,
         hierarchy: { [TypeHierarchy.ENTITY]: {} },
       },
-      undefined, // mdxModule not needed - using event system
-    );
+      mdxExtension: undefined, // mdxModule not needed - using event system
+    });
 
     renderer.mdxModuleIndexFileSupport = true;
 

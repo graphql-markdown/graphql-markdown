@@ -218,20 +218,21 @@ describe("generator", () => {
           undefined,
           expect.anything(), // event emitter
         );
-        expect(rendererSpy).toHaveBeenCalledWith(
-          {},
-          options.outputDir,
-          options.baseURL,
-          undefined,
-          options.prettify,
-          {
+        expect(rendererSpy).toHaveBeenCalledWith({
+          printer: {},
+          outputDir: options.outputDir,
+          baseURL: options.baseURL,
+          group: undefined,
+          prettify: options.prettify,
+          docOptions: {
             ...options.docOptions,
             deprecated: options.printTypeOptions!.deprecated,
             hierarchy: options.printTypeOptions!.hierarchy,
           },
-          ".md",
-          undefined, // outputAdapter: unset, so the renderer falls back to the filesystem
-        );
+          mdxExtension: ".md",
+          // outputAdapter: unset, so the renderer falls back to the filesystem
+          outputAdapter: undefined,
+        });
       },
     );
 
@@ -623,7 +624,7 @@ describe("generator", () => {
       });
 
       // Verify the last argument (mdxExtension) is .mdx
-      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
+      expect(rendererSpy.mock.calls[0]![0].mdxExtension).toBe(".mdx");
     });
 
     test("uses custom mdxExtension from mdxModule when provided", async () => {
@@ -648,7 +649,7 @@ describe("generator", () => {
       });
 
       // Verify the last argument (mdxExtension) is the custom extension
-      expect(rendererSpy.mock.calls[0]![6]).toBe(".custom");
+      expect(rendererSpy.mock.calls[0]![0].mdxExtension).toBe(".custom");
     });
 
     test("does not use mdxDeclaration as file extension (regression test)", async () => {
@@ -677,7 +678,7 @@ describe("generator", () => {
       });
 
       // Should use mdxExtension (.mdx), not mdxDeclaration (the import statement)
-      expect(rendererSpy.mock.calls[0]![6]).toBe(".mdx");
+      expect(rendererSpy.mock.calls[0]![0].mdxExtension).toBe(".mdx");
     });
 
     test("calls resolveSkipAndOnlyDirectives with directive options and schema", async () => {

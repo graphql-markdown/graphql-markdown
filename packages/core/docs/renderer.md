@@ -4,7 +4,7 @@
 
 ### Renderer
 
-Defined in: [core/src/renderer.ts:342](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L342)
+Defined in: [packages/core/src/renderer.ts:376](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L376)
 
 Core renderer class responsible for generating documentation files from GraphQL schema entities.
 Handles the conversion of schema types to markdown/MDX documentation with proper organization.
@@ -27,63 +27,20 @@ Each level has its own CategoryPositionManager that restarts numbering at 1.
 ##### Constructor
 
 ```ts
-new Renderer(
-   printer,
-   outputDir,
-   baseURL,
-   group,
-   prettify,
-   docOptions,
-   mdxExtension): Renderer;
+new Renderer(options): Renderer;
 ```
 
-Defined in: [core/src/renderer.ts:366](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L366)
+Defined in: [packages/core/src/renderer.ts:395](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L395)
 
 Creates a new Renderer instance.
 
 ###### Parameters
 
-###### printer
+###### options
 
-_typeof_ `IPrinter`
+[`RendererOptions`](#rendereroptions-1)
 
-The printer instance used to convert GraphQL types to markdown
-
-###### outputDir
-
-`string`
-
-Directory where documentation will be generated
-
-###### baseURL
-
-`string`
-
-Base URL for the documentation
-
-###### group
-
-`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
-
-Optional grouping configuration for schema entities
-
-###### prettify
-
-`boolean`
-
-Whether to format the generated markdown
-
-###### docOptions
-
-`Maybe`&lt;`RendererDocOptions`&gt;
-
-Additional documentation options
-
-###### mdxExtension
-
-`string`
-
-Optional MDX file extension to use
+Renderer construction options
 
 ###### Returns
 
@@ -103,7 +60,7 @@ Optional MDX file extension to use
 readonly baseURL: string;
 ```
 
-Defined in: [core/src/renderer.ts:345](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L345)
+Defined in: [packages/core/src/renderer.ts:379](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L379)
 
 ##### group
 
@@ -111,7 +68,7 @@ Defined in: [core/src/renderer.ts:345](https://github.com/graphql-markdown/graph
 readonly group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
 ```
 
-Defined in: [core/src/renderer.ts:343](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L343)
+Defined in: [packages/core/src/renderer.ts:377](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L377)
 
 ##### mdxExtension
 
@@ -119,7 +76,7 @@ Defined in: [core/src/renderer.ts:343](https://github.com/graphql-markdown/graph
 readonly mdxExtension: string;
 ```
 
-Defined in: [core/src/renderer.ts:348](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L348)
+Defined in: [packages/core/src/renderer.ts:382](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L382)
 
 ##### options
 
@@ -127,7 +84,15 @@ Defined in: [core/src/renderer.ts:348](https://github.com/graphql-markdown/graph
 readonly options: Maybe<RendererDocOptions>;
 ```
 
-Defined in: [core/src/renderer.ts:347](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L347)
+Defined in: [packages/core/src/renderer.ts:381](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L381)
+
+##### outputAdapter
+
+```ts
+readonly outputAdapter: OutputAdapter;
+```
+
+Defined in: [packages/core/src/renderer.ts:383](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L383)
 
 ##### outputDir
 
@@ -135,7 +100,7 @@ Defined in: [core/src/renderer.ts:347](https://github.com/graphql-markdown/graph
 readonly outputDir: string;
 ```
 
-Defined in: [core/src/renderer.ts:344](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L344)
+Defined in: [packages/core/src/renderer.ts:378](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L378)
 
 ##### prettify
 
@@ -143,7 +108,7 @@ Defined in: [core/src/renderer.ts:344](https://github.com/graphql-markdown/graph
 readonly prettify: boolean;
 ```
 
-Defined in: [core/src/renderer.ts:346](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L346)
+Defined in: [packages/core/src/renderer.ts:380](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L380)
 
 #### Methods
 
@@ -153,10 +118,11 @@ Defined in: [core/src/renderer.ts:346](https://github.com/graphql-markdown/graph
 generateCategoryMetafileType(
    type,
    name,
-   rootTypeName): Promise<string>;
+   rootTypeName
+): Promise<string>;
 ```
 
-Defined in: [core/src/renderer.ts:469](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L469)
+Defined in: [packages/core/src/renderer.ts:500](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L500)
 
 Generates the directory path and metafiles for a specific schema entity type.
 Creates the appropriate directory structure based on configuration options.
@@ -199,10 +165,11 @@ The generated directory path
 generateIndexMetafile(
    dirPath,
    category,
-   options?): Promise<void>;
+   options?
+): Promise<void>;
 ```
 
-Defined in: [core/src/renderer.ts:414](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L414)
+Defined in: [packages/core/src/renderer.ts:445](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L445)
 
 Generates an index metafile for a category directory if MDX support is available.
 
@@ -247,7 +214,7 @@ await renderer.generateIndexMetafile("docs/types", "Types", {
 preCollectCategories(rootTypeNames): void;
 ```
 
-Defined in: [core/src/renderer.ts:759](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L759)
+Defined in: [packages/core/src/renderer.ts:796](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L796)
 
 Pre-collects all category names that will be generated during rendering.
 This allows the position manager to assign consistent positions before
@@ -283,7 +250,7 @@ Array of root type names from the schema
 renderHomepage(homepageLocation): Promise<void>;
 ```
 
-Defined in: [core/src/renderer.ts:809](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L809)
+Defined in: [packages/core/src/renderer.ts:846](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L846)
 
 Renders the homepage for the documentation from a template file.
 Replaces placeholders in the template with actual values.
@@ -314,7 +281,7 @@ Promise that resolves when the homepage is rendered
 renderRootTypes(rootTypeName, type): Promise<Maybe<Maybe<Category>[]>>;
 ```
 
-Defined in: [core/src/renderer.ts:553](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L553)
+Defined in: [packages/core/src/renderer.ts:584](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L584)
 
 Renders all types within a root type category (e.g., all Query types).
 
@@ -351,10 +318,12 @@ renderTypeEntities(
    dirPath,
    name,
    type,
-   operationNamespaceParts?): Promise<Maybe<Category>>;
+   operationNamespaceParts?,
+   entity?
+): Promise<Maybe<Category>>;
 ```
 
-Defined in: [core/src/renderer.ts:620](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L620)
+Defined in: [packages/core/src/renderer.ts:654](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L654)
 
 Renders documentation for a specific type entity and saves it to a file.
 
@@ -382,6 +351,14 @@ The type entity to render
 
 `string`[]
 
+The namespace parts for a namespaced operation
+
+###### entity?
+
+`SchemaEntity`
+
+The schema entity kind being rendered, e.g. `queries`
+
 ###### Returns
 
 `Promise`&lt;`Maybe`&lt;`Category`&gt;&gt;
@@ -398,7 +375,7 @@ The category information for the rendered entity or undefined
 
 ### CategoryMetafileOptions
 
-Defined in: [core/src/renderer.ts:223](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L223)
+Defined in: [packages/core/src/renderer.ts:221](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L221)
 
 Configuration options for category metafiles in the documentation.
 These options control the appearance and behavior of category sections in the sidebar.
@@ -424,7 +401,7 @@ const options: CategoryMetafileOptions = {
 optional collapsed?: boolean;
 ```
 
-Defined in: [core/src/renderer.ts:225](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L225)
+Defined in: [packages/core/src/renderer.ts:223](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L223)
 
 Whether the category should be initially collapsed
 
@@ -434,7 +411,7 @@ Whether the category should be initially collapsed
 optional collapsible?: boolean;
 ```
 
-Defined in: [core/src/renderer.ts:224](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L224)
+Defined in: [packages/core/src/renderer.ts:222](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L222)
 
 Whether the category should be collapsible in the sidebar
 
@@ -444,7 +421,7 @@ Whether the category should be collapsible in the sidebar
 optional sidebarPosition?: number;
 ```
 
-Defined in: [core/src/renderer.ts:226](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L226)
+Defined in: [packages/core/src/renderer.ts:224](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L224)
 
 Custom position in the sidebar (lower numbers appear first)
 
@@ -454,9 +431,99 @@ Custom position in the sidebar (lower numbers appear first)
 optional styleClass?: string;
 ```
 
-Defined in: [core/src/renderer.ts:227](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L227)
+Defined in: [packages/core/src/renderer.ts:225](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L225)
 
 CSS class to apply to the category for styling
+
+---
+
+### RendererOptions
+
+Defined in: [packages/core/src/renderer.ts:344](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L344)
+
+Constructor options for [Renderer](#renderer), and input to [getRenderer](#getrenderer).
+
+#### Properties
+
+##### baseURL
+
+```ts
+baseURL: string;
+```
+
+Defined in: [packages/core/src/renderer.ts:350](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L350)
+
+Base URL for the documentation
+
+##### docOptions
+
+```ts
+docOptions: Maybe<RendererDocOptions>;
+```
+
+Defined in: [packages/core/src/renderer.ts:356](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L356)
+
+Additional documentation options
+
+##### group
+
+```ts
+group: Maybe<Partial<Record<SchemaEntity, Record<string, Maybe<string>>>>>;
+```
+
+Defined in: [packages/core/src/renderer.ts:352](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L352)
+
+Optional grouping configuration for schema entities
+
+##### mdxExtension
+
+```ts
+mdxExtension: string;
+```
+
+Defined in: [packages/core/src/renderer.ts:358](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L358)
+
+Optional MDX file extension to use
+
+##### outputAdapter?
+
+```ts
+optional outputAdapter?: Maybe<OutputAdapter>;
+```
+
+Defined in: [packages/core/src/renderer.ts:360](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L360)
+
+Destination for generated pages; defaults to the local filesystem
+
+##### outputDir
+
+```ts
+outputDir: string;
+```
+
+Defined in: [packages/core/src/renderer.ts:348](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L348)
+
+Directory where documentation will be generated
+
+##### prettify
+
+```ts
+prettify: boolean;
+```
+
+Defined in: [packages/core/src/renderer.ts:354](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L354)
+
+Whether to format the generated markdown
+
+##### printer
+
+```ts
+printer: typeof IPrinter;
+```
+
+Defined in: [packages/core/src/renderer.ts:346](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L346)
+
+The printer instance used to convert GraphQL types to markdown
 
 ## Variables
 
@@ -466,7 +533,7 @@ CSS class to apply to the category for styling
 const API_GROUPS: Required<ApiGroupOverrideType>;
 ```
 
-Defined in: [core/src/renderer.ts:126](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L126)
+Defined in: [packages/core/src/renderer.ts:125](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L125)
 
 Default group names for API types and non-API types.
 This constant provides the base folder structure for organizing GraphQL schema entities.
@@ -495,7 +562,7 @@ const customGroups = { ...API_GROUPS, operations: "queries-and-mutations" };
 function getApiGroupFolder(type, groups?): string;
 ```
 
-Defined in: [core/src/renderer.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L149)
+Defined in: [packages/core/src/renderer.ts:147](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L147)
 
 Determines the appropriate folder for a GraphQL schema entity based on its type.
 
@@ -534,65 +601,21 @@ const folder = getApiGroupFolder(objectType, { operations: "queries" }); // Retu
 ### getRenderer()
 
 ```ts
-function getRenderer(
-  printer,
-  outputDir,
-  baseURL,
-  group,
-  prettify,
-  docOptions,
-  mdxExtension,
-): Promise<Renderer>;
+function getRenderer(options): Promise<Renderer>;
 ```
 
-Defined in: [core/src/renderer.ts:1041](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L1041)
+Defined in: [packages/core/src/renderer.ts:1094](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L1094)
 
 Factory function to create and initialize a Renderer instance.
 Creates the output directory and returns a configured renderer.
 
 #### Parameters
 
-##### printer
+##### options
 
-_typeof_ `IPrinter`
+[`RendererOptions`](#rendereroptions-1)
 
-The printer instance to use for rendering types
-
-##### outputDir
-
-`string`
-
-The output directory for generated documentation
-
-##### baseURL
-
-`string`
-
-The base URL for the documentation
-
-##### group
-
-`Maybe`&lt;`Partial`&lt;`Record`&lt;`SchemaEntity`, `Record`&lt;`string`, `Maybe`&lt;`string`&gt;&gt;&gt;&gt;&gt;
-
-Optional grouping configuration
-
-##### prettify
-
-`boolean`
-
-Whether to prettify the output markdown
-
-##### docOptions
-
-`Maybe`&lt;`RendererDocOptions`&gt;
-
-Additional documentation options
-
-##### mdxExtension
-
-`string`
-
-Extension to use for MDX files
+Renderer construction options
 
 #### Returns
 
@@ -603,12 +626,46 @@ A configured Renderer instance
 #### Example
 
 ```typescript
-const renderer = await getRenderer(
-  myPrinter,
-  "./docs",
-  "/api",
-  groupConfig,
-  true,
-  { force: true, index: true },
-);
+const renderer = await getRenderer({
+  printer: myPrinter,
+  outputDir: "./docs",
+  baseURL: "/api",
+  group: groupConfig,
+  prettify: true,
+  docOptions: { force: true, index: true },
+  mdxExtension: ".mdx",
+});
 ```
+
+---
+
+### logHandlerErrors()
+
+```ts
+function logHandlerErrors(eventName, errors): void;
+```
+
+Defined in: [packages/core/src/renderer.ts:335](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L335)
+
+Reports errors thrown by event handlers.
+
+Handler errors are collected rather than thrown, so without this they are
+dropped and the formatter's post-processing silently does nothing.
+
+#### Parameters
+
+##### eventName
+
+`string`
+
+Name of the emitted event
+
+##### errors
+
+`Error`[]
+
+Errors collected from the handlers
+
+#### Returns
+
+`void`
