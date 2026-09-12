@@ -23,6 +23,7 @@ import {
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";
+import { printSlotDecorators } from "./decorator";
 import {
   hasPrintableDirective,
   printLink,
@@ -89,11 +90,33 @@ export const printSectionItem = <T>(
     withAttributes: false,
   });
 
-  const badges = printBadges(type, options);
-  const tags = printCustomTags(type, options);
+  const badges = [
+    printBadges(type, options),
+    ...printSlotDecorators("badges", type, options),
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const tags = [
+    printCustomTags(type, options),
+    ...printSlotDecorators("tags", type, options),
+  ]
+    .filter(Boolean)
+    .join(" ");
   const parentTypeLink = printParentLink(type, options);
-  const permalink = printPermalink(link.id, options);
-  const metadata = [badges, tags, permalink].filter(Boolean).join(" ");
+  const permalink = [
+    printPermalink(link.id, options),
+    ...printSlotDecorators("permalink", type, options),
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const metadata = [
+    badges,
+    tags,
+    permalink,
+    ...printSlotDecorators("metadata", type, options),
+  ]
+    .filter(Boolean)
+    .join(" ");
   const title =
     `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${metadata} ${MARKDOWN_EOL}` as MDXString;
 

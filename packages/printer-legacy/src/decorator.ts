@@ -207,27 +207,28 @@ const resolveDirectiveDefinition = (
 };
 
 /**
- * Prints a single decorator for a type.
+ * Resolves and renders a single decorator's raw content for a type.
  *
  * The decorator is skipped, returning `undefined`, when its `appliesTo` filter
  * excludes the type, its predicate does not match, no value is resolved for
- * it, or the render callback returns no content.
+ * it, or the render callback returns no content. Shared by {@link printDecorator}
+ * (which wraps this into a titled page section) and {@link printSlotDecorators}
+ * (which collects this raw content for a named slot, such as the metadata line).
  *
- * Reserved ids are filtered by `getDeclaredDecorators`, not here: the built-in
- * sections are themselves declared with a reserved id.
+ * @internal
  *
  * @param type - the GraphQL type being printed.
  * @param decorator - the resolved decorator declaration.
  * @param options - the print options in effect.
  *
- * @returns the rendered page section, or `undefined` when nothing to print.
+ * @returns the decorator's rendered content, or `undefined` when nothing to print.
  *
  */
-export const printDecorator = (
+const renderDecoratorContent = (
   type: unknown,
   decorator: ResolvedDecorator,
   options: PrintTypeOptions,
-): Maybe<PageSection> => {
+): Maybe<string> => {
   if (
     typeof decorator.render !== "function" ||
     !appliesToEntity(type, decorator, options)
@@ -281,6 +282,33 @@ export const printDecorator = (
   const content = decorator.render(values, options, context);
 
   if (typeof content !== "string" || content.trim().length === 0) {
+    return undefined;
+  }
+
+  return content;
+};
+
+/**
+ * Prints a single decorator for a type, as a titled page section.
+ *
+ * Reserved ids are filtered by `getDeclaredDecorators`, not here: the built-in
+ * sections are themselves declared with a reserved id.
+ *
+ * @param type - the GraphQL type being printed.
+ * @param decorator - the resolved decorator declaration.
+ * @param options - the print options in effect.
+ *
+ * @returns the rendered page section, or `undefined` when nothing to print.
+ *
+ */
+export const printDecorator = (
+  type: unknown,
+  decorator: ResolvedDecorator,
+  options: PrintTypeOptions,
+): Maybe<PageSection> => {
+  const content = renderDecoratorContent(type, decorator, options);
+
+  if (content === undefined) {
     return undefined;
   }
 
@@ -391,6 +419,40 @@ export const printDecorators = (
     });
 
   return sections;
+};
+
+/**
+ * Prints every decorator declared for a named slot (`position: { into: slot }`),
+ * as raw content rather than a page section — used to splice decorator output
+ * into a slot outside the page's section order, such as the metadata line of a
+ * type or field heading, or a member's description.
+ *
+ * @param slot - the slot name (matches a decorator's `position.into`).
+ * @param type - the GraphQL type being printed.
+ * @param options - the print options in effect.
+ *
+ * @returns the rendered content for every decorator targeting `slot`, in
+ * declaration order; empty when none target it or render no content.
+ *
+ */
+export const printSlotDecorators = (
+  slot: string,
+  type: unknown,
+  options: PrintTypeOptions,
+): string[] => {
+  return getDeclaredDecorators(options)
+    .filter((decorator): boolean => {
+      return (
+        targetsSlot(decorator) &&
+        (decorator.position as { into: string }).into === slot
+      );
+    })
+    .map((decorator): Maybe<string> => {
+      return renderDecoratorContent(type, decorator, options);
+    })
+    .filter((content): content is string => {
+      return typeof content === "string";
+    });
 };
 
 /**

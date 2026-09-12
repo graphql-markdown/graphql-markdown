@@ -22,6 +22,7 @@ import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
 import { getCustomDirectiveResolver } from "./directive";
+import { printSlotDecorators } from "./decorator";
 
 /**
  * Prints documentation for custom directives applied to a type.
@@ -148,5 +149,10 @@ export const printDescription = (
   const description = formatDescription(type, noText);
   const customDirectives = getCustomDirectivesText(type, options);
   const deprecation = printDeprecation(type, options);
-  return `${deprecation}${description}${customDirectives}`;
+  const decoratorContent = printSlotDecorators("description", type, options);
+  const decorators =
+    decoratorContent.length > 0
+      ? `${MARKDOWN_EOP}${decoratorContent.join(MARKDOWN_EOP)}`
+      : "";
+  return `${deprecation}${description}${customDirectives}${decorators}`;
 };

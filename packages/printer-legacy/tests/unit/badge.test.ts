@@ -134,6 +134,19 @@ describe("badge", () => {
     });
   });
 
+  describe("formatBadge", () => {
+    test("formats a badge through the active formatter, same as printBadge", () => {
+      expect.assertions(1);
+
+      const badge = { text: "custom" };
+      const options = createOptionsWithFormatter();
+
+      expect(Badge.formatBadge(badge, options)).toBe(
+        Badge.printBadge(badge, options),
+      );
+    });
+  });
+
   describe("getTypeBadges", () => {
     test("return non-null badge is type is non-null", () => {
       expect.assertions(1);
