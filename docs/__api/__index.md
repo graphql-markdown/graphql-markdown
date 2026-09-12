@@ -30,7 +30,7 @@ If you are targeting a formatter-based documentation stack such as Hugo, MkDocs,
 Using the CLI:
 
 ```bash
-graphql-markdown --schema ./schema.graphql --root ./docs
+npx gqlmd graphql-to-doc --schema ./schema.graphql --root ./docs
 ```
 
 For programmatic usage, you can use the CLI package:
