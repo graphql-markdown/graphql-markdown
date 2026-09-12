@@ -4,6 +4,7 @@ import type {
   ConfigOptions,
   CustomDirective,
   CustomSections,
+  Decorators,
   DirectiveName,
   ExtensionProjectConfig,
   GraphQLDirective,
@@ -38,6 +39,8 @@ import {
   parseHomepageOption,
   TypeHierarchy,
   getCustomSectionsOption,
+  getDecoratorsOption,
+  parseDeprecatedCustomSectionsOption,
 } from "../../src/config";
 
 import * as graphqlConfigModule from "../../src/graphql-config";
@@ -363,6 +366,7 @@ describe("config", () => {
       expect(config).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         customDirective: configFileOpts.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: configFileOpts.diffMethod,
         docOptions: {
           ...configFileOpts.docOptions,
@@ -476,6 +480,7 @@ describe("config", () => {
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
       });
     });
 
@@ -554,6 +559,7 @@ describe("config", () => {
         skipDocDirective: [],
         onlyDocDirective: [],
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
       });
     });
 
@@ -575,6 +581,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -613,6 +620,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -655,6 +663,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -908,6 +917,232 @@ describe("config", () => {
           "Custom section 'httpResponse' requires a 'render' function.",
         ),
       );
+    });
+  });
+
+  describe("getDecoratorsOption", () => {
+    const decorator = {
+      render: (): string => {
+        return "content";
+      },
+    };
+
+    test.each([undefined, null])(
+      "returns undefined if not configured (%s)",
+      (value) => {
+        expect.assertions(1);
+
+        expect(getDecoratorsOption(value)).toBeUndefined();
+      },
+    );
+
+    test.each([false, 0, ""])(
+      "throws a type error if the option is the falsy non-object %p",
+      (value) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption(value as unknown as Decorators);
+        }).toThrow(
+          new TypeError("Option 'decorators' must be a map of decorator ids."),
+        );
+      },
+    );
+
+    test("returns the decorators if valid, with an id that differs from any directive name", () => {
+      expect.assertions(1);
+
+      expect(
+        getDecoratorsOption({ responses: decorator } as Decorators),
+      ).toStrictEqual({ responses: decorator });
+    });
+
+    test("returns the decorators when predicate, resolve, and directive are all set", () => {
+      expect.assertions(1);
+
+      const full = {
+        ...decorator,
+        predicate: (): boolean => {
+          return true;
+        },
+        resolve: (): Record<string, unknown>[] => {
+          return [];
+        },
+        directive: "httpResponse",
+      };
+
+      expect(
+        getDecoratorsOption({ responses: full } as Decorators),
+      ).toStrictEqual({ responses: full });
+    });
+
+    test("throws a type error if the option is a list", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption([decorator] as unknown as Decorators);
+      }).toThrow(
+        new TypeError("Option 'decorators' must be a map of decorator ids."),
+      );
+    });
+
+    test("throws a type error if a decorator has no id", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({ "": decorator } as Decorators);
+      }).toThrow(
+        new TypeError(
+          "Option 'decorators' requires a non-empty id for each decorator.",
+        ),
+      );
+    });
+
+    test("throws an error if a decorator id is reserved", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({ metadata: decorator } as Decorators);
+      }).toThrow("Decorator id 'metadata' is reserved, please use another id.");
+    });
+
+    test("ignores a decorator named '__proto__', which is not an own property", () => {
+      expect.assertions(1);
+
+      expect(
+        getDecoratorsOption({ __proto__: decorator } as Decorators),
+      ).toStrictEqual({});
+    });
+
+    test("throws a type error if a decorator has no render function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({
+          responses: { render: {} },
+        } as unknown as Decorators);
+      }).toThrow(
+        new TypeError("Decorator 'responses' requires a 'render' function."),
+      );
+    });
+
+    test("throws a type error if predicate is not a function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({
+          responses: { ...decorator, predicate: "nope" },
+        } as unknown as Decorators);
+      }).toThrow(
+        new TypeError(
+          "Decorator 'responses' option 'predicate' must be a function.",
+        ),
+      );
+    });
+
+    test("throws a type error if resolve is not a function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({
+          responses: { ...decorator, resolve: "nope" },
+        } as unknown as Decorators);
+      }).toThrow(
+        new TypeError(
+          "Decorator 'responses' option 'resolve' must be a function.",
+        ),
+      );
+    });
+
+    test.each([123, ""])(
+      "throws a type error if directive is not a non-empty string (%p)",
+      (value) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption({
+            responses: { ...decorator, directive: value },
+          } as unknown as Decorators);
+        }).toThrow(
+          new TypeError(
+            "Decorator 'responses' option 'directive' must be a non-empty string.",
+          ),
+        );
+      },
+    );
+  });
+
+  describe("parseDeprecatedCustomSectionsOption", () => {
+    const decorator = {
+      render: (): string => {
+        return "decorator content";
+      },
+    };
+    const section = {
+      render: (): string => {
+        return "section content";
+      },
+    };
+
+    test("returns decorators unchanged if customSections is not configured", () => {
+      expect.assertions(1);
+
+      expect(
+        parseDeprecatedCustomSectionsOption(
+          { responses: decorator } as Decorators,
+          undefined,
+        ),
+      ).toStrictEqual({ responses: decorator });
+    });
+
+    test("returns undefined if neither is configured", () => {
+      expect.assertions(1);
+
+      expect(
+        parseDeprecatedCustomSectionsOption(undefined, undefined),
+      ).toBeUndefined();
+    });
+
+    test("merges a legacy customSections entry into decorators", () => {
+      expect.assertions(1);
+
+      expect(
+        parseDeprecatedCustomSectionsOption(undefined, {
+          httpResponse: section,
+        } as CustomSections),
+      ).toStrictEqual({ httpResponse: section });
+    });
+
+    test("an explicit decorators entry wins over a customSections entry with the same id", () => {
+      expect.assertions(1);
+
+      expect(
+        parseDeprecatedCustomSectionsOption(
+          { httpResponse: decorator } as Decorators,
+          { httpResponse: section } as CustomSections,
+        ),
+      ).toStrictEqual({ httpResponse: decorator });
+    });
+
+    test("logs a deprecation warning when customSections is non-empty", () => {
+      expect.assertions(1);
+
+      parseDeprecatedCustomSectionsOption(undefined, {
+        httpResponse: section,
+      } as CustomSections);
+
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"printTypeOptions.customSections"'),
+        "warn",
+      );
+    });
+
+    test("does not log when customSections is empty", () => {
+      expect.assertions(1);
+
+      parseDeprecatedCustomSectionsOption(undefined, {} as CustomSections);
+
+      expect(log).not.toHaveBeenCalled();
     });
   });
 

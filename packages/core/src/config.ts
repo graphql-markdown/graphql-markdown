@@ -28,6 +28,7 @@ import type {
   ConfigPrintTypeOptions,
   CustomDirective,
   CustomSections,
+  Decorators,
   DirectiveName,
   GroupByDirectiveOptions,
   Maybe,
@@ -771,6 +772,137 @@ export const getCustomSectionsOption = (
   return customSections;
 };
 
+/**
+ * Validates the top-level `decorators` option.
+ *
+ * Unlike the deprecated `printTypeOptions.customSections`, a decorator's key is
+ * a free-form id — it is not required to name a schema directive — so
+ * validation only rejects a reserved id, not an id that happens not to match
+ * anything in the schema (that is a runtime predicate concern, not a
+ * configuration error).
+ *
+ * @param decorators - the `decorators` option declared in the config file.
+ *
+ * @returns the validated decorators, or `undefined` when none is declared.
+ *
+ * @throws Error if an entry is malformed or claims a built-in section name.
+ *
+ * @example
+ * ```js
+ * getDecoratorsOption({
+ *   responses: {
+ *     predicate: hasDirectiveNamed("httpResponse"),
+ *     title: "Responses",
+ *     position: { after: "metadata" },
+ *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
+ *   },
+ * });
+ * ```
+ */
+export const getDecoratorsOption = (
+  decorators: Maybe<Decorators>,
+): Maybe<Decorators> => {
+  // Only an absent option selects the default: a configuration file is runtime
+  // JavaScript, so a falsy non-object such as `false` or `""` is a mistake worth
+  // reporting rather than a silent way to disable the decorators.
+  if (decorators === null || decorators === undefined) {
+    return DEFAULT_OPTIONS.decorators;
+  }
+
+  if (typeof decorators !== "object" || Array.isArray(decorators)) {
+    throw new TypeError("Option 'decorators' must be a map of decorator ids.");
+  }
+
+  // `Object.entries` skips the `__proto__` key of an object literal, which never
+  // becomes an own property, so a decorator cannot claim it here either.
+  Object.entries(decorators).forEach(([id, decorator]): void => {
+    if (id.length === 0) {
+      throw new TypeError(
+        "Option 'decorators' requires a non-empty id for each decorator.",
+      );
+    }
+
+    if (RESERVED_SECTION_NAMES.includes(id)) {
+      throw new Error(
+        `Decorator id '${id}' is reserved, please use another id.`,
+      );
+    }
+
+    if (typeof decorator.render !== "function") {
+      throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
+    }
+
+    if (
+      decorator.predicate !== undefined &&
+      typeof decorator.predicate !== "function"
+    ) {
+      throw new TypeError(
+        `Decorator '${id}' option 'predicate' must be a function.`,
+      );
+    }
+
+    if (
+      decorator.resolve !== undefined &&
+      typeof decorator.resolve !== "function"
+    ) {
+      throw new TypeError(
+        `Decorator '${id}' option 'resolve' must be a function.`,
+      );
+    }
+
+    if (
+      decorator.directive !== undefined &&
+      (typeof decorator.directive !== "string" ||
+        decorator.directive.length === 0)
+    ) {
+      throw new TypeError(
+        `Decorator '${id}' option 'directive' must be a non-empty string.`,
+      );
+    }
+  });
+
+  return decorators;
+};
+
+/**
+ * Merges the deprecated `printTypeOptions.customSections` option into
+ * `decorators`, warning once when `customSections` is declared.
+ *
+ * A `customSections` entry is translated as-is: its map key becomes a
+ * decorator id exactly as it did before (see {@link getDeclaredDecorators} in
+ * `@graphql-markdown/printer-legacy`, which already treats a bare id as the
+ * directive name to read by default). An explicit `decorators` entry with the
+ * same id takes precedence over the legacy one, so migrating one entry at a
+ * time is safe.
+ *
+ * @param decorators - the already-validated `decorators` option.
+ * @param customSections - the already-validated, deprecated
+ * `printTypeOptions.customSections` option.
+ *
+ * @returns the merged decorators, or `undefined` when neither is declared.
+ *
+ */
+export const parseDeprecatedCustomSectionsOption = (
+  decorators: Maybe<Decorators>,
+  customSections: Maybe<CustomSections>,
+): Maybe<Decorators> => {
+  if (customSections === null || customSections === undefined) {
+    return decorators;
+  }
+
+  if (
+    typeof customSections === "object" &&
+    Object.keys(customSections).length > 0
+  ) {
+    log(
+      `Setting "printTypeOptions.customSections" is deprecated and will be removed in a future version. Use "decorators" instead.`,
+      LogLevel.warn,
+    );
+  }
+
+  return { ...customSections, ...decorators } as Maybe<Decorators>;
+};
+
 const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
@@ -989,11 +1121,20 @@ export const buildConfig = async (
     .addFromCli(cliOpts.tmp, "tmpDir")
     .build() as BuildConfigOptions;
 
+  const printTypeOptions = getPrintTypeOptions(
+    cliOpts,
+    config.printTypeOptions,
+  );
+
   return {
     baseURL,
     customDirective: getCustomDirectives(
       config.customDirective,
       skipDocDirective,
+    ),
+    decorators: parseDeprecatedCustomSectionsOption(
+      getDecoratorsOption(config.decorators),
+      printTypeOptions.customSections,
     ),
     diffMethod: force
       ? getForcedDiffMethod()
@@ -1012,7 +1153,7 @@ export const buildConfig = async (
     outputAdapter,
     outputDir: join(rootPath, baseURL),
     prettify,
-    printTypeOptions: getPrintTypeOptions(cliOpts, config.printTypeOptions),
+    printTypeOptions,
     schemaLocation,
     skipDocDirective,
     tmpDir,
