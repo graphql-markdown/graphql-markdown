@@ -1,5 +1,5 @@
 /** Represents the available logging levels */
-type LogLevel = "debug" | "error" | "info" | "log" | "success" | "warn";
+export type LogLevel = "debug" | "error" | "info" | "log" | "success" | "warn";
 
 /** Interface for logger implementation */
 export interface LoggerType {
