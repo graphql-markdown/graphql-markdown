@@ -144,12 +144,17 @@ let defaultTmpDir: string | undefined;
 export const DEFAULT_OPTIONS: Readonly<
   Pick<
     ConfigOptions,
-    "customDirective" | "groupByDirective" | "loaders" | "outputAdapter"
+    | "customDirective"
+    | "decorators"
+    | "groupByDirective"
+    | "loaders"
+    | "outputAdapter"
   > &
     Required<
       Omit<
         ConfigOptions,
         | "customDirective"
+        | "decorators"
         | "formatter"
         | "groupByDirective"
         | "loaders"
@@ -173,6 +178,7 @@ export const DEFAULT_OPTIONS: Readonly<
   id: "default" as const,
   baseURL: "schema" as const,
   customDirective: undefined,
+  decorators: undefined,
   diffMethod: DiffMethod.NONE,
   docOptions: {
     categorySort: undefined,

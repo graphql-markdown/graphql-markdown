@@ -184,6 +184,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "customSections": undefined,
+          "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
           "exampleSection": undefined,
@@ -254,6 +255,7 @@ describe("Printer", () => {
           "collapsible": undefined,
           "customDirectives": undefined,
           "customSections": undefined,
+          "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
           "exampleSection": {

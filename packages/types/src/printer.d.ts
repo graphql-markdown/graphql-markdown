@@ -2,6 +2,7 @@ import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
   CustomSections,
+  Decorators,
   FrontMatterOptions,
   MetaInfo,
   TypeDeprecatedOption,
@@ -201,6 +202,7 @@ export interface AdmonitionType {
  * Configuration options for printing type documentation
  */
 export interface PrinterConfigPrintTypeOptions {
+  /** @deprecated Use the top-level `decorators` option instead. */
   customSections?: CustomSections;
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption;
@@ -216,8 +218,16 @@ export interface PrinterConfigPrintTypeOptions {
 export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   collapsible?: Maybe<CollapsibleOption>;
+  /** @deprecated Use `decorators` instead. */
   customDirectives?: Maybe<CustomDirectiveMap>;
+  /** @deprecated Use `decorators` instead. */
   customSections?: Maybe<CustomSections>;
+  /**
+   * Decorators: selects nodes with a predicate and renders a titled section, a
+   * badge, or appended description text for them. Supersedes `customDirectives`
+   * and `customSections`.
+   */
+  decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   /** The schema entity kind being printed, when known by the caller. */
   entity?: Maybe<SchemaEntity>;

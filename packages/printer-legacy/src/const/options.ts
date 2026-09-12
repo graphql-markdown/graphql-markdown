@@ -60,6 +60,7 @@ export const DEFAULT_OPTIONS: Required<
     PrintTypeOptions,
     | "collapsible"
     | "customSections"
+    | "decorators"
     | "entity"
     | "exampleSection"
     | "formatCategoryFolderName"
@@ -74,6 +75,7 @@ export const DEFAULT_OPTIONS: Required<
 > & {
   collapsible: Maybe<CollapsibleOption>;
   customSections: PrintTypeOptions["customSections"];
+  decorators: PrintTypeOptions["decorators"];
   entity: PrintTypeOptions["entity"];
   exampleSection: PrintTypeOptions["exampleSection"];
   groups: Maybe<SchemaEntitiesGroupMap>;
@@ -88,6 +90,7 @@ export const DEFAULT_OPTIONS: Required<
   collapsible: undefined,
   customDirectives: {} as const,
   customSections: PRINT_TYPE_DEFAULT_OPTIONS.customSections,
+  decorators: undefined,
   entity: undefined,
   exampleSection: undefined,
   groups: undefined,

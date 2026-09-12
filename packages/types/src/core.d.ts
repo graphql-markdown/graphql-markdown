@@ -237,6 +237,8 @@ export type TypeExampleSectionOption = Partial<
  * @param options - the print options in effect for the type being rendered.
  *
  * @returns the section content, or a nullish value to skip the section.
+ *
+ * @deprecated Use {@link DecoratorRenderer} instead.
  */
 export type CustomSectionRenderer = (
   values: Record<string, unknown>[],
@@ -246,6 +248,8 @@ export type CustomSectionRenderer = (
 /**
  * Placement of a custom section relative to another section of the type page.
  * When omitted, the section is appended after the last built-in section.
+ *
+ * @deprecated Use {@link DecoratorPosition} instead.
  */
 export type CustomSectionPosition =
   | { after: string; before?: never }
@@ -257,6 +261,8 @@ export type CustomSectionPosition =
  * Declares a directive-driven, top-level section of a type page. The section is
  * rendered when the directive naming it is present on the type being printed,
  * and is skipped otherwise.
+ *
+ * @deprecated Use {@link DecoratorDefinition} instead.
  */
 export interface TypeCustomSectionOption {
   /** Optional heading for the section. Omit for an untitled section. */
@@ -277,8 +283,152 @@ export interface TypeCustomSectionOption {
  * The directive name is both the schema directive carrying the section data and
  * the section key injected into the page sections map, so it must not collide
  * with a built-in section.
+ *
+ * @deprecated Use {@link Decorators} instead.
  */
 export type CustomSections = Record<DirectiveName, TypeCustomSectionOption>;
+
+/**
+ * Predicate selecting which nodes a decorator applies to.
+ *
+ * Unlike the directive-driven {@link TypeCustomSectionOption}, a decorator is
+ * triggered by an arbitrary condition over the node being printed: a directive,
+ * an entity kind, a name pattern, or any combination thereof. See
+ * `@graphql-markdown/graphql`'s predicate helpers (`hasDirective`, `isEntity`,
+ * `and`, `or`, `not`) for the common building blocks.
+ *
+ * @param type - the GraphQL node being printed (a type, field, or argument).
+ * @param options - the print options in effect for the node being rendered.
+ *
+ * @returns `true` if the decorator applies to this node.
+ */
+export type DecoratorPredicate = (
+  type: unknown,
+  options: PrintTypeOptions,
+) => boolean;
+
+/**
+ * Resolves the values a decorator renders.
+ *
+ * Defaults to reading every occurrence of the decorator's directive off the
+ * node, in schema declaration order (see `directiveOccurrences` in
+ * `@graphql-markdown/graphql`). Provide a custom resolver when the values do
+ * not come from a directive at all.
+ *
+ * @param type - the GraphQL node being printed.
+ * @param options - the print options in effect for the node being rendered.
+ *
+ * @returns one record per value to render, or a nullish/empty value to skip.
+ */
+export type DecoratorResolver = (
+  type: unknown,
+  options: PrintTypeOptions,
+) => Maybe<Record<string, unknown>[]>;
+
+/**
+ * Context passed to a decorator's `render` callback, in addition to the
+ * resolved values and the print options.
+ */
+export interface DecoratorContext {
+  /** The decorator id (the key under which it is declared in `decorators`). */
+  id: string;
+  /** The GraphQL node being printed (a type, field, or argument). */
+  type: unknown;
+  /** The matched directive definition, when the decorator is directive-driven. */
+  directive?: Maybe<GraphQLDirective>;
+  /** The schema entity kind of the node being printed, when resolvable. */
+  entity?: Maybe<SchemaEntity>;
+}
+
+/**
+ * Renders a decorator's resolved values into Markdown/MDX content.
+ *
+ * Returning a nullish or blank value skips the decorator. A decorator declared
+ * without a `title` renders bare content: appended to the type's description,
+ * or dropped into the metadata line, depending on its `position`.
+ *
+ * @param values - the values resolved by `resolve` (or the default directive lookup).
+ * @param options - the print options in effect for the node being rendered.
+ * @param context - the decorator id, the node, and the matched directive, when any.
+ *
+ * @returns the decorator's content, or a nullish value to skip it.
+ */
+export type DecoratorRenderer = (
+  values: Record<string, unknown>[],
+  options: PrintTypeOptions,
+  context: DecoratorContext,
+) => Maybe<string>;
+
+/**
+ * Placement of a decorator relative to a named position.
+ *
+ * `after`/`before` splice the decorator into the page's section order, exactly
+ * like {@link CustomSectionPosition}. `into` instead appends the decorator's
+ * (titleless) content into a named slot that is not itself a section — for
+ * example the `metadata` line of a type or field heading (badges, tags,
+ * permalink), or `description`. When omitted, the decorator is appended after
+ * the last built-in section.
+ */
+export type DecoratorPosition =
+  | { after: string; before?: never; into?: never }
+  | { after?: never; before: string; into?: never }
+  | { after?: never; before?: never; into: string };
+
+/**
+ * Decorator configuration options.
+ *
+ * A decorator is selected by `predicate` (defaulting to "the node carries the
+ * directive named `directive`, or named by this decorator's id"), resolves
+ * values with `resolve` (defaulting to reading that directive's occurrences),
+ * and renders them with `render`. A decorator with no `title` renders bare
+ * content rather than a titled section — this is how a badge or an appended
+ * description line is expressed: they are not a distinct kind of decorator,
+ * only a titleless one placed at a different `position`.
+ *
+ * @example
+ * ```js
+ * decorators: {
+ *   responses: {
+ *     predicate: hasDirective("httpResponse"),
+ *     title: "Responses",
+ *     position: { after: "metadata" },
+ *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
+ *   },
+ * }
+ * ```
+ */
+export interface DecoratorDefinition {
+  /** Selects the nodes this decorator applies to. Defaults to `hasDirective(directive ?? id)`. */
+  predicate?: Maybe<DecoratorPredicate>;
+  /** Directive driving the default resolver and `context.directive`. Defaults to this decorator's id. */
+  directive?: Maybe<DirectiveName>;
+  /** Produces the values passed to `render`. Defaults to reading `directive`'s occurrences off the node. */
+  resolve?: Maybe<DecoratorResolver>;
+  /** Optional heading for the section. Omit for bare/titleless output (a badge, an appended description line). */
+  title?: Maybe<string>;
+  /** Optional heading level, defaults to `3`. Ignored when `title` is absent. */
+  level?: Maybe<number>;
+  /** Optional placement relative to another section, or into a named slot. */
+  position?: Maybe<DecoratorPosition>;
+  /**
+   * Optional list of schema entities the decorator applies to. AND-ed with
+   * `predicate` when both are present.
+   *
+   * @deprecated Sugar for `isEntity(...)` composed with `predicate` via `and()`.
+   */
+  appliesTo?: Maybe<SchemaEntity[]>;
+  /** Callback rendering the decorator's content from the resolved values. */
+  render: DecoratorRenderer;
+}
+
+/**
+ * Map of decorator ids to their configuration.
+ *
+ * Unlike {@link CustomSections}, the key is a free-form, unique id — it is not
+ * required to name a schema directive. A decorator's id must not collide with
+ * a built-in page section name when it produces a titled section.
+ */
+export type Decorators = Record<string, DecoratorDefinition>;
 
 export type DiffMethodName = string & { _opaque: typeof DIFF_METHOD_NAME };
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- used in opaque type pattern
@@ -290,8 +440,20 @@ export type Pointer = UnnormalizedTypeDefPointer;
 export interface ConfigOptions {
   /** Base URL for the documentation links */
   baseURL?: Maybe<string>;
-  /** List of custom directives to include in documentation */
+  /**
+   * List of custom directives to include in documentation.
+   *
+   * @deprecated Use `decorators` instead.
+   * @see decorators
+   */
   customDirective?: Maybe<CustomDirective>;
+  /**
+   * Decorators: selects nodes with a predicate (a directive, an entity kind, or
+   * any combination) and renders a titled section, a badge, or appended
+   * description text for them. Supersedes both `customDirective` and
+   * `printTypeOptions.customSections`.
+   */
+  decorators?: Maybe<Decorators>;
   /** Method to use for diffing schema changes */
   diffMethod?: Maybe<TypeDiffMethod>;
   /** Documentation framework specific options */
@@ -346,7 +508,12 @@ export interface ConfigOptions {
 export interface ConfigPrintTypeOptions {
   /** How to handle deprecated items */
   deprecated?: TypeDeprecatedOption;
-  /** Configuration for directive-driven custom sections */
+  /**
+   * Configuration for directive-driven custom sections.
+   *
+   * @deprecated Use the top-level `decorators` option instead.
+   * @see decorators
+   */
   customSections?: Maybe<CustomSections>;
   /** Configuration for example sections */
   exampleSection?: TypeExampleSectionOption;
