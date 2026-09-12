@@ -29,9 +29,24 @@ import * as Utils from "@graphql-markdown/utils";
 
 vi.mock("@graphql-markdown/graphql", () => {
   return {
+    always: vi.fn(() => {
+      return (): boolean => {
+        return true;
+      };
+    }),
     getConstDirectiveMap: vi.fn(),
+    getSchemaEntity: vi.fn(),
     getTypeName: vi.fn(),
+    GraphQLSchema: class {},
     hasDirective: vi.fn(),
+    hasDirectiveNamed: vi.fn(() => {
+      return (): boolean => {
+        return false;
+      };
+    }),
+    instanceOf: vi.fn(() => {
+      return false;
+    }),
     isDirectiveType: vi.fn(),
     isEnumType: vi.fn(),
     isInputType: vi.fn(),

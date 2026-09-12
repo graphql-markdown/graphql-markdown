@@ -1,21 +1,28 @@
 import { buildSchema } from "graphql/utilities";
 
-import type { CustomSections, PrintTypeOptions } from "@graphql-markdown/types";
+import type {
+  CustomSections,
+  Decorators,
+  PrintTypeOptions,
+} from "@graphql-markdown/types";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import { Printer } from "../../src/printer";
 
-import type { SectionDefinition } from "../../src/custom-section";
+import type { SectionDefinition } from "../../src/decorator";
 
 import {
   getCustomSectionsOrder,
+  getDecoratorsOrder,
   getExampleSectionDefinition,
   getSchemaEntity,
   printCustomSection,
   printCustomSections,
-} from "../../src/custom-section";
+  printDecorator,
+  printDecorators,
+} from "../../src/decorator";
 
-describe("custom-section", () => {
+describe("decorator", () => {
   const schema = buildSchema(`
     directive @httpResponse(
       code: Int!
@@ -523,6 +530,295 @@ describe("custom-section", () => {
           customSections: {} as CustomSections,
         }),
       ).toStrictEqual(order);
+    });
+  });
+
+  describe("decorators", () => {
+    test("id may differ from the directive it reads", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "responses",
+            directive: "httpResponse",
+            render: httpResponses.render,
+          },
+          options,
+        ),
+      ).toMatchObject({
+        content: expect.stringContaining("200"),
+      });
+    });
+
+    test("a predicate returning false skips the decorator even when the directive is present", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "httpResponse",
+            render: httpResponses.render,
+            predicate: () => {
+              return false;
+            },
+          },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
+    test("predicate is AND-ed with appliesTo: either false skips", () => {
+      expect.assertions(2);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "httpResponse",
+            render: httpResponses.render,
+            predicate: () => {
+              return false;
+            },
+            appliesTo: ["objects"],
+          },
+          options,
+        ),
+      ).toBeUndefined();
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "httpResponse",
+            render: httpResponses.render,
+            predicate: () => {
+              return true;
+            },
+            appliesTo: ["queries"],
+          },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
+    test("skips a decorator whose resolve returns a non-array value", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "custom",
+            predicate: () => {
+              return true;
+            },
+            resolve: () => {
+              return undefined;
+            },
+            render: httpResponses.render,
+          },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
+    test("a custom resolve bypasses the directive lookup entirely", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "custom",
+            resolve: () => {
+              return [{ value: 42 }];
+            },
+            render: (values) => {
+              return `value: ${values[0]!.value as number}`;
+            },
+          },
+          options,
+        ),
+      ).toMatchObject({ content: expect.stringContaining("value: 42") });
+    });
+
+    test("a predicate-only decorator with no directive and no resolve renders once with an empty record", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "marker",
+            predicate: () => {
+              return true;
+            },
+            render: (values) => {
+              return `count: ${values.length}`;
+            },
+          },
+          options,
+        ),
+      ).toMatchObject({ content: expect.stringContaining("count: 1") });
+    });
+
+    test("a directive-driven decorator with zero occurrences still renders nothing", () => {
+      expect.assertions(1);
+
+      expect(
+        printDecorator(
+          type,
+          { id: "doesNotExistOnSchema", render: httpResponses.render },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
+    test("context.directive is undefined when no schema is set", () => {
+      expect.assertions(1);
+
+      let seenDirective: unknown = "not set";
+
+      printDecorator(
+        type,
+        {
+          id: "marker",
+          predicate: () => {
+            return true;
+          },
+          render: (_values, _options, context) => {
+            seenDirective = context.directive;
+            return "rendered";
+          },
+        },
+        { ...options, schema: undefined },
+      );
+
+      expect(seenDirective).toBeUndefined();
+    });
+
+    test("render receives id, type, directive, and entity in its context", () => {
+      expect.assertions(4);
+
+      let seen:
+        | {
+            id: string;
+            type: unknown;
+            directive: unknown;
+            entity: unknown;
+          }
+        | undefined;
+
+      printDecorator(
+        type,
+        {
+          id: "httpResponse",
+          render: (_values, _options, context) => {
+            seen = { ...context };
+            return "rendered";
+          },
+        },
+        options,
+      );
+
+      expect(seen?.id).toBe("httpResponse");
+      expect(seen?.type).toBe(type);
+      expect((seen?.directive as { name?: string } | undefined)?.name).toBe(
+        "httpResponse",
+      );
+      expect(seen?.entity).toBe("objects");
+    });
+
+    test("a decorator declared under `decorators` and one under the deprecated `customSections` produce identical output", () => {
+      expect.assertions(1);
+
+      const declaration = {
+        title: "Responses",
+        render: httpResponses.render,
+      };
+
+      const viaDecorators = printDecorators(type, {
+        ...options,
+        decorators: { httpResponse: declaration } as Decorators,
+      });
+
+      const viaCustomSections = printDecorators(type, {
+        ...options,
+        customSections: { httpResponse: declaration } as CustomSections,
+      });
+
+      expect(viaDecorators).toStrictEqual(viaCustomSections);
+    });
+
+    test("`decorators` takes precedence over `customSections` when both are set", () => {
+      expect.assertions(1);
+
+      const sections = printDecorators(type, {
+        ...options,
+        decorators: {
+          httpResponse: {
+            render: (): string => {
+              return "from decorators";
+            },
+          },
+        } as Decorators,
+        customSections: {
+          httpResponse: {
+            render: (): string => {
+              return "from customSections";
+            },
+          },
+        } as CustomSections,
+      });
+
+      expect(sections["httpResponse"]).toMatchObject({
+        content: expect.stringContaining("from decorators"),
+      });
+    });
+
+    describe("getDecoratorsOrder()", () => {
+      const order = ["description", "code", "metadata", "relations"];
+
+      test("excludes a decorator targeting a named slot (`into`) from the section order", () => {
+        expect.assertions(1);
+
+        expect(
+          getDecoratorsOrder(order, {
+            ...options,
+            decorators: {
+              badge: {
+                render: () => {
+                  return "badge";
+                },
+                position: { into: "metadata" },
+              },
+            } as Decorators,
+          }),
+        ).toStrictEqual(order);
+      });
+    });
+
+    describe("printDecorators()", () => {
+      test("excludes a decorator targeting a named slot (`into`) from the page sections map", () => {
+        expect.assertions(1);
+
+        const sections = printDecorators(type, {
+          ...options,
+          decorators: {
+            badge: {
+              render: () => {
+                return "badge";
+              },
+              position: { into: "metadata" },
+            },
+          } as Decorators,
+        });
+
+        expect(Object.keys(sections)).toStrictEqual([]);
+      });
     });
   });
 });

@@ -74,11 +74,11 @@ import { printRelations } from "./relation";
 import { printDescription } from "./common";
 import { printCustomDirectives, printCustomTags } from "./directive";
 import {
-  getCustomSectionsOrder,
+  getDecoratorsOrder,
   getExampleSectionDefinition,
-  printCustomSection,
-  printCustomSections,
-} from "./custom-section";
+  printDecorator,
+  printDecorators,
+} from "./decorator";
 import { printFrontMatter } from "./frontmatter";
 import {
   printCodeDirective,
@@ -200,9 +200,16 @@ export class Printer implements IPrinter {
   static readonly printCustomTags = printCustomTags;
 
   /**
-   * Prints directive-driven custom sections
+   * Prints predicate-driven decorators
    */
-  static readonly printCustomSections = printCustomSections;
+  static readonly printDecorators = printDecorators;
+
+  /**
+   * Prints predicate-driven decorators
+   *
+   * @deprecated Use {@link Printer.printDecorators} instead.
+   */
+  static readonly printCustomSections = printDecorators;
 
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 
@@ -450,11 +457,7 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): Maybe<PageSection> => {
-    return printCustomSection(
-      type,
-      getExampleSectionDefinition(options),
-      options,
-    );
+    return printDecorator(type, getExampleSectionDefinition(options), options);
   };
 
   /**
@@ -628,10 +631,10 @@ export class Printer implements IPrinter {
       metadata: Printer.normalizePageSection(metadata),
       example: Printer.normalizePageSection(example),
       relations: Printer.normalizePageSection(relations),
-      ...Printer.printCustomSections(type, printTypeOptions),
+      ...Printer.printDecorators(type, printTypeOptions),
     };
 
-    let sectionOrder: (keyof PageSections)[] = getCustomSectionsOrder(
+    let sectionOrder: (keyof PageSections)[] = getDecoratorsOrder(
       TYPE_PAGE_SECTION_ORDER,
       printTypeOptions,
     );
