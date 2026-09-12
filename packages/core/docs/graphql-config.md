@@ -5,6 +5,38 @@ GraphQL Markdown configuration utilities
 This module provides utilities for loading and processing GraphQL configuration
 using the graphql-config package.
 
+## Interfaces
+
+### ThrowOptions
+
+Defined in: [packages/core/src/graphql-config.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L58)
+
+Options for controlling throw behavior when loading configuration.
+
+ThrowOptions
+
+#### Properties
+
+##### throwOnEmpty?
+
+```ts
+optional throwOnEmpty?: boolean;
+```
+
+Defined in: [packages/core/src/graphql-config.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L60)
+
+Whether to throw when the config is empty.
+
+##### throwOnMissing?
+
+```ts
+optional throwOnMissing?: boolean;
+```
+
+Defined in: [packages/core/src/graphql-config.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L59)
+
+Whether to throw when the config file is missing.
+
 ## Variables
 
 ### graphQLConfigExtension
@@ -13,7 +45,7 @@ using the graphql-config package.
 const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-Defined in: [core/src/graphql-config.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L48)
+Defined in: [packages/core/src/graphql-config.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L47)
 
 GraphQL extension declaration for graphql-config.
 
@@ -42,7 +74,7 @@ function loadConfiguration(
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>>;
 ```
 
-Defined in: [core/src/graphql-config.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L146)
+Defined in: [packages/core/src/graphql-config.ts:144](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L144)
 
 Loads the GraphQL Markdown configuration from graphql-config.
 
@@ -66,7 +98,7 @@ Optional package options to apply.
 
 ##### throwOptions?
 
-`ThrowOptions` = `DEFAULT_THROW_OPTIONS`
+[`ThrowOptions`](#throwoptions) = `DEFAULT_THROW_OPTIONS`
 
 Options for controlling throw behavior.
 
@@ -103,7 +135,7 @@ const config = await loadConfiguration(
 function setLoaderOptions(loaders, options): LoaderOption;
 ```
 
-Defined in: [core/src/graphql-config.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L98)
+Defined in: [packages/core/src/graphql-config.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L96)
 
 Sets loader options for GraphQL Markdown loaders.
 
