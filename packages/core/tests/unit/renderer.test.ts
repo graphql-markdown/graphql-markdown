@@ -2320,7 +2320,7 @@ describe("renderer", () => {
         expect(pos4).toBeLessThanOrEqual(3);
       });
 
-      test("automatically prefixes when categorySort is set", async () => {
+      test("still applies root-category prefixes when categorySort is not set", async () => {
         expect.assertions(2);
 
         const renderer = await getRenderer(

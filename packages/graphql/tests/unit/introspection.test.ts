@@ -203,28 +203,16 @@ describe("introspection", () => {
   });
 
   describe("getTypeName()", () => {
-    test("returns type name for object", () => {
+    test.each([
+      { kind: "object", typeName: "Tweet" },
+      { kind: "interface", typeName: "Node" },
+      { kind: "scalar", typeName: "ID" },
+    ])("returns type name for $kind", ({ typeName }) => {
       expect.hasAssertions();
 
-      const name = getTypeName(schema.getType("Tweet")!);
+      const name = getTypeName(schema.getType(typeName)!);
 
-      expect(name).toBe("Tweet");
-    });
-
-    test("returns type name for interface", () => {
-      expect.hasAssertions();
-
-      const name = getTypeName(schema.getType("Node")!);
-
-      expect(name).toBe("Node");
-    });
-
-    test("returns type name for scalar", () => {
-      expect.hasAssertions();
-
-      const name = getTypeName(schema.getType("ID")!);
-
-      expect(name).toBe("ID");
+      expect(name).toBe(typeName);
     });
 
     test("returns default name for unknown", () => {

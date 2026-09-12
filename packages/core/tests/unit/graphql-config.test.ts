@@ -359,81 +359,29 @@ describe("config", () => {
       );
     });
 
-    test("loads configuration with throwOnMissing and throwOnEmpty both true", async () => {
-      expect.hasAssertions();
+    test.each([
+      { throwOnMissing: true, throwOnEmpty: true },
+      { throwOnMissing: false, throwOnEmpty: false },
+      { throwOnMissing: true, throwOnEmpty: false },
+      { throwOnMissing: false, throwOnEmpty: true },
+    ])(
+      "returns undefined for throwOnMissing=$throwOnMissing and throwOnEmpty=$throwOnEmpty",
+      async ({ throwOnMissing, throwOnEmpty }) => {
+        expect.hasAssertions();
 
-      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
-        config: { id: "test-project" },
-      });
+        (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
+          config: { id: "test-project" },
+        });
 
-      const result = await CoreGraphQLConfig.loadConfiguration(
-        "test",
-        {},
-        {
-          throwOnMissing: true,
-          throwOnEmpty: true,
-        },
-      );
+        const result = await CoreGraphQLConfig.loadConfiguration(
+          "test",
+          {},
+          { throwOnMissing, throwOnEmpty },
+        );
 
-      expect(result).toBeUndefined();
-    });
-
-    test("loads configuration with throwOnMissing and throwOnEmpty both false", async () => {
-      expect.hasAssertions();
-
-      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
-        config: { id: "test-project" },
-      });
-
-      const result = await CoreGraphQLConfig.loadConfiguration(
-        "test",
-        {},
-        {
-          throwOnMissing: false,
-          throwOnEmpty: false,
-        },
-      );
-
-      expect(result).toBeUndefined();
-    });
-
-    test("handles throwOnMissing true and throwOnEmpty false", async () => {
-      expect.hasAssertions();
-
-      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
-        config: { id: "test-project" },
-      });
-
-      const result = await CoreGraphQLConfig.loadConfiguration(
-        "test",
-        {},
-        {
-          throwOnMissing: true,
-          throwOnEmpty: false,
-        },
-      );
-
-      expect(result).toBeUndefined();
-    });
-
-    test("handles throwOnMissing false and throwOnEmpty true", async () => {
-      expect.hasAssertions();
-
-      (GraphQLConfig.loadConfig as Mock).mockResolvedValueOnce({
-        config: { id: "test-project" },
-      });
-
-      const result = await CoreGraphQLConfig.loadConfiguration(
-        "test",
-        {},
-        {
-          throwOnMissing: false,
-          throwOnEmpty: true,
-        },
-      );
-
-      expect(result).toBeUndefined();
-    });
+        expect(result).toBeUndefined();
+      },
+    );
 
     test("returns undefined when id is numeric value", async () => {
       expect.hasAssertions();
