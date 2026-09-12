@@ -31,9 +31,7 @@ import {
   getSkipDocDirectives,
   getTypeHierarchyOption,
   getVisibilityDirectives,
-  parseDeprecatedDocOptions,
   parseDeprecatedFormatterOption,
-  parseDeprecatedPrintTypeOptions,
   parseGroupByOption,
   parseHomepageOption,
   TypeHierarchy,
@@ -1146,20 +1144,6 @@ describe("config", () => {
         parseDeprecatedFormatterOption({ mdxParser: null }, {}),
       ).toBeUndefined();
       expect(log).not.toHaveBeenCalled();
-    });
-  });
-
-  describe("parseDeprecatedPrintTypeOptions", () => {
-    test("returns empty object", () => {
-      expect.hasAssertions();
-      expect(parseDeprecatedPrintTypeOptions({}, undefined)).toStrictEqual({});
-    });
-  });
-
-  describe("parseDeprecatedDocOptions", () => {
-    test("returns empty object", () => {
-      expect.hasAssertions();
-      expect(parseDeprecatedDocOptions({}, undefined)).toStrictEqual({});
     });
   });
 
