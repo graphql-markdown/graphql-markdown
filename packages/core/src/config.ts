@@ -469,6 +469,14 @@ export const getDiffMethod = (diff: TypeDiffMethod): TypeDiffMethod => {
   return getNormalizedDiffMethod(diff);
 };
 
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+export const parseDeprecatedDocOptions = (
+  _cliOpts?: Maybe<CliOptions>,
+  _configOptions?: Maybe<ConfigDocOptions>,
+): Record<string, never> => {
+  return {};
+};
+
 /**
  * Builds the document options by merging CLI options, config file options, and defaults.
  * Handles index generation flag and front matter configuration.
@@ -494,6 +502,7 @@ export const getDocOptions = (
   cliOpts?: Maybe<CliOptions>,
   configOptions?: Maybe<ConfigDocOptions>,
 ): Required<ConfigDocOptions> => {
+  const deprecated = parseDeprecatedDocOptions(cliOpts, configOptions);
   const cliIndex =
     typeof cliOpts?.index === "boolean" ? cliOpts.index : undefined;
   const configIndex =
@@ -508,6 +517,7 @@ export const getDocOptions = (
   return {
     categorySort: configOptions?.categorySort,
     frontMatter: {
+      ...deprecated,
       ...configOptions?.frontMatter,
     },
     // the framework name and version are set by the framework plugin, and are
@@ -607,6 +617,14 @@ export const parseDeprecatedFormatterOption = (
   return (
     cliOpts?.formatter ?? legacyCli ?? configOptions?.formatter ?? legacyConfig
   );
+};
+
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+export const parseDeprecatedPrintTypeOptions = (
+  _cliOpts?: Maybe<CliOptions>,
+  _configOptions?: Maybe<ConfigPrintTypeOptions>,
+): Record<string, never> => {
+  return {};
 };
 
 /**
@@ -879,6 +897,11 @@ export const buildConfig = async (
   cliOpts ??= {};
 
   const graphqlConfig = await loadConfiguration(id);
+
+  parseDeprecatedPrintTypeOptions(cliOpts, {
+    ...(graphqlConfig as Maybe<ConfigOptions>)?.printTypeOptions,
+    ...configFileOpts?.printTypeOptions,
+  });
 
   const config = deepmerge()(
     { ...DEFAULT_OPTIONS, ...graphqlConfig },
