@@ -357,7 +357,7 @@ export interface RendererOptions {
   /** Optional MDX file extension to use */
   mdxExtension: string;
   /** Destination for generated pages; defaults to the local filesystem */
-  outputAdapter?: Maybe<OutputAdapter>;
+  outputAdapter?: OutputAdapter | null;
 }
 
 /**

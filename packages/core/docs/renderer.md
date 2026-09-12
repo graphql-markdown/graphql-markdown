@@ -488,7 +488,7 @@ Optional MDX file extension to use
 ##### outputAdapter?
 
 ```ts
-optional outputAdapter?: Maybe<OutputAdapter>;
+optional outputAdapter?: OutputAdapter | null;
 ```
 
 Defined in: [packages/core/src/renderer.ts:360](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/renderer.ts#L360)
