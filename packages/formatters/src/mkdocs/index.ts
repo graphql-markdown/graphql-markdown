@@ -18,10 +18,7 @@ import type {
   MetaInfo,
   RenderTypeEntitiesHook,
 } from "@graphql-markdown/types";
-import {
-  extractFrontmatterTitle,
-  indentMarkdownLines,
-} from "@graphql-markdown/helpers";
+import { indentMarkdownLines } from "@graphql-markdown/helpers";
 import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
@@ -29,6 +26,7 @@ import {
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
+  formatMDXFrontmatterTitleOnly,
   formatMDXLink,
   formatMDXPermalink,
 } from "../defaults";
@@ -120,8 +118,7 @@ export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  const title = extractFrontmatterTitle(formatted);
-  return title ? (`# ${title}` as MDXString) : ("" as MDXString);
+  return formatMDXFrontmatterTitleOnly(formatted);
 };
 
 /**

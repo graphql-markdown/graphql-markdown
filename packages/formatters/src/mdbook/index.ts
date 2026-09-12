@@ -27,7 +27,6 @@ import type {
 } from "@graphql-markdown/types";
 import {
   appendExtensionToAbsolutePathWithoutExtension,
-  extractFrontmatterTitle,
   quoteMarkdownLines,
 } from "@graphql-markdown/helpers";
 import {
@@ -38,6 +37,7 @@ import {
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
+  formatMDXFrontmatterTitleOnly,
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
@@ -97,8 +97,7 @@ export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
   formatted: Maybe<string[]>,
 ): MDXString => {
-  const title = extractFrontmatterTitle(formatted);
-  return (title ? `# ${title}${MARKDOWN_EOL}` : "") as MDXString;
+  return formatMDXFrontmatterTitleOnly(formatted, true);
 };
 
 /** mdBook expects `.md` files; override the default `.mdx` extension. */

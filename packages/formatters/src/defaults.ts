@@ -17,7 +17,10 @@ import type {
   MetaInfo,
   TypeLink,
 } from "@graphql-markdown/types";
-import { formatMarkdownFrontmatter } from "@graphql-markdown/helpers";
+import {
+  extractFrontmatterTitle,
+  formatMarkdownFrontmatter,
+} from "@graphql-markdown/helpers";
 import {
   FRONT_MATTER_DELIMITER,
   MARKDOWN_EOL,
@@ -83,6 +86,24 @@ export const formatMDXFrontmatter = (
     FRONT_MATTER_DELIMITER,
     MARKDOWN_EOL,
   ) as MDXString;
+};
+
+/**
+ * Formats the page title as a visible H1 heading, for frameworks that render
+ * YAML front matter as literal page content and so must suppress it entirely.
+ * @param formatted - Pre-formatted front matter lines
+ * @param trailingEol - Whether to append a trailing end-of-line after the heading
+ * @returns `# Title` heading, or empty string if no title is available
+ */
+export const formatMDXFrontmatterTitleOnly = (
+  formatted: Maybe<string[]>,
+  trailingEol = false,
+): MDXString => {
+  const title = extractFrontmatterTitle(formatted);
+  if (!title) {
+    return "" as MDXString;
+  }
+  return `# ${title}${trailingEol ? MARKDOWN_EOL : ""}` as MDXString;
 };
 
 /**
