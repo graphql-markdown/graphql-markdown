@@ -231,8 +231,8 @@ const rewriteInternalLinks = (
       pos = urlStart;
       continue;
     }
-    out.push(content.slice(pos, markerPos));
     out.push(
+      content.slice(pos, markerPos),
       resolveLink(
         match.urlWithHash,
         filePath,
@@ -424,7 +424,10 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
     return;
   }
 
-  const withUid = content.replace(/^(\s*)uid:.*$/m, `$1uid: ${uid}`);
+  // [ \t]* rather than \s* keeps the match within a single line: \s also
+  // matches newlines, which would overlap with the `m`-flag line anchors and
+  // cause polynomial backtracking when no "uid:" line is present.
+  const withUid = content.replace(/^([ \t]*)uid:.*$/m, `$1uid: ${uid}`);
   const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
 
   if (rewritten !== content) {
