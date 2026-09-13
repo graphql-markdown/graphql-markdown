@@ -343,6 +343,7 @@ export const resolveSkipAndOnlyDirectives = (
 export const generateDocFromSchema = async ({
   baseURL,
   customDirective,
+  decorators,
   diffMethod,
   docOptions,
   force,
@@ -450,6 +451,7 @@ export const generateDocFromSchema = async ({
     // options
     {
       customDirectives,
+      decorators,
       groups,
       meta: {
         generatorFrameworkName: docOptions?.generatorFrameworkName,

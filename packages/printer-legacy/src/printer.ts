@@ -270,6 +270,7 @@ export class Printer implements IPrinter {
     linkRoot: Maybe<string> = "/",
     {
       customDirectives,
+      decorators,
       deprecated,
       groups,
       meta,
@@ -292,6 +293,7 @@ export class Printer implements IPrinter {
         basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
         customDirectives,
         customSections: printTypeOptions?.customSections,
+        decorators,
         exampleSection:
           typeof printTypeOptions?.exampleSection === "object"
             ? printTypeOptions.exampleSection

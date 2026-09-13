@@ -1026,6 +1026,19 @@ describe("config", () => {
       );
     });
 
+    test.each([null, undefined])(
+      "throws the same friendly error, not a raw TypeError, when a decorator entry is %s",
+      (value) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption({ responses: value } as unknown as Decorators);
+        }).toThrow(
+          new TypeError("Decorator 'responses' requires a 'render' function."),
+        );
+      },
+    );
+
     test("throws a type error if predicate is not a function", () => {
       expect.assertions(1);
 

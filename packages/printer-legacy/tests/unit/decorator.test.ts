@@ -665,6 +665,37 @@ describe("decorator", () => {
       ).toMatchObject({ content: expect.stringContaining("count: 1") });
     });
 
+    test("a decorator with an explicit predicate AND a custom resolve returning [] renders nothing, unlike the marker case", () => {
+      expect.assertions(1);
+
+      // Unlike the predicate-only marker decorator above, a custom `resolve`
+      // returning an empty array is never ambiguous with "no arguments to
+      // carry" — it means "nothing to render this time" and must be skipped,
+      // not substituted with a synthetic `[{}]` record.
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "rows",
+            predicate: () => {
+              return true;
+            },
+            resolve: () => {
+              return [];
+            },
+            render: (values) => {
+              return values
+                .map((v) => {
+                  return `- ${v.code as number}`;
+                })
+                .join("\n");
+            },
+          },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
     test("a directive-driven decorator with zero occurrences still renders nothing", () => {
       expect.assertions(1);
 
@@ -775,6 +806,41 @@ describe("decorator", () => {
       });
 
       expect(sections["httpResponse"]).toMatchObject({
+        content: expect.stringContaining("from decorators"),
+      });
+    });
+
+    test("a `customSections` entry survives when `decorators` declares a different id", () => {
+      expect.assertions(2);
+
+      // Regression test: `getDeclaredDecorators` used to fall back to
+      // `customSections` only when `decorators` was entirely absent
+      // (`options.decorators ?? options.customSections`), silently dropping
+      // every `customSections` entry the moment a single `decorators` entry
+      // existed — a direct printer-API caller migrating one entry at a time
+      // (the guarantee documented for `parseDeprecatedCustomSectionsOption`
+      // in `@graphql-markdown/core`) would lose unrelated legacy sections.
+      const sections = printDecorators(type, {
+        ...options,
+        decorators: {
+          other: {
+            predicate: (): boolean => {
+              return true;
+            },
+            render: (): string => {
+              return "from decorators";
+            },
+          },
+        } as Decorators,
+        customSections: {
+          httpResponse: { title: "Responses", render: httpResponses.render },
+        } as CustomSections,
+      });
+
+      expect(sections["httpResponse"]).toMatchObject({
+        content: expect.stringContaining("200"),
+      });
+      expect(sections["other"]).toMatchObject({
         content: expect.stringContaining("from decorators"),
       });
     });

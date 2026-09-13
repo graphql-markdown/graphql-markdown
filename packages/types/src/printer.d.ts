@@ -304,6 +304,7 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
  */
 export type PrinterInitOptions = {
   customDirectives?: Maybe<CustomDirectiveMap>;
+  decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
   meta?: Maybe<MetaInfo>;
@@ -451,6 +452,11 @@ export interface PrinterConfig {
 export interface PrinterOptions {
   /** Map of custom directive handlers */
   customDirectives?: Maybe<CustomDirectiveMap>;
+  /**
+   * Predicate-driven decorators, resolved by the configuration layer (which
+   * also merges the deprecated `printTypeOptions.customSections` into them).
+   */
+  decorators?: Maybe<Decorators>;
   /** Configuration for handling deprecated types and fields */
   deprecated?: Maybe<TypeDeprecatedOption>;
   /** Schema entity grouping configuration */

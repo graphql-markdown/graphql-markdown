@@ -236,6 +236,48 @@ describe("generator", () => {
       },
     );
 
+    test("forwards the top-level decorators option to the printer", async () => {
+      // Regression test: `decorators` reached `buildConfig`'s return value
+      // (Options.decorators) but `generateDocFromSchema` never destructured
+      // or forwarded it to `getPrinter`, so the whole feature was inert for
+      // any real config/CLI user — only unit tests that hand-built
+      // `PrintTypeOptions` directly exercised it.
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      mockSchemaLoad(mockSchema);
+
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
+      const getPrinterSpy = vi
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      const decorators = {
+        responses: {
+          predicate: () => {
+            return true;
+          },
+          render: () => {
+            return "x";
+          },
+        },
+      };
+
+      await generateDocFromSchema({
+        ...options,
+        decorators,
+      } as GeneratorOptions);
+
+      expect(getPrinterSpy.mock.calls[0][1]?.decorators).toBe(decorators);
+    });
+
     test("prints summary when completed", async () => {
       expect.assertions(1);
 

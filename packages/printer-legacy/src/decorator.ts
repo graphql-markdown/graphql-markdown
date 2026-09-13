@@ -423,14 +423,20 @@ const renderDecoratorContent = (
 
   let values = resolved;
   if (values.length === 0) {
-    if (!decorator.predicate) {
-      // No values, and nothing beyond the default gating asked for this
-      // decorator: preserve today's behaviour of skipping it silently.
+    if (!decorator.predicate || decorator.resolve) {
+      // No values, and either nothing beyond the default gating asked for
+      // this decorator, or a custom `resolve` explicitly returned nothing:
+      // preserve today's behaviour of skipping it silently. The marker
+      // substitution below is only for the directive-occurrences default
+      // path, where "no occurrences" is ambiguous with "a pure marker
+      // directive with no arguments" — a custom `resolve` returning `[]` is
+      // never ambiguous, it means "nothing to render this time".
       return undefined;
     }
-    // An explicit predicate matched with no resolved values: this is a pure
-    // marker decorator (no directive arguments to carry), so it still renders
-    // once, with an empty record.
+    // An explicit predicate matched, using the default directive-occurrences
+    // resolver, with no resolved values: this is a pure marker decorator (no
+    // directive arguments to carry), so it still renders once, with an empty
+    // record.
     values = [{}];
   }
 
@@ -504,12 +510,18 @@ export const printCustomSection = (
 /**
  * Returns the decorators to build, in declaration order.
  *
- * Reads the top-level `decorators` option; when absent, falls back to the
- * deprecated `printTypeOptions.customSections` so existing configuration
- * keeps working unchanged. Decorators claiming a reserved id are dropped: the
- * printer is reachable directly through its public API, bypassing the
- * configuration validation, and such a decorator would otherwise overwrite a
- * built-in section.
+ * Reads the top-level `decorators` option, merged with the deprecated
+ * `printTypeOptions.customSections` so existing configuration keeps working
+ * unchanged. The merge is per-id: an explicit `decorators` entry wins over a
+ * `customSections` entry with the same id, matching the merge
+ * `parseDeprecatedCustomSectionsOption` performs in `@graphql-markdown/core`
+ * — so a caller that reaches the printer directly (bypassing that merge, as
+ * the reserved-id filter below already assumes is possible) still migrates
+ * one entry at a time safely, rather than the whole legacy map disappearing
+ * the moment a single `decorators` entry exists. Decorators claiming a
+ * reserved id are dropped: the printer is reachable directly through its
+ * public API, bypassing the configuration validation, and such a decorator
+ * would otherwise overwrite a built-in section.
  *
  * @internal
  *
@@ -521,11 +533,27 @@ export const printCustomSection = (
 const getDeclaredDecorators = (
   options: PrintTypeOptions,
 ): ResolvedDecorator[] => {
-  const declared = options.decorators ?? options.customSections;
+  const customSections =
+    typeof options.customSections === "object" &&
+    options.customSections !== null
+      ? options.customSections
+      : undefined;
+  const decorators =
+    typeof options.decorators === "object" && options.decorators !== null
+      ? options.decorators
+      : undefined;
 
-  if (typeof declared !== "object" || declared === null) {
+  if (!customSections && !decorators) {
     return [];
   }
+
+  // Explicitly typed: `CustomSections`' keys are the branded `DirectiveName`,
+  // which defeats TS's spread-type inference when merged with `Decorators`'
+  // plain `string` keys.
+  const declared: Record<
+    string,
+    DecoratorDefinition | TypeCustomSectionOption
+  > = { ...customSections, ...decorators };
 
   return Object.entries(declared)
     .filter(([id]): boolean => {

@@ -28,6 +28,7 @@ import type {
   ConfigPrintTypeOptions,
   CustomDirective,
   CustomSections,
+  DecoratorDefinition,
   Decorators,
   DirectiveName,
   GroupByDirectiveOptions,
@@ -820,51 +821,58 @@ export const getDecoratorsOption = (
 
   // `Object.entries` skips the `__proto__` key of an object literal, which never
   // becomes an own property, so a decorator cannot claim it here either.
-  Object.entries(decorators).forEach(([id, decorator]): void => {
-    if (id.length === 0) {
-      throw new TypeError(
-        "Option 'decorators' requires a non-empty id for each decorator.",
-      );
-    }
+  Object.entries(decorators).forEach(
+    ([id, decorator]: [string, Maybe<DecoratorDefinition>]): void => {
+      if (id.length === 0) {
+        throw new TypeError(
+          "Option 'decorators' requires a non-empty id for each decorator.",
+        );
+      }
 
-    if (RESERVED_SECTION_NAMES.includes(id)) {
-      throw new Error(
-        `Decorator id '${id}' is reserved, please use another id.`,
-      );
-    }
+      if (RESERVED_SECTION_NAMES.includes(id)) {
+        throw new Error(
+          `Decorator id '${id}' is reserved, please use another id.`,
+        );
+      }
 
-    if (typeof decorator.render !== "function") {
-      throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
-    }
+      // A config file is untrusted runtime JavaScript, so a non-object entry
+      // (`null`, or `undefined` from a conditional spread) must produce this
+      // same validation error rather than an unguarded TypeError dereferencing
+      // `.render` on it. The `!decorator` half also narrows `decorator` from
+      // `Maybe<DecoratorDefinition>` for every check below.
+      if (!decorator || typeof decorator.render !== "function") {
+        throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
+      }
 
-    if (
-      decorator.predicate !== undefined &&
-      typeof decorator.predicate !== "function"
-    ) {
-      throw new TypeError(
-        `Decorator '${id}' option 'predicate' must be a function.`,
-      );
-    }
+      if (
+        decorator.predicate !== undefined &&
+        typeof decorator.predicate !== "function"
+      ) {
+        throw new TypeError(
+          `Decorator '${id}' option 'predicate' must be a function.`,
+        );
+      }
 
-    if (
-      decorator.resolve !== undefined &&
-      typeof decorator.resolve !== "function"
-    ) {
-      throw new TypeError(
-        `Decorator '${id}' option 'resolve' must be a function.`,
-      );
-    }
+      if (
+        decorator.resolve !== undefined &&
+        typeof decorator.resolve !== "function"
+      ) {
+        throw new TypeError(
+          `Decorator '${id}' option 'resolve' must be a function.`,
+        );
+      }
 
-    if (
-      decorator.directive !== undefined &&
-      (typeof decorator.directive !== "string" ||
-        decorator.directive.length === 0)
-    ) {
-      throw new TypeError(
-        `Decorator '${id}' option 'directive' must be a non-empty string.`,
-      );
-    }
-  });
+      if (
+        decorator.directive !== undefined &&
+        (typeof decorator.directive !== "string" ||
+          decorator.directive.length === 0)
+      ) {
+        throw new TypeError(
+          `Decorator '${id}' option 'directive' must be a non-empty string.`,
+        );
+      }
+    },
+  );
 
   return decorators;
 };
