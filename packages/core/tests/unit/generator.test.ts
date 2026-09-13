@@ -19,6 +19,17 @@ import { GraphQLDirective } from "graphql/type";
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
   return {
+    // `always()` is invoked eagerly at module load by
+    // `@graphql-markdown/printer-legacy`'s decorator.ts (building its
+    // customDirective-adapter decorator constants), which this file reaches
+    // transitively through `../../src/generator` — so it must exist even
+    // though generator.test.ts never exercises decorator rendering itself
+    // (`../../src/printer` is mocked below).
+    always: vi.fn(() => {
+      return (): boolean => {
+        return true;
+      };
+    }),
     getCustomDirectives: vi.fn(),
     getDocumentLoaders: vi.fn(),
     getGroups: vi.fn(),

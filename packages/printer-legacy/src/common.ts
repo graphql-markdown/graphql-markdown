@@ -146,12 +146,15 @@ export const printDescription = (
   noText?: string,
 ): MDXString | string => {
   const description = formatDescription(type, noText);
-  const customDirectives = getCustomDirectivesText(type, options);
   const deprecation = printDeprecation(type, options);
+  // `customDirective`'s `descriptor` handlers reach this line via the
+  // decorators pipeline (`printSlotDecorators`, not a direct
+  // `getCustomDirectivesText` call) — see `CUSTOM_DIRECTIVE_DESCRIPTION` in
+  // `./decorator`.
   const decoratorContent = printSlotDecorators("description", type, options);
   const decorators =
     decoratorContent.length > 0
       ? `${MARKDOWN_EOP}${decoratorContent.join(MARKDOWN_EOP)}`
       : "";
-  return `${deprecation}${description}${customDirectives}${decorators}`;
+  return `${deprecation}${description}${decorators}`;
 };

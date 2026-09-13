@@ -27,7 +27,7 @@ import type {
   ConfigOptions,
   ConfigPrintTypeOptions,
   CustomDirective,
-  CustomSections,
+  DecoratorDefinition,
   Decorators,
   DirectiveName,
   GroupByDirectiveOptions,
@@ -166,12 +166,8 @@ export const DEFAULT_OPTIONS: Readonly<
     >
 > & {
   printTypeOptions: Required<
-    Omit<
-      ConfigPrintTypeOptions,
-      "customSections" | "exampleSection" | "hierarchy"
-    >
+    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
   > & {
-    customSections: ConfigPrintTypeOptions["customSections"];
     exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   };
@@ -195,18 +191,13 @@ export const DEFAULT_OPTIONS: Readonly<
   metatags: [] as Record<string, string>[],
   pretty: false as const,
   printTypeOptions: {
-    customSections: undefined,
     deprecated: DeprecatedOption.DEFAULT,
     exampleSection: undefined,
     parentTypePrefix: true as const,
     typeBadges: true as const,
   } as Required<
-    Omit<
-      ConfigPrintTypeOptions,
-      "customSections" | "exampleSection" | "hierarchy"
-    >
+    Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
   > & {
-    customSections: ConfigPrintTypeOptions["customSections"];
     exampleSection: ConfigPrintTypeOptions["exampleSection"];
     hierarchy: Required<Pick<TypeHierarchyObjectType, TypeHierarchy.API>>;
   },
@@ -703,142 +694,13 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
 ] as const;
 
 /**
- * Error messages for {@link validateSectionLikeOption}, one set per caller so
- * each option's errors stay in its own vocabulary ("section"/"directive name"
- * vs. "decorator"/"id") while the validation control flow itself — the shape
- * shared by `decorators` and the deprecated `printTypeOptions.customSections`
- * — is written once.
- *
- * @internal
- */
-interface SectionLikeOptionMessages {
-  /** "Option '<name>' must be a map of ...". */
-  shape: string;
-  /** "Option '<name>' requires ... for each entry.". */
-  missingId: string;
-  reserved: (id: string) => string;
-  missingRender: (id: string) => string;
-}
-
-/**
- * Validates the map-of-ids shape shared by the top-level `decorators` option
- * and the deprecated `printTypeOptions.customSections`: absent selects
- * `defaultValue`, a falsy non-object or an array throws, every id must be
- * non-empty and not a built-in section name, and every entry must declare a
- * `render` callback. An invalid entry is a configuration error rather than
- * something to silently drop, as it would otherwise produce a page missing a
- * section without any indication why.
- *
- * @internal
- *
- * @param value - the option as declared in the config file.
- * @param defaultValue - the value to return when `value` is absent.
- * @param messages - the option-specific error message templates.
- * @param validateEntry - additional per-entry checks beyond `render`, run
- * after the shared checks pass.
- *
- * @returns `value`, or `defaultValue` when absent.
- *
- * @throws Error if an entry is malformed or claims a built-in section name.
- *
- */
-const validateSectionLikeOption = <
-  T extends Record<string, { render?: unknown } | null | undefined>,
->(
-  value: Maybe<T>,
-  defaultValue: Maybe<T>,
-  messages: SectionLikeOptionMessages,
-  validateEntry?: (id: string, entry: NonNullable<T[string]>) => void,
-): Maybe<T> => {
-  // Only an absent option selects the default: a configuration file is runtime
-  // JavaScript, so a falsy non-object such as `false` or `""` is a mistake worth
-  // reporting rather than a silent way to disable the option.
-  if (value === null || value === undefined) {
-    return defaultValue;
-  }
-
-  if (typeof value !== "object" || Array.isArray(value)) {
-    throw new TypeError(messages.shape);
-  }
-
-  // `Object.entries` skips the `__proto__` key of an object literal, which never
-  // becomes an own property, so an entry cannot claim it here either.
-  Object.entries(value).forEach(([id, entry]): void => {
-    if (id.length === 0) {
-      throw new TypeError(messages.missingId);
-    }
-
-    if (RESERVED_SECTION_NAMES.includes(id)) {
-      throw new Error(messages.reserved(id));
-    }
-
-    // A config file is untrusted runtime JavaScript, so a non-object entry
-    // (`null`, or `undefined` from a conditional spread) must produce this
-    // same validation error rather than an unguarded TypeError dereferencing
-    // `.render` on it.
-    if (!entry || typeof entry.render !== "function") {
-      throw new TypeError(messages.missingRender(id));
-    }
-
-    validateEntry?.(id, entry as NonNullable<T[string]>);
-  });
-
-  return value;
-};
-
-/**
- * Validates the custom sections option.
- *
- * The option is keyed by directive name, which is also the section key: it must
- * be neither a built-in section key nor `__proto__`, and each entry must declare
- * a `render` callback.
- *
- * @param customSections - the custom sections declared in the config file.
- *
- * @returns the validated custom sections, or `undefined` when none is declared.
- *
- * @throws Error if an entry is malformed or claims a built-in section name.
- *
- * @example
- * ```js
- * getCustomSectionsOption({
- *   httpResponse: {
- *     title: "Responses",
- *     position: { after: "metadata" },
- *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
- *   },
- * });
- * ```
- */
-export const getCustomSectionsOption = (
-  customSections: Maybe<CustomSections>,
-): Maybe<CustomSections> => {
-  return validateSectionLikeOption(
-    customSections,
-    DEFAULT_OPTIONS.printTypeOptions.customSections,
-    {
-      shape:
-        "Option 'printTypeOptions.customSections' must be a map of directive names.",
-      missingId:
-        "Option 'printTypeOptions.customSections' requires a directive name for each section.",
-      reserved: (name): string => {
-        return `Custom section name '${name}' is reserved, please use another name.`;
-      },
-      missingRender: (name): string => {
-        return `Custom section '${name}' requires a 'render' function.`;
-      },
-    },
-  );
-};
-
-/**
  * Validates the top-level `decorators` option.
  *
- * Unlike the deprecated `printTypeOptions.customSections`, a decorator's key is
- * a free-form id — it is not required to name a schema directive — so
- * validation only rejects a reserved id, not an id that happens not to match
- * anything in the schema (that is a runtime predicate concern, not a
- * configuration error).
+ * The option is keyed by a free-form id — it is not required to name a
+ * schema directive — and every entry must declare a `render` callback. An
+ * invalid entry is a configuration error rather than something to silently
+ * drop, as it would otherwise produce a page missing a section without any
+ * indication why.
  *
  * @param decorators - the `decorators` option declared in the config file.
  *
@@ -861,21 +723,42 @@ export const getCustomSectionsOption = (
 export const getDecoratorsOption = (
   decorators: Maybe<Decorators>,
 ): Maybe<Decorators> => {
-  return validateSectionLikeOption(
-    decorators,
-    DEFAULT_OPTIONS.decorators,
-    {
-      shape: "Option 'decorators' must be a map of decorator ids.",
-      missingId:
-        "Option 'decorators' requires a non-empty id for each decorator.",
-      reserved: (id): string => {
-        return `Decorator id '${id}' is reserved, please use another id.`;
-      },
-      missingRender: (id): string => {
-        return `Decorator '${id}' requires a 'render' function.`;
-      },
-    },
-    (id, decorator): void => {
+  // Only an absent option selects the default: a configuration file is runtime
+  // JavaScript, so a falsy non-object such as `false` or `""` is a mistake worth
+  // reporting rather than a silent way to disable the decorators.
+  if (decorators === null || decorators === undefined) {
+    return DEFAULT_OPTIONS.decorators;
+  }
+
+  if (typeof decorators !== "object" || Array.isArray(decorators)) {
+    throw new TypeError("Option 'decorators' must be a map of decorator ids.");
+  }
+
+  // `Object.entries` skips the `__proto__` key of an object literal, which never
+  // becomes an own property, so a decorator cannot claim it here either.
+  Object.entries(decorators).forEach(
+    ([id, decorator]: [string, Maybe<DecoratorDefinition>]): void => {
+      if (id.length === 0) {
+        throw new TypeError(
+          "Option 'decorators' requires a non-empty id for each decorator.",
+        );
+      }
+
+      if (RESERVED_SECTION_NAMES.includes(id)) {
+        throw new Error(
+          `Decorator id '${id}' is reserved, please use another id.`,
+        );
+      }
+
+      // A config file is untrusted runtime JavaScript, so a non-object entry
+      // (`null`, or `undefined` from a conditional spread) must produce this
+      // same validation error rather than an unguarded TypeError dereferencing
+      // `.render` on it. The `!decorator` half also narrows `decorator` from
+      // `Maybe<DecoratorDefinition>` for every check below.
+      if (!decorator || typeof decorator.render !== "function") {
+        throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
+      }
+
       if (
         decorator.predicate !== undefined &&
         typeof decorator.predicate !== "function"
@@ -905,45 +788,8 @@ export const getDecoratorsOption = (
       }
     },
   );
-};
 
-/**
- * Merges the deprecated `printTypeOptions.customSections` option into
- * `decorators`, warning once when `customSections` is declared.
- *
- * A `customSections` entry is translated as-is: its map key becomes a
- * decorator id exactly as it did before (see {@link getDeclaredDecorators} in
- * `@graphql-markdown/printer-legacy`, which already treats a bare id as the
- * directive name to read by default). An explicit `decorators` entry with the
- * same id takes precedence over the legacy one, so migrating one entry at a
- * time is safe.
- *
- * @param decorators - the already-validated `decorators` option.
- * @param customSections - the already-validated, deprecated
- * `printTypeOptions.customSections` option.
- *
- * @returns the merged decorators, or `undefined` when neither is declared.
- *
- */
-export const parseDeprecatedCustomSectionsOption = (
-  decorators: Maybe<Decorators>,
-  customSections: Maybe<CustomSections>,
-): Maybe<Decorators> => {
-  if (customSections === null || customSections === undefined) {
-    return decorators;
-  }
-
-  if (
-    typeof customSections === "object" &&
-    Object.keys(customSections).length > 0
-  ) {
-    log(
-      `Setting "printTypeOptions.customSections" is deprecated and will be removed in a future version. Use "decorators" instead.`,
-      LogLevel.warn,
-    );
-  }
-
-  return { ...customSections, ...decorators } as Maybe<Decorators>;
+  return decorators;
 };
 
 const getPrintTypeOptions = (
@@ -951,7 +797,6 @@ const getPrintTypeOptions = (
   configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
   return {
-    customSections: getCustomSectionsOption(configOptions?.customSections),
     deprecated: (
       (cliOpts?.deprecated ??
         configOptions?.deprecated ??
@@ -1175,10 +1020,7 @@ export const buildConfig = async (
       config.customDirective,
       skipDocDirective,
     ),
-    decorators: parseDeprecatedCustomSectionsOption(
-      getDecoratorsOption(config.decorators),
-      printTypeOptions.customSections,
-    ),
+    decorators: getDecoratorsOption(config.decorators),
     diffMethod: force
       ? getForcedDiffMethod()
       : getDiffMethod(cliOpts.diff ?? config.diffMethod!),

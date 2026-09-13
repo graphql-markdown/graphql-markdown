@@ -1,7 +1,6 @@
 import type {
   CollapsibleOption,
   ConfigPrintTypeOptions,
-  CustomSections,
   Decorators,
   FrontMatterOptions,
   MetaInfo,
@@ -202,8 +201,6 @@ export interface AdmonitionType {
  * Configuration options for printing type documentation
  */
 export interface PrinterConfigPrintTypeOptions {
-  /** @deprecated Use the top-level `decorators` option instead. */
-  customSections?: CustomSections;
   deprecated?: TypeDeprecatedOption;
   exampleSection?: TypeExampleSectionOption;
   hierarchy?: TypeHierarchyObjectType;
@@ -218,14 +215,17 @@ export interface PrinterConfigPrintTypeOptions {
 export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   collapsible?: Maybe<CollapsibleOption>;
-  /** @deprecated Use `decorators` instead. */
+  /**
+   * The schema-resolved form of the deprecated `customDirective` option, built
+   * once by `@graphql-markdown/core` and consumed by the decorators pipeline
+   * to render `customDirective`'s `descriptor`/`tag` handlers as decorators.
+   *
+   * @deprecated Use `decorators` instead.
+   */
   customDirectives?: Maybe<CustomDirectiveMap>;
-  /** @deprecated Use `decorators` instead. */
-  customSections?: Maybe<CustomSections>;
   /**
    * Decorators: selects nodes with a predicate and renders a titled section, a
-   * badge, or appended description text for them. Supersedes `customDirectives`
-   * and `customSections`.
+   * badge, or appended description text for them. Supersedes `customDirectives`.
    */
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
@@ -450,12 +450,12 @@ export interface PrinterConfig {
  * Extended printer options for customizing documentation generation
  */
 export interface PrinterOptions {
-  /** Map of custom directive handlers */
-  customDirectives?: Maybe<CustomDirectiveMap>;
   /**
-   * Predicate-driven decorators, resolved by the configuration layer (which
-   * also merges the deprecated `printTypeOptions.customSections` into them).
+   * Schema-resolved form of the deprecated `customDirective` option (see
+   * `PrintTypeOptions.customDirectives`).
    */
+  customDirectives?: Maybe<CustomDirectiveMap>;
+  /** Predicate-driven decorators, resolved by the configuration layer. */
   decorators?: Maybe<Decorators>;
   /** Configuration for handling deprecated types and fields */
   deprecated?: Maybe<TypeDeprecatedOption>;

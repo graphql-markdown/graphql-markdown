@@ -23,7 +23,7 @@ import {
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";
-import { printCustomTags, printSlotDecorators } from "./decorator";
+import { printSlotDecorators } from "./decorator";
 import {
   hasPrintableDirective,
   printLink,
@@ -95,10 +95,10 @@ export const printSectionItem = <T>(
   ]
     .filter(Boolean)
     .join(" ");
-  const tags = [
-    printCustomTags(type, options),
-    ...printSlotDecorators("tags", type, options),
-  ]
+  // `customDirective`'s `tag` handlers reach this line via the decorators
+  // pipeline (`printSlotDecorators`, not a direct `printCustomTags` call) —
+  // see `CUSTOM_DIRECTIVE_TAGS` in `./decorator`.
+  const tags = printSlotDecorators("tags", type, options)
     .filter(Boolean)
     .join(" ");
   const parentTypeLink = printParentLink(type, options);

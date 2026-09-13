@@ -6,13 +6,15 @@
  * directive named after this decorator" — and renders its resolved values
  * through a user callback. A decorator with a title becomes a top-level
  * section of the type page; one without renders bare content, placed relative
- * to the built-in sections (or, once wired by the metadata-slot machinery,
- * into a named slot such as the heading's metadata line).
+ * to the built-in sections, or into a named slot such as the heading's
+ * metadata line or a member's description.
  *
- * `printTypeOptions.customSections` is the deprecated, directive-only
- * predecessor of this module: its map key doubled as both the section id and
- * the directive name. It is still read here as a fallback so existing
- * configuration keeps working unchanged.
+ * `customDirective` is the deprecated predecessor of this module: each of its
+ * `descriptor`/`tag` handlers is translated into a decorator declaration
+ * below (`CUSTOM_DIRECTIVE_DESCRIPTION`, `CUSTOM_DIRECTIVE_TAGS`,
+ * `CUSTOM_DIRECTIVES_SECTION`), so both options flow through the same
+ * resolve/render pipeline — there is one code path for "select nodes by
+ * directive, render descriptor text, a badge, or a section", not two.
  *
  * @packageDocumentation
  */
@@ -31,7 +33,6 @@ import type {
   PageSection,
   PageSections,
   PrintTypeOptions,
-  TypeCustomSectionOption,
 } from "@graphql-markdown/types";
 
 import {
@@ -44,6 +45,8 @@ import {
   hasDirectiveNamed,
   isEntity,
 } from "@graphql-markdown/graphql";
+
+import { escapeMDX } from "@graphql-markdown/utils";
 
 import { formatBadges } from "./badge";
 import { printExample } from "./example";
@@ -60,14 +63,40 @@ import { SectionLevels } from "./const/options";
 export { getSchemaEntity };
 
 /**
- * Resolves a custom directive using the provided resolver function.
+ * A decorator, resolved from its declaration under `decorators`.
  *
- * Relocated from the deleted `directive.ts` (T6 of the decorators plan):
- * `customDirective` is deprecated in favour of `decorators`, but its runtime
- * behaviour is kept unchanged here rather than folded into the generic
- * predicate/slot pipeline — the two have different iteration, escaping, and
- * ordering rules, and merging them risked silently changing rendered output.
- * See `.claude/plans/decorators.md` (T6) for the full rationale.
+ * @internal
+ */
+export type ResolvedDecorator = DecoratorDefinition & {
+  /** The decorator id — the key under which it was declared. */
+  id: string;
+};
+
+/**
+ * Section/decorator keys owned by the printer, which a decorator cannot claim.
+ *
+ * Re-exported from the package root: `@graphql-markdown/core`'s
+ * `getDecoratorsOption` validates against this same list (plus `"__proto__"`,
+ * reserved only there — see that package's own copy of this comment) so the
+ * two entry points, config-file validation and building a decorators map
+ * directly against the printer API, can't silently drift apart on which
+ * names are reserved.
+ */
+export const RESERVED_SECTION_NAMES: readonly string[] = [
+  "header",
+  "metatags",
+  "mdxDeclaration",
+  "tags",
+  "description",
+  "code",
+  "customDirectives",
+  "metadata",
+  "example",
+  "relations",
+] as const;
+
+/**
+ * Resolves a custom directive handler's return value.
  *
  * @param resolver - The resolver function name to execute
  * @param type - The GraphQL type to resolve the directive for
@@ -97,7 +126,8 @@ export const getCustomDirectiveResolver = (
 };
 
 /**
- * Prints a single custom directive entry as a Markdown string.
+ * Prints a single custom directive entry as a Markdown string, for the
+ * built-in "Directives" section.
  *
  * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
  */
@@ -122,46 +152,6 @@ export const printCustomDirective = (
   }
 
   return `${SectionLevels.LEVEL.repeat(4)} ${typeNameLink}${MARKDOWN_EOL} ${description}${MARKDOWN_EOL} `;
-};
-
-/**
- * Prints the built-in "Directives" page section, listing every custom
- * directive declared on a type.
- *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
- */
-export const printCustomDirectives = (
-  type: unknown,
-  options: PrintTypeOptions,
-): Maybe<PageSection> => {
-  const constDirectiveMap = getConstDirectiveMap(
-    type,
-    options.customDirectives,
-  );
-
-  if (!constDirectiveMap || Object.keys(constDirectiveMap).length === 0) {
-    return undefined;
-  }
-
-  const directives = Object.values(constDirectiveMap)
-    .map((constDirectiveOption): Maybe<string> => {
-      return printCustomDirective(type, constDirectiveOption, options);
-    })
-    .filter((value): boolean => {
-      return value !== undefined;
-    });
-
-  if (directives.length === 0) {
-    return undefined;
-  }
-
-  const content = directives.join(MARKDOWN_EOP);
-
-  return {
-    title: "Directives",
-    content: `${content}${MARKDOWN_EOP}`,
-    level: 3,
-  };
 };
 
 /**
@@ -209,75 +199,127 @@ export const printCustomTags = (
 };
 
 /**
- * Resolves the values a section renders, replacing the default directive lookup.
+ * Reads every custom directive matched on a node, in schema declaration
+ * order. Shared by the `customDirective`-adapter decorators below: matching
+ * (including wildcard `"*"` precedence — a named handler wins over `"*"`)
+ * is already resolved by `getConstDirectiveMap`/`options.customDirectives`
+ * (built by `@graphql-markdown/graphql`'s `getCustomDirectives`, which
+ * expands a wildcard into concrete per-directive entries upstream), so the
+ * adapter reuses that resolution rather than re-implementing it against the
+ * generic predicate system.
  *
- * Used by the built-in sections, such as the example section, whose values do
- * not come from reading directive occurrences off the type.
+ * @internal
+ */
+const resolveCustomDirectiveMatches: DecoratorResolver = (
+  type: unknown,
+  options: PrintTypeOptions,
+): Record<string, unknown>[] => {
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
+
+  return constDirectiveMap
+    ? (Object.values(constDirectiveMap) as unknown as Record<string, unknown>[])
+    : [];
+};
+
+/**
+ * The built-in "Directives" page section, listing every custom directive
+ * declared on a type — a titled decorator translating the deprecated
+ * `customDirective` option. Not part of `getDeclaredDecorators`'s output
+ * (its id is reserved): printed directly by {@link printCustomDirectives},
+ * the same way the built-in Example section is printed directly by
+ * `Printer.printExample`.
+ *
+ * @internal
+ */
+const CUSTOM_DIRECTIVES_SECTION: ResolvedDecorator = {
+  id: "customDirectives",
+  title: "Directives",
+  predicate: always(),
+  resolve: resolveCustomDirectiveMatches,
+  render: (values, options, context): Maybe<string> => {
+    const directives = (values as unknown as CustomDirectiveMapItem[])
+      .map((item): Maybe<string> => {
+        return printCustomDirective(context.type, item, options);
+      })
+      .filter((value): value is string => {
+        return value !== undefined;
+      });
+
+    return directives.length > 0 ? directives.join(MARKDOWN_EOP) : undefined;
+  },
+};
+
+/**
+ * Appends `customDirective`'s `descriptor` handlers as description text —
+ * the translation of `customDirective` into a decorator with
+ * `position: { into: "description" }`. Included unconditionally in
+ * `getDeclaredDecorators`'s output; its `resolve` returns `[]` (skipping
+ * silently) when `options.customDirectives` is absent or matches nothing.
+ *
+ * @internal
+ */
+const CUSTOM_DIRECTIVE_DESCRIPTION: ResolvedDecorator = {
+  id: "customDirective:description",
+  predicate: always(),
+  resolve: resolveCustomDirectiveMatches,
+  position: { into: "description" },
+  render: (values, _options, context): Maybe<string> => {
+    const parts = (values as unknown as CustomDirectiveMapItem[])
+      .map((item): Maybe<string> => {
+        return getCustomDirectiveResolver("descriptor", context.type, item, "");
+      })
+      .filter((text): text is string => {
+        return typeof text === "string" && text.length > 0;
+      })
+      .map((text): string => {
+        return escapeMDX(text);
+      });
+
+    return parts.length > 0 ? parts.join(MARKDOWN_EOP) : undefined;
+  },
+};
+
+/**
+ * Renders `customDirective`'s `tag` handlers as badges in the metadata
+ * line's `tags` slot — the translation of `customDirective` into a decorator
+ * with `position: { into: "tags" }`. Included unconditionally in
+ * `getDeclaredDecorators`'s output, on the same terms as
+ * {@link CUSTOM_DIRECTIVE_DESCRIPTION}.
+ *
+ * @internal
+ */
+const CUSTOM_DIRECTIVE_TAGS: ResolvedDecorator = {
+  id: "customDirective:tags",
+  predicate: always(),
+  resolve: resolveCustomDirectiveMatches,
+  position: { into: "tags" },
+  render: (values, options, context): Maybe<string> => {
+    const badges = (values as unknown as CustomDirectiveMapItem[])
+      .map((item): Maybe<string> => {
+        return getCustomDirectiveResolver("tag", context.type, item);
+      })
+      .filter((value): value is string => {
+        return value !== undefined;
+      }) as unknown as Badge[];
+
+    return badges.length > 0
+      ? (formatBadges(badges, options) as string)
+      : undefined;
+  },
+};
+
+/**
+ * Resolves the values a decorator renders, replacing the default directive
+ * lookup.
  *
  * @internal
  *
  * @deprecated Use {@link DecoratorResolver} instead.
  */
 export type SectionValuesResolver = DecoratorResolver;
-
-/**
- * A custom section, resolved from its declaration.
- *
- * `printTypeOptions.customSections` is keyed by directive name, which is also
- * the section key: both are carried here so the section can be printed on its
- * own. The `resolve` callback is internal, as a declared section always reads
- * directive occurrences.
- *
- * @internal
- *
- * @deprecated Use {@link ResolvedDecorator} instead.
- */
-export type SectionDefinition = TypeCustomSectionOption & {
-  /** Section key, injected into the page sections map. */
-  name: string;
-  /** Name of the schema directive carrying the section data. */
-  directive: string;
-  resolve?: SectionValuesResolver;
-};
-
-/**
- * A decorator, resolved from its declaration under `decorators` (or, as a
- * fallback, under the deprecated `printTypeOptions.customSections`).
- *
- * @internal
- */
-export type ResolvedDecorator = DecoratorDefinition & {
-  /** The decorator id — the key under which it was declared. */
-  id: string;
-};
-
-/**
- * Section/decorator keys owned by the printer, which a decorator cannot claim.
- *
- * Re-exported from the package root: `@graphql-markdown/core`'s
- * `getDecoratorsOption`/`getCustomSectionsOption` validate against this same
- * list (plus `"__proto__"`, which is deliberately absent here — a decorator
- * declared with that id is filtered at render time below by the printer's
- * own reserved-id check, and `__proto__` never becomes an own property of an
- * object literal in the first place, so a decorators map only carries it when
- * built some other way, e.g. `Object.defineProperty`; config-file validation
- * rejects it outright instead, since a config author writing `__proto__:` is
- * almost certainly a mistake) so the two entry points — validating an
- * untrusted config file, and building a decorators map directly against the
- * printer API — can't silently drift apart on which names are reserved.
- */
-export const RESERVED_SECTION_NAMES: readonly string[] = [
-  "header",
-  "metatags",
-  "mdxDeclaration",
-  "tags",
-  "description",
-  "code",
-  "customDirectives",
-  "metadata",
-  "example",
-  "relations",
-] as const;
 
 /**
  * Builds the predicate for a decorator's (deprecated) `appliesTo` filter.
@@ -391,16 +433,16 @@ const renderDecoratorContent = (
 
   const directiveName = decorator.directive ?? decorator.id;
   // Resolved once and reused below for both the default resolve path and the
-  // render context, rather than looked up twice (once implicitly inside
-  // `directiveOccurrences`, once for `context.directive`) as when this used
-  // `directiveOccurrences` directly.
+  // render context, rather than looked up twice.
   const directive = getDirectiveFromSchema(directiveName, options);
 
   // A decorator with a custom `resolve` is gated only by its own return value,
   // matching the pre-existing behaviour of a custom-section resolver (most
   // notably the built-in Example section, whose values may come from a field
-  // nested arbitrarily deep rather than from the type itself). Only the
-  // default, directive-occurrences path is gated on directive presence.
+  // nested arbitrarily deep rather than from the type itself, and the
+  // `customDirective`-adapter decorators above, whose matching is driven by
+  // `options.customDirectives`, not the decorator's own id/directive). Only
+  // the default, directive-occurrences path is gated on directive presence.
   //
   // `appliesTo` is composed in via `and()` rather than checked separately: it
   // is sugar for `isEntity(...)` combined with `predicate`, not a second,
@@ -498,78 +540,52 @@ export const printDecorator = (
 };
 
 /**
- * Prints a single custom section for a type.
+ * Prints the built-in "Directives" page section.
  *
- * @deprecated Use {@link printDecorator} instead.
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
  */
-export const printCustomSection = (
+export const printCustomDirectives = (
   type: unknown,
-  section: SectionDefinition,
   options: PrintTypeOptions,
 ): Maybe<PageSection> => {
-  const { name, directive, ...rest } = section;
-  return printDecorator(
-    type,
-    { ...rest, id: name, directive: directive as DirectiveName },
-    options,
-  );
+  return printDecorator(type, CUSTOM_DIRECTIVES_SECTION, options);
 };
 
 /**
- * Returns the decorators to build, in declaration order.
- *
- * Reads the top-level `decorators` option, merged with the deprecated
- * `printTypeOptions.customSections` so existing configuration keeps working
- * unchanged. The merge is per-id: an explicit `decorators` entry wins over a
- * `customSections` entry with the same id, matching the merge
- * `parseDeprecatedCustomSectionsOption` performs in `@graphql-markdown/core`
- * — so a caller that reaches the printer directly (bypassing that merge, as
- * the reserved-id filter below already assumes is possible) still migrates
- * one entry at a time safely, rather than the whole legacy map disappearing
- * the moment a single `decorators` entry exists. Decorators claiming a
- * reserved id are dropped: the printer is reachable directly through its
- * public API, bypassing the configuration validation, and such a decorator
- * would otherwise overwrite a built-in section.
+ * Returns the decorators to build, in declaration order: the
+ * `customDirective`-adapter decorators (always present; each skips silently
+ * when it matches nothing) followed by every entry declared under the
+ * top-level `decorators` option. Decorators claiming a reserved id are
+ * dropped: the printer is reachable directly through its public API,
+ * bypassing the configuration validation, and such a decorator would
+ * otherwise overwrite a built-in section.
  *
  * @internal
  *
  * @param options - the print options in effect.
  *
- * @returns the decorators to build, empty when none is declared.
+ * @returns the decorators to build.
  *
  */
 const getDeclaredDecorators = (
   options: PrintTypeOptions,
 ): ResolvedDecorator[] => {
-  const customSections =
-    typeof options.customSections === "object" &&
-    options.customSections !== null
-      ? options.customSections
-      : undefined;
   const decorators =
     typeof options.decorators === "object" && options.decorators !== null
       ? options.decorators
       : undefined;
 
-  if (!customSections && !decorators) {
-    return [];
-  }
+  const declared = decorators
+    ? Object.entries(decorators)
+        .filter(([id]): boolean => {
+          return !RESERVED_SECTION_NAMES.includes(id);
+        })
+        .map(([id, decorator]): ResolvedDecorator => {
+          return { ...decorator, id };
+        })
+    : [];
 
-  // Explicitly typed: `CustomSections`' keys are the branded `DirectiveName`,
-  // which defeats TS's spread-type inference when merged with `Decorators`'
-  // plain `string` keys.
-  const declared: Record<
-    string,
-    DecoratorDefinition | TypeCustomSectionOption
-  > = { ...customSections, ...decorators };
-
-  return Object.entries(declared)
-    .filter(([id]): boolean => {
-      return !RESERVED_SECTION_NAMES.includes(id);
-    })
-    .map(([id, decorator]): ResolvedDecorator => {
-      return { ...decorator, id };
-    });
+  return [CUSTOM_DIRECTIVE_DESCRIPTION, CUSTOM_DIRECTIVE_TAGS, ...declared];
 };
 
 /**
@@ -654,18 +670,6 @@ export const printSlotDecorators = (
 };
 
 /**
- * Prints every custom section declared in the print options.
- *
- * @deprecated Use {@link printDecorators} instead.
- */
-export const printCustomSections = (
-  type: unknown,
-  options: PrintTypeOptions,
-): PageSections => {
-  return printDecorators(type, options);
-};
-
-/**
  * Splices the decorators into the built-in section order.
  *
  * A decorator is placed after or before the section named by its `position`,
@@ -708,16 +712,4 @@ export const getDecoratorsOrder = (
       },
       [...sectionOrder],
     );
-};
-
-/**
- * Splices the custom sections into the built-in section order.
- *
- * @deprecated Use {@link getDecoratorsOrder} instead.
- */
-export const getCustomSectionsOrder = (
-  sectionOrder: readonly string[],
-  options: PrintTypeOptions,
-): string[] => {
-  return getDecoratorsOrder(sectionOrder, options);
 };

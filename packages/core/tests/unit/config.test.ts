@@ -3,7 +3,6 @@ import type {
   CliOptions,
   ConfigOptions,
   CustomDirective,
-  CustomSections,
   Decorators,
   DirectiveName,
   ExtensionProjectConfig,
@@ -38,9 +37,7 @@ import {
   parseGroupByOption,
   parseHomepageOption,
   TypeHierarchy,
-  getCustomSectionsOption,
   getDecoratorsOption,
-  parseDeprecatedCustomSectionsOption,
 } from "../../src/config";
 
 import * as graphqlConfigModule from "../../src/graphql-config";
@@ -341,7 +338,6 @@ describe("config", () => {
           sectionHeaderId: false,
         },
         printTypeOptions: {
-          customSections: undefined,
           deprecated: "group",
           exampleSection: { directive: "example" },
           hierarchy: TypeHierarchy.ENTITY,
@@ -824,102 +820,6 @@ describe("config", () => {
     );
   });
 
-  describe("getCustomSectionsOption", () => {
-    const section = {
-      render: (): string => {
-        return "content";
-      },
-    };
-
-    test.each([undefined, null])(
-      "returns undefined if not configured (%s)",
-      (value) => {
-        expect.assertions(1);
-
-        expect(getCustomSectionsOption(value)).toBeUndefined();
-      },
-    );
-
-    test.each([false, 0, ""])(
-      "throws a type error if the option is the falsy non-object %p",
-      (value) => {
-        expect.assertions(1);
-
-        expect(() => {
-          getCustomSectionsOption(value as unknown as CustomSections);
-        }).toThrow(
-          new TypeError(
-            "Option 'printTypeOptions.customSections' must be a map of directive names.",
-          ),
-        );
-      },
-    );
-
-    test("returns the sections if valid", () => {
-      expect.assertions(1);
-
-      expect(
-        getCustomSectionsOption({ httpResponse: section } as CustomSections),
-      ).toStrictEqual({ httpResponse: section });
-    });
-
-    test("throws a type error if the option is a list", () => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomSectionsOption([section] as unknown as CustomSections);
-      }).toThrow(
-        new TypeError(
-          "Option 'printTypeOptions.customSections' must be a map of directive names.",
-        ),
-      );
-    });
-
-    test("throws a type error if a section has no directive name", () => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomSectionsOption({ "": section } as CustomSections);
-      }).toThrow(
-        new TypeError(
-          "Option 'printTypeOptions.customSections' requires a directive name for each section.",
-        ),
-      );
-    });
-
-    test("throws an error if a section name is reserved", () => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomSectionsOption({ metadata: section } as CustomSections);
-      }).toThrow(
-        "Custom section name 'metadata' is reserved, please use another name.",
-      );
-    });
-
-    test("ignores a section named '__proto__', which is not an own property", () => {
-      expect.assertions(1);
-
-      expect(
-        getCustomSectionsOption({ __proto__: section } as CustomSections),
-      ).toStrictEqual({});
-    });
-
-    test("throws a type error if a section has no render function", () => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomSectionsOption({
-          httpResponse: { render: {} },
-        } as unknown as CustomSections);
-      }).toThrow(
-        new TypeError(
-          "Custom section 'httpResponse' requires a 'render' function.",
-        ),
-      );
-    });
-  });
-
   describe("getDecoratorsOption", () => {
     const decorator = {
       render: (): string => {
@@ -1083,80 +983,6 @@ describe("config", () => {
         );
       },
     );
-  });
-
-  describe("parseDeprecatedCustomSectionsOption", () => {
-    const decorator = {
-      render: (): string => {
-        return "decorator content";
-      },
-    };
-    const section = {
-      render: (): string => {
-        return "section content";
-      },
-    };
-
-    test("returns decorators unchanged if customSections is not configured", () => {
-      expect.assertions(1);
-
-      expect(
-        parseDeprecatedCustomSectionsOption(
-          { responses: decorator } as Decorators,
-          undefined,
-        ),
-      ).toStrictEqual({ responses: decorator });
-    });
-
-    test("returns undefined if neither is configured", () => {
-      expect.assertions(1);
-
-      expect(
-        parseDeprecatedCustomSectionsOption(undefined, undefined),
-      ).toBeUndefined();
-    });
-
-    test("merges a legacy customSections entry into decorators", () => {
-      expect.assertions(1);
-
-      expect(
-        parseDeprecatedCustomSectionsOption(undefined, {
-          httpResponse: section,
-        } as CustomSections),
-      ).toStrictEqual({ httpResponse: section });
-    });
-
-    test("an explicit decorators entry wins over a customSections entry with the same id", () => {
-      expect.assertions(1);
-
-      expect(
-        parseDeprecatedCustomSectionsOption(
-          { httpResponse: decorator } as Decorators,
-          { httpResponse: section } as CustomSections,
-        ),
-      ).toStrictEqual({ httpResponse: decorator });
-    });
-
-    test("logs a deprecation warning when customSections is non-empty", () => {
-      expect.assertions(1);
-
-      parseDeprecatedCustomSectionsOption(undefined, {
-        httpResponse: section,
-      } as CustomSections);
-
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"printTypeOptions.customSections"'),
-        "warn",
-      );
-    });
-
-    test("does not log when customSections is empty", () => {
-      expect.assertions(1);
-
-      parseDeprecatedCustomSectionsOption(undefined, {} as CustomSections);
-
-      expect(log).not.toHaveBeenCalled();
-    });
   });
 
   describe("getCustomDirectives", () => {

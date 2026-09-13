@@ -228,74 +228,13 @@ export type TypeExampleSectionOption = Partial<
 >;
 
 /**
- * Renderer callback for a custom section.
- *
- * Receives one record of coerced directive arguments per directive occurrence,
- * in schema declaration order, and returns the section content as Markdown.
- *
- * @param values - the directive occurrences, one record of arguments each.
- * @param options - the print options in effect for the type being rendered.
- *
- * @returns the section content, or a nullish value to skip the section.
- *
- * @deprecated Use {@link DecoratorRenderer} instead.
- */
-export type CustomSectionRenderer = (
-  values: Record<string, unknown>[],
-  options: PrintTypeOptions,
-) => Maybe<string>;
-
-/**
- * Placement of a custom section relative to another section of the type page.
- * When omitted, the section is appended after the last built-in section.
- *
- * @deprecated Use {@link DecoratorPosition} instead.
- */
-export type CustomSectionPosition =
-  | { after: string; before?: never }
-  | { after?: never; before: string };
-
-/**
- * Custom section configuration options.
- *
- * Declares a directive-driven, top-level section of a type page. The section is
- * rendered when the directive naming it is present on the type being printed,
- * and is skipped otherwise.
- *
- * @deprecated Use {@link DecoratorDefinition} instead.
- */
-export interface TypeCustomSectionOption {
-  /** Optional heading for the section. Omit for an untitled section. */
-  title?: Maybe<string>;
-  /** Optional heading level, defaults to `3`. */
-  level?: Maybe<number>;
-  /** Optional placement relative to another section. */
-  position?: Maybe<CustomSectionPosition>;
-  /** Optional list of schema entities the section applies to. Defaults to all. */
-  appliesTo?: Maybe<SchemaEntity[]>;
-  /** Callback rendering the section content from the directive occurrences. */
-  render: CustomSectionRenderer;
-}
-
-/**
- * Map of directive names to their custom section options.
- *
- * The directive name is both the schema directive carrying the section data and
- * the section key injected into the page sections map, so it must not collide
- * with a built-in section.
- *
- * @deprecated Use {@link Decorators} instead.
- */
-export type CustomSections = Record<DirectiveName, TypeCustomSectionOption>;
-
-/**
  * Predicate selecting which nodes a decorator applies to.
  *
- * Unlike the directive-driven {@link TypeCustomSectionOption}, a decorator is
- * triggered by an arbitrary condition over the node being printed: a directive,
- * an entity kind, a name pattern, or any combination thereof. See
- * `@graphql-markdown/graphql`'s predicate helpers (`hasDirective`, `isEntity`,
- * `and`, `or`, `not`) for the common building blocks.
+ * A decorator is triggered by an arbitrary condition over the node being
+ * printed: a directive, an entity kind, a name pattern, or any combination
+ * thereof. See `@graphql-markdown/graphql`'s predicate helpers
+ * (`hasDirectiveNamed`, `isEntity`, `and`, `or`, `not`) for the common
+ * building blocks.
  *
  * @param type - the GraphQL node being printed (a type, field, or argument).
  * @param options - the print options in effect for the node being rendered.
@@ -362,12 +301,11 @@ export type DecoratorRenderer = (
 /**
  * Placement of a decorator relative to a named position.
  *
- * `after`/`before` splice the decorator into the page's section order, exactly
- * like {@link CustomSectionPosition}. `into` instead appends the decorator's
- * (titleless) content into a named slot that is not itself a section — for
- * example the `metadata` line of a type or field heading (badges, tags,
- * permalink), or `description`. When omitted, the decorator is appended after
- * the last built-in section.
+ * `after`/`before` splice the decorator into the page's section order. `into`
+ * instead appends the decorator's (titleless) content into a named slot that
+ * is not itself a section — for example the `metadata` line of a type or
+ * field heading (badges, tags, permalink), or `description`. When omitted,
+ * the decorator is appended after the last built-in section.
  */
 export type DecoratorPosition =
   | { after: string; before?: never; into?: never }
@@ -424,9 +362,9 @@ export interface DecoratorDefinition {
 /**
  * Map of decorator ids to their configuration.
  *
- * Unlike {@link CustomSections}, the key is a free-form, unique id — it is not
- * required to name a schema directive. A decorator's id must not collide with
- * a built-in page section name when it produces a titled section.
+ * The key is a free-form, unique id — it is not required to name a schema
+ * directive. A decorator's id must not collide with a built-in page section
+ * name when it produces a titled section.
  */
 export type Decorators = Record<string, DecoratorDefinition>;
 
@@ -450,8 +388,7 @@ export interface ConfigOptions {
   /**
    * Decorators: selects nodes with a predicate (a directive, an entity kind, or
    * any combination) and renders a titled section, a badge, or appended
-   * description text for them. Supersedes both `customDirective` and
-   * `printTypeOptions.customSections`.
+   * description text for them. Supersedes `customDirective`.
    */
   decorators?: Maybe<Decorators>;
   /** Method to use for diffing schema changes */
@@ -508,13 +445,6 @@ export interface ConfigOptions {
 export interface ConfigPrintTypeOptions {
   /** How to handle deprecated items */
   deprecated?: TypeDeprecatedOption;
-  /**
-   * Configuration for directive-driven custom sections.
-   *
-   * @deprecated Use the top-level `decorators` option instead.
-   * @see decorators
-   */
-  customSections?: Maybe<CustomSections>;
   /** Configuration for example sections */
   exampleSection?: TypeExampleSectionOption;
   /** Documentation hierarchy structure */
