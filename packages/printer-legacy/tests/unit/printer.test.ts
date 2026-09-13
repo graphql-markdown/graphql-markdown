@@ -44,6 +44,9 @@ vi.mock("@graphql-markdown/graphql", () => {
       },
     ),
     getConstDirectiveMap: vi.fn(),
+    getDirectiveFromSchema: vi.fn(() => {
+      return undefined;
+    }),
     getSchemaEntity: vi.fn(),
     getTypeName: vi.fn(),
     GraphQLSchema: class {},

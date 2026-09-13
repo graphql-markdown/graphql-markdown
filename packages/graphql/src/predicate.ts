@@ -194,6 +194,33 @@ export const always = (): DecoratorPredicate => {
 };
 
 /**
+ * Resolves a schema directive definition by name.
+ *
+ * Shared by {@link directiveOccurrences} (which reads a directive's argument
+ * values off a node) and `@graphql-markdown/printer-legacy`'s decorator
+ * resolution (which also needs the directive definition itself, for a
+ * decorator's render context) — both need "look up this named directive on
+ * `options.schema`, safely", so it lives here once rather than being
+ * reimplemented at each call site.
+ *
+ * @param name - the schema directive name to resolve.
+ * @param options - the print options in effect; `options.schema` is read.
+ *
+ * @returns the directive definition, or `undefined` when `options.schema` is
+ * absent, not a `GraphQLSchema`, or does not declare a directive named `name`.
+ *
+ */
+export const getDirectiveFromSchema = (
+  name: string,
+  options: PrintTypeOptions,
+): Maybe<GraphQLDirective> => {
+  const schema = options.schema;
+  return schema && instanceOf(schema, GraphQLSchema as never)
+    ? (schema.getDirective(name) ?? undefined)
+    : undefined;
+};
+
+/**
  * Builds a resolver reading every occurrence of a directive off the node being
  * printed, as one record of arguments per occurrence (see
  * {@link getTypeDirectiveValuesList}, which this delegates to and which also
@@ -210,11 +237,7 @@ export const directiveOccurrences = (name: string): DecoratorResolver => {
     type: unknown,
     options: PrintTypeOptions,
   ): Record<string, unknown>[] => {
-    const schema = options.schema;
-    const directive: Maybe<GraphQLDirective> =
-      schema && instanceOf(schema, GraphQLSchema as never)
-        ? schema.getDirective(name)
-        : undefined;
+    const directive = getDirectiveFromSchema(name, options);
 
     if (!directive) {
       return [];

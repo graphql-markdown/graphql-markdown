@@ -5,6 +5,7 @@ import {
   always,
   and,
   directiveOccurrences,
+  getDirectiveFromSchema,
   hasAnyDirective,
   hasDirectiveNamed,
   isEntity,
@@ -265,6 +266,33 @@ describe("always", () => {
     expect(always()(withDirective, baseOptions)).toBe(true);
     expect(always()(null, baseOptions)).toBe(true);
     expect(always()(undefined, baseOptions)).toBe(true);
+  });
+});
+
+describe("getDirectiveFromSchema", () => {
+  test("returns the directive definition when declared in the schema", () => {
+    expect.assertions(2);
+
+    const directive = getDirectiveFromSchema("httpResponse", baseOptions);
+
+    expect(directive).toBeDefined();
+    expect(directive?.name).toBe("httpResponse");
+  });
+
+  test("returns undefined when the directive is absent from the schema", () => {
+    expect.assertions(1);
+
+    expect(getDirectiveFromSchema("doesNotExist", baseOptions)).toBeUndefined();
+  });
+
+  test("returns undefined when options.schema is missing", () => {
+    expect.assertions(1);
+
+    expect(
+      getDirectiveFromSchema("httpResponse", {
+        basePath: "/",
+      } as PrintTypeOptions),
+    ).toBeUndefined();
   });
 });
 

@@ -26,7 +26,6 @@ import type {
   DecoratorPredicate,
   DecoratorResolver,
   DirectiveName,
-  GraphQLDirective,
   MDXString,
   Maybe,
   PageSection,
@@ -38,12 +37,11 @@ import type {
 import {
   always,
   and,
-  directiveOccurrences,
   getConstDirectiveMap,
+  getDirectiveFromSchema,
   getSchemaEntity,
-  GraphQLSchema,
+  getTypeDirectiveValuesList,
   hasDirectiveNamed,
-  instanceOf,
   isEntity,
 } from "@graphql-markdown/graphql";
 
@@ -365,21 +363,6 @@ export const getExampleSectionDefinition = (
 };
 
 /**
- * Resolves the schema directive named by a decorator, for its render context.
- *
- * @internal
- */
-const resolveDirectiveDefinition = (
-  name: string,
-  options: PrintTypeOptions,
-): Maybe<GraphQLDirective> => {
-  const schema = options.schema;
-  return schema && instanceOf(schema, GraphQLSchema as never)
-    ? (schema.getDirective(name) ?? undefined)
-    : undefined;
-};
-
-/**
  * Resolves and renders a single decorator's raw content for a type.
  *
  * The decorator is skipped, returning `undefined`, when its `appliesTo` filter
@@ -407,6 +390,11 @@ const renderDecoratorContent = (
   }
 
   const directiveName = decorator.directive ?? decorator.id;
+  // Resolved once and reused below for both the default resolve path and the
+  // render context, rather than looked up twice (once implicitly inside
+  // `directiveOccurrences`, once for `context.directive`) as when this used
+  // `directiveOccurrences` directly.
+  const directive = getDirectiveFromSchema(directiveName, options);
 
   // A decorator with a custom `resolve` is gated only by its own return value,
   // matching the pre-existing behaviour of a custom-section resolver (most
@@ -433,7 +421,9 @@ const renderDecoratorContent = (
 
   const resolved = decorator.resolve
     ? decorator.resolve(type, options)
-    : directiveOccurrences(directiveName)(type, options);
+    : directive
+      ? getTypeDirectiveValuesList(directive, type)
+      : [];
 
   if (!Array.isArray(resolved)) {
     return undefined;
@@ -461,7 +451,7 @@ const renderDecoratorContent = (
   const context: DecoratorContext = {
     id: decorator.id,
     type,
-    directive: resolveDirectiveDefinition(directiveName, options),
+    directive,
     entity: getSchemaEntity(type, options),
   };
 
