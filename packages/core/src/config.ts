@@ -428,6 +428,11 @@ export const getCustomDirectives = (
     return undefined;
   }
 
+  log(
+    `Setting "customDirective" is deprecated and will be removed in a future version. Use "decorators" instead.`,
+    LogLevel.warn,
+  );
+
   for (const [name, option] of Object.entries(customDirectiveOptions)) {
     if (
       Array.isArray(skipDocDirective) &&

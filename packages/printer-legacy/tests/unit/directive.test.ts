@@ -41,8 +41,11 @@ import {
   printCustomDirectives,
   printCustomDirective,
   printCustomTags,
-} from "../../src/directive";
+} from "../../src/decorator";
 
+// Covers the deprecated `customDirective` machinery, relocated (unchanged)
+// from the deleted `directive.ts` into `decorator.ts` (T6 of the decorators
+// plan). `decorator.test.ts` covers the `decorators` option this replaces.
 describe("directive", () => {
   const schema = buildSchema(`
     directive @testA(

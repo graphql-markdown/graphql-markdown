@@ -1230,6 +1230,25 @@ describe("config", () => {
       }
       `);
     });
+
+    test("logs a deprecation warning when configured", () => {
+      expect.hasAssertions();
+
+      getCustomDirectives({ test: { descriptor: (): void => {} } });
+
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"customDirective"'),
+        "warn",
+      );
+    });
+
+    test("does not log when not configured", () => {
+      expect.hasAssertions();
+
+      getCustomDirectives(undefined);
+
+      expect(log).not.toHaveBeenCalled();
+    });
   });
 
   describe("getDocOptions()", () => {

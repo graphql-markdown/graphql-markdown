@@ -21,8 +21,7 @@ import {
 import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
 
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
-import { getCustomDirectiveResolver } from "./directive";
-import { printSlotDecorators } from "./decorator";
+import { getCustomDirectiveResolver, printSlotDecorators } from "./decorator";
 
 /**
  * Prints documentation for custom directives applied to a type.

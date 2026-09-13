@@ -23,14 +23,13 @@ import {
 
 import { printDescription } from "./common";
 import { printBadges } from "./badge";
-import { printSlotDecorators } from "./decorator";
+import { printCustomTags, printSlotDecorators } from "./decorator";
 import {
   hasPrintableDirective,
   printLink,
   printParentLink,
   toLink,
 } from "./link";
-import { printCustomTags } from "./directive";
 
 import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
 import { DEFAULT_OPTIONS, SectionLevels } from "./const/options";

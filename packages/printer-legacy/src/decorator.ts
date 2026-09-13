@@ -18,12 +18,16 @@
  */
 
 import type {
+  Badge,
+  CustomDirectiveMapItem,
+  CustomDirectiveResolver,
   DecoratorContext,
   DecoratorDefinition,
   DecoratorPredicate,
   DecoratorResolver,
   DirectiveName,
   GraphQLDirective,
+  MDXString,
   Maybe,
   PageSection,
   PageSections,
@@ -34,17 +38,175 @@ import type {
 import {
   always,
   directiveOccurrences,
+  getConstDirectiveMap,
   getSchemaEntity,
   GraphQLSchema,
   hasDirectiveNamed,
   instanceOf,
 } from "@graphql-markdown/graphql";
 
+import { formatBadges } from "./badge";
 import { printExample } from "./example";
+import { printLink } from "./link";
 
-import { MARKDOWN_EOC, MARKDOWN_EOP, MARKDOWN_SOC } from "./const/strings";
+import {
+  MARKDOWN_EOC,
+  MARKDOWN_EOL,
+  MARKDOWN_EOP,
+  MARKDOWN_SOC,
+} from "./const/strings";
+import { SectionLevels } from "./const/options";
 
 export { getSchemaEntity };
+
+/**
+ * Resolves a custom directive using the provided resolver function.
+ *
+ * Relocated from the deleted `directive.ts` (T6 of the decorators plan):
+ * `customDirective` is deprecated in favour of `decorators`, but its runtime
+ * behaviour is kept unchanged here rather than folded into the generic
+ * predicate/slot pipeline — the two have different iteration, escaping, and
+ * ordering rules, and merging them risked silently changing rendered output.
+ * See `.claude/plans/decorators.md` (T6) for the full rationale.
+ *
+ * @param resolver - The resolver function name to execute
+ * @param type - The GraphQL type to resolve the directive for
+ * @param constDirectiveOption - The directive configuration options
+ * @param fallback - Optional fallback value if resolution fails
+ * @returns The resolved directive value or `fallback`/`undefined`
+ *
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ */
+export const getCustomDirectiveResolver = (
+  resolver: CustomDirectiveResolver,
+  type: unknown,
+  constDirectiveOption: CustomDirectiveMapItem,
+  fallback?: Maybe<string>,
+): Maybe<string> => {
+  if (
+    typeof constDirectiveOption.type !== "object" ||
+    typeof constDirectiveOption[resolver] !== "function"
+  ) {
+    return fallback;
+  }
+
+  return constDirectiveOption[resolver]!(
+    constDirectiveOption.type,
+    type,
+  ) as Maybe<string>;
+};
+
+/**
+ * Prints a single custom directive entry as a Markdown string.
+ *
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+export const printCustomDirective = (
+  type: unknown,
+  constDirectiveOption: CustomDirectiveMapItem,
+  options: PrintTypeOptions,
+): Maybe<string> => {
+  const typeNameLink = printLink(constDirectiveOption.type, {
+    ...options,
+    withAttributes: false,
+  });
+  const description = getCustomDirectiveResolver(
+    "descriptor",
+    type,
+    constDirectiveOption,
+  );
+
+  if (typeof description !== "string") {
+    return undefined;
+  }
+
+  return `${SectionLevels.LEVEL.repeat(4)} ${typeNameLink}${MARKDOWN_EOL} ${description}${MARKDOWN_EOL} `;
+};
+
+/**
+ * Prints the built-in "Directives" page section, listing every custom
+ * directive declared on a type.
+ *
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ */
+export const printCustomDirectives = (
+  type: unknown,
+  options: PrintTypeOptions,
+): Maybe<PageSection> => {
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
+
+  if (!constDirectiveMap || Object.keys(constDirectiveMap).length === 0) {
+    return undefined;
+  }
+
+  const directives = Object.values(constDirectiveMap)
+    .map((constDirectiveOption): Maybe<string> => {
+      return printCustomDirective(type, constDirectiveOption, options);
+    })
+    .filter((value): boolean => {
+      return value !== undefined;
+    });
+
+  if (directives.length === 0) {
+    return undefined;
+  }
+
+  const content = directives.join(MARKDOWN_EOP);
+
+  return {
+    title: "Directives",
+    content: `${content}${MARKDOWN_EOP}`,
+    level: 3,
+  };
+};
+
+/**
+ * Extracts custom tags from directives for a given type.
+ *
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ */
+// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+export const getCustomTags = (
+  type: unknown,
+  options: PrintTypeOptions,
+): Badge[] => {
+  const constDirectiveMap = getConstDirectiveMap(
+    type,
+    options.customDirectives,
+  );
+
+  if (
+    typeof constDirectiveMap !== "object" ||
+    constDirectiveMap === null ||
+    Object.keys(constDirectiveMap).length === 0
+  ) {
+    return [];
+  }
+
+  return Object.values(constDirectiveMap)
+    .map((constDirectiveOption): Maybe<string> => {
+      return getCustomDirectiveResolver("tag", type, constDirectiveOption);
+    })
+    .filter((value): boolean => {
+      return value !== undefined;
+    }) as unknown as Badge[];
+};
+
+/**
+ * Prints custom directive tags as Markdown badges.
+ *
+ * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ */
+export const printCustomTags = (
+  type: unknown,
+  options: PrintTypeOptions,
+): MDXString | string => {
+  return formatBadges(getCustomTags(type, options), options);
+};
 
 /**
  * Resolves the values a section renders, replacing the default directive lookup.

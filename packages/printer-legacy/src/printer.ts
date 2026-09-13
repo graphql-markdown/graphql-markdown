@@ -72,10 +72,11 @@ import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
 import { printDescription } from "./common";
-import { printCustomDirectives, printCustomTags } from "./directive";
 import {
   getDecoratorsOrder,
   getExampleSectionDefinition,
+  printCustomDirectives,
+  printCustomTags,
   printDecorator,
   printDecorators,
 } from "./decorator";
