@@ -534,6 +534,27 @@ describe("decorator", () => {
   });
 
   describe("decorators", () => {
+    test("returns undefined when render is not a function, bypassing config validation", () => {
+      expect.assertions(1);
+
+      // `printDecorator` is directly callable, bypassing the config-time
+      // validation that `getDecoratorsOption`/`getCustomSectionsOption`
+      // otherwise enforce (see this file's own reserved-id tests, which rely
+      // on the same bypass) — so a malformed `render` must still be handled
+      // gracefully here rather than throwing.
+      expect(
+        printDecorator(
+          type,
+          {
+            id: "responses",
+            directive: "httpResponse",
+            render: {} as never,
+          },
+          options,
+        ),
+      ).toBeUndefined();
+    });
+
     test("id may differ from the directive it reads", () => {
       expect.assertions(1);
 

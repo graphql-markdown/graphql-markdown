@@ -37,12 +37,14 @@ import type {
 
 import {
   always,
+  and,
   directiveOccurrences,
   getConstDirectiveMap,
   getSchemaEntity,
   GraphQLSchema,
   hasDirectiveNamed,
   instanceOf,
+  isEntity,
 } from "@graphql-markdown/graphql";
 
 import { formatBadges } from "./badge";
@@ -254,7 +256,17 @@ export type ResolvedDecorator = DecoratorDefinition & {
 /**
  * Section/decorator keys owned by the printer, which a decorator cannot claim.
  *
- * @internal
+ * Re-exported from the package root: `@graphql-markdown/core`'s
+ * `getDecoratorsOption`/`getCustomSectionsOption` validate against this same
+ * list (plus `"__proto__"`, which is deliberately absent here — a decorator
+ * declared with that id is filtered at render time below by the printer's
+ * own reserved-id check, and `__proto__` never becomes an own property of an
+ * object literal in the first place, so a decorators map only carries it when
+ * built some other way, e.g. `Object.defineProperty`; config-file validation
+ * rejects it outright instead, since a config author writing `__proto__:` is
+ * almost certainly a mistake) so the two entry points — validating an
+ * untrusted config file, and building a decorators map directly against the
+ * printer API — can't silently drift apart on which names are reserved.
  */
 export const RESERVED_SECTION_NAMES: readonly string[] = [
   "header",
@@ -270,33 +282,32 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
 ] as const;
 
 /**
- * Checks a decorator against its `appliesTo` filter.
+ * Builds the predicate for a decorator's (deprecated) `appliesTo` filter.
  *
  * A decorator without `appliesTo` applies everywhere. A decorator with
  * `appliesTo` is skipped when the entity kind is unknown, as the narrowing
- * cannot be honoured.
+ * cannot be honoured — matching `isEntity`, which this is built from.
+ *
+ * `appliesTo` is documented as sugar for composing `isEntity(...)` with
+ * `predicate` via `and()`; this is that composition, not a second, parallel
+ * gating mechanism alongside the predicate pipeline.
  *
  * @internal
  *
- * @param type - the GraphQL type being printed.
  * @param decorator - the decorator declaration.
- * @param options - the print options in effect.
  *
- * @returns `true` if the decorator applies to the type being printed.
+ * @returns a predicate true when `appliesTo` is absent, or the type's entity
+ * kind is one of `appliesTo`.
  *
  */
-const appliesToEntity = (
-  type: unknown,
+const appliesToPredicate = (
   decorator: Pick<DecoratorDefinition, "appliesTo">,
-  options: PrintTypeOptions,
-): boolean => {
+): DecoratorPredicate => {
   if (!Array.isArray(decorator.appliesTo) || decorator.appliesTo.length === 0) {
-    return true;
+    return always();
   }
 
-  const entity = getSchemaEntity(type, options);
-
-  return !!entity && decorator.appliesTo.includes(entity);
+  return isEntity(...decorator.appliesTo);
 };
 
 /**
@@ -391,10 +402,7 @@ const renderDecoratorContent = (
   decorator: ResolvedDecorator,
   options: PrintTypeOptions,
 ): Maybe<string> => {
-  if (
-    typeof decorator.render !== "function" ||
-    !appliesToEntity(type, decorator, options)
-  ) {
+  if (typeof decorator.render !== "function") {
     return undefined;
   }
 
@@ -405,9 +413,19 @@ const renderDecoratorContent = (
   // notably the built-in Example section, whose values may come from a field
   // nested arbitrarily deep rather than from the type itself). Only the
   // default, directive-occurrences path is gated on directive presence.
-  const predicate: DecoratorPredicate =
+  //
+  // `appliesTo` is composed in via `and()` rather than checked separately: it
+  // is sugar for `isEntity(...)` combined with `predicate`, not a second,
+  // parallel gating mechanism (see `appliesToPredicate`). The raw
+  // `decorator.predicate` — not this composed one — is still what the
+  // empty-values marker rule below consults, so `appliesTo` alone (no
+  // explicit `predicate`) does not turn a directive-driven decorator into a
+  // marker one.
+  const predicate: DecoratorPredicate = and(
     decorator.predicate ??
-    (decorator.resolve ? always() : hasDirectiveNamed(directiveName));
+      (decorator.resolve ? always() : hasDirectiveNamed(directiveName)),
+    appliesToPredicate(decorator),
+  );
 
   if (!predicate(type, options)) {
     return undefined;

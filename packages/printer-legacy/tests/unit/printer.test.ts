@@ -34,6 +34,15 @@ vi.mock("@graphql-markdown/graphql", () => {
         return true;
       };
     }),
+    and: vi.fn(
+      (...predicates: ((type: unknown, options: unknown) => boolean)[]) => {
+        return (type: unknown, options: unknown): boolean => {
+          return predicates.every((predicate) => {
+            return predicate(type, options);
+          });
+        };
+      },
+    ),
     getConstDirectiveMap: vi.fn(),
     getSchemaEntity: vi.fn(),
     getTypeName: vi.fn(),
@@ -48,6 +57,7 @@ vi.mock("@graphql-markdown/graphql", () => {
       return false;
     }),
     isDirectiveType: vi.fn(),
+    isEntity: vi.fn(),
     isEnumType: vi.fn(),
     isInputType: vi.fn(),
     isInterfaceType: vi.fn(),

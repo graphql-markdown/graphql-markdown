@@ -112,26 +112,6 @@ export const printBadge = (
 };
 
 /**
- * Formats a single badge into MDX string format, through the active formatter.
- *
- * Public alias for {@link printBadge} — the name a decorator's `render`
- * callback reaches for when it wants to emit a properly-classed badge, rather
- * than plain text, into a slot such as the metadata line's `tags`.
- *
- * @param badge - the badge to format.
- * @param options - options containing the formatter for badges.
- *
- * @returns the formatted MDX badge.
- *
- */
-export const formatBadge = (
-  badge: Badge,
-  options: PrintTypeOptions,
-): MDXString => {
-  return printBadge(badge, options);
-};
-
-/**
  * Formats an array of badges into a space-joined MDX string.
  * @param badges - Array of badge objects to format
  * @param options - Options containing the formatter for badges

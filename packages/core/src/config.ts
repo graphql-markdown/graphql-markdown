@@ -44,6 +44,7 @@ import type {
 } from "@graphql-markdown/types";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
+import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
 import { loadConfiguration } from "./graphql-config";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
@@ -689,24 +690,18 @@ export const parseDeprecatedPrintTypeOptions = (
  * @see {@link getTypeHierarchyOption} for hierarchy resolution
  */
 /**
- * Section keys owned by the printer, which a custom section cannot claim.
+ * Section keys owned by the printer, which a custom section/decorator cannot
+ * claim. Shares `@graphql-markdown/printer-legacy`'s `RESERVED_SECTION_NAMES`
+ * — the single source of truth for the built-in names — plus `"__proto__"`,
+ * reserved only here: a config file declaring it is almost certainly a
+ * mistake, whereas the printer deliberately supports it as a section id when
+ * built directly (not via a config file), guarded by `Object.create(null)`.
  *
  * @internal
  */
 const RESERVED_SECTION_NAMES: readonly string[] = [
-  // Assigning `__proto__` on an object literal reaches the prototype setter
-  // instead of creating an own entry, so the section would never be rendered.
+  ...PrinterReservedSectionNames,
   "__proto__",
-  "header",
-  "metatags",
-  "mdxDeclaration",
-  "tags",
-  "description",
-  "code",
-  "customDirectives",
-  "metadata",
-  "example",
-  "relations",
 ] as const;
 
 /**
