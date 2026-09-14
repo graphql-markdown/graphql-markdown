@@ -104,9 +104,8 @@ export const printDescription = (
   const description = formatDescription(type, noText);
   const deprecation = printDeprecation(type, options);
   // `customDirective`'s `descriptor` handlers reach this line via the
-  // decorators pipeline (`printSlotDecorators`, not a direct
-  // `getCustomDirectivesText` call) — see `CUSTOM_DIRECTIVE_DESCRIPTION` in
-  // `./decorator`.
+  // decorators pipeline (`printSlotDecorators`), not a dedicated call — see
+  // `buildCustomDirectiveDecorators` in `./decorator`.
   const decoratorContent = printSlotDecorators("description", type, options);
   const decorators =
     decoratorContent.length > 0

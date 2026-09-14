@@ -96,8 +96,8 @@ export const printSectionItem = <T>(
     .filter(Boolean)
     .join(" ");
   // `customDirective`'s `tag` handlers reach this line via the decorators
-  // pipeline (`printSlotDecorators`, not a direct `printCustomTags` call) —
-  // see `CUSTOM_DIRECTIVE_TAGS` in `./decorator`.
+  // pipeline (`printSlotDecorators`), not a dedicated call — see
+  // `buildCustomDirectiveDecorators` in `./decorator`.
   const tags = printSlotDecorators("tags", type, options)
     .filter(Boolean)
     .join(" ");
