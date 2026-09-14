@@ -105,8 +105,7 @@ describe("buildCustomDirectiveDecorators", () => {
     const options = {
       ...DEFAULT_OPTIONS,
       schema,
-      customDirectiveDecorators:
-        buildCustomDirectiveDecorators(customDirectives),
+      decorators: buildCustomDirectiveDecorators(customDirectives),
     };
 
     test("renders a section listing every matched directive", () => {
@@ -144,8 +143,7 @@ describe("buildCustomDirectiveDecorators", () => {
     const options = {
       ...DEFAULT_OPTIONS,
       schema,
-      customDirectiveDecorators:
-        buildCustomDirectiveDecorators(customDirectives),
+      decorators: buildCustomDirectiveDecorators(customDirectives),
     };
 
     test("appends the descriptor text", () => {
@@ -168,7 +166,7 @@ describe("buildCustomDirectiveDecorators", () => {
         printSlotDecorators("description", type, {
           ...DEFAULT_OPTIONS,
           schema,
-          customDirectiveDecorators: noDescriptorOnly,
+          decorators: noDescriptorOnly,
         }),
       ).toStrictEqual([]);
     });
@@ -186,8 +184,7 @@ describe("buildCustomDirectiveDecorators", () => {
     const options = {
       ...DEFAULT_OPTIONS,
       schema,
-      customDirectiveDecorators:
-        buildCustomDirectiveDecorators(customDirectives),
+      decorators: buildCustomDirectiveDecorators(customDirectives),
     };
 
     test("renders a badge for the matched directive's tag", () => {

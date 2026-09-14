@@ -92,9 +92,26 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
   "description",
   "code",
   "customDirectives",
+  "customDirective:description",
+  "customDirective:tags",
   "metadata",
   "example",
   "relations",
+] as const;
+
+/**
+ * Ids {@link buildCustomDirectiveDecorators} assigns to its three adapter
+ * decorators. Reserved above so a user's own `decorators` config can't claim
+ * them, but exempted from `getDeclaredDecorators`'s reserved-id filter so
+ * `@graphql-markdown/core` can merge the converter's own output for these
+ * ids directly into `options.decorators`.
+ *
+ * @internal
+ */
+const CUSTOM_DIRECTIVE_DECORATOR_IDS: readonly string[] = [
+  "customDirectives",
+  "customDirective:description",
+  "customDirective:tags",
 ] as const;
 
 /**
@@ -164,14 +181,13 @@ const printCustomDirective = (
  * same resolve/render pipeline as everything declared under `decorators`.
  *
  * Called once by `@graphql-markdown/core`, right after `customDirectives` is
- * schema-resolved — `customDirective`/`CustomDirectiveMap` never reach this
- * printer package otherwise; only the three decorators built here do, via
- * `PrintTypeOptions.customDirectiveDecorators`.
+ * schema-resolved, and merged directly into the top-level `decorators`
+ * option before it reaches the printer — `customDirective`/`CustomDirectiveMap`
+ * never reach this printer package otherwise; only the three decorators
+ * built here do, indistinguishable from any other `decorators` entry except
+ * for their reserved ids (see {@link CUSTOM_DIRECTIVE_DECORATOR_IDS}).
  *
- * Returns three entries, merged unconditionally by `getDeclaredDecorators`
- * (ahead of `decorators`, bypassing its reserved-id filter — these ids,
- * including the reserved `customDirectives`, are assigned here, not by user
- * config):
+ * Returns three entries:
  * - `customDirectives`: the built-in "Directives" section, listing every
  *   custom directive declared on a type, positioned right after `code`
  *   (its fixed position in the pre-decorators built-in section order).
@@ -527,15 +543,19 @@ export const printDecorator = (
 };
 
 /**
- * Returns the decorators to build, in declaration order: `customDirective`'s
- * adapter decorators (see {@link buildCustomDirectiveDecorators}; always
- * present, each skips silently when it matches nothing) followed by every
- * entry declared under the top-level `decorators` option. Only the latter is
- * filtered against reserved ids: the adapter's ids are assigned by the
- * converter, not user config, and the printer is reachable directly through
- * its public API, bypassing configuration validation, so a user-declared
- * decorator claiming a reserved id must still be dropped rather than
- * overwrite a built-in section.
+ * Returns the decorators to build, in declaration order, from the top-level
+ * `decorators` option. `@graphql-markdown/core` merges `customDirective`'s
+ * adapter decorators (see {@link buildCustomDirectiveDecorators}) into this
+ * same option before it reaches the printer, so this reads a single source,
+ * with no separate customDirective-specific path.
+ *
+ * Every entry is filtered against reserved ids, except the adapter's own —
+ * see {@link CUSTOM_DIRECTIVE_DECORATOR_IDS} — since those are assigned by
+ * the converter, not user config, and are reserved specifically to keep user
+ * config from claiming them. A user-declared decorator claiming any other
+ * reserved id is still dropped: the printer is reachable directly through
+ * its public API, bypassing configuration validation, and such a decorator
+ * would otherwise overwrite a built-in section.
  *
  * @internal
  *
@@ -552,31 +572,18 @@ const getDeclaredDecorators = (
       ? options.decorators
       : undefined;
 
-  const declared = decorators
+  return decorators
     ? Object.entries(decorators)
         .filter(([id]): boolean => {
-          return !RESERVED_SECTION_NAMES.includes(id);
+          return (
+            !RESERVED_SECTION_NAMES.includes(id) ||
+            CUSTOM_DIRECTIVE_DECORATOR_IDS.includes(id)
+          );
         })
         .map(([id, decorator]): ResolvedDecorator => {
           return { ...decorator, id };
         })
     : [];
-
-  const customDirectiveDecorators =
-    typeof options.customDirectiveDecorators === "object" &&
-    options.customDirectiveDecorators !== null
-      ? options.customDirectiveDecorators
-      : undefined;
-
-  const adapter = customDirectiveDecorators
-    ? Object.entries(customDirectiveDecorators).map(
-        ([id, decorator]): ResolvedDecorator => {
-          return { ...decorator, id };
-        },
-      )
-    : [];
-
-  return [...adapter, ...declared];
 };
 
 /**

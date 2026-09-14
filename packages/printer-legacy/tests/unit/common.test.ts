@@ -166,7 +166,7 @@ Lorem ipsum"
 
       const options = {
         ...DEFAULT_OPTIONS,
-        customDirectiveDecorators: buildCustomDirectiveDecorators({
+        decorators: buildCustomDirectiveDecorators({
           testDirective: {
             type: directiveType,
             descriptor: (directive: GraphQLDirective): string => {

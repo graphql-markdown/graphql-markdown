@@ -213,7 +213,7 @@ describe("generator", () => {
             schema: mockSchema,
           },
           {
-            customDirectiveDecorators: {},
+            decorators: {},
             groups: undefined,
             meta: {
               generatorFrameworkName: undefined,
@@ -252,7 +252,10 @@ describe("generator", () => {
       // (Options.decorators) but `generateDocFromSchema` never destructured
       // or forwarded it to `getPrinter`, so the whole feature was inert for
       // any real config/CLI user — only unit tests that hand-built
-      // `PrintTypeOptions` directly exercised it.
+      // `PrintTypeOptions` directly exercised it. `generateDocFromSchema`
+      // merges `customDirective`'s translated decorators into a new object
+      // (see `buildCustomDirectiveDecorators`), so the forwarded value is no
+      // longer the same reference — deep-equal, not `toBe`, is what matters.
       expect.assertions(1);
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
@@ -286,7 +289,9 @@ describe("generator", () => {
         decorators,
       } as GeneratorOptions);
 
-      expect(getPrinterSpy.mock.calls[0][1]?.decorators).toBe(decorators);
+      expect(getPrinterSpy.mock.calls[0][1]?.decorators).toStrictEqual(
+        decorators,
+      );
     });
 
     test("prints summary when completed", async () => {
@@ -458,7 +463,7 @@ describe("generator", () => {
           schema: expect.anything(),
         }),
         expect.objectContaining({
-          customDirectiveDecorators: {},
+          decorators: {},
           groups: undefined,
           meta: expect.any(Object),
           metatags: expect.any(Array),

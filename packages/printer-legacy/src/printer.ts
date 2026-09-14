@@ -122,7 +122,6 @@ import {
  * @internal
  */
 const DEFAULT_INIT_OPTIONS = {
-  customDirectiveDecorators: undefined,
   groups: undefined,
   sectionHeaderId: true,
 };
@@ -250,7 +249,6 @@ export class Printer implements IPrinter {
     baseURL: Maybe<string> = "schema",
     linkRoot: Maybe<string> = "/",
     {
-      customDirectiveDecorators,
       decorators,
       deprecated,
       groups,
@@ -272,7 +270,6 @@ export class Printer implements IPrinter {
       Printer.options = {
         ...DEFAULT_OPTIONS,
         basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
-        customDirectiveDecorators,
         decorators,
         exampleSection:
           typeof printTypeOptions?.exampleSection === "object"

@@ -210,7 +210,6 @@ describe("Printer", () => {
         {
           "basePath": "/schema",
           "collapsible": undefined,
-          "customDirectiveDecorators": undefined,
           "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
@@ -280,7 +279,6 @@ describe("Printer", () => {
         {
           "basePath": "/test",
           "collapsible": undefined,
-          "customDirectiveDecorators": undefined,
           "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,

@@ -29,6 +29,11 @@ export enum TypeHierarchy {
 }
 
 export enum SectionLevels {
+  /**
+   * @deprecated Use `SectionLevels.LEVEL` instead.
+   */
+  // Reserved for future usage.
+  NONE = "",
   LEVEL = "#",
 }
 
@@ -52,7 +57,6 @@ export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
-    | "customDirectiveDecorators"
     | "decorators"
     | "entity"
     | "exampleSection"
@@ -67,7 +71,6 @@ export const DEFAULT_OPTIONS: Required<
   >
 > & {
   collapsible: Maybe<CollapsibleOption>;
-  customDirectiveDecorators: PrintTypeOptions["customDirectiveDecorators"];
   decorators: PrintTypeOptions["decorators"];
   entity: PrintTypeOptions["entity"];
   exampleSection: PrintTypeOptions["exampleSection"];
@@ -81,7 +84,6 @@ export const DEFAULT_OPTIONS: Required<
   deprecated: PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
   basePath: "/" as const,
   collapsible: undefined,
-  customDirectiveDecorators: undefined,
   decorators: undefined,
   entity: undefined,
   exampleSection: undefined,

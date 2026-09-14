@@ -430,12 +430,15 @@ export const generateDocFromSchema = async ({
   events.emit(SchemaEvents.AFTER_MAP, new SchemaEvent({ schema, rootTypes }));
 
   // `customDirective` is schema-resolved here, then immediately converted
-  // into decorators: the printer never sees `customDirective` or the
-  // resolved `CustomDirectiveMap` it produces, only the decorators built
-  // from it (see `buildCustomDirectiveDecorators`).
-  const customDirectiveDecorators = buildCustomDirectiveDecorators(
-    getCustomDirectives(rootTypes, customDirective),
-  );
+  // into decorators and merged into `decorators` itself: the printer never
+  // sees `customDirective` or the resolved `CustomDirectiveMap` it produces,
+  // only the merged decorators (see `buildCustomDirectiveDecorators`).
+  const decoratorsWithCustomDirective = {
+    ...buildCustomDirectiveDecorators(
+      getCustomDirectives(rootTypes, customDirective),
+    ),
+    ...decorators,
+  };
 
   const groups = getGroups(rootTypes, groupByDirective);
 
@@ -458,8 +461,7 @@ export const generateDocFromSchema = async ({
 
     // options
     {
-      customDirectiveDecorators,
-      decorators,
+      decorators: decoratorsWithCustomDirective,
       groups,
       meta: {
         generatorFrameworkName: docOptions?.generatorFrameworkName,
