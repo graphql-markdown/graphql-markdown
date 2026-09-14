@@ -453,11 +453,14 @@ const resolveDecoratorValues = (
   directive: ReturnType<typeof getDirectiveFromSchema>,
   options: PrintTypeOptions,
 ): Maybe<Record<string, unknown>[]> => {
-  const resolved = decorator.resolve
-    ? decorator.resolve(type, options)
-    : directive
-      ? getTypeDirectiveValuesList(directive, type)
-      : [];
+  let resolved: unknown;
+  if (decorator.resolve) {
+    resolved = decorator.resolve(type, options);
+  } else if (directive) {
+    resolved = getTypeDirectiveValuesList(directive, type);
+  } else {
+    resolved = [];
+  }
 
   if (!Array.isArray(resolved)) {
     return undefined;

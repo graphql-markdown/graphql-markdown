@@ -823,7 +823,6 @@ const validateDecoratorEntry = (
  * });
  * ```
  */
-
 export const getDecoratorsOption = (
   decorators: Maybe<Decorators>,
 ): Maybe<Decorators> => {
