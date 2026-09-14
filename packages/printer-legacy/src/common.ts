@@ -4,65 +4,21 @@
  */
 
 import type {
-  CustomDirectiveMap,
-  CustomDirectiveMapItem,
   Maybe,
   MDXString,
   PrintTypeOptions,
 } from "@graphql-markdown/types";
 
 import {
-  isEmpty,
   escapeMDX,
   isTypeObject,
   hasStringProperty,
 } from "@graphql-markdown/utils";
 
-import { isDeprecated, getConstDirectiveMap } from "@graphql-markdown/graphql";
+import { isDeprecated } from "@graphql-markdown/graphql";
 
 import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
-import { getCustomDirectiveResolver, printSlotDecorators } from "./decorator";
-
-/**
- * Prints documentation for custom directives applied to a type.
- *
- * @param type - GraphQL type to get directives from
- * @param options - Printer configuration options
- * @returns Formatted directive documentation string
- */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const getCustomDirectivesText = (
-  type: unknown,
-  options?: PrintTypeOptions,
-): string => {
-  const constDirectiveMap = getConstDirectiveMap(
-    type,
-    options?.customDirectives,
-  );
-
-  if (isEmpty<CustomDirectiveMap>(constDirectiveMap)) {
-    return "";
-  }
-
-  const content = Object.values<CustomDirectiveMapItem>(constDirectiveMap)
-    .map((constDirectiveOption) => {
-      return getCustomDirectiveResolver(
-        "descriptor",
-        type,
-        constDirectiveOption,
-        "",
-      );
-    })
-    .filter((text) => {
-      return typeof text === "string" && text.length > 0;
-    })
-    .map((text) => {
-      return escapeMDX(text);
-    })
-    .join(MARKDOWN_EOP);
-
-  return `${MARKDOWN_EOP}${content}`;
-};
+import { printSlotDecorators } from "./decorator";
 
 /**
  * Formats a GraphQL type description or falls back to a default message.

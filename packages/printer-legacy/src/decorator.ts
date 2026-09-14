@@ -98,13 +98,18 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
 /**
  * Resolves a custom directive handler's return value.
  *
+ * Internal to the deprecated `customDirective` option's rendering path
+ * (`printCustomDirective`, `getCustomTags`, and the `customDirective`-adapter
+ * decorators in this module); not itself user-facing, so not `@deprecated` —
+ * see `ConfigOptions.customDirective` for the setting that is.
+ *
  * @param resolver - The resolver function name to execute
  * @param type - The GraphQL type to resolve the directive for
  * @param constDirectiveOption - The directive configuration options
  * @param fallback - Optional fallback value if resolution fails
  * @returns The resolved directive value or `fallback`/`undefined`
  *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ * @internal
  */
 export const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
@@ -129,9 +134,12 @@ export const getCustomDirectiveResolver = (
  * Prints a single custom directive entry as a Markdown string, for the
  * built-in "Directives" section.
  *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ * Used by {@link CUSTOM_DIRECTIVES_SECTION}'s render; not itself user-facing,
+ * so not `@deprecated` — see `ConfigOptions.customDirective` for the setting
+ * that is.
+ *
+ * @internal
  */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
@@ -157,9 +165,12 @@ export const printCustomDirective = (
 /**
  * Extracts custom tags from directives for a given type.
  *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ * Used by {@link printCustomTags}, which backs `Printer.printCustomTags`;
+ * not itself user-facing, so not `@deprecated` — see
+ * `ConfigOptions.customDirective` for the setting that is.
+ *
+ * @internal
  */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const getCustomTags = (
   type: unknown,
   options: PrintTypeOptions,
@@ -189,7 +200,8 @@ export const getCustomTags = (
 /**
  * Prints custom directive tags as Markdown badges.
  *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ * Backs the public `Printer.printCustomTags`; not itself `@deprecated` —
+ * see `ConfigOptions.customDirective` for the setting that is.
  */
 export const printCustomTags = (
   type: unknown,
@@ -310,16 +322,6 @@ const CUSTOM_DIRECTIVE_TAGS: ResolvedDecorator = {
       : undefined;
   },
 };
-
-/**
- * Resolves the values a decorator renders, replacing the default directive
- * lookup.
- *
- * @internal
- *
- * @deprecated Use {@link DecoratorResolver} instead.
- */
-export type SectionValuesResolver = DecoratorResolver;
 
 /**
  * Builds the predicate for a decorator's (deprecated) `appliesTo` filter.
@@ -567,7 +569,9 @@ export const printDecorator = (
 /**
  * Prints the built-in "Directives" page section.
  *
- * @deprecated Part of the deprecated `customDirective` option. Use `decorators` instead.
+ * Backs the public `Printer.printCustomDirectives`; not itself
+ * `@deprecated` — see `ConfigOptions.customDirective` for the setting
+ * that is.
  */
 export const printCustomDirectives = (
   type: unknown,

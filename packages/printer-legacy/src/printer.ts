@@ -205,13 +205,6 @@ export class Printer implements IPrinter {
    */
   static readonly printDecorators = printDecorators;
 
-  /**
-   * Prints predicate-driven decorators
-   *
-   * @deprecated Use {@link Printer.printDecorators} instead.
-   */
-  static readonly printCustomSections = printDecorators;
-
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 
   private static _options: Readonly<Maybe<PrintTypeOptions>>;

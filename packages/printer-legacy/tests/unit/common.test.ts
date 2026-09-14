@@ -2,7 +2,6 @@ import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
 import { DirectiveLocation } from "graphql/language";
 
 import {
-  getCustomDirectivesText,
   printDeprecation,
   printDescription,
   printWarning,
@@ -250,57 +249,6 @@ Lorem ipsum"
       const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toBe("");
-    });
-  });
-
-  describe("getCustomDirectivesText()", () => {
-    const directiveType = new GraphQLDirective({
-      name: "testDirective",
-      locations: [DirectiveLocation.OBJECT],
-    });
-    const type = {
-      name: "TestType",
-      astNode: {
-        directives: [
-          {
-            name: {
-              value: "testDirective",
-            },
-          },
-        ],
-      },
-    };
-
-    test("does not print directive description if type has no directive", () => {
-      expect.hasAssertions();
-
-      const description = getCustomDirectivesText(type, DEFAULT_OPTIONS);
-
-      expect(description).toBe("");
-    });
-
-    test("prints directive description", () => {
-      expect.hasAssertions();
-
-      const options = {
-        ...DEFAULT_OPTIONS,
-        customDirectives: {
-          testDirective: {
-            type: directiveType,
-            descriptor: (directive: GraphQLDirective): string => {
-              return `Test ${directive.name}`;
-            },
-          },
-        },
-      };
-
-      const description = getCustomDirectivesText(type, options);
-
-      expect(description).toMatchInlineSnapshot(`
-"
-
-Test testDirective"
-`);
     });
   });
 
