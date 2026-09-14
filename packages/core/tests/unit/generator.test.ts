@@ -213,7 +213,7 @@ describe("generator", () => {
             schema: mockSchema,
           },
           {
-            customDirectives: undefined,
+            customDirectiveDecorators: {},
             groups: undefined,
             meta: {
               generatorFrameworkName: undefined,
@@ -458,7 +458,7 @@ describe("generator", () => {
           schema: expect.anything(),
         }),
         expect.objectContaining({
-          customDirectives: undefined,
+          customDirectiveDecorators: {},
           groups: undefined,
           meta: expect.any(Object),
           metatags: expect.any(Array),

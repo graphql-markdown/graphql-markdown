@@ -8,6 +8,7 @@ import {
 } from "../../src/common";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
+import { buildCustomDirectiveDecorators } from "../../src/decorator";
 
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
@@ -165,14 +166,14 @@ Lorem ipsum"
 
       const options = {
         ...DEFAULT_OPTIONS,
-        customDirectives: {
+        customDirectiveDecorators: buildCustomDirectiveDecorators({
           testDirective: {
             type: directiveType,
             descriptor: (directive: GraphQLDirective): string => {
               return `Test ${directive.name}`;
             },
           },
-        },
+        } as never),
       };
 
       const description = printDescription(type, options);

@@ -1,5 +1,8 @@
 export { Printer } from "./printer";
-export { RESERVED_SECTION_NAMES } from "./decorator";
+export {
+  buildCustomDirectiveDecorators,
+  RESERVED_SECTION_NAMES,
+} from "./decorator";
 export {
   PrintCodeEvent,
   PrintTypeEvent,

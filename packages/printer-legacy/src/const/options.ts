@@ -52,6 +52,7 @@ export const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
+    | "customDirectiveDecorators"
     | "decorators"
     | "entity"
     | "exampleSection"
@@ -66,6 +67,7 @@ export const DEFAULT_OPTIONS: Required<
   >
 > & {
   collapsible: Maybe<CollapsibleOption>;
+  customDirectiveDecorators: PrintTypeOptions["customDirectiveDecorators"];
   decorators: PrintTypeOptions["decorators"];
   entity: PrintTypeOptions["entity"];
   exampleSection: PrintTypeOptions["exampleSection"];
@@ -79,7 +81,7 @@ export const DEFAULT_OPTIONS: Required<
   deprecated: PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
   basePath: "/" as const,
   collapsible: undefined,
-  customDirectives: {} as const,
+  customDirectiveDecorators: undefined,
   decorators: undefined,
   entity: undefined,
   exampleSection: undefined,

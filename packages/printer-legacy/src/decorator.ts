@@ -9,26 +9,28 @@
  * to the built-in sections, or into a named slot such as the heading's
  * metadata line or a member's description.
  *
- * `customDirective` is the deprecated predecessor of this module: each of its
- * `descriptor`/`tag` handlers is translated into a decorator declaration
- * below (`CUSTOM_DIRECTIVE_DESCRIPTION`, `CUSTOM_DIRECTIVE_TAGS`,
- * `CUSTOM_DIRECTIVES_SECTION`), so both options flow through the same
- * resolve/render pipeline — there is one code path for "select nodes by
- * directive, render descriptor text, a badge, or a section", not two.
+ * `customDirective` is the deprecated predecessor of this module. It never
+ * reaches this module, or any other part of the printer: `@graphql-markdown/core`
+ * converts its schema-resolved directive map into decorator declarations
+ * (see {@link buildCustomDirectiveDecorators}) once, before the printer is
+ * ever invoked, so both options flow through the exact same resolve/render
+ * pipeline below — there is one code path for "select nodes by directive,
+ * render descriptor text, a badge, or a section", not two.
  *
  * @packageDocumentation
  */
 
 import type {
   Badge,
+  CustomDirectiveMap,
   CustomDirectiveMapItem,
   CustomDirectiveResolver,
   DecoratorContext,
   DecoratorDefinition,
+  Decorators,
   DecoratorPredicate,
   DecoratorResolver,
   DirectiveName,
-  MDXString,
   Maybe,
   PageSection,
   PageSections,
@@ -98,10 +100,8 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
 /**
  * Resolves a custom directive handler's return value.
  *
- * Internal to the deprecated `customDirective` option's rendering path
- * (`printCustomDirective`, `getCustomTags`, and the `customDirective`-adapter
- * decorators in this module); not itself user-facing, so not `@deprecated` —
- * see `ConfigOptions.customDirective` for the setting that is.
+ * Internal to {@link buildCustomDirectiveDecorators}'s render closures; not
+ * itself user-facing — see `ConfigOptions.customDirective` for the setting.
  *
  * @param resolver - The resolver function name to execute
  * @param type - The GraphQL type to resolve the directive for
@@ -111,7 +111,7 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
  *
  * @internal
  */
-export const getCustomDirectiveResolver = (
+const getCustomDirectiveResolver = (
   resolver: CustomDirectiveResolver,
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
@@ -134,13 +134,9 @@ export const getCustomDirectiveResolver = (
  * Prints a single custom directive entry as a Markdown string, for the
  * built-in "Directives" section.
  *
- * Used by {@link CUSTOM_DIRECTIVES_SECTION}'s render; not itself user-facing,
- * so not `@deprecated` — see `ConfigOptions.customDirective` for the setting
- * that is.
- *
  * @internal
  */
-export const printCustomDirective = (
+const printCustomDirective = (
   type: unknown,
   constDirectiveOption: CustomDirectiveMapItem,
   options: PrintTypeOptions,
@@ -163,164 +159,128 @@ export const printCustomDirective = (
 };
 
 /**
- * Extracts custom tags from directives for a given type.
+ * Converts the deprecated `customDirective` option's schema-resolved
+ * directive map into decorator declarations, so it flows through the exact
+ * same resolve/render pipeline as everything declared under `decorators`.
  *
- * Used by {@link printCustomTags}, which backs `Printer.printCustomTags`;
- * not itself user-facing, so not `@deprecated` — see
- * `ConfigOptions.customDirective` for the setting that is.
+ * Called once by `@graphql-markdown/core`, right after `customDirectives` is
+ * schema-resolved — `customDirective`/`CustomDirectiveMap` never reach this
+ * printer package otherwise; only the three decorators built here do, via
+ * `PrintTypeOptions.customDirectiveDecorators`.
  *
- * @internal
+ * Returns three entries, merged unconditionally by `getDeclaredDecorators`
+ * (ahead of `decorators`, bypassing its reserved-id filter — these ids,
+ * including the reserved `customDirectives`, are assigned here, not by user
+ * config):
+ * - `customDirectives`: the built-in "Directives" section, listing every
+ *   custom directive declared on a type, positioned right after `code`
+ *   (its fixed position in the pre-decorators built-in section order).
+ * - `customDirective:description`: `customDirective`'s `descriptor`
+ *   handlers, appended as description text (`position: { into: "description" }`).
+ * - `customDirective:tags`: `customDirective`'s `tag` handlers, rendered as
+ *   badges in the metadata line (`position: { into: "tags" }`).
+ *
+ * All three share one `resolve`, reading every custom directive matched on
+ * a node, in schema declaration order. Matching (including wildcard `"*"`
+ * precedence — a named handler wins over `"*"`) is already resolved by
+ * `getConstDirectiveMap` (fed by `@graphql-markdown/graphql`'s
+ * `getCustomDirectives`, which expands a wildcard into concrete
+ * per-directive entries upstream), so this reuses that resolution rather
+ * than re-implementing it against the generic predicate system.
+ *
+ * @param customDirectives - the schema-resolved `customDirective` map, or
+ * `undefined`/empty when the option is not in use.
+ *
+ * @returns the three decorators, or `{}` when `customDirectives` is empty.
+ *
  */
-export const getCustomTags = (
-  type: unknown,
-  options: PrintTypeOptions,
-): Badge[] => {
-  const constDirectiveMap = getConstDirectiveMap(
-    type,
-    options.customDirectives,
-  );
-
+export const buildCustomDirectiveDecorators = (
+  customDirectives: Maybe<CustomDirectiveMap>,
+): Decorators => {
   if (
-    typeof constDirectiveMap !== "object" ||
-    constDirectiveMap === null ||
-    Object.keys(constDirectiveMap).length === 0
+    typeof customDirectives !== "object" ||
+    customDirectives === null ||
+    Object.keys(customDirectives).length === 0
   ) {
-    return [];
+    return {};
   }
 
-  return Object.values(constDirectiveMap)
-    .map((constDirectiveOption): Maybe<string> => {
-      return getCustomDirectiveResolver("tag", type, constDirectiveOption);
-    })
-    .filter((value): boolean => {
-      return value !== undefined;
-    }) as unknown as Badge[];
-};
+  const resolve: DecoratorResolver = (
+    type: unknown,
+  ): Record<string, unknown>[] => {
+    const constDirectiveMap = getConstDirectiveMap(type, customDirectives);
 
-/**
- * Prints custom directive tags as Markdown badges.
- *
- * Backs the public `Printer.printCustomTags`; not itself `@deprecated` —
- * see `ConfigOptions.customDirective` for the setting that is.
- */
-export const printCustomTags = (
-  type: unknown,
-  options: PrintTypeOptions,
-): MDXString | string => {
-  return formatBadges(getCustomTags(type, options), options);
-};
+    return constDirectiveMap
+      ? (Object.values(constDirectiveMap) as unknown as Record<
+          string,
+          unknown
+        >[])
+      : [];
+  };
 
-/**
- * Reads every custom directive matched on a node, in schema declaration
- * order. Shared by the `customDirective`-adapter decorators below: matching
- * (including wildcard `"*"` precedence — a named handler wins over `"*"`)
- * is already resolved by `getConstDirectiveMap`/`options.customDirectives`
- * (built by `@graphql-markdown/graphql`'s `getCustomDirectives`, which
- * expands a wildcard into concrete per-directive entries upstream), so the
- * adapter reuses that resolution rather than re-implementing it against the
- * generic predicate system.
- *
- * @internal
- */
-const resolveCustomDirectiveMatches: DecoratorResolver = (
-  type: unknown,
-  options: PrintTypeOptions,
-): Record<string, unknown>[] => {
-  const constDirectiveMap = getConstDirectiveMap(
-    type,
-    options.customDirectives,
-  );
+  return {
+    customDirectives: {
+      title: "Directives",
+      predicate: always(),
+      resolve,
+      position: { after: "code" },
+      render: (values, options, context): Maybe<string> => {
+        const directives = (values as unknown as CustomDirectiveMapItem[])
+          .map((item): Maybe<string> => {
+            return printCustomDirective(context.type, item, options);
+          })
+          .filter((value): value is string => {
+            return value !== undefined;
+          });
 
-  return constDirectiveMap
-    ? (Object.values(constDirectiveMap) as unknown as Record<string, unknown>[])
-    : [];
-};
+        return directives.length > 0
+          ? directives.join(MARKDOWN_EOP)
+          : undefined;
+      },
+    },
+    "customDirective:description": {
+      predicate: always(),
+      resolve,
+      position: { into: "description" },
+      render: (values, _options, context): Maybe<string> => {
+        const parts = (values as unknown as CustomDirectiveMapItem[])
+          .map((item): Maybe<string> => {
+            return getCustomDirectiveResolver(
+              "descriptor",
+              context.type,
+              item,
+              "",
+            );
+          })
+          .filter((text): text is string => {
+            return typeof text === "string" && text.length > 0;
+          })
+          .map((text): string => {
+            return escapeMDX(text);
+          });
 
-/**
- * The built-in "Directives" page section, listing every custom directive
- * declared on a type — a titled decorator translating the deprecated
- * `customDirective` option. Not part of `getDeclaredDecorators`'s output
- * (its id is reserved): printed directly by {@link printCustomDirectives},
- * the same way the built-in Example section is printed directly by
- * `Printer.printExample`.
- *
- * @internal
- */
-const CUSTOM_DIRECTIVES_SECTION: ResolvedDecorator = {
-  id: "customDirectives",
-  title: "Directives",
-  predicate: always(),
-  resolve: resolveCustomDirectiveMatches,
-  render: (values, options, context): Maybe<string> => {
-    const directives = (values as unknown as CustomDirectiveMapItem[])
-      .map((item): Maybe<string> => {
-        return printCustomDirective(context.type, item, options);
-      })
-      .filter((value): value is string => {
-        return value !== undefined;
-      });
+        return parts.length > 0 ? parts.join(MARKDOWN_EOP) : undefined;
+      },
+    },
+    "customDirective:tags": {
+      predicate: always(),
+      resolve,
+      position: { into: "tags" },
+      render: (values, options, context): Maybe<string> => {
+        const badges = (values as unknown as CustomDirectiveMapItem[])
+          .map((item): Maybe<string> => {
+            return getCustomDirectiveResolver("tag", context.type, item);
+          })
+          .filter((value): value is string => {
+            return value !== undefined;
+          }) as unknown as Badge[];
 
-    return directives.length > 0 ? directives.join(MARKDOWN_EOP) : undefined;
-  },
-};
-
-/**
- * Appends `customDirective`'s `descriptor` handlers as description text —
- * the translation of `customDirective` into a decorator with
- * `position: { into: "description" }`. Included unconditionally in
- * `getDeclaredDecorators`'s output; its `resolve` returns `[]` (skipping
- * silently) when `options.customDirectives` is absent or matches nothing.
- *
- * @internal
- */
-const CUSTOM_DIRECTIVE_DESCRIPTION: ResolvedDecorator = {
-  id: "customDirective:description",
-  predicate: always(),
-  resolve: resolveCustomDirectiveMatches,
-  position: { into: "description" },
-  render: (values, _options, context): Maybe<string> => {
-    const parts = (values as unknown as CustomDirectiveMapItem[])
-      .map((item): Maybe<string> => {
-        return getCustomDirectiveResolver("descriptor", context.type, item, "");
-      })
-      .filter((text): text is string => {
-        return typeof text === "string" && text.length > 0;
-      })
-      .map((text): string => {
-        return escapeMDX(text);
-      });
-
-    return parts.length > 0 ? parts.join(MARKDOWN_EOP) : undefined;
-  },
-};
-
-/**
- * Renders `customDirective`'s `tag` handlers as badges in the metadata
- * line's `tags` slot — the translation of `customDirective` into a decorator
- * with `position: { into: "tags" }`. Included unconditionally in
- * `getDeclaredDecorators`'s output, on the same terms as
- * {@link CUSTOM_DIRECTIVE_DESCRIPTION}.
- *
- * @internal
- */
-const CUSTOM_DIRECTIVE_TAGS: ResolvedDecorator = {
-  id: "customDirective:tags",
-  predicate: always(),
-  resolve: resolveCustomDirectiveMatches,
-  position: { into: "tags" },
-  render: (values, options, context): Maybe<string> => {
-    const badges = (values as unknown as CustomDirectiveMapItem[])
-      .map((item): Maybe<string> => {
-        return getCustomDirectiveResolver("tag", context.type, item);
-      })
-      .filter((value): value is string => {
-        return value !== undefined;
-      }) as unknown as Badge[];
-
-    return badges.length > 0
-      ? (formatBadges(badges, options) as string)
-      : undefined;
-  },
+        return badges.length > 0
+          ? (formatBadges(badges, options) as string)
+          : undefined;
+      },
+    },
+  };
 };
 
 /**
@@ -567,27 +527,15 @@ export const printDecorator = (
 };
 
 /**
- * Prints the built-in "Directives" page section.
- *
- * Backs the public `Printer.printCustomDirectives`; not itself
- * `@deprecated` — see `ConfigOptions.customDirective` for the setting
- * that is.
- */
-export const printCustomDirectives = (
-  type: unknown,
-  options: PrintTypeOptions,
-): Maybe<PageSection> => {
-  return printDecorator(type, CUSTOM_DIRECTIVES_SECTION, options);
-};
-
-/**
- * Returns the decorators to build, in declaration order: the
- * `customDirective`-adapter decorators (always present; each skips silently
- * when it matches nothing) followed by every entry declared under the
- * top-level `decorators` option. Decorators claiming a reserved id are
- * dropped: the printer is reachable directly through its public API,
- * bypassing the configuration validation, and such a decorator would
- * otherwise overwrite a built-in section.
+ * Returns the decorators to build, in declaration order: `customDirective`'s
+ * adapter decorators (see {@link buildCustomDirectiveDecorators}; always
+ * present, each skips silently when it matches nothing) followed by every
+ * entry declared under the top-level `decorators` option. Only the latter is
+ * filtered against reserved ids: the adapter's ids are assigned by the
+ * converter, not user config, and the printer is reachable directly through
+ * its public API, bypassing configuration validation, so a user-declared
+ * decorator claiming a reserved id must still be dropped rather than
+ * overwrite a built-in section.
  *
  * @internal
  *
@@ -614,7 +562,21 @@ const getDeclaredDecorators = (
         })
     : [];
 
-  return [CUSTOM_DIRECTIVE_DESCRIPTION, CUSTOM_DIRECTIVE_TAGS, ...declared];
+  const customDirectiveDecorators =
+    typeof options.customDirectiveDecorators === "object" &&
+    options.customDirectiveDecorators !== null
+      ? options.customDirectiveDecorators
+      : undefined;
+
+  const adapter = customDirectiveDecorators
+    ? Object.entries(customDirectiveDecorators).map(
+        ([id, decorator]): ResolvedDecorator => {
+          return { ...decorator, id };
+        },
+      )
+    : [];
+
+  return [...adapter, ...declared];
 };
 
 /**

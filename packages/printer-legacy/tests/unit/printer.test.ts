@@ -210,7 +210,7 @@ describe("Printer", () => {
         {
           "basePath": "/schema",
           "collapsible": undefined,
-          "customDirectives": undefined,
+          "customDirectiveDecorators": undefined,
           "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
@@ -280,7 +280,7 @@ describe("Printer", () => {
         {
           "basePath": "/test",
           "collapsible": undefined,
-          "customDirectives": undefined,
+          "customDirectiveDecorators": undefined,
           "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
@@ -559,8 +559,6 @@ describe("Printer", () => {
   describe("printType()", () => {
     const methods = [
       "printCode",
-      "printCustomDirectives",
-      "printCustomTags",
       "printDescription",
       "printHeader",
       "printRelations",
@@ -829,8 +827,6 @@ describe("Printer", () => {
       vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
       // Mock printDescription since it's a static property pointing to external function
       (Printer as any).printDescription = vi.fn().mockReturnValue("");
-      (Printer as any).printCustomDirectives = vi.fn().mockReturnValue("");
-      (Printer as any).printCustomTags = vi.fn().mockReturnValue("");
     });
 
     afterEach(() => {

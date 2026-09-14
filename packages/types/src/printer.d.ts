@@ -124,7 +124,6 @@ import type {
   SchemaEntitiesGroupMap,
   SchemaEntity,
 } from "./graphql";
-import type { CustomDirectiveMap } from "./helpers";
 
 /**
  * Minimal event emitter interface for printer event emission.
@@ -216,16 +215,22 @@ export type PrintTypeOptions = Partial<Formatter> & {
   basePath: string;
   collapsible?: Maybe<CollapsibleOption>;
   /**
-   * The schema-resolved form of the deprecated `customDirective` option, built
-   * once by `@graphql-markdown/core` and consumed by the decorators pipeline
-   * to render `customDirective`'s `descriptor`/`tag` handlers as decorators.
+   * Decorators built once by `@graphql-markdown/core` from the deprecated
+   * `customDirective` option's schema-resolved directive map, translating its
+   * `descriptor`/`tag`/section handlers into decorator declarations. Merged
+   * unconditionally into the decorators pipeline's output, ahead of
+   * `decorators`, bypassing its reserved-id filtering (their ids — including
+   * the reserved `customDirectives` — are assigned by the converter, not
+   * user config). `customDirective` itself, and the schema-resolved
+   * `CustomDirectiveMap` it produces, never reach the printer: this is the
+   * only trace of it that does.
    *
-   * @deprecated Use `decorators` instead.
+   * @internal
    */
-  customDirectives?: Maybe<CustomDirectiveMap>;
+  customDirectiveDecorators?: Maybe<Decorators>;
   /**
    * Decorators: selects nodes with a predicate and renders a titled section, a
-   * badge, or appended description text for them. Supersedes `customDirectives`.
+   * badge, or appended description text for them. Supersedes `customDirective`.
    */
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
@@ -303,7 +308,7 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
  * Options accepted by printer initialization.
  */
 export type PrinterInitOptions = {
-  customDirectives?: Maybe<CustomDirectiveMap>;
+  customDirectiveDecorators?: Maybe<Decorators>;
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
@@ -377,28 +382,6 @@ export abstract class IPrinter {
   static printCode(type: unknown, options: PrintTypeOptions): string;
 
   /**
-   * Prints custom directives associated with a type
-   * @param type - The GraphQL type to document
-   * @param options - Combined printer configuration and options
-   * @returns MDX string containing custom directives
-   */
-  static printCustomDirectives(
-    type: unknown,
-    options: PrintTypeOptions,
-  ): Maybe<PageSection>;
-
-  /**
-   * Prints custom tags associated with a type
-   * @param type - The GraphQL type to document
-   * @param options - Combined printer configuration and options
-   * @returns MDX string containing custom tags
-   */
-  static printCustomTags(
-    type: unknown,
-    options: PrintTypeOptions,
-  ): MDXString | string;
-
-  /**
    * Prints metadata information for a type
    * @param type - The GraphQL type to document
    * @param options - Combined printer configuration and options
@@ -451,10 +434,11 @@ export interface PrinterConfig {
  */
 export interface PrinterOptions {
   /**
-   * Schema-resolved form of the deprecated `customDirective` option (see
-   * `PrintTypeOptions.customDirectives`).
+   * Decorators translated from the deprecated `customDirective` option by
+   * `@graphql-markdown/core` (see `PrintTypeOptions.customDirectiveDecorators`).
+   * `customDirective` itself never reaches the printer.
    */
-  customDirectives?: Maybe<CustomDirectiveMap>;
+  customDirectiveDecorators?: Maybe<Decorators>;
   /** Predicate-driven decorators, resolved by the configuration layer. */
   decorators?: Maybe<Decorators>;
   /** Configuration for handling deprecated types and fields */
