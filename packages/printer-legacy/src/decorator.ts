@@ -405,6 +405,72 @@ export const getExampleSectionDefinition = (
 };
 
 /**
+ * Builds the predicate gating a decorator.
+ *
+ * A decorator with a custom `resolve` is gated only by its own return value,
+ * matching the pre-existing behaviour of a custom-section resolver (most
+ * notably the built-in Example section, whose values may come from a field
+ * nested arbitrarily deep rather than from the type itself, and the
+ * `customDirective`-adapter decorators above, whose matching is driven by
+ * `options.customDirectives`, not the decorator's own id/directive). Only
+ * the default, directive-occurrences path is gated on directive presence.
+ *
+ * `appliesTo` is composed in via `and()` rather than checked separately: it
+ * is sugar for `isEntity(...)` combined with `predicate`, not a second,
+ * parallel gating mechanism (see `appliesToPredicate`).
+ *
+ * @internal
+ */
+const resolveDecoratorPredicate = (
+  decorator: ResolvedDecorator,
+  directiveName: string,
+): DecoratorPredicate => {
+  return and(
+    decorator.predicate ??
+      (decorator.resolve ? always() : hasDirectiveNamed(directiveName)),
+    appliesToPredicate(decorator),
+  );
+};
+
+/**
+ * Resolves the values a decorator renders, applying the marker-decorator
+ * substitution rule.
+ *
+ * `undefined` means "skip this decorator": either its resolver returned a
+ * non-array, or it resolved no values with nothing asking for the
+ * marker-decorator substitution below. An explicit `predicate`, using the
+ * default directive-occurrences resolver, with no resolved values is a pure
+ * marker decorator (no directive arguments to carry): it still renders once,
+ * with an empty record. A custom `resolve` returning `[]` is never
+ * ambiguous with that case — it means "nothing to render this time" — so it
+ * is not substituted.
+ *
+ * @internal
+ */
+const resolveDecoratorValues = (
+  type: unknown,
+  decorator: ResolvedDecorator,
+  directive: ReturnType<typeof getDirectiveFromSchema>,
+  options: PrintTypeOptions,
+): Maybe<Record<string, unknown>[]> => {
+  const resolved = decorator.resolve
+    ? decorator.resolve(type, options)
+    : directive
+      ? getTypeDirectiveValuesList(directive, type)
+      : [];
+
+  if (!Array.isArray(resolved)) {
+    return undefined;
+  }
+
+  if (resolved.length === 0) {
+    return !decorator.predicate || decorator.resolve ? undefined : [{}];
+  }
+
+  return resolved;
+};
+
+/**
  * Resolves and renders a single decorator's raw content for a type.
  *
  * The decorator is skipped, returning `undefined`, when its `appliesTo` filter
@@ -436,58 +502,14 @@ const renderDecoratorContent = (
   // render context, rather than looked up twice.
   const directive = getDirectiveFromSchema(directiveName, options);
 
-  // A decorator with a custom `resolve` is gated only by its own return value,
-  // matching the pre-existing behaviour of a custom-section resolver (most
-  // notably the built-in Example section, whose values may come from a field
-  // nested arbitrarily deep rather than from the type itself, and the
-  // `customDirective`-adapter decorators above, whose matching is driven by
-  // `options.customDirectives`, not the decorator's own id/directive). Only
-  // the default, directive-occurrences path is gated on directive presence.
-  //
-  // `appliesTo` is composed in via `and()` rather than checked separately: it
-  // is sugar for `isEntity(...)` combined with `predicate`, not a second,
-  // parallel gating mechanism (see `appliesToPredicate`). The raw
-  // `decorator.predicate` — not this composed one — is still what the
-  // empty-values marker rule below consults, so `appliesTo` alone (no
-  // explicit `predicate`) does not turn a directive-driven decorator into a
-  // marker one.
-  const predicate: DecoratorPredicate = and(
-    decorator.predicate ??
-      (decorator.resolve ? always() : hasDirectiveNamed(directiveName)),
-    appliesToPredicate(decorator),
-  );
-
-  if (!predicate(type, options)) {
+  if (!resolveDecoratorPredicate(decorator, directiveName)(type, options)) {
     return undefined;
   }
 
-  const resolved = decorator.resolve
-    ? decorator.resolve(type, options)
-    : directive
-      ? getTypeDirectiveValuesList(directive, type)
-      : [];
+  const values = resolveDecoratorValues(type, decorator, directive, options);
 
-  if (!Array.isArray(resolved)) {
+  if (values === undefined || values === null) {
     return undefined;
-  }
-
-  let values = resolved;
-  if (values.length === 0) {
-    if (!decorator.predicate || decorator.resolve) {
-      // No values, and either nothing beyond the default gating asked for
-      // this decorator, or a custom `resolve` explicitly returned nothing:
-      // preserve today's behaviour of skipping it silently. The marker
-      // substitution below is only for the directive-occurrences default
-      // path, where "no occurrences" is ambiguous with "a pure marker
-      // directive with no arguments" — a custom `resolve` returning `[]` is
-      // never ambiguous, it means "nothing to render this time".
-      return undefined;
-    }
-    // An explicit predicate matched, using the default directive-occurrences
-    // resolver, with no resolved values: this is a pure marker decorator (no
-    // directive arguments to carry), so it still renders once, with an empty
-    // record.
-    values = [{}];
   }
 
   const context: DecoratorContext = {

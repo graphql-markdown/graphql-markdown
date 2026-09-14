@@ -983,6 +983,42 @@ describe("config", () => {
         );
       },
     );
+
+    test.each([
+      { into: "tags" },
+      { after: "metadata" },
+      { before: "metadata" },
+    ])("returns the decorators when position is %p", (position) => {
+      expect.assertions(1);
+
+      const withPosition = { ...decorator, position };
+
+      expect(
+        getDecoratorsOption({ responses: withPosition } as Decorators),
+      ).toStrictEqual({ responses: withPosition });
+    });
+
+    test.each([
+      {},
+      { after: "metadata", into: "tags" },
+      { after: "" },
+      { into: 123 },
+    ])(
+      "throws a type error if position does not set exactly one of after/before/into to a non-empty string (%p)",
+      (position) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption({
+            responses: { ...decorator, position },
+          } as unknown as Decorators);
+        }).toThrow(
+          new TypeError(
+            "Decorator 'responses' option 'position' must set exactly one of 'after', 'before', or 'into' to a non-empty string.",
+          ),
+        );
+      },
+    );
   });
 
   describe("getCustomDirectives", () => {

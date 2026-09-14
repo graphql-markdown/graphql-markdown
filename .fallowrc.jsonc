@@ -35,6 +35,10 @@
   // not static import statements, so fallow cannot trace them:
   //   @docusaurus/logger              — dynamically imported in logger tests via import(moduleName)
   //   cz-emoji                        — commitizen adapter (config.commitizen.path)
+  //   custom-mdx-parser                — not a real package: a `vi.mock("custom-mdx-parser", ...)`
+  //                                      virtual module name/fixture `formatter` value in
+  //                                      packages/core/tests/unit/generator.test.ts, standing in
+  //                                      for a user-loaded MDX formatter module
   //   eslint-import-resolver-typescript — ESLint import/resolver setting
   //   jest-environment-node           — jest testEnvironment: "node"
   //   typedoc-docusaurus-theme        — TypeDoc plugin string in typedoc config
@@ -69,6 +73,7 @@
     "@graphql-markdown/utils",
     "@docusaurus/logger",
     "cz-emoji",
+    "custom-mdx-parser",
     "eslint-import-resolver-typescript",
     "jest-environment-node",
     "typedoc-docusaurus-theme",

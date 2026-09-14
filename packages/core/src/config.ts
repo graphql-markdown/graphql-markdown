@@ -28,6 +28,7 @@ import type {
   ConfigPrintTypeOptions,
   CustomDirective,
   DecoratorDefinition,
+  DecoratorPosition,
   Decorators,
   DirectiveName,
   GroupByDirectiveOptions,
@@ -694,6 +695,108 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
 ] as const;
 
 /**
+ * Validates an optional callback-typed decorator field (`predicate`, `resolve`).
+ *
+ * @internal
+ *
+ * @throws TypeError if the field is set and is not a function.
+ */
+const validateDecoratorCallback = (
+  id: string,
+  field: "predicate" | "resolve",
+  value: unknown,
+): void => {
+  if (value !== undefined && typeof value !== "function") {
+    throw new TypeError(
+      `Decorator '${id}' option '${field}' must be a function.`,
+    );
+  }
+};
+
+/**
+ * Validates a decorator's optional `position`.
+ *
+ * An invalid `position` fails silently downstream — a typo'd slot name never
+ * matches in `printSlotDecorators`, and an unknown anchor is absorbed by
+ * `getDecoratorsOrder`'s "append when not found" fallback — so it is checked
+ * here instead, where a mistake can be reported.
+ *
+ * @internal
+ *
+ * @throws TypeError if `position` is set and is not exactly one of
+ * `after`/`before`/`into`, as a non-empty string.
+ */
+const validateDecoratorPosition = (
+  id: string,
+  position: Maybe<DecoratorPosition>,
+): void => {
+  if (position === undefined || position === null) {
+    return;
+  }
+
+  const anchors = (["after", "before", "into"] as const).filter(
+    (key): boolean => {
+      return position[key] !== undefined;
+    },
+  );
+
+  const value = anchors.length === 1 ? position[anchors[0]] : undefined;
+
+  if (typeof value !== "string" || value.length === 0) {
+    throw new TypeError(
+      `Decorator '${id}' option 'position' must set exactly one of 'after', 'before', or 'into' to a non-empty string.`,
+    );
+  }
+};
+
+/**
+ * Validates a single decorator declaration.
+ *
+ * A config file is untrusted runtime JavaScript, so every malformed field is
+ * a configuration error to report, not a value to silently ignore or coerce.
+ *
+ * @internal
+ *
+ * @throws Error or TypeError if the decorator id or any of its fields is malformed.
+ */
+const validateDecoratorEntry = (
+  id: string,
+  decorator: Maybe<DecoratorDefinition>,
+): void => {
+  if (id.length === 0) {
+    throw new TypeError(
+      "Option 'decorators' requires a non-empty id for each decorator.",
+    );
+  }
+
+  if (RESERVED_SECTION_NAMES.includes(id)) {
+    throw new Error(`Decorator id '${id}' is reserved, please use another id.`);
+  }
+
+  // The `!decorator` half narrows `decorator` from `Maybe<DecoratorDefinition>`
+  // for every check below, and also catches a non-object entry (`null`, or
+  // `undefined` from a conditional spread).
+  if (!decorator || typeof decorator.render !== "function") {
+    throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
+  }
+
+  validateDecoratorCallback(id, "predicate", decorator.predicate);
+  validateDecoratorCallback(id, "resolve", decorator.resolve);
+
+  if (
+    decorator.directive !== undefined &&
+    (typeof decorator.directive !== "string" ||
+      decorator.directive.length === 0)
+  ) {
+    throw new TypeError(
+      `Decorator '${id}' option 'directive' must be a non-empty string.`,
+    );
+  }
+
+  validateDecoratorPosition(id, decorator.position);
+};
+
+/**
  * Validates the top-level `decorators` option.
  *
  * The option is keyed by a free-form id — it is not required to name a
@@ -720,6 +823,7 @@ const RESERVED_SECTION_NAMES: readonly string[] = [
  * });
  * ```
  */
+
 export const getDecoratorsOption = (
   decorators: Maybe<Decorators>,
 ): Maybe<Decorators> => {
@@ -738,54 +842,7 @@ export const getDecoratorsOption = (
   // becomes an own property, so a decorator cannot claim it here either.
   Object.entries(decorators).forEach(
     ([id, decorator]: [string, Maybe<DecoratorDefinition>]): void => {
-      if (id.length === 0) {
-        throw new TypeError(
-          "Option 'decorators' requires a non-empty id for each decorator.",
-        );
-      }
-
-      if (RESERVED_SECTION_NAMES.includes(id)) {
-        throw new Error(
-          `Decorator id '${id}' is reserved, please use another id.`,
-        );
-      }
-
-      // A config file is untrusted runtime JavaScript, so a non-object entry
-      // (`null`, or `undefined` from a conditional spread) must produce this
-      // same validation error rather than an unguarded TypeError dereferencing
-      // `.render` on it. The `!decorator` half also narrows `decorator` from
-      // `Maybe<DecoratorDefinition>` for every check below.
-      if (!decorator || typeof decorator.render !== "function") {
-        throw new TypeError(`Decorator '${id}' requires a 'render' function.`);
-      }
-
-      if (
-        decorator.predicate !== undefined &&
-        typeof decorator.predicate !== "function"
-      ) {
-        throw new TypeError(
-          `Decorator '${id}' option 'predicate' must be a function.`,
-        );
-      }
-
-      if (
-        decorator.resolve !== undefined &&
-        typeof decorator.resolve !== "function"
-      ) {
-        throw new TypeError(
-          `Decorator '${id}' option 'resolve' must be a function.`,
-        );
-      }
-
-      if (
-        decorator.directive !== undefined &&
-        (typeof decorator.directive !== "string" ||
-          decorator.directive.length === 0)
-      ) {
-        throw new TypeError(
-          `Decorator '${id}' option 'directive' must be a non-empty string.`,
-        );
-      }
+      validateDecoratorEntry(id, decorator);
     },
   );
 
