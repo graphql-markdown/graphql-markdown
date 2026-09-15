@@ -2,11 +2,10 @@
 id: decorators
 pagination_prev: null
 pagination_next: null
-description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it — the successor to customDirective and customSections.
+description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it — the successor to customDirective.
 keywords:
   - GraphQL decorators
   - custom directive
-  - custom sections
   - predicate
   - badges
   - documentation sections
@@ -16,7 +15,7 @@ keywords:
 
 A decorator selects nodes in the schema with a **predicate** — by default, "the node carries this directive" — and renders their resolved values with a callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
 
-`decorators` supersedes both [`customDirective`](/docs/settings#customdirective) and the former `printTypeOptions.customSections` (see [migrating from `customSections`](#migrating-from-customsections) below): a single option, keyed by a free-form id rather than a directive name, selecting nodes by any predicate rather than directive presence alone.
+`decorators` supersedes [`customDirective`](/docs/settings#customdirective) (see [migrating from `customDirective`](#migrating-from-customdirective) below): a single option, keyed by a free-form id rather than a directive name, selecting nodes by any predicate rather than directive presence alone.
 
 ## Usage
 
@@ -263,38 +262,6 @@ Only the first occurrence is used here, as `@meta` is not repeatable.
 ```
 
 A `customDirective` entry's `descriptor`/`tag` each become their own decorator, sharing the `directive` field so both read the same schema directive; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
-
-## Migrating from `customSections`
-
-`printTypeOptions.customSections` — an early, narrower predecessor of `decorators` keyed by directive name, with a `render(values, options)` callback and an `appliesTo` filter — is removed. Convert each entry to a `decorators` entry: move it to the top level (not under `printTypeOptions`), give it an id, set `directive` to the schema directive name it used to key on, add `context` as `render`'s third argument if the entry read the directive definition itself, and replace `appliesTo` with an equivalent `predicate: isEntity(...)` (composed with any other `predicate` via `and()`).
-
-```diff
-- printTypeOptions: {
--   customSections: {
--     httpResponse: {
--       title: "Responses",
--       position: { after: "metadata" },
--       appliesTo: ["queries", "mutations"],
--       render: (values) => {
--         return values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n");
--       },
--     },
--   },
-- },
-+ decorators: {
-+   httpResponse: {
-+     directive: "httpResponse",
-+     title: "Responses",
-+     position: { after: "metadata" },
-+     predicate: isEntity("queries", "mutations"),
-+     render: (values) => {
-+       return values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n");
-+     },
-+   },
-+ },
-```
-
-The `render` signature is unchanged (`(values, options) => content`, with `context` now available as a third argument); the built-in section order is the same list, minus the now-removed `customDirectives` entry (its equivalent, `customDirective`'s "Directives" section, is spliced back in automatically when `customDirective` is configured).
 
 ## Helpers
 

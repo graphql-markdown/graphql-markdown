@@ -51,7 +51,7 @@ Use this option to render directive information for types (see [custom directive
 
 ## `decorators`
 
-Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/advanced/decorators)). Supersedes [`customDirective`](#customdirective) and the former `printTypeOptions.customSections`.
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/advanced/decorators)). Supersedes [`customDirective`](#customdirective).
 
 | Setting      | CLI flag        | Default     |
 | ------------ | --------------- | ----------- |
