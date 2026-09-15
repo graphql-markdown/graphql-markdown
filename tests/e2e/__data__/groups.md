@@ -43,23 +43,30 @@ This is an example of documentation grouping with GraphQL directive using the `g
     hierarchy: "entity",
   },
   skipDocDirective: ["@noDoc"],
-  customDirective: {
-    auth: {
-      descriptor: (directive, type) =>
+  decorators: {
+    authDescription: {
+      directive: "auth",
+      position: { into: "description" },
+      render: (_values, _options, { directive, type }) =>
         directiveDescriptor(
           directive,
           type,
           "This requires the current user to be in `${requires}` role.",
         ),
     },
-    beta: {
-      tag: (directive) => ({
-        text: directive?.name?.toUpperCase(),
-        classname: "badge--danger",
-      }),
+    betaTag: {
+      directive: "beta",
+      position: { into: "tags" },
+      render: (_values, options, { directive }) =>
+        options.formatMDXBadge({
+          text: directive?.name?.toUpperCase(),
+          classname: "badge--danger",
+        }),
     },
-    complexity: {
-      descriptor: (directive, type) => {
+    complexityDescription: {
+      directive: "complexity",
+      position: { into: "description" },
+      render: (_values, _options, { directive, type }) => {
         const { value, multipliers } = getTypeDirectiveValues(directive, type);
         const multiplierDescription = multipliers
           ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`
@@ -102,23 +109,30 @@ This is an example of documentation grouping with GraphQL directive using the `g
         hierarchy: "entity",
       },
       skipDocDirective: ["@noDoc"],
-      customDirective: {
-        auth: {
-          descriptor: (directive, type) =>
+      decorators: {
+        authDescription: {
+          directive: "auth",
+          position: { into: "description" },
+          render: (_values, _options, { directive, type }) =>
             directiveDescriptor(
               directive,
               type,
               "This requires the current user to be in `${requires}` role.",
             ),
         },
-        beta: {
-          tag: (directive) => ({
-            text: directive?.name?.toUpperCase(),
-            classname: "badge--danger",
-          }),
+        betaTag: {
+          directive: "beta",
+          position: { into: "tags" },
+          render: (_values, options, { directive }) =>
+            options.formatMDXBadge({
+              text: directive?.name?.toUpperCase(),
+              classname: "badge--danger",
+            }),
         },
-        complexity: {
-          descriptor: (directive, type) => {
+        complexityDescription: {
+          directive: "complexity",
+          position: { into: "description" },
+          render: (_values, _options, { directive, type }) => {
             const { value, multipliers } = getTypeDirectiveValues(directive, type);
             const multiplierDescription = multipliers
               ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`

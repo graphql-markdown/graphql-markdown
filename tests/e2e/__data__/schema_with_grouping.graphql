@@ -29,9 +29,9 @@ directive @doc(
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
 
 """
-Example of custom directive for `customDirective`.
+Example of custom directive rendered via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#customdirective)
+See [documentation](https://graphql-markdown.dev/docs/settings)
 """
 directive @complexity(
   """
@@ -49,9 +49,9 @@ directive @complexity(
 ) on FIELD_DEFINITION
 
 """
-Example of custom directive for `customDirective` descriptor.
+Example of custom directive rendered as description text via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#customdirective)
+See [documentation](https://graphql-markdown.dev/docs/settings)
 """
 directive @auth(
   """
@@ -61,9 +61,9 @@ directive @auth(
 ) on OBJECT | FIELD_DEFINITION
 
 """
-Example of custom directive for `customDirective` tag.
+Example of custom directive rendered as a tag via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#skipdocdirective)
+See [documentation](https://graphql-markdown.dev/docs/settings)
 """
 directive @beta on OBJECT | INTERFACE | FIELD_DEFINITION
 

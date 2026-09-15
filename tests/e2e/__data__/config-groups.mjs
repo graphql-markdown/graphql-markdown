@@ -5,9 +5,17 @@ import {
   directiveDescriptor,
   directiveTag,
 } from "@graphql-markdown/helpers";
+import { escapeMDX } from "@graphql-markdown/utils";
 
 /** @type {string} */
 export const schema = "data/schema_with_grouping.graphql";
+
+// A decorator's `render` returns Markdown/MDX directly, so a badge built
+// from a `Badge` object (as `directiveTag` and the `beta` tag below return)
+// must be escaped and formatted the same way the printer formats its own
+// badges, via `options.formatMDXBadge`.
+const renderBadge = ({ text, classname }, options) =>
+  options.formatMDXBadge({ text: escapeMDX(text), classname });
 
 /** @type {import('@graphql-markdown/types').ConfigOptions} */
 export const options = {
@@ -29,31 +37,55 @@ export const options = {
     index: true,
     categorySort: "natural",
   },
-  customDirective: {
-    beta: {
-      tag: (directive) => ({
-        text: directive?.name?.toUpperCase(),
-        classname: "badge--danger",
-      }),
+  decorators: {
+    betaTag: {
+      directive: "beta",
+      position: { into: "tags" },
+      render: (_values, options, { directive }) =>
+        renderBadge(
+          { text: directive?.name?.toUpperCase(), classname: "badge--danger" },
+          options,
+        ),
     },
-    auth: {
-      descriptor: (directive, type) =>
-        directiveDescriptor(
+    authDescription: {
+      directive: "auth",
+      position: { into: "description" },
+      render: (_values, _options, { directive, type }) =>
+        escapeMDX(
+          directiveDescriptor(
+            directive,
+            type,
+            "This requires the current user to be in `${requires}` role.",
+          ),
+        ),
+    },
+    authTag: {
+      directive: "auth",
+      position: { into: "tags" },
+      render: (_values, options, { directive, type }) =>
+        renderBadge(directiveTag(directive, type), options),
+    },
+    complexityDescription: {
+      directive: "complexity",
+      position: { into: "description" },
+      render: (_values, _options, { directive, type }) => {
+        const { value, multipliers } = getTypeDirectiveValues(
           directive,
           type,
-          "This requires the current user to be in `${requires}` role.",
-        ),
-      tag: directiveTag,
-    },
-    complexity: {
-      descriptor: (directive, type) => {
-        const { value, multipliers } = getTypeDirectiveValues(directive, type);
+        );
         const multiplierDescription = multipliers
           ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`
           : "";
-        return `This has an additional cost of \`${value}\` points${multiplierDescription}.`;
+        return escapeMDX(
+          `This has an additional cost of \`${value}\` points${multiplierDescription}.`,
+        );
       },
-      tag: directiveTag,
+    },
+    complexityTag: {
+      directive: "complexity",
+      position: { into: "tags" },
+      render: (_values, options, { directive, type }) =>
+        renderBadge(directiveTag(directive, type), options),
     },
   },
 };
