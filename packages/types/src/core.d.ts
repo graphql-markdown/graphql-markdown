@@ -327,7 +327,7 @@ export type DecoratorPosition =
  * ```js
  * decorators: {
  *   responses: {
- *     predicate: hasDirective("httpResponse"),
+ *     predicate: hasDirectiveNamed("httpResponse"),
  *     title: "Responses",
  *     position: { after: "metadata" },
  *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
@@ -336,7 +336,7 @@ export type DecoratorPosition =
  * ```
  */
 export interface DecoratorDefinition {
-  /** Selects the nodes this decorator applies to. Defaults to `hasDirective(directive ?? id)`. */
+  /** Selects the nodes this decorator applies to. Defaults to `hasDirectiveNamed(directive ?? id)`. */
   predicate?: Maybe<DecoratorPredicate>;
   /** Directive driving the default resolver and `context.directive`. Defaults to this decorator's id. */
   directive?: Maybe<DirectiveName>;

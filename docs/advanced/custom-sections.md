@@ -1,177 +1,123 @@
 ---
 pagination_prev: null
 pagination_next: null
-description: Add your own directive-driven sections to GraphQL type pages, for HTTP status codes, response headers, or any schema metadata a custom directive carries.
+description: printTypeOptions.customSections is removed, superseded by the decorators option. Migrate with these diff examples.
 keywords:
   - GraphQL custom sections
   - custom directive
-  - repeatable directive
-  - HTTP status codes
+  - decorators
+  - migration
   - documentation sections
 ---
 
 # Custom sections
 
-Schemas often carry documentation-only metadata that has no natural home on a type page: the HTTP status codes an operation can return, the headers it expects, or a description of a `meta` object returned alongside the data.
+:::caution
 
-The option [`printTypeOptions.customSections`](/docs/settings#printtypeoptions) turns such a directive into its own top-level section of the type page, rendered by a callback you provide. It is a map of directive names, in the same shape as [`customDirective`](/docs/advanced/custom-directive).
-
-:::info
-
-A custom section is a **page-level** section. Operations are printed on their own pages, so a directive on `Query.user` produces a section on the `user` page.
+`printTypeOptions.customSections` is **removed**, superseded by [`decorators`](/docs/advanced/decorators): a top-level option, keyed by a free-form id rather than a directive name, selecting nodes by any predicate rather than directive presence alone. Setting `printTypeOptions.customSections` no longer has any effect.
 
 :::
 
-## Usage
+## Migrating
 
-**1. Declare a directive in the schema**
+Move each entry out of `printTypeOptions.customSections` to the top level, under `decorators`. Give it an id (it no longer doubles as the directive name), set `directive` to the schema directive it used to key on, and replace `appliesTo` — removed, it was sugar for `isEntity(...)` — with an equivalent `predicate`.
 
-Mark it `repeatable` when a type can carry more than one occurrence.
+### Basic section
 
-```graphql
-directive @httpResponse(
-  code: Int!
-  description: String
-) repeatable on FIELD_DEFINITION
-
-type Query {
-  user(id: ID!): User
-    @httpResponse(code: 200, description: "OK")
-    @httpResponse(code: 404, description: "User not found")
-}
+```diff
+- printTypeOptions: {
+-   customSections: {
+-     httpResponse: {
+-       title: "Responses",
+-       position: { after: "metadata" },
+-       appliesTo: ["queries", "mutations"],
+-       render: (values) => {
+-         return [
+-           "| Code | Description |",
+-           "| ---- | ----------- |",
+-           ...values.map((value) => `| \`${value.code}\` | ${value.description ?? ""} |`),
+-         ].join("\n");
+-       },
+-     },
+-   },
+- },
++ decorators: {
++   httpResponse: {
++     directive: "httpResponse",
++     title: "Responses",
++     position: { after: "metadata" },
++     predicate: isEntity("queries", "mutations"),
++     render: (values) => {
++       return [
++         "| Code | Description |",
++         "| ---- | ----------- |",
++         ...values.map((value) => `| \`${value.code}\` | ${value.description ?? ""} |`),
++       ].join("\n");
++     },
++   },
++ },
 ```
 
-**2. Declare the section in the configuration**
-
-```js title="docusaurus.config.js"
-printTypeOptions: {
-  customSections: {
-    httpResponse: {
-      title: "Responses",
-      position: { after: "metadata" },
-      appliesTo: ["queries", "mutations"],
-      render: (values) => {
-        return [
-          "| Code | Description |",
-          "| ---- | ----------- |",
-          ...values.map((value) => `| \`${value.code}\` | ${value.description ?? ""} |`),
-        ].join("\n");
-      },
-    },
-  },
-}
-```
-
-**3. The section is rendered on the page**
-
-```md
-### Responses
-
-| Code  | Description    |
-| ----- | -------------- |
-| `200` | OK             |
-| `404` | User not found |
-```
-
-## Options
-
-Each key is the name of the schema directive carrying the section data, and is also the section key on the page. It must not be one of the built-in keys (see [Position](#position)).
-
-| Option      | Required | Description                                                                                   |
-| ----------- | -------- | --------------------------------------------------------------------------------------------- |
-| `render`    | yes      | Callback returning the section content as Markdown (see [Render](#render)).                   |
-| `title`     | no       | Section heading. Omit for an untitled section.                                                |
-| `level`     | no       | Heading level, defaults to `3`.                                                               |
-| `position`  | no       | Placement relative to another section (see [Position](#position)). Defaults to last.          |
-| `appliesTo` | no       | Restricts the section to some schema entities (see [appliesTo](#appliesto)). Defaults to all. |
-
-A section is skipped, and no heading is printed, when the directive is absent from the schema or from the type, or when `render` returns nothing.
-
-### Render
-
-`render` receives one record of directive arguments **per occurrence**, in schema declaration order, and the print options in effect. It returns the section content as Markdown, or a nullish value to skip the section.
-
-```js
-render: (values, options) => {
-  // values: [ { code: 200, description: "OK" }, { code: 404, description: "User not found" } ]
-  // options: the print options in effect for the type being rendered
-};
-```
-
-Optional directive arguments that were omitted are absent from the record rather than set to `undefined`, so give them a fallback.
-
-### Position
-
-`position` places the section relative to another one, using either `{ after: "<section>" }` or `{ before: "<section>" }`. The built-in sections are, in their default order:
-
-`tags`, `description`, `code`, `customDirectives`, `metadata`, `example`, `relations`
-
-Another custom section can also be named, by its directive name, as long as it is declared earlier. A section whose `position` names an unknown section is appended last.
-
-:::note
-
-`example` is itself a custom section, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `customSections`.
-
-:::
-
-:::tip
-
-Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) when the placement has to be decided per type, rather than once in the configuration.
-
-:::
-
-### appliesTo
-
-`appliesTo` restricts the section to some schema entities:
-
-`queries`, `mutations`, `subscriptions`, `objects`, `interfaces`, `unions`, `enums`, `inputs`, `scalars`, `directives`
-
-This is not the same as the directive's own GraphQL locations: `on FIELD_DEFINITION` cannot tell a query from a mutation, and a third-party schema may declare locations wider than what you want documented.
-
-## Examples
+`isEntity` is exported by `@graphql-markdown/graphql`. `render`'s signature is unchanged (`(values, options) => content`); a third `context` argument (`{ id, type, directive, entity }`) is now also available.
 
 ### Response headers
 
-```graphql
-directive @httpHeader(
-  name: String!
-  required: Boolean = false
-) repeatable on FIELD_DEFINITION
+```diff
+- printTypeOptions: {
+-   customSections: {
+-     httpHeader: {
+-       title: "Headers",
+-       position: { after: "metadata" },
+-       render: (values) => {
+-         return values
+-           .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
+-           .join("\n");
+-       },
+-     },
+-   },
+- },
++ decorators: {
++   httpHeader: {
++     directive: "httpHeader",
++     title: "Headers",
++     position: { after: "metadata" },
++     render: (values) => {
++       return values
++         .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
++         .join("\n");
++     },
++   },
++ },
 ```
 
-```js
-{
-  httpHeader: {
-    title: "Headers",
-    position: { after: "metadata" },
-    render: (values) => {
-      return values
-        .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
-        .join("\n");
-    },
-  },
-}
-```
+No `appliesTo` here, so nothing to replace with a `predicate` — just the id/`directive` split and the move out of `printTypeOptions`.
 
 ### Meta object
 
-A directive naming another documented type, rendered as a link to its page.
-
-```graphql
-directive @meta(type: String!) on FIELD_DEFINITION
+```diff
+- printTypeOptions: {
+-   customSections: {
+-     meta: {
+-       title: "Meta",
+-       position: { after: "code" },
+-       render: ([value], options) => {
+-         const slug = String(value.type).toLowerCase();
+-         return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
+-       },
+-     },
+-   },
+- },
++ decorators: {
++   meta: {
++     directive: "meta",
++     title: "Meta",
++     position: { after: "code" },
++     render: ([value], options) => {
++       const slug = String(value.type).toLowerCase();
++       return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
++     },
++   },
++ },
 ```
 
-```js
-{
-  meta: {
-    title: "Meta",
-    position: { after: "code" },
-    render: ([value], options) => {
-      const slug = String(value.type).toLowerCase();
-      return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
-    },
-  },
-}
-```
-
-Only the first occurrence is used here, as `@meta` is not repeatable.
+See [decorators](/docs/advanced/decorators) for the full option reference, including `predicate`, `resolve`, and the `position: { into: <slot> }` form for badges and description text that `customSections` could not express.
