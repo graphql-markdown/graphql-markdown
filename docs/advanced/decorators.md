@@ -296,7 +296,11 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 }
 ```
 
+:::info
+
 `isOperation` only takes `type`, one argument fewer than `predicate`'s `(type, options)` — that's fine, since `predicate` is always called with both, and the extra one is simply ignored. Any single-argument type guard from `@graphql-markdown/graphql` (`isObjectType`, `isEnumType`, …) can be passed directly as `predicate` the same way.
+
+:::
 
 ## Migrating from `customDirective`
 
