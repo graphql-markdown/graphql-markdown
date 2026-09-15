@@ -13,11 +13,9 @@ keywords:
 
 # Decorators
 
-A decorator selects nodes in the schema with a **predicate** — by default, every node — and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
+A decorator selects **nodes** in the schema — a type, field, or argument the printer is about to render — with a **predicate** (by default, every node), and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
 
-There is no built-in "this decorator's own directive" option: a directive-driven decorator selects its nodes with `predicate: hasDirectiveNamed("name")` and, if it needs that directive's argument values, reads them in `resolve` (or directly in `render`) using `@graphql-markdown/graphql`'s `getDirectiveFromSchema` combined with `getTypeDirectiveValues`/`getTypeDirectiveValuesList` — the same public helpers the printer uses internally, so nothing is hidden.
-
-`decorators` supersedes [`customDirective`](/docs/settings#customdirective) (see [migrating from `customDirective`](#migrating-from-customdirective) below): a single option, keyed by a free-form id rather than a directive name, selecting nodes by any predicate rather than directive presence alone.
+`decorators` replaces the deprecated [`customDirective`](/docs/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). Unlike `customDirective`, it is keyed by a free-form id rather than a directive name, and selects nodes by any predicate rather than directive presence alone. There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
@@ -180,6 +178,8 @@ Another decorator can also be named, by its id, as long as it is declared earlie
 
 A decorator using `into` is excluded from the page's section order entirely — it never has a heading, regardless of `title`.
 
+`badges`, `permalink`, and `metadata` are only reachable from a member's line (a field, argument, or enum value) — there is no type-heading equivalent, so a decorator targeting one of them never renders for the type itself; use `description` or `tags` for type-level placement instead. Conversely, `description` and `tags` are shared between the heading and every member row: a predicate that isn't scoped tightly enough (matching, say, both a type and its own fields) renders the decorator in both places.
+
 :::note
 
 `example` is itself a decorator, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `decorators`.
@@ -303,6 +303,8 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 `isOperation` only takes `type`, one argument fewer than `predicate`'s `(type, options)` — that's fine, since `predicate` is always called with both, and the extra one is simply ignored. Any single-argument type guard from `@graphql-markdown/graphql` (`isObjectType`, `isEnumType`, …) can be passed directly as `predicate` the same way.
 
 :::
+
+This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#display-response-types-for-operations), which achieves the same result by rewriting the generated code block directly. Prefer this decorator form when the content should be orderable via `position` or need not touch the code block itself; prefer the hook when you need to intercept `printCode`'s raw output.
 
 ## Migrating from `customDirective`
 
