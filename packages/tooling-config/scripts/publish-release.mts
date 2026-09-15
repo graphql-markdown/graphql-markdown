@@ -77,6 +77,39 @@ const isPublished = (name: string, version: string): boolean => {
   return result.status === 0 && result.stdout.trim() === version;
 };
 
+const packTarball = (packageDir: string, tarballPath: string): boolean => {
+  const pack = spawnSync(
+    "bun",
+    ["pm", "pack", "--quiet", "--filename", tarballPath],
+    { cwd: packageDir, stdio: "inherit" },
+  );
+  return !pack.error && pack.status === 0;
+};
+
+const hasWorkspaceReferences = (tarballPath: string): boolean => {
+  const packedPackageJson = spawnSync(
+    "tar",
+    ["-xzf", tarballPath, "-O", "package/package.json"],
+    { encoding: "utf-8" },
+  );
+  return packedPackageJson.stdout.includes('"workspace:');
+};
+
+const publishTarball = (tarballPath: string): boolean => {
+  const publishArgs = [
+    "publish",
+    tarballPath,
+    "--access",
+    "public",
+    "--workspaces=false",
+  ];
+  if (dryRun) {
+    publishArgs.push("--dry-run");
+  }
+  const publish = spawnSync("npm", publishArgs, { stdio: "inherit" });
+  return !publish.error && publish.status === 0;
+};
+
 const packAndPublish = (
   pkg: string,
   name: string,
@@ -88,40 +121,17 @@ const packAndPublish = (
   const tarballPath = resolve(packDir, tarballName);
 
   try {
-    const pack = spawnSync(
-      "bun",
-      ["pm", "pack", "--quiet", "--filename", tarballPath],
-      { cwd: packageDir, stdio: "inherit" },
-    );
-    if (pack.error || pack.status !== 0) {
+    if (!packTarball(packageDir, tarballPath)) {
       console.error(`failed to pack ${name}@${version}`);
       return false;
     }
-
-    const packedPackageJson = spawnSync(
-      "tar",
-      ["-xzf", tarballPath, "-O", "package/package.json"],
-      { encoding: "utf-8" },
-    );
-    if (packedPackageJson.stdout.includes('"workspace:')) {
+    if (hasWorkspaceReferences(tarballPath)) {
       console.error(
         `refusing to publish ${name}@${version}: tarball still contains "workspace:" references`,
       );
       return false;
     }
-
-    const publishArgs = [
-      "publish",
-      tarballPath,
-      "--access",
-      "public",
-      "--workspaces=false",
-    ];
-    if (dryRun) {
-      publishArgs.push("--dry-run");
-    }
-    const publish = spawnSync("npm", publishArgs, { stdio: "inherit" });
-    if (publish.error || publish.status !== 0) {
+    if (!publishTarball(tarballPath)) {
       console.error(`failed to publish ${name}@${version}`);
       return false;
     }
