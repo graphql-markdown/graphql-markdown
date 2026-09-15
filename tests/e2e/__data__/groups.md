@@ -43,23 +43,42 @@ This is an example of documentation grouping with GraphQL directive using the `g
     hierarchy: "entity",
   },
   skipDocDirective: ["@noDoc"],
-  customDirective: {
-    auth: {
-      descriptor: (directive, type) =>
-        directiveDescriptor(
-          directive,
-          type,
-          "This requires the current user to be in `${requires}` role.",
-        ),
+  decorators: {
+    authDescription: {
+      predicate: hasDirectiveNamed("auth"),
+      position: { into: "description" },
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("auth", options);
+        return directive
+          ? directiveDescriptor(
+              directive,
+              type,
+              "This requires the current user to be in `${requires}` role.",
+            )
+          : undefined;
+      },
     },
-    beta: {
-      tag: (directive) => ({
-        text: directive?.name?.toUpperCase(),
-        classname: "badge--danger",
-      }),
+    betaTag: {
+      predicate: hasDirectiveNamed("beta"),
+      position: { into: "tags" },
+      render: (_values, options) => {
+        const directive = getDirectiveFromSchema("beta", options);
+        return directive
+          ? options.formatMDXBadge({
+              text: directive.name.toUpperCase(),
+              classname: "badge--danger",
+            })
+          : undefined;
+      },
     },
-    complexity: {
-      descriptor: (directive, type) => {
+    complexityDescription: {
+      predicate: hasDirectiveNamed("complexity"),
+      position: { into: "description" },
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("complexity", options);
+        if (!directive) {
+          return undefined;
+        }
         const { value, multipliers } = getTypeDirectiveValues(directive, type);
         const multiplierDescription = multipliers
           ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`
@@ -102,23 +121,42 @@ This is an example of documentation grouping with GraphQL directive using the `g
         hierarchy: "entity",
       },
       skipDocDirective: ["@noDoc"],
-      customDirective: {
-        auth: {
-          descriptor: (directive, type) =>
-            directiveDescriptor(
-              directive,
-              type,
-              "This requires the current user to be in `${requires}` role.",
-            ),
+      decorators: {
+        authDescription: {
+          predicate: hasDirectiveNamed("auth"),
+          position: { into: "description" },
+          render: (_values, options, { type }) => {
+            const directive = getDirectiveFromSchema("auth", options);
+            return directive
+              ? directiveDescriptor(
+                  directive,
+                  type,
+                  "This requires the current user to be in `${requires}` role.",
+                )
+              : undefined;
+          },
         },
-        beta: {
-          tag: (directive) => ({
-            text: directive?.name?.toUpperCase(),
-            classname: "badge--danger",
-          }),
+        betaTag: {
+          predicate: hasDirectiveNamed("beta"),
+          position: { into: "tags" },
+          render: (_values, options) => {
+            const directive = getDirectiveFromSchema("beta", options);
+            return directive
+              ? options.formatMDXBadge({
+                  text: directive.name.toUpperCase(),
+                  classname: "badge--danger",
+                })
+              : undefined;
+          },
         },
-        complexity: {
-          descriptor: (directive, type) => {
+        complexityDescription: {
+          predicate: hasDirectiveNamed("complexity"),
+          position: { into: "description" },
+          render: (_values, options, { type }) => {
+            const directive = getDirectiveFromSchema("complexity", options);
+            if (!directive) {
+              return undefined;
+            }
             const { value, multipliers } = getTypeDirectiveValues(directive, type);
             const multiplierDescription = multipliers
               ? ` per ${multipliers.map((v) => `\`${v}\``).join(", ")}`

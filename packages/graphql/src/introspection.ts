@@ -279,7 +279,7 @@ export const getDirective = (
  * @returns the AST node carrying the `directives` list.
  *
  */
-const getDirectivesHolder = (
+export const getDirectivesHolder = (
   type: unknown,
 ): Maybe<{ readonly directives?: readonly DirectiveNode[] }> => {
   if (typeof type !== "object" || type === null) {

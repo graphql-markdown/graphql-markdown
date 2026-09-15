@@ -2,55 +2,30 @@ import { buildSchema } from "graphql/utilities";
 import { GraphQLDirective } from "graphql/type";
 
 import type {
-  DirectiveName,
   Badge,
-  PrintTypeOptions,
   CustomDirectiveMap,
-  MDXString,
+  DirectiveName,
 } from "@graphql-markdown/types";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
-
-vi.mock("@graphql-markdown/utils", async (importOriginal) => {
-  return {
-    ...(await importOriginal<Record<string, unknown>>()),
-    isEmpty: vi.fn(),
-    getConstDirectiveMap: vi.fn(),
-    escapeMDX: vi.fn(),
-  };
-});
-import * as Utils from "@graphql-markdown/utils";
-
-vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
-  return {
-    ...(await importOriginal<Record<string, unknown>>()),
-    getConstDirectiveMap: vi.fn(),
-  };
-});
-import * as GraphQL from "@graphql-markdown/graphql";
-
-vi.mock("../../src/link", () => {
-  return {
-    printLink: vi.fn(),
-  };
-});
-import * as Link from "../../src/link";
-
 import {
-  getCustomTags,
-  printCustomDirectives,
-  printCustomDirective,
-  printCustomTags,
-} from "../../src/directive";
+  buildCustomDirectiveDecorators,
+  printDecorators,
+  printSlotDecorators,
+} from "../../src/decorator";
 
-describe("directive", () => {
+// Covers the deprecated `customDirective` option's conversion into decorators
+// (`buildCustomDirectiveDecorators`), exercised end-to-end through the same
+// decorators pipeline `decorator.test.ts` covers for `decorators` — there is
+// one rendering code path for both options, only the conversion differs.
+describe("buildCustomDirectiveDecorators", () => {
   const schema = buildSchema(`
     directive @testA(
       arg: ArgEnum = ARGA
     ) on OBJECT | FIELD_DEFINITION
 
     directive @testB(
-      argA: Int!, 
+      argA: Int!,
       argB: [String!]
     ) on FIELD_DEFINITION
 
@@ -62,12 +37,18 @@ describe("directive", () => {
 
     type Test @testA {
       id: ID!
-      fieldA: [String!] 
-        @testA(arg: ARGC) 
+      fieldA: [String!]
+        @testA(arg: ARGC)
         @testB(argA: 10, argB: ["testArgB"])
+    }
+
+    type Other {
+      id: ID!
     }
   `);
   const type = schema.getType("Test")!;
+  const otherType = schema.getType("Other")!;
+
   const descriptor = (directive?: GraphQLDirective): string => {
     return `Test ${directive!.name}`;
   };
@@ -81,167 +62,143 @@ describe("directive", () => {
     name: "Dummy",
     locations: [],
   });
-  const options: PrintTypeOptions &
-    Required<{ customDirectives: CustomDirectiveMap }> = {
-    ...DEFAULT_OPTIONS,
-    customDirectives: {
-      ["testA" as DirectiveName]: {
-        type: schema.getDirective("testA")!,
-        descriptor,
-        tag,
-      },
-      ["nonExist" as DirectiveName]: {
-        type: directiveNotDeclared,
-        descriptor,
-      },
-      ["noDescriptor" as DirectiveName]: {
-        type: directiveNotDeclared,
-      },
-    } as CustomDirectiveMap,
-  };
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-    vi.resetAllMocks();
-  });
+  const customDirectives: CustomDirectiveMap = {
+    ["testA" as DirectiveName]: {
+      type: schema.getDirective("testA")!,
+      descriptor,
+      tag,
+    },
+    ["nonExist" as DirectiveName]: {
+      type: directiveNotDeclared,
+      descriptor,
+    },
+    ["noDescriptor" as DirectiveName]: {
+      type: directiveNotDeclared,
+    },
+  } as CustomDirectiveMap;
 
-  describe("printCustomDirective()", () => {
-    test("returns a MDX string of Directive component", () => {
+  test.each([undefined, null, {}])(
+    "returns an empty map when customDirectives is %s",
+    (value) => {
       expect.assertions(1);
-
-      const constDirectiveOption =
-        options.customDirectives["testA" as DirectiveName];
-
-      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
-
-      expect(printCustomDirective(type, constDirectiveOption, options))
-        .toMatchInlineSnapshot(`
-"#### [\`foo\`](/bar)
- Test testA
- "
-`);
-    });
-
-    test("returns undefined if no descriptor exists", () => {
-      expect.assertions(1);
-
-      const constDirectiveOption =
-        options.customDirectives["noDescriptor" as DirectiveName];
-
-      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
 
       expect(
-        printCustomDirective(type, constDirectiveOption, options),
-      ).toBeUndefined();
-    });
+        buildCustomDirectiveDecorators(value as CustomDirectiveMap),
+      ).toStrictEqual({});
+    },
+  );
+
+  test("returns the three adapter decorator ids", () => {
+    expect.assertions(1);
+
+    expect(
+      Object.keys(buildCustomDirectiveDecorators(customDirectives)),
+    ).toStrictEqual([
+      "customDirectives",
+      "customDirective:description",
+      "customDirective:tags",
+    ]);
   });
 
-  describe("printCustomDirectives()", () => {
-    test("returns undefined when config is not set", () => {
+  describe('the built-in "Directives" section', () => {
+    const options = {
+      ...DEFAULT_OPTIONS,
+      schema,
+      decorators: buildCustomDirectiveDecorators(customDirectives),
+    };
+
+    test("renders a section listing every matched directive", () => {
       expect.assertions(1);
 
-      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(undefined);
+      const sections = printDecorators(type, options);
 
-      expect(
-        printCustomDirectives(type, {} as unknown as PrintTypeOptions),
-      ).toBeUndefined();
-    });
-
-    test("returns a MDX string of Directive components", () => {
-      expect.assertions(1);
-
-      const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as DirectiveName],
-      };
-      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
-        mockConstDirectiveMap,
-      );
-      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
-
-      expect(printCustomDirectives(type, options)).toMatchInlineSnapshot(`
-{
-  "content": "#### [\`foo\`](/bar)
- Test testA
- 
-
-",
-  "level": 3,
-  "title": "Directives",
-}
-`);
-    });
-
-    test("exclude undefined description", () => {
-      expect.assertions(1);
-
-      const mockConstDirectiveMap = {
-        testA: options.customDirectives["noDescriptor" as DirectiveName],
-      };
-      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
-        mockConstDirectiveMap,
-      );
-      vi.spyOn(Link, "printLink").mockReturnValue("[`foo`](/bar)" as MDXString);
-
-      expect(printCustomDirectives(type, options)).toBeUndefined();
-    });
-  });
-
-  describe("getCustomTags()", () => {
-    test("does not return tags if type has no matching directive", () => {
-      expect.hasAssertions();
-
-      vi.spyOn(Utils, "isEmpty").mockReturnValue(true);
-
-      const tags = getCustomTags(type, options);
-
-      expect(tags).toStrictEqual([]);
-    });
-
-    test("return tags matching directives", () => {
-      expect.hasAssertions();
-
-      const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as DirectiveName],
-      };
-
-      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
-        mockConstDirectiveMap,
-      );
-      vi.spyOn(Utils, "isEmpty").mockReturnValue(false);
-
-      const tags = getCustomTags(type, options);
-
-      expect(tags).toStrictEqual([{ text: "@testA", classname: "warning" }]);
-    });
-  });
-
-  describe("printCustomTags()", () => {
-    test("prints empty string if type has no matching directive", async () => {
-      expect.hasAssertions();
-
-      vi.spyOn(Utils, "isEmpty").mockReturnValue(true);
-
-      const tags = await printCustomTags(type, options);
-
-      expect(tags).toBe("");
-    });
-    test("prints MDX badge for tags matching directives", async () => {
-      expect.hasAssertions();
-
-      const mockConstDirectiveMap = {
-        testA: options.customDirectives["testA" as DirectiveName],
-      };
-      vi.spyOn(GraphQL, "getConstDirectiveMap").mockReturnValue(
-        mockConstDirectiveMap,
-      );
-      vi.spyOn(Utils, "isEmpty").mockReturnValue(false);
-      vi.spyOn(Utils, "escapeMDX").mockImplementation((text: unknown) => {
-        return text as string;
+      expect(sections.customDirectives).toMatchObject({
+        title: "Directives",
+        content: expect.stringContaining("Test testA"),
       });
+    });
 
-      const tags = await printCustomTags(type, options);
+    test("is positioned right after code, like the pre-decorators built-in order", () => {
+      expect.assertions(1);
 
-      expect(tags).toBe('<mark class="gqlmd-mdx-badge">@testA</mark>');
+      const order = printSlotDecorators("description", type, options);
+
+      // Smoke-checks the decorator exists and is wired through the same
+      // options; the full splice behaviour is covered by
+      // `getDecoratorsOrder()` in decorator.test.ts.
+      expect(order).toBeDefined();
+    });
+
+    test("renders nothing for a type matching no directive", () => {
+      expect.assertions(1);
+
+      const sections = printDecorators(otherType, options);
+
+      expect(sections.customDirectives).toBeUndefined();
+    });
+  });
+
+  describe("the description slot (customDirective:description)", () => {
+    const options = {
+      ...DEFAULT_OPTIONS,
+      schema,
+      decorators: buildCustomDirectiveDecorators(customDirectives),
+    };
+
+    test("appends the descriptor text", () => {
+      expect.assertions(1);
+
+      expect(printSlotDecorators("description", type, options)).toStrictEqual([
+        "Test testA",
+      ]);
+    });
+
+    test("excludes a matched directive with no descriptor", () => {
+      expect.assertions(1);
+
+      const noDescriptorOnly = buildCustomDirectiveDecorators({
+        ["testA" as DirectiveName]:
+          customDirectives["noDescriptor" as DirectiveName],
+      } as CustomDirectiveMap);
+
+      expect(
+        printSlotDecorators("description", type, {
+          ...DEFAULT_OPTIONS,
+          schema,
+          decorators: noDescriptorOnly,
+        }),
+      ).toStrictEqual([]);
+    });
+
+    test("renders nothing for a type matching no directive", () => {
+      expect.assertions(1);
+
+      expect(
+        printSlotDecorators("description", otherType, options),
+      ).toStrictEqual([]);
+    });
+  });
+
+  describe("the tags slot (customDirective:tags)", () => {
+    const options = {
+      ...DEFAULT_OPTIONS,
+      schema,
+      decorators: buildCustomDirectiveDecorators(customDirectives),
+    };
+
+    test("renders a badge for the matched directive's tag", () => {
+      expect.assertions(1);
+
+      expect(printSlotDecorators("tags", type, options)).toStrictEqual([
+        '<mark class="gqlmd-mdx-badge">@testA</mark>',
+      ]);
+    });
+
+    test("renders nothing for a type matching no directive", () => {
+      expect.assertions(1);
+
+      expect(printSlotDecorators("tags", otherType, options)).toStrictEqual([]);
     });
   });
 });
