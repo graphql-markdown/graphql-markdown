@@ -361,8 +361,22 @@ npm i @graphql-markdown/helpers
 
 ### `@graphql-markdown/graphql`
 
-- `hasDirectiveNamed`, `hasAnyDirective`, `isEntity`, `and`, `or`, `not`, `always` — predicate helpers (see [Predicate](#predicate)).
-- `getDirectiveFromSchema` — resolves a directive's schema definition by name (see [Resolve](#resolve)).
+Predicate helpers (see [Predicate](#predicate)):
+
+- [`hasDirectiveNamed`](/api/graphql/predicate#hasdirectivenamed)
+- [`hasAnyDirective`](/api/graphql/predicate#hasanydirective)
+- [`isEntity`](/api/graphql/predicate#isentity)
+- [`and`](/api/graphql/predicate#and), [`or`](/api/graphql/predicate#or), [`not`](/api/graphql/predicate#not)
+- [`always`](/api/graphql/predicate#always)
+- [`isOperation`](/api/graphql/guard#isoperation) and the other type guards — any single-argument one doubles as a predicate (see [response type for operations](#response-type-for-operations)).
+
+Directive-value helpers (see [Resolve](#resolve)):
+
+- [`getDirectiveFromSchema`](/api/graphql/predicate#getdirectivefromschema)
 - [`getTypeDirectiveValues`](/api/graphql/introspection#gettypedirectivevalues)
 - [`getTypeDirectiveValuesList`](/api/graphql/introspection#gettypedirectivevalueslist)
 - [`getTypeDirectiveArgValue`](/api/graphql/introspection#gettypedirectiveargvalue)
+
+### `@graphql-markdown/printer-legacy`
+
+- [`Printer.printCode`](/api/printer-legacy/printer#printcode) — renders a type's SDL as a code block, reused in [response type for operations](#response-type-for-operations).
