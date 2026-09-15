@@ -63,6 +63,12 @@ decorators: {
 }
 ```
 
+:::tip
+
+`resolve` here is exactly what [`directiveOccurrences`](#resolve) does — use `resolve: directiveOccurrences("httpResponse")` instead of spelling it out, unless the values need further transformation.
+
+:::
+
 **3. The section is rendered on the page**
 
 ```md
@@ -123,7 +129,19 @@ A decorator declaring an explicit `predicate` but no `resolve` still renders onc
 
 `resolve` is `(type, options) => values`, producing the records `render` receives; it defaults to producing none. A decorator declaring neither `predicate` nor `resolve` is a no-op by construction (`predicate` matches everything, `resolve` produces nothing to substitute) — declare at least one.
 
-For a directive-driven decorator that needs the directive's argument values, read every occurrence with `getDirectiveFromSchema` + `getTypeDirectiveValuesList` (one record per occurrence, in schema declaration order — required for repeatable directives):
+For a directive-driven decorator that needs the directive's argument values, `@graphql-markdown/graphql` provides a ready-made `resolve`:
+
+```js
+const { directiveOccurrences, directiveOccurrence } = require("@graphql-markdown/graphql");
+
+// one record per occurrence, in schema declaration order — for a `repeatable` directive
+resolve: directiveOccurrences("httpResponse"),
+
+// a single record — for a directive that is not `repeatable`
+resolve: directiveOccurrence("meta"),
+```
+
+Write `resolve` by hand instead when the values need further transformation, or do not come from a directive's arguments at all — for instance, derived from a nested field, or from a different data source entirely:
 
 ```js
 resolve: (type, options) => {
@@ -132,7 +150,7 @@ resolve: (type, options) => {
 },
 ```
 
-Provide a custom `resolve` whenever the rendered values do not come from a directive's arguments at all — for instance, derived from a nested field, or from a different data source entirely.
+`directiveOccurrences`/`directiveOccurrence` are exactly this pattern, packaged up.
 
 ### Render
 
@@ -150,7 +168,7 @@ render: (values, options, context) => {
 - `context.type` — the GraphQL node being printed.
 - `context.entity` — the node's schema entity kind, when resolvable.
 
-There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
+There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely — or with `@graphql-markdown/helpers`'s `withDirective`, which wraps exactly that lookup (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
 
 Optional directive arguments that were omitted are absent from a resolved record rather than set to `undefined`, so give them a fallback.
 
@@ -204,17 +222,14 @@ directive @httpHeader(
 ```
 
 ```js
-const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { directiveOccurrences, hasDirectiveNamed } = require("@graphql-markdown/graphql");
 
 {
   httpHeader: {
     predicate: hasDirectiveNamed("httpHeader"),
     title: "Headers",
     position: { after: "metadata" },
-    resolve: (type, options) => {
-      const directive = getDirectiveFromSchema("httpHeader", options);
-      return directive ? getTypeDirectiveValuesList(directive, type) : [];
-    },
+    resolve: directiveOccurrences("httpHeader"),
     render: (values) => {
       return values
         .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
@@ -246,25 +261,21 @@ const { hasDirectiveNamed } = require("@graphql-markdown/graphql");
 
 ### Meta object
 
-A directive naming another documented type, rendered as a link to its page. Only the first occurrence is read, with `getTypeDirectiveValues` (singular), as `@meta` is not repeatable.
+A directive naming another documented type, rendered as a link to its page. `@meta` is not `repeatable`, so `directiveOccurrence` (singular) resolves its one occurrence.
 
 ```graphql
 directive @meta(type: String!) on FIELD_DEFINITION
 ```
 
 ```js
-const { getDirectiveFromSchema, getTypeDirectiveValues, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { directiveOccurrence, hasDirectiveNamed } = require("@graphql-markdown/graphql");
 
 {
   meta: {
     predicate: hasDirectiveNamed("meta"),
     title: "Meta",
     position: { after: "code" },
-    resolve: (type, options) => {
-      const directive = getDirectiveFromSchema("meta", options);
-      const value = directive && getTypeDirectiveValues(directive, type);
-      return value ? [value] : [];
-    },
+    resolve: directiveOccurrence("meta"),
     render: ([value], options) => {
       const slug = String(value.type).toLowerCase();
       return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
@@ -322,25 +333,21 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#disp
 +   authDescription: {
 +     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "description" },
-+     render: (values, options, { type }) => {
-+       const directive = getDirectiveFromSchema("auth", options);
-+       return directive
-+         ? directiveDescriptor(directive, type, "Requires the `${requires}` role.")
-+         : undefined;
-+     },
++     render: withDirective("auth", (directive, options, { type }) =>
++       directiveDescriptor(directive, type, "Requires the `${requires}` role."),
++     ),
 +   },
 +   authTag: {
 +     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "tags" },
-+     render: (values, options) => {
-+       const directive = getDirectiveFromSchema("auth", options);
-+       return directive ? options.formatMDXBadge({ text: `@${directive.name}` }) : undefined;
-+     },
++     render: withDirective("auth", (directive, options) =>
++       options.formatMDXBadge({ text: `@${directive.name}` }),
++     ),
 +   },
 + },
 ```
 
-A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values, so `render` looks it up itself with `getDirectiveFromSchema`. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
+A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
 
 ## Helpers
 
@@ -360,6 +367,7 @@ npm i @graphql-markdown/helpers
 
 - [`directiveDescriptor`](/api/helpers/directives/descriptor)
 - [`directiveTag`](/api/helpers/directives/tag)
+- [`withDirective`](/api/helpers/directives/with-directive) — wraps a `render` that only needs a directive's definition (see [migrating from `customDirective`](#migrating-from-customdirective)).
 
 ### `@graphql-markdown/graphql`
 
@@ -374,6 +382,8 @@ Predicate helpers (see [Predicate](#predicate)):
 
 Directive-value helpers (see [Resolve](#resolve)):
 
+- [`directiveOccurrences`](/api/graphql/predicate#directiveoccurrences) — ready-made `resolve` for a `repeatable` directive.
+- [`directiveOccurrence`](/api/graphql/predicate#directiveoccurrence) — ready-made `resolve` for a non-repeatable directive.
 - [`getDirectiveFromSchema`](/api/graphql/predicate#getdirectivefromschema)
 - [`getTypeDirectiveValues`](/api/graphql/introspection#gettypedirectivevalues)
 - [`getTypeDirectiveValuesList`](/api/graphql/introspection#gettypedirectivevalueslist)

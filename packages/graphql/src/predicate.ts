@@ -21,6 +21,7 @@ import type {
 
 import {
   getDirectivesHolder,
+  getTypeDirectiveValues,
   getTypeDirectiveValuesList,
   GraphQLSchema,
 } from "./introspection";
@@ -221,6 +222,30 @@ export const getDirectiveFromSchema = (
 };
 
 /**
+ * Shared by {@link directiveOccurrences} and {@link directiveOccurrence}:
+ * both resolve to nothing when the named directive is absent from the
+ * schema, and otherwise delegate to a directive-specific reader.
+ *
+ * @internal
+ */
+const resolveDirectiveValues = (
+  name: string,
+  read: (
+    directive: GraphQLDirective,
+    type: unknown,
+  ) => Record<string, unknown>[],
+): DecoratorResolver => {
+  return (
+    type: unknown,
+    options: PrintTypeOptions,
+  ): Record<string, unknown>[] => {
+    const directive = getDirectiveFromSchema(name, options);
+
+    return directive ? read(directive, type) : [];
+  };
+};
+
+/**
  * Builds a resolver reading every occurrence of a directive off the node being
  * printed, as one record of arguments per occurrence (see
  * {@link getTypeDirectiveValuesList}, which this delegates to and which also
@@ -233,16 +258,25 @@ export const getDirectiveFromSchema = (
  *
  */
 export const directiveOccurrences = (name: string): DecoratorResolver => {
-  return (
-    type: unknown,
-    options: PrintTypeOptions,
-  ): Record<string, unknown>[] => {
-    const directive = getDirectiveFromSchema(name, options);
+  return resolveDirectiveValues(name, getTypeDirectiveValuesList);
+};
 
-    if (!directive) {
-      return [];
-    }
-
-    return getTypeDirectiveValuesList(directive, type);
-  };
+/**
+ * Builds a resolver reading a single, non-repeatable directive's argument
+ * values off the node being printed (see {@link getTypeDirectiveValues},
+ * which this delegates to). Use {@link directiveOccurrences} instead for a
+ * `repeatable` directive, where more than one occurrence can carry values.
+ *
+ * @param name - the schema directive name to read.
+ *
+ * @returns a {@link DecoratorResolver} resolving that directive's single
+ * occurrence as a one-record array, or an empty array when the schema, the
+ * directive, or that occurrence is absent.
+ *
+ */
+export const directiveOccurrence = (name: string): DecoratorResolver => {
+  return resolveDirectiveValues(name, (directive, type) => {
+    const value = getTypeDirectiveValues(directive, type);
+    return value ? [value] : [];
+  });
 };

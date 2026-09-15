@@ -4,9 +4,10 @@ import type { GraphQLObjectType } from "graphql/type";
 import type { Decorators, PrintTypeOptions } from "@graphql-markdown/types";
 import {
   and,
+  directiveOccurrence,
+  directiveOccurrences,
   getDirectiveFromSchema,
   getNamedType,
-  getTypeDirectiveValues,
   getTypeDirectiveValuesList,
   hasDirectiveNamed,
   isEntity,
@@ -159,6 +160,41 @@ describe("docs/advanced/decorators.md examples", () => {
         ),
       ).toBeUndefined();
     });
+
+    test("directiveOccurrences/directiveOccurrence match their hand-written equivalents", () => {
+      expect.assertions(2);
+
+      const schema = buildSchema(`
+        directive @httpResponse(
+          code: Int!
+          description: String
+        ) repeatable on FIELD_DEFINITION
+
+        directive @meta(type: String!) on FIELD_DEFINITION
+
+        type Query {
+          user: String
+            @httpResponse(code: 200, description: "OK")
+            @httpResponse(code: 404, description: "User not found")
+          post: String @meta(type: "Post")
+        }
+      `);
+
+      const options = { ...DEFAULT_OPTIONS, schema } as PrintTypeOptions;
+      const queryFields = schema.getQueryType()!.getFields();
+
+      const handWritten = (type: unknown, printOptions: PrintTypeOptions) => {
+        const directive = getDirectiveFromSchema("httpResponse", printOptions);
+        return directive ? getTypeDirectiveValuesList(directive, type) : [];
+      };
+
+      expect(
+        directiveOccurrences("httpResponse")(queryFields.user, options),
+      ).toStrictEqual(handWritten(queryFields.user, options));
+      expect(
+        directiveOccurrence("meta")(queryFields.post, options),
+      ).toStrictEqual([{ type: "Post" }]);
+    });
   });
 
   describe("Examples", () => {
@@ -187,13 +223,7 @@ describe("docs/advanced/decorators.md examples", () => {
           predicate: hasDirectiveNamed("httpHeader"),
           title: "Headers",
           position: { after: "metadata" as const },
-          resolve: (type: unknown, printOptions: PrintTypeOptions) => {
-            const directive = getDirectiveFromSchema(
-              "httpHeader",
-              printOptions,
-            );
-            return directive ? getTypeDirectiveValuesList(directive, type) : [];
-          },
+          resolve: directiveOccurrences("httpHeader"),
           render: (values: Record<string, unknown>[]): string => {
             return values
               .map((value) => {
@@ -277,11 +307,7 @@ describe("docs/advanced/decorators.md examples", () => {
           predicate: hasDirectiveNamed("meta"),
           title: "Meta",
           position: { after: "code" as const },
-          resolve: (type: unknown, printOptions: PrintTypeOptions) => {
-            const directive = getDirectiveFromSchema("meta", printOptions);
-            const value = directive && getTypeDirectiveValues(directive, type);
-            return value ? [value] : [];
-          },
+          resolve: directiveOccurrence("meta"),
           render: (
             [value]: Record<string, unknown>[],
             printOptions: PrintTypeOptions,
@@ -363,11 +389,12 @@ describe("docs/advanced/decorators.md examples", () => {
     const type = schema.getType("User")!;
 
     // Stand-ins matching `directiveDescriptor`/`directiveTag`'s exact
-    // `(directive, type, template?)`/`(directive, type)` signature — those
-    // helpers' own behavior is covered in
-    // packages/helpers/tests/unit/directives; what this test verifies is
-    // the *wiring* the migration guide describes: a `predicate` gate plus a
-    // `getDirectiveFromSchema` lookup inside `render`, with no `resolve`.
+    // `(directive, type, template?)`/`(directive, type)` signature, and
+    // `withDirective`'s exact `(name, render)` signature — those helpers'
+    // own behavior is covered in packages/helpers/tests/unit/directives;
+    // what this test verifies is the *wiring* the migration guide
+    // describes: a `predicate` gate plus a directive-definition lookup
+    // inside `render`, with no `resolve`.
     const directiveDescriptor = (
       directive: { description?: string | null },
       _node: unknown,
@@ -380,28 +407,38 @@ describe("docs/advanced/decorators.md examples", () => {
         text: `@${directive.name}`,
       };
     };
+    const withDirective = (
+      name: string,
+      render: (
+        directive: NonNullable<ReturnType<typeof getDirectiveFromSchema>>,
+        options: PrintTypeOptions,
+        context: { type: unknown },
+      ) => string | undefined,
+    ) => {
+      return (
+        _values: Record<string, unknown>[],
+        printOptions: PrintTypeOptions,
+        context: { type: unknown },
+      ): string | undefined => {
+        const directive = getDirectiveFromSchema(name, printOptions);
+        return directive ? render(directive, printOptions, context) : undefined;
+      };
+    };
 
-    test("authDescription renders via predicate + render-side getDirectiveFromSchema, no resolve", () => {
+    test("authDescription renders via withDirective, no resolve", () => {
       expect.assertions(1);
 
       const authDescription = {
         id: "authDescription",
         predicate: hasDirectiveNamed("auth"),
         position: { into: "description" as const },
-        render: (
-          _values: Record<string, unknown>[],
-          printOptions: PrintTypeOptions,
-          { type: node }: { type: unknown },
-        ) => {
-          const directive = getDirectiveFromSchema("auth", printOptions);
-          return directive
-            ? directiveDescriptor(
-                directive,
-                node,
-                "Requires the `${requires}` role.",
-              )
-            : undefined;
-        },
+        render: withDirective("auth", (directive, _options, { type: node }) => {
+          return directiveDescriptor(
+            directive,
+            node,
+            "Requires the `${requires}` role.",
+          );
+        }),
       };
 
       expect(
@@ -419,15 +456,9 @@ describe("docs/advanced/decorators.md examples", () => {
         id: "authTag",
         predicate: hasDirectiveNamed("auth"),
         position: { into: "tags" as const },
-        render: (
-          _values: Record<string, unknown>[],
-          printOptions: PrintTypeOptions,
-        ) => {
-          const directive = getDirectiveFromSchema("auth", printOptions);
-          return directive
-            ? printOptions.formatMDXBadge!(directiveTag(directive))
-            : undefined;
-        },
+        render: withDirective("auth", (directive, renderOptions) => {
+          return renderOptions.formatMDXBadge!(directiveTag(directive));
+        }),
       };
 
       expect(

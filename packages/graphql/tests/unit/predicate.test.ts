@@ -4,6 +4,7 @@ import type { PrintTypeOptions } from "@graphql-markdown/types";
 import {
   always,
   and,
+  directiveOccurrence,
   directiveOccurrences,
   getDirectiveFromSchema,
   hasAnyDirective,
@@ -20,6 +21,12 @@ const schema = buildSchema(`
   ) repeatable on OBJECT | FIELD_DEFINITION
 
   directive @noArgDirective on OBJECT
+
+  directive @meta(kind: String!) on OBJECT
+
+  type WithMeta @meta(kind: "info") {
+    id: ID!
+  }
 
   enum Status {
     ACTIVE
@@ -56,6 +63,7 @@ const schema = buildSchema(`
 const withDirective = schema.getType("WithDirective")!;
 const withoutDirective = schema.getType("WithoutDirective")!;
 const withOtherDirective = schema.getType("WithOtherDirective")!;
+const withMeta = schema.getType("WithMeta")!;
 const status = schema.getType("Status")!;
 const date = schema.getType("Date")!;
 const filter = schema.getType("Filter")!;
@@ -329,6 +337,42 @@ describe("directiveOccurrences", () => {
 
     expect(
       directiveOccurrences("httpResponse")(withDirective, {
+        basePath: "/",
+      } as PrintTypeOptions),
+    ).toStrictEqual([]);
+  });
+});
+
+describe("directiveOccurrence", () => {
+  test("returns the single occurrence as a one-record array", () => {
+    expect.assertions(1);
+
+    expect(directiveOccurrence("meta")(withMeta, baseOptions)).toStrictEqual([
+      { kind: "info" },
+    ]);
+  });
+
+  test("returns an empty array when the node has no occurrence", () => {
+    expect.assertions(1);
+
+    expect(
+      directiveOccurrence("meta")(withoutDirective, baseOptions),
+    ).toStrictEqual([]);
+  });
+
+  test("returns an empty array when the directive is absent from the schema", () => {
+    expect.assertions(1);
+
+    expect(
+      directiveOccurrence("doesNotExist")(withMeta, baseOptions),
+    ).toStrictEqual([]);
+  });
+
+  test("returns an empty array when options.schema is missing", () => {
+    expect.assertions(1);
+
+    expect(
+      directiveOccurrence("meta")(withMeta, {
         basePath: "/",
       } as PrintTypeOptions),
     ).toStrictEqual([]);
