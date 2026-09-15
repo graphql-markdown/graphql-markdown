@@ -3,7 +3,7 @@ import type {
   CliOptions,
   ConfigOptions,
   CustomDirective,
-  CustomSections,
+  Decorators,
   DirectiveName,
   ExtensionProjectConfig,
   GraphQLDirective,
@@ -37,7 +37,7 @@ import {
   parseGroupByOption,
   parseHomepageOption,
   TypeHierarchy,
-  getCustomSectionsOption,
+  getDecoratorsOption,
 } from "../../src/config";
 
 import * as graphqlConfigModule from "../../src/graphql-config";
@@ -338,7 +338,6 @@ describe("config", () => {
           sectionHeaderId: false,
         },
         printTypeOptions: {
-          customSections: undefined,
           deprecated: "group",
           exampleSection: { directive: "example" },
           hierarchy: TypeHierarchy.ENTITY,
@@ -363,6 +362,7 @@ describe("config", () => {
       expect(config).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         customDirective: configFileOpts.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: configFileOpts.diffMethod,
         docOptions: {
           ...configFileOpts.docOptions,
@@ -476,6 +476,7 @@ describe("config", () => {
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
       });
     });
 
@@ -554,6 +555,7 @@ describe("config", () => {
         skipDocDirective: [],
         onlyDocDirective: [],
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
       });
     });
 
@@ -575,6 +577,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -613,6 +616,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -655,6 +659,7 @@ describe("config", () => {
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
         customDirective: DEFAULT_OPTIONS.customDirective,
+        decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
           ...DEFAULT_OPTIONS.docOptions,
@@ -815,8 +820,8 @@ describe("config", () => {
     );
   });
 
-  describe("getCustomSectionsOption", () => {
-    const section = {
+  describe("getDecoratorsOption", () => {
+    const decorator = {
       render: (): string => {
         return "content";
       },
@@ -827,7 +832,7 @@ describe("config", () => {
       (value) => {
         expect.assertions(1);
 
-        expect(getCustomSectionsOption(value)).toBeUndefined();
+        expect(getDecoratorsOption(value)).toBeUndefined();
       },
     );
 
@@ -837,78 +842,165 @@ describe("config", () => {
         expect.assertions(1);
 
         expect(() => {
-          getCustomSectionsOption(value as unknown as CustomSections);
+          getDecoratorsOption(value as unknown as Decorators);
         }).toThrow(
-          new TypeError(
-            "Option 'printTypeOptions.customSections' must be a map of directive names.",
-          ),
+          new TypeError("Option 'decorators' must be a map of decorator ids."),
         );
       },
     );
 
-    test("returns the sections if valid", () => {
+    test("returns the decorators if valid, with an id that differs from any directive name", () => {
       expect.assertions(1);
 
       expect(
-        getCustomSectionsOption({ httpResponse: section } as CustomSections),
-      ).toStrictEqual({ httpResponse: section });
+        getDecoratorsOption({ responses: decorator } as Decorators),
+      ).toStrictEqual({ responses: decorator });
+    });
+
+    test("returns the decorators when predicate and resolve are both set", () => {
+      expect.assertions(1);
+
+      const full = {
+        ...decorator,
+        predicate: (): boolean => {
+          return true;
+        },
+        resolve: (): Record<string, unknown>[] => {
+          return [];
+        },
+      };
+
+      expect(
+        getDecoratorsOption({ responses: full } as Decorators),
+      ).toStrictEqual({ responses: full });
     });
 
     test("throws a type error if the option is a list", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption([section] as unknown as CustomSections);
+        getDecoratorsOption([decorator] as unknown as Decorators);
+      }).toThrow(
+        new TypeError("Option 'decorators' must be a map of decorator ids."),
+      );
+    });
+
+    test("throws a type error if a decorator has no id", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({ "": decorator } as Decorators);
       }).toThrow(
         new TypeError(
-          "Option 'printTypeOptions.customSections' must be a map of directive names.",
+          "Option 'decorators' requires a non-empty id for each decorator.",
         ),
       );
     });
 
-    test("throws a type error if a section has no directive name", () => {
+    test("throws an error if a decorator id is reserved", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption({ "": section } as CustomSections);
-      }).toThrow(
-        new TypeError(
-          "Option 'printTypeOptions.customSections' requires a directive name for each section.",
-        ),
-      );
+        getDecoratorsOption({ metadata: decorator } as Decorators);
+      }).toThrow("Decorator id 'metadata' is reserved, please use another id.");
     });
 
-    test("throws an error if a section name is reserved", () => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomSectionsOption({ metadata: section } as CustomSections);
-      }).toThrow(
-        "Custom section name 'metadata' is reserved, please use another name.",
-      );
-    });
-
-    test("ignores a section named '__proto__', which is not an own property", () => {
+    test("ignores a decorator named '__proto__', which is not an own property", () => {
       expect.assertions(1);
 
       expect(
-        getCustomSectionsOption({ __proto__: section } as CustomSections),
+        getDecoratorsOption({ __proto__: decorator } as Decorators),
       ).toStrictEqual({});
     });
 
-    test("throws a type error if a section has no render function", () => {
+    test("throws a type error if a decorator has no render function", () => {
       expect.assertions(1);
 
       expect(() => {
-        getCustomSectionsOption({
-          httpResponse: { render: {} },
-        } as unknown as CustomSections);
+        getDecoratorsOption({
+          responses: { render: {} },
+        } as unknown as Decorators);
+      }).toThrow(
+        new TypeError("Decorator 'responses' requires a 'render' function."),
+      );
+    });
+
+    test.each([null, undefined])(
+      "throws the same friendly error, not a raw TypeError, when a decorator entry is %s",
+      (value) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption({ responses: value } as unknown as Decorators);
+        }).toThrow(
+          new TypeError("Decorator 'responses' requires a 'render' function."),
+        );
+      },
+    );
+
+    test("throws a type error if predicate is not a function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({
+          responses: { ...decorator, predicate: "nope" },
+        } as unknown as Decorators);
       }).toThrow(
         new TypeError(
-          "Custom section 'httpResponse' requires a 'render' function.",
+          "Decorator 'responses' option 'predicate' must be a function.",
         ),
       );
     });
+
+    test("throws a type error if resolve is not a function", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({
+          responses: { ...decorator, resolve: "nope" },
+        } as unknown as Decorators);
+      }).toThrow(
+        new TypeError(
+          "Decorator 'responses' option 'resolve' must be a function.",
+        ),
+      );
+    });
+
+    test.each([
+      { into: "tags" },
+      { after: "metadata" },
+      { before: "metadata" },
+    ])("returns the decorators when position is %p", (position) => {
+      expect.assertions(1);
+
+      const withPosition = { ...decorator, position };
+
+      expect(
+        getDecoratorsOption({ responses: withPosition } as Decorators),
+      ).toStrictEqual({ responses: withPosition });
+    });
+
+    test.each([
+      {},
+      { after: "metadata", into: "tags" },
+      { after: "" },
+      { into: 123 },
+    ])(
+      "throws a type error if position does not set exactly one of after/before/into to a non-empty string (%p)",
+      (position) => {
+        expect.assertions(1);
+
+        expect(() => {
+          getDecoratorsOption({
+            responses: { ...decorator, position },
+          } as unknown as Decorators);
+        }).toThrow(
+          new TypeError(
+            "Decorator 'responses' option 'position' must set exactly one of 'after', 'before', or 'into' to a non-empty string.",
+          ),
+        );
+      },
+    );
   });
 
   describe("getCustomDirectives", () => {
@@ -994,6 +1086,25 @@ describe("config", () => {
         },
       }
       `);
+    });
+
+    test("logs a deprecation warning when configured", () => {
+      expect.hasAssertions();
+
+      getCustomDirectives({ test: { descriptor: (): void => {} } });
+
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining('"customDirective"'),
+        "warn",
+      );
+    });
+
+    test("does not log when not configured", () => {
+      expect.hasAssertions();
+
+      getCustomDirectives(undefined);
+
+      expect(log).not.toHaveBeenCalled();
     });
   });
 

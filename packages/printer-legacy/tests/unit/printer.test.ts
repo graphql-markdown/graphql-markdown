@@ -29,10 +29,38 @@ import * as Utils from "@graphql-markdown/utils";
 
 vi.mock("@graphql-markdown/graphql", () => {
   return {
+    always: vi.fn(() => {
+      return (): boolean => {
+        return true;
+      };
+    }),
+    and: vi.fn(
+      (...predicates: ((type: unknown, options: unknown) => boolean)[]) => {
+        return (type: unknown, options: unknown): boolean => {
+          return predicates.every((predicate) => {
+            return predicate(type, options);
+          });
+        };
+      },
+    ),
     getConstDirectiveMap: vi.fn(),
+    getDirectiveFromSchema: vi.fn(() => {
+      return undefined;
+    }),
+    getSchemaEntity: vi.fn(),
     getTypeName: vi.fn(),
+    GraphQLSchema: class {},
     hasDirective: vi.fn(),
+    hasDirectiveNamed: vi.fn(() => {
+      return (): boolean => {
+        return false;
+      };
+    }),
+    instanceOf: vi.fn(() => {
+      return false;
+    }),
     isDirectiveType: vi.fn(),
+    isEntity: vi.fn(),
     isEnumType: vi.fn(),
     isInputType: vi.fn(),
     isInterfaceType: vi.fn(),
@@ -182,8 +210,7 @@ describe("Printer", () => {
         {
           "basePath": "/schema",
           "collapsible": undefined,
-          "customDirectives": undefined,
-          "customSections": undefined,
+          "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
           "exampleSection": undefined,
@@ -252,8 +279,7 @@ describe("Printer", () => {
         {
           "basePath": "/test",
           "collapsible": undefined,
-          "customDirectives": undefined,
-          "customSections": undefined,
+          "decorators": undefined,
           "deprecated": "default",
           "entity": undefined,
           "exampleSection": {
@@ -531,8 +557,6 @@ describe("Printer", () => {
   describe("printType()", () => {
     const methods = [
       "printCode",
-      "printCustomDirectives",
-      "printCustomTags",
       "printDescription",
       "printHeader",
       "printRelations",
@@ -801,8 +825,6 @@ describe("Printer", () => {
       vi.spyOn(Link, "hasPrintableDirective").mockReturnValue(true);
       // Mock printDescription since it's a static property pointing to external function
       (Printer as any).printDescription = vi.fn().mockReturnValue("");
-      (Printer as any).printCustomDirectives = vi.fn().mockReturnValue("");
-      (Printer as any).printCustomTags = vi.fn().mockReturnValue("");
     });
 
     afterEach(() => {

@@ -13,6 +13,12 @@ keywords:
 
 # Custom schema directives handling
 
+:::caution
+
+`customDirective` is deprecated in favor of [`decorators`](/docs/advanced/decorators), which supersedes it. See [migrating from `customDirective`](/docs/advanced/decorators#migrating-from-customdirective).
+
+:::
+
 For directives applied to the schema, you can select which ones to be rendered for the types or in the locations they are declared. Information about the custom directives includes a custom description.
 
 For example, we have one query called `searchRole`, and we want to limit access to `ADMIN` user roles only.

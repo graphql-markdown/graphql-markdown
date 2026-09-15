@@ -4,4 +4,5 @@ export * from "./group";
 export * from "./guard";
 export * from "./introspection";
 export * from "./loader";
+export * from "./predicate";
 export * from "./relation";

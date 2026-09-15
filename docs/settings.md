@@ -37,11 +37,25 @@ The base URL used by Docusaurus. It will also be used as the folder name under [
 
 ## `customDirective`
 
+:::caution
+
+Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/advanced/decorators#migrating-from-customdirective).
+
+:::
+
 Use this option to render directive information for types (see [custom directive](/docs/advanced/custom-directive)).
 
 | Setting           | CLI flag        | Default     |
 | ----------------- | --------------- | ----------- |
 | `customDirective` | _not supported_ | `undefined` |
+
+## `decorators`
+
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/advanced/decorators)). Supersedes [`customDirective`](#customdirective).
+
+| Setting      | CLI flag        | Default     |
+| ------------ | --------------- | ----------- |
+| `decorators` | _not supported_ | `undefined` |
 
 ## `diffMethod`
 
@@ -371,7 +385,6 @@ Use these options to toggle the type of information rendered on pages:
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
-- `customSections`: add directive-driven sections to type pages (see [Custom sections](/docs/advanced/custom-sections)).
 - `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/advanced/examples)).
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
@@ -383,7 +396,6 @@ Use these options to toggle the type of information rendered on pages:
 
 | Setting                             | CLI flag                | Default   |
 | ----------------------------------- | ----------------------- | --------- |
-| `printTypeOptions.customSections`   | n/a                     | —         |
 | `printTypeOptions.deprecated`       | `--deprecated <option>` | `default` |
 | `printTypeOptions.exampleSection`   | n/a                     | —         |
 | `printTypeOptions.hierarchy`        | `--hierarchy`           | `api`     |

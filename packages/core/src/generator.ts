@@ -33,6 +33,8 @@ import {
   loadSchema,
 } from "@graphql-markdown/graphql";
 
+import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
+
 import { toString } from "@graphql-markdown/utils";
 
 import { dirname } from "node:path";
@@ -343,6 +345,7 @@ export const resolveSkipAndOnlyDirectives = (
 export const generateDocFromSchema = async ({
   baseURL,
   customDirective,
+  decorators,
   diffMethod,
   docOptions,
   force,
@@ -426,7 +429,16 @@ export const generateDocFromSchema = async ({
   const rootTypes = getSchemaMap(schema);
   events.emit(SchemaEvents.AFTER_MAP, new SchemaEvent({ schema, rootTypes }));
 
-  const customDirectives = getCustomDirectives(rootTypes, customDirective);
+  // `customDirective` is schema-resolved here, then immediately converted
+  // into decorators and merged into `decorators` itself: the printer never
+  // sees `customDirective` or the resolved `CustomDirectiveMap` it produces,
+  // only the merged decorators (see `buildCustomDirectiveDecorators`).
+  const decoratorsWithCustomDirective = {
+    ...buildCustomDirectiveDecorators(
+      getCustomDirectives(rootTypes, customDirective),
+    ),
+    ...decorators,
+  };
 
   const groups = getGroups(rootTypes, groupByDirective);
 
@@ -449,7 +461,7 @@ export const generateDocFromSchema = async ({
 
     // options
     {
-      customDirectives,
+      decorators: decoratorsWithCustomDirective,
       groups,
       meta: {
         generatorFrameworkName: docOptions?.generatorFrameworkName,

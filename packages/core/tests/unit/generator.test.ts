@@ -19,6 +19,17 @@ import { GraphQLDirective } from "graphql/type";
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
   return {
+    // `always()` is invoked eagerly at module load by
+    // `@graphql-markdown/printer-legacy`'s decorator.ts (building its
+    // customDirective-adapter decorator constants), which this file reaches
+    // transitively through `../../src/generator` — so it must exist even
+    // though generator.test.ts never exercises decorator rendering itself
+    // (`../../src/printer` is mocked below).
+    always: vi.fn(() => {
+      return (): boolean => {
+        return true;
+      };
+    }),
     getCustomDirectives: vi.fn(),
     getDocumentLoaders: vi.fn(),
     getGroups: vi.fn(),
@@ -202,7 +213,7 @@ describe("generator", () => {
             schema: mockSchema,
           },
           {
-            customDirectives: undefined,
+            decorators: {},
             groups: undefined,
             meta: {
               generatorFrameworkName: undefined,
@@ -235,6 +246,53 @@ describe("generator", () => {
         });
       },
     );
+
+    test("forwards the top-level decorators option to the printer", async () => {
+      // Regression test: `decorators` reached `buildConfig`'s return value
+      // (Options.decorators) but `generateDocFromSchema` never destructured
+      // or forwarded it to `getPrinter`, so the whole feature was inert for
+      // any real config/CLI user — only unit tests that hand-built
+      // `PrintTypeOptions` directly exercised it. `generateDocFromSchema`
+      // merges `customDirective`'s translated decorators into a new object
+      // (see `buildCustomDirectiveDecorators`), so the forwarded value is no
+      // longer the same reference — deep-equal, not `toBe`, is what matters.
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+
+      mockSchemaLoad(mockSchema);
+
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
+      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
+      const getPrinterSpy = vi
+        .spyOn(CorePrinter, "getPrinter")
+        .mockResolvedValueOnce({} as unknown as typeof IPrinter);
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      const decorators = {
+        responses: {
+          predicate: () => {
+            return true;
+          },
+          render: () => {
+            return "x";
+          },
+        },
+      };
+
+      await generateDocFromSchema({
+        ...options,
+        decorators,
+      } as GeneratorOptions);
+
+      expect(getPrinterSpy.mock.calls[0][1]?.decorators).toStrictEqual(
+        decorators,
+      );
+    });
 
     test("prints summary when completed", async () => {
       expect.assertions(1);
@@ -405,7 +463,7 @@ describe("generator", () => {
           schema: expect.anything(),
         }),
         expect.objectContaining({
-          customDirectives: undefined,
+          decorators: {},
           groups: undefined,
           meta: expect.any(Object),
           metatags: expect.any(Array),
