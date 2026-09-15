@@ -271,6 +271,31 @@ const { getDirectiveFromSchema, getTypeDirectiveValues, hasDirectiveNamed } = re
 }
 ```
 
+### Response type for operations
+
+Not every decorator needs a directive at all: `predicate` and `resolve` can just as well select and derive content from the schema's own shape. This appends each query/mutation's return type as its own SDL code block, reusing `Printer.printCode`:
+
+```js
+const { getNamedType, isOperation, isScalarType } = require("@graphql-markdown/graphql");
+const { Printer } = require("@graphql-markdown/printer-legacy");
+
+{
+  responseType: {
+    predicate: isOperation,
+    title: "Response Type",
+    position: { after: "code" },
+    resolve: (type, options) => {
+      const returnType = getNamedType(type.type);
+      if (isScalarType(returnType)) {
+        return [];
+      }
+      return [{ code: Printer.printCode(returnType, options) }];
+    },
+    render: ([value]) => value.code,
+  },
+}
+```
+
 ## Migrating from `customDirective`
 
 [`customDirective`](/docs/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.

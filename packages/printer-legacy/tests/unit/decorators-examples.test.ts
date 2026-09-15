@@ -5,14 +5,18 @@ import type { Decorators, PrintTypeOptions } from "@graphql-markdown/types";
 import {
   and,
   getDirectiveFromSchema,
+  getNamedType,
   getTypeDirectiveValues,
   getTypeDirectiveValuesList,
   hasDirectiveNamed,
   isEntity,
+  isOperation,
+  isScalarType,
 } from "@graphql-markdown/graphql";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import { printDecorator, printSlotDecorators } from "../../src/decorator";
+import { Printer } from "../../src/printer";
 
 // Every code sample in docs/advanced/decorators.md is reproduced here
 // verbatim (module-level `require`s become the imports above) and checked
@@ -289,6 +293,49 @@ describe("docs/advanced/decorators.md examples", () => {
 
         expect(printDecorator(field, meta, options)?.content).toBe(
           `Returned alongside the data: [\`ResponseMeta\`](${options.basePath}/objects/responsemeta).\n\n`,
+        );
+      });
+    });
+
+    describe("Response type for operations", () => {
+      const schema = buildSchema(`
+        type User {
+          id: ID!
+          name: String!
+        }
+
+        type Query {
+          user(id: ID!): User
+        }
+      `);
+
+      const options = { ...DEFAULT_OPTIONS, schema } as PrintTypeOptions;
+      const field = schema.getQueryType()!.getFields().user;
+      const userType = schema.getType("User")!;
+
+      test("appends the return type's SDL, with no directive involved", () => {
+        expect.assertions(2);
+
+        const responseType = {
+          id: "responseType",
+          predicate: isOperation,
+          title: "Response Type",
+          position: { after: "code" as const },
+          resolve: (type: unknown, printOptions: PrintTypeOptions) => {
+            const returnType = getNamedType((type as { type: unknown }).type);
+            if (isScalarType(returnType)) {
+              return [];
+            }
+            return [{ code: Printer.printCode(returnType, printOptions) }];
+          },
+          render: ([value]: Record<string, unknown>[]): string => {
+            return value!.code as string;
+          },
+        };
+
+        expect(isOperation(field)).toBe(true);
+        expect(printDecorator(field, responseType, options)?.content).toBe(
+          `${Printer.printCode(userType, options)}\n\n`,
         );
       });
     });
