@@ -21,6 +21,8 @@ There is no built-in "this decorator's own directive" option: a directive-driven
 
 ## Usage
 
+This walkthrough shows the most common case, a decorator driven by a directive; a directive is not required — see [response type for operations](#response-type-for-operations) below for one driven entirely by the schema's own shape instead.
+
 **1. Declare a directive in the schema**
 
 Mark it `repeatable` when a type can carry more than one occurrence.
@@ -78,14 +80,14 @@ decorators: {
 
 The key is a free-form, unique id — it does not need to name a schema directive, and does not become the section heading (set `title` for that). It must not be one of the built-in section names (see [Position](#position)).
 
-| Option      | Required | Description                                                                                     |
-| ----------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `predicate` | no       | Selects the nodes this decorator applies to (see [Predicate](#predicate)). Defaults to matching every node. |
-| `resolve`   | no       | Produces the values passed to `render` (see [Resolve](#resolve)). Defaults to none (an empty array). |
-| `render`    | yes      | Callback returning the content as Markdown (see [Render](#render)).                             |
+| Option      | Required | Description                                                                                                                                      |
+| ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `predicate` | no       | Selects the nodes this decorator applies to (see [Predicate](#predicate)). Defaults to matching every node.                                      |
+| `resolve`   | no       | Produces the values passed to `render` (see [Resolve](#resolve)). Defaults to none (an empty array).                                             |
+| `render`    | yes      | Callback returning the content as Markdown (see [Render](#render)).                                                                              |
 | `title`     | no       | Section heading. Omit for bare, titleless output — this is how a badge or an appended description line is expressed (see [Position](#position)). |
-| `level`     | no       | Heading level, defaults to `3`. Ignored when `title` is absent.                                 |
-| `position`  | no       | Placement relative to another section, or into a named slot (see [Position](#position)). Defaults to last. |
+| `level`     | no       | Heading level, defaults to `3`. Ignored when `title` is absent.                                                                                  |
+| `position`  | no       | Placement relative to another section, or into a named slot (see [Position](#position)). Defaults to last.                                       |
 
 A decorator is skipped, and nothing is printed, when its predicate does not match, `resolve` returns nothing, or `render` returns nothing.
 
@@ -115,7 +117,7 @@ decorators: {
 
 :::info
 
-A decorator declaring an explicit `predicate` but no `resolve` still renders once, with an empty record, whenever the predicate matches — this is a *marker* decorator (see [the marker example](#a-badge-from-a-directive-with-no-arguments) below), useful for a directive whose mere presence is the content. If that is not the intent, supply `resolve` too.
+A decorator declaring an explicit `predicate` but no `resolve` still renders once, with an empty record, whenever the predicate matches — this is a _marker_ decorator (see [the marker example](#a-badge-from-a-directive-with-no-arguments) below), useful for a directive whose mere presence is the content. If that is not the intent, supply `resolve` too.
 
 :::
 
@@ -150,7 +152,7 @@ render: (values, options, context) => {
 - `context.type` — the GraphQL node being printed.
 - `context.entity` — the node's schema entity kind, when resolvable.
 
-There is no `context.directive`: a decorator that only needs a directive's *definition* (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
+There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
 
 Optional directive arguments that were omitted are absent from a resolved record rather than set to `undefined`, so give them a fallback.
 
@@ -168,13 +170,13 @@ Another decorator can also be named, by its id, as long as it is declared earlie
 
 **Into a named slot** — `{ into: "<slot>" }` appends the decorator's bare (titleless) content into a slot that is not itself a page section:
 
-| Slot         | Appears                                                                 |
-| ------------ | ------------------------------------------------------------------------ |
-| `description`| Appended after the node's description text (the type's, or a field/argument's). |
-| `tags`       | Alongside the type-badges/deprecation tags on the heading's metadata line. |
-| `badges`     | Alongside the built-in type badges (`non-null`, `scalar`, …) on a member's metadata line. |
-| `permalink`  | Next to the permalink icon on a member's metadata line.                |
-| `metadata`   | Appended at the end of a member's metadata line, after badges/tags/permalink. |
+| Slot          | Appears                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------- |
+| `description` | Appended after the node's description text (the type's, or a field/argument's).           |
+| `tags`        | Alongside the type-badges/deprecation tags on the heading's metadata line.                |
+| `badges`      | Alongside the built-in type badges (`non-null`, `scalar`, …) on a member's metadata line. |
+| `permalink`   | Next to the permalink icon on a member's metadata line.                                   |
+| `metadata`    | Appended at the end of a member's metadata line, after badges/tags/permalink.             |
 
 A decorator using `into` is excluded from the page's section order entirely — it never has a heading, regardless of `title`.
 
@@ -224,7 +226,7 @@ const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } 
 
 ### A badge from a directive with no arguments
 
-A decorator with an explicit `predicate` and no `resolve` still renders once when the directive is present with no arguments to carry (a *marker* decorator) — useful for a plain presence badge.
+A decorator with an explicit `predicate` and no `resolve` still renders once when the directive is present with no arguments to carry (a _marker_ decorator) — useful for a plain presence badge.
 
 ```graphql
 directive @beta on OBJECT | FIELD_DEFINITION
@@ -336,7 +338,7 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 + },
 ```
 
-A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive *definition*, not per-occurrence argument values, so `render` looks it up itself with `getDirectiveFromSchema`. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
+A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values, so `render` looks it up itself with `getDirectiveFromSchema`. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
 
 ## Helpers
 
