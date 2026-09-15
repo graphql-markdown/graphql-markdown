@@ -296,6 +296,8 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 }
 ```
 
+`isOperation` only takes `type`, one argument fewer than `predicate`'s `(type, options)` — that's fine, since `predicate` is always called with both, and the extra one is simply ignored. Any single-argument type guard from `@graphql-markdown/graphql` (`isObjectType`, `isEnumType`, …) can be passed directly as `predicate` the same way.
+
 ## Migrating from `customDirective`
 
 [`customDirective`](/docs/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.

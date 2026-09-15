@@ -306,37 +306,46 @@ describe("docs/advanced/decorators.md examples", () => {
 
         type Query {
           user(id: ID!): User
+          ping: String
         }
       `);
 
       const options = { ...DEFAULT_OPTIONS, schema } as PrintTypeOptions;
-      const field = schema.getQueryType()!.getFields().user;
+      const queryFields = schema.getQueryType()!.getFields();
       const userType = schema.getType("User")!;
+
+      const responseType = {
+        id: "responseType",
+        predicate: isOperation,
+        title: "Response Type",
+        position: { after: "code" as const },
+        resolve: (type: unknown, printOptions: PrintTypeOptions) => {
+          const returnType = getNamedType((type as { type: unknown }).type);
+          if (isScalarType(returnType)) {
+            return [];
+          }
+          return [{ code: Printer.printCode(returnType, printOptions) }];
+        },
+        render: ([value]: Record<string, unknown>[]): string => {
+          return value!.code as string;
+        },
+      };
 
       test("appends the return type's SDL, with no directive involved", () => {
         expect.assertions(2);
 
-        const responseType = {
-          id: "responseType",
-          predicate: isOperation,
-          title: "Response Type",
-          position: { after: "code" as const },
-          resolve: (type: unknown, printOptions: PrintTypeOptions) => {
-            const returnType = getNamedType((type as { type: unknown }).type);
-            if (isScalarType(returnType)) {
-              return [];
-            }
-            return [{ code: Printer.printCode(returnType, printOptions) }];
-          },
-          render: ([value]: Record<string, unknown>[]): string => {
-            return value!.code as string;
-          },
-        };
+        expect(isOperation(queryFields.user)).toBe(true);
+        expect(
+          printDecorator(queryFields.user, responseType, options)?.content,
+        ).toBe(`${Printer.printCode(userType, options)}\n\n`);
+      });
 
-        expect(isOperation(field)).toBe(true);
-        expect(printDecorator(field, responseType, options)?.content).toBe(
-          `${Printer.printCode(userType, options)}\n\n`,
-        );
+      test("is skipped for an operation returning a scalar", () => {
+        expect.assertions(1);
+
+        expect(
+          printDecorator(queryFields.ping, responseType, options),
+        ).toBeUndefined();
       });
     });
   });
