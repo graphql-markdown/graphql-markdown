@@ -312,15 +312,16 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("returns undefined if the schema is not set and the default gating applies", () => {
+    test("returns undefined if the schema is not set and the default resolve applies", () => {
       expect.assertions(1);
 
-      // No explicit `predicate`: the default gate is `hasDirectiveNamed`
-      // (schema-independent, reads the AST) followed by the default resolve
-      // (`directiveOccurrences`, which does need the schema). Without a
-      // schema the resolve returns `[]`, and with no explicit predicate that
-      // is not a marker decorator, so it is skipped — unlike an
-      // explicit-predicate decorator, covered separately below.
+      // No explicit `predicate` (defaults to matching every node) and no
+      // explicit `resolve`: the default resolve reads `directive`'s
+      // occurrences off the node, which needs the schema to look the
+      // directive up at all. Without a schema it resolves `[]`, and with no
+      // explicit `predicate` that is not a marker decorator, so it is
+      // skipped — unlike an explicit-predicate decorator, covered
+      // separately below.
       expect(
         printDecorator(type, httpResponses, {
           ...options,

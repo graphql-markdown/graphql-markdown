@@ -71,8 +71,8 @@ The key is a free-form, unique id — it does not need to name a schema directiv
 
 | Option      | Required | Description                                                                                     |
 | ----------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `predicate` | no       | Selects the nodes this decorator applies to (see [Predicate](#predicate)). Defaults to `hasDirectiveNamed(directive ?? id)`. |
-| `directive` | no       | Directive driving the default predicate/resolver, and `context.directive`. Defaults to the decorator's id. |
+| `predicate` | no       | Selects the nodes this decorator applies to (see [Predicate](#predicate)). Defaults to matching every node. |
+| `directive` | no       | Directive driving the default `resolve` and `context.directive` (see [Predicate](#predicate) for how this differs from gating). Defaults to the decorator's id. |
 | `resolve`   | no       | Produces the values passed to `render` (see [Resolve](#resolve)). Defaults to reading `directive`'s occurrences off the node. |
 | `render`    | yes      | Callback returning the content as Markdown (see [Render](#render)).                             |
 | `title`     | no       | Section heading. Omit for bare, titleless output — this is how a badge or an appended description line is expressed (see [Position](#position)). |
@@ -83,13 +83,19 @@ A decorator is skipped, and nothing is printed, when its predicate does not matc
 
 ### Predicate
 
-`predicate` is `(type, options) => boolean`, evaluated once per node. `@graphql-markdown/graphql` exports the common building blocks:
+`predicate` is `(type, options) => boolean`, evaluated once per node, and defaults to matching every node (`always()`). `@graphql-markdown/graphql` exports the common building blocks:
 
 - `hasDirectiveNamed(name)` — the node carries a directive named `name`.
 - `hasAnyDirective()` — the node carries at least one directive.
 - `isEntity(...kinds)` — the node's schema entity kind is one of `kinds` (`"queries"`, `"mutations"`, `"subscriptions"`, `"objects"`, `"interfaces"`, `"unions"`, `"enums"`, `"inputs"`, `"scalars"`, `"directives"`).
 - `and(...predicates)`, `or(...predicates)`, `not(predicate)` — compose predicates.
-- `always()` — matches every node; the default when a custom `resolve` is set.
+- `always()` — matches every node; the default.
+
+:::info
+
+A decorator ends up gated on its own directive through `resolve`, not `predicate`: without a custom `resolve`, the values come from `directive`'s occurrences on the node, which is empty — and so skipped — for a node that lacks it. `predicate` and `directive` are independent: an explicit `predicate` alone decides whether the decorator runs, it is never AND-ed with directive presence. A decorator combining an explicit `predicate` with the default `resolve` still renders once, with an empty record, for a matching node that lacks `directive` — useful for a presence-only badge (see [the marker example](#a-badge-from-a-directive-with-no-arguments) below), surprising otherwise. Supply `resolve` too if that is not the intent.
+
+:::
 
 ```js title="docusaurus.config.js"
 const { hasDirectiveNamed, isEntity, and } = require("@graphql-markdown/graphql");

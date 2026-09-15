@@ -315,19 +315,28 @@ export type DecoratorPosition =
 /**
  * Decorator configuration options.
  *
- * A decorator is selected by `predicate` (defaulting to "the node carries the
- * directive named `directive`, or named by this decorator's id"), resolves
- * values with `resolve` (defaulting to reading that directive's occurrences),
- * and renders them with `render`. A decorator with no `title` renders bare
- * content rather than a titled section — this is how a badge or an appended
- * description line is expressed: they are not a distinct kind of decorator,
- * only a titleless one placed at a different `position`.
+ * A decorator is selected by `predicate` (defaulting to matching every node)
+ * and resolves values with `resolve` (defaulting to reading `directive`'s
+ * occurrences off the node, which is empty for a node lacking it, and so
+ * skipped by default — the usual way a decorator ends up directive-driven,
+ * not the predicate), and renders them with `render`. A decorator with no
+ * `title` renders bare content rather than a titled section — this is how a
+ * badge or an appended description line is expressed: they are not a
+ * distinct kind of decorator, only a titleless one placed at a different
+ * `position`.
+ *
+ * `predicate` and `directive` are independent: setting `predicate` does not
+ * additionally require `directive`'s presence — it alone decides whether
+ * the decorator runs. `directive` only feeds the *default* `resolve`, so a
+ * decorator combining an explicit `predicate` with the default `resolve`
+ * still renders once, with an empty record, for a matching node that lacks
+ * `directive` (a marker decorator, if that is the intent — otherwise supply
+ * `resolve` too).
  *
  * @example
  * ```js
  * decorators: {
  *   responses: {
- *     predicate: hasDirectiveNamed("httpResponse"),
  *     title: "Responses",
  *     position: { after: "metadata" },
  *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
@@ -336,7 +345,11 @@ export type DecoratorPosition =
  * ```
  */
 export interface DecoratorDefinition {
-  /** Selects the nodes this decorator applies to. Defaults to `hasDirectiveNamed(directive ?? id)`. */
+  /**
+   * Selects the nodes this decorator applies to. Defaults to matching every
+   * node — filtering by `directive`'s presence, when relevant, falls out of
+   * the default `resolve` instead (see above).
+   */
   predicate?: Maybe<DecoratorPredicate>;
   /** Directive driving the default resolver and `context.directive`. Defaults to this decorator's id. */
   directive?: Maybe<DirectiveName>;
