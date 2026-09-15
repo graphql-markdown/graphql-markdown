@@ -347,64 +347,6 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("predicate is AND-ed with appliesTo: either false skips", () => {
-      expect.assertions(2);
-
-      expect(
-        printDecorator(
-          type,
-          {
-            id: "httpResponse",
-            render: httpResponses.render,
-            predicate: () => {
-              return false;
-            },
-            appliesTo: ["objects"],
-          },
-          options,
-        ),
-      ).toBeUndefined();
-
-      expect(
-        printDecorator(
-          type,
-          {
-            id: "httpResponse",
-            render: httpResponses.render,
-            predicate: () => {
-              return true;
-            },
-            appliesTo: ["queries"],
-          },
-          options,
-        ),
-      ).toBeUndefined();
-    });
-
-    test("renders if appliesTo matches the entity kind", () => {
-      expect.assertions(1);
-
-      expect(
-        printDecorator(
-          type,
-          { ...httpResponses, appliesTo: ["objects"] },
-          options,
-        ),
-      ).toBeDefined();
-    });
-
-    test("returns undefined if appliesTo is set and the entity kind is unknown", () => {
-      expect.assertions(1);
-
-      expect(
-        printDecorator(
-          { name: "NotAType" },
-          { ...httpResponses, appliesTo: ["objects"] },
-          options,
-        ),
-      ).toBeUndefined();
-    });
-
     test("skips a decorator whose resolve returns a non-array value", () => {
       expect.assertions(1);
 

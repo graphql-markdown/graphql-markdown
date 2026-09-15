@@ -348,13 +348,6 @@ export interface DecoratorDefinition {
   level?: Maybe<number>;
   /** Optional placement relative to another section, or into a named slot. */
   position?: Maybe<DecoratorPosition>;
-  /**
-   * Optional list of schema entities the decorator applies to. AND-ed with
-   * `predicate` when both are present.
-   *
-   * @deprecated Sugar for `isEntity(...)` composed with `predicate` via `and()`.
-   */
-  appliesTo?: Maybe<SchemaEntity[]>;
   /** Callback rendering the decorator's content from the resolved values. */
   render: DecoratorRenderer;
 }

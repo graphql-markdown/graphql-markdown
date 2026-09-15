@@ -39,13 +39,11 @@ import type {
 
 import {
   always,
-  and,
   getConstDirectiveMap,
   getDirectiveFromSchema,
   getSchemaEntity,
   getTypeDirectiveValuesList,
   hasDirectiveNamed,
-  isEntity,
 } from "@graphql-markdown/graphql";
 
 import { escapeMDX } from "@graphql-markdown/utils";
@@ -300,35 +298,6 @@ export const buildCustomDirectiveDecorators = (
 };
 
 /**
- * Builds the predicate for a decorator's (deprecated) `appliesTo` filter.
- *
- * A decorator without `appliesTo` applies everywhere. A decorator with
- * `appliesTo` is skipped when the entity kind is unknown, as the narrowing
- * cannot be honoured — matching `isEntity`, which this is built from.
- *
- * `appliesTo` is documented as sugar for composing `isEntity(...)` with
- * `predicate` via `and()`; this is that composition, not a second, parallel
- * gating mechanism alongside the predicate pipeline.
- *
- * @internal
- *
- * @param decorator - the decorator declaration.
- *
- * @returns a predicate true when `appliesTo` is absent, or the type's entity
- * kind is one of `appliesTo`.
- *
- */
-const appliesToPredicate = (
-  decorator: Pick<DecoratorDefinition, "appliesTo">,
-): DecoratorPredicate => {
-  if (!Array.isArray(decorator.appliesTo) || decorator.appliesTo.length === 0) {
-    return always();
-  }
-
-  return isEntity(...decorator.appliesTo);
-};
-
-/**
  * Builds the example section as a decorator definition.
  *
  * The example section is a specialized decorator: it is driven by a schema
@@ -389,13 +358,10 @@ export const getExampleSectionDefinition = (
  * matching the pre-existing behaviour of a custom-section resolver (most
  * notably the built-in Example section, whose values may come from a field
  * nested arbitrarily deep rather than from the type itself, and the
- * `customDirective`-adapter decorators above, whose matching is driven by
- * `options.customDirectives`, not the decorator's own id/directive). Only
- * the default, directive-occurrences path is gated on directive presence.
- *
- * `appliesTo` is composed in via `and()` rather than checked separately: it
- * is sugar for `isEntity(...)` combined with `predicate`, not a second,
- * parallel gating mechanism (see `appliesToPredicate`).
+ * `customDirective`-adapter decorators built by `buildCustomDirectiveDecorators`,
+ * whose matching is driven by the schema-resolved directive map they close
+ * over, not the decorator's own id/directive). Only the default,
+ * directive-occurrences path is gated on directive presence.
  *
  * @internal
  */
@@ -403,10 +369,9 @@ const resolveDecoratorPredicate = (
   decorator: ResolvedDecorator,
   directiveName: string,
 ): DecoratorPredicate => {
-  return and(
+  return (
     decorator.predicate ??
-      (decorator.resolve ? always() : hasDirectiveNamed(directiveName)),
-    appliesToPredicate(decorator),
+    (decorator.resolve ? always() : hasDirectiveNamed(directiveName))
   );
 };
 
@@ -454,9 +419,9 @@ const resolveDecoratorValues = (
 /**
  * Resolves and renders a single decorator's raw content for a type.
  *
- * The decorator is skipped, returning `undefined`, when its `appliesTo` filter
- * excludes the type, its predicate does not match, no value is resolved for
- * it, or the render callback returns no content. Shared by {@link printDecorator}
+ * The decorator is skipped, returning `undefined`, when its predicate does
+ * not match, no value is resolved for it, or the render callback returns no
+ * content. Shared by {@link printDecorator}
  * (which wraps this into a titled page section) and {@link printSlotDecorators}
  * (which collects this raw content for a named slot, such as the metadata line).
  *
