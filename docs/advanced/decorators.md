@@ -15,7 +15,7 @@ keywords:
 
 A decorator selects **nodes** in the schema — a type, field, or argument the printer is about to render — with a **predicate** (by default, every node), and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
 
-`decorators` replaces the deprecated [`customDirective`](/docs/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). Unlike `customDirective`, it is keyed by a free-form id rather than a directive name, and selects nodes by any predicate rather than directive presence alone. There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
+`decorators` replaces the deprecated [`customDirective`](/docs/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
