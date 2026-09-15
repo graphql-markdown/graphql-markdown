@@ -3,11 +3,13 @@
  *
  * A decorator (declared in the top-level `decorators` option) is selected by a
  * predicate over the node being printed — by default, every node — and
- * renders its resolved values through a user callback. Without a custom
- * `resolve`, the values are the occurrences of the decorator's own directive
- * on the node, which is empty (and so skipped) for a node lacking it: this,
- * not the predicate, is what makes a decorator directive-driven by default.
- * A decorator with a title becomes a top-level
+ * renders its resolved values through a user callback. There is no built-in
+ * notion of "this decorator's own directive": a directive-driven decorator
+ * selects its nodes with `predicate: hasDirectiveNamed("name")` and reads
+ * that directive's argument values, if any, from `resolve` via
+ * `@graphql-markdown/graphql`'s `getDirectiveFromSchema` combined with
+ * `getTypeDirectiveValues`/`getTypeDirectiveValuesList` — the same public
+ * helpers this module uses internally. A decorator with a title becomes a top-level
  * section of the type page; one without renders bare content, placed relative
  * to the built-in sections, or into a named slot such as the heading's
  * metadata line or a member's description.
@@ -31,9 +33,7 @@ import type {
   DecoratorContext,
   DecoratorDefinition,
   Decorators,
-  DecoratorPredicate,
   DecoratorResolver,
-  DirectiveName,
   Maybe,
   PageSection,
   PageSections,
@@ -43,9 +43,7 @@ import type {
 import {
   always,
   getConstDirectiveMap,
-  getDirectiveFromSchema,
   getSchemaEntity,
-  getTypeDirectiveValuesList,
 } from "@graphql-markdown/graphql";
 
 import { escapeMDX } from "@graphql-markdown/utils";
@@ -306,12 +304,11 @@ export const buildCustomDirectiveDecorators = (
  * directive, named by [`printTypeOptions.exampleSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions),
  * and rendered as a code block.
  *
- * It resolves its own value rather than reading directive occurrences,
+ * It resolves its own value rather than gating on a directive by name,
  * because an example is also derived from the fields of a type carrying no
- * example directive itself — so it must not be gated on that directive's
- * presence on the type (see {@link printDecorator}'s predicate default).
- * The `directive` name is therefore descriptive only: the schema lookup
- * belongs to {@link printExample}.
+ * example directive itself — the directive lookup (which schema directive
+ * name to use, from `printTypeOptions.exampleSection`) belongs to
+ * {@link printExample} alone.
  *
  * @param options - the print options in effect.
  *
@@ -324,22 +321,10 @@ export const buildCustomDirectiveDecorators = (
  * ```
  *
  */
-export const getExampleSectionDefinition = (
-  options: PrintTypeOptions,
-): ResolvedDecorator => {
-  const { exampleSection } = options;
-  // Matches `getDirectiveExampleOption`: an empty directive name falls back too.
-  const directive =
-    exampleSection &&
-    typeof exampleSection === "object" &&
-    exampleSection.directive
-      ? exampleSection.directive
-      : "example";
-
+export const getExampleSectionDefinition = (): ResolvedDecorator => {
   return {
     id: "example",
     title: "Example",
-    directive: directive as DirectiveName,
     resolve: (
       type: unknown,
       printOptions: PrintTypeOptions,
@@ -354,54 +339,29 @@ export const getExampleSectionDefinition = (
 };
 
 /**
- * Builds the predicate gating a decorator.
- *
- * Defaults to `always()`: a decorator applies to every node by default, the
- * same as one with a custom `resolve` (see below). Filtering by the
- * decorator's own directive is not the predicate's job — it falls out of
- * the default `resolve`, which reads that directive's occurrences and
- * yields nothing for a node that lacks it (see {@link resolveDecoratorValues}).
- * Declaring both `predicate` and `directive` does not AND them together:
- * an explicit `predicate` alone decides whether the decorator runs at all,
- * `directive` only ever feeds the default `resolve`.
- *
- * @internal
- */
-const resolveDecoratorPredicate = (
-  decorator: ResolvedDecorator,
-): DecoratorPredicate => {
-  return decorator.predicate ?? always();
-};
-
-/**
  * Resolves the values a decorator renders, applying the marker-decorator
  * substitution rule.
  *
  * `undefined` means "skip this decorator": either its resolver returned a
  * non-array, or it resolved no values with nothing asking for the
- * marker-decorator substitution below. An explicit `predicate`, using the
- * default directive-occurrences resolver, with no resolved values is a pure
- * marker decorator (no directive arguments to carry): it still renders once,
- * with an empty record. A custom `resolve` returning `[]` is never
- * ambiguous with that case — it means "nothing to render this time" — so it
- * is not substituted.
+ * marker-decorator substitution below. A decorator with an explicit
+ * `predicate` and no `resolve` renders once, with an empty record, whenever
+ * its predicate matches — a pure marker decorator, useful for a directive
+ * whose mere presence is the content (see the module doc for how to also
+ * gate on, and read, a specific directive). A `resolve` returning `[]` is
+ * never ambiguous with that case — it means "nothing to render this time"
+ * — so it is not substituted; nor is the no-`predicate`-no-`resolve` case,
+ * which is a no-op by construction (`predicate` defaults to matching every
+ * node, `resolve` to producing nothing).
  *
  * @internal
  */
 const resolveDecoratorValues = (
   type: unknown,
   decorator: ResolvedDecorator,
-  directive: ReturnType<typeof getDirectiveFromSchema>,
   options: PrintTypeOptions,
 ): Maybe<Record<string, unknown>[]> => {
-  let resolved: unknown;
-  if (decorator.resolve) {
-    resolved = decorator.resolve(type, options);
-  } else if (directive) {
-    resolved = getTypeDirectiveValuesList(directive, type);
-  } else {
-    resolved = [];
-  }
+  const resolved = decorator.resolve ? decorator.resolve(type, options) : [];
 
   if (!Array.isArray(resolved)) {
     return undefined;
@@ -441,16 +401,13 @@ const renderDecoratorContent = (
     return undefined;
   }
 
-  const directiveName = decorator.directive ?? decorator.id;
-  // Resolved once and reused below for both the default resolve path and the
-  // render context, rather than looked up twice.
-  const directive = getDirectiveFromSchema(directiveName, options);
+  const predicate = decorator.predicate ?? always();
 
-  if (!resolveDecoratorPredicate(decorator)(type, options)) {
+  if (!predicate(type, options)) {
     return undefined;
   }
 
-  const values = resolveDecoratorValues(type, decorator, directive, options);
+  const values = resolveDecoratorValues(type, decorator, options);
 
   if (values === undefined || values === null) {
     return undefined;
@@ -459,7 +416,6 @@ const renderDecoratorContent = (
   const context: DecoratorContext = {
     id: decorator.id,
     type,
-    directive,
     entity: getSchemaEntity(type, options),
   };
 

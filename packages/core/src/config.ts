@@ -782,17 +782,6 @@ const validateDecoratorEntry = (
 
   validateDecoratorCallback(id, "predicate", decorator.predicate);
   validateDecoratorCallback(id, "resolve", decorator.resolve);
-
-  if (
-    decorator.directive !== undefined &&
-    (typeof decorator.directive !== "string" ||
-      decorator.directive.length === 0)
-  ) {
-    throw new TypeError(
-      `Decorator '${id}' option 'directive' must be a non-empty string.`,
-    );
-  }
-
   validateDecoratorPosition(id, decorator.position);
 };
 

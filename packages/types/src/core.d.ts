@@ -273,8 +273,6 @@ export interface DecoratorContext {
   id: string;
   /** The GraphQL node being printed (a type, field, or argument). */
   type: unknown;
-  /** The matched directive definition, when the decorator is directive-driven. */
-  directive?: Maybe<GraphQLDirective>;
   /** The schema entity kind of the node being printed, when resolvable. */
   entity?: Maybe<SchemaEntity>;
 }
@@ -286,9 +284,14 @@ export interface DecoratorContext {
  * without a `title` renders bare content: appended to the type's description,
  * or dropped into the metadata line, depending on its `position`.
  *
- * @param values - the values resolved by `resolve` (or the default directive lookup).
+ * A directive-driven decorator's own definition is not resolved for you —
+ * look it up with `@graphql-markdown/graphql`'s `getDirectiveFromSchema`
+ * (given `options`) when `render` (or `resolve`) needs it, for instance to
+ * pass to `getTypeDirectiveValues`/`getTypeDirectiveValuesList`.
+ *
+ * @param values - the values resolved by `resolve`. Empty unless `resolve` is set.
  * @param options - the print options in effect for the node being rendered.
- * @param context - the decorator id, the node, and the matched directive, when any.
+ * @param context - the decorator id, the node, and its schema entity kind, when resolvable.
  *
  * @returns the decorator's content, or a nullish value to skip it.
  */
@@ -315,45 +318,41 @@ export type DecoratorPosition =
 /**
  * Decorator configuration options.
  *
- * A decorator is selected by `predicate` (defaulting to matching every node)
- * and resolves values with `resolve` (defaulting to reading `directive`'s
- * occurrences off the node, which is empty for a node lacking it, and so
- * skipped by default — the usual way a decorator ends up directive-driven,
- * not the predicate), and renders them with `render`. A decorator with no
- * `title` renders bare content rather than a titled section — this is how a
- * badge or an appended description line is expressed: they are not a
- * distinct kind of decorator, only a titleless one placed at a different
- * `position`.
+ * A decorator is selected by `predicate` (defaulting to matching every node),
+ * resolves values with `resolve` (defaulting to none — an empty array), and
+ * renders them with `render`. A decorator with no `title` renders bare
+ * content rather than a titled section — this is how a badge or an appended
+ * description line is expressed: they are not a distinct kind of decorator,
+ * only a titleless one placed at a different `position`.
  *
- * `predicate` and `directive` are independent: setting `predicate` does not
- * additionally require `directive`'s presence — it alone decides whether
- * the decorator runs. `directive` only feeds the *default* `resolve`, so a
- * decorator combining an explicit `predicate` with the default `resolve`
- * still renders once, with an empty record, for a matching node that lacks
- * `directive` (a marker decorator, if that is the intent — otherwise supply
- * `resolve` too).
+ * There is no dedicated `directive` option: a directive-driven decorator
+ * selects its nodes with `predicate: hasDirectiveNamed("name")` and, if it
+ * needs the directive's argument values, resolves them with
+ * `@graphql-markdown/graphql`'s `getDirectiveFromSchema` combined with
+ * `getTypeDirectiveValues`/`getTypeDirectiveValuesList` — both exported for
+ * this — inside `resolve` (or `render`, for a definition that does not need
+ * a node-specific lookup).
  *
  * @example
  * ```js
  * decorators: {
  *   responses: {
+ *     predicate: hasDirectiveNamed("httpResponse"),
  *     title: "Responses",
  *     position: { after: "metadata" },
+ *     resolve: (type, options) => {
+ *       const directive = getDirectiveFromSchema("httpResponse", options);
+ *       return directive ? getTypeDirectiveValuesList(directive, type) : [];
+ *     },
  *     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
  *   },
  * }
  * ```
  */
 export interface DecoratorDefinition {
-  /**
-   * Selects the nodes this decorator applies to. Defaults to matching every
-   * node — filtering by `directive`'s presence, when relevant, falls out of
-   * the default `resolve` instead (see above).
-   */
+  /** Selects the nodes this decorator applies to. Defaults to matching every node. */
   predicate?: Maybe<DecoratorPredicate>;
-  /** Directive driving the default resolver and `context.directive`. Defaults to this decorator's id. */
-  directive?: Maybe<DirectiveName>;
-  /** Produces the values passed to `render`. Defaults to reading `directive`'s occurrences off the node. */
+  /** Produces the values passed to `render`. Defaults to none (an empty array). */
   resolve?: Maybe<DecoratorResolver>;
   /** Optional heading for the section. Omit for bare/titleless output (a badge, an appended description line). */
   title?: Maybe<string>;

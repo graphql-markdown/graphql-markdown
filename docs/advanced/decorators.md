@@ -13,7 +13,9 @@ keywords:
 
 # Decorators
 
-A decorator selects nodes in the schema with a **predicate** — by default, "the node carries this directive" — and renders their resolved values with a callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
+A decorator selects nodes in the schema with a **predicate** — by default, every node — and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
+
+There is no built-in "this decorator's own directive" option: a directive-driven decorator selects its nodes with `predicate: hasDirectiveNamed("name")` and, if it needs that directive's argument values, reads them in `resolve` (or directly in `render`) using `@graphql-markdown/graphql`'s `getDirectiveFromSchema` combined with `getTypeDirectiveValues`/`getTypeDirectiveValuesList` — the same public helpers the printer uses internally, so nothing is hidden.
 
 `decorators` supersedes [`customDirective`](/docs/settings#customdirective) (see [migrating from `customDirective`](#migrating-from-customdirective) below): a single option, keyed by a free-form id rather than a directive name, selecting nodes by any predicate rather than directive presence alone.
 
@@ -39,10 +41,17 @@ type Query {
 **2. Declare the decorator in the configuration**
 
 ```js title="docusaurus.config.js"
+const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+
 decorators: {
   responses: {
+    predicate: hasDirectiveNamed("httpResponse"),
     title: "Responses",
     position: { after: "metadata" },
+    resolve: (type, options) => {
+      const directive = getDirectiveFromSchema("httpResponse", options);
+      return directive ? getTypeDirectiveValuesList(directive, type) : [];
+    },
     render: (values) => {
       return [
         "| Code | Description |",
@@ -72,8 +81,7 @@ The key is a free-form, unique id — it does not need to name a schema directiv
 | Option      | Required | Description                                                                                     |
 | ----------- | -------- | ------------------------------------------------------------------------------------------------- |
 | `predicate` | no       | Selects the nodes this decorator applies to (see [Predicate](#predicate)). Defaults to matching every node. |
-| `directive` | no       | Directive driving the default `resolve` and `context.directive` (see [Predicate](#predicate) for how this differs from gating). Defaults to the decorator's id. |
-| `resolve`   | no       | Produces the values passed to `render` (see [Resolve](#resolve)). Defaults to reading `directive`'s occurrences off the node. |
+| `resolve`   | no       | Produces the values passed to `render` (see [Resolve](#resolve)). Defaults to none (an empty array). |
 | `render`    | yes      | Callback returning the content as Markdown (see [Render](#render)).                             |
 | `title`     | no       | Section heading. Omit for bare, titleless output — this is how a badge or an appended description line is expressed (see [Position](#position)). |
 | `level`     | no       | Heading level, defaults to `3`. Ignored when `title` is absent.                                 |
@@ -91,12 +99,6 @@ A decorator is skipped, and nothing is printed, when its predicate does not matc
 - `and(...predicates)`, `or(...predicates)`, `not(predicate)` — compose predicates.
 - `always()` — matches every node; the default.
 
-:::info
-
-A decorator ends up gated on its own directive through `resolve`, not `predicate`: without a custom `resolve`, the values come from `directive`'s occurrences on the node, which is empty — and so skipped — for a node that lacks it. `predicate` and `directive` are independent: an explicit `predicate` alone decides whether the decorator runs, it is never AND-ed with directive presence. A decorator combining an explicit `predicate` with the default `resolve` still renders once, with an empty record, for a matching node that lacks `directive` — useful for a presence-only badge (see [the marker example](#a-badge-from-a-directive-with-no-arguments) below), surprising otherwise. Supply `resolve` too if that is not the intent.
-
-:::
-
 ```js title="docusaurus.config.js"
 const { hasDirectiveNamed, isEntity, and } = require("@graphql-markdown/graphql");
 
@@ -105,16 +107,32 @@ decorators: {
     // highlight-next-line
     predicate: and(hasDirectiveNamed("httpResponse"), isEntity("queries", "mutations")),
     title: "Responses",
+    resolve: /* ... */,
     render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
   },
 }
 ```
 
+:::info
+
+A decorator declaring an explicit `predicate` but no `resolve` still renders once, with an empty record, whenever the predicate matches — this is a *marker* decorator (see [the marker example](#a-badge-from-a-directive-with-no-arguments) below), useful for a directive whose mere presence is the content. If that is not the intent, supply `resolve` too.
+
+:::
+
 ### Resolve
 
-`resolve` is `(type, options) => values`, producing the records `render` receives. Without a custom `resolve`, every occurrence of `directive` on the node is read, one record per occurrence, in schema declaration order — required for repeatable directives.
+`resolve` is `(type, options) => values`, producing the records `render` receives; it defaults to producing none. A decorator declaring neither `predicate` nor `resolve` is a no-op by construction (`predicate` matches everything, `resolve` produces nothing to substitute) — declare at least one.
 
-Provide a custom `resolve` when the rendered values do not come from the decorator's own directive at all — for instance, derived from a nested field, or from a different data source entirely.
+For a directive-driven decorator that needs the directive's argument values, read every occurrence with `getDirectiveFromSchema` + `getTypeDirectiveValuesList` (one record per occurrence, in schema declaration order — required for repeatable directives):
+
+```js
+resolve: (type, options) => {
+  const directive = getDirectiveFromSchema("httpResponse", options);
+  return directive ? getTypeDirectiveValuesList(directive, type) : [];
+},
+```
+
+Provide a custom `resolve` whenever the rendered values do not come from a directive's arguments at all — for instance, derived from a nested field, or from a different data source entirely.
 
 ### Render
 
@@ -124,16 +142,17 @@ Provide a custom `resolve` when the rendered values do not come from the decorat
 render: (values, options, context) => {
   // values: [ { code: 200, description: "OK" }, { code: 404, description: "User not found" } ]
   // options: the print options in effect for the node being rendered
-  // context: { id, type, directive, entity }
+  // context: { id, type, entity }
 };
 ```
 
 - `context.id` — the decorator's id.
 - `context.type` — the GraphQL node being printed.
-- `context.directive` — the matched directive definition, when the decorator is directive-driven.
 - `context.entity` — the node's schema entity kind, when resolvable.
 
-Optional directive arguments that were omitted are absent from the record rather than set to `undefined`, so give them a fallback.
+There is no `context.directive`: a decorator that only needs a directive's *definition* (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
+
+Optional directive arguments that were omitted are absent from a resolved record rather than set to `undefined`, so give them a fallback.
 
 A decorator declared without a `title` renders bare content: this is how a badge or an appended description line is expressed, using `position: { into: <slot> }` to say where.
 
@@ -183,10 +202,17 @@ directive @httpHeader(
 ```
 
 ```js
+const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+
 {
   httpHeader: {
+    predicate: hasDirectiveNamed("httpHeader"),
     title: "Headers",
     position: { after: "metadata" },
+    resolve: (type, options) => {
+      const directive = getDirectiveFromSchema("httpHeader", options);
+      return directive ? getTypeDirectiveValuesList(directive, type) : [];
+    },
     render: (values) => {
       return values
         .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
@@ -218,17 +244,25 @@ const { hasDirectiveNamed } = require("@graphql-markdown/graphql");
 
 ### Meta object
 
-A directive naming another documented type, rendered as a link to its page.
+A directive naming another documented type, rendered as a link to its page. Only the first occurrence is read, with `getTypeDirectiveValues` (singular), as `@meta` is not repeatable.
 
 ```graphql
 directive @meta(type: String!) on FIELD_DEFINITION
 ```
 
 ```js
+const { getDirectiveFromSchema, getTypeDirectiveValues, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+
 {
   meta: {
+    predicate: hasDirectiveNamed("meta"),
     title: "Meta",
     position: { after: "code" },
+    resolve: (type, options) => {
+      const directive = getDirectiveFromSchema("meta", options);
+      const value = directive && getTypeDirectiveValues(directive, type);
+      return value ? [value] : [];
+    },
     render: ([value], options) => {
       const slug = String(value.type).toLowerCase();
       return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
@@ -236,8 +270,6 @@ directive @meta(type: String!) on FIELD_DEFINITION
   },
 }
 ```
-
-Only the first occurrence is used here, as `@meta` is not repeatable.
 
 ## Migrating from `customDirective`
 
@@ -253,21 +285,27 @@ Only the first occurrence is used here, as `@meta` is not repeatable.
 - },
 + decorators: {
 +   authDescription: {
-+     directive: "auth",
++     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "description" },
-+     render: (values, options, { directive, type }) =>
-+       directiveDescriptor(directive, type, "Requires the `${requires}` role."),
++     render: (values, options, { type }) => {
++       const directive = getDirectiveFromSchema("auth", options);
++       return directive
++         ? directiveDescriptor(directive, type, "Requires the `${requires}` role.")
++         : undefined;
++     },
 +   },
 +   authTag: {
-+     directive: "auth",
++     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "tags" },
-+     render: (values, options, { directive }) =>
-+       options.formatMDXBadge({ text: `@${directive.name}` }),
++     render: (values, options) => {
++       const directive = getDirectiveFromSchema("auth", options);
++       return directive ? options.formatMDXBadge({ text: `@${directive.name}` }) : undefined;
++     },
 +   },
 + },
 ```
 
-A `customDirective` entry's `descriptor`/`tag` each become their own decorator, sharing the `directive` field so both read the same schema directive; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
+A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive *definition*, not per-occurrence argument values, so `render` looks it up itself with `getDirectiveFromSchema`. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
 
 ## Helpers
 
@@ -291,5 +329,7 @@ npm i @graphql-markdown/helpers
 ### `@graphql-markdown/graphql`
 
 - `hasDirectiveNamed`, `hasAnyDirective`, `isEntity`, `and`, `or`, `not`, `always` — predicate helpers (see [Predicate](#predicate)).
+- `getDirectiveFromSchema` — resolves a directive's schema definition by name (see [Resolve](#resolve)).
 - [`getTypeDirectiveValues`](/api/graphql/introspection#gettypedirectivevalues)
+- [`getTypeDirectiveValuesList`](/api/graphql/introspection#gettypedirectivevalueslist)
 - [`getTypeDirectiveArgValue`](/api/graphql/introspection#gettypedirectiveargvalue)

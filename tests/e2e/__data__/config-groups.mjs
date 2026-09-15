@@ -1,6 +1,10 @@
 // @ts-check
 
-import { getTypeDirectiveValues } from "@graphql-markdown/graphql";
+import {
+  getDirectiveFromSchema,
+  getTypeDirectiveValues,
+  hasDirectiveNamed,
+} from "@graphql-markdown/graphql";
 import {
   directiveDescriptor,
   directiveTag,
@@ -39,36 +43,55 @@ export const options = {
   },
   decorators: {
     betaTag: {
-      directive: "beta",
+      predicate: hasDirectiveNamed("beta"),
       position: { into: "tags" },
-      render: (_values, options, { directive }) =>
-        renderBadge(
-          { text: directive?.name?.toUpperCase(), classname: "badge--danger" },
-          options,
-        ),
+      render: (_values, options) => {
+        const directive = getDirectiveFromSchema("beta", options);
+        return directive
+          ? renderBadge(
+              {
+                text: directive.name.toUpperCase(),
+                classname: "badge--danger",
+              },
+              options,
+            )
+          : undefined;
+      },
     },
     authDescription: {
-      directive: "auth",
+      predicate: hasDirectiveNamed("auth"),
       position: { into: "description" },
-      render: (_values, _options, { directive, type }) =>
-        escapeMDX(
-          directiveDescriptor(
-            directive,
-            type,
-            "This requires the current user to be in `${requires}` role.",
-          ),
-        ),
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("auth", options);
+        return directive
+          ? escapeMDX(
+              directiveDescriptor(
+                directive,
+                type,
+                "This requires the current user to be in `${requires}` role.",
+              ),
+            )
+          : undefined;
+      },
     },
     authTag: {
-      directive: "auth",
+      predicate: hasDirectiveNamed("auth"),
       position: { into: "tags" },
-      render: (_values, options, { directive, type }) =>
-        renderBadge(directiveTag(directive, type), options),
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("auth", options);
+        return directive
+          ? renderBadge(directiveTag(directive, type), options)
+          : undefined;
+      },
     },
     complexityDescription: {
-      directive: "complexity",
+      predicate: hasDirectiveNamed("complexity"),
       position: { into: "description" },
-      render: (_values, _options, { directive, type }) => {
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("complexity", options);
+        if (!directive) {
+          return undefined;
+        }
         const { value, multipliers } = getTypeDirectiveValues(
           directive,
           type,
@@ -82,10 +105,14 @@ export const options = {
       },
     },
     complexityTag: {
-      directive: "complexity",
+      predicate: hasDirectiveNamed("complexity"),
       position: { into: "tags" },
-      render: (_values, options, { directive, type }) =>
-        renderBadge(directiveTag(directive, type), options),
+      render: (_values, options, { type }) => {
+        const directive = getDirectiveFromSchema("complexity", options);
+        return directive
+          ? renderBadge(directiveTag(directive, type), options)
+          : undefined;
+      },
     },
   },
 };

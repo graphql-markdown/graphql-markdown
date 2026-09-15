@@ -857,7 +857,7 @@ describe("config", () => {
       ).toStrictEqual({ responses: decorator });
     });
 
-    test("returns the decorators when predicate, resolve, and directive are all set", () => {
+    test("returns the decorators when predicate and resolve are both set", () => {
       expect.assertions(1);
 
       const full = {
@@ -868,7 +868,6 @@ describe("config", () => {
         resolve: (): Record<string, unknown>[] => {
           return [];
         },
-        directive: "httpResponse",
       };
 
       expect(
@@ -966,23 +965,6 @@ describe("config", () => {
         ),
       );
     });
-
-    test.each([123, ""])(
-      "throws a type error if directive is not a non-empty string (%p)",
-      (value) => {
-        expect.assertions(1);
-
-        expect(() => {
-          getDecoratorsOption({
-            responses: { ...decorator, directive: value },
-          } as unknown as Decorators);
-        }).toThrow(
-          new TypeError(
-            "Decorator 'responses' option 'directive' must be a non-empty string.",
-          ),
-        );
-      },
-    );
 
     test.each([
       { into: "tags" },

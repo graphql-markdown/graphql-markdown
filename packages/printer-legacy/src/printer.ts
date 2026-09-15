@@ -437,7 +437,7 @@ export class Printer implements IPrinter {
     type: unknown,
     options: PrintTypeOptions,
   ): Maybe<PageSection> => {
-    return printDecorator(type, getExampleSectionDefinition(options), options);
+    return printDecorator(type, getExampleSectionDefinition(), options);
   };
 
   /**

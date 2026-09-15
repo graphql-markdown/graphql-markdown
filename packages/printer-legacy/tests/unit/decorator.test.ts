@@ -1,6 +1,12 @@
 import { buildSchema } from "graphql/utilities";
 
 import type { Decorators, PrintTypeOptions } from "@graphql-markdown/types";
+import {
+  always,
+  getDirectiveFromSchema,
+  getTypeDirectiveValuesList,
+  hasDirectiveNamed,
+} from "@graphql-markdown/graphql";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
 import { Printer } from "../../src/printer";
@@ -47,10 +53,20 @@ describe("decorator", () => {
     schema,
   } as PrintTypeOptions;
 
+  // A directive-driven decorator now selects its nodes and reads its
+  // directive's argument values explicitly, via the same public helpers a
+  // config author would use — there is no framework-provided `directive`
+  // option to do this for you.
   const httpResponses: ResolvedDecorator = {
     id: "httpResponse",
-    directive: "httpResponse",
+    predicate: hasDirectiveNamed("httpResponse"),
     title: "Responses",
+    resolve: (resolvedType, resolvedOptions) => {
+      const directive = getDirectiveFromSchema("httpResponse", resolvedOptions);
+      return directive
+        ? getTypeDirectiveValuesList(directive, resolvedType)
+        : [];
+    },
     render: (values) => {
       return values
         .map((value) => {
@@ -106,7 +122,7 @@ describe("decorator", () => {
       expect(
         printDecorator(
           exampleSchema.getType("Sample")!,
-          getExampleSectionDefinition(exampleOptions),
+          getExampleSectionDefinition(),
           exampleOptions,
         ),
       ).toMatchInlineSnapshot(`
@@ -128,7 +144,7 @@ describe("decorator", () => {
       expect.assertions(1);
 
       expect(
-        printDecorator(type, getExampleSectionDefinition(options), options),
+        printDecorator(type, getExampleSectionDefinition(), options),
       ).toBeUndefined();
     });
 
@@ -141,24 +157,10 @@ describe("decorator", () => {
       expect(
         printDecorator(
           exampleSchema.getType("NoSample")!,
-          getExampleSectionDefinition(exampleOptions),
+          getExampleSectionDefinition(),
           exampleOptions,
         ),
       ).toBeDefined();
-    });
-
-    test("uses the directive name from the exampleSection option", () => {
-      expect.assertions(2);
-
-      expect(getExampleSectionDefinition(exampleOptions).directive).toBe(
-        "example",
-      );
-      expect(
-        getExampleSectionDefinition({
-          ...exampleOptions,
-          exampleSection: { directive: "sample" },
-        }).directive,
-      ).toBe("sample");
     });
   });
 
@@ -170,6 +172,8 @@ describe("decorator", () => {
         decorators: {
           httpResponse: {
             title: httpResponses.title,
+            predicate: httpResponses.predicate,
+            resolve: httpResponses.resolve,
             render: httpResponses.render,
             position: { after: "code" },
           },
@@ -226,7 +230,7 @@ describe("decorator", () => {
           type,
           {
             id: "responses",
-            directive: "httpResponse",
+            predicate: hasDirectiveNamed("httpResponse"),
             render: {} as never,
           },
           options,
@@ -234,7 +238,7 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("id may differ from the directive it reads", () => {
+    test("a decorator's id is independent of what its predicate/resolve target", () => {
       expect.assertions(1);
 
       expect(
@@ -242,7 +246,8 @@ describe("decorator", () => {
           type,
           {
             id: "responses",
-            directive: "httpResponse",
+            predicate: httpResponses.predicate,
+            resolve: httpResponses.resolve,
             render: httpResponses.render,
           },
           options,
@@ -312,16 +317,15 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("returns undefined if the schema is not set and the default resolve applies", () => {
+    test("returns undefined if the schema is not set and resolve's own directive lookup fails", () => {
       expect.assertions(1);
 
-      // No explicit `predicate` (defaults to matching every node) and no
-      // explicit `resolve`: the default resolve reads `directive`'s
-      // occurrences off the node, which needs the schema to look the
-      // directive up at all. Without a schema it resolves `[]`, and with no
-      // explicit `predicate` that is not a marker decorator, so it is
-      // skipped — unlike an explicit-predicate decorator, covered
-      // separately below.
+      // `hasDirectiveNamed` reads the AST directly, so the predicate still
+      // matches without a schema — but `httpResponses.resolve` looks the
+      // directive definition up via `getDirectiveFromSchema`, which needs
+      // one, and returns `[]` without it. With `resolve` explicitly set,
+      // an empty result is never substituted (see the marker-decorator
+      // tests below), so the decorator is skipped.
       expect(
         printDecorator(type, httpResponses, {
           ...options,
@@ -369,7 +373,7 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("a custom resolve bypasses the directive lookup entirely", () => {
+    test("a custom resolve produces values with no directive involved", () => {
       expect.assertions(1);
 
       expect(
@@ -389,7 +393,7 @@ describe("decorator", () => {
       ).toMatchObject({ content: expect.stringContaining("value: 42") });
     });
 
-    test("a predicate-only decorator with no directive and no resolve renders once with an empty record", () => {
+    test("a predicate-only decorator with no resolve renders once with an empty record", () => {
       expect.assertions(1);
 
       expect(
@@ -440,49 +444,30 @@ describe("decorator", () => {
       ).toBeUndefined();
     });
 
-    test("a directive-driven decorator with zero occurrences still renders nothing", () => {
+    test("a decorator with neither predicate nor resolve renders nothing, for any node", () => {
       expect.assertions(1);
 
+      // `predicate` defaults to matching every node, but `resolve` defaults
+      // to producing nothing — and with no explicit `predicate` either, an
+      // empty result is not substituted (that is the marker-decorator case,
+      // which requires an explicit `predicate`). So a decorator declaring
+      // neither is a no-op by construction, regardless of what `id` names.
       expect(
         printDecorator(
           type,
-          { id: "doesNotExistOnSchema", render: httpResponses.render },
+          { id: "noop", render: httpResponses.render },
           options,
         ),
       ).toBeUndefined();
     });
 
-    test("context.directive is undefined when no schema is set", () => {
-      expect.assertions(1);
-
-      let seenDirective: unknown = "not set";
-
-      printDecorator(
-        type,
-        {
-          id: "marker",
-          predicate: () => {
-            return true;
-          },
-          render: (_values, _options, context) => {
-            seenDirective = context.directive;
-            return "rendered";
-          },
-        },
-        { ...options, schema: undefined },
-      );
-
-      expect(seenDirective).toBeUndefined();
-    });
-
-    test("render receives id, type, directive, and entity in its context", () => {
-      expect.assertions(4);
+    test("render receives id, type, and entity in its context", () => {
+      expect.assertions(3);
 
       let seen:
         | {
             id: string;
             type: unknown;
-            directive: unknown;
             entity: unknown;
           }
         | undefined;
@@ -491,6 +476,7 @@ describe("decorator", () => {
         type,
         {
           id: "httpResponse",
+          predicate: always(),
           render: (_values, _options, context) => {
             seen = { ...context };
             return "rendered";
@@ -501,9 +487,6 @@ describe("decorator", () => {
 
       expect(seen?.id).toBe("httpResponse");
       expect(seen?.type).toBe(type);
-      expect((seen?.directive as { name?: string } | undefined)?.name).toBe(
-        "httpResponse",
-      );
       expect(seen?.entity).toBe("objects");
     });
 
