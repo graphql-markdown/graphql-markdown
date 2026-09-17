@@ -54,6 +54,44 @@ const SCHEMA_ISSUE_802_FILE = require.resolve("../__data__/schema_802.graphql");
 const SCHEMA_ISSUE_1907_FILE =
   require.resolve("../__data__/schema_1907.graphql");
 
+// Projects a GraphQLField down to the properties this suite cares about, so
+// `JSON.stringify`-based snapshot assertions stay stable across graphql-js
+// versions that change the field/argument objects' internal shape (v17 turned
+// them into classes with an overridden `toJSON()`/`toString()`, and their
+// `astNode.arguments`/`astNode.directives` become `undefined` instead of `[]`
+// when empty).
+const projectField = (field: any) => {
+  return {
+    name: field.name,
+    type: String(field.type),
+    args: field.args.map((arg: any) => {
+      return arg.name;
+    }),
+    description: field.description,
+    deprecationReason: field.deprecationReason,
+  };
+};
+
+const projectFieldMap = (fields: Record<string, any>) => {
+  return Object.fromEntries(
+    Object.entries(fields).map(([key, field]) => {
+      return [key, projectField(field)];
+    }),
+  );
+};
+
+// Only queries/mutations/subscriptions hold raw GraphQLField objects; the
+// rest of a SchemaMap (objects, interfaces, inputs, enums, unions, scalars,
+// directives) is unaffected by the graphql-js v16/v17 field shape change.
+const projectSchemaMap = (schemaTypeMap: any) => {
+  return {
+    ...schemaTypeMap,
+    queries: projectFieldMap(schemaTypeMap.queries ?? {}),
+    mutations: projectFieldMap(schemaTypeMap.mutations ?? {}),
+    subscriptions: projectFieldMap(schemaTypeMap.subscriptions ?? {}),
+  };
+};
+
 describe("introspection", () => {
   let schema: GraphQLSchema;
 
@@ -69,7 +107,7 @@ describe("introspection", () => {
 
       const list = getOperation(schema.getQueryType()!);
 
-      expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
+      expect(JSON.stringify(projectFieldMap(list), null, 2)).toMatchSnapshot();
     });
 
     test("returns list of mutations", () => {
@@ -77,7 +115,7 @@ describe("introspection", () => {
 
       const list = getOperation(schema.getMutationType()!);
 
-      expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
+      expect(JSON.stringify(projectFieldMap(list), null, 2)).toMatchSnapshot();
     });
 
     test("returns list of subscriptions", () => {
@@ -85,7 +123,7 @@ describe("introspection", () => {
 
       const list = getOperation(schema.getSubscriptionType()!);
 
-      expect(JSON.stringify(list, null, 2)).toMatchSnapshot();
+      expect(JSON.stringify(projectFieldMap(list), null, 2)).toMatchSnapshot();
     });
 
     test("returns {} if null", () => {
@@ -169,7 +207,9 @@ describe("introspection", () => {
 
       const fields = getFields(schema.getMutationType()!);
 
-      expect(JSON.stringify(fields, null, 2)).toMatchSnapshot();
+      expect(
+        JSON.stringify((fields as any[]).map(projectField), null, 2),
+      ).toMatchSnapshot();
     });
 
     test("returns empty list if getFields not supported", () => {
@@ -345,7 +385,9 @@ describe("introspection", () => {
 
       const schemaTypeMap = getSchemaMap(schema);
 
-      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+      expect(
+        JSON.stringify(projectSchemaMap(schemaTypeMap), null, 2),
+      ).toMatchSnapshot();
     });
 
     test("returns {} if root type no declared (issue #802)", async () => {
@@ -357,7 +399,9 @@ describe("introspection", () => {
 
       const schemaTypeMap = getSchemaMap(schema802);
 
-      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+      expect(
+        JSON.stringify(projectSchemaMap(schemaTypeMap), null, 2),
+      ).toMatchSnapshot();
     });
 
     test("returns schema types map with custom root types", async () => {
@@ -370,7 +414,9 @@ describe("introspection", () => {
 
       const schemaTypeMap = getSchemaMap(testSchema);
 
-      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+      expect(
+        JSON.stringify(projectSchemaMap(schemaTypeMap), null, 2),
+      ).toMatchSnapshot();
     });
 
     test("does not misclassify mutations returning root Mutation type as namespace containers", () => {
@@ -432,7 +478,9 @@ describe("introspection", () => {
 
       const schemaTypeMap = getSchemaMap(testSchema);
 
-      expect(JSON.stringify(schemaTypeMap, null, 2)).toMatchSnapshot();
+      expect(
+        JSON.stringify(projectSchemaMap(schemaTypeMap), null, 2),
+      ).toMatchSnapshot();
     });
   });
 
