@@ -314,7 +314,13 @@ export const getTypeDirectiveValues = (
     return undefined;
   }
 
-  return getDirectiveValues(directive, node);
+  // graphql-js's `getDirectiveValues` returns a null-prototype object;
+  // normalize to a plain object so callers get a consistent shape
+  // regardless of the resolved graphql-js version (v16 did this
+  // normalization internally, v17 no longer does).
+  const values = getDirectiveValues(directive, node);
+
+  return values ? { ...values } : values;
 };
 
 /**
@@ -360,7 +366,13 @@ export const getTypeDirectiveValuesList = (
     .map((directiveNode: DirectiveNode): Maybe<Record<string, unknown>> => {
       // Coerce each occurrence in isolation, as `getDirectiveValues` only ever
       // resolves the first directive node matching the directive name.
-      return getDirectiveValues(directive, { directives: [directiveNode] });
+      // Normalize the null-prototype object graphql-js returns to a plain
+      // object (see the comment in `getTypeDirectiveValues` above).
+      const values = getDirectiveValues(directive, {
+        directives: [directiveNode],
+      });
+
+      return values ? { ...values } : values;
     })
     .filter((values): values is Record<string, unknown> => {
       return values !== undefined;
