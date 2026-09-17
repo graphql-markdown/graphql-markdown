@@ -13,7 +13,11 @@ import {
   GraphQLString,
 } from "graphql/type";
 
-import type { PageSections, PrintTypeOptions } from "@graphql-markdown/types";
+import type {
+  MDXString,
+  PageSections,
+  PrintTypeOptions,
+} from "@graphql-markdown/types";
 
 vi.mock("@graphql-markdown/utils", async (importOriginal) => {
   return {
@@ -74,6 +78,9 @@ import * as GraphQL from "@graphql-markdown/graphql";
 
 vi.mock("../../src/graphql");
 import * as GraphQLPrinter from "../../src/graphql";
+
+vi.mock("../../src/badge");
+import * as BadgePrinter from "../../src/badge";
 
 // Partial mock: `printExample` is stubbed per test, while
 // `getExampleSectionDefinition` stays real so the example section is still built
@@ -525,6 +532,22 @@ describe("Printer", () => {
           operationNamespaceParts: ["analytics", "admin"],
         }),
       );
+    });
+  });
+
+  describe("printBadge()", () => {
+    test("delegates to badge.printBadge with the given badge and options", () => {
+      expect.hasAssertions();
+
+      const badge = { text: "Required" };
+      const spy = vi
+        .spyOn(BadgePrinter, "printBadge")
+        .mockReturnValue("<mark>Required</mark>" as MDXString);
+
+      const result = Printer.printBadge(badge, DEFAULT_OPTIONS);
+
+      expect(spy).toHaveBeenCalledWith(badge, DEFAULT_OPTIONS);
+      expect(result).toBe("<mark>Required</mark>");
     });
   });
 

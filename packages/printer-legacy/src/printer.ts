@@ -9,6 +9,7 @@
  */
 
 import type {
+  Badge,
   ConfigPrintTypeOptions,
   Formatter,
   GraphQLSchema,
@@ -70,6 +71,7 @@ import {
 import { pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation";
+import { printBadge } from "./badge";
 import { printDescription } from "./common";
 import {
   getDecoratorsOrder,
@@ -368,6 +370,22 @@ export class Printer implements IPrinter {
     }
 
     return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
+  };
+
+  /**
+   * Formats a single badge into MDX string format
+   *
+   * @param badge - Badge object containing text and optional classname
+   * @param options - Printer configuration options
+   * @returns Formatted MDX string, using the configured formatter's
+   * `formatMDXBadge` when set and falling back to the default formatter
+   * otherwise
+   */
+  static readonly printBadge = (
+    badge: Badge,
+    options: PrintTypeOptions,
+  ): MDXString => {
+    return printBadge(badge, options);
   };
 
   /**
