@@ -249,15 +249,22 @@ directive @beta on OBJECT | FIELD_DEFINITION
 
 ```js
 const { hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { Printer } = require("@graphql-markdown/printer-legacy");
 
 {
   beta: {
     predicate: hasDirectiveNamed("beta"),
     position: { into: "tags" },
-    render: (values, options) => options.formatMDXBadge({ text: "BETA", classname: "badge--danger" }),
+    render: (values, options) => Printer.printBadge({ text: "BETA", classname: "badge--danger" }, options),
   },
 }
 ```
+
+:::info
+
+[`Printer.printBadge`](/api/printer-legacy/printer#printbadge) renders a `Badge` object the same way the printer renders its own tags — escaping the text and falling back to the default formatter when `options.formatMDXBadge` isn't set — rather than calling `options.formatMDXBadge` directly.
+
+:::
 
 ### Meta object
 
@@ -341,13 +348,13 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#disp
 +     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "tags" },
 +     render: withDirective("auth", (directive, options) =>
-+       options.formatMDXBadge({ text: `@${directive.name}` }),
++       Printer.printBadge(directiveTag(directive), options),
 +     ),
 +   },
 + },
 ```
 
-A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. A badge decorator formats its own Markdown via `options.formatMDXBadge`, the same formatter the printer uses for its own badges.
+A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. `directiveTag` still only builds the `Badge` object (`{ text, classname }`); turning it into Markdown is now the decorator's own job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`) — the same badge renderer the printer uses for its own tags, so custom badges stay visually consistent and keep working if the configured formatter changes.
 
 ## Helpers
 
@@ -392,3 +399,4 @@ Directive-value helpers (see [Resolve](#resolve)):
 ### `@graphql-markdown/printer-legacy`
 
 - [`Printer.printCode`](/api/printer-legacy/printer#printcode) — renders a type's SDL as a code block, reused in [response type for operations](#response-type-for-operations).
+- [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) — formats a `Badge` object into Markdown, reused in [migrating from `customDirective`](#migrating-from-customdirective).

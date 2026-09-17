@@ -262,10 +262,10 @@ describe("docs/advanced/decorators.md examples", () => {
             _values: Record<string, unknown>[],
             printOptions: PrintTypeOptions,
           ) => {
-            return printOptions.formatMDXBadge!({
-              text: "BETA",
-              classname: "badge--danger",
-            });
+            return Printer.printBadge(
+              { text: "BETA", classname: "badge--danger" },
+              printOptions,
+            );
           },
         };
 
@@ -457,7 +457,7 @@ describe("docs/advanced/decorators.md examples", () => {
         predicate: hasDirectiveNamed("auth"),
         position: { into: "tags" as const },
         render: withDirective("auth", (directive, renderOptions) => {
-          return renderOptions.formatMDXBadge!(directiveTag(directive));
+          return Printer.printBadge(directiveTag(directive), renderOptions);
         }),
       };
 
