@@ -156,7 +156,7 @@
     },
     "packages/helpers": {
       "name": "@graphql-markdown/helpers",
-      "version": "1.1.4",
+      "version": "1.2.0",
       "dependencies": {
         "@graphql-markdown/graphql": "workspace:",
         "@graphql-markdown/types": "workspace:",
