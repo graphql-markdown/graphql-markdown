@@ -3,7 +3,7 @@
 // Packs every publishable workspace package into a .tgz (via `bun pm pack` from
 // within each package dir), mirroring the old Earthfile `build-package` target.
 // Replaces pack-packages.sh: consumes the workspace build order directly instead
-// of word-splitting `node build-packages.mjs` stdout in the shell.
+// of word-splitting `node build-packages.mts` stdout in the shell.
 //
 // Usage: node pack-packages.mjs <out-dir>
 
@@ -26,7 +26,7 @@ const outDir = resolve(process.cwd(), outDirArg);
 mkdirSync(outDir, { recursive: true });
 
 const { getBuildSequence } = await import(
-  "../../packages/tooling-config/scripts/build-packages.mjs"
+  "../../packages/tooling-config/scripts/build-packages.mts"
 );
 
 for (const pkg of getBuildSequence()) {

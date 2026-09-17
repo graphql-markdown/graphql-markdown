@@ -3,7 +3,7 @@
 // Installs every non-CLI/non-Docusaurus package tgz into the current project,
 // mirroring the old Earthfile `INSTALL_GQLMD` UDC. Replaces install-gqlmd.sh:
 // consumes the workspace build order directly instead of word-splitting
-// `node build-packages.mjs` stdout in the shell.
+// `node build-packages.mts` stdout in the shell.
 //
 // Must be run from within the target project directory (the caller cd's into it).
 //
@@ -25,7 +25,7 @@ const projectDir = process.cwd();
 const pkgDir = resolve(projectDir, pkgDirArg);
 
 const { getBuildSequence } = await import(
-  "../../packages/tooling-config/scripts/build-packages.mjs"
+  "../../packages/tooling-config/scripts/build-packages.mts"
 );
 
 const tarballs = getBuildSequence()
