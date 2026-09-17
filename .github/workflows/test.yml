@@ -101,3 +101,55 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # `@graphql-markdown/graphql` wraps graphql-js's own field/argument/type
+  # objects directly, so it is the one package sensitive to internal shape
+  # changes between graphql-js major versions (e.g. v17 turning GraphQLField/
+  # GraphQLArgument from plain objects into classes). The `test` job above only
+  # ever exercises the single graphql-js version the workspace's own bun.lock
+  # resolves; this job re-runs just that package's unit tests against every
+  # graphql-js major version the catalog range (`^16.0.0 || ^17.0.0`, see root
+  # package.json) claims to support, so a future graphql-js bump can't silently
+  # break behavior this narrowly again.
+  graphql-compat:
+    name: Test graphql package against graphql-js ${{ matrix.graphql }}
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ !cancelled() }}
+    env:
+      RUN_TESTS: >-
+        ${{ needs.changes.result != 'success'
+          || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql') }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Major versions, not exact pins, so this always tests the latest
+        # patch/minor within each major graphql-js still supports (mirrors
+        # smoke.yml's `graphql: [16, 17]` matrix).
+        graphql: [16, 17]
+
+    steps:
+      - name: Checkout Code Base
+        if: env.RUN_TESTS == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup environment
+        if: env.RUN_TESTS == 'true'
+        uses: ./.github/actions/setup
+
+      - name: Pin graphql-js under test
+        if: env.RUN_TESTS == 'true'
+        run: bun add graphql@${{ matrix.graphql }}
+
+      - name: Build graphql package
+        if: env.RUN_TESTS == 'true'
+        run: bun run build -- --filter=@graphql-markdown/graphql...
+
+      - name: Run Tests
+        if: env.RUN_TESTS == 'true'
+        run: |
+          cd packages/graphql
+          bun test:ci
