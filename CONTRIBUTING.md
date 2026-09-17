@@ -335,7 +335,7 @@ Use `--dry-run` to review the publish plan and validate the tarball flow without
 
 #### Dependency Order for Publishing
 
-Packages must be published in dependency order:
+Packages are published in dependency order, computed by [`getBuildSequence()`](packages/tooling-config/scripts/build-packages.mjs) and reused directly by [`publish-release.mts`](packages/tooling-config/scripts/publish-release.mts) — adding a package needs no separate list, only correct `dependencies`/`peerDependencies` in its `package.json`. As of this writing that order is:
 
 1. `types` (no internal deps)
 2. `utils`, `logger`, `graphql`
@@ -346,7 +346,7 @@ Packages must be published in dependency order:
 7. `cli`
 8. `docusaurus`
 
-This order comes from [`getBuildSequence()`](packages/tooling-config/scripts/build-packages.mjs), which [`publish-release.mts`](packages/tooling-config/scripts/publish-release.mts) reuses directly — no separate list to keep in sync when adding a package.
+This snapshot is for orientation only; treat `getBuildSequence()` as authoritative if the two ever disagree.
 
 #### Automated publishing on release
 
