@@ -1,12 +1,19 @@
-// @ts-check
+// Run directly by Node (>= 22.18) through type stripping, so it must stay
+// within erasable syntax: no enums, no parameter properties, no namespaces.
 
 import { pathToFileURL } from "node:url";
 
-import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mjs";
+import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mts";
+
+type PackageMeta = {
+  private?: boolean;
+  dependencies?: Record<string, string>;
+  peerDependencies?: Record<string, string>;
+};
 
 const orgName = "@graphql-markdown";
 
-const getWorkspaceBuildNeeds = (packageMeta = {}) => {
+const getWorkspaceBuildNeeds = (packageMeta: PackageMeta = {}): string[] => {
   return Object.keys({
     ...packageMeta.dependencies,
     ...packageMeta.peerDependencies,
@@ -15,24 +22,21 @@ const getWorkspaceBuildNeeds = (packageMeta = {}) => {
   });
 };
 
-const getBuildDependency = () => {
+const getBuildDependency = (): string[] => {
   const packagesMap = getWorkspacePackagesMap();
-  /**
-   * @type {string[]}
-   */
-  const buildSequence = [];
-  const visited = new Set();
-  const visiting = new Set();
+  const buildSequence: string[] = [];
+  const visited = new Set<string>();
+  const visiting = new Set<string>();
 
-  const shouldSkipVisit = (packageName) => {
+  const shouldSkipVisit = (packageName: string): boolean => {
     if (visited.has(packageName)) {
       return true;
     }
     const packageMeta = packagesMap[packageName];
-    return !packageMeta || packageMeta.private;
+    return !packageMeta || Boolean(packageMeta.private);
   };
 
-  const visit = (packageName) => {
+  const visit = (packageName: string) => {
     if (shouldSkipVisit(packageName)) {
       return;
     }
@@ -60,12 +64,9 @@ const getBuildDependency = () => {
   return buildSequence;
 };
 
-/**
- * Publishable workspace package short names (org prefix stripped), ordered so
- * each package's `@graphql-markdown/*` dependencies are built before it.
- * @returns {string[]}
- */
-const getBuildSequence = () => {
+// Publishable workspace package short names (org prefix stripped), ordered so
+// each package's `@graphql-markdown/*` dependencies are built before it.
+const getBuildSequence = (): string[] => {
   return getBuildDependency().map((packageName) => {
     return packageName.slice(orgName.length + 1);
   });
@@ -73,8 +74,8 @@ const getBuildSequence = () => {
 
 export { getBuildSequence };
 
-// When run directly (`node build-packages.mjs`), print one package name per line
-// so shell tooling can consume the build order.
+// When run directly (`node build-packages.mts`), print one package name per
+// line so shell tooling can consume the build order.
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   for (const packageName of getBuildSequence()) {
     console.log(packageName);

@@ -303,16 +303,16 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
   bun run build
   ```
 
-2. **Use the publish scripts** (recommended):
+2. **Use the publish script** (recommended):
 
   ```shell
   # Single package
-  ./packages/tooling-config/scripts/publish-package.sh <package-name>
-  ./packages/tooling-config/scripts/publish-package.sh --dry-run <package-name>
+  node packages/tooling-config/scripts/publish-release.mts <package-name>
+  node packages/tooling-config/scripts/publish-release.mts --dry-run <package-name>
 
-  # All packages for a release
-  ./packages/tooling-config/scripts/publish-release.sh
-  ./packages/tooling-config/scripts/publish-release.sh --dry-run
+  # All packages for a release, in dependency order
+  node packages/tooling-config/scripts/publish-release.mts
+  node packages/tooling-config/scripts/publish-release.mts --dry-run
   ```
 
 3. **Or manually with bun pack + npm publish tarball**:
@@ -323,18 +323,19 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
   npm publish <tarball.tgz> --access public
   ```
 
-The publish scripts will:
+The publish script will:
 
 - Pack with `bun pm pack` (resolves `workspace:^` to versions)
 - Verify no `workspace:` references remain in the tarball
 - Publish using the tarball (not from directory)
-- Publish in correct dependency order
+- Publish in dependency order, skipping any version already live on npm
+- Prompt for confirmation before publishing, unless run with `--yes`/`-y` or without a TTY (as in CI)
 
 Use `--dry-run` to review the publish plan and validate the tarball flow without publishing anything.
 
 #### Dependency Order for Publishing
 
-Packages must be published in dependency order:
+Packages are published in dependency order, computed by [`getBuildSequence()`](packages/tooling-config/scripts/build-packages.mts) and reused directly by [`publish-release.mts`](packages/tooling-config/scripts/publish-release.mts) — adding a package needs no separate list, only correct `dependencies`/`peerDependencies` in its `package.json`. As of this writing that order is:
 
 1. `types` (no internal deps)
 2. `utils`, `logger`, `graphql`
@@ -345,7 +346,11 @@ Packages must be published in dependency order:
 7. `cli`
 8. `docusaurus`
 
-This is the order used by [`publish-release.sh`](packages/tooling-config/scripts/publish-release.sh); keep both in sync when adding a package.
+This snapshot is for orientation only; treat `getBuildSequence()` as authoritative if the two ever disagree.
+
+#### Automated publishing on release
+
+Pushing a GitHub Release (`release: published`) runs [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which publishes every publishable package to npm via [npm's OIDC trusted publishing](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) — no `NPM_TOKEN` secret involved. The workflow always runs `publish-release.mts --dry-run` first as a rehearsal, then the real publish, and is gated behind the `npm-publish` GitHub Environment (required reviewer approval).
 
 ### Troubleshooting
 

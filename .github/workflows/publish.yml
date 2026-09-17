@@ -1,0 +1,46 @@
+name: Publish
+run-name: ${{ format('Publish release {0} to npm', github.event.release.name) }}
+
+env:
+  HUSKY: 0
+
+on:
+  release:
+    types: [published]
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    permissions:
+      id-token: write # OIDC trusted publishing to npm, no NPM_TOKEN needed
+      contents: read
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: ./.github/actions/setup
+
+      - name: Build packages
+        run: bun run build
+
+      - name: Ensure OIDC-capable npm CLI
+        run: npm install -g npm@latest
+
+      - name: Dry-run publish (rehearsal)
+        run: node packages/tooling-config/scripts/publish-release.mts --dry-run
+
+      - name: Publish to npm
+        run: node packages/tooling-config/scripts/publish-release.mts --yes
