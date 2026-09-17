@@ -72,7 +72,7 @@ const repoRoot = resolve(scriptDir, "../../../");
 // Resolve paths before importing build-packages: its transitive
 // dependencies-utils import chdir()s the process as a side effect. Every
 // spawnSync/spawn call below passes an explicit `cwd` for the same reason.
-const { getBuildSequence } = await import("./build-packages.mjs");
+const { getBuildSequence } = await import("./build-packages.mts");
 
 const buildSequence: string[] = getBuildSequence();
 const packageArg = positional[0];

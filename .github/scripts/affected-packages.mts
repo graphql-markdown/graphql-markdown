@@ -294,7 +294,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     : undefined;
 
   const { getWorkspacePackagesMap } =
-    (await import("../../packages/tooling-config/scripts/shared/dependencies-utils.mjs")) as {
+    (await import("../../packages/tooling-config/scripts/shared/dependencies-utils.mts")) as {
       getWorkspacePackagesMap: () => PackagesMap;
     };
 
