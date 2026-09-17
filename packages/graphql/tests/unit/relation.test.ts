@@ -10,6 +10,19 @@ import {
   getRelationOfUnion,
 } from "../../src/relation";
 
+// Projects a GraphQLField down to the properties this suite cares about,
+// so assertions stay stable across graphql-js versions that change the
+// field/argument objects' internal shape (see relation.ts:211 history).
+const projectField = (field: any) => {
+  return {
+    name: field.name,
+    type: String(field.type),
+    args: field.args.map((arg: any) => {
+      return arg.name;
+    }),
+  };
+};
+
 describe("relation", () => {
   describe("getRelationOfInterface()", () => {
     test("returns types and interfaces extending an interface", () => {
@@ -196,7 +209,47 @@ describe("relation", () => {
 
       const relations = getRelationOfReturn(compositeType, schemaMap);
 
-      expect(relations).toMatchSnapshot();
+      expect({
+        queries: relations.queries.map(projectField),
+        mutations: relations.mutations.map(projectField),
+        subscriptions: relations.subscriptions.map(projectField),
+      }).toMatchInlineSnapshot(`
+        {
+          "mutations": [
+            {
+              "args": [
+                "subject",
+                "duration",
+              ],
+              "name": "addStudyItem",
+              "type": "StudyItem",
+            },
+          ],
+          "queries": [
+            {
+              "args": [
+                "subject",
+              ],
+              "name": "getStudyItems",
+              "type": "[StudyItem!]",
+            },
+            {
+              "args": [
+                "id",
+              ],
+              "name": "getStudyItem",
+              "type": "StudyItem",
+            },
+          ],
+          "subscriptions": [
+            {
+              "args": [],
+              "name": "listStudyItems",
+              "type": "[StudyItem!]",
+            },
+          ],
+        }
+      `);
     });
 
     test("preserves nested query namespace name for operation relations", () => {
@@ -290,7 +343,53 @@ describe("relation", () => {
 
       const relations = getRelationOfField(compositeType, schemaMap);
 
-      expect(relations).toMatchSnapshot();
+      expect({
+        ...relations,
+        queries: relations.queries.map(projectField),
+        mutations: relations.mutations.map(projectField),
+        subscriptions: relations.subscriptions.map(projectField),
+      }).toMatchInlineSnapshot(`
+        {
+          "directives": [
+            "@deprecated",
+            "@specifiedBy",
+          ],
+          "inputs": [],
+          "interfaces": [
+            "Record",
+          ],
+          "mutations": [
+            {
+              "args": [
+                "subject",
+                "duration",
+              ],
+              "name": "addStudyItem",
+              "type": "StudyItem",
+            },
+          ],
+          "objects": [
+            "StudyItem",
+          ],
+          "queries": [
+            {
+              "args": [
+                "subject",
+              ],
+              "name": "getStudyItems",
+              "type": "[StudyItem!]",
+            },
+            {
+              "args": [
+                "id",
+              ],
+              "name": "getStudyItem",
+              "type": "StudyItem",
+            },
+          ],
+          "subscriptions": [],
+        }
+      `);
     });
 
     test("preserves nested query namespace name for field relations", () => {

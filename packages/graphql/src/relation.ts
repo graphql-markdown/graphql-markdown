@@ -28,7 +28,7 @@ import type {
   SchemaMap,
 } from "@graphql-markdown/types";
 
-import { toString, hasProperty, isTypeObject } from "@graphql-markdown/utils";
+import { hasProperty, isTypeObject } from "@graphql-markdown/utils";
 
 import { _getFields } from "./introspection";
 import { isGraphQLFieldType } from "./guard";
@@ -207,10 +207,7 @@ export const getRelationOfField: IGetRelation<RelationOfField> = <T>(
       ) {
         if (
           !results.some((r) => {
-            return (
-              toString(r) === key ||
-              (isTypeObject(r) && hasProperty(r, "name") && r.name === key)
-            );
+            return isTypeObject(r) && hasProperty(r, "name") && r.name === key;
           })
         ) {
           if (
