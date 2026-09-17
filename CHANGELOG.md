@@ -1,7 +1,78 @@
+<a id="1.37.0"></a>
+# [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0) - 2026-09-17
+
+1.37.0 adds `decorators`, a more flexible way to add custom content to type pages, and deprecates `customDirective` in its favor. Nothing breaks: existing `customDirective` configs keep working unchanged, and migrating is optional.
+
+### What's New
+
+**`decorators`: predicate-driven content for type pages.** With `customDirective`, custom content could only be triggered by a schema directive. `decorators` drops that restriction — a decorator picks the nodes it applies to with a predicate function `(type, options) => boolean`, so it can react to a directive, a node's kind (query, object, enum, ...), or any combination of those, not just "this directive is present." It can still render a titled section exactly like `customDirective` did, and can now also splice content into a smaller slot, such as a badge next to a heading or a line appended to a description.
+
+Here's a decorator that renders an HTTP response table for fields carrying a repeatable `@httpResponse` directive — the kind of thing `customDirective` handled today, expressed the new way:
+
+```js title="docusaurus.config.js"
+const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+
+decorators: {
+  responses: {
+    predicate: hasDirectiveNamed("httpResponse"),
+    title: "Responses",
+    position: { after: "metadata" },
+    resolve: (type, options) => {
+      const directive = getDirectiveFromSchema("httpResponse", options);
+      return directive ? getTypeDirectiveValuesList(directive, type) : [];
+    },
+    render: (values) => [
+      "| Code | Description |",
+      "| ---- | ----------- |",
+      ...values.map((v) => `| \`${v.code}\` | ${v.description ?? ""} |`),
+    ].join("\n"),
+  },
+}
+```
+
+Given a schema field marked `@httpResponse(code: 200, description: "OK") @httpResponse(code: 404, description: "User not found")`, that field's page gets a `### Responses` section with both rows.
+
+`@graphql-markdown/graphql` exports the building blocks used above (`getDirectiveFromSchema`, `getTypeDirectiveValues`/`List`, `getTypeDirectiveArgValue`, and predicate helpers like `hasDirectiveNamed`, `and`, `or`, `not`, `isEntity`), and `@graphql-markdown/helpers` adds a ready-made `withDirective` decorator for the common case. Full reference and a step-by-step migration guide from `customDirective`: [docs/advanced/decorators](https://graphql-markdown.dev/docs/advanced/decorators) ([#3312](https://github.com/graphql-markdown/graphql-markdown/issues/3312)).
+
+**Other additions:**
+
+- **GraphQL**: `getTypeDirectiveValuesList` reads the values of a repeatable directive off a type ([#3274](https://github.com/graphql-markdown/graphql-markdown/issues/3274)).
+- **Logger / CLI**: the logger now accepts a pre-built instance, and CLI `cliOptions` are optional ([#3283](https://github.com/graphql-markdown/graphql-markdown/issues/3283)).
+- **Core**: `Renderer`/`getRenderer` consolidate their parameters into a single options object ([#3302](https://github.com/graphql-markdown/graphql-markdown/issues/3302)).
+
+### Deprecated
+
+- **Core**: `customDirective` is deprecated in favor of `decorators` above. It is not going away in this release and keeps working exactly as before — there's nothing you need to change today. When you're ready, the [migration guide](https://graphql-markdown.dev/docs/advanced/decorators#migrating-from-customdirective) walks through converting an existing config ([#3312](https://github.com/graphql-markdown/graphql-markdown/issues/3312)).
+
+### Fixed
+
+- **GraphQL**: support graphql-js v17's `GraphQLField`/`GraphQLArgument` shape change ([#3319](https://github.com/graphql-markdown/graphql-markdown/pull/3319)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.37.0 |
+| @graphql-markdown/core | 1.23.0 |
+| @graphql-markdown/printer-legacy | 1.18.0 |
+| @graphql-markdown/types | 1.15.0 |
+| @graphql-markdown/graphql | 1.3.0 |
+| @graphql-markdown/helpers | 1.2.0 |
+| @graphql-markdown/logger | 1.1.0 |
+| @graphql-markdown/cli | 1.1.0 |
+| @graphql-markdown/formatters | 1.1.1 |
+| @graphql-markdown/utils | 1.13.1 |
+| @graphql-markdown/diff | 1.1.19 |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.36.0...1.37.0
+
+[Changes][1.37.0]
+
+
 <a id="1.36.0"></a>
 # [1.36.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.36.0) - 2026-09-04
 
-1.36.0 makes the output destination pluggable: `outputAdapter` lets the generator write somewhere other than the local filesystem — object storage, a CMS, an in-memory bundle — while the filesystem stays the default. It also switches section header IDs to the syntax native to each target framework, which changes generated output by default.
+1.36.0 makes the output destination pluggable: [`outputAdapter`](https://graphql-markdown.dev/docs/settings#outputadapter) lets the generator write somewhere other than the local filesystem — object storage, a CMS, an in-memory bundle — while the filesystem stays the default. It also switches section header IDs to the syntax native to each target framework, which changes generated output by default.
 
 ### 💥 Breaking Change
 
@@ -9,7 +80,7 @@
 
 ### What's New
 
-- **Core**: pluggable `outputAdapter` sends generated pages to a destination other than the local filesystem. `fsOutputAdapter` remains the default, so existing setups are unchanged, and formatter lifecycle hooks write through the same adapter — post-processed pages follow the output instead of silently landing on disk ([#3238](https://github.com/graphql-markdown/graphql-markdown/issues/3238), [#3258](https://github.com/graphql-markdown/graphql-markdown/issues/3258)). See the [output adapter guide](https://graphql-markdown.dev/docs/advanced/output-adapter).
+- **Core**: pluggable `outputAdapter` sends generated pages to a destination other than the local filesystem. [`fsOutputAdapter`](https://graphql-markdown.dev/api/utils/fs#fsoutputadapter) remains the default, so existing setups are unchanged, and formatter lifecycle hooks write through the same adapter — post-processed pages follow the output instead of silently landing on disk ([#3238](https://github.com/graphql-markdown/graphql-markdown/issues/3238), [#3258](https://github.com/graphql-markdown/graphql-markdown/issues/3258)). See the [output adapter guide](https://graphql-markdown.dev/docs/advanced/output-adapter).
 - **Formatters**: section header IDs now use each framework's native syntax — `{/* #ID */}` on Docusaurus 3.10 and later, `[#ID]` on Fumadocs, escaped `\{#ID\}` on Starlight and Vocs, and the classic `{#ID}` elsewhere. Since `docOptions.sectionHeaderId` defaults to `true`, this changes generated output without any config change: set it to `false` to restore the previous behaviour, or override `formatMDXPermalink` in a custom formatter ([#3255](https://github.com/graphql-markdown/graphql-markdown/issues/3255)).
 
 ### Package Versions 📦
@@ -2455,6 +2526,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.37.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.36.0...1.37.0
 [1.36.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.2...1.36.0
 [1.35.2]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.1...1.35.2
 [1.35.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.0...1.35.1
