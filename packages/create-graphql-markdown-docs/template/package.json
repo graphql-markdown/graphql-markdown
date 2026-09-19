@@ -1,0 +1,25 @@
+{
+  "name": "graphql-markdown-docs",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GraphQL API reference site powered by GraphQL Markdown",
+  "type": "module",
+  "scripts": {
+    "dev": "nuxi dev",
+    "generate": "nuxi generate",
+    "build": "nuxi build",
+    "preview": "nuxi preview"
+  },
+  "dependencies": {
+    "@graphql-markdown/nuxt-theme": "^0.1.0",
+    "@nuxt/content": "^3.16.0",
+    "@nuxt/ui": "^4.11.0",
+    "better-sqlite3": "^13.0.3",
+    "nuxt": "^4.5.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

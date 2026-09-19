@@ -1,0 +1,60 @@
+{
+  "name": "create-graphql-markdown-docs",
+  "version": "0.1.0",
+  "description": "Create a new GraphQL API documentation site with GraphQL Markdown and Nuxt",
+  "type": "module",
+  "homepage": "https://graphql-markdown.dev",
+  "bugs": {
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graphql-markdown/graphql-markdown.git",
+    "directory": "packages/create-graphql-markdown-docs"
+  },
+  "keywords": [
+    "create",
+    "nuxt",
+    "graphql",
+    "documentation",
+    "cli",
+    "scaffold"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "license": "MIT",
+  "bin": {
+    "create-graphql-markdown-docs": "./bin/create.mjs"
+  },
+  "scripts": {
+    "build": "echo \"no build step — bin/ and template/ ship as source\"",
+    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\"",
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\" --fix",
+    "prettier": "prettier \"bin/**/*.mjs\" \"template/**/*.{ts,vue,json,md}\" \"tests/**/*.ts\" --check",
+    "prettier:fix": "prettier \"bin/**/*.mjs\" \"template/**/*.{ts,vue,json,md}\" \"tests/**/*.ts\" --write",
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run --passWithNoTests tests/unit",
+    "test:integration": "vitest run --passWithNoTests tests/integration",
+    "test:e2e": "GQLMD_CLI_E2E=1 vitest run tests/integration/e2e-build.test.ts"
+  },
+  "files": [
+    "bin",
+    "template"
+  ],
+  "dependencies": {
+    "@clack/prompts": "^0.8.0",
+    "graphql": "^16.8.0",
+    "package-manager-detector": "^0.2.2"
+  },
+  "devDependencies": {
+    "@graphql-markdown/tooling-config": "workspace:",
+    "vitest": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
