@@ -23,7 +23,7 @@ import { appendFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ORG_NAME = "@graphql-markdown";
+import { ORG_NAME, shortName } from "../../packages/tooling-config/scripts/shared/package-names.mts";
 
 // Real workspace packages, but with no `test:ci` script: `types` is pure
 // `.d.ts` (erased before anything could run against it) and `tooling-config`
@@ -116,10 +116,6 @@ const matches = (file: string, patterns: RegExp[]): boolean => {
   return patterns.some((pattern) => {
     return pattern.test(file);
   });
-};
-
-const shortName = (packageName: string): string => {
-  return packageName.slice(ORG_NAME.length + 1);
 };
 
 /**
