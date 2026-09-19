@@ -16,6 +16,12 @@ website/api
 # stryker temp files
 .stryker-tmp
 
+# Nuxt build/runtime artifacts (nuxt-theme's own dev state, and its test fixtures')
+.nuxt
+.output
+.data
+packages/*/tests/fixture*/content/
+
 # istanbul code coverage
 .nyc_output
 coverage
@@ -27,7 +33,6 @@ output
 dist
 *.tgz
 *.tsbuildinfo
-bin
 
 *.code-workspace
 
