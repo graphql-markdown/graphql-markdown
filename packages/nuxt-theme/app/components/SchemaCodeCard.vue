@@ -54,12 +54,16 @@ const copyLabel = computed(() =>
   copied.value ? "Copied" : `Copy ${props.label} snippet`,
 );
 
+// `aria-label` (not `ariaLabel`): UButton has no such prop, so this falls
+// through as a raw attribute — Vue does not hyphenate an unrecognized
+// camelCase key for fallthrough attrs, so `ariaLabel` would render as the
+// DOM attribute `arialabel`, which screen readers don't recognize.
 const copyButtonProps = computed(() => ({
   icon: copied.value ? "i-lucide-check" : "i-lucide-copy",
   color: "neutral",
   variant: "ghost",
   size: "xs",
-  ariaLabel: copyLabel.value,
+  "aria-label": copyLabel.value,
 }) as const);
 
 // `@vueuse/core` is only present as a hoisted dependency of `@nuxt/ui`, so the
