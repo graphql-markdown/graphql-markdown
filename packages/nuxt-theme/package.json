@@ -1,0 +1,83 @@
+{
+  "name": "@graphql-markdown/nuxt-theme",
+  "version": "0.1.0",
+  "description": "A Nuxt layer for building GraphQL API reference sites",
+  "homepage": "https://graphql-markdown.dev",
+  "bugs": {
+    "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graphql-markdown/graphql-markdown.git",
+    "directory": "packages/nuxt-theme"
+  },
+  "keywords": [
+    "nuxt",
+    "nuxt-layer",
+    "graphql",
+    "graphql-schema",
+    "documentation",
+    "api-reference",
+    "markdown",
+    "graphql-markdown"
+  ],
+  "author": {
+    "name": "Gregory Heitz"
+  },
+  "license": "MIT",
+  "type": "module",
+  "main": "./nuxt.config.ts",
+  "exports": {
+    ".": "./nuxt.config.ts",
+    "./generate": "./generate.ts",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "echo \"no build step — Nuxt layer ships source\"",
+    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"app/**/*.{ts,vue}\" \"modules/**/*.ts\" \"*.ts\"",
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"app/**/*.{ts,vue}\" \"modules/**/*.ts\" \"*.ts\" --fix",
+    "prettier": "prettier \"app/**/*.{ts,vue,css}\" \"modules/**/*.ts\" \"*.ts\" --check",
+    "prettier:fix": "prettier \"app/**/*.{ts,vue,css}\" \"modules/**/*.ts\" \"*.ts\" --write",
+    "ts:check": "nuxi typecheck",
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "vitest run --passWithNoTests tests/unit",
+    "test:integration": "vitest run --passWithNoTests tests/integration",
+    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.8.0",
+    "@graphql-markdown/cli": "workspace:",
+    "@nuxt/content": "^3.16.0",
+    "@nuxt/kit": "^4.5.2",
+    "@nuxt/ui": "^4.11.0",
+    "consola": "^3.4.2",
+    "shiki": "^4.4.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@graphql-markdown/tooling-config": "workspace:",
+    "nuxt": "^4.5.2",
+    "typescript": "6.0.3",
+    "vue-tsc": "^3.3.11"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "gqlmd-swizzle": "./bin/swizzle.mjs"
+  },
+  "files": [
+    "app",
+    "modules",
+    "bin",
+    "content.config.ts",
+    "formatter.ts",
+    "generate.ts",
+    "nuxt.config.ts",
+    "swizzle.manifest.ts",
+    "swizzle.manifest.mjs"
+  ]
+}

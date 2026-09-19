@@ -1,0 +1,23 @@
+scalar DateTime
+
+type Query {
+  user(id: ID!): User
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  profile: Profile
+  status: String @deprecated(reason: "Use active field instead")
+}
+
+type Profile {
+  bio: String
+  preferences: Preferences!
+}
+
+type Preferences {
+  theme: String!
+  notifications: Boolean!
+}
