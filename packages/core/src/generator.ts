@@ -45,6 +45,8 @@ import { getPrinter } from "./printer";
 import { getRenderer, logHandlerErrors } from "./renderer";
 import { getEvents } from "./event-emitter";
 import {
+  ConfigBuildEvent,
+  ConfigBuildEvents,
   SchemaEvent,
   SchemaEvents,
   DiffCheckEvent,
@@ -342,40 +344,49 @@ export const resolveSkipAndOnlyDirectives = (
  * @param options - Complete configuration for the documentation generation
  * @returns Promise that resolves when documentation is fully generated
  */
-export const generateDocFromSchema = async ({
-  baseURL,
-  customDirective,
-  decorators,
-  diffMethod,
-  docOptions,
-  force,
-  groupByDirective,
-  homepageLocation,
-  linkRoot,
-  loaders: loadersList,
-  loggerModule,
-  formatter,
-  metatags,
-  onlyDocDirective,
-  outputAdapter,
-  outputDir,
-  prettify,
-  printTypeOptions,
-  schemaLocation,
-  skipDocDirective,
-  tmpDir,
-}: GeneratorOptions): Promise<void> => {
+export const generateDocFromSchema = async (
+  options: GeneratorOptions,
+): Promise<void> => {
   const start = process.hrtime.bigint();
 
-  await Logger(loggerModule);
+  await Logger(options.loggerModule);
 
-  const mdxModule = await loadMDXModule(formatter);
+  const mdxModule = await loadMDXModule(options.formatter);
   // Register MDX lifecycle event handlers if mdxModule loaded successfully
   // This must be called BEFORE getEvents() because it resets the singleton
   registerMDXEventHandlers(mdxModule);
 
   // Get events AFTER registration (registerMDXEventHandlers resets and recreates the singleton)
   const events = getEvents();
+
+  // Emitted before destructuring `options` below, so a hook that mutates
+  // `event.data.config` (same object reference as `options`) is picked up.
+  await events.emitAsync(
+    ConfigBuildEvents.AFTER_BUILD,
+    new ConfigBuildEvent({ config: options }),
+  );
+
+  const {
+    baseURL,
+    customDirective,
+    decorators,
+    diffMethod,
+    docOptions,
+    force,
+    groupByDirective,
+    homepageLocation,
+    linkRoot,
+    loaders: loadersList,
+    metatags,
+    onlyDocDirective,
+    outputAdapter,
+    outputDir,
+    prettify,
+    printTypeOptions,
+    schemaLocation,
+    skipDocDirective,
+    tmpDir,
+  } = options;
 
   await events.emitAsync(
     SchemaEvents.BEFORE_LOAD,
