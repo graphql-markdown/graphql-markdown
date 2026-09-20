@@ -89,6 +89,19 @@ jobs:
         if: env.RUN_MUTATION == 'true'
         run: bun run build
 
+      # @stryker-mutator/vitest-runner@10.0.0 (latest, as of this writing) crashes
+      # on init against vitest 5's resolved config: `resolvedProjects[0].viteConfig.test`
+      # is self-referential, and the runner tries to `JSON.stringify` it — "TypeError:
+      # Converting circular structure to JSON". Stryker swallows that failure per
+      # mutant rather than aborting the run, so every mutant across every package
+      # silently scores as failed, flattening every mutation score to 0.00 regardless
+      # of what the PR actually changed. `--no-save` keeps this confined to this job's
+      # ephemeral install; the rest of the repo (and its own tests) stay on vitest 5.
+      # Drop this once a `@stryker-mutator/vitest-runner` release fixes the crash.
+      - name: Downgrade vitest for Stryker (vitest-runner incompatible with vitest 5)
+        if: env.RUN_MUTATION == 'true'
+        run: bun add -D vitest@^4 --no-save
+
       - name: Run Mutations Tests
         if: env.RUN_MUTATION == 'true'
         run: bun run --filter '@graphql-markdown/${{ matrix.package }}' stryker --allowEmpty --reporters dashboard,json --dashboard.module ${{matrix.package}}
