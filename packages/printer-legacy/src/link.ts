@@ -223,6 +223,42 @@ const isHierarchy = (
 };
 
 /**
+ * Resolves the namespace folder segments and final filename slug for an
+ * operation link, matching the two layouts `renderer.ts` can write: nested
+ * category/namespace folders normally, or — under flat hierarchy, where
+ * `renderTypeEntities` writes one file per operation using the full dotted
+ * name (e.g. `queries-analytics-aggregate-tournaments.mdx`) — a single
+ * flattened filename with no namespace subfolders.
+ *
+ * @param isFlat - Whether the flat hierarchy option is active
+ * @param category - The resolved category, used as a folder (non-flat) or filename prefix (flat)
+ * @param name - The full, possibly dotted, operation name
+ * @param operationNameParts - `name` split on "." for namespaced operations, empty otherwise
+ * @param operationLeafName - The last part of `operationNameParts`, or the type's display name
+ * @returns The namespace folder segments (empty under flat hierarchy) and the final leaf slug
+ */
+const getOperationPathSegments = (
+  isFlat: boolean,
+  category: Maybe<string>,
+  name: string,
+  operationNameParts: string[],
+  operationLeafName: string,
+): { namespaceFolders: string[]; leafSegment: string } => {
+  const flatCategoryPrefix = isFlat && category ? `${slugify(category)}-` : "";
+
+  return {
+    namespaceFolders: isFlat
+      ? []
+      : operationNameParts.slice(0, -1).map((folder) => {
+          return slugify(folder);
+        }),
+    leafSegment: `${flatCategoryPrefix}${slugify(
+      isFlat && operationNameParts.length > 0 ? name : operationLeafName,
+    )}`,
+  };
+};
+
+/**
  * Converts a GraphQL type to a link object.
  *
  * @param type - The GraphQL type to convert
@@ -302,12 +338,15 @@ export const toLink = (
     isOperation(type) && name.includes(".")
       ? name.split(".").filter(Boolean)
       : [];
-  const operationNamespaceFolders = operationNameParts.slice(0, -1);
   const operationLeafName = operationNameParts.at(-1) ?? text;
 
-  // Flat: `category` becomes a filename prefix ("queries-"), matching
-  // `renderer.ts`. Non-flat: `category` is a folder segment, as before.
-  const flatCategoryPrefix = isFlat && category ? `${slugify(category)}-` : "";
+  const { namespaceFolders, leafSegment } = getOperationPathSegments(
+    isFlat,
+    category,
+    name,
+    operationNameParts,
+    operationLeafName,
+  );
 
   const url = pathUrl.join(
     options.basePath,
@@ -315,10 +354,8 @@ export const toLink = (
     formatFolder(groupFolder),
     formatFolder(apiGroupFolder),
     isFlat ? "" : formatFolder(category ?? ""),
-    ...operationNamespaceFolders.map((folder) => {
-      return slugify(folder);
-    }),
-    `${flatCategoryPrefix}${slugify(operationLeafName)}`,
+    ...namespaceFolders,
+    leafSegment,
   );
 
   const link = {
