@@ -384,7 +384,10 @@ describe("generator", () => {
         (event.data.config as GeneratorOptions).baseURL = "mutated base URL";
       });
 
-      await generateDocFromSchema(options);
+      // Copy `options` before passing it in: the hook mutates `event.data.config`
+      // in place (same reference as whatever's passed to `generateDocFromSchema`),
+      // and `options` is shared across every test in this describe block.
+      await generateDocFromSchema({ ...options });
 
       expect(rendererSpy).toHaveBeenCalledWith(
         expect.objectContaining({ baseURL: "mutated base URL" }),
