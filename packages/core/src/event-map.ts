@@ -6,6 +6,7 @@
  *
  * @packageDocumentation
  */
+import { ConfigBuildEvents } from "./events/config-build-events";
 import { SchemaEvents } from "./events/schema-events";
 import { DiffEvents } from "./events/diff-events";
 import { RenderRootTypesEvents } from "./events/render-root-types-events";
@@ -23,6 +24,7 @@ import { PrintTypeEvents } from "./events/print-type-events";
  * They are pure transformations handled via the Formatter interface, not events.
  */
 export const EVENT_CALLBACK_MAP = {
+  [ConfigBuildEvents.AFTER_BUILD]: "afterConfigBuildHook",
   [SchemaEvents.BEFORE_LOAD]: "beforeLoadSchemaHook",
   [SchemaEvents.AFTER_LOAD]: "afterLoadSchemaHook",
   [DiffEvents.BEFORE_CHECK]: "beforeCheckDiffHook",
