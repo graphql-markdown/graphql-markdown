@@ -43,7 +43,11 @@ import * as CoreDiff from "../../src/diff";
 
 vi.mock("../../src/diff");
 import * as CoreRenderer from "../../src/renderer";
-import { RenderFilesEvents } from "../../src/events";
+import {
+  ConfigBuildEvents,
+  RenderFilesEvents,
+  SchemaEvents,
+} from "../../src/events";
 
 vi.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
@@ -325,6 +329,66 @@ describe("generator", () => {
   ],
 ]
 `);
+    });
+
+    test("emits config:afterBuild with the resolved config before loading the schema", async () => {
+      expect.assertions(2);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      const calls: string[] = [];
+      let receivedConfig: Maybe<GeneratorOptions>;
+      getEvents().on(ConfigBuildEvents.AFTER_BUILD, (event) => {
+        calls.push(ConfigBuildEvents.AFTER_BUILD);
+        receivedConfig = event.data.config as GeneratorOptions;
+      });
+      getEvents().on(SchemaEvents.BEFORE_LOAD, () => {
+        calls.push(SchemaEvents.BEFORE_LOAD);
+      });
+
+      await generateDocFromSchema(options);
+
+      expect(calls).toStrictEqual([
+        ConfigBuildEvents.AFTER_BUILD,
+        SchemaEvents.BEFORE_LOAD,
+      ]);
+      expect(receivedConfig).toMatchObject({ baseURL: options.baseURL });
+    });
+
+    test("applies config mutated by an afterConfigBuildHook listener", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      const rendererSpy = vi
+        .spyOn(CoreRenderer, "getRenderer")
+        .mockResolvedValueOnce(mockRenderer);
+
+      getEvents().on(ConfigBuildEvents.AFTER_BUILD, (event) => {
+        (event.data.config as GeneratorOptions).baseURL = "mutated base URL";
+      });
+
+      await generateDocFromSchema(options);
+
+      expect(rendererSpy).toHaveBeenCalledWith(
+        expect.objectContaining({ baseURL: "mutated base URL" }),
+      );
     });
 
     test("returns early when loadGraphqlSchema returns undefined", async () => {
