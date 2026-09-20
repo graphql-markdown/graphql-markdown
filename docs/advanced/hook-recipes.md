@@ -26,7 +26,7 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 
 | Hook                                | Description                                  |
 | ----------------------------------- | -------------------------------------------- |
-| `afterConfigBuildHook`              | Called once after the final configuration is resolved, before schema loading — can inspect or override resolved options |
+| `afterConfigBuildHook`              | Called once after the final configuration is resolved, before schema loading — can inspect or override resolved options (except `formatter` and `loggerModule`, which are already applied by this point) |
 | `beforeLoadSchemaHook`              | Called before loading the GraphQL schema     |
 | `afterLoadSchemaHook`               | Called after loading the GraphQL schema      |
 | `beforeCheckDiffHook`               | Called before checking schema differences    |
