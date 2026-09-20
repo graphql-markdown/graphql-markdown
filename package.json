@@ -208,7 +208,7 @@
     "jsonc-eslint-parser": "3.3.0",
     "knip": "6.36.0",
     "lodash.filter": "4.6.0",
-    "memfs": "4.78.0",
+    "memfs": "4.78.1",
     "mutation-testing-metrics": "3.9.0",
     "prettier": "catalog:",
     "turbo": "2.10.13",
