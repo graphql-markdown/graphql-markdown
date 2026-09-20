@@ -40,14 +40,29 @@ jobs:
     # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
     # broken gate runs the full matrix instead of skipping to green: a skipped
     # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    # `vars.MUTATION_TESTS_ENABLED` is a temporary kill switch (repository variable,
+    # Settings > Secrets and variables > Actions > Variables — unset or anything but
+    # "true" means disabled). @stryker-mutator/vitest-runner@10.0.0 (latest
+    # published) crashes on init against vitest 5's resolved config (circular
+    # JSON), so every mutant in every package silently scores as failed.
+    # Downgrading vitest just for this job (see the "Downgrade vitest for Stryker"
+    # step below) dodges that crash, but trades it for a different failure: vitest
+    # 4's `test.each` `$name` interpolation quotes string values ("'Directive'"),
+    # while vitest 5's doesn't ("Directive") — so a snapshot file correct for one
+    # major version's test titles mismatches under the other. There is no vitest
+    # version this job and the rest of the repo's test suite can currently agree
+    # on, so the whole job is disabled by default until
+    # @stryker-mutator/vitest-runner supports vitest 5 for real — at which point
+    # drop the now-unnecessary vitest downgrade step too.
     if: >-
       !cancelled()
       && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     env:
       RUN_MUTATION: >-
-        ${{ needs.changes.result != 'success'
+        ${{ vars.MUTATION_TESTS_ENABLED == 'true' &&
+          (needs.changes.result != 'success'
           || github.event_name != 'pull_request'
-          || contains(fromJSON(needs.changes.outputs.direct_packages || '[]'), matrix.package) }}
+          || contains(fromJSON(needs.changes.outputs.direct_packages || '[]'), matrix.package)) }}
     strategy:
       fail-fast: false
       matrix:
