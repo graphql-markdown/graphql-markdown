@@ -87,6 +87,7 @@ export interface MDXSupportType {
   formatMDXFrontmatter: (
     props: Maybe<FrontMatterOptions>,
     formatted: Maybe<string[]>,
+    context?: { entity?: Maybe<SchemaEntity> },
   ) => MDXString;
   mdxDeclaration: string;
   // Event hooks, see EVENT_CALLBACK_MAP in @graphql-markdown/core

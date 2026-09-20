@@ -514,7 +514,13 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValue(slug);
+      // Flat hierarchy now prefixes the link with the entity's category
+      // ("directives-") to match `renderer.ts`'s flat filenames, so the
+      // mock has to distinguish the category slug ("directives") from the
+      // entity name slug (`slug`) instead of returning one constant for both.
+      mockUtils.slugify.mockImplementation((value: unknown) => {
+        return value === "directives" ? "directives" : slug;
+      });
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -525,7 +531,56 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/test-directive",
+          "url": "docs/graphql/directives-test-directive",
+        }
+      `);
+    });
+
+    test("returns a link matching renderer.ts's flat filename for a namespaced operation", () => {
+      expect.hasAssertions();
+
+      // `renderer.ts`'s `renderTypeEntities` writes one file per operation
+      // under flat hierarchy using the full dotted name, e.g.
+      // `queries-analytics-aggregate-tournaments.mdx` — no namespace
+      // subfolder. The link built here has to match that exact filename.
+      const entityName = "analytics.aggregateTournaments";
+      const type = {
+        name: "aggregateTournaments",
+        type: {
+          name: "AggregateGroup",
+        },
+      };
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockGraphQL.isOperation.mockReturnValue(true);
+      mockGraphQL.isApiType.mockReturnValue(true);
+      mockUtils.slugify.mockImplementation((value: unknown) => {
+        if (value === "queries") {
+          return "queries";
+        }
+        return String(value)
+          .replace(/\./g, "-")
+          .replace(/([a-z])([A-Z])/g, "$1-$2")
+          .toLowerCase();
+      });
+
+      const link = Link.toLink(
+        type,
+        entityName,
+        { singular: "query", plural: "queries" },
+        {
+          ...DEFAULT_OPTIONS,
+          basePath,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        },
+      );
+
+      expect(link).toMatchInlineSnapshot(`
+        {
+          "text": "analytics.aggregateTournaments",
+          "url": "docs/graphql/queries-analytics-aggregate-tournaments",
         }
       `);
     });

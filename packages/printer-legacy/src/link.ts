@@ -223,6 +223,42 @@ const isHierarchy = (
 };
 
 /**
+ * Resolves the namespace folder segments and final filename slug for an
+ * operation link, matching the two layouts `renderer.ts` can write: nested
+ * category/namespace folders normally, or — under flat hierarchy, where
+ * `renderTypeEntities` writes one file per operation using the full dotted
+ * name (e.g. `queries-analytics-aggregate-tournaments.mdx`) — a single
+ * flattened filename with no namespace subfolders.
+ *
+ * @param isFlat - Whether the flat hierarchy option is active
+ * @param category - The resolved category, used as a folder (non-flat) or filename prefix (flat)
+ * @param name - The full, possibly dotted, operation name
+ * @param operationNameParts - `name` split on "." for namespaced operations, empty otherwise
+ * @param operationLeafName - The last part of `operationNameParts`, or the type's display name
+ * @returns The namespace folder segments (empty under flat hierarchy) and the final leaf slug
+ */
+const getOperationPathSegments = (
+  isFlat: boolean,
+  category: Maybe<string>,
+  name: string,
+  operationNameParts: string[],
+  operationLeafName: string,
+): { namespaceFolders: string[]; leafSegment: string } => {
+  const flatCategoryPrefix = isFlat && category ? `${slugify(category)}-` : "";
+
+  return {
+    namespaceFolders: isFlat
+      ? []
+      : operationNameParts.slice(0, -1).map((folder) => {
+          return slugify(folder);
+        }),
+    leafSegment: `${flatCategoryPrefix}${slugify(
+      isFlat && operationNameParts.length > 0 ? name : operationLeafName,
+    )}`,
+  };
+};
+
+/**
  * Converts a GraphQL type to a link object.
  *
  * @param type - The GraphQL type to convert
@@ -256,14 +292,23 @@ export const toLink = (
   // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
   const graphQLNamedType = getNamedType(type as never);
 
-  let category: Maybe<string> = "";
+  const isFlat = isHierarchy(options, TypeHierarchy.FLAT);
+
+  // Under flat hierarchy there are no folders to keep same-named entities of
+  // different kinds apart (a `type User` and a `Query.user` field both
+  // slugify to "user") — `renderer.ts`'s `renderTypeEntities` prefixes the
+  // actual filename with the entity kind (e.g. `objects-user.mdx`) to stay
+  // unique, so the link generated here has to build the exact same prefix
+  // or it would point at a file that doesn't exist.
+  let category: Maybe<string> = getLinkCategoryFolder(
+    graphQLNamedType,
+    operation,
+  );
   let deprecatedFolder = "";
   let groupFolder = "";
   let apiGroupFolder = "";
 
-  if (!isHierarchy(options, TypeHierarchy.FLAT)) {
-    category = getLinkCategoryFolder(graphQLNamedType, operation);
-
+  if (!isFlat) {
     if (!category) {
       return fallback;
     }
@@ -293,19 +338,24 @@ export const toLink = (
     isOperation(type) && name.includes(".")
       ? name.split(".").filter(Boolean)
       : [];
-  const operationNamespaceFolders = operationNameParts.slice(0, -1);
   const operationLeafName = operationNameParts.at(-1) ?? text;
+
+  const { namespaceFolders, leafSegment } = getOperationPathSegments(
+    isFlat,
+    category,
+    name,
+    operationNameParts,
+    operationLeafName,
+  );
 
   const url = pathUrl.join(
     options.basePath,
     formatFolder(deprecatedFolder),
     formatFolder(groupFolder),
     formatFolder(apiGroupFolder),
-    formatFolder(category),
-    ...operationNamespaceFolders.map((folder) => {
-      return slugify(folder);
-    }),
-    `${slugify(operationLeafName)}`,
+    isFlat ? "" : formatFolder(category ?? ""),
+    ...namespaceFolders,
+    leafSegment,
   );
 
   const link = {
