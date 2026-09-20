@@ -483,6 +483,37 @@ describe("Printer", () => {
             ---"
           `);
     });
+
+    test("forwards options.entity to formatMDXFrontmatter as page context", () => {
+      expect.hasAssertions();
+
+      const formatMDXFrontmatter = vi.fn().mockReturnValue("");
+
+      Printer.printHeader("an-object-type-name", "An Object Type Name", {
+        ...DEFAULT_OPTIONS,
+        entity: "objects",
+        formatMDXFrontmatter,
+      });
+
+      expect(formatMDXFrontmatter.mock.calls[0]?.[2]).toEqual({
+        entity: "objects",
+      });
+    });
+
+    test("forwards an undefined entity when options.entity is not set", () => {
+      expect.hasAssertions();
+
+      const formatMDXFrontmatter = vi.fn().mockReturnValue("");
+
+      Printer.printHeader("an-object-type-name", "An Object Type Name", {
+        ...DEFAULT_OPTIONS,
+        formatMDXFrontmatter,
+      });
+
+      expect(formatMDXFrontmatter.mock.calls[0]?.[2]).toEqual({
+        entity: undefined,
+      });
+    });
   });
 
   describe("printCode()", () => {

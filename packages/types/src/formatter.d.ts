@@ -11,6 +11,7 @@
 import type { Maybe, MDXString } from "./utils";
 import type { AdmonitionType, Badge, MetaInfo, TypeLink } from "./printer";
 import type { CollapsibleOption, FrontMatterOptions } from "./core";
+import type { SchemaEntity } from "./graphql";
 
 /**
  * Formatter interface defining all formatting methods for documentation output.
@@ -72,11 +73,13 @@ export interface Formatter {
    *
    * @param props - Frontmatter properties or false to disable
    * @param formatted - Pre-formatted frontmatter lines
+   * @param context - Additional page context, such as the GraphQL entity kind being rendered
    * @returns Formatted frontmatter block
    */
   formatMDXFrontmatter: (
     props: Maybe<FrontMatterOptions>,
     formatted: Maybe<string[]>,
+    context?: { entity?: Maybe<SchemaEntity> },
   ) => MDXString;
 
   /**

@@ -514,7 +514,13 @@ describe("link", () => {
         entityName as unknown as GraphQLNamedType,
       );
       mockGraphQL.isDirectiveType.mockReturnValueOnce(true);
-      mockUtils.slugify.mockReturnValue(slug);
+      // Flat hierarchy now prefixes the link with the entity's category
+      // ("directives-") to match `renderer.ts`'s flat filenames, so the
+      // mock has to distinguish the category slug ("directives") from the
+      // entity name slug (`slug`) instead of returning one constant for both.
+      mockUtils.slugify.mockImplementation((value: unknown) => {
+        return value === "directives" ? "directives" : slug;
+      });
 
       const link = Link.toLink(type, entityName, undefined, {
         ...DEFAULT_OPTIONS,
@@ -525,7 +531,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/test-directive",
+          "url": "docs/graphql/directives-test-directive",
         }
       `);
     });

@@ -256,14 +256,23 @@ export const toLink = (
   // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
   const graphQLNamedType = getNamedType(type as never);
 
-  let category: Maybe<string> = "";
+  const isFlat = isHierarchy(options, TypeHierarchy.FLAT);
+
+  // Under flat hierarchy there are no folders to keep same-named entities of
+  // different kinds apart (a `type User` and a `Query.user` field both
+  // slugify to "user") — `renderer.ts`'s `renderTypeEntities` prefixes the
+  // actual filename with the entity kind (e.g. `objects-user.mdx`) to stay
+  // unique, so the link generated here has to build the exact same prefix
+  // or it would point at a file that doesn't exist.
+  let category: Maybe<string> = getLinkCategoryFolder(
+    graphQLNamedType,
+    operation,
+  );
   let deprecatedFolder = "";
   let groupFolder = "";
   let apiGroupFolder = "";
 
-  if (!isHierarchy(options, TypeHierarchy.FLAT)) {
-    category = getLinkCategoryFolder(graphQLNamedType, operation);
-
+  if (!isFlat) {
     if (!category) {
       return fallback;
     }
@@ -296,16 +305,20 @@ export const toLink = (
   const operationNamespaceFolders = operationNameParts.slice(0, -1);
   const operationLeafName = operationNameParts.at(-1) ?? text;
 
+  // Flat: `category` becomes a filename prefix ("queries-"), matching
+  // `renderer.ts`. Non-flat: `category` is a folder segment, as before.
+  const flatCategoryPrefix = isFlat && category ? `${slugify(category)}-` : "";
+
   const url = pathUrl.join(
     options.basePath,
     formatFolder(deprecatedFolder),
     formatFolder(groupFolder),
     formatFolder(apiGroupFolder),
-    formatFolder(category),
+    isFlat ? "" : formatFolder(category ?? ""),
     ...operationNamespaceFolders.map((folder) => {
       return slugify(folder);
     }),
-    `${slugify(operationLeafName)}`,
+    `${flatCategoryPrefix}${slugify(operationLeafName)}`,
   );
 
   const link = {

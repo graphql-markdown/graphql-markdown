@@ -670,7 +670,17 @@ export class Renderer {
       /(?<category>[a-z0-9-]+)[\\/]+(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
     const PageRegexFlat = /(?<pageId>[a-z0-9-]+)\.mdx?$/i; // NOSONAR
 
-    const fileName = slugify(name);
+    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
+
+    // Flat hierarchy has no folders to keep same-named entities of different
+    // kinds apart (a `type User` and a `Query.user` field both slugify to
+    // "user") — prefixing with `entity` (the `SchemaEntity` root type this
+    // came from, e.g. "objects" vs "queries") keeps every flat filename
+    // unique the same way the folder structure already does for "api"/
+    // "entity" hierarchy. `link.ts`'s `toLink` builds the matching prefix for
+    // cross-references under flat hierarchy — the two must stay in sync.
+    const fileName =
+      isFlat && entity ? `${entity}-${slugify(name)}` : slugify(name);
     const filePath = join(
       normalize(dirPath),
       `${fileName}${this.mdxExtension}`,
@@ -732,8 +742,6 @@ export class Renderer {
     await this.writeOutput(filePath, content);
 
     const pagePath = relative(this.outputDir, filePath);
-
-    const isFlat = isHierarchy(this.options, TypeHierarchy.FLAT);
 
     const page = isFlat
       ? PageRegexFlat.exec(pagePath)

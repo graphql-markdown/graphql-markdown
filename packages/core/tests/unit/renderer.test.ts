@@ -821,7 +821,52 @@ describe("renderer", () => {
         });
 
         expect(spy).toHaveBeenCalledTimes(1);
-        expect(spy).toHaveBeenCalledWith("/output/foo.mdx", "content");
+        // Flat hierarchy has no folders, so the filename carries an
+        // `entity`-based prefix ("objects-") instead — the only thing that
+        // keeps a same-named type and operation (e.g. `type User` and
+        // `Query.user`) from silently overwriting each other's file.
+        expect(spy).toHaveBeenCalledWith("/output/objects-foo.mdx", "content");
+      });
+
+      test("keeps a same-named type and operation in separate files under flat hierarchy", async () => {
+        expect.assertions(3);
+
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "content" as MDXString,
+        );
+        replaceProperty(rendererInstance, "options", {
+          frontMatter: undefined,
+          hierarchy: { [TypeHierarchy.FLAT]: {} },
+        });
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+
+        // `type User` and a `Query.user` field both slugify to "user" — flat
+        // hierarchy has no folders to keep them apart, so without the
+        // `entity`-prefixed filename this fix adds, the second render call
+        // below would silently overwrite the first's file.
+        await rendererInstance.renderRootTypes("objects", {
+          user: new GraphQLScalarType({
+            name: "user",
+            astNode: {
+              kind: Kind.SCALAR_TYPE_DEFINITION,
+              name: { kind: Kind.NAME, value: "user" },
+            },
+          }),
+        });
+
+        await rendererInstance.renderRootTypes("queries", {
+          user: new GraphQLScalarType({
+            name: "user",
+            astNode: {
+              kind: Kind.SCALAR_TYPE_DEFINITION,
+              name: { kind: Kind.NAME, value: "user" },
+            },
+          }),
+        });
+
+        expect(spy).toHaveBeenCalledTimes(2);
+        expect(spy).toHaveBeenCalledWith("/output/objects-user.mdx", "content");
+        expect(spy).toHaveBeenCalledWith("/output/queries-user.mdx", "content");
       });
 
       test("passes namespace parts in flat hierarchy for namespaced operations", async () => {
@@ -843,7 +888,7 @@ describe("renderer", () => {
         });
 
         expect(printSpy).toHaveBeenCalledWith(
-          "analytics-aggregate-tournaments",
+          "queries-analytics-aggregate-tournaments",
           expect.anything(),
           expect.objectContaining({ operationNamespaceParts: ["analytics"] }),
         );
