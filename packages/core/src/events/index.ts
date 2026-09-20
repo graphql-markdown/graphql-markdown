@@ -5,6 +5,7 @@
  */
 
 // Event constants
+export { ConfigBuildEvents } from "./config-build-events";
 export { SchemaEvents } from "./schema-events";
 export { DiffEvents } from "./diff-events";
 export { RenderRootTypesEvents } from "./render-root-types-events";
@@ -16,6 +17,7 @@ export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events";
 export { PrintTypeEvents } from "./print-type-events";
 
 // Event classes
+export { ConfigBuildEvent } from "./config-build";
 export { SchemaEvent } from "./schema-load";
 export { DiffCheckEvent } from "./diff-check";
 export { RenderRootTypesEvent } from "./render-root-types";
