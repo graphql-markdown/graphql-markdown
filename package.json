@@ -211,7 +211,7 @@
     "memfs": "4.78.1",
     "mutation-testing-metrics": "3.9.0",
     "prettier": "catalog:",
-    "turbo": "2.10.13",
+    "turbo": "2.11.1",
     "typedoc": "0.28.20",
     "typedoc-docusaurus-theme": "1.4.3",
     "typedoc-plugin-frontmatter": "1.3.2",
