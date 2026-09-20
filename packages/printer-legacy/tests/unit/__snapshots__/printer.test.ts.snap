@@ -8,7 +8,7 @@ exports[`Printer > printCode() > returns a Markdown codeblock with non supported
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Directive' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Directive 1`] = `
 "
 \`\`\`graphql
 Directive
@@ -16,7 +16,7 @@ Directive
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Enum' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Enum 1`] = `
 "
 \`\`\`graphql
 Enum
@@ -24,7 +24,7 @@ Enum
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Input' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Input 1`] = `
 "
 \`\`\`graphql
 Input
@@ -32,7 +32,7 @@ Input
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Interface' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Interface 1`] = `
 "
 \`\`\`graphql
 Interface
@@ -40,7 +40,7 @@ Interface
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Object' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Object 1`] = `
 "
 \`\`\`graphql
 Object
@@ -48,7 +48,7 @@ Object
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Operation' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Operation 1`] = `
 "
 \`\`\`graphql
 Operation
@@ -56,7 +56,7 @@ Operation
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Scalar' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Scalar 1`] = `
 "
 \`\`\`graphql
 Scalar
@@ -64,7 +64,7 @@ Scalar
 "
 `;
 
-exports[`Printer > printCode() > returns a Markdown graphql codeblock with type 'Union' 1`] = `
+exports[`Printer > printCode() > returns a Markdown graphql codeblock with type Union 1`] = `
 "
 \`\`\`graphql
 Union
