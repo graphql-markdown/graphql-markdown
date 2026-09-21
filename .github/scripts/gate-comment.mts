@@ -109,14 +109,27 @@ function fetchMatrixJobs(config: GateConfig): RunJob[] {
   return dedupeByLatestStart(matching).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-function renderBody(gateName: string, marker: string, results: RunJob[]): string {
+function renderHeading(gateName: string, results: RunJob[]): string {
+  // `cancelled` almost always means a newer push superseded this run (this
+  // workflow's `cancel-in-progress: true`), not a real failure -- reporting
+  // it as "N checks failed" is misleading once the run for the latest commit
+  // finishes and this same comment gets overwritten anyway.
+  const cancelled = results.filter((job) => job.conclusion === "cancelled");
   const failed = results.filter(
-    (job) => job.conclusion !== "success" && job.conclusion !== "skipped",
+    (job) => job.conclusion !== "success" && job.conclusion !== "skipped" && job.conclusion !== "cancelled",
   );
-  const heading =
-    failed.length === 0
-      ? `## ✅ ${gateName} — all checks passed`
-      : `## ❌ ${gateName} — ${failed.length} check${failed.length === 1 ? "" : "s"} failed`;
+
+  if (failed.length > 0) {
+    return `## ❌ ${gateName} — ${failed.length} check${failed.length === 1 ? "" : "s"} failed`;
+  }
+  if (cancelled.length > 0) {
+    return `## ⏳ ${gateName} — superseded by a newer push (${cancelled.length} cancelled)`;
+  }
+  return `## ✅ ${gateName} — all checks passed`;
+}
+
+function renderBody(gateName: string, marker: string, results: RunJob[]): string {
+  const heading = renderHeading(gateName, results);
   const rows = results
     .map((job) => `| ${job.name} | ${CONCLUSION_ICON[job.conclusion ?? ""] ?? "❔"} ${job.conclusion ?? "unknown"} |`)
     .join("\n");
