@@ -37,11 +37,7 @@ jobs:
       # ran and quietly did nothing used to report `success`, indistinguishable
       # from having actually passed.
       matrix:
-        package: >-
-          ${{ fromJSON(
-            needs.changes.result != 'success' && '["cli","core","diff","docusaurus","formatters","graphql","helpers","logger","printer-legacy","utils"]'
-            || needs.changes.outputs.packages
-          ) }}
+        package: ${{ fromJSON(needs.changes.result != 'success' && '["cli","core","diff","docusaurus","formatters","graphql","helpers","logger","printer-legacy","utils"]' || needs.changes.outputs.packages) }}
 
     steps:
       - name: Checkout Code Base
@@ -109,11 +105,7 @@ jobs:
         # smoke.yml's `graphql: [16, 17]` matrix). Empty when `graphql` itself
         # isn't affected -- see `test` job above for why this is a dynamic
         # matrix rather than a per-step `if:`.
-        graphql: >-
-          ${{ fromJSON(
-            (needs.changes.result != 'success' || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql'))
-            && '[16, 17]' || '[]'
-          ) }}
+        graphql: ${{ fromJSON((needs.changes.result != 'success' || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql')) && '[16, 17]' || '[]') }}
 
     steps:
       - name: Checkout Code Base
