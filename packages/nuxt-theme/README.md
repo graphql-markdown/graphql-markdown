@@ -81,6 +81,20 @@ Defined in the layer's `main.css`, overridable from your own project's styleshee
 
 These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-deprecation-callout`) directly in the generated markdown — they don't reach every page, though: `app/utils/api-document.ts` promotes badges and the deprecation callout into `UBadge`/`UAlert` Nuxt UI components before render on the reference page itself, so those two properties style the *generated markdown* as parsed content, while the reference page's own badges/callouts follow Nuxt UI's own `color`/`variant` styling instead. Both code paths exist because the raw classes still matter for anything that renders the markdown directly (search results, raw content queries).
 
+### `printTypeOptions`
+
+`createGenerateDocs`'s `printTypeOptions` is a generic passthrough to [`@graphql-markdown/core`](https://graphql-markdown.dev/docs/settings#printtypeoptions) — every documented option (`deprecated`, `exampleSection`, `hierarchy`, `parentTypePrefix`, `typeBadges`) works here exactly as described there. This layer only sets its own defaults for two of them (`parentTypePrefix: false`, `typeBadges: true`), which your own `printTypeOptions` can override like any other key.
+
+`hierarchy` (`"api"` default, `"entity"`, `"flat"`) controls the generated folder structure — and this layer's navigation and landing-page grid adapt to it automatically. Under `"flat"`, where there's no folder to group by at all, every generated page's frontmatter carries a `kind` field (the GraphQL entity kind — `objects`, `scalars`, `queries`, `directives`, …), and the sidebar/landing grid group by that instead, so the site stays organized whichever `hierarchy` value you choose.
+
+### Single-page reference
+
+Set `printTypeOptions.hierarchy: "flat"` in your `generate-docs.ts` (a `@graphql-markdown/core` option — see the `hierarchy` paragraph above) and this layer automatically shows the entire API as one continuous page at the base route (`<baseURL>`, e.g. `/api-reference`) instead of the per-type catalog: every query, mutation, and type grouped into Queries / Mutations / Subscriptions / Types (only non-empty groups shown), with a sidebar of in-page anchor links — modeled on references like [Anvil's GraphQL API docs](https://www.useanvil.com/docs/api/graphql/reference/). There's no separate flag or route for this: it's detected automatically from the generated content (every page having no folder nesting), and it replaces the multi-page catalog entirely rather than adding an alternative to it. Any direct link to an old per-type page (e.g. `<baseURL>/user`) still resolves — it redirects to that entry's anchor on the single page (`<baseURL>#<kind>-<slug>`) instead of 404ing.
+
+Under `"api"`/`"entity"` hierarchy, nothing changes — you still get the per-type catalog with its own landing grid, exactly as before.
+
+This view isn't meant to scale indefinitely: every entry's definition and examples are Shiki-highlighted up front, and every entry hydrates its own copy-button state, so a schema with hundreds of types renders as hundreds of small interactive islands on one page. For a very large schema, prefer `"api"` or `"entity"` hierarchy instead of `"flat"`.
+
 ## Customize by swizzling
 
 For changes config and CSS can't reach — different markup, different components entirely — eject a file into your own project with:

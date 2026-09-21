@@ -3,11 +3,23 @@
 
 :root {
   --gqlmd-sidebar-width: 20rem;
-  --gqlmd-badge-bg: color-mix(in oklch, var(--ui-color-neutral-500) 15%, transparent);
+  --gqlmd-badge-bg: color-mix(
+    in oklch,
+    var(--ui-color-neutral-500) 15%,
+    transparent
+  );
   --gqlmd-badge-text: var(--ui-text-muted);
-  --gqlmd-badge-deprecated-bg: color-mix(in oklch, var(--ui-color-warning-500) 20%, transparent);
+  --gqlmd-badge-deprecated-bg: color-mix(
+    in oklch,
+    var(--ui-color-warning-500) 20%,
+    transparent
+  );
   --gqlmd-badge-deprecated-text: var(--ui-color-warning-700);
-  --gqlmd-callout-deprecated-bg: color-mix(in oklch, var(--ui-color-error-500) 10%, transparent);
+  --gqlmd-callout-deprecated-bg: color-mix(
+    in oklch,
+    var(--ui-color-error-500) 10%,
+    transparent
+  );
   --gqlmd-callout-deprecated-border: var(--ui-color-error-500);
   --gqlmd-code-text: #e4e4e7;
 }

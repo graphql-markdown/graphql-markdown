@@ -6,10 +6,23 @@ import type { Ref } from "vue";
  * `h3` — the shape `[...slug].vue`'s template renders as a `ContentRenderer`
  * lead plus one `UCollapsible` per section.
  */
-export function useApiDocument(page: Ref<Record<string, any> | null | undefined>) {
-  const documentBody = computed<MdcNode[]>(() => page.value?.body?.value ?? []);
+export const useApiDocument = (
+  page: Ref<Record<string, any> | null | undefined>,
+): {
+  documentBody: ComputedRef<MdcNode[]>;
+  deprecationReason: ComputedRef<ReturnType<typeof findDeprecationNotice>>;
+  document: ComputedRef<{
+    lead: Record<string, any> | undefined;
+    sections: { id: string; title: string; document: Record<string, any> }[];
+  }>;
+} => {
+  const documentBody = computed<MdcNode[]>(() => {
+    return page.value?.body?.value ?? [];
+  });
 
-  const deprecationReason = computed(() => findDeprecationNotice(page.value?.body));
+  const deprecationReason = computed(() => {
+    return findDeprecationNotice(page.value?.body);
+  });
 
   /**
    * The prose column: generated markup fixed up for Nuxt UI, minus everything
@@ -19,15 +32,19 @@ export function useApiDocument(page: Ref<Record<string, any> | null | undefined>
     const inCodeColumn = codeColumnNodeIndexes(documentBody.value);
 
     return withoutDeprecationNotice(
-      documentBody.value.filter((_, index) => !inCodeColumn.has(index)),
+      documentBody.value.filter((_, index) => {
+        return !inCodeColumn.has(index);
+      }),
       deprecationReason.value,
     ).map(toRenderableNode);
   });
 
-  const asDocument = (nodes: MdcNode[]) => ({
-    ...page.value,
-    body: { ...page.value?.body, value: nodes },
-  });
+  const asDocument = (nodes: MdcNode[]): Record<string, any> => {
+    return {
+      ...page.value,
+      body: { ...page.value?.body, value: nodes },
+    };
+  };
 
   /**
    * The document is split at its `h3` boundaries so each schema section
@@ -35,30 +52,18 @@ export function useApiDocument(page: Ref<Record<string, any> | null | undefined>
    * before the first heading are the type description and stay always visible.
    */
   const document = computed(() => {
-    const lead: MdcNode[] = [];
-    const sections: Array<{ id: string; title: string; nodes: MdcNode[] }> = [];
-
-    for (const node of documentNodes.value) {
-      if (isElement(node, "h3")) {
-        sections.push({
-          id: node[1]?.id ?? `section-${sections.length}`,
-          title: nodeText(node).trim(),
-          nodes: [],
-        });
-        continue;
-      }
-
-      (sections.at(-1)?.nodes ?? lead).push(node);
-    }
+    const { lead, sections } = splitDocumentSections(documentNodes.value);
 
     return {
       lead: lead.length ? asDocument(lead) : undefined,
-      sections: sections.map(({ nodes, ...section }) => ({
-        ...section,
-        document: asDocument(nodes),
-      })),
+      sections: sections.map(({ nodes, ...section }) => {
+        return {
+          ...section,
+          document: asDocument(nodes),
+        };
+      }),
     };
   });
 
   return { documentBody, deprecationReason, document };
-}
+};

@@ -51,7 +51,7 @@ describe("gqlmd-swizzle CLI", () => {
     }
   });
 
-  it("should list all 9 components", () => {
+  it("should list all 11 components", () => {
     const swizzlePath = join(packageRoot, "bin/swizzle.mjs");
 
     let output;
@@ -77,6 +77,8 @@ describe("gqlmd-swizzle CLI", () => {
       "ApiNamespaceLanding",
       "ApiDocumentContent",
       "ApiCodeColumn",
+      "ApiSinglePageSection",
+      "ApiSinglePageEntry",
       "ReferenceLayout",
       "ReferencePage",
     ]);

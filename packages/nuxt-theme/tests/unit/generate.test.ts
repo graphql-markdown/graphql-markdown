@@ -56,6 +56,37 @@ describe("createGenerateDocs", () => {
     });
   });
 
+  it("passes through hierarchy untouched, alongside the layer's own printTypeOptions defaults", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      printTypeOptions: { hierarchy: "entity" },
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.printTypeOptions).toMatchObject({
+      parentTypePrefix: false,
+      typeBadges: true,
+      hierarchy: "entity",
+    });
+  });
+
+  it("passes through the object form of hierarchy (customized api group names) untouched", async () => {
+    const hierarchy = { api: { operations: "api" } };
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      printTypeOptions: { hierarchy },
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.printTypeOptions).toMatchObject({
+      parentTypePrefix: false,
+      typeBadges: true,
+      hierarchy,
+    });
+  });
+
   it("passes through decorators untouched, with no default", async () => {
     const decorators = {
       customTag: {

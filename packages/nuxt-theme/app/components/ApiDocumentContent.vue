@@ -35,7 +35,11 @@
 defineProps<{
   document: {
     lead?: Record<string, any>;
-    sections: Array<{ id: string; title: string; document: Record<string, any> }>;
+    sections: Array<{
+      id: string;
+      title: string;
+      document: Record<string, any>;
+    }>;
   };
 }>();
 </script>

@@ -14,10 +14,7 @@
       <div class="flex items-center gap-2">
         <UBadge color="primary" variant="subtle" size="sm">{{ kind }}</UBadge>
 
-        <UButton
-          v-bind="copyButtonProps"
-          @click="copy(code)"
-        />
+        <UButton v-bind="copyButtonProps" @click="copy(code)" />
       </div>
     </div>
 
@@ -58,13 +55,16 @@ const copyLabel = computed(() =>
 // through as a raw attribute — Vue does not hyphenate an unrecognized
 // camelCase key for fallthrough attrs, so `ariaLabel` would render as the
 // DOM attribute `arialabel`, which screen readers don't recognize.
-const copyButtonProps = computed(() => ({
-  icon: copied.value ? "i-lucide-check" : "i-lucide-copy",
-  color: "neutral",
-  variant: "ghost",
-  size: "xs",
-  "aria-label": copyLabel.value,
-}) as const);
+const copyButtonProps = computed(
+  () =>
+    ({
+      icon: copied.value ? "i-lucide-check" : "i-lucide-copy",
+      color: "neutral",
+      variant: "ghost",
+      size: "xs",
+      "aria-label": copyLabel.value,
+    }) as const,
+);
 
 // `@vueuse/core` is only present as a hoisted dependency of `@nuxt/ui`, so the
 // clipboard call is written against the platform API instead.

@@ -383,4 +383,153 @@ describe("useApiNavigation", () => {
     expect(newType?.isDeprecated).toBe(false);
     expect(newType?.badge).toBeUndefined();
   });
+
+  it("falls back to grouping by kind (from meta) when a page has no path segments to group by", async () => {
+    const mockPages = [
+      { path: "/api-reference/user", title: "User", body: "", meta: { kind: "objects" } },
+      { path: "/api-reference/profile", title: "Profile", body: "", meta: { kind: "objects" } },
+      { path: "/api-reference/id", title: "ID", body: "", meta: { kind: "scalars" } },
+      { path: "/api-reference/get-user", title: "GetUser", body: "", meta: { kind: "queries" } },
+    ];
+
+    mockQueryCollection.mockReturnValue({
+      order: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      all: vi.fn().mockResolvedValue(mockPages),
+    });
+
+    mockUseAsyncData.mockImplementation((key, callback) => {
+      return callback().then((data) => ({ data: createRef(data) }));
+    });
+
+    mockUseAppConfig.mockReturnValue({
+      gqlmd: { baseURL: "api-reference" },
+    });
+
+    const result = await useApiNavigation();
+    const sections = result.sections.value;
+
+    const objects = sections.find(
+      (s): s is ApiNavigationNode & { title: string } => "children" in s && s.title === "Objects",
+    );
+    const scalars = sections.find(
+      (s): s is ApiNavigationNode & { title: string } => "children" in s && s.title === "Scalars",
+    );
+    const queries = sections.find(
+      (s): s is ApiNavigationNode & { title: string } => "children" in s && s.title === "Queries",
+    );
+
+    expect(objects).toBeDefined();
+    expect(scalars).toBeDefined();
+    expect(queries).toBeDefined();
+
+    if (objects && "children" in objects) {
+      expect(objects.children.length).toBe(2);
+      const userLeaf = objects.children.find(
+        (c): c is ApiNavigationLeaf => "path" in c && c.path === "/api-reference/user",
+      );
+      expect(userLeaf).toBeDefined();
+    }
+  });
+
+  it("leaves pages ungrouped when neither path segments nor kind are available", async () => {
+    const mockPages = [{ path: "/api-reference/user", title: "User", body: "" }];
+
+    mockQueryCollection.mockReturnValue({
+      order: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      all: vi.fn().mockResolvedValue(mockPages),
+    });
+
+    mockUseAsyncData.mockImplementation((key, callback) => {
+      return callback().then((data) => ({ data: createRef(data) }));
+    });
+
+    mockUseAppConfig.mockReturnValue({
+      gqlmd: { baseURL: "api-reference" },
+    });
+
+    const result = await useApiNavigation();
+    const sections = result.sections.value;
+
+    expect(sections.length).toBe(1);
+    expect("path" in sections[0]! && sections[0].path).toBe("/api-reference/user");
+  });
+
+  it("sorts branches and leaves alphabetically by title at every level", async () => {
+    const mockPages = [
+      { path: "/api-reference/types/objects/user", title: "User", body: "" },
+      { path: "/api-reference/types/objects/profile", title: "Profile", body: "" },
+      { path: "/api-reference/types/enums/status", title: "Status", body: "" },
+      { path: "/api-reference/operations/queries/user", title: "GetUser", body: "" },
+      { path: "/api-reference/operations/mutations/create-user", title: "CreateUser", body: "" },
+    ];
+
+    mockQueryCollection.mockReturnValue({
+      order: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      all: vi.fn().mockResolvedValue(mockPages),
+    });
+
+    mockUseAsyncData.mockImplementation((key, callback) => {
+      return callback().then((data) => ({ data: createRef(data) }));
+    });
+
+    mockUseAppConfig.mockReturnValue({
+      gqlmd: { baseURL: "api-reference" },
+    });
+
+    const result = await useApiNavigation();
+    const sections = result.sections.value as Array<ApiNavigationNode & { title: string; children: ApiNavigationNode[] }>;
+
+    // Top-level branches: "Operations" before "Types" alphabetically.
+    expect(sections.map((s) => s.title)).toEqual(["Operations", "Types"]);
+
+    const operations = sections.find((s) => s.title === "Operations")!;
+    // Its own children (Mutations, Queries) sorted alphabetically too.
+    expect(
+      operations.children.map((c) => (c as ApiNavigationNode & { title: string }).title),
+    ).toEqual(["Mutations", "Queries"]);
+
+    const types = sections.find((s) => s.title === "Types")!;
+    expect(types.children.map((c) => (c as ApiNavigationNode & { title: string }).title)).toEqual([
+      "Enums",
+      "Objects",
+    ]);
+
+    const objects = types.children.find(
+      (c): c is ApiNavigationNode & { title: string; children: ApiNavigationLeaf[] } =>
+        "children" in c && c.title === "Objects",
+    )!;
+    // Leaves within a group ("Profile" before "User"), by title, not path/insertion order.
+    expect(objects.children.map((leaf) => leaf.title)).toEqual(["Profile", "User"]);
+  });
+
+  it("overviewGroupsFor also falls back to grouping by kind for a flat landing page", async () => {
+    const mockPages = [
+      { path: "/api-reference/user", title: "User", body: "", meta: { kind: "objects" } },
+      { path: "/api-reference/id", title: "ID", body: "", meta: { kind: "scalars" } },
+    ];
+
+    mockQueryCollection.mockReturnValue({
+      order: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      all: vi.fn().mockResolvedValue(mockPages),
+    });
+
+    mockUseAsyncData.mockImplementation((key, callback) => {
+      return callback().then((data) => ({ data: createRef(data) }));
+    });
+
+    mockUseAppConfig.mockReturnValue({
+      gqlmd: { baseURL: "api-reference" },
+    });
+
+    const result = await useApiNavigation();
+    const groups = result.overviewGroupsFor("/api-reference");
+
+    const sectionTitles = groups.map((g) => (g as { sectionTitle: string }).sectionTitle);
+    expect(sectionTitles).toContain("Objects");
+    expect(sectionTitles).toContain("Scalars");
+  });
 });

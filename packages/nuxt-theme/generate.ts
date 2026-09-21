@@ -32,7 +32,7 @@ const DEFAULT_LOADERS = {
  * @param userOptions.loaders - Custom schema loaders (default: GraphQLFileLoader)
  * @returns A function that generates the documentation when called
  */
-export function createGenerateDocs(userOptions: {
+export const createGenerateDocs = (userOptions: {
   schema: string;
   rootPath?: string;
   baseURL?: string;
@@ -40,7 +40,7 @@ export function createGenerateDocs(userOptions: {
   decorators?: GraphQLMarkdownOptions["decorators"];
   formatter?: string;
   loaders?: GraphQLMarkdownOptions["loaders"];
-}): () => Promise<void> {
+}): (() => Promise<void>) => {
   const {
     schema,
     rootPath = "./content",
@@ -88,4 +88,4 @@ export function createGenerateDocs(userOptions: {
       throw new Error("GraphQL Markdown generation failed", { cause: error });
     }
   };
-}
+};

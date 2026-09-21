@@ -32,8 +32,33 @@
       "project": ["**/*.ts!"],
       "ignoreDependencies": ["prettier"]
     },
-    "packages/tooling-config": {
+    "packages/nuxt-theme": {
       "entry": [
+        "nuxt.config.ts",
+        "content.config.ts",
+        "generate.ts",
+        "generate-docs.ts",
+        "formatter.ts",
+        "swizzle.manifest.ts",
+        "modules/*.ts",
+        "vitest.config.mjs",
+        "app/components/*.vue"
+      ],
+      "ignore": [
+        "tests/fixture/**",
+        "tests/fixture-multi/**",
+        "tests/fixture-flat/**"
+      ],
+      "ignoreDependencies": ["nuxt"]
+    },
+    "packages/create-graphql-markdown-docs": {
+      "entry": ["bin/create.mjs", "vitest.config.mjs"],
+      "ignore": ["template/**"]
+    },
+    "packages/tooling-config": {
+      "project": ["**/*.{ts,mts}!"],
+      "entry": [
+        "scripts/shared/package-names.mts",
         "eslint/config.ts",
         "vitest/base.mjs",
         "prettier/index.mjs",

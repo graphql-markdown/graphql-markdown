@@ -23,12 +23,21 @@
         class="mb-8"
       />
 
-      <ApiNamespaceLanding
-        v-if="isLandingPage"
-        title="Schema Documentation"
-        description="Browse the workspace API by operation or schema type. Every page includes its definition, related fields, and examples when available."
-        :items="overviewGroups"
-      />
+      <template v-if="isLandingPage">
+        <template v-if="isFlat">
+          <ApiSinglePageSection
+            v-for="bucket in buckets"
+            :key="bucket.id"
+            :bucket="bucket"
+          />
+        </template>
+        <ApiNamespaceLanding
+          v-else
+          title="Schema Documentation"
+          description="Browse the workspace API by operation or schema type. Every page includes its definition, related fields, and examples when available."
+          :items="overviewGroups"
+        />
+      </template>
       <ApiDocumentContent v-else :document="document" />
     </section>
 
@@ -36,14 +45,15 @@
       v-if="!isLandingPage"
       :definition-card="definitionCard"
       :example-cards="exampleCards"
-      :is-operation="isOperation"
     />
   </main>
   <main
     v-else-if="!page && route.path === baseURLPath && sections.length > 0"
     class="grid flex-1 grid-cols-1"
   >
-    <section class="api-document max-w-none overflow-y-auto p-8 lg:px-16 lg:py-20">
+    <section
+      class="api-document max-w-none overflow-y-auto p-8 lg:px-16 lg:py-20"
+    >
       <UBreadcrumb
         :items="[{ label: 'API Reference' }]"
         class="mb-8 -mt-12 font-mono"
@@ -63,6 +73,8 @@
 </template>
 
 <script setup lang="ts">
+import { anchorIdFor } from "~/composables/useApiSinglePage";
+
 definePageMeta({ layout: "reference" });
 
 const route = useRoute();
@@ -86,12 +98,27 @@ const { data: page } = await useAsyncData(route.path, async () => {
     .first();
 });
 
-const isLandingPage = computed(() => page.value?.path?.endsWith("/generated") ?? false);
+const isLandingPage = computed(
+  () => page.value?.path?.endsWith("/generated") ?? false,
+);
 
 const { sections, overviewGroupsFor } = await useApiNavigation();
+const { isFlat } = await useHierarchyMode();
+const { buckets } = await useApiSinglePage();
 const overviewGroups = computed(() =>
   isLandingPage.value ? overviewGroupsFor(route.path) : [],
 );
+
+if (isFlat.value && page.value && !isLandingPage.value) {
+  const anchorId = anchorIdFor({
+    path: page.value.path,
+    kind:
+      typeof page.value.meta?.kind === "string"
+        ? page.value.meta.kind
+        : undefined,
+  });
+  await navigateTo(`${baseURLPath.value}#${anchorId}`, { redirectCode: 301 });
+}
 
 const breadcrumbs = computed(() =>
   pathSegments.value.map((segment, index) => {
@@ -116,6 +143,7 @@ const { documentBody, deprecationReason, document } = useApiDocument(page);
 const { definitionCard, exampleCards } = await useApiCodeCards(
   documentBody,
   schemaKind,
+  isOperation,
   config.gqlmd.shikiTheme,
 );
 

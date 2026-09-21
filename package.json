@@ -13,7 +13,8 @@
     "packages": [
       "packages/*",
       "packages/*/tests/fixture",
-      "packages/*/tests/fixture-multi"
+      "packages/*/tests/fixture-multi",
+      "packages/*/tests/fixture-flat"
     ],
     "catalog": {
       "graphql": "^16.0.0 || ^17.0.0",

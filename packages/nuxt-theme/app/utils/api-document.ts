@@ -30,37 +30,45 @@ const SCHEMA_KIND_LABELS: Record<string, string> = {
 /** Categories whose pages document an operation rather than a schema type. */
 const OPERATION_CATEGORIES = ["queries", "mutations", "subscriptions"];
 
-export const isOperationCategory = (category?: string): boolean =>
-  Boolean(category && OPERATION_CATEGORIES.includes(category));
+export const isOperationCategory = (category?: string): boolean => {
+  return Boolean(category && OPERATION_CATEGORIES.includes(category));
+};
 
 /** Badge for a page's schema kind, taken from its category path segment. */
-export const schemaKindLabel = (category?: string): string =>
-  category
+export const schemaKindLabel = (category?: string): string => {
+  return category
     ? (SCHEMA_KIND_LABELS[category] ?? category.toUpperCase())
     : "GRAPHQL";
+};
 
 /** `create-project` → `Create Project`, for path segments used as labels. */
-export const titleCase = (value: string): string =>
-  value.replace(/-/g, " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
+export const titleCase = (value: string): string => {
+  return value.replace(/-/g, " ").replace(/\b\w/g, (letter) => {
+    return letter.toUpperCase();
+  });
+};
 
 // --- Queries -------------------------------------------------------------
 
-const findSectionIndex = (nodes: MdcNode[], title: string): number =>
-  nodes.findIndex(
-    (node) => isElement(node, "h3") && nodeText(node).trim() === title,
-  );
+const findSectionIndex = (nodes: MdcNode[], title: string): number => {
+  return nodes.findIndex((node) => {
+    return isElement(node, "h3") && nodeText(node).trim() === title;
+  });
+};
 
-const findGraphqlCode = (nodes: MdcNode[], from = 0): MdcElement | undefined =>
-  nodes
-    .slice(from)
-    .find(
-      (node): node is MdcElement =>
-        isElement(node, "pre") && node[1]?.language === "graphql",
-    );
+const findGraphqlCode = (
+  nodes: MdcNode[],
+  from = 0,
+): MdcElement | undefined => {
+  return nodes.slice(from).find((node): node is MdcElement => {
+    return isElement(node, "pre") && node[1].language === "graphql";
+  });
+};
 
 /** The type or operation definition, always the page's first code block. */
-export const definitionCode = (nodes: MdcNode[]): string | undefined =>
-  findGraphqlCode(nodes)?.[1]?.code;
+export const definitionCode = (nodes: MdcNode[]): string | undefined => {
+  return findGraphqlCode(nodes)?.[1]?.code;
+};
 
 /** The code block below an `### <title>` heading, if the schema defines one. */
 export const sectionCode = (
@@ -81,15 +89,19 @@ export const sectionCode = (
  * A type retired with `@deprecatedType` states its replacement as prose above
  * the definition rather than through the standard `@deprecated` directive.
  */
-export const findDeprecationNotice = (body: any): string | undefined => {
+export const findDeprecationNotice = (
+  body: { value?: MdcNode[] } | null | undefined,
+): string | undefined => {
   const nodes: MdcNode[] = body?.value ?? [];
-  const definitionIndex = nodes.findIndex((node) => isElement(node, "pre"));
+  const definitionIndex = nodes.findIndex((node) => {
+    return isElement(node, "pre");
+  });
   const metadataNodes =
     definitionIndex >= 0 ? nodes.slice(0, definitionIndex) : [];
 
-  return metadataNodes
-    .map(nodeText)
-    .find((text) => text.includes("Replaced by"));
+  return metadataNodes.map(nodeText).find((text) => {
+    return text.includes("Replaced by");
+  });
 };
 
 // --- Transforms ----------------------------------------------------------
@@ -99,9 +111,19 @@ export const findDeprecationNotice = (body: any): string | undefined => {
  * column instead, with the badge each card carries — `kind` defaults to the
  * page's own schema kind. Single source of truth for both sides of the move.
  */
-export const CODE_COLUMN_SECTIONS: Array<{ title: string; kind?: string }> = [
+export const CODE_COLUMN_SECTIONS: {
+  title: string;
+  label?: string;
+  kind?: string;
+  operationOnly?: boolean;
+}[] = [
   { title: "Example" },
-  { title: "Example Response", kind: "JSON" },
+  {
+    title: "Example Response",
+    label: "Response",
+    kind: "JSON",
+    operationOnly: true,
+  },
 ];
 
 /** Indexes of the moved headings and the code block following each of them. */
@@ -175,7 +197,11 @@ const promoteBadges = (node: MdcNode): MdcNode => {
 
   const classes = nodeClasses(node);
   if (node[0] === "mark" && classes.includes("gqlmd-mdx-badge")) {
-    const style = classes.map((name) => BADGE_STYLES[name]).find(Boolean) ?? {
+    const style = classes
+      .map((name) => {
+        return BADGE_STYLES[name];
+      })
+      .find(Boolean) ?? {
       color: "neutral",
       variant: "subtle",
     };
@@ -199,7 +225,7 @@ const normalizeAnchorId = (node: MdcNode): MdcNode => {
 
   const lastChild = node.at(-1);
   const anchorMatch =
-    typeof lastChild === "string" && lastChild.match(/\s*\{#([^}]+)\}\s*$/);
+    typeof lastChild === "string" && /\s*\{#([^}]+)\}\s*$/.exec(lastChild);
   if (!anchorMatch) return node;
 
   const children = node.slice(2, -1) as MdcNode[];
@@ -210,5 +236,45 @@ const normalizeAnchorId = (node: MdcNode): MdcNode => {
 };
 
 /** Every generated-markup fixup the reference layout applies to a node. */
-export const toRenderableNode = (node: MdcNode): MdcNode =>
-  promoteBadges(promoteDeprecationCallout(normalizeAnchorId(node)));
+export const toRenderableNode = (node: MdcNode): MdcNode => {
+  return promoteBadges(promoteDeprecationCallout(normalizeAnchorId(node)));
+};
+
+export interface DocumentSection {
+  id: string;
+  title: string;
+  nodes: MdcNode[];
+}
+
+export interface SplitDocument {
+  lead: MdcNode[];
+  sections: DocumentSection[];
+}
+
+/**
+ * Splits a document's fixed-up node list at its `h3` boundaries, so each
+ * schema section ("Arguments", "Fields", …) can be rendered on its own. The
+ * nodes before the first heading are the type/operation description and
+ * always stay together as `lead`. Shared by `useApiDocument` (one reactive
+ * page) and `useApiSinglePage` (many pages fetched at once), which is why
+ * this lives here as a plain function rather than inside either composable.
+ */
+export const splitDocumentSections = (nodes: MdcNode[]): SplitDocument => {
+  const lead: MdcNode[] = [];
+  const sections: DocumentSection[] = [];
+
+  for (const node of nodes) {
+    if (isElement(node, "h3")) {
+      sections.push({
+        id: node[1].id ?? `section-${sections.length}`,
+        title: nodeText(node).trim(),
+        nodes: [],
+      });
+      continue;
+    }
+
+    (sections.at(-1)?.nodes ?? lead).push(node);
+  }
+
+  return { lead, sections };
+};

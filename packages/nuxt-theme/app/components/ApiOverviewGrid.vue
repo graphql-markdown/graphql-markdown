@@ -26,7 +26,9 @@
 import type { ApiNavigationNode } from "~/composables/useApiNavigation";
 
 defineProps<{
-  items: Array<ApiNavigationNode | (ApiNavigationNode & { sectionTitle: string })>;
+  items: Array<
+    ApiNavigationNode | (ApiNavigationNode & { sectionTitle: string })
+  >;
 }>();
 
 const itemKey = (item: any) =>

@@ -1,7 +1,13 @@
 import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { execFileSync } from "node:child_process";
 import { join } from "node:path";
-import { mkdtempSync, rmSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import {
+  mkdtempSync,
+  rmSync,
+  readFileSync,
+  writeFileSync,
+  existsSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 
 /**
@@ -55,25 +61,19 @@ describe.skipIf(!RUN_E2E)("create-graphql-markdown-docs — real build", () => {
     }
   });
 
-  it(
-    "runs a cold `npm run generate` successfully",
-    () => {
-      execFileSync("npm", ["run", "generate"], {
-        cwd: projectDir,
-        stdio: "pipe",
-        encoding: "utf-8",
-        timeout: 120_000,
-      });
+  it("runs a cold `npm run generate` successfully", () => {
+    execFileSync("npm", ["run", "generate"], {
+      cwd: projectDir,
+      stdio: "pipe",
+      encoding: "utf-8",
+      timeout: 120_000,
+    });
 
-      expect(existsSync(join(projectDir, ".output/public/index.html"))).toBe(
-        true,
-      );
-      expect(
-        existsSync(
-          join(projectDir, ".output/public/api-reference/index.html"),
-        ),
-      ).toBe(true);
-    },
-    150_000,
-  );
+    expect(existsSync(join(projectDir, ".output/public/index.html"))).toBe(
+      true,
+    );
+    expect(
+      existsSync(join(projectDir, ".output/public/api-reference/index.html")),
+    ).toBe(true);
+  }, 150_000);
 });

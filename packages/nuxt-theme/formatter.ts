@@ -19,7 +19,9 @@ interface Admonition {
 }
 
 /** ` · ` instead of the default ` ● `, as text rather than a styled span. */
-export const formatMDXBullet = (text = ""): string => `&nbsp;·&nbsp;${text}`;
+export const formatMDXBullet = (text = ""): string => {
+  return `&nbsp;·&nbsp;${text}`;
+};
 
 export const formatMDXBadge = ({ text }: Badge): string => {
   const suffix = String(text).toLowerCase();
@@ -48,3 +50,28 @@ export const formatMDXAdmonition = ({
  * generated pages have to be emitted as plain Markdown to be searchable.
  */
 export const mdxExtension = ".md";
+
+/**
+ * Stamps a `kind` frontmatter field (the GraphQL entity kind being
+ * rendered — `objects`, `scalars`, `queries`, `directives`, etc.) onto every
+ * generated page, on top of the same `---`-delimited wrapping graphql-markdown's
+ * own default `formatMDXFrontmatter` produces (reimplemented inline rather
+ * than imported, since this file is loaded by URL at generation time and
+ * deliberately stays free of `@graphql-markdown/*` runtime dependencies).
+ *
+ * `useApiNavigation.ts` reads this field back to group the sidebar/landing
+ * grid by entity kind whenever a page has no folder segments left to group
+ * by — today, that's `printTypeOptions.hierarchy: "flat"`, which otherwise
+ * has nothing else to group on.
+ */
+export const formatMDXFrontmatter = (
+  _props: unknown,
+  formatted: string[] | null | undefined,
+  context?: { entity?: string | null },
+): string => {
+  if (!formatted) return "";
+  const lines = context?.entity
+    ? [...formatted, `kind: ${context.entity}`]
+    : formatted;
+  return ["---", ...lines, "---"].join("\n");
+};

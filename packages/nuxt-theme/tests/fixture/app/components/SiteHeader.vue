@@ -25,8 +25,8 @@
 // The reference layout is full-bleed so the header lines up with the fixed
 // sidebar; the landing page centres its content and passes its own width.
 withDefaults(defineProps<{ containerClass?: string }>(), {
-  containerClass: 'max-w-none px-4 md:px-8'
-})
+  containerClass: "max-w-none px-4 md:px-8",
+});
 
 const config = useAppConfig();
 </script>

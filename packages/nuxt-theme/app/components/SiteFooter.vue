@@ -1,5 +1,7 @@
 <template>
-  <UFooter :ui="{ root: 'border-t border-default bg-muted', container: 'py-6' }">
+  <UFooter
+    :ui="{ root: 'border-t border-default bg-muted', container: 'py-6' }"
+  >
     <ULink
       to="https://graphql-markdown.dev/"
       target="_blank"

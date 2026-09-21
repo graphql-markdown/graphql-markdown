@@ -24,7 +24,7 @@ import { DEFAULT_BASE_URL } from "../constants";
  *   content/api-reference/types/objects/user.md -> /api-reference/types/objects/user
  */
 
-async function walk(dir: string): Promise<string[]> {
+const walk = async (dir: string): Promise<string[]> => {
   const out: string[] = [];
   try {
     for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -40,7 +40,7 @@ async function walk(dir: string): Promise<string[]> {
     // Directory does not exist yet; that's ok.
   }
   return out;
-}
+};
 
 /**
  * Maps a content file path to its final route.
@@ -55,11 +55,9 @@ async function walk(dir: string): Promise<string[]> {
  * the existing single-schema fixture test still passes unmodified against
  * this version.
  */
-function routeFor(contentDir: string, file: string): string | undefined {
+const routeFor = (contentDir: string, file: string): string | undefined => {
   const relativePath = relative(contentDir, file);
-  const segments = relativePath
-    .replace(/\.md$/, "")
-    .split(sep);
+  const segments = relativePath.replace(/\.md$/, "").split(sep);
 
   if (segments.at(-1) === "generated") {
     return `/${segments.slice(0, -1).join("/")}`;
@@ -67,7 +65,7 @@ function routeFor(contentDir: string, file: string): string | undefined {
 
   // All other pages: map directly
   return `/${segments.join("/")}`;
-}
+};
 
 export default defineNuxtModule({
   meta: {
@@ -92,7 +90,9 @@ export default defineNuxtModule({
         // fallback still needs to be reachable there. A no-op/duplicate add
         // for the default single-schema case, since that route is already
         // registered by the walk above via its own `generated.md`.
-        const appConfig = nuxt.options.appConfig as { gqlmd?: { baseURL?: string } };
+        const appConfig = nuxt.options.appConfig as {
+          gqlmd?: { baseURL?: string };
+        };
         const baseURL = appConfig.gqlmd?.baseURL ?? DEFAULT_BASE_URL;
         routes.add(`/${baseURL}`);
       });

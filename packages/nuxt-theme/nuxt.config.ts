@@ -1,5 +1,6 @@
 import { fileURLToPath } from "node:url";
 import { join } from "node:path";
+import { defineNuxtConfig } from "nuxt/config";
 
 const layerDir = fileURLToPath(new URL(".", import.meta.url));
 

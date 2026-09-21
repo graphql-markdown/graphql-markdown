@@ -4,7 +4,7 @@
  * helpers are the only place that shape is unpacked, so the pages and
  * composables above them never index into raw tuples.
  */
-export type MdcNode = string | MdcElement;
+export type MdcNode = MdcElement | string;
 
 export type MdcElement = [
   tag: string,
@@ -12,30 +12,36 @@ export type MdcElement = [
   ...children: MdcNode[],
 ];
 
-export const isElement = (node: unknown, tag?: string): node is MdcElement =>
-  Array.isArray(node) && (tag === undefined || node[0] === tag);
+export const isElement = (node: unknown, tag?: string): node is MdcElement => {
+  return Array.isArray(node) && (tag === undefined || node[0] === tag);
+};
 
-export const childrenOf = (node: MdcNode): MdcNode[] =>
-  isElement(node) ? (node.slice(2) as MdcNode[]) : [];
+export const childrenOf = (node: MdcNode): MdcNode[] => {
+  return isElement(node) ? (node.slice(2) as MdcNode[]) : [];
+};
 
 /**
  * Flattened text of a node. Inline markup such as ``Replaced by `Project` ``
  * splits a single sentence across several children, so prose has to be read
  * from the flattened text rather than from any one child.
  */
-export const nodeText = (node: MdcNode): string =>
-  typeof node === "string" ? node : childrenOf(node).map(nodeText).join("");
+export const nodeText = (node: MdcNode): string => {
+  return typeof node === "string"
+    ? node
+    : childrenOf(node).map(nodeText).join("");
+};
 
 export const nodeClasses = (node: MdcNode): string[] => {
   const className = isElement(node)
-    ? (node[1]?.className ?? node[1]?.class ?? "")
+    ? (node[1].className ?? node[1].class ?? "")
     : "";
 
   return Array.isArray(className) ? className : String(className).split(" ");
 };
 
-export const hasClass = (node: MdcNode, className: string): boolean =>
-  nodeClasses(node).includes(className);
+export const hasClass = (node: MdcNode, className: string): boolean => {
+  return nodeClasses(node).includes(className);
+};
 
 /** Depth-first search for the first descendant (or `node` itself) with a class. */
 export const findByClass = (
@@ -46,6 +52,8 @@ export const findByClass = (
   if (hasClass(node, className)) return node;
 
   return childrenOf(node)
-    .map((child) => findByClass(child, className))
+    .map((child) => {
+      return findByClass(child, className);
+    })
     .find(Boolean);
 };

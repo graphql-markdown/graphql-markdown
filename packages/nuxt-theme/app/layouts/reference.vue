@@ -80,6 +80,7 @@
 
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
+import { useApiSinglePageNavigation } from "~/composables/useApiSinglePage";
 
 const config = useAppConfig();
 const baseURLPath = useApiBaseURL();
@@ -94,7 +95,13 @@ const isSidebarOpen = ref(true);
 // structurally match. UContentNavigation's `navigation` prop actually wants
 // the stricter ContentNavigationLink (which extends this with only optional
 // fields), so the same cast satisfies it too.
-const { sections: navigationSections } = await useApiNavigation();
+const { isFlat } = await useHierarchyMode();
+const { buckets } = await useApiSinglePage();
+const { sections } = await useApiNavigation();
+
+const navigationSections = computed(() =>
+  isFlat.value ? useApiSinglePageNavigation(buckets.value) : sections.value,
+);
 
 const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
   queryCollectionSearchSections("content"),

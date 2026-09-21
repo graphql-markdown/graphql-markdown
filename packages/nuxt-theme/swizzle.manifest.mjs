@@ -60,6 +60,18 @@ export const swizzleManifest = [
     description: "Code column sidebar with highlighted schema definitions and examples",
   },
   {
+    id: "ApiSinglePageSection",
+    sourcePath: "app/components/ApiSinglePageSection.vue",
+    targetPath: "app/components/ApiSinglePageSection.vue",
+    description: "Bucket heading + entries for the single-page reference view",
+  },
+  {
+    id: "ApiSinglePageEntry",
+    sourcePath: "app/components/ApiSinglePageEntry.vue",
+    targetPath: "app/components/ApiSinglePageEntry.vue",
+    description: "One query/mutation/type's content on the single-page reference view",
+  },
+  {
     id: "ReferenceLayout",
     sourcePath: "app/layouts/reference.vue",
     targetPath: "app/layouts/reference.vue",

@@ -1,7 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach } from "vitest";
-import { execFileSync, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { join } from "node:path";
-import { mkdtempSync, rmSync, readdirSync, statSync, existsSync } from "node:fs";
+import {
+  mkdtempSync,
+  rmSync,
+  readdirSync,
+  existsSync,
+  mkdirSync,
+  writeFileSync,
+  readFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 
 const packageRoot = join(import.meta.dirname || __dirname, "../..");
@@ -10,7 +18,7 @@ const templateDir = join(packageRoot, "template");
 /**
  * Recursively get all files and directories from a directory.
  */
-function getAllFiles(dir, prefix = "") {
+const getAllFiles = (dir, prefix = "") => {
   const files = [];
   const entries = readdirSync(dir, { withFileTypes: true });
 
@@ -34,7 +42,7 @@ function getAllFiles(dir, prefix = "") {
   }
 
   return files;
-}
+};
 
 describe("create-graphql-markdown-docs CLI", () => {
   let testDir: string;
@@ -53,10 +61,14 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "my-docs");
 
-    const result = spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    const result = spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     // Should succeed
     expect(result.status).toBe(0);
@@ -69,13 +81,17 @@ describe("create-graphql-markdown-docs CLI", () => {
   it("refuses to scaffold into a non-empty directory, leaving it untouched", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "occupied");
-    require("node:fs").mkdirSync(projectDir);
-    require("node:fs").writeFileSync(join(projectDir, "keep-me.txt"), "do not delete");
+    mkdirSync(projectDir);
+    writeFileSync(join(projectDir, "keep-me.txt"), "do not delete");
 
-    const result = spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    const result = spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     expect(result.status).not.toBe(0);
     expect(existsSync(join(projectDir, "keep-me.txt"))).toBe(true);
@@ -86,10 +102,14 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "my-docs");
 
-    spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     // Check key files exist
     const expectedFiles = [
@@ -115,13 +135,27 @@ describe("create-graphql-markdown-docs CLI", () => {
 
     const result = spawnSync(
       "node",
-      [cliPath, "--yes", "--dir", projectDir, "--title", "My Cool API", "--color", "emerald", "--no-install", "--no-git"],
+      [
+        cliPath,
+        "--yes",
+        "--dir",
+        projectDir,
+        "--title",
+        "My Cool API",
+        "--color",
+        "emerald",
+        "--no-install",
+        "--no-git",
+      ],
       { cwd: packageRoot, encoding: "utf-8" },
     );
 
     expect(result.status).toBe(0);
 
-    const appConfig = require("node:fs").readFileSync(join(projectDir, "app/app.config.ts"), "utf-8");
+    const appConfig = readFileSync(
+      join(projectDir, "app/app.config.ts"),
+      "utf-8",
+    );
     expect(appConfig).toContain("siteTitle: 'My Cool API'");
     expect(appConfig).toContain("primary: 'emerald'");
   });
@@ -130,13 +164,17 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "custom-project-name");
 
-    spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     const pkgJson = JSON.parse(
-      require("node:fs").readFileSync(join(projectDir, "package.json"), "utf-8")
+      readFileSync(join(projectDir, "package.json"), "utf-8"),
     );
 
     expect(pkgJson.name).toBe("custom-project-name");
@@ -146,14 +184,26 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "my-docs");
 
-    spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     // Get file lists
-    const templateFiles = getAllFiles(templateDir).map((f) => f.path).sort();
-    const scaffoldedFiles = getAllFiles(projectDir).map((f) => f.path).sort();
+    const templateFiles = getAllFiles(templateDir)
+      .map((f) => {
+        return f.path;
+      })
+      .sort();
+    const scaffoldedFiles = getAllFiles(projectDir)
+      .map((f) => {
+        return f.path;
+      })
+      .sort();
 
     // They should have the same structure (apart from name field in package.json)
     expect(scaffoldedFiles).toEqual(templateFiles);
@@ -163,16 +213,20 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "my-docs");
 
-    spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     const schemaPath = join(projectDir, "schema", "example.graphql");
     expect(existsSync(schemaPath)).toBe(true);
 
     // Schema should contain basic types
-    const schemaContent = require("node:fs").readFileSync(schemaPath, "utf-8");
+    const schemaContent = readFileSync(schemaPath, "utf-8");
     expect(schemaContent).toContain("type Query");
     expect(schemaContent).toContain("type User");
   });
@@ -181,13 +235,17 @@ describe("create-graphql-markdown-docs CLI", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const projectDir = join(testDir, "my-docs");
 
-    spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-      cwd: packageRoot,
-      encoding: "utf-8",
-    });
+    spawnSync(
+      "node",
+      [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+      {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      },
+    );
 
     const pkgJson = JSON.parse(
-      require("node:fs").readFileSync(join(projectDir, "package.json"), "utf-8")
+      readFileSync(join(projectDir, "package.json"), "utf-8"),
     );
 
     expect(pkgJson.name).toBeDefined();
@@ -201,21 +259,29 @@ describe("create-graphql-markdown-docs CLI", () => {
   });
 
   describe("schema loader detection", () => {
-    const fs = require("node:fs");
     const cliPath = join(packageRoot, "bin/create.mjs");
 
     it("defaults to the bundled example with no explicit loader", () => {
       const projectDir = join(testDir, "default-schema");
-      spawnSync("node", [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"], {
-        cwd: packageRoot,
-        encoding: "utf-8",
-      });
+      spawnSync(
+        "node",
+        [cliPath, "--yes", "--dir", projectDir, "--no-install", "--no-git"],
+        {
+          cwd: packageRoot,
+          encoding: "utf-8",
+        },
+      );
 
-      const generateDocs = fs.readFileSync(join(projectDir, "generate-docs.ts"), "utf-8");
+      const generateDocs = readFileSync(
+        join(projectDir, "generate-docs.ts"),
+        "utf-8",
+      );
       expect(generateDocs).toContain("schema: './schema/example.graphql'");
       expect(generateDocs).not.toContain("loaders:");
 
-      const pkgJson = JSON.parse(fs.readFileSync(join(projectDir, "package.json"), "utf-8"));
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
       expect(Object.keys(pkgJson.dependencies)).not.toEqual(
         expect.arrayContaining([expect.stringMatching(/@graphql-tools\//)]),
       );
@@ -240,67 +306,107 @@ describe("create-graphql-markdown-docs CLI", () => {
 
       expect(result.status).toBe(0);
 
-      const generateDocs = fs.readFileSync(join(projectDir, "generate-docs.ts"), "utf-8");
-      expect(generateDocs).toContain("schema: 'https://api.example.com/graphql'");
+      const generateDocs = readFileSync(
+        join(projectDir, "generate-docs.ts"),
+        "utf-8",
+      );
+      expect(generateDocs).toContain(
+        "schema: 'https://api.example.com/graphql'",
+      );
       expect(generateDocs).toContain(
         "loaders: { UrlLoader: '@graphql-tools/url-loader' }",
       );
       // No local file to copy for a remote source — the directory may still
       // exist (it ships empty in the template), but nothing should be in it.
       const schemaDir = join(projectDir, "schema");
-      expect(!existsSync(schemaDir) || fs.readdirSync(schemaDir).length === 0).toBe(true);
+      expect(
+        !existsSync(schemaDir) || readdirSync(schemaDir).length === 0,
+      ).toBe(true);
 
-      const pkgJson = JSON.parse(fs.readFileSync(join(projectDir, "package.json"), "utf-8"));
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
       expect(pkgJson.dependencies["@graphql-tools/url-loader"]).toBeDefined();
 
       // A remote schema source has no local file to watch — the template's
       // `watch` entry (and its now-unused fileURLToPath import) must be
       // dropped, not left pointing at a path that no longer means anything.
-      const nuxtConfig = fs.readFileSync(join(projectDir, "nuxt.config.ts"), "utf-8");
+      const nuxtConfig = readFileSync(
+        join(projectDir, "nuxt.config.ts"),
+        "utf-8",
+      );
       expect(nuxtConfig).not.toContain("watch:");
       expect(nuxtConfig).not.toContain("fileURLToPath");
     });
 
     it("points nuxt.config.ts's watch entry at a renamed local schema file", () => {
       const schemaSrc = join(testDir, "custom.graphql");
-      fs.writeFileSync(schemaSrc, "type Query { hello: String }");
+      writeFileSync(schemaSrc, "type Query { hello: String }");
 
       const projectDir = join(testDir, "renamed-schema");
       const result = spawnSync(
         "node",
-        [cliPath, "--yes", "--dir", projectDir, "--schema", schemaSrc, "--no-install", "--no-git"],
+        [
+          cliPath,
+          "--yes",
+          "--dir",
+          projectDir,
+          "--schema",
+          schemaSrc,
+          "--no-install",
+          "--no-git",
+        ],
         { cwd: packageRoot, encoding: "utf-8" },
       );
 
       expect(result.status).toBe(0);
 
-      const nuxtConfig = fs.readFileSync(join(projectDir, "nuxt.config.ts"), "utf-8");
+      const nuxtConfig = readFileSync(
+        join(projectDir, "nuxt.config.ts"),
+        "utf-8",
+      );
       expect(nuxtConfig).toContain("./schema/schema.graphql");
       expect(nuxtConfig).not.toContain("example.graphql");
     });
 
     it("detects a local JSON introspection file and adds @graphql-tools/json-file-loader", () => {
       const schemaSrc = join(testDir, "introspection.json");
-      fs.writeFileSync(schemaSrc, JSON.stringify({ data: { __schema: {} } }));
+      writeFileSync(schemaSrc, JSON.stringify({ data: { __schema: {} } }));
 
       const projectDir = join(testDir, "json-schema");
       const result = spawnSync(
         "node",
-        [cliPath, "--yes", "--dir", projectDir, "--schema", schemaSrc, "--no-install", "--no-git"],
+        [
+          cliPath,
+          "--yes",
+          "--dir",
+          projectDir,
+          "--schema",
+          schemaSrc,
+          "--no-install",
+          "--no-git",
+        ],
         { cwd: packageRoot, encoding: "utf-8" },
       );
 
       expect(result.status).toBe(0);
       expect(existsSync(join(projectDir, "schema/schema.json"))).toBe(true);
 
-      const generateDocs = fs.readFileSync(join(projectDir, "generate-docs.ts"), "utf-8");
+      const generateDocs = readFileSync(
+        join(projectDir, "generate-docs.ts"),
+        "utf-8",
+      );
       expect(generateDocs).toContain("schema: './schema/schema.json'");
       expect(generateDocs).toContain(
         "loaders: { JsonFileLoader: '@graphql-tools/json-file-loader' }",
       );
 
-      const pkgJson = JSON.parse(fs.readFileSync(join(projectDir, "package.json"), "utf-8"));
-      expect(pkgJson.dependencies["@graphql-tools/json-file-loader"]).toBeDefined();
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
+      expect(
+        pkgJson.dependencies["@graphql-tools/json-file-loader"],
+      ).toBeDefined();
     });
   });
 });

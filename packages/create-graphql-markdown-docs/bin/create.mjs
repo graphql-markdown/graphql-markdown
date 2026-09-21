@@ -1,28 +1,28 @@
 #!/usr/bin/env node
 
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { spawn } from 'node:child_process';
-import os from 'node:os';
-import { parseArgs } from 'node:util';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { spawn } from "node:child_process";
+import os from "node:os";
+import { parseArgs } from "node:util";
 
-import * as prompts from '@clack/prompts';
-import { detect as detectPackageManager } from 'package-manager-detector';
+import * as prompts from "@clack/prompts";
+import { detect as detectPackageManager } from "package-manager-detector";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const packageRoot = path.resolve(__dirname, '..');
-const templateDir = path.resolve(packageRoot, 'template');
+const packageRoot = path.resolve(__dirname, "..");
+const templateDir = path.resolve(packageRoot, "template");
 
 /**
  * Maps each package manager to its install command and arguments.
  * Each entry is [command, args] to be passed to spawn().
  */
 const INSTALL_COMMANDS = {
-  npm: ['npm', ['install']],
-  pnpm: ['pnpm', ['install']],
-  yarn: ['yarn', []],
-  bun: ['bun', ['install']],
+  npm: ["npm", ["install"]],
+  pnpm: ["pnpm", ["install"]],
+  yarn: ["yarn", []],
+  bun: ["bun", ["install"]],
 };
 
 /**
@@ -45,56 +45,59 @@ const INSTALL_COMMANDS = {
  */
 const LOADERS = [
   {
-    id: 'url',
+    id: "url",
     match: (source) => /^https?:\/\//i.test(source),
-    className: 'UrlLoader',
-    package: '@graphql-tools/url-loader',
-    version: 'latest',
+    className: "UrlLoader",
+    package: "@graphql-tools/url-loader",
+    version: "latest",
   },
   {
-    id: 'github',
+    id: "github",
     match: (source) => /^github:/i.test(source),
-    className: 'GithubLoader',
-    package: '@graphql-tools/github-loader',
-    version: 'latest',
+    className: "GithubLoader",
+    package: "@graphql-tools/github-loader",
+    version: "latest",
   },
   {
-    id: 'git',
+    id: "git",
     match: (source) => /^git:/i.test(source),
-    className: 'GitLoader',
-    package: '@graphql-tools/git-loader',
-    version: 'latest',
+    className: "GitLoader",
+    package: "@graphql-tools/git-loader",
+    version: "latest",
   },
   {
-    id: 'json',
+    id: "json",
     match: (source) => /\.json$/i.test(source),
-    className: 'JsonFileLoader',
-    package: '@graphql-tools/json-file-loader',
-    version: 'latest',
+    className: "JsonFileLoader",
+    package: "@graphql-tools/json-file-loader",
+    version: "latest",
   },
   {
-    id: 'code',
+    id: "code",
     match: (source) => /\.(js|mjs|cjs|ts|mts|cts)$/i.test(source),
-    className: 'CodeFileLoader',
-    package: '@graphql-tools/code-file-loader',
-    version: 'latest',
+    className: "CodeFileLoader",
+    package: "@graphql-tools/code-file-loader",
+    version: "latest",
   },
   {
     // Default: a local .graphql/.gql SDL file. This is the loader
     // `createGenerateDocs` already defaults to internally, so scaffolds that
     // land here emit no explicit `loaders` option at all — one less thing
     // for the common case to carry, and no version to track either.
-    id: 'file',
+    id: "file",
     match: (source) => /\.(graphql|gql)$/i.test(source),
-    className: 'GraphQLFileLoader',
-    package: '@graphql-tools/graphql-file-loader',
+    className: "GraphQLFileLoader",
+    package: "@graphql-tools/graphql-file-loader",
     isDefault: true,
   },
 ];
 
 /** Picks the loader for a schema source string, falling back to the local-file loader. */
 function detectLoader(schemaSource) {
-  return LOADERS.find((loader) => loader.match(schemaSource)) ?? LOADERS.find((l) => l.isDefault);
+  return (
+    LOADERS.find((loader) => loader.match(schemaSource)) ??
+    LOADERS.find((l) => l.isDefault)
+  );
 }
 
 /** A schema "path" that's actually a remote/VCS reference, not a local file to copy. */
@@ -113,7 +116,7 @@ function copyDirRecursive(src, dst, excludePatterns = []) {
   const files = fs.readdirSync(src);
   for (const file of files) {
     // Skip excluded patterns
-    if (excludePatterns.some(pattern => file.match(pattern))) {
+    if (excludePatterns.some((pattern) => file.match(pattern))) {
       continue;
     }
 
@@ -134,14 +137,14 @@ function copyDirRecursive(src, dst, excludePatterns = []) {
  */
 async function validateGraphQLSchema(schemaPath) {
   try {
-    const fs = await import('node:fs/promises');
-    const schemaText = await fs.readFile(schemaPath, 'utf-8');
+    const fs = await import("node:fs/promises");
+    const schemaText = await fs.readFile(schemaPath, "utf-8");
 
     // Use graphql's buildSchema to validate
-    const { buildSchema } = await import('graphql');
+    const { buildSchema } = await import("graphql");
     buildSchema(schemaText);
     return true;
-  } catch (error) {
+  } catch {
     return false;
   }
 }
@@ -152,17 +155,17 @@ async function validateGraphQLSchema(schemaPath) {
 function runCommand(command, args, options = {}) {
   return new Promise((resolve, reject) => {
     const proc = spawn(command, args, {
-      stdio: 'inherit',
-      ...options
+      stdio: "inherit",
+      ...options,
     });
-    proc.on('close', (code) => {
+    proc.on("close", (code) => {
       if (code === 0) {
         resolve();
       } else {
         reject(new Error(`Command failed with exit code ${code}`));
       }
     });
-    proc.on('error', reject);
+    proc.on("error", reject);
   });
 }
 
@@ -173,9 +176,10 @@ function runCommand(command, args, options = {}) {
 async function installDependencies(packageManager, projectDir) {
   prompts.log.info(`Installing dependencies with ${packageManager}...`);
   try {
-    const [command, args] = INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
+    const [command, args] =
+      INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
     await runCommand(command, args, { cwd: projectDir });
-    prompts.success('Dependencies installed!');
+    prompts.success("Dependencies installed!");
   } catch (error) {
     prompts.log.error(`Failed to install dependencies: ${error.message}`);
   }
@@ -188,10 +192,12 @@ async function installDependencies(packageManager, projectDir) {
  */
 async function initGitRepo(projectDir) {
   try {
-    await runCommand('git', ['init'], { cwd: projectDir });
-    await runCommand('git', ['add', '.'], { cwd: projectDir });
-    await runCommand('git', ['commit', '-m', 'Initial commit'], { cwd: projectDir });
-    prompts.success('Git repository initialized!');
+    await runCommand("git", ["init"], { cwd: projectDir });
+    await runCommand("git", ["add", "."], { cwd: projectDir });
+    await runCommand("git", ["commit", "-m", "Initial commit"], {
+      cwd: projectDir,
+    });
+    prompts.success("Git repository initialized!");
   } catch (error) {
     prompts.log.warn(`Could not initialize git: ${error.message}`);
   }
@@ -205,15 +211,18 @@ function writeAppConfig(tempDir, titleOverride, colorOverride) {
     return; // No changes needed
   }
 
-  const appConfigPath = path.join(tempDir, 'app', 'app.config.ts');
-  let appConfig = fs.readFileSync(appConfigPath, 'utf-8');
+  const appConfigPath = path.join(tempDir, "app", "app.config.ts");
+  let appConfig = fs.readFileSync(appConfigPath, "utf-8");
   const originalContent = appConfig;
 
   if (titleOverride) {
-    appConfig = appConfig.replace(/siteTitle: 'My API'/, `siteTitle: '${titleOverride}'`);
+    appConfig = appConfig.replace(
+      /siteTitle: 'My API'/,
+      `siteTitle: '${titleOverride}'`,
+    );
     if (appConfig === originalContent) {
       throw new Error(
-        `Expected to find and replace "siteTitle: 'My API'" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+        `Expected to find and replace "siteTitle: 'My API'" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   }
@@ -224,12 +233,12 @@ function writeAppConfig(tempDir, titleOverride, colorOverride) {
     // one rather than trying to replace a value that isn't there.
     const beforeColorOverride = appConfig;
     appConfig = appConfig.replace(
-      'export default defineAppConfig({',
+      "export default defineAppConfig({",
       `export default defineAppConfig({\n  ui: {\n    colors: {\n      primary: '${colorOverride}',\n    },\n  },`,
     );
     if (appConfig === beforeColorOverride) {
       throw new Error(
-        `Expected to find and replace "export default defineAppConfig({" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+        `Expected to find and replace "export default defineAppConfig({" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   }
@@ -241,8 +250,8 @@ function writeAppConfig(tempDir, titleOverride, colorOverride) {
  * Rewrite generate-docs.ts to use the resolved schema path and loader.
  */
 function writeGenerateDocs(tempDir, schemaRef, loader) {
-  const generateDocsPath = path.join(tempDir, 'generate-docs.ts');
-  const originalContent = fs.readFileSync(generateDocsPath, 'utf-8');
+  const generateDocsPath = path.join(tempDir, "generate-docs.ts");
+  const originalContent = fs.readFileSync(generateDocsPath, "utf-8");
 
   // The default (bundled example, GraphQLFileLoader) needs no `loaders` option
   // at all — createGenerateDocs already defaults to it — so only inject
@@ -253,13 +262,16 @@ function writeGenerateDocs(tempDir, schemaRef, loader) {
 
   const updated = originalContent.replace(
     "  schema: './schema/example.graphql',",
-    replacement
+    replacement,
   );
 
   // Only validate the replacement if we expected a change (i.e., the replacement differs from the original pattern).
-  if (replacement !== "  schema: './schema/example.graphql'," && updated === originalContent) {
+  if (
+    replacement !== "  schema: './schema/example.graphql'," &&
+    updated === originalContent
+  ) {
     throw new Error(
-      `Expected to find and replace "  schema: './schema/example.graphql'," in ${generateDocsPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+      `Expected to find and replace "  schema: './schema/example.graphql'," in ${generateDocsPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
 
@@ -270,8 +282,8 @@ function writeGenerateDocs(tempDir, schemaRef, loader) {
  * Rewrite nuxt.config.ts's `watch` entry and/or schema filename to match the resolved schema.
  */
 function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
-  const nuxtConfigPath = path.join(tempDir, 'nuxt.config.ts');
-  const originalContent = fs.readFileSync(nuxtConfigPath, 'utf-8');
+  const nuxtConfigPath = path.join(tempDir, "nuxt.config.ts");
+  const originalContent = fs.readFileSync(nuxtConfigPath, "utf-8");
 
   let updated = originalContent;
 
@@ -283,32 +295,38 @@ function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
     const beforeWatchRemoval = updated;
     updated = updated.replace(
       /\s*\/\/ The layer's gqlmd-generate module[\s\S]*?\n\s*watch: \[[^\]]*\],\n/,
-      '\n'
+      "\n",
     );
 
     if (updated === beforeWatchRemoval) {
       throw new Error(
-        `Expected to find and replace the watch block in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+        `Expected to find and replace the watch block in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
 
     const beforeImportRemoval = updated;
-    updated = updated.replace("import { fileURLToPath } from \"node:url\";\n\n", '');
+    updated = updated.replace(
+      'import { fileURLToPath } from "node:url";\n\n',
+      "",
+    );
 
     if (updated === beforeImportRemoval) {
       throw new Error(
-        `Expected to find and replace the fileURLToPath import in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+        `Expected to find and replace the fileURLToPath import in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   } else {
     // Local schema: replace the example filename with the actual one.
     // Only validate if we expect a change (schemaRef differs from the default).
     const beforeSchemaReplace = updated;
-    updated = updated.replace('./schema/example.graphql', schemaRef);
+    updated = updated.replace("./schema/example.graphql", schemaRef);
 
-    if (schemaRef !== './schema/example.graphql' && updated === beforeSchemaReplace) {
+    if (
+      schemaRef !== "./schema/example.graphql" &&
+      updated === beforeSchemaReplace
+    ) {
       throw new Error(
-        `Expected to find and replace "./schema/example.graphql" in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+        `Expected to find and replace "./schema/example.graphql" in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   }
@@ -320,14 +338,14 @@ function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
  * Rewrite package.json to set the project name and add non-default loaders as dependencies.
  */
 function writePackageJson(tempDir, projectDir, loader) {
-  const pkgJsonPath = path.join(tempDir, 'package.json');
-  let pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf-8'));
+  const pkgJsonPath = path.join(tempDir, "package.json");
+  let pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
   const projectName = path.basename(projectDir);
   pkgJson.name = projectName;
   if (!loader.isDefault) {
     pkgJson.dependencies[loader.package] = loader.version;
   }
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + '\n');
+  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
 }
 
 /**
@@ -338,8 +356,8 @@ function writeReadme(tempDir, schemaPath, schemaRef, loader) {
     return; // No custom schema, keep the template's instructions
   }
 
-  const readmePath = path.join(tempDir, 'README.md');
-  const originalContent = fs.readFileSync(readmePath, 'utf-8');
+  const readmePath = path.join(tempDir, "README.md");
+  const originalContent = fs.readFileSync(readmePath, "utf-8");
   const schemaSectionRe = /### Your GraphQL Schema\n\n[\s\S]*?(?=\n### |\n## )/;
 
   const isRemoteSource = /^(https?|git|github):/i.test(schemaRef);
@@ -351,7 +369,7 @@ function writeReadme(tempDir, schemaPath, schemaRef, loader) {
 
   if (updated === originalContent) {
     throw new Error(
-      `Expected to find and replace the schema section in ${readmePath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`
+      `Expected to find and replace the schema section in ${readmePath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
 
@@ -367,15 +385,15 @@ async function main() {
   const { values: args } = parseArgs({
     args: process.argv.slice(2),
     options: {
-      dir: { type: 'string', short: 'd' },
-      schema: { type: 'string' },
-      example: { type: 'boolean' },
-      pm: { type: 'string' },
-      title: { type: 'string' },
-      color: { type: 'string' },
-      'no-install': { type: 'boolean' },
-      'no-git': { type: 'boolean' },
-      yes: { type: 'boolean' },
+      dir: { type: "string", short: "d" },
+      schema: { type: "string" },
+      example: { type: "boolean" },
+      pm: { type: "string" },
+      title: { type: "string" },
+      color: { type: "string" },
+      "no-install": { type: "boolean" },
+      "no-git": { type: "boolean" },
+      yes: { type: "boolean" },
     },
     allowPositionals: false,
   });
@@ -386,12 +404,12 @@ async function main() {
   let packageManager = args.pm;
   const siteTitle = args.title;
   const primaryColor = args.color;
-  const noInstall = args['no-install'];
-  const noGit = args['no-git'];
+  const noInstall = args["no-install"];
+  const noGit = args["no-git"];
   const isYes = args.yes;
 
   // Create a temporary directory for scaffolding
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'gqlmd-'));
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-"));
 
   try {
     // =========================================================================
@@ -401,14 +419,14 @@ async function main() {
     // Step 2.1: Project directory
     if (!projectDir) {
       if (isYes) {
-        projectDir = './my-graphql-docs';
+        projectDir = "./my-graphql-docs";
       } else {
         projectDir = await prompts.text({
-          message: 'Where should we create your project?',
-          defaultValue: './my-graphql-docs',
+          message: "Where should we create your project?",
+          defaultValue: "./my-graphql-docs",
           validate: (value) => {
-            if (!value || value.trim() === '') {
-              return 'Project directory cannot be empty';
+            if (!value || value.trim() === "") {
+              return "Project directory cannot be empty";
             }
             return;
           },
@@ -417,7 +435,7 @@ async function main() {
     }
 
     if (prompts.isCancel(projectDir)) {
-      prompts.cancel('Setup cancelled.');
+      prompts.cancel("Setup cancelled.");
       process.exit(1);
     }
 
@@ -430,7 +448,9 @@ async function main() {
     // still mean deleting whatever was there first. If you want to scaffold
     // into that directory, empty or remove it yourself first.
     if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
-      prompts.log.error(`${projectDir} already exists and is not empty — refusing to overwrite it.`);
+      prompts.log.error(
+        `${projectDir} already exists and is not empty — refusing to overwrite it.`,
+      );
       process.exit(1);
     }
 
@@ -440,33 +460,36 @@ async function main() {
         schemaPath = null;
       } else {
         const schemaChoice = await prompts.select({
-          message: 'How would you like to provide your GraphQL schema?',
+          message: "How would you like to provide your GraphQL schema?",
           options: [
-            { value: 'example', label: 'Use example schema (recommended for first-time)' },
-            { value: 'existing', label: 'Use an existing schema file' },
+            {
+              value: "example",
+              label: "Use example schema (recommended for first-time)",
+            },
+            { value: "existing", label: "Use an existing schema file" },
           ],
         });
 
         if (prompts.isCancel(schemaChoice)) {
-          prompts.cancel('Setup cancelled.');
+          prompts.cancel("Setup cancelled.");
           process.exit(1);
         }
 
-        if (schemaChoice === 'existing') {
+        if (schemaChoice === "existing") {
           schemaPath = await prompts.text({
             message:
-              'Path or URL to your GraphQL schema (local file, introspection endpoint, git:/github: ref):',
+              "Path or URL to your GraphQL schema (local file, introspection endpoint, git:/github: ref):",
             validate: (value) => {
-              if (!value) return 'Schema source is required';
+              if (!value) return "Schema source is required";
               if (!isRemoteSchemaSource(value) && !fs.existsSync(value)) {
-                return 'Schema file not found';
+                return "Schema file not found";
               }
               return;
             },
           });
 
           if (prompts.isCancel(schemaPath)) {
-            prompts.cancel('Setup cancelled.');
+            prompts.cancel("Setup cancelled.");
             process.exit(1);
           }
         }
@@ -490,7 +513,7 @@ async function main() {
     // detect it from the source and report the choice; `--yes` and
     // interactive runs both get this, there's no meaningful "which loader"
     // question to ask separately, it's implied by the source itself.
-    const loader = detectLoader(schemaPath ?? 'schema/example.graphql');
+    const loader = detectLoader(schemaPath ?? "schema/example.graphql");
     if (schemaPath && !loader.isDefault) {
       prompts.log.info(
         `Detected schema source needs ${loader.package} (${loader.className}) — adding it as a dependency.`,
@@ -504,20 +527,20 @@ async function main() {
         packageManager = detected.name;
       } else {
         if (isYes) {
-          packageManager = 'npm';
+          packageManager = "npm";
         } else {
           packageManager = await prompts.select({
-            message: 'Which package manager would you like to use?',
+            message: "Which package manager would you like to use?",
             options: [
-              { value: 'npm', label: 'npm' },
-              { value: 'pnpm', label: 'pnpm' },
-              { value: 'yarn', label: 'yarn' },
-              { value: 'bun', label: 'bun' },
+              { value: "npm", label: "npm" },
+              { value: "pnpm", label: "pnpm" },
+              { value: "yarn", label: "yarn" },
+              { value: "bun", label: "bun" },
             ],
           });
 
           if (prompts.isCancel(packageManager)) {
-            prompts.cancel('Setup cancelled.');
+            prompts.cancel("Setup cancelled.");
             process.exit(1);
           }
         }
@@ -525,18 +548,18 @@ async function main() {
     }
 
     // Step 2.4: Optional title and color customization
-    let titleOverride = '';
-    let colorOverride = primaryColor ?? '';
+    let titleOverride = "";
+    let colorOverride = primaryColor ?? "";
     if (!isYes) {
       const customizeTheme = await prompts.confirm({
-        message: 'Would you like to customize the site title and appearance?',
+        message: "Would you like to customize the site title and appearance?",
         initialValue: false,
       });
 
       if (!prompts.isCancel(customizeTheme) && customizeTheme) {
         const customTitle = await prompts.text({
-          message: 'Site title:',
-          defaultValue: 'My API',
+          message: "Site title:",
+          defaultValue: "My API",
         });
         if (!prompts.isCancel(customTitle) && customTitle) {
           titleOverride = customTitle;
@@ -544,7 +567,8 @@ async function main() {
 
         if (!colorOverride) {
           const customColor = await prompts.text({
-            message: 'Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):',
+            message:
+              "Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):",
           });
           if (!prompts.isCancel(customColor) && customColor) {
             colorOverride = customColor;
@@ -570,16 +594,16 @@ async function main() {
     writeAppConfig(tempDir, titleOverride, colorOverride);
 
     // Step 3.2: Resolve the schema reference and copy local schema if needed
-    let schemaRef = './schema/example.graphql';
-    const templateExamplePath = path.join(tempDir, 'schema', 'example.graphql');
+    let schemaRef = "./schema/example.graphql";
+    const templateExamplePath = path.join(tempDir, "schema", "example.graphql");
     if (schemaPath && isRemoteSchemaSource(schemaPath)) {
       // Nothing to copy — the bundled example is unused, drop it so it
       // doesn't sit there implying it's still what gets generated.
       fs.rmSync(templateExamplePath, { force: true });
       schemaRef = schemaPath;
     } else if (schemaPath) {
-      const destName = `schema${path.extname(schemaPath) || '.graphql'}`;
-      const destSchema = path.join(tempDir, 'schema', destName);
+      const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
+      const destSchema = path.join(tempDir, "schema", destName);
       if (destSchema !== templateExamplePath) {
         fs.rmSync(templateExamplePath, { force: true });
       }
@@ -609,13 +633,13 @@ async function main() {
     }
     fs.renameSync(tempDir, projectDir);
 
-    prompts.log.success('Project created successfully!');
+    prompts.log.success("Project created successfully!");
 
     // Step 4.1: Install dependencies (unless --no-install)
     if (!noInstall) {
       if (!isYes) {
         const shouldInstall = await prompts.confirm({
-          message: 'Install dependencies now?',
+          message: "Install dependencies now?",
           initialValue: true,
         });
 
@@ -631,7 +655,7 @@ async function main() {
     if (!noGit) {
       if (!isYes) {
         const shouldGit = await prompts.confirm({
-          message: 'Initialize a git repository?',
+          message: "Initialize a git repository?",
           initialValue: true,
         });
 

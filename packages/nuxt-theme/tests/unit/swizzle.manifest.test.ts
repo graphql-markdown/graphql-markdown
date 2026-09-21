@@ -6,8 +6,8 @@ import { join } from "node:path";
 const packageRoot = join(import.meta.dirname || __dirname, "../..");
 
 describe("swizzleManifest", () => {
-  it("should have exactly 9 entries", () => {
-    expect(swizzleManifest).toHaveLength(9);
+  it("should have exactly 11 entries", () => {
+    expect(swizzleManifest).toHaveLength(11);
   });
 
   it("should have unique IDs", () => {

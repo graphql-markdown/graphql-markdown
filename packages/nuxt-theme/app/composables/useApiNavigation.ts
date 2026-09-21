@@ -13,16 +13,20 @@ export interface ApiNavigationBranch {
   children: ApiNavigationNode[];
 }
 
-export type ApiNavigationNode = ApiNavigationLeaf | ApiNavigationBranch;
+export type ApiNavigationNode = ApiNavigationBranch | ApiNavigationLeaf;
 
 interface RawPage {
   path: string;
   title: string;
   isDeprecated: boolean;
+  /** The GraphQL entity kind (`objects`, `scalars`, `queries`, …) stamped by `formatter.ts`'s `formatMDXFrontmatter`. */
+  kind?: string;
 }
 
 /** True for a namespace/schema's own generated landing doc, never a real nav entry. */
-const isLandingDoc = (path: string): boolean => path.endsWith("/generated");
+const isLandingDoc = (path: string): boolean => {
+  return path.endsWith("/generated");
+};
 
 interface Branch {
   children: Map<string, Branch>;
@@ -38,12 +42,20 @@ interface Branch {
  * (multi-schema namespaces stacked above section/group). This is the fix
  * for the old hardcoded-exactly-2-levels behavior.
  */
-function buildTree(items: RawPage[], rootDepth: number): ApiNavigationNode[] {
+const buildTree = (
+  items: RawPage[],
+  rootDepth: number,
+): ApiNavigationNode[] => {
   const root: Branch = { children: new Map(), leaves: [] };
 
   for (const item of items) {
     const segments = item.path.split("/").filter(Boolean);
-    const categoryPath = segments.slice(rootDepth, -1);
+    const pathCategory = segments.slice(rootDepth, -1);
+    // Falls back to the page's `kind` frontmatter (see RawPage) when there
+    // are no folder segments left to group by — i.e. `hierarchy: "flat"`,
+    // which otherwise has nothing else to group the sidebar/landing grid on.
+    const categoryPath =
+      pathCategory.length > 0 ? pathCategory : item.kind ? [item.kind] : [];
     let node = root;
     for (const segment of categoryPath) {
       let child = node.children.get(segment);
@@ -59,21 +71,35 @@ function buildTree(items: RawPage[], rootDepth: number): ApiNavigationNode[] {
       isDeprecated: item.isDeprecated,
       ui: { linkTitle: "font-mono text-[small]" },
       badge: item.isDeprecated
-        ? { label: "deprecated", color: "error" as const, variant: "subtle" as const }
+        ? {
+            label: "deprecated",
+            color: "error" as const,
+            variant: "subtle" as const,
+          }
         : undefined,
     });
   }
 
-  const toNodes = (branch: Branch): ApiNavigationNode[] => [
-    ...[...branch.children.entries()].map(([name, child]) => ({
-      title: titleCase(name),
-      children: toNodes(child),
-    })),
-    ...branch.leaves,
-  ];
+  const byTitle = <T extends { title: string }>(a: T, b: T): number => {
+    return a.title.localeCompare(b.title);
+  };
+
+  const toNodes = (branch: Branch): ApiNavigationNode[] => {
+    return [
+      ...[...branch.children.entries()]
+        .map(([name, child]) => {
+          return {
+            title: titleCase(name),
+            children: toNodes(child),
+          };
+        })
+        .sort(byTitle),
+      ...[...branch.leaves].sort(byTitle),
+    ];
+  };
 
   return toNodes(root);
-}
+};
 
 /**
  * The navigation tree, derived from the content paths themselves and however
@@ -87,7 +113,12 @@ function buildTree(items: RawPage[], rootDepth: number): ApiNavigationNode[] {
  * expect — nodes with a `title` and either `children` or a `path` — so the
  * sidebar and the search palette read the same tree.
  */
-export const useApiNavigation = async () => {
+export const useApiNavigation = async (): Promise<{
+  sections: ComputedRef<ApiNavigationNode[]>;
+  overviewGroupsFor: (landingPath: string) => (ApiNavigationNode & {
+    sectionTitle: string;
+  })[];
+}> => {
   // Read app config BEFORE the first `await` below. Nuxt's async-instance
   // context (how `useAppConfig`/`useAsyncData`/etc. find "the current app"
   // at all) only survives automatically across `<script setup>`'s own
@@ -98,27 +129,46 @@ export const useApiNavigation = async () => {
   // Vue setup function") — confirmed by actually reproducing it against a
   // real dev server and reading the thrown error's stack trace, not assumed.
   const config = useAppConfig();
-  const rootDepth = computed(
-    () => (config.gqlmd.baseURL as string).split("/").filter(Boolean).length,
+  const rootDepth = computed(() => {
+    return (config.gqlmd.baseURL as string).split("/").filter(Boolean).length;
+  });
+
+  const { data: pages } = await useAsyncData(
+    "api-reference-navigation",
+    async () => {
+      return queryCollection("content")
+        .order("path", "ASC")
+        .select("path", "title", "body", "meta")
+        .all()
+        .then((items) => {
+          return items
+            .filter((item) => {
+              return !isLandingDoc(item.path);
+            })
+            .map<RawPage>((item) => {
+              return {
+                path: item.path,
+                title: item.title,
+                isDeprecated: Boolean(findDeprecationNotice(item.body)),
+                // `kind` (see RawPage) is undeclared custom frontmatter, so
+                // Nuxt Content surfaces it under `meta`, not as a top-level field.
+                // Nuxt Content's generated query type claims `meta` is always
+                // present, but real content items (and this file's own test
+                // mocks) can omit it — the optional chain here is load-bearing.
+                kind:
+                  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+                  typeof item.meta?.kind === "string"
+                    ? item.meta.kind
+                    : undefined,
+              };
+            });
+        });
+    },
   );
 
-  const { data: pages } = await useAsyncData("api-reference-navigation", () =>
-    queryCollection("content")
-      .order("path", "ASC")
-      .select("path", "title", "body")
-      .all()
-      .then((items) =>
-        items
-          .filter((item) => !isLandingDoc(item.path))
-          .map<RawPage>((item) => ({
-            path: item.path,
-            title: item.title,
-            isDeprecated: Boolean(findDeprecationNotice(item.body)),
-          })),
-      ),
-  );
-
-  const sections = computed(() => buildTree(pages.value ?? [], rootDepth.value));
+  const sections = computed(() => {
+    return buildTree(pages.value ?? [], rootDepth.value);
+  });
 
   /**
    * Card-grid data for a landing page at `landingPath` (e.g. `/api-reference`
@@ -129,24 +179,32 @@ export const useApiNavigation = async () => {
    * grid" projection, independent of how deep the underlying tree actually
    * goes below that.
    */
-  const overviewGroupsFor = (landingPath: string) => {
+  const overviewGroupsFor = (
+    landingPath: string,
+  ): (ApiNavigationNode & { sectionTitle: string })[] => {
     const scopeDepth = landingPath.split("/").filter(Boolean).length;
     const prefix = landingPath.replace(/\/$/, "") + "/";
-    const scoped = (pages.value ?? []).filter((item) => item.path.startsWith(prefix));
+    const scoped = (pages.value ?? []).filter((item) => {
+      return item.path.startsWith(prefix);
+    });
     const scopedTree = buildTree(scoped, scopeDepth);
 
-    return scopedTree.flatMap((node) =>
-      "children" in node
-        ? node.children.map((item) => ({ ...item, sectionTitle: node.title }))
-        : [],
-    );
+    return scopedTree.flatMap((node) => {
+      return "children" in node
+        ? node.children.map((item) => {
+            return { ...item, sectionTitle: node.title };
+          })
+        : [];
+    });
   };
 
   return { sections, overviewGroupsFor };
 };
 
 /** The absolute path for the shared `gqlmd.baseURL` prefix (e.g. `/api-reference`), used by every file that needs to link to or detect the reference root. */
-export const useApiBaseURL = () => {
+export const useApiBaseURL = (): ComputedRef<string> => {
   const config = useAppConfig();
-  return computed(() => `/${config.gqlmd.baseURL}`);
+  return computed(() => {
+    return `/${config.gqlmd.baseURL}`;
+  });
 };

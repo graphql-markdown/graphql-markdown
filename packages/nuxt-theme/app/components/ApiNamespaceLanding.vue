@@ -22,6 +22,8 @@ import type { ApiNavigationNode } from "~/composables/useApiNavigation";
 defineProps<{
   title: string;
   description: string;
-  items: Array<ApiNavigationNode | (ApiNavigationNode & { sectionTitle: string })>;
+  items: Array<
+    ApiNavigationNode | (ApiNavigationNode & { sectionTitle: string })
+  >;
 }>();
 </script>

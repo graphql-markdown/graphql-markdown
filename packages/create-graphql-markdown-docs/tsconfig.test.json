@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
+    "noEmit": true,
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
+
+    "isolatedModules": true,
+
+    "types": ["node", "vitest/globals"]
+  },
+
+  "include": ["tests"],
+  "exclude": ["template", "**/dist"]
+}
