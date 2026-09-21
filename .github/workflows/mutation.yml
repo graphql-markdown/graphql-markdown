@@ -87,16 +87,24 @@ jobs:
     # kill switch in `mutation-matrix` above) until
     # @stryker-mutator/vitest-runner supports vitest 5 for real — at which
     # point drop the now-unnecessary vitest downgrade step too.
+    # The `needs.mutation-matrix.outputs.packages != '[]'` clause guards
+    # against a GitHub Actions gap that's been an open, unresolved community
+    # report since 2021 (github.com/orgs/community/discussions/27096): a
+    # `strategy.matrix` that evaluates to `[]` doesn't skip the job, it
+    # crashes it ("Matrix vector does not contain any values"). Checking the
+    # same output the matrix expression below reads, before the matrix is
+    # ever evaluated, keeps it non-empty whenever this job runs at all.
     if: >-
       !cancelled() && needs.mutation-matrix.result == 'success'
+      && needs.mutation-matrix.outputs.packages != '[]'
       && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
     strategy:
       fail-fast: false
       # Dynamic rather than the old static list gated per step: `matrix` isn't
-      # available in a job-level `if:`, but it IS available here, so an empty
-      # array makes GitHub skip this job outright -- reporting as `skipped` to
-      # the gate below, rather than a job that ran and quietly did nothing
-      # reporting as `success`, indistinguishable from having actually passed.
+      # available in a job-level `if:`, but it IS available here, so an
+      # unaffected package's job never starts at all instead of starting and
+      # skipping every step. A job that ran and quietly did nothing used to
+      # report `success`, indistinguishable from having actually passed.
       matrix:
         package: ${{ fromJSON(needs.mutation-matrix.outputs.packages) }}
 

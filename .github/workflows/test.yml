@@ -26,16 +26,27 @@ jobs:
     # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
     # broken gate still runs -- the matrix expression below then fails open to
     # every package, since `needs.changes.result` is what it inspects.
-    if: ${{ !cancelled() }}
+    #
+    # The second clause guards against a GitHub Actions gap that's been an
+    # open, unresolved community report since 2021 (github.com/orgs/community/
+    # discussions/27096): a `strategy.matrix` that evaluates to `[]` doesn't
+    # skip the job, it crashes it ("Matrix vector does not contain any
+    # values"). `matrix` isn't available in a job-level `if:` (confirmed by
+    # GitHub's own context-availability docs), so this can't check the same
+    # thing the matrix expression below checks per-entry -- but it can check
+    # the same *source* (`needs.changes.outputs.packages`) before the matrix
+    # is ever evaluated, which is enough to keep it non-empty whenever this
+    # job runs at all.
+    if: >-
+      !cancelled()
+      && (needs.changes.result != 'success' || needs.changes.outputs.packages != '[]')
     strategy:
       fail-fast: false
       # Dynamic rather than the old static list gated per step: `matrix` isn't
       # available in a job-level `if:`, but it IS available here, so an
       # unaffected package's job never starts at all instead of starting and
-      # skipping every step. An empty array makes GitHub skip this job
-      # entirely, which reports as `skipped` to the gate below -- a job that
-      # ran and quietly did nothing used to report `success`, indistinguishable
-      # from having actually passed.
+      # skipping every step. A job that ran and quietly did nothing used to
+      # report `success`, indistinguishable from having actually passed.
       matrix:
         package: ${{ fromJSON(needs.changes.result != 'success' && '["cli","core","diff","docusaurus","formatters","graphql","helpers","logger","printer-legacy","utils"]' || needs.changes.outputs.packages) }}
 
@@ -96,7 +107,14 @@ jobs:
     name: Test graphql package against graphql-js ${{ matrix.graphql }}
     runs-on: ubuntu-latest
     needs: changes
-    if: ${{ !cancelled() }}
+    # See `test` job above: guards against a `strategy.matrix` evaluating to
+    # `[]` crashing the job (github.com/orgs/community/discussions/27096)
+    # rather than cleanly skipping it. Same condition the matrix expression
+    # below already uses to choose `[16, 17]` vs `[]`, checked at job level
+    # so the job is skipped outright instead of ever reaching an empty matrix.
+    if: >-
+      !cancelled()
+      && (needs.changes.result != 'success' || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql'))
     strategy:
       fail-fast: false
       matrix:
