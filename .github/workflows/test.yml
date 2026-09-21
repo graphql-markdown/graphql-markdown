@@ -24,48 +24,36 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
-    # broken gate runs the full matrix instead of skipping to green: a skipped
-    # job reports a `skipped` check run, which the ruleset counts as satisfied.
+    # broken gate still runs -- the matrix expression below then fails open to
+    # every package, since `needs.changes.result` is what it inspects.
     if: ${{ !cancelled() }}
-    # Gated per step rather than per job: `matrix` is not available in a
-    # job-level `if:` (it is evaluated before the matrix expands). An unaffected
-    # package therefore still starts a runner, but every step is skipped, so it
-    # finishes in seconds and still reports the check name the ruleset requires.
-    env:
-      RUN_TESTS: >-
-        ${{ needs.changes.result != 'success'
-          || contains(fromJSON(needs.changes.outputs.packages || '[]'), matrix.package) }}
     strategy:
       fail-fast: false
+      # Dynamic rather than the old static list gated per step: `matrix` isn't
+      # available in a job-level `if:`, but it IS available here, so an
+      # unaffected package's job never starts at all instead of starting and
+      # skipping every step. An empty array makes GitHub skip this job
+      # entirely, which reports as `skipped` to the gate below -- a job that
+      # ran and quietly did nothing used to report `success`, indistinguishable
+      # from having actually passed.
       matrix:
-        package:
-          [
-            "cli",
-            "core",
-            "diff",
-            "docusaurus",
-            "formatters",
-            "graphql",
-            "helpers",
-            "logger",
-            "printer-legacy",
-            "utils",
-          ]
+        package: >-
+          ${{ fromJSON(
+            needs.changes.result != 'success' && '["cli","core","diff","docusaurus","formatters","graphql","helpers","logger","printer-legacy","utils"]'
+            || needs.changes.outputs.packages
+          ) }}
 
     steps:
       - name: Checkout Code Base
-        if: env.RUN_TESTS == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup environment
-        if: env.RUN_TESTS == 'true'
         uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
-        if: env.RUN_TESTS == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
@@ -74,11 +62,9 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Build packages
-        if: env.RUN_TESTS == 'true'
         run: bun run build -- --filter=@graphql-markdown/${{ matrix.package }}...
 
       - name: Run Tests
-        if: env.RUN_TESTS == 'true'
         run: |
           cd packages/${{ matrix.package }}
           bun test:ci -- --coverage --reporter=github-actions --reporter=default
@@ -86,9 +72,8 @@ jobs:
       - name: SonarCloud Scan
         id: sonarcloud
         if: >-
-          env.RUN_TESTS == 'true'
-          && (github.event_name != 'pull_request'
-            || github.event.pull_request.head.repo.full_name == github.repository)
+          github.event_name != 'pull_request'
+          || github.event.pull_request.head.repo.full_name == github.repository
         uses: SonarSource/sonarqube-scan-action@ba9859eae8dd6bd29e412f25ddbbef3d032000f4 # v8.2
         with:
           projectBaseDir: ${{ github.workspace }}
@@ -116,40 +101,37 @@ jobs:
     runs-on: ubuntu-latest
     needs: changes
     if: ${{ !cancelled() }}
-    env:
-      RUN_TESTS: >-
-        ${{ needs.changes.result != 'success'
-          || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql') }}
     strategy:
       fail-fast: false
       matrix:
         # Major versions, not exact pins, so this always tests the latest
         # patch/minor within each major graphql-js still supports (mirrors
-        # smoke.yml's `graphql: [16, 17]` matrix).
-        graphql: [16, 17]
+        # smoke.yml's `graphql: [16, 17]` matrix). Empty when `graphql` itself
+        # isn't affected -- see `test` job above for why this is a dynamic
+        # matrix rather than a per-step `if:`.
+        graphql: >-
+          ${{ fromJSON(
+            (needs.changes.result != 'success' || contains(fromJSON(needs.changes.outputs.packages || '[]'), 'graphql'))
+            && '[16, 17]' || '[]'
+          ) }}
 
     steps:
       - name: Checkout Code Base
-        if: env.RUN_TESTS == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           fetch-depth: 0
           persist-credentials: false
 
       - name: Setup environment
-        if: env.RUN_TESTS == 'true'
         uses: ./.github/actions/setup
 
       - name: Pin graphql-js under test
-        if: env.RUN_TESTS == 'true'
         run: bun add graphql@${{ matrix.graphql }}
 
       - name: Build graphql package
-        if: env.RUN_TESTS == 'true'
         run: bun run build -- --filter=@graphql-markdown/graphql...
 
       - name: Run Tests
-        if: env.RUN_TESTS == 'true'
         run: |
           cd packages/graphql
           bun test:ci

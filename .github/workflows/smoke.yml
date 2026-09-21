@@ -170,10 +170,11 @@ jobs:
       - name: Run CLI Smoke Tests
         run: .github/scripts/e2e/smoke-test.sh cli "$PROJECT_DIR"
 
-  # See test.yml's `gate` job for the general pattern. Unlike test.yml/
-  # mutation.yml, these four jobs skip at the *job* level (they're gated on
-  # `needs.changes.outputs.smoke*`, not just their steps), so `skipped` is an
-  # accepted outcome here, not just `success`.
+  # See test.yml's `gate` job for the general pattern. These four jobs skip
+  # at the *job* level (gated on `needs.changes.outputs.smoke*`, which -- unlike
+  # test.yml/mutation.yml's per-package skip -- doesn't need a dynamic matrix,
+  # since none of these `if:` conditions depend on `matrix.*`), so `skipped`
+  # is an accepted outcome here too, not just `success`.
   gate:
     name: Smoke Gate
     runs-on: ubuntu-latest
