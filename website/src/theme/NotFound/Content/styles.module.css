@@ -1,16 +1,19 @@
 .heroButton {
-  border-radius: 0px;
+  border-radius: 0;
   padding-left: 4px;
   padding-right: 4px;
   width: 200px;
+
   --ifm-button-border-width: 0.4rem;
+
   color: white !important;
 }
 
 .heroButton:hover {
   --ifm-button-background-color: #485e58;
   --ifm-button-border-color: var(--ifm-button-background-color);
-  color: ≈ !important;
+
+  color: white !important;
 }
 
 :global([data-theme="dark"]) .heroButton {
@@ -20,16 +23,19 @@
 :global([data-theme="dark"]) .heroButton:hover {
   --ifm-button-background-color: var(--ifm-color-primary-darkest);
   --ifm-button-border-color: var(--ifm-button-background-color);
+
   color: var(--ifm-background-color) !important;
 }
 
 .heroButtonSecondary {
   --ifm-button-border-color: #e535ab;
+
   color: #e535ab !important;
 }
 
 .heroButtonSecondary:hover {
   --ifm-button-background-color: #e535ab;
+
   color: white !important;
 }
 

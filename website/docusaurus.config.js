@@ -189,8 +189,7 @@ const config = {
           price: "0",
           priceCurrency: "USD",
         },
-        codeRepository:
-          "https://github.com/graphql-markdown/graphql-markdown",
+        codeRepository: "https://github.com/graphql-markdown/graphql-markdown",
         programmingLanguage: ["TypeScript", "JavaScript"],
       }),
     },

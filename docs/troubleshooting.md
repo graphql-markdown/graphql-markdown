@@ -18,7 +18,7 @@ keywords:
 Add a `resolutions` entry to your `package.json`:
 
 ```json title="package.json"
-"resolutions": 
+"resolutions":
 {
   "graphql": "16.14.2"
 }
@@ -29,29 +29,33 @@ Add a `resolutions` entry to your `package.json`:
 There are several potential solutions:
 
 1. Change the temporary folder location:
+
 ```js
 {
-  tmpDir: "./.docusaurus"
+  tmpDir: "./.docusaurus";
 }
 ```
 
-2. Disable schema diff feature:
+1. Disable schema diff feature:
+
 ```js
 {
-  diffMethod: "NONE" 
+  diffMethod: "NONE";
 }
 ```
 
-3. Check file permissions on the temporary directory
+1. Check file permissions on the temporary directory
 
 ## Schema Loading Issues
 
 1. Ensure required loaders are installed:
+
 ```shell
 npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
 ```
 
-2. Verify loader configuration:
+1. Verify loader configuration:
+
 ```js
 {
   loaders: {
@@ -63,9 +67,9 @@ npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
 
 ## "UrlLoader" does not exist in type "LoaderOption".ts
 
-*Reported in [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213).*
+_Reported in [#2213](https://github.com/graphql-markdown/graphql-markdown/issues/2213)._
 
-```
+```text
 Object literal may only specify known properties, and 'UrlLoader' does not exist in type 'LoaderOption'.ts(2353)
 core.d.ts(128, 3): The expected type comes from property 'loaders' which is declared here on type 'ConfigOptions'
 ```
@@ -90,6 +94,7 @@ loaders: {
 For large schemas, try:
 
 1. Increase Node.js memory limit:
+
 ```shell
 NODE_OPTIONS=--max-old-space-size=4096 npx docusaurus graphql-to-doc
 ```

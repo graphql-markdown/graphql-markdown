@@ -39,9 +39,7 @@ const FULL_ROOT_CONTENT =
 const CUSTOM_LLM_FILES = [
   {
     filename: "llms-api.txt",
-    includePatterns: [
-      "api/**/*.md",
-    ],
+    includePatterns: ["api/**/*.md"],
     title: "GraphQL-Markdown API Reference",
     description:
       "Comprehensive API reference for GraphQL-Markdown packages, CLI commands, and integration helpers.",
@@ -49,7 +47,7 @@ const CUSTOM_LLM_FILES = [
     includeUnmatchedLast: true,
     rootContent:
       "Endpoints, CLI commands, and helper utilities documented here mirror the content published under /api/ on graphql-markdown.dev.",
-  }
+  },
 ];
 
 const normalizePath = (value) => value.replaceAll("\\", "/");

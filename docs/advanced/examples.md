@@ -18,38 +18,39 @@ Examples are added to types documentation as soon as the schema declares an `@ex
 
 **1. Add a type definition directive `@example` to the schema**
 
-  ```graphql
-  directive @example(
-    value: String
-  ) on OBJECT | INPUT_OBJECT | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
-  ```
+```graphql
+directive @example(
+  value: String
+) on OBJECT | INPUT_OBJECT | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
+```
 
 **2. Add examples to the schema**
 
-  ```graphql
-  scalar Date @example(value: "1970-01-01")
+```graphql
+scalar Date @example(value: "1970-01-01")
 
-  interface Record {
-    id: ID! @example(value: "1")
-  }
+interface Record {
+  id: ID! @example(value: "1")
+}
 
-  type Course implements Record @example(value: "{ \"id\": 2, \"title\": \"GraphQL\" }") {
-    id: ID!
-    title: String!
-  } 
+type Course implements Record
+  @example(value: "{ \"id\": 2, \"title\": \"GraphQL\" }") {
+  id: ID!
+  title: String!
+}
 
-  type Semester implements Record {
-    id: ID!
-    startDate: Date
-    withdrawDate: Date @deprecated
-    endDate: Date
-    courses: [Course!]!
-  }
+type Semester implements Record {
+  id: ID!
+  startDate: Date
+  withdrawDate: Date @deprecated
+  endDate: Date
+  courses: [Course!]!
+}
 
-  type Query {
-    course(id: ID!): Course @example(value: "{ course(id: \"1\") { title } }")
-  }
-  ```
+type Query {
+  course(id: ID!): Course @example(value: "{ course(id: \"1\") { title } }")
+}
+```
 
 Examples can be inherited, this is why in the above example there is no example explicitly set for the type `Semester`, and it will render as the following
 
@@ -72,8 +73,19 @@ For example, if the GraphQL schema already supports examples using the `@spectaq
 ```graphql
 type CustomExampleDirective {
   myField: String @spectaql(options: [{ key: "undocumented", value: "true" }])
-  myFieldOtherField: String @spectaql(options: [{ key: "example", value: "An Example from the Directive" }])
-  myFieldOtherOtherField: String @spectaql(options: [{ key: "examples", value: "[\"Example 1 from the Directive\", \"Example 2 from the Directive\"]" }])
+  myFieldOtherField: String
+    @spectaql(
+      options: [{ key: "example", value: "An Example from the Directive" }]
+    )
+  myFieldOtherOtherField: String
+    @spectaql(
+      options: [
+        {
+          key: "examples"
+          value: "[\"Example 1 from the Directive\", \"Example 2 from the Directive\"]"
+        }
+      ]
+    )
 }
 ```
 
@@ -94,11 +106,9 @@ plugins: [
               return undefined;
             }
 
-            const example = options.find(
-              (option) => {
-                return ["example", "examples"].includes(option.key);
-              },
-            );
+            const example = options.find((option) => {
+              return ["example", "examples"].includes(option.key);
+            });
 
             if (!example) {
               return undefined;
@@ -109,10 +119,10 @@ plugins: [
             }
 
             return JSON.parse(example.value)[0];
-          }
-        }
-      }
-    }
-  ]
-]
+          },
+        },
+      },
+    },
+  ],
+];
 ```

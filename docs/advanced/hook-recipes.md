@@ -24,32 +24,32 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 
 ### Generation Hooks
 
-| Hook                                | Description                                  |
-| ----------------------------------- | -------------------------------------------- |
-| `afterConfigBuildHook`              | Called once after the final configuration is resolved, before schema loading — can inspect or override resolved options (except `formatter` and `loggerModule`, which are already applied by this point) |
-| `beforeLoadSchemaHook`              | Called before loading the GraphQL schema     |
-| `afterLoadSchemaHook`               | Called after loading the GraphQL schema      |
-| `beforeCheckDiffHook`               | Called before checking schema differences    |
-| `afterCheckDiffHook`                | Called after checking schema differences     |
-| `beforeRenderRootTypesHook`         | Called before rendering root types           |
-| `afterRenderRootTypesHook`          | Called after rendering root types            |
-| `beforeRenderHomepageHook`          | Called before rendering the homepage         |
-| `afterRenderHomepageHook`           | Called after rendering the homepage          |
-| `beforeRenderTypeEntitiesHook`      | Called before rendering type entities        |
-| `afterRenderTypeEntitiesHook`       | Called after rendering type entities         |
-| `beforeGenerateIndexMetafileHook`   | Called before generating index metafiles     |
-| `afterGenerateIndexMetafileHook`    | Called after generating index metafiles      |
-| `afterRenderFilesHook`              | Called once after all pages have been written — receives the full pages collection |
+| Hook                              | Description                                                                                                                                                                                              |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `afterConfigBuildHook`            | Called once after the final configuration is resolved, before schema loading — can inspect or override resolved options (except `formatter` and `loggerModule`, which are already applied by this point) |
+| `beforeLoadSchemaHook`            | Called before loading the GraphQL schema                                                                                                                                                                 |
+| `afterLoadSchemaHook`             | Called after loading the GraphQL schema                                                                                                                                                                  |
+| `beforeCheckDiffHook`             | Called before checking schema differences                                                                                                                                                                |
+| `afterCheckDiffHook`              | Called after checking schema differences                                                                                                                                                                 |
+| `beforeRenderRootTypesHook`       | Called before rendering root types                                                                                                                                                                       |
+| `afterRenderRootTypesHook`        | Called after rendering root types                                                                                                                                                                        |
+| `beforeRenderHomepageHook`        | Called before rendering the homepage                                                                                                                                                                     |
+| `afterRenderHomepageHook`         | Called after rendering the homepage                                                                                                                                                                      |
+| `beforeRenderTypeEntitiesHook`    | Called before rendering type entities                                                                                                                                                                    |
+| `afterRenderTypeEntitiesHook`     | Called after rendering type entities                                                                                                                                                                     |
+| `beforeGenerateIndexMetafileHook` | Called before generating index metafiles                                                                                                                                                                 |
+| `afterGenerateIndexMetafileHook`  | Called after generating index metafiles                                                                                                                                                                  |
+| `afterRenderFilesHook`            | Called once after all pages have been written — receives the full pages collection                                                                                                                       |
 
 ### Printer Hooks
 
-| Hook                          | Description                                                                             |
-| ----------------------------- | --------------------------------------------------------------------------------------- |
-| `beforePrintCodeHook`         | Called before generating code blocks — can modify options or prevent default generation |
-| `afterPrintCodeHook`          | Called after generating code blocks — can modify the generated output                   |
-| `beforePrintTypeHook`         | Called before generating type documentation — can modify options or prevent default     |
-| `afterPrintTypeHook`          | Called after generating type documentation — can modify the generated output            |
-| `beforeComposePageTypeHook`   | Called before composing type page sections — can reorder, remove, or inject sections    |
+| Hook                        | Description                                                                             |
+| --------------------------- | --------------------------------------------------------------------------------------- |
+| `beforePrintCodeHook`       | Called before generating code blocks — can modify options or prevent default generation |
+| `afterPrintCodeHook`        | Called after generating code blocks — can modify the generated output                   |
+| `beforePrintTypeHook`       | Called before generating type documentation — can modify options or prevent default     |
+| `afterPrintTypeHook`        | Called after generating type documentation — can modify the generated output            |
+| `beforeComposePageTypeHook` | Called before composing type page sections — can reorder, remove, or inject sections    |
 
 <br/>
 
@@ -74,7 +74,7 @@ const afterPrintCodeHook = async (event) => {
 };
 
 module.exports = {
-  ...DocusaurusMDX,  // Keep all default formatters
+  ...DocusaurusMDX, // Keep all default formatters
   afterPrintCodeHook, // Add your custom hook
 };
 ```
@@ -112,7 +112,6 @@ title: "Unions"
 Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
 
 ```js title="custom-mdx.mjs"
-
 import { join, dirname, resolve, basename } from "node:path";
 import { appendFile } from "node:fs/promises";
 
@@ -127,9 +126,9 @@ const INDEX_MD = "index.md";
 
 /**
  * Hook that generates an index metadata file for a category directory.
- * 
- * This hook is executed before generating index metadata files. 
- * It checks if an index.md file exists in the specified directory. 
+ *
+ * This hook is executed before generating index metadata files.
+ * It checks if an index.md file exists in the specified directory.
  * If not, it creates one with a title derived from the category name.
  */
 const beforeGenerateIndexMetafileHook = async (event) => {
@@ -148,9 +147,9 @@ const beforeGenerateIndexMetafileHook = async (event) => {
 
 /**
  * Hook that appends a link to the entity's page in the index file after rendering type entities.
- * 
- * This hook is triggered after a GraphQL type entity is rendered. 
- * It checks if an index file exists in the same directory as the 
+ *
+ * This hook is triggered after a GraphQL type entity is rendered.
+ * It checks if an index file exists in the same directory as the
  * rendered entity, and if so, appends a markdown link to the entity's page.
  */
 const afterRenderTypeEntitiesHook = async (event) => {
@@ -163,10 +162,7 @@ const afterRenderTypeEntitiesHook = async (event) => {
   }
 };
 
-export { 
-  beforeGenerateIndexMetafileHook, 
-  afterRenderTypeEntitiesHook 
-};
+export { beforeGenerateIndexMetafileHook, afterRenderTypeEntitiesHook };
 ```
 
 ## Display response types for operations
@@ -203,10 +199,10 @@ type User {
 Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
 
 ```js title="custom-mdx.mjs"
-import { 
-  isOperation, 
-  isScalarType, 
-  getNamedType 
+import {
+  isOperation,
+  isScalarType,
+  getNamedType,
 } from "@graphql-markdown/graphql";
 import { Printer } from "@graphql-markdown/printer-legacy";
 
@@ -278,7 +274,11 @@ const beforeComposePageTypeHook = async (event) => {
   const relationsIndex = event.output.indexOf("relations");
   const metadataIndex = event.output.indexOf("metadata");
 
-  if (relationsIndex > -1 && metadataIndex > -1 && relationsIndex > metadataIndex) {
+  if (
+    relationsIndex > -1 &&
+    metadataIndex > -1 &&
+    relationsIndex > metadataIndex
+  ) {
     event.output.splice(relationsIndex, 1);
     event.output.splice(metadataIndex, 0, "relations");
   }

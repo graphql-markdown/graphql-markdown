@@ -31,11 +31,11 @@ interface OutputAdapter {
 
 ## When each method is called
 
-| Method | Called |
-| --- | --- |
-| `ensureDir` | once for the output directory when generation starts, then once per category directory by the Docusaurus and Hugo presets |
+| Method      | Called                                                                                                                                            |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ensureDir` | once for the output directory when generation starts, then once per category directory by the Docusaurus and Hugo presets                         |
 | `writeFile` | once per type page, once for the homepage, plus any navigation file the preset maintains (`_category_.yml`, `_index.md`, `toc.yml`, `SUMMARY.md`) |
-| `readFile` | once per page for the DocFX, mdBook and MkDocs presets, once per category for Docusaurus, and once per navigation file a preset maintains |
+| `readFile`  | once per page for the DocFX, mdBook and MkDocs presets, once per category for Docusaurus, and once per navigation file a preset maintains         |
 
 An adapter is used for the whole run: there is no per-page opt-out.
 
@@ -59,11 +59,11 @@ const toKey = (location) =>
     .join("/");
 ```
 
-| Written | Key |
-| --- | --- |
+| Written                             | Key                            |
+| ----------------------------------- | ------------------------------ |
 | `docs/schema/types/objects/book.md` | `schema/types/objects/book.md` |
-| `docs/schema/index.md` | `schema/index.md` |
-| `docs/SUMMARY.md` | `SUMMARY.md` |
+| `docs/schema/index.md`              | `schema/index.md`              |
+| `docs/SUMMARY.md`                   | `SUMMARY.md`                   |
 
 Use forward slashes in keys regardless of the OS that generated them, so the same schema produces the same keys everywhere.
 
@@ -246,7 +246,7 @@ Two pieces of bookkeeping live for as long as the adapter object does, rather th
 - DocFX records which directories it has already given an "Overview" entry, so the check runs once per directory rather than once per page.
 - The first page that cannot be read back is reported once, so a write-only destination does not repeat the same error for every page.
 
-Generating once per process — which is what the CLI and every framework plugin do — is unaffected. Calling `generateDocFromSchema` repeatedly inside one process while passing the *same* adapter object carries that state into the later runs: a second run over a directory cleared by [`force`](/docs/settings#force) can leave its `toc.yml` without the "Overview" entry, and a destination that still cannot serve reads stays quiet after the first report.
+Generating once per process — which is what the CLI and every framework plugin do — is unaffected. Calling `generateDocFromSchema` repeatedly inside one process while passing the _same_ adapter object carries that state into the later runs: a second run over a directory cleared by [`force`](/docs/settings#force) can leave its `toc.yml` without the "Overview" entry, and a destination that still cannot serve reads stays quiet after the first report.
 
 Construct a new adapter object per run to avoid it. An adapter that holds an expensive client can keep the client in a shared scope and return a fresh wrapper object around it.
 

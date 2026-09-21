@@ -36,11 +36,11 @@ npx gqlmd graphql-to-doc --schema ./schema.graphql --root ./docs
 For programmatic usage, you can use the CLI package:
 
 ```typescript
-import { runGraphQLMarkdown } from '@graphql-markdown/cli';
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
 
 const config = {
-  schema: './schema.graphql',
-  rootPath: './docs',
+  schema: "./schema.graphql",
+  rootPath: "./docs",
 };
 
 await runGraphQLMarkdown(config);

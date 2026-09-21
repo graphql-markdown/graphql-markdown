@@ -24,75 +24,100 @@ jobs:
     name: Changes
     uses: ./.github/workflows/changes.yml
 
+  # Computes the `mutation` job's matrix in a shell step rather than inline in
+  # `strategy.matrix`: that used to be a three-clause `&&`/`||` chain (kill
+  # switch, fail-open, PR-vs-schedule), and GitHub Actions' expression
+  # operator precedence is not documented precisely enough to trust a chain
+  # that deep -- it silently produced a value `fromJSON` couldn't use as a
+  # matrix, which fails the job outright before it ever starts (not even a
+  # `skipped` verdict). An `if/elif/else` here is unambiguous and easy to
+  # test locally.
+  mutation-matrix:
+    name: Compute mutation matrix
+    runs-on: ubuntu-latest
+    needs: changes
+    if: ${{ !cancelled() }}
+    outputs:
+      packages: ${{ steps.compute.outputs.packages }}
+    steps:
+      - name: Compute packages
+        id: compute
+        env:
+          # `vars.MUTATION_TESTS_ENABLED` is a temporary kill switch (repository
+          # variable, Settings > Secrets and variables > Actions > Variables —
+          # unset or anything but "true" means disabled). See the `mutation`
+          # job below for why it exists.
+          ENABLED: ${{ vars.MUTATION_TESTS_ENABLED }}
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          EVENT_NAME: ${{ github.event_name }}
+          DIRECT_PACKAGES: ${{ needs.changes.outputs.direct_packages }}
+        run: |
+          if [ "$ENABLED" != "true" ]; then
+            packages='[]'
+          elif [ "$CHANGES_RESULT" != "success" ] || [ "$EVENT_NAME" != "pull_request" ]; then
+            # Fail-open (gate errored) or a non-PR trigger (schedule/workflow_dispatch):
+            # run the full matrix. PRs only run the packages they directly change (see
+            # DIRECT_PACKAGES below), so the full matrix runs on a schedule to keep every
+            # Stryker dashboard module's score fresh.
+            packages='["cli","core","diff","docusaurus","formatters","graphql","helpers","logger","printer-legacy","utils"]'
+          else
+            packages="$DIRECT_PACKAGES"
+          fi
+          echo "packages=$packages" >> "$GITHUB_OUTPUT"
+
   mutation:
     name: Mutation tests package ${{matrix.package}}
     runs-on: ubuntu-latest
-    needs: changes
+    needs: [changes, mutation-matrix]
     # Stryker mutates a package's own `src/**/*.ts` and runs that same package's
     # tests, so its score is a pure function of the two. An upstream change can
     # only make the tests fail, which the Test job already reports -- hence
     # `direct_packages` here rather than the dependency closure `test.yml` uses.
     #
-    # Gated per step rather than per job: `matrix` is not available in a
-    # job-level `if:` (it is evaluated before the matrix expands). An unaffected
-    # package still starts a runner, but skips every step, so it finishes in
-    # seconds and still reports the check name the ruleset requires.
-    # `!cancelled()` drops the implicit "all needs succeeded" requirement, so a
-    # broken gate runs the full matrix instead of skipping to green: a skipped
-    # job reports a `skipped` check run, which the ruleset counts as satisfied.
-    # `vars.MUTATION_TESTS_ENABLED` is a temporary kill switch (repository variable,
-    # Settings > Secrets and variables > Actions > Variables — unset or anything but
-    # "true" means disabled). @stryker-mutator/vitest-runner@10.0.0 (latest
-    # published) crashes on init against vitest 5's resolved config (circular
-    # JSON), so every mutant in every package silently scores as failed.
-    # Downgrading vitest just for this job (see the "Downgrade vitest for Stryker"
-    # step below) dodges that crash, but trades it for a different failure: vitest
-    # 4's `test.each` `$name` interpolation quotes string values ("'Directive'"),
-    # while vitest 5's doesn't ("Directive") — so a snapshot file correct for one
-    # major version's test titles mismatches under the other. There is no vitest
-    # version this job and the rest of the repo's test suite can currently agree
-    # on, so the whole job is disabled by default until
-    # @stryker-mutator/vitest-runner supports vitest 5 for real — at which point
-    # drop the now-unnecessary vitest downgrade step too.
+    # @stryker-mutator/vitest-runner@10.0.0 (latest published) crashes on init
+    # against vitest 5's resolved config (circular JSON), so every mutant in
+    # every package silently scores as failed. Downgrading vitest just for
+    # this job (see the "Downgrade vitest for Stryker" step below) dodges that
+    # crash, but trades it for a different failure: vitest 4's `test.each`
+    # `$name` interpolation quotes string values ("'Directive'"), while
+    # vitest 5's doesn't ("Directive") — so a snapshot file correct for one
+    # major version's test titles mismatches under the other. There is no
+    # vitest version this job and the rest of the repo's test suite can
+    # currently agree on, so the whole job is disabled by default (see the
+    # kill switch in `mutation-matrix` above) until
+    # @stryker-mutator/vitest-runner supports vitest 5 for real — at which
+    # point drop the now-unnecessary vitest downgrade step too.
+    # The `needs.mutation-matrix.outputs.packages != '[]'` clause guards
+    # against a GitHub Actions gap that's been an open, unresolved community
+    # report since 2021 (github.com/orgs/community/discussions/27096): a
+    # `strategy.matrix` that evaluates to `[]` doesn't skip the job, it
+    # crashes it ("Matrix vector does not contain any values"). Checking the
+    # same output the matrix expression below reads, before the matrix is
+    # ever evaluated, keeps it non-empty whenever this job runs at all.
     if: >-
-      !cancelled()
+      !cancelled() && needs.mutation-matrix.result == 'success'
+      && needs.mutation-matrix.outputs.packages != '[]'
       && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
-    env:
-      RUN_MUTATION: >-
-        ${{ vars.MUTATION_TESTS_ENABLED == 'true' &&
-          (needs.changes.result != 'success'
-          || github.event_name != 'pull_request'
-          || contains(fromJSON(needs.changes.outputs.direct_packages || '[]'), matrix.package)) }}
     strategy:
       fail-fast: false
+      # Dynamic rather than the old static list gated per step: `matrix` isn't
+      # available in a job-level `if:`, but it IS available here, so an
+      # unaffected package's job never starts at all instead of starting and
+      # skipping every step. A job that ran and quietly did nothing used to
+      # report `success`, indistinguishable from having actually passed.
       matrix:
-        package:
-          [
-            "cli",
-            "core",
-            "diff",
-            "docusaurus",
-            "formatters",
-            "graphql",
-            "helpers",
-            "logger",
-            "printer-legacy",
-            "utils",
-          ]
+        package: ${{ fromJSON(needs.mutation-matrix.outputs.packages) }}
 
     steps:
       - name: Checkout Code Base
-        if: env.RUN_MUTATION == 'true'
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
 
       - name: Setup environment
-        if: env.RUN_MUTATION == 'true'
         uses: ./.github/actions/setup
 
       - name: Cache turbo build setup
-        if: env.RUN_MUTATION == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
         with:
           path: .turbo
@@ -101,7 +126,6 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: Build packages
-        if: env.RUN_MUTATION == 'true'
         run: bun run build
 
       # @stryker-mutator/vitest-runner@10.0.0 (latest, as of this writing) crashes
@@ -114,13 +138,63 @@ jobs:
       # ephemeral install; the rest of the repo (and its own tests) stay on vitest 5.
       # Drop this once a `@stryker-mutator/vitest-runner` release fixes the crash.
       - name: Downgrade vitest for Stryker (vitest-runner incompatible with vitest 5)
-        if: env.RUN_MUTATION == 'true'
         run: bun add -D vitest@^4 --no-save
 
       - name: Run Mutations Tests
-        if: env.RUN_MUTATION == 'true'
         run: bun run --filter '@graphql-markdown/${{ matrix.package }}' stryker --allowEmpty --reporters dashboard,json --dashboard.module ${{matrix.package}}
 
       - name: Mutation summary
-        if: always() && env.RUN_MUTATION == 'true'
+        if: always()
         run: bun .github/scripts/mutation-summary.mjs ${{ matrix.package }} packages/${{ matrix.package }}/reports/mutation/mutation.json
+
+  # See test.yml's `gate` job: one required check standing in for the whole
+  # `matrix.package` matrix, so the ruleset doesn't need an entry per package.
+  # `mutation` can also skip at the *job* level for draft PRs (see its `if:`
+  # above, independent of the dynamic matrix), so `skipped` is accepted here
+  # too -- a job that was never supposed to run must not block the merge.
+  gate:
+    name: Mutation Gate
+    runs-on: ubuntu-latest
+    needs: [mutation-matrix, mutation]
+    if: always()
+    permissions:
+      actions: read
+      pull-requests: write
+    steps:
+      - name: Require every job to have passed or been skipped
+        run: |
+          for result in "${{ needs.mutation-matrix.result }}" "${{ needs.mutation.result }}"; do
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
+              echo "::error::required job result was '$result'"
+              exit 1
+            fi
+          done
+
+      # `continue-on-error: true` on both: the comment is informational, so a
+      # transient `gh api` failure here must not turn an otherwise-green
+      # matrix into a failed required check. Only the "Require ..." step
+      # above decides the gate.
+      - name: Checkout Code Base
+        if: >-
+          always()
+          && github.event_name == 'pull_request'
+          && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github
+
+      - name: Post summary comment
+        if: >-
+          always()
+          && github.event_name == 'pull_request'
+          && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
+        uses: ./.github/actions/gate-comment
+        with:
+          gate-name: Mutation Gate
+          gate-marker: mutation
+          job-prefixes: '["Mutation tests package "]'
+          exclude-job-name: Mutation Gate
+          github-token: ${{ secrets.GITHUB_TOKEN }}

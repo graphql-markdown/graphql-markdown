@@ -25,6 +25,15 @@ import { fileURLToPath } from "node:url";
 
 const ORG_NAME = "@graphql-markdown";
 
+// Real workspace packages, but with no `test:ci` script: `types` is pure
+// `.d.ts` (erased before anything could run against it) and `tooling-config`
+// is shared build/lint tooling, not a package with its own test suite. They
+// still count towards `code` (so Lint/ts:check/etc. still run when either
+// changes), but including them in `packages`/`direct_packages` would hand
+// test.yml's/mutation.yml's dynamic matrices a package name whose `bun
+// test:ci` doesn't exist, failing the job outright rather than skipping it.
+const UNTESTABLE_PACKAGES = new Set(["types", "tooling-config"]);
+
 type PackageMeta = {
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
@@ -40,6 +49,8 @@ type AffectedOutputs = {
   smoke_cli: boolean;
   smoke_docusaurus: boolean;
   workflows: boolean;
+  docs: boolean;
+  website: boolean;
   docs_only: boolean;
 };
 
@@ -72,15 +83,24 @@ const GLOBAL_STATIC_PATTERNS = [
 
 // Scoped deliberately rather than a blanket `\.md$`: `tests/e2e/__data__` holds
 // Markdown fixtures (homepages fed to the generator) that smoke tests consume.
-const DOC_PATTERNS = [
+// Prose only -- unlike the old version of this list, `website/` is NOT here:
+// it used to blanket-exclude the whole Docusaurus site (React components,
+// CSS, shell scripts) from every signal, which meant none of that source ever
+// got linted. Only `docs/`, `api/`, and Markdown are genuinely "not code".
+const PROSE_PATTERNS = [
   /^docs\//u,
-  /^website\//u,
   /^api\//u,
   /^[^/]+\.md$/u,
   /^\.github\/[^/]*\.md$/u,
   /^packages\/[^/]+\/docs\//u,
   /^packages\/[^/]+\/[^/]*\.md$/u,
 ];
+
+// The Docusaurus site: React source, CSS, its own build scripts, config.
+// None of it matches `^packages\//`, so it never affects package/smoke
+// detection either way -- this exists purely to compute the `website`
+// output below, so linter.yml can run website-specific checks on it.
+const WEBSITE_PATTERNS = [/^website\//u];
 
 const SMOKE_PATTERNS = {
   cli: [/^tests\/e2e\/cli\//u],
@@ -222,14 +242,16 @@ const touchesCiTooling = (files: string[]): boolean => {
 };
 
 /**
- * Nothing outside documentation changed: every gated job can skip.
+ * Nothing outside documentation and the website changed: every gated job can
+ * skip.
  */
 const isDocsOnly = (
   packagesTouched: boolean,
   smoke: boolean,
   workflows: boolean,
+  website: boolean,
 ): boolean => {
-  return !packagesTouched && !smoke && !workflows;
+  return !packagesTouched && !smoke && !workflows && !website;
 };
 
 const computeAffected = (
@@ -238,14 +260,20 @@ const computeAffected = (
 ): AffectedOutputs => {
   const allPackages = Object.keys(packagesMap).map(shortName);
 
-  const files = changedFiles
+  const trimmed = changedFiles
     .map((file) => {
       return file.trim();
     })
-    .filter(Boolean)
-    .filter((file) => {
-      return !matches(file, DOC_PATTERNS);
-    });
+    .filter(Boolean);
+
+  // Prose and the website never affect package/smoke/workflow detection --
+  // neither matches `^packages\//`, a global pattern, a smoke target, or
+  // `.github/`/`tests/ci/` -- so filtering them out here only matters for
+  // `packages/<name>/README.md`-style paths, which would otherwise falsely
+  // mark that package as touched.
+  const files = trimmed.filter((file) => {
+    return !matches(file, PROSE_PATTERNS) && !matches(file, WEBSITE_PATTERNS);
+  });
 
   const global = getGlobalScope(files);
   const touched = getTouchedPackages(files, allPackages);
@@ -264,20 +292,31 @@ const computeAffected = (
   const packagesTouched = affected.size > 0;
   const smoke = getSmokeTargets(files, packagesTouched);
   const workflows = touchesCiTooling(files);
+  const docs = trimmed.some((file) => {
+    return matches(file, PROSE_PATTERNS);
+  });
+  const website = trimmed.some((file) => {
+    return matches(file, WEBSITE_PATTERNS);
+  });
 
   const sort = (names: Iterable<string>): string[] => {
     return [...names].sort();
   };
+  const testable = (names: Iterable<string>): string[] => {
+    return sort([...names].filter((name) => !UNTESTABLE_PACKAGES.has(name)));
+  };
 
   return {
     code: packagesTouched,
-    packages: sort(affected),
-    direct_packages: sort(direct),
+    packages: testable(affected),
+    direct_packages: testable(direct),
     smoke: smoke.any,
     smoke_cli: smoke.cli,
     smoke_docusaurus: smoke.docusaurus,
     workflows,
-    docs_only: isDocsOnly(packagesTouched, smoke.any, workflows),
+    docs,
+    website,
+    docs_only: isDocsOnly(packagesTouched, smoke.any, workflows, website),
   };
 };
 
