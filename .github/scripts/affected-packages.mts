@@ -25,6 +25,15 @@ import { fileURLToPath } from "node:url";
 
 const ORG_NAME = "@graphql-markdown";
 
+// Real workspace packages, but with no `test:ci` script: `types` is pure
+// `.d.ts` (erased before anything could run against it) and `tooling-config`
+// is shared build/lint tooling, not a package with its own test suite. They
+// still count towards `code` (so Lint/ts:check/etc. still run when either
+// changes), but including them in `packages`/`direct_packages` would hand
+// test.yml's/mutation.yml's dynamic matrices a package name whose `bun
+// test:ci` doesn't exist, failing the job outright rather than skipping it.
+const UNTESTABLE_PACKAGES = new Set(["types", "tooling-config"]);
+
 type PackageMeta = {
   dependencies?: Record<string, string>;
   peerDependencies?: Record<string, string>;
@@ -293,11 +302,14 @@ const computeAffected = (
   const sort = (names: Iterable<string>): string[] => {
     return [...names].sort();
   };
+  const testable = (names: Iterable<string>): string[] => {
+    return sort([...names].filter((name) => !UNTESTABLE_PACKAGES.has(name)));
+  };
 
   return {
     code: packagesTouched,
-    packages: sort(affected),
-    direct_packages: sort(direct),
+    packages: testable(affected),
+    direct_packages: testable(direct),
     smoke: smoke.any,
     smoke_cli: smoke.cli,
     smoke_docusaurus: smoke.docusaurus,

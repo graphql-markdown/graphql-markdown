@@ -106,6 +106,28 @@ describe("computeAffected() global fail-open", () => {
       computeAffected([".github/scripts/changed-files.sh"], packagesMap),
     ).toHaveProperty("direct_packages", []);
   });
+
+  test("excludes packages with no test:ci script from packages/direct_packages, even when globally affected", () => {
+    // `types` (pure .d.ts) and `tooling-config` (shared build/lint tooling)
+    // are real workspace packages, so a global-scope change (like the
+    // bun.lock case above) would otherwise hand test.yml's/mutation.yml's
+    // dynamic matrices a package name with no `test:ci` script, failing
+    // the job outright instead of it simply not existing.
+    const withUntestable: PackagesMap = {
+      ...packagesMap,
+      "@graphql-markdown/types": {},
+      "@graphql-markdown/tooling-config": {},
+    };
+
+    const outputs = computeAffected(["bun.lock"], withUntestable);
+
+    expect(outputs.packages).not.toContain("types");
+    expect(outputs.packages).not.toContain("tooling-config");
+    expect(outputs.direct_packages).not.toContain("types");
+    expect(outputs.direct_packages).not.toContain("tooling-config");
+    // Still counts as code touched, so Lint/ts:check/etc. still run.
+    expect(outputs.code).toBe(true);
+  });
 });
 
 describe("computeAffected() smoke targets", () => {
