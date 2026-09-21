@@ -23,11 +23,17 @@ Given this schema:
 
 ```graphql
 type User {
-  """User's unique identifier"""
+  """
+  User's unique identifier
+  """
   id: ID!
-  """User's full name"""
+  """
+  User's full name
+  """
   name: String!
-  """List of posts authored by this user"""
+  """
+  List of posts authored by this user
+  """
   posts: [Post!]
 }
 
@@ -59,10 +65,10 @@ Object Type
 
 ## Fields
 
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| `id` | `ID!` | User's unique identifier |
-| `name` | `String!` | User's full name |
+| Name    | Type                                    | Description                         |
+| ------- | --------------------------------------- | ----------------------------------- |
+| `id`    | `ID!`                                   | User's unique identifier            |
+| `name`  | `String!`                               | User's full name                    |
 | `posts` | [`[Post!]`](/docs/graphql/objects/post) | List of posts authored by this user |
 
 ## Returned by
@@ -74,17 +80,17 @@ Notice the cross-link on `Post` and the back-reference under "Returned by" — t
 
 ## What gets generated
 
-| Output | Description |
-| ------ | ----------- |
-| `objects/` | One file per Object type |
-| `inputs/` | One file per Input type |
-| `queries/` | One file per Query field |
-| `mutations/` | One file per Mutation field |
-| `subscriptions/` | One file per Subscription field |
-| `enums/` | One file per Enum type |
-| `interfaces/` | One file per Interface type |
-| `unions/` | One file per Union type |
-| `scalars/` | One file per Scalar type |
+| Output           | Description                      |
+| ---------------- | -------------------------------- |
+| `objects/`       | One file per Object type         |
+| `inputs/`        | One file per Input type          |
+| `queries/`       | One file per Query field         |
+| `mutations/`     | One file per Mutation field      |
+| `subscriptions/` | One file per Subscription field  |
+| `enums/`         | One file per Enum type           |
+| `interfaces/`    | One file per Interface type      |
+| `unions/`        | One file per Union type          |
+| `scalars/`       | One file per Scalar type         |
 | `_category_.yml` | Sidebar metadata for each folder |
 
 ## Customization

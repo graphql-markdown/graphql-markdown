@@ -1,0 +1,29 @@
+{
+  "config": {
+    "default": true,
+    // Docusaurus/README content relies on raw HTML (badges, <details>, admonitions).
+    "MD033": false,
+    // Prose width is intentionally unwrapped (see prettier's `proseWrap: "preserve"`).
+    "MD013": false,
+    // Front matter (Docusaurus `---` blocks) is not a duplicate top-level heading.
+    "MD025": false,
+    // Generated files: not authored Markdown, shouldn't be hand-fixed for style.
+    "MD041": false,
+    // This repo's docs use bold step labels ("**1. Do the thing**") rather
+    // than a heading per step; that's a style choice, not an error.
+    "MD036": false,
+    // Hand-maintained tables aren't kept pipe-aligned; not worth enforcing.
+    "MD060": false
+  },
+  "ignores": [
+    "**/node_modules/**",
+    "**/CHANGELOG.md",
+    "website/build/**",
+    "**/dist/**",
+    // TypeDoc-generated API reference, not hand-authored Markdown -- its
+    // per-overload structure inherently repeats headings (MD024) that
+    // hand-fixing would just have TypeDoc regenerate right back.
+    "packages/*/docs/**"
+  ],
+  "globs": ["docs/**/*.md", "api/**/*.md", "*.md", ".github/*.md", "packages/*/*.md"]
+}

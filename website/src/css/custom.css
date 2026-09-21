@@ -26,6 +26,10 @@
   --aa-selected-color-rgb: 72, 94, 88 !important;
 }
 
+main code {
+  color: var(--ifm-color-primary-darkest) !important;
+}
+
 main a,
 main a code {
   color: var(--ifm-link-color) !important;
@@ -34,10 +38,6 @@ main a code {
 
 main a:hover {
   text-decoration: var(--ifm-link-decoration) !important;
-}
-
-main code {
-  color: var(--ifm-color-primary-darkest) !important;
 }
 
 [data-theme="dark"] {
@@ -98,6 +98,7 @@ span.deprecated::after {
 div[class^="announcementBar_"] {
   --site-announcement-bar-stripe-color1: #ffd7ff;
   --site-announcement-bar-stripe-color2: #e6ffd1;
+
   background: repeating-linear-gradient(
     55deg,
     var(--site-announcement-bar-stripe-color1),
@@ -175,7 +176,9 @@ div[class^="announcementBar_"] {
   text-decoration: none !important;
   color: inherit !important;
   min-height: 200px;
-  transition: border-color 0.2s, background 0.2s;
+  transition:
+    border-color 0.2s,
+    background 0.2s;
 }
 
 .showcase__add-card:hover {
@@ -289,7 +292,7 @@ a.menu__link[href$="/docs/troubleshooting"]::before,
   margin-right: 0.4rem;
   margin-bottom: -0.15rem;
   flex-shrink: 0;
-  background-color: currentColor;
+  background-color: currentcolor;
   opacity: 0.7;
   mask-size: contain;
   mask-repeat: no-repeat;
@@ -303,34 +306,42 @@ a.menu__link[href$="/docs/intro"]::before {
   mask-image: url("/img/docs/icons/intro.svg");
   -webkit-mask-image: url("/img/docs/icons/intro.svg");
 }
+
 a.menu__link[href$="/docs/try-it"]::before {
   mask-image: url("/img/docs/icons/try-it.svg");
   -webkit-mask-image: url("/img/docs/icons/try-it.svg");
 }
+
 a.menu__link[href$="/docs/get-started"]::before {
   mask-image: url("/img/docs/icons/get-started.svg");
   -webkit-mask-image: url("/img/docs/icons/get-started.svg");
 }
+
 a.menu__link[href$="/docs/how-it-works"]::before {
   mask-image: url("/img/docs/icons/how-it-works.svg");
   -webkit-mask-image: url("/img/docs/icons/how-it-works.svg");
 }
+
 a.menu__link[href$="/docs/configuration"]::before {
   mask-image: url("/img/docs/icons/configuration.svg");
   -webkit-mask-image: url("/img/docs/icons/configuration.svg");
 }
+
 a.menu__link[href$="/docs/configuration-cheatsheet"]::before {
   mask-image: url("/img/docs/icons/cheatsheet.svg");
   -webkit-mask-image: url("/img/docs/icons/cheatsheet.svg");
 }
+
 a.menu__link[href$="/docs/settings"]::before {
   mask-image: url("/img/docs/icons/settings.svg");
   -webkit-mask-image: url("/img/docs/icons/settings.svg");
 }
+
 a.menu__link[href$="/docs/troubleshooting"]::before {
   mask-image: url("/img/docs/icons/troubleshooting.svg");
   -webkit-mask-image: url("/img/docs/icons/troubleshooting.svg");
 }
+
 .sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
   mask-image: url("/img/docs/icons/advanced.svg");
   -webkit-mask-image: url("/img/docs/icons/advanced.svg");

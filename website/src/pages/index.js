@@ -81,7 +81,9 @@ function HomepageHeader() {
         <p className={styles.heroSubtitle}>
           Use the Docusaurus plugin for Docusaurus sites, or formatter presets
           for{" "}
-          <span className={styles.accentGreen}>Hugo, MkDocs, DocFX, mdBook</span>{" "}
+          <span className={styles.accentGreen}>
+            Hugo, MkDocs, DocFX, mdBook
+          </span>{" "}
           and other supported documentation ecosystems.
         </p>
 

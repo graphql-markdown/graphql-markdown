@@ -15,12 +15,12 @@ GraphQL-Markdown supports multiple documentation frameworks through formatter pr
 
 Use the path that matches your documentation stack:
 
-| If you are using... | Recommended path |
-| ------------------- | ---------------- |
-| **Docusaurus** | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior. |
+| If you are using...                        | Recommended path                                                                                                                                       |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Docusaurus**                             | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior.             |
 | **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems. |
-| **Starlight, Fumadocs, or Vocs** | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place. |
-| **Any unsupported framework** | Start from the closest preset or create a custom formatter module. |
+| **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                 |
+| **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                     |
 
 For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
 
@@ -53,17 +53,17 @@ npm install @graphql-markdown/formatters
 
 Then select your framework:
 
-| Framework | Package | Setup |
-| --------- | ------- | ----- |
-| **Docusaurus** | `@graphql-markdown/formatters/docusaurus` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/README.md) |
-| **Astro Starlight** | `@graphql-markdown/formatters/starlight` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/README.md) |
-| **Next.js + Fumadocs** | `@graphql-markdown/formatters/fumadocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/README.md) |
-| **Vocs** | `@graphql-markdown/formatters/vocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/README.md) |
-| **HonKit** | `@graphql-markdown/formatters/honkit` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/README.md) |
-| **Hugo** | `@graphql-markdown/formatters/hugo` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/README.md) |
-| **MkDocs** | `@graphql-markdown/formatters/mkdocs` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/README.md) |
-| **DocFX** | `@graphql-markdown/formatters/docfx` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md) |
-| **mdBook** | `@graphql-markdown/formatters/mdbook` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/README.md) |
+| Framework              | Package                                   | Setup                                                                                                                |
+| ---------------------- | ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **Docusaurus**         | `@graphql-markdown/formatters/docusaurus` | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/README.md) |
+| **Astro Starlight**    | `@graphql-markdown/formatters/starlight`  | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/README.md)  |
+| **Next.js + Fumadocs** | `@graphql-markdown/formatters/fumadocs`   | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/README.md)   |
+| **Vocs**               | `@graphql-markdown/formatters/vocs`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/README.md)       |
+| **HonKit**             | `@graphql-markdown/formatters/honkit`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/README.md)     |
+| **Hugo**               | `@graphql-markdown/formatters/hugo`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/README.md)       |
+| **MkDocs**             | `@graphql-markdown/formatters/mkdocs`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/README.md)     |
+| **DocFX**              | `@graphql-markdown/formatters/docfx`      | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md)      |
+| **mdBook**             | `@graphql-markdown/formatters/mdbook`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/README.md)     |
 
 ### Quick Example
 
@@ -104,8 +104,8 @@ await runGraphQLMarkdown(
 
 Some frameworks have dedicated integration packages beyond the basic formatters:
 
-| Framework | Framework Link | Package | NPM |
-| --------- | -------------- | ------- | --- |
+| Framework     | Framework Link                          | Package                    | NPM                                                             |
+| ------------- | --------------------------------------- | -------------------------- | --------------------------------------------------------------- |
 | **VitePress** | [vitepress.dev](https://vitepress.dev/) | graphql-markdown-vitepress | [NPM](https://www.npmjs.com/package/graphql-markdown-vitepress) |
 
 ## Custom MDX Formatter
@@ -116,24 +116,24 @@ For frameworks not listed above, or to customize formatting behavior, create a c
 
 A custom MDX module can export individual formatter functions:
 
-| Export                     | Type                                                               | Description                                      |
-| -------------------------- | ------------------------------------------------------------------ | ------------------------------------------------ |
-| `formatMDXBadge`           | `(badge: { text, classname? }) => string`                          | Format type badges (deprecated, required, etc.)  |
-| `formatMDXAdmonition`      | `(admonition: { text, title, type, icon? }, meta?) => string`      | Format callout/warning blocks                    |
-| `formatMDXBullet`          | `(text?: string) => string`                                        | Format bullet point separators                   |
-| `formatMDXDetails`         | `(option: { dataOpen, dataClose? }) => string`                     | Format collapsible sections                      |
-| `formatMDXFrontmatter`     | `(props?, formatted?: string[]) => string`                         | Format page frontmatter                          |
-| `formatMDXLink`            | `(link: { text, url }) => { text, url }`                           | Transform type links                             |
-| `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                    | Format named entity references                   |
-| `formatMDXPermalink`       | `(id: string) => string`                                           | Format section header permalinks                 |
-| `formatMDXSpecifiedByLink` | `(url: string) => string`                                          | Format scalar specification links                |
+| Export                     | Type                                                          | Description                                     |
+| -------------------------- | ------------------------------------------------------------- | ----------------------------------------------- |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`                     | Format type badges (deprecated, required, etc.) |
+| `formatMDXAdmonition`      | `(admonition: { text, title, type, icon? }, meta?) => string` | Format callout/warning blocks                   |
+| `formatMDXBullet`          | `(text?: string) => string`                                   | Format bullet point separators                  |
+| `formatMDXDetails`         | `(option: { dataOpen, dataClose? }) => string`                | Format collapsible sections                     |
+| `formatMDXFrontmatter`     | `(props?, formatted?: string[]) => string`                    | Format page frontmatter                         |
+| `formatMDXLink`            | `(link: { text, url }) => { text, url }`                      | Transform type links                            |
+| `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`               | Format named entity references                  |
+| `formatMDXPermalink`       | `(id: string) => string`                                      | Format section header permalinks                |
+| `formatMDXSpecifiedByLink` | `(url: string) => string`                                     | Format scalar specification links               |
 
 Optional exports:
 
-| Export            | Type     | Description                                          |
-| ----------------- | -------- | ---------------------------------------------------- |
-| `mdxDeclaration`  | `string` | Import statements prepended to generated files       |
-| `mdxExtension`    | `string` | Custom file extension (defaults to `.mdx`)           |
+| Export           | Type     | Description                                    |
+| ---------------- | -------- | ---------------------------------------------- |
+| `mdxDeclaration` | `string` | Import statements prepended to generated files |
+| `mdxExtension`   | `string` | Custom file extension (defaults to `.mdx`)     |
 
 :::tip
 You only need to export the formatter functions your framework requires. Any missing functions will use the default HTML-like implementation.
@@ -163,7 +163,7 @@ To customize a preset, spread its exports and override specific formatters:
 
 ```js
 // src/modules/custom-mdx.cjs
-const PresetMDX = require('@graphql-markdown/formatters/starlight');
+const PresetMDX = require("@graphql-markdown/formatters/starlight");
 
 const formatMDXBadge = ({ text, classname }) => {
   // Your custom logic

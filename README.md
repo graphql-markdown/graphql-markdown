@@ -8,7 +8,6 @@
 [![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/graphql-markdown/graphql-markdown)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-
 # GraphQL-Markdown
 
 Generate **Markdown and MDX documentation** from **GraphQL schemas** for Docusaurus and other supported documentation ecosystems.
@@ -110,6 +109,6 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
 
 <p align="center">
   <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" />
+    <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" alt="Contributors" />
   </a>
 </p>

@@ -170,9 +170,9 @@ Force generating documentation in an empty folder and set [`diffMethod`](#diffme
 
 Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/advanced/group-by-directive)).
 
-| Setting            | CLI flag                                                                        | Default     |
-| ------------------ | ------------------------------------------------------------------------------- | ----------- |
-| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code>       | `undefined` |
+| Setting            | CLI flag                                                                  | Default     |
+| ------------------ | ------------------------------------------------------------------------- | ----------- |
+| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
 
 ## `homepage`
 
@@ -202,9 +202,9 @@ The GraphQL-Markdown template for Docusaurus provides a customized homepage loca
 
 The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/advanced/additional-schema): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/configuration#graphql-config) project of the same name.
 
-| Setting | CLI flag        | Default     |
-| ------- | --------------- | ----------- |
-| `id`    | _not supported_ | `default`   |
+| Setting | CLI flag        | Default   |
+| ------- | --------------- | --------- |
+| `id`    | _not supported_ | `default` |
 
 ## `linkRoot`
 
@@ -226,9 +226,9 @@ GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loadin
 
 Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
 
-| Setting     | CLI flag      | Default                            |
-| ----------- | ------------- | ---------------------------------- |
-| `formatter` | `--formatter` | `undefined`                        |
+| Setting     | CLI flag      | Default     |
+| ----------- | ------------- | ----------- |
+| `formatter` | `--formatter` | `undefined` |
 
 :::note
 
@@ -445,7 +445,9 @@ const DocusaurusMDX = require("@graphql-markdown/docusaurus/mdx");
 
 const beforeComposePageTypeHook = async (event) => {
   // Hide code and relations sections
-  event.output = event.output.filter((key) => key !== "code" && key !== "relations");
+  event.output = event.output.filter(
+    (key) => key !== "code" && key !== "relations",
+  );
 };
 
 module.exports = {

@@ -35,6 +35,15 @@ jobs:
       RUN_CODE_CHECKS: >-
         ${{ needs.changes.result != 'success'
           || needs.changes.outputs.code == 'true' }}
+      # `website/scripts` is one of the three directories the shellcheck `find`
+      # below scans, so it needs its own signal: `workflows` only tracks
+      # `.github/`/`tests/ci/` and would otherwise never fire for it.
+      RUN_WEBSITE_CHECKS: >-
+        ${{ needs.changes.result != 'success'
+          || needs.changes.outputs.website == 'true' }}
+      RUN_DOCS_CHECKS: >-
+        ${{ needs.changes.result != 'success'
+          || needs.changes.outputs.docs == 'true' }}
 
     steps:
       - name: Checkout Code Base
@@ -56,11 +65,13 @@ jobs:
         run: actionlint -color
 
       - name: Run shellcheck
-        if: env.RUN_WORKFLOW_CHECKS == 'true'
+        if: env.RUN_WORKFLOW_CHECKS == 'true' || env.RUN_WEBSITE_CHECKS == 'true'
         run: find .github/scripts website/scripts packages/tooling-config/scripts -name '*.sh' -exec shellcheck {} +
 
       - name: Setup environment
-        if: env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
+        if: >-
+          env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
+          || env.RUN_WEBSITE_CHECKS == 'true' || env.RUN_DOCS_CHECKS == 'true'
         uses: ./.github/actions/setup
 
       # The CI gate script decides which jobs the rest of the matrix skips, so
@@ -76,6 +87,23 @@ jobs:
       - name: Run Prettier
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run prettier
+
+      # `turbo run prettier`/`turbo run lint` above only iterate the
+      # `packages/*` workspaces -- docs/ and website/ aren't packages, so
+      # they need their own, separately scoped Prettier pass.
+      - name: Run Prettier (docs & website)
+        if: env.RUN_DOCS_CHECKS == 'true' || env.RUN_WEBSITE_CHECKS == 'true'
+        run: >-
+          bunx prettier --config packages/tooling-config/prettier/index.mjs
+          "docs/**/*.md" "website/**/*.{js,jsx,css,json}" --ignore-path .gitignore --check
+
+      - name: Run markdownlint
+        if: env.RUN_DOCS_CHECKS == 'true'
+        run: bunx markdownlint-cli2
+
+      - name: Run stylelint
+        if: env.RUN_WEBSITE_CHECKS == 'true'
+        run: bunx stylelint "website/src/**/*.css" --config website/stylelint.config.mjs
 
       - name: Run ESLint
         if: env.RUN_CODE_CHECKS == 'true'

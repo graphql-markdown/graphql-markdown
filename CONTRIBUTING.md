@@ -303,7 +303,7 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
   bun run build
   ```
 
-2. **Use the publish script** (recommended):
+1. **Use the publish script** (recommended):
 
   ```shell
   # Single package
@@ -315,7 +315,7 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
   node packages/tooling-config/scripts/publish-release.mts --dry-run
   ```
 
-3. **Or manually with bun pack + npm publish tarball**:
+1. **Or manually with bun pack + npm publish tarball**:
 
   ```shell
   cd packages/<package-name>

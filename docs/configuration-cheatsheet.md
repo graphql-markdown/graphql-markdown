@@ -19,23 +19,23 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 
 ## Essential Options
 
-| Option     | Type     | Default    | Description                                               |
-| ---------- | -------- | ---------- | --------------------------------------------------------- |
-| `schema`   | `string` | —          | **Required**. Path to schema file or introspection result |
-| `rootPath` | `string` | `./docs`   | Root folder for documentation generation                  |
-| `baseURL`  | `string` | `schema`   | Base URL path and output folder name under `rootPath`     |
+| Option     | Type     | Default  | Description                                               |
+| ---------- | -------- | -------- | --------------------------------------------------------- |
+| `schema`   | `string` | —        | **Required**. Path to schema file or introspection result |
+| `rootPath` | `string` | `./docs` | Root folder for documentation generation                  |
+| `baseURL`  | `string` | `schema` | Base URL path and output folder name under `rootPath`     |
 
 ## Document Structure
 
-| Option             | Type                   | Default        | Description                                                      |
-| ------------------ | ---------------------- | -------------- | ---------------------------------------------------------------- |
-| `linkRoot`         | `string`               | `/`            | Root path used for type cross-links in generated documentation   |
-| `homepage`         | `string` \| `false`    | `generated.md` | Custom homepage content file, `false` to disable                 |
-| `hierarchy`        | `string`               | `api`          | Documentation structure: `api`, `entity`, or `flat`              |
-| `index`            | `boolean`              | `false`        | Generate category indices                                        |
-| `categorySort`     | `string` \| `function` | —              | Sort categories: `"natural"` for alphabetical or custom function |
-| `sectionHeaderId`  | `boolean`              | `true`         | Generate custom section header IDs for permalinks                |
-| `pretty`           | `boolean`              | `false`        | Format generated Markdown files                                  |
+| Option            | Type                   | Default        | Description                                                      |
+| ----------------- | ---------------------- | -------------- | ---------------------------------------------------------------- |
+| `linkRoot`        | `string`               | `/`            | Root path used for type cross-links in generated documentation   |
+| `homepage`        | `string` \| `false`    | `generated.md` | Custom homepage content file, `false` to disable                 |
+| `hierarchy`       | `string`               | `api`          | Documentation structure: `api`, `entity`, or `flat`              |
+| `index`           | `boolean`              | `false`        | Generate category indices                                        |
+| `categorySort`    | `string` \| `function` | —              | Sort categories: `"natural"` for alphabetical or custom function |
+| `sectionHeaderId` | `boolean`              | `true`         | Generate custom section header IDs for permalinks                |
+| `pretty`          | `boolean`              | `false`        | Format generated Markdown files                                  |
 
 ## Content Options
 
@@ -55,41 +55,41 @@ For formatter-based setups, prefer `formatter`. The older `mdxParser` setting an
 
 ## Build Control Options
 
-| Option        | Type      | Default | Description                                                       |
-| ------------- | --------- | ------- | ----------------------------------------------------------------- |
-| `force`       | `boolean` | `false` | Force regeneration of all files                                   |
-| `diffMethod`  | `string`  | `NONE`  | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH`   |
-| `tmpDir`      | `string`  | —       | Temporary directory for storing schema signature (used by diff)   |
-| `pretty`      | `boolean` | `false` | Format output files with Prettier (requires `prettier` installed) |
-| `formatter`   | `string`  | —       | Package name or path to a custom formatter module                 |
-| `outputAdapter` | `object` | fs     | Write pages somewhere other than the local filesystem             |
+| Option          | Type      | Default | Description                                                       |
+| --------------- | --------- | ------- | ----------------------------------------------------------------- |
+| `force`         | `boolean` | `false` | Force regeneration of all files                                   |
+| `diffMethod`    | `string`  | `NONE`  | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH`   |
+| `tmpDir`        | `string`  | —       | Temporary directory for storing schema signature (used by diff)   |
+| `pretty`        | `boolean` | `false` | Format output files with Prettier (requires `prettier` installed) |
+| `formatter`     | `string`  | —       | Package name or path to a custom formatter module                 |
+| `outputAdapter` | `object`  | fs      | Write pages somewhere other than the local filesystem             |
 
 ## CLI Flags
 
 All config options can be passed as CLI flags to `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone CLI).
 
-| Flag                              | Config option                         | Description                                    |
-| --------------------------------- | ------------------------------------- | ---------------------------------------------- |
-| `-s, --schema <path>`             | `schema`                              | Schema file, URL, or introspection JSON        |
-| `-b, --base <baseURL>`            | `baseURL`                             | Base URL and output folder name                |
-| `-r, --root <rootPath>`           | `rootPath`                            | Root output folder                             |
-| `-l, --link <linkRoot>`           | `linkRoot`                            | Root path for cross-links                      |
-| `-h, --homepage <file>`           | `homepage`                            | Custom homepage file                           |
-| `-f, --force`                     | `force`                               | Skip diff, always regenerate                   |
-| `-d, --diff <method>`             | `diffMethod`                          | Diff method (`NONE`, `SCHEMA-DIFF`, etc.)      |
-| `-t, --tmp <dir>`                 | `tmpDir`                              | Temp dir for schema diffing                    |
-| `--index`                         | `docOptions.index`                    | Generate category index pages                  |
-| `--hierarchy <type>`              | `printTypeOptions.hierarchy`          | Folder structure: `api`, `entity`, `flat`      |
-| `--deprecated <option>`           | `printTypeOptions.deprecated`         | `default`, `group`, or `skip`                  |
-| `--noParentType`                  | `printTypeOptions.parentTypePrefix`   | Hide parent type prefix on fields              |
-| `--noTypeBadges`                  | `printTypeOptions.typeBadges`         | Hide type attribute badges                     |
-| `--noSectionId`                   | `docOptions.sectionHeaderId`          | Disable section header IDs for permalinks      |
-| `--only <@directive...>`          | `onlyDocDirective`                    | Include only types with these directives       |
-| `--skip <@directive...>`          | `skipDocDirective`                    | Exclude types with these directives            |
-| `--groupByDirective <expr>`       | `groupByDirective`                    | Group by directive: `@dir(field\|=fallback)`   |
-| `--pretty`                        | `pretty`                              | Format output with Prettier                    |
-| `--formatter <pkg>`[^1]           | `formatter`                           | Formatter package name or path                 |
-| `--mdxParser <pkg>`[^1]           | ~~`mdxParser`~~ (deprecated)          | Deprecated alias for `formatter`               |
-| `--config`                        | —                                     | Print resolved config (debug)                  |
+| Flag                        | Config option                       | Description                                  |
+| --------------------------- | ----------------------------------- | -------------------------------------------- |
+| `-s, --schema <path>`       | `schema`                            | Schema file, URL, or introspection JSON      |
+| `-b, --base <baseURL>`      | `baseURL`                           | Base URL and output folder name              |
+| `-r, --root <rootPath>`     | `rootPath`                          | Root output folder                           |
+| `-l, --link <linkRoot>`     | `linkRoot`                          | Root path for cross-links                    |
+| `-h, --homepage <file>`     | `homepage`                          | Custom homepage file                         |
+| `-f, --force`               | `force`                             | Skip diff, always regenerate                 |
+| `-d, --diff <method>`       | `diffMethod`                        | Diff method (`NONE`, `SCHEMA-DIFF`, etc.)    |
+| `-t, --tmp <dir>`           | `tmpDir`                            | Temp dir for schema diffing                  |
+| `--index`                   | `docOptions.index`                  | Generate category index pages                |
+| `--hierarchy <type>`        | `printTypeOptions.hierarchy`        | Folder structure: `api`, `entity`, `flat`    |
+| `--deprecated <option>`     | `printTypeOptions.deprecated`       | `default`, `group`, or `skip`                |
+| `--noParentType`            | `printTypeOptions.parentTypePrefix` | Hide parent type prefix on fields            |
+| `--noTypeBadges`            | `printTypeOptions.typeBadges`       | Hide type attribute badges                   |
+| `--noSectionId`             | `docOptions.sectionHeaderId`        | Disable section header IDs for permalinks    |
+| `--only <@directive...>`    | `onlyDocDirective`                  | Include only types with these directives     |
+| `--skip <@directive...>`    | `skipDocDirective`                  | Exclude types with these directives          |
+| `--groupByDirective <expr>` | `groupByDirective`                  | Group by directive: `@dir(field\|=fallback)` |
+| `--pretty`                  | `pretty`                            | Format output with Prettier                  |
+| `--formatter <pkg>`[^1]     | `formatter`                         | Formatter package name or path               |
+| `--mdxParser <pkg>`[^1]     | ~~`mdxParser`~~ (deprecated)        | Deprecated alias for `formatter`             |
+| `--config`                  | —                                   | Print resolved config (debug)                |
 
 [^1]: The `--formatter` and `--mdxParser` flags are only registered when the CLI is set up with a default formatter package, as done by `@graphql-markdown/docusaurus`. The standalone `gqlmd` command does not expose them &mdash; set `formatter` in your configuration file instead.

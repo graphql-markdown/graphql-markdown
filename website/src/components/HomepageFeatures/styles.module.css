@@ -71,7 +71,9 @@
   text-align: center;
   padding: 2rem 1.5rem;
   border-radius: 10px;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s;
 }
 
 .featureCard:hover {
