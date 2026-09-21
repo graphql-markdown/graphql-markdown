@@ -136,7 +136,7 @@ describe("computeAffected() documentation and tooling", () => {
   test("returns nothing to run for a documentation-only change", () => {
     expect(
       computeAffected(
-        ["docs/settings.md", "README.md", "api/index.md", "website/src/app.js"],
+        ["docs/settings.md", "README.md", "api/index.md"],
         packagesMap,
       ),
     ).toMatchObject({
@@ -145,8 +145,34 @@ describe("computeAffected() documentation and tooling", () => {
       direct_packages: [],
       smoke: false,
       workflows: false,
+      docs: true,
+      website: false,
       docs_only: true,
     });
+  });
+
+  test("flags the website so its own checks run, without touching package/smoke/workflow detection", () => {
+    // `website/` used to sit in the same exclusion list as `docs/`, which
+    // meant none of the Docusaurus site's own source (React components, CSS,
+    // shell scripts) was ever checked by anything. It is real source, not
+    // prose, so it gets its own signal instead of being lumped in as "docs".
+    expect(
+      computeAffected(["website/src/css/custom.css"], packagesMap),
+    ).toMatchObject({
+      code: false,
+      packages: [],
+      smoke: false,
+      workflows: false,
+      docs: false,
+      website: true,
+      docs_only: false,
+    });
+  });
+
+  test("flags website/scripts changes as website, not workflows", () => {
+    expect(
+      computeAffected(["website/scripts/build-docs.sh"], packagesMap),
+    ).toMatchObject({ workflows: false, website: true, docs_only: false });
   });
 
   test("ignores documentation shipped inside a package", () => {

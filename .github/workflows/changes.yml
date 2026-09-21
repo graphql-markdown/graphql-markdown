@@ -32,8 +32,14 @@ on:
       workflows:
         description: Something under .github/ changed
         value: ${{ jobs.changes.outputs.workflows }}
+      docs:
+        description: Documentation prose (docs/, api/, Markdown) changed
+        value: ${{ jobs.changes.outputs.docs }}
+      website:
+        description: The Docusaurus site (website/) changed
+        value: ${{ jobs.changes.outputs.website }}
       docs_only:
-        description: Nothing outside documentation changed
+        description: Nothing outside documentation and the website changed
         value: ${{ jobs.changes.outputs.docs_only }}
 
 jobs:
@@ -48,6 +54,8 @@ jobs:
       smoke_cli: ${{ steps.affected.outputs.smoke_cli }}
       smoke_docusaurus: ${{ steps.affected.outputs.smoke_docusaurus }}
       workflows: ${{ steps.affected.outputs.workflows }}
+      docs: ${{ steps.affected.outputs.docs }}
+      website: ${{ steps.affected.outputs.website }}
       docs_only: ${{ steps.affected.outputs.docs_only }}
     steps:
       - name: Checkout Code Base
@@ -81,5 +89,7 @@ jobs:
             echo "| smoke_cli | ${{ steps.affected.outputs.smoke_cli }} |"
             echo "| smoke_docusaurus | ${{ steps.affected.outputs.smoke_docusaurus }} |"
             echo "| workflows | ${{ steps.affected.outputs.workflows }} |"
+            echo "| docs | ${{ steps.affected.outputs.docs }} |"
+            echo "| website | ${{ steps.affected.outputs.website }} |"
             echo "| docs_only | ${{ steps.affected.outputs.docs_only }} |"
           } >> "$GITHUB_STEP_SUMMARY"
