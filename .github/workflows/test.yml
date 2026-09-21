@@ -153,3 +153,56 @@ jobs:
         run: |
           cd packages/graphql
           bun test:ci
+
+  # A single required check standing in for the whole matrix, so the
+  # `main-checklist` ruleset only has to name one job instead of one entry per
+  # `matrix.package`/`matrix.graphql` value. `needs.<job>.result` already
+  # aggregates a matrix job into one success/failure/skipped verdict, so
+  # nothing here has to re-derive that from the matrix definitions above; the
+  # ruleset's required-checks list stops needing an edit whenever a package is
+  # added or removed.
+  gate:
+    name: Test Gate
+    runs-on: ubuntu-latest
+    needs: [test, graphql-compat]
+    if: always()
+    # `actions: read` to list this run's jobs, `pull-requests: write` to post
+    # the summary comment -- both only needed for the comment step below.
+    permissions:
+      actions: read
+      pull-requests: write
+    steps:
+      - name: Require all matrix jobs to have passed
+        run: |
+          for result in "${{ needs.test.result }}" "${{ needs.graphql-compat.result }}"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::required job result was '$result'"
+              exit 1
+            fi
+          done
+
+      # Skipped for pushes to main (no PR to comment on) and for PRs from
+      # forks, whose GITHUB_TOKEN GitHub restricts to read-only regardless of
+      # the `permissions:` above -- the write calls would just fail there.
+      - name: Checkout Code Base
+        if: >-
+          always()
+          && github.event_name == 'pull_request'
+          && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+          sparse-checkout: .github
+
+      - name: Post summary comment
+        if: >-
+          always()
+          && github.event_name == 'pull_request'
+          && github.event.pull_request.head.repo.full_name == github.repository
+        uses: ./.github/actions/gate-comment
+        with:
+          gate-name: Test Gate
+          gate-marker: test
+          job-prefixes: '["Test "]'
+          exclude-job-name: Test Gate
+          github-token: ${{ secrets.GITHUB_TOKEN }}

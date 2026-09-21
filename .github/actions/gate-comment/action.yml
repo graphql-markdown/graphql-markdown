@@ -1,0 +1,40 @@
+name: Post gate summary comment
+description: Posts or updates a sticky PR comment summarizing a gate's matrix job results
+
+inputs:
+  gate-name:
+    description: Heading shown in the comment, e.g. "Test Gate"
+    required: true
+  gate-marker:
+    description: Unique id used as the sticky-comment marker, e.g. "test"
+    required: true
+  job-prefixes:
+    description: JSON array of job-name prefixes belonging to this gate
+    required: true
+  exclude-job-name:
+    description: The gate job's own name, excluded from the summary
+    required: true
+  github-token:
+    description: Token used to read this run's jobs and read/write the PR comment
+    required: true
+
+# Callers must check out the repo (at least `.github/`) before this step, so
+# the local `uses: ./.github/actions/gate-comment` reference itself resolves.
+runs:
+  using: composite
+  steps:
+    - name: Setup NodeJS LTS
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+      with:
+        node-version: "lts/*"
+
+    - name: Post summary comment
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        PR_NUMBER: ${{ github.event.pull_request.number }}
+        GATE_NAME: ${{ inputs.gate-name }}
+        GATE_MARKER: ${{ inputs.gate-marker }}
+        JOB_PREFIXES: ${{ inputs.job-prefixes }}
+        EXCLUDE_JOB_NAME: ${{ inputs.exclude-job-name }}
+      run: node .github/scripts/gate-comment.mts
