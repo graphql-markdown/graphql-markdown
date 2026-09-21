@@ -184,11 +184,17 @@ jobs:
       # Skipped for pushes to main (no PR to comment on) and for PRs from
       # forks, whose GITHUB_TOKEN GitHub restricts to read-only regardless of
       # the `permissions:` above -- the write calls would just fail there.
+      #
+      # `continue-on-error: true` on both: the comment is informational, so a
+      # transient `gh api` failure here (rate limit, a run with enough jobs to
+      # paginate) must not turn an otherwise-green matrix into a failed
+      # required check. Only the "Require ..." step above decides the gate.
       - name: Checkout Code Base
         if: >-
           always()
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
@@ -199,6 +205,7 @@ jobs:
           always()
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
         uses: ./.github/actions/gate-comment
         with:
           gate-name: Test Gate

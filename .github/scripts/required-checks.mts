@@ -36,39 +36,76 @@ interface RequiredCheck {
   integration_id?: number;
 }
 
-function main(): void {
-  if (!process.argv.includes("--apply") && !process.argv.includes("--dry-run")) {
-    console.log(JSON.stringify(CI_CHECKS, null, 2));
-    return;
-  }
+interface RequiredStatusChecksRule {
+  type: string;
+  parameters?: { required_status_checks?: RequiredCheck[] };
+}
 
-  const current = JSON.parse(execFileSync("gh", ["api", RULESET]).toString());
-  const rule = current.rules.find((r: { type: string }) => r.type === "required_status_checks");
-  const existing: RequiredCheck[] = rule?.parameters?.required_status_checks ?? [];
+interface Ruleset {
+  rules: RequiredStatusChecksRule[];
+}
 
-  // Third-party app checks always carry an `integration_id`; CI-owned checks
-  // (ours or any stale leftovers from before this script) never do.
+interface Merge {
+  ruleset: Ruleset;
+  appChecks: RequiredCheck[];
+  merged: RequiredCheck[];
+}
+
+function fetchRuleset(): Ruleset {
+  return JSON.parse(execFileSync("gh", ["api", RULESET]).toString());
+}
+
+function putRuleset(ruleset: Ruleset): void {
+  execFileSync("gh", ["api", "--method", "PUT", RULESET, "--input", "-"], {
+    input: JSON.stringify(ruleset),
+    stdio: ["pipe", "inherit", "inherit"],
+  });
+}
+
+/**
+ * The live ruleset merged with `CI_CHECKS`. Third-party app checks always
+ * carry an `integration_id`; CI-owned checks never do, so that field alone
+ * tells the two apart without needing to name every app check by hand.
+ */
+function computeMerge(): Merge {
+  const ruleset = fetchRuleset();
+  const rule = ruleset.rules.find((r) => r.type === "required_status_checks");
+  const existing = rule?.parameters?.required_status_checks ?? [];
   const appChecks = existing.filter((c) => c.integration_id != null);
-  const merged: RequiredCheck[] = [...appChecks, ...CI_CHECKS.map((context) => ({ context }))];
+  const merged = [...appChecks, ...CI_CHECKS.map((context) => ({ context }))];
 
-  if (process.argv.includes("--dry-run")) {
-    console.log(`Kept (app, ${appChecks.length}):`, appChecks.map((c) => c.context));
-    console.log(`Set (CI, ${CI_CHECKS.length}):`, CI_CHECKS);
-    console.log(`Total after apply: ${merged.length}`);
-    return;
-  }
+  return { ruleset, appChecks, merged };
+}
 
-  for (const r of current.rules) {
-    if (r.type === "required_status_checks") {
-      r.parameters.required_status_checks = merged;
+function printChecks(): void {
+  console.log(JSON.stringify(CI_CHECKS, null, 2));
+}
+
+function printDryRun({ appChecks, merged }: Merge): void {
+  console.log(`Kept (app, ${appChecks.length}):`, appChecks.map((c) => c.context));
+  console.log(`Set (CI, ${CI_CHECKS.length}):`, CI_CHECKS);
+  console.log(`Total after apply: ${merged.length}`);
+}
+
+function apply({ ruleset, appChecks, merged }: Merge): void {
+  for (const rule of ruleset.rules) {
+    if (rule.type === "required_status_checks" && rule.parameters) {
+      rule.parameters.required_status_checks = merged;
     }
   }
 
-  execFileSync("gh", ["api", "--method", "PUT", RULESET, "--input", "-"], {
-    input: JSON.stringify(current),
-    stdio: ["pipe", "inherit", "inherit"],
-  });
+  putRuleset(ruleset);
   console.log(`\nApplied ${merged.length} required checks (${CI_CHECKS.length} CI + ${appChecks.length} app).`);
+}
+
+function main(): void {
+  if (process.argv.includes("--apply")) {
+    apply(computeMerge());
+  } else if (process.argv.includes("--dry-run")) {
+    printDryRun(computeMerge());
+  } else {
+    printChecks();
+  }
 }
 
 main();

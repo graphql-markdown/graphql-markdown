@@ -196,11 +196,16 @@ jobs:
             fi
           done
 
+      # `continue-on-error: true` on both: the comment is informational, so a
+      # transient `gh api` failure here must not turn an otherwise-green
+      # matrix into a failed required check. Only the "Require ..." step
+      # above decides the gate.
       - name: Checkout Code Base
         if: >-
           always()
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           persist-credentials: false
@@ -211,6 +216,7 @@ jobs:
           always()
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: true
         uses: ./.github/actions/gate-comment
         with:
           gate-name: Smoke Gate
