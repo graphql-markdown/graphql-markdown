@@ -127,6 +127,9 @@ jobs:
 
   # See test.yml's `gate` job: one required check standing in for the whole
   # `matrix.package` matrix, so the ruleset doesn't need an entry per package.
+  # Unlike test.yml, `mutation` can skip at the *job* level (draft PRs, see
+  # its `if:` above), so `skipped` is an accepted outcome here too -- a job
+  # that was never supposed to run must not block the merge.
   gate:
     name: Mutation Gate
     runs-on: ubuntu-latest
@@ -136,10 +139,11 @@ jobs:
       actions: read
       pull-requests: write
     steps:
-      - name: Require the matrix job to have passed
+      - name: Require the matrix job to have passed or been skipped
         run: |
-          if [ "${{ needs.mutation.result }}" != "success" ]; then
-            echo "::error::required job result was '${{ needs.mutation.result }}'"
+          result="${{ needs.mutation.result }}"
+          if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
+            echo "::error::required job result was '$result'"
             exit 1
           fi
 

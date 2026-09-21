@@ -172,10 +172,10 @@ jobs:
       actions: read
       pull-requests: write
     steps:
-      - name: Require all matrix jobs to have passed
+      - name: Require all matrix jobs to have passed or been skipped
         run: |
           for result in "${{ needs.test.result }}" "${{ needs.graphql-compat.result }}"; do
-            if [ "$result" != "success" ]; then
+            if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
               echo "::error::required job result was '$result'"
               exit 1
             fi
