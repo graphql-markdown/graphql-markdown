@@ -209,7 +209,7 @@
     "knip": "6.37.0",
     "lodash.filter": "4.6.0",
     "markdownlint-cli2": "^0.23.3",
-    "memfs": "4.78.1",
+    "memfs": "4.79.0",
     "mutation-testing-metrics": "3.9.0",
     "prettier": "catalog:",
     "stylelint": "^17.15.0",
