@@ -348,15 +348,18 @@ export const toLink = (
     operationLeafName,
   );
 
-  const url = pathUrl.join(
-    options.basePath,
-    formatFolder(deprecatedFolder),
-    formatFolder(groupFolder),
-    formatFolder(apiGroupFolder),
-    isFlat ? "" : formatFolder(category ?? ""),
-    ...namespaceFolders,
-    leafSegment,
-  );
+  const leafLink: string[] = isFlat
+    ? [`#${leafSegment}`]
+    : [
+        formatFolder(deprecatedFolder),
+        formatFolder(groupFolder),
+        formatFolder(apiGroupFolder),
+        formatFolder(category ?? ""),
+        ...namespaceFolders,
+        leafSegment,
+      ];
+
+  const url = pathUrl.join(options.basePath, ...leafLink);
 
   const link = {
     text,
@@ -443,6 +446,19 @@ const isLinkType = (arg: unknown): arg is TypeLink => {
   );
 };
 
+export const printFormattedLink = (
+  text: string,
+  link: TypeLink,
+  options: PrintLinkOptions,
+): string => {
+  // create a permalink if url is not provided or is just a hash
+  if ((!link.url || link.url === "#") && typeof link.id === "string") {
+    const linkUrl = options.sectionHeaderId ? link.id : "";
+    return `[${text}](#${linkUrl})`;
+  }
+  return `[${text}](${link.url})`;
+};
+
 /**
  * Prints a link for a GraphQL type based on the provided options.
  *
@@ -465,26 +481,17 @@ export const printLink = <T>(
     link = toLink(arg, getTypeName(arg, toString(arg)), undefined, options);
   }
 
-  const printFormattedLink = (text: string, link: TypeLink): string => {
-    // create a permalink if url is not provided or is just a hash
-    if ((!link.url || link.url === "#") && typeof link.id === "string") {
-      const linkUrl = options.sectionHeaderId ? link.id : "";
-      return `[${text}](#${linkUrl})`;
-    }
-    return `[${text}](${link.url})`;
-  };
-
   if (!hasOptionWithAttributes(options)) {
     const textWithAttribute = options.formatMDXNameEntity!(
       link.text,
       options.parentType,
     );
-    return printFormattedLink(textWithAttribute, link);
+    return printFormattedLink(textWithAttribute, link, options);
   }
 
   const text = printLinkAttributes(arg, link.text);
 
-  return printFormattedLink(options.formatMDXNameEntity!(text), link);
+  return printFormattedLink(options.formatMDXNameEntity!(text), link, options);
 };
 
 /**

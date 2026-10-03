@@ -531,7 +531,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "TestDirective",
-          "url": "docs/graphql/directives-test-directive",
+          "url": "docs/graphql/#directives-test-directive",
         }
       `);
     });
@@ -580,7 +580,7 @@ describe("link", () => {
       expect(link).toMatchInlineSnapshot(`
         {
           "text": "analytics.aggregateTournaments",
-          "url": "docs/graphql/queries-analytics-aggregate-tournaments",
+          "url": "docs/graphql/#queries-analytics-aggregate-tournaments",
         }
       `);
     });

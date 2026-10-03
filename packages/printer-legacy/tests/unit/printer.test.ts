@@ -314,6 +314,7 @@ describe("Printer", () => {
           "parentType": undefined,
           "parentTypePrefix": false,
           "schema": GraphQLSchema {
+            "__kind": Symbol(Schema),
             "__validationErrors": undefined,
             "_directives": [
               "@include",
@@ -325,7 +326,7 @@ describe("Printer", () => {
             "_implementationsMap": {},
             "_mutationType": undefined,
             "_queryType": undefined,
-            "_subTypeMap": {},
+            "_subTypeMap": Map {},
             "_subscriptionType": undefined,
             "_typeMap": {
               "Boolean": "Boolean",
@@ -339,6 +340,7 @@ describe("Printer", () => {
               "__Type": "__Type",
               "__TypeKind": "__TypeKind",
             },
+            "assumeValid": false,
             "astNode": undefined,
             "description": undefined,
             "extensionASTNodes": [],
