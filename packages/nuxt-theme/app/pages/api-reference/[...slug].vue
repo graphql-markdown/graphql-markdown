@@ -104,7 +104,7 @@ const isLandingPage = computed(
 
 const { sections, overviewGroupsFor } = await useApiNavigation();
 const { isFlat } = await useHierarchyMode();
-const { buckets } = await useApiSinglePage();
+const { buckets } = await useApiSinglePage(isFlat.value);
 const overviewGroups = computed(() =>
   isLandingPage.value ? overviewGroupsFor(route.path) : [],
 );

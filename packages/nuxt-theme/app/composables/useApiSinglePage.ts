@@ -201,7 +201,9 @@ const buildEntry = async (
  * one page. Consumers with very large schemas should prefer `"api"`/`"entity"`
  * hierarchy over `"flat"`.
  */
-export const useApiSinglePage = async (): Promise<{
+export const useApiSinglePage = async (
+  enabled = true,
+): Promise<{
   buckets: ComputedRef<ApiSinglePageBucket[]>;
 }> => {
   const config = useAppConfig();
@@ -212,9 +214,17 @@ export const useApiSinglePage = async (): Promise<{
   // — which both call this composable under flat hierarchy — share one
   // cached result under this key instead of each redoing the Shiki
   // highlighting pass.
+  // When `enabled` is false (non-flat hierarchy) the handler returns empty
+  // buckets without querying or highlighting, under a distinct key.
   const { data: buckets } = await useAsyncData(
-    "api-reference-single-page",
-    async () => {
+    enabled
+      ? "api-reference-single-page"
+      : "api-reference-single-page-disabled",
+    async (): Promise<ApiSinglePageBucket[]> => {
+      if (!enabled) {
+        return [];
+      }
+
       const items = await queryCollection("content")
         .order("path", "ASC")
         .select("path", "title", "body", "meta")

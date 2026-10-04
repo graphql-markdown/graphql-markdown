@@ -77,6 +77,18 @@ describe("useApiSinglePage", () => {
     expect(types.entries.map((entry) => entry.title)).toEqual(["ID", "User"]);
   });
 
+  it("returns empty buckets without querying when disabled", async () => {
+    setUpPages([
+      { path: "/api-reference/user", title: "User", kind: "objects", body: pageBody("type User { id: ID! }", "A user.") },
+    ]);
+
+    const { buckets } = await useApiSinglePage(false);
+
+    expect(buckets.value).toEqual([]);
+    expect(mockQueryCollection).not.toHaveBeenCalled();
+    expect(mockUseAsyncData.mock.calls[0][0]).toBe("api-reference-single-page-disabled");
+  });
+
   it("reads the anchor id from the page's own (already-unique) path segment", async () => {
     // @graphql-markdown/core's flat-hierarchy renderer already disambiguates
     // a same-named query and type by prefixing the generated *filename*

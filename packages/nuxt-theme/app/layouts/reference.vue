@@ -96,7 +96,7 @@ const isSidebarOpen = ref(true);
 // the stricter ContentNavigationLink (which extends this with only optional
 // fields), so the same cast satisfies it too.
 const { isFlat } = await useHierarchyMode();
-const { buckets } = await useApiSinglePage();
+const { buckets } = await useApiSinglePage(isFlat.value);
 const { sections } = await useApiNavigation();
 
 const navigationSections = computed(() =>
