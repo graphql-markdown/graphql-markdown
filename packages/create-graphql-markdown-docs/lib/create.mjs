@@ -13,13 +13,13 @@ const packageRoot = path.resolve(__dirname, "..");
 const templatesRoot = path.resolve(packageRoot, "templates");
 
 /** Supported scaffold targets; each maps to `templates/<framework>`. */
-export const FRAMEWORKS = ["nuxt", "docusaurus"];
+const FRAMEWORKS = ["nuxt", "docusaurus"];
 
 /**
  * Maps each package manager to its install command and arguments.
  * Each entry is [command, args] to be passed to spawn().
  */
-export const INSTALL_COMMANDS = {
+const INSTALL_COMMANDS = {
   npm: ["npm", ["install"]],
   pnpm: ["pnpm", ["install"]],
   yarn: ["yarn", []],
@@ -44,7 +44,7 @@ export const INSTALL_COMMANDS = {
  * path or a URL) to pick the loader graphql-markdown needs to actually read
  * it; order matters, first match wins.
  */
-export const LOADERS = [
+const LOADERS = [
   {
     id: "url",
     match: (source) => /^https?:\/\//i.test(source),
@@ -443,16 +443,32 @@ export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
   fs.writeFileSync(readmePath, updated);
 }
 
-/**
- * Run the scaffolder; resolves to the process exit code (never exits itself).
- */
-export async function main(argv = process.argv.slice(2)) {
-  prompts.intro(`✨ Welcome to GraphQL Markdown Docs`);
+/** Thrown to abort the scaffold with an exit code; the message was already logged. */
+class CliExit extends Error {
+  constructor(code = 1) {
+    super("cli-exit");
+    this.code = code;
+  }
+}
 
-  // ============================================================================
-  // PHASE 1: Parse command-line arguments
-  // ============================================================================
-  const { values: args } = parseArgs({
+/** Abort the run when a prompt was cancelled; otherwise return its value. */
+function unlessCancelled(value) {
+  if (prompts.isCancel(value)) {
+    prompts.cancel("Setup cancelled.");
+    throw new CliExit(1);
+  }
+  return value;
+}
+
+/** Log an error and abort the run. */
+function fail(message) {
+  prompts.log.error(message);
+  throw new CliExit(1);
+}
+
+/** Phase 1: parse command-line arguments. */
+export function parseCliArgs(argv) {
+  const { values } = parseArgs({
     args: argv,
     options: {
       framework: { type: "string" },
@@ -468,62 +484,36 @@ export async function main(argv = process.argv.slice(2)) {
     },
     allowPositionals: false,
   });
+  return values;
+}
 
-  let framework = args.framework;
-  let projectDir = args.dir;
-  let schemaPath = args.schema;
-  let useExample = args.example;
-  let packageManager = args.pm;
-  const siteTitle = args.title;
-  const primaryColor = args.color;
-  const noInstall = args["no-install"];
-  const noGit = args["no-git"];
-  const isYes = args.yes;
-
-  // Create a temporary directory for scaffolding
-  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-"));
-
-  try {
-    // =========================================================================
-    // PHASE 2: Gather decisions through prompts (project dir, schema, pm, title/color)
-    // =========================================================================
-
-    // Step 2.0: Framework
-    if (framework && !FRAMEWORKS.includes(framework)) {
-      prompts.log.error(
-        `Invalid --framework "${framework}" — expected one of: ${FRAMEWORKS.join(", ")}.`,
+async function resolveFramework(args) {
+  if (args.framework) {
+    if (!FRAMEWORKS.includes(args.framework)) {
+      fail(
+        `Invalid --framework "${args.framework}" — expected one of: ${FRAMEWORKS.join(", ")}.`,
       );
-      return 1;
     }
+    return args.framework;
+  }
+  if (args.yes) return "nuxt";
+  return unlessCancelled(
+    await prompts.select({
+      message: "Which framework would you like to use?",
+      options: [
+        { value: "nuxt", label: "Nuxt (@graphql-markdown/nuxt-theme)" },
+        { value: "docusaurus", label: "Docusaurus" },
+      ],
+    }),
+  );
+}
 
-    if (!framework) {
-      if (isYes) {
-        framework = "nuxt";
-      } else {
-        framework = await prompts.select({
-          message: "Which framework would you like to use?",
-          options: [
-            { value: "nuxt", label: "Nuxt (@graphql-markdown/nuxt-theme)" },
-            { value: "docusaurus", label: "Docusaurus" },
-          ],
-        });
-
-        if (prompts.isCancel(framework)) {
-          prompts.cancel("Setup cancelled.");
-          return 1;
-        }
-      }
-    }
-
-    const isDocusaurus = framework === "docusaurus";
-    const templateDir = path.join(templatesRoot, framework);
-
-    // Step 2.1: Project directory
-    if (!projectDir) {
-      if (isYes) {
-        projectDir = "./my-graphql-docs";
-      } else {
-        projectDir = await prompts.text({
+async function resolveProjectDir(args) {
+  let projectDir = args.dir;
+  if (!projectDir) {
+    projectDir = args.yes
+      ? "./my-graphql-docs"
+      : await prompts.text({
           message: "Where should we create your project?",
           defaultValue: "./my-graphql-docs",
           validate: (value) => {
@@ -533,281 +523,292 @@ export async function main(argv = process.argv.slice(2)) {
             return;
           },
         });
-      }
-    }
+  }
+  projectDir = path.resolve(unlessCancelled(projectDir));
 
-    if (prompts.isCancel(projectDir)) {
-      prompts.cancel("Setup cancelled.");
-      return 1;
-    }
+  // Refuse a non-empty target outright — never overwrite existing files,
+  // in interactive mode or --yes. There is no confirm-to-overwrite path:
+  // the scaffold later does an unconditional `rmSync(projectDir, {
+  // recursive: true })` before writing, so "confirm then proceed" would
+  // still mean deleting whatever was there first. If you want to scaffold
+  // into that directory, empty or remove it yourself first.
+  if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
+    fail(
+      `${projectDir} already exists and is not empty — refusing to overwrite it.`,
+    );
+  }
+  return projectDir;
+}
 
-    projectDir = path.resolve(projectDir);
+function validateSchemaSource(value) {
+  if (!value) return "Schema source is required";
+  if (!isRemoteSchemaSource(value) && !fs.existsSync(value)) {
+    return "Schema file not found";
+  }
+  return;
+}
 
-    // Refuse a non-empty target outright — never overwrite existing files,
-    // in interactive mode or --yes. There is no confirm-to-overwrite path:
-    // the scaffold later does an unconditional `rmSync(projectDir, {
-    // recursive: true })` before writing, so "confirm then proceed" would
-    // still mean deleting whatever was there first. If you want to scaffold
-    // into that directory, empty or remove it yourself first.
-    if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
-      prompts.log.error(
-        `${projectDir} already exists and is not empty — refusing to overwrite it.`,
-      );
-      return 1;
-    }
+/** Resolves the custom schema source, or undefined to use the bundled example. */
+async function resolveSchemaPath(args) {
+  if (args.example || args.schema || args.yes) return args.schema;
 
-    // Step 2.2: Schema choice and validation
-    if (!useExample && !schemaPath) {
-      if (isYes) {
-        useExample = true;
-      } else {
-        const schemaChoice = await prompts.select({
-          message: "How would you like to provide your GraphQL schema?",
-          options: [
-            {
-              value: "example",
-              label: "Use example schema (recommended for first-time)",
-            },
-            { value: "existing", label: "Use an existing schema file" },
-          ],
-        });
+  const schemaChoice = unlessCancelled(
+    await prompts.select({
+      message: "How would you like to provide your GraphQL schema?",
+      options: [
+        {
+          value: "example",
+          label: "Use example schema (recommended for first-time)",
+        },
+        { value: "existing", label: "Use an existing schema file" },
+      ],
+    }),
+  );
+  if (schemaChoice !== "existing") return undefined;
 
-        if (prompts.isCancel(schemaChoice)) {
-          prompts.cancel("Setup cancelled.");
-          return 1;
-        }
+  return unlessCancelled(
+    await prompts.text({
+      message:
+        "Path or URL to your GraphQL schema (local file, introspection endpoint, git:/github: ref):",
+      validate: validateSchemaSource,
+    }),
+  );
+}
 
-        useExample = schemaChoice === "example";
-        if (schemaChoice === "existing") {
-          schemaPath = await prompts.text({
-            message:
-              "Path or URL to your GraphQL schema (local file, introspection endpoint, git:/github: ref):",
-            validate: (value) => {
-              if (!value) return "Schema source is required";
-              if (!isRemoteSchemaSource(value) && !fs.existsSync(value)) {
-                return "Schema file not found";
-              }
-              return;
-            },
-          });
-
-          if (prompts.isCancel(schemaPath)) {
-            prompts.cancel("Setup cancelled.");
-            return 1;
-          }
-        }
-      }
-    }
-
-    // Validate a local schema file's syntax (skipped for remote sources —
-    // fetching one just to lint it isn't worth the network round trip here;
-    // `nuxi generate` will surface a real error if it's actually invalid).
-    if (schemaPath && !isRemoteSchemaSource(schemaPath)) {
-      const isValid = await validateGraphQLSchema(schemaPath);
-      if (!isValid) {
-        prompts.log.warn(
-          `${schemaPath} did not parse as a valid GraphQL schema — continuing anyway, but double-check it.`,
-        );
-      }
-    }
-
-    // Every schema source needs the matching graphql-tools loader
-    // (github.com/ardatan/graphql-tools/tree/master/packages/loaders) —
-    // detect it from the source and report the choice; `--yes` and
-    // interactive runs both get this, there's no meaningful "which loader"
-    // question to ask separately, it's implied by the source itself.
-    const loader = detectLoader(schemaPath ?? "schema/example.graphql");
-    if (schemaPath && !loader.isDefault) {
-      prompts.log.info(
-        `Detected schema source needs ${loader.package} (${loader.className}) — adding it as a dependency.`,
-      );
-    }
-
-    // Step 2.3: Package manager detection
-    if (!packageManager) {
-      const detected = await detectPackageManager({ cwd: process.cwd() });
-      if (detected && detected.name) {
-        packageManager = detected.name;
-      } else {
-        if (isYes) {
-          packageManager = "npm";
-        } else {
-          packageManager = await prompts.select({
-            message: "Which package manager would you like to use?",
-            options: [
-              { value: "npm", label: "npm" },
-              { value: "pnpm", label: "pnpm" },
-              { value: "yarn", label: "yarn" },
-              { value: "bun", label: "bun" },
-            ],
-          });
-
-          if (prompts.isCancel(packageManager)) {
-            prompts.cancel("Setup cancelled.");
-            return 1;
-          }
-        }
-      }
-    }
-
-    // Step 2.4: Optional title and color customization
-    let titleOverride = siteTitle ?? "";
-    let colorOverride = primaryColor ?? "";
-    if (isDocusaurus && colorOverride) {
+/** Validates a local schema and detects the loader it needs. */
+async function resolveLoader(schemaPath) {
+  // Validate a local schema file's syntax (skipped for remote sources —
+  // fetching one just to lint it isn't worth the network round trip here;
+  // `nuxi generate` will surface a real error if it's actually invalid).
+  if (schemaPath && !isRemoteSchemaSource(schemaPath)) {
+    const isValid = await validateGraphQLSchema(schemaPath);
+    if (!isValid) {
       prompts.log.warn(
-        "--color only applies to the Nuxt template — ignoring it for Docusaurus.",
+        `${schemaPath} did not parse as a valid GraphQL schema — continuing anyway, but double-check it.`,
       );
-      colorOverride = "";
     }
-    if (!isYes) {
-      const customizeTheme = await prompts.confirm({
-        message: "Would you like to customize the site title and appearance?",
-        initialValue: false,
-      });
+  }
 
-      if (!prompts.isCancel(customizeTheme) && customizeTheme) {
-        if (!siteTitle) {
-          const customTitle = await prompts.text({
-            message: "Site title:",
-            defaultValue: "My API",
-          });
-          if (!prompts.isCancel(customTitle) && customTitle) {
-            titleOverride = customTitle;
-          }
-        }
+  // Every schema source needs the matching graphql-tools loader — detect it
+  // from the source and report the choice.
+  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
+  if (schemaPath && !loader.isDefault) {
+    prompts.log.info(
+      `Detected schema source needs ${loader.package} (${loader.className}) — adding it as a dependency.`,
+    );
+  }
+  return loader;
+}
 
-        if (!isDocusaurus && !colorOverride) {
-          const customColor = await prompts.text({
-            message:
-              "Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):",
-          });
-          if (!prompts.isCancel(customColor) && customColor) {
-            colorOverride = customColor;
-          }
-        }
-      }
-    }
+async function resolvePackageManager(args) {
+  if (args.pm) return args.pm;
+  const detected = await detectPackageManager({ cwd: process.cwd() });
+  if (detected && detected.name) return detected.name;
+  if (args.yes) return "npm";
+  return unlessCancelled(
+    await prompts.select({
+      message: "Which package manager would you like to use?",
+      options: [
+        { value: "npm", label: "npm" },
+        { value: "pnpm", label: "pnpm" },
+        { value: "yarn", label: "yarn" },
+        { value: "bun", label: "bun" },
+      ],
+    }),
+  );
+}
 
-    // =========================================================================
-    // PHASE 3: Apply template transformations
-    // =========================================================================
+/** Asks for a value; a cancelled or empty answer yields `fallback`. */
+async function askOptional(options, fallback) {
+  const answer = await prompts.text(options);
+  return !prompts.isCancel(answer) && answer ? answer : fallback;
+}
 
-    // Copy template to temp directory
-    copyDirRecursive(templateDir, tempDir, [
-      /^node_modules$/,
-      /^\.nuxt$/,
-      /^\.output$/,
-    ]);
+/** Warns when --color is passed to a framework that ignores it. */
+function initialColor(args, isDocusaurus) {
+  const color = args.color ?? "";
+  if (isDocusaurus && color) {
+    prompts.log.warn(
+      "--color only applies to the Nuxt template — ignoring it for Docusaurus.",
+    );
+    return "";
+  }
+  return color;
+}
 
-    // Step 3.1: Rewrite the site title (and color, for Nuxt)
-    if (isDocusaurus) {
-      writeDocusaurusConfig(tempDir, titleOverride);
-    } else {
-      writeAppConfig(tempDir, titleOverride, colorOverride);
-    }
+/** Whether the user wants to customize title/color interactively. */
+async function wantsCustomization() {
+  const answer = await prompts.confirm({
+    message: "Would you like to customize the site title and appearance?",
+    initialValue: false,
+  });
+  return !prompts.isCancel(answer) && Boolean(answer);
+}
 
-    // Step 3.2: Resolve the schema reference and copy local schema if needed
-    let schemaRef = "./schema/example.graphql";
-    const templateExamplePath = path.join(tempDir, "schema", "example.graphql");
-    if (schemaPath && isRemoteSchemaSource(schemaPath)) {
-      // Nothing to copy — the bundled example is unused, drop it so it
-      // doesn't sit there implying it's still what gets generated.
-      fs.rmSync(templateExamplePath, { force: true });
-      schemaRef = schemaPath;
-    } else if (schemaPath) {
-      const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
-      const destSchema = path.join(tempDir, "schema", destName);
-      if (destSchema !== templateExamplePath) {
-        fs.rmSync(templateExamplePath, { force: true });
-      }
-      fs.copyFileSync(schemaPath, destSchema);
-      schemaRef = `./schema/${destName}`;
-    }
+/** Optional title and color customization. */
+async function promptCustomization(args, isDocusaurus) {
+  let title = args.title ?? "";
+  let color = initialColor(args, isDocusaurus);
+  if (args.yes || !(await wantsCustomization())) return { title, color };
 
-    if (isDocusaurus) {
-      // Step 3.3: Rewrite .graphqlrc for the schema and loader
-      writeGraphqlrc(tempDir, schemaRef, loader);
-    } else {
-      // Step 3.3: Rewrite generate-docs.ts for the schema and loader
-      writeGenerateDocs(tempDir, schemaRef, loader);
+  if (!args.title) {
+    title = await askOptional(
+      { message: "Site title:", defaultValue: "My API" },
+      title,
+    );
+  }
+  if (!isDocusaurus && !color) {
+    color = await askOptional(
+      {
+        message:
+          "Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):",
+      },
+      color,
+    );
+  }
+  return { title, color };
+}
 
-      // Step 3.4: Rewrite nuxt.config.ts for the schema
-      writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
-    }
+/** Copies a local schema into the scaffold (or drops the example for remote ones). */
+function placeSchema(tempDir, schemaPath) {
+  const templateExamplePath = path.join(tempDir, "schema", "example.graphql");
+  if (!schemaPath) return "./schema/example.graphql";
 
-    // Step 3.5: Rewrite package.json with project name and loader dependency
-    writePackageJson(tempDir, projectDir, loader);
+  if (isRemoteSchemaSource(schemaPath)) {
+    // Nothing to copy — the bundled example is unused, drop it so it
+    // doesn't sit there implying it's still what gets generated.
+    fs.rmSync(templateExamplePath, { force: true });
+    return schemaPath;
+  }
 
-    // Step 3.6: Rewrite README.md's schema section (Nuxt only — the
-    // Docusaurus README already documents editing .graphqlrc generically)
-    if (!isDocusaurus) {
-      writeReadme(tempDir, schemaPath, schemaRef, loader);
-    }
+  const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
+  const destSchema = path.join(tempDir, "schema", destName);
+  if (destSchema !== templateExamplePath) {
+    fs.rmSync(templateExamplePath, { force: true });
+  }
+  fs.copyFileSync(schemaPath, destSchema);
+  return `./schema/${destName}`;
+}
 
-    // =========================================================================
-    // PHASE 4: Move into place, install dependencies, init git, print summary
-    // =========================================================================
+/** Phase 3: copy the template and apply all rewrites. */
+function applyTemplate(tempDir, ctx) {
+  const { framework, projectDir, schemaPath, loader, title, color } = ctx;
+  const isDocusaurus = framework === "docusaurus";
 
-    // Move from temp to target directory
-    if (fs.existsSync(projectDir)) {
-      fs.rmSync(projectDir, { recursive: true, force: true });
-    }
-    try {
-      fs.renameSync(tempDir, projectDir);
-    } catch (err) {
-      if (err.code !== "EXDEV") throw err;
-      // temp dir is on another filesystem; the finally block removes it
-      fs.cpSync(tempDir, projectDir, { recursive: true });
-    }
+  copyDirRecursive(path.join(templatesRoot, framework), tempDir, [
+    /^node_modules$/,
+    /^\.nuxt$/,
+    /^\.output$/,
+  ]);
 
-    prompts.log.success("Project created successfully!");
+  const schemaRef = placeSchema(tempDir, schemaPath);
 
-    // Step 4.1: Install dependencies (unless --no-install)
-    if (!noInstall) {
-      if (!isYes) {
-        const shouldInstall = await prompts.confirm({
-          message: "Install dependencies now?",
-          initialValue: true,
-        });
+  if (isDocusaurus) {
+    writeDocusaurusConfig(tempDir, title);
+    writeGraphqlrc(tempDir, schemaRef, loader);
+  } else {
+    writeAppConfig(tempDir, title, color);
+    writeGenerateDocs(tempDir, schemaRef, loader);
+    writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
+  }
 
-        if (!prompts.isCancel(shouldInstall) && shouldInstall) {
-          await installDependencies(packageManager, projectDir);
-        }
-      } else {
-        await installDependencies(packageManager, projectDir);
-      }
-    }
+  writePackageJson(tempDir, projectDir, loader);
 
-    // Step 4.2: Initialize git repo (unless --no-git)
-    if (!noGit) {
-      if (!isYes) {
-        const shouldGit = await prompts.confirm({
-          message: "Initialize a git repository?",
-          initialValue: true,
-        });
+  // The Docusaurus README already documents editing .graphqlrc generically.
+  if (!isDocusaurus) {
+    writeReadme(tempDir, schemaPath, schemaRef, loader);
+  }
+}
 
-        if (!prompts.isCancel(shouldGit) && shouldGit) {
-          await initGitRepo(projectDir);
-        }
-      } else {
-        await initGitRepo(projectDir);
-      }
-    }
+function moveIntoPlace(tempDir, projectDir) {
+  if (fs.existsSync(projectDir)) {
+    fs.rmSync(projectDir, { recursive: true, force: true });
+  }
+  try {
+    fs.renameSync(tempDir, projectDir);
+  } catch (err) {
+    if (err.code !== "EXDEV") throw err;
+    // temp dir is on another filesystem; the caller removes it afterwards
+    fs.cpSync(tempDir, projectDir, { recursive: true });
+  }
+}
 
-    // Step 4.3: Final summary
-    const nextSteps = isDocusaurus
+/** Runs `action` immediately with --yes, otherwise only after a confirmed prompt. */
+async function confirmThen(isYes, message, action) {
+  if (isYes) return action();
+  const confirmed = await prompts.confirm({ message, initialValue: true });
+  if (!prompts.isCancel(confirmed) && confirmed) return action();
+}
+
+/** Phase 4: install dependencies, init git, print summary. */
+async function finalize(args, ctx) {
+  const { projectDir, packageManager, framework } = ctx;
+  const isYes = Boolean(args.yes);
+
+  if (!args["no-install"]) {
+    await confirmThen(isYes, "Install dependencies now?", () =>
+      installDependencies(packageManager, projectDir),
+    );
+  }
+  if (!args["no-git"]) {
+    await confirmThen(isYes, "Initialize a git repository?", () =>
+      initGitRepo(projectDir),
+    );
+  }
+
+  const nextSteps =
+    framework === "docusaurus"
       ? `  2. ${packageManager} run doc\n  3. ${packageManager} start`
       : `  2. ${packageManager} run dev`;
-    prompts.outro(`
+  prompts.outro(`
 Next steps:
   1. cd ${projectDir}
 ${nextSteps}
 
 Documentation: https://graphql-markdown.dev
     `);
+}
+
+async function scaffold(args, tempDir) {
+  const framework = await resolveFramework(args);
+  const projectDir = await resolveProjectDir(args);
+  const schemaPath = await resolveSchemaPath(args);
+  const loader = await resolveLoader(schemaPath);
+  const packageManager = await resolvePackageManager(args);
+  const { title, color } = await promptCustomization(
+    args,
+    framework === "docusaurus",
+  );
+
+  applyTemplate(tempDir, {
+    framework,
+    projectDir,
+    schemaPath,
+    loader,
+    title,
+    color,
+  });
+  moveIntoPlace(tempDir, projectDir);
+  prompts.log.success("Project created successfully!");
+
+  await finalize(args, { projectDir, packageManager, framework });
+}
+
+/**
+ * Run the scaffolder; resolves to the process exit code (never exits itself).
+ */
+export async function main(argv = process.argv.slice(2)) {
+  prompts.intro(`✨ Welcome to GraphQL Markdown Docs`);
+  const args = parseCliArgs(argv);
+
+  const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-"));
+  try {
+    await scaffold(args, tempDir);
     return 0;
+  } catch (error) {
+    if (error instanceof CliExit) return error.code;
+    throw error;
   } finally {
-    // Clean up temp directory if it still exists
     if (fs.existsSync(tempDir)) {
       fs.rmSync(tempDir, { recursive: true, force: true });
     }
