@@ -16,7 +16,35 @@
     "packages/tooling-config/typedoc/**",
     "tests/ci/**",
     "tests/e2e/*/specs/*.spec.mjs",
-    "tests/e2e/helpers/**"
+    "tests/e2e/helpers/**",
+    "packages/nuxt-theme/app/assets/css/main.css",
+    "packages/nuxt-theme/generate-docs.ts",
+    "packages/nuxt-theme/tests/global-setup.mjs",
+    "packages/nuxt-theme/tests/fixture*/content.config.ts",
+    "packages/nuxt-theme/tests/fixture*/generate-docs.ts",
+    "packages/nuxt-theme/tests/fixture*/schema/*.graphql",
+  ],
+
+  // nuxt-theme is a Nuxt layer: its entries are wired by nuxt.config.ts (css),
+  // vitest.config.mjs (globalSetup) and the Nuxt Content/CLI runtimes, none of
+  // which fallow traces. The test fixtures extend the layer and override its
+  // SiteHeader component, which looks like a package cycle (see package-cycle
+  // under `rules`).
+
+  // `vue` is provided by Nuxt, not listed in the layer's package.json.
+  "ignoreUnresolvedImports": ["vue"],
+
+  // formatter.ts is loaded dynamically by @graphql-markdown/cli as a formatter
+  // module; SwizzleEntry is the public type of the manifest.
+  "ignoreExports": [
+    {
+      "file": "packages/nuxt-theme/formatter.ts",
+      "exports": ["*"],
+    },
+    {
+      "file": "packages/nuxt-theme/swizzle.manifest.ts",
+      "exports": ["SwizzleEntry"],
+    },
   ],
 
   // website/ is a Docusaurus app outside the packages/* workspace —
@@ -82,7 +110,9 @@
     "lodash.filter",
     "graphql",
     "memfs",
-    "mutation-testing-metrics"
+    "mutation-testing-metrics",
+    "better-sqlite3",
+    "shiki",
   ],
 
   // Class member false-positive suppressions.
@@ -115,7 +145,7 @@
     "addFromConfig",
     "addFromCli",
     "get",
-    "build"
+    "build",
   ],
 
   "production": false,
@@ -128,12 +158,19 @@
     // packages/formatters/src/**  — 8 preset implementations intentionally share structure
     // packages/formatters/tests/** — each formatter test file tests the same Formatter
     //   interface contract; structural similarity is by design, not copy-paste debt
-    "ignore": ["packages/formatters/**"]
+    "ignore": [
+      "packages/formatters/**",
+      "packages/nuxt-theme/tests/fixture*/**",
+    ],
   },
 
   "rules": {
     // unlisted-dependencies: tooling-config's ESLint/TypeDoc plugins are used
     //   transitively across all packages but listed only in tooling-config.
-    "unlisted-dependencies": "warn"
-  }
+    "unlisted-dependencies": "warn",
+    // package-cycle: nuxt-theme tests/fixture* extend the layer, and the layer's
+    //   reference.vue resolves <SiteHeader> to the fixture's override. That is
+    //   Nuxt layer resolution, not a real build-order dependency.
+    "package-cycle": "off",
+  },
 }
