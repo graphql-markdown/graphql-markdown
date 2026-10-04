@@ -2,13 +2,13 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 
 const FIXTURE_DIR = join(import.meta.dirname, "../fixture-multi");
 const NUXI = join(FIXTURE_DIR, "node_modules/.bin/nuxi");
 const BUILD_TIMEOUT = 120_000;
 
-function runNuxi(args: string[]): void {
+const runNuxi = (args: string[]): void => {
   try {
     execFileSync(process.execPath, [NUXI, ...args], {
       cwd: FIXTURE_DIR,
@@ -18,9 +18,11 @@ function runNuxi(args: string[]): void {
   } catch (error) {
     const stdout = (error as { stdout?: string }).stdout ?? "";
     const stderr = (error as { stderr?: string }).stderr ?? "";
-    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`);
+    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`, {
+      cause: error,
+    });
   }
-}
+};
 
 /**
  * All setup — cold-clean and generate — happens once here so every `it()`
@@ -41,7 +43,7 @@ describe("Multi-schema fixture", () => {
       join(FIXTURE_DIR, ".output"),
       join(FIXTURE_DIR, "content"),
     ]) {
-      if (existsSync(dir)) rmDirSync(dir);
+      if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
     }
 
     // Cold-build to verify multi-schema generation and prerendering works.
@@ -49,17 +51,26 @@ describe("Multi-schema fixture", () => {
   }, BUILD_TIMEOUT * 2);
 
   it("generated content for schema-a at api-reference/schema-a", async () => {
-    const contentPath = join(FIXTURE_DIR, "content/api-reference/schema-a/generated.md");
+    const contentPath = join(
+      FIXTURE_DIR,
+      "content/api-reference/schema-a/generated.md",
+    );
     expect(existsSync(contentPath)).toBe(true);
   });
 
   it("generated content for schema-b at api-reference/schema-b", async () => {
-    const contentPath = join(FIXTURE_DIR, "content/api-reference/schema-b/generated.md");
+    const contentPath = join(
+      FIXTURE_DIR,
+      "content/api-reference/schema-b/generated.md",
+    );
     expect(existsSync(contentPath)).toBe(true);
   });
 
   it("prerendered schema-a landing page with Schema Documentation header", async () => {
-    const landingPagePath = join(FIXTURE_DIR, ".output/public/api-reference/schema-a/index.html");
+    const landingPagePath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/schema-a/index.html",
+    );
     expect(existsSync(landingPagePath)).toBe(true);
 
     const content = await readFile(landingPagePath, "utf-8");
@@ -67,7 +78,10 @@ describe("Multi-schema fixture", () => {
   });
 
   it("prerendered schema-b landing page with Schema Documentation header", async () => {
-    const landingPagePath = join(FIXTURE_DIR, ".output/public/api-reference/schema-b/index.html");
+    const landingPagePath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/schema-b/index.html",
+    );
     expect(existsSync(landingPagePath)).toBe(true);
 
     const content = await readFile(landingPagePath, "utf-8");
@@ -75,7 +89,10 @@ describe("Multi-schema fixture", () => {
   });
 
   it("schema-a namespace has no cross-contamination links to schema-b", async () => {
-    const landingPagePath = join(FIXTURE_DIR, ".output/public/api-reference/schema-a/index.html");
+    const landingPagePath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/schema-a/index.html",
+    );
     const content = await readFile(landingPagePath, "utf-8");
 
     // Verify schema-a page does NOT contain links to schema-b
@@ -83,7 +100,10 @@ describe("Multi-schema fixture", () => {
   });
 
   it("shared baseURL root provides fallback with links to both namespaces", async () => {
-    const fallbackPath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const fallbackPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     expect(existsSync(fallbackPath)).toBe(true);
 
     const content = await readFile(fallbackPath, "utf-8");
@@ -96,14 +116,8 @@ describe("Multi-schema fixture", () => {
   it("prerendered 3-level-deep nested route under schema-a namespace", () => {
     const nestedPath = join(
       FIXTURE_DIR,
-      ".output/public/api-reference/schema-a/types/objects/user/index.html"
+      ".output/public/api-reference/schema-a/types/objects/user/index.html",
     );
     expect(existsSync(nestedPath)).toBe(true);
   });
 });
-
-function rmDirSync(dir: string): void {
-  // node:fs/promises' rm isn't available synchronously; beforeAll here is
-  // intentionally sync so cleanup fully completes before `runNuxi` starts.
-  require("node:fs").rmSync(dir, { recursive: true, force: true });
-}

@@ -11,7 +11,9 @@ describe("swizzleManifest", () => {
   });
 
   it("should have unique IDs", () => {
-    const ids = swizzleManifest.map((e) => e.id);
+    const ids = swizzleManifest.map((e) => {
+      return e.id;
+    });
     const uniqueIds = new Set(ids);
     expect(uniqueIds.size).toBe(ids.length);
   });
@@ -43,17 +45,19 @@ describe("swizzleManifest", () => {
     const componentDir = join(packageRoot, "app/components");
     if (existsSync(componentDir)) {
       const files = readdirSync(componentDir)
-        .filter((f) => f.endsWith(".vue"))
+        .filter((f) => {
+          return f.endsWith(".vue");
+        })
         .sort();
 
       for (const file of files) {
         const fullPath = `app/components/${file}`;
-        const hasEntry = swizzleManifest.some(
-          (e) => e.sourcePath === fullPath
-        );
+        const hasEntry = swizzleManifest.some((e) => {
+          return e.sourcePath === fullPath;
+        });
         expect(
           hasEntry,
-          `File app/components/${file} should have a manifest entry`
+          `File app/components/${file} should have a manifest entry`,
         ).toBe(true);
       }
     }
@@ -63,17 +67,19 @@ describe("swizzleManifest", () => {
     const layoutDir = join(packageRoot, "app/layouts");
     if (existsSync(layoutDir)) {
       const files = readdirSync(layoutDir, { recursive: true })
-        .filter((f) => typeof f === "string" && f.endsWith(".vue"))
+        .filter((f) => {
+          return typeof f === "string" && f.endsWith(".vue");
+        })
         .sort();
 
       for (const file of files) {
         const fullPath = `app/layouts/${file}`;
-        const hasEntry = swizzleManifest.some(
-          (e) => e.sourcePath === fullPath
-        );
+        const hasEntry = swizzleManifest.some((e) => {
+          return e.sourcePath === fullPath;
+        });
         expect(
           hasEntry,
-          `File app/layouts/${file} should have a manifest entry`
+          `File app/layouts/${file} should have a manifest entry`,
         ).toBe(true);
       }
     }
@@ -83,17 +89,19 @@ describe("swizzleManifest", () => {
     const pageDir = join(packageRoot, "app/pages");
     if (existsSync(pageDir)) {
       const files = readdirSync(pageDir, { recursive: true })
-        .filter((f) => typeof f === "string" && f.endsWith(".vue"))
+        .filter((f) => {
+          return typeof f === "string" && f.endsWith(".vue");
+        })
         .sort();
 
       for (const file of files) {
         const fullPath = `app/pages/${file}`;
-        const hasEntry = swizzleManifest.some(
-          (e) => e.sourcePath === fullPath
-        );
+        const hasEntry = swizzleManifest.some((e) => {
+          return e.sourcePath === fullPath;
+        });
         expect(
           hasEntry,
-          `File app/pages/${file} should have a manifest entry`
+          `File app/pages/${file} should have a manifest entry`,
         ).toBe(true);
       }
     }

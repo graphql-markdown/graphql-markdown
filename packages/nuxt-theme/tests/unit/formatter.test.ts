@@ -9,9 +9,13 @@ describe("formatMDXFrontmatter", () => {
   });
 
   it("appends a kind line when context.entity is provided", () => {
-    const result = formatMDXFrontmatter(undefined, ["id: user", "title: User"], {
-      entity: "objects",
-    });
+    const result = formatMDXFrontmatter(
+      undefined,
+      ["id: user", "title: User"],
+      {
+        entity: "objects",
+      },
+    );
 
     expect(result).toBe("---\nid: user\ntitle: User\nkind: objects\n---");
   });
@@ -23,7 +27,9 @@ describe("formatMDXFrontmatter", () => {
   });
 
   it("omits the kind line when context.entity is null or undefined", () => {
-    expect(formatMDXFrontmatter(undefined, ["title: User"], {})).not.toContain("kind:");
+    expect(formatMDXFrontmatter(undefined, ["title: User"], {})).not.toContain(
+      "kind:",
+    );
     expect(
       formatMDXFrontmatter(undefined, ["title: User"], { entity: null }),
     ).not.toContain("kind:");

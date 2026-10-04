@@ -9,17 +9,23 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const promptState = vi.hoisted(() => ({
-  select: vi.fn(),
-  confirm: vi.fn(),
-  cancelled: Symbol("cancel"),
-}));
+const promptState = vi.hoisted(() => {
+  return {
+    select: vi.fn(),
+    confirm: vi.fn(),
+    cancelled: Symbol("cancel"),
+  };
+});
 
-vi.mock("@clack/prompts", () => ({
-  select: promptState.select,
-  confirm: promptState.confirm,
-  isCancel: (value: unknown) => value === promptState.cancelled,
-}));
+vi.mock("@clack/prompts", () => {
+  return {
+    select: promptState.select,
+    confirm: promptState.confirm,
+    isCancel: (value: unknown) => {
+      return value === promptState.cancelled;
+    },
+  };
+});
 
 const swizzle = await import("../../bin/swizzle.mjs");
 const { swizzleManifest } = await import("../../swizzle.manifest.mjs");
@@ -104,7 +110,9 @@ describe("swizzle CLI functions", () => {
   });
 
   describe("checkSwizzled", () => {
-    const target = () => join(cwd, entry.targetPath);
+    const target = () => {
+      return join(cwd, entry.targetPath);
+    };
 
     it("warns when the stamped version differs", () => {
       mkdirSync(join(target(), ".."), { recursive: true });

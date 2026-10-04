@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig.json",
+  "extends": "./tsconfig.scripts.json",
+
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
+
+    "isolatedModules": true,
+
+    "types": ["node", "vitest/globals"]
+  },
+
+  "include": ["tests/**/*.ts"],
+  "exclude": ["tests/fixture*/**", ".nuxt", "node_modules"]
+}

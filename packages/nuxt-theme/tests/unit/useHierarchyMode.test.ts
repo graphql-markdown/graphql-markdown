@@ -2,13 +2,17 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Create minimal mock implementations for Vue's ref and computed
 // These don't need to be fully functional - just need to track values
-const createRef = (value: unknown) => ({
-  value,
-});
+const createRef = (value: unknown) => {
+  return {
+    value,
+  };
+};
 
-const createComputed = (getter: () => unknown) => ({
-  value: getter(),
-});
+const createComputed = (getter: () => unknown) => {
+  return {
+    value: getter(),
+  };
+};
 
 // Mock Nuxt globals that are not available in plain vitest environment
 const mockUseAsyncData = vi.fn();
@@ -22,9 +26,8 @@ globalThis.queryCollection = mockQueryCollection;
 globalThis.computed = createComputed;
 
 // Now import the composable after globals are set up
-const { useHierarchyMode } = await import(
-  "../../app/composables/useHierarchyMode"
-);
+const { useHierarchyMode } =
+  await import("../../app/composables/useHierarchyMode");
 
 describe("useHierarchyMode", () => {
   beforeEach(() => {
@@ -46,7 +49,9 @@ describe("useHierarchyMode", () => {
     });
 
     mockUseAsyncData.mockImplementation((key, callback) => {
-      return callback().then((data) => ({ data: createRef(data) }));
+      return callback().then((data) => {
+        return { data: createRef(data) };
+      });
     });
 
     mockUseAppConfig.mockReturnValue({
@@ -70,7 +75,9 @@ describe("useHierarchyMode", () => {
     });
 
     mockUseAsyncData.mockImplementation((key, callback) => {
-      return callback().then((data) => ({ data: createRef(data) }));
+      return callback().then((data) => {
+        return { data: createRef(data) };
+      });
     });
 
     mockUseAppConfig.mockReturnValue({
@@ -91,7 +98,9 @@ describe("useHierarchyMode", () => {
     });
 
     mockUseAsyncData.mockImplementation((key, callback) => {
-      return callback().then((data) => ({ data: createRef(data) }));
+      return callback().then((data) => {
+        return { data: createRef(data) };
+      });
     });
 
     mockUseAppConfig.mockReturnValue({
@@ -115,7 +124,9 @@ describe("useHierarchyMode", () => {
     });
 
     mockUseAsyncData.mockImplementation((key, callback) => {
-      return callback().then((data) => ({ data: createRef(data) }));
+      return callback().then((data) => {
+        return { data: createRef(data) };
+      });
     });
 
     mockUseAppConfig.mockReturnValue({

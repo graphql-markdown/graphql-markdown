@@ -8,7 +8,7 @@ const FIXTURE_DIR = join(import.meta.dirname, "../fixture-flat");
 const NUXI = join(FIXTURE_DIR, "node_modules/.bin/nuxi");
 const BUILD_TIMEOUT = 120_000;
 
-function runNuxi(args: string[]): void {
+const runNuxi = (args: string[]): void => {
   try {
     execFileSync(process.execPath, [NUXI, ...args], {
       cwd: FIXTURE_DIR,
@@ -18,9 +18,11 @@ function runNuxi(args: string[]): void {
   } catch (error) {
     const stdout = (error as { stdout?: string }).stdout ?? "";
     const stderr = (error as { stderr?: string }).stderr ?? "";
-    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`);
+    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`, {
+      cause: error,
+    });
   }
-}
+};
 
 /**
  * `hierarchy: "flat"` is the thing this fixture exists to exercise (see
@@ -49,7 +51,10 @@ describe("Flat-hierarchy fixture app", () => {
   });
 
   it("shows the single-page reference at the base route, not the per-type landing grid", async () => {
-    const rootPath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const rootPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     expect(existsSync(rootPath)).toBe(true);
 
     const content = await readFile(rootPath, "utf-8");
@@ -58,7 +63,9 @@ describe("Flat-hierarchy fixture app", () => {
     // isn't a reliable signal on its own — this checks for the overview
     // grid's actual body copy instead, which only `ApiNamespaceLanding`
     // renders.
-    expect(content).not.toContain("Browse the workspace API by operation or schema type");
+    expect(content).not.toContain(
+      "Browse the workspace API by operation or schema type",
+    );
     expect(content).not.toContain("Choose a Namespace");
 
     // Bucket headings, in Anvil's order — no mutations/subscriptions in this
@@ -67,7 +74,9 @@ describe("Flat-hierarchy fixture app", () => {
     expect(content).toContain('id="types"');
     expect(content).not.toContain('id="mutations"');
     expect(content).not.toContain('id="subscriptions"');
-    expect(content.indexOf('id="queries"')).toBeLessThan(content.indexOf('id="types"'));
+    expect(content.indexOf('id="queries"')).toBeLessThan(
+      content.indexOf('id="types"'),
+    );
   });
 
   it("keeps a same-named query and type as distinct entries instead of one overwriting the other", async () => {
@@ -77,7 +86,10 @@ describe("Flat-hierarchy fixture app", () => {
     // `user.md` filename, silently letting the second write clobber the
     // first. This is the regression test for that fix, exercised through
     // the whole stack: generator -> content -> rendered page.
-    const rootPath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const rootPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     const content = await readFile(rootPath, "utf-8");
 
     expect(content).toContain('id="queries-user"');
@@ -86,18 +98,30 @@ describe("Flat-hierarchy fixture app", () => {
   });
 
   it("every sidebar anchor link resolves to a real heading id on the same page", async () => {
-    const rootPath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const rootPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     const content = await readFile(rootPath, "utf-8");
 
-    const hrefs = [...content.matchAll(/href="#([a-zA-Z0-9_-]+)"/g)].map((match) => match[1]);
+    const hrefs = [...content.matchAll(/href="#([a-zA-Z0-9_-]+)"/g)].map(
+      (match) => {
+        return match[1];
+      },
+    );
     expect(hrefs.length).toBeGreaterThan(0);
     for (const href of hrefs) {
-      expect(content, `#${href} is linked but has no matching id`).toContain(`id="${href}"`);
+      expect(content, `#${href} is linked but has no matching id`).toContain(
+        `id="${href}"`,
+      );
     }
   });
 
   it("rendered the deprecated field's callout on the single page", async () => {
-    const rootPath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const rootPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     const content = await readFile(rootPath, "utf-8");
 
     expect(content).toContain("Use active field instead");
@@ -108,7 +132,10 @@ describe("Flat-hierarchy fixture app", () => {
     // it), but under flat hierarchy `[...slug].vue` redirects any direct
     // visit to it — including its own real, now kind-prefixed path — back to
     // the single page, since the per-type view is never the intended UI here.
-    const perTypePath = join(FIXTURE_DIR, ".output/public/api-reference/objects-user/index.html");
+    const perTypePath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/objects-user/index.html",
+    );
     expect(existsSync(perTypePath)).toBe(true);
 
     const content = await readFile(perTypePath, "utf-8");

@@ -21,7 +21,9 @@ describe("gqlmd-swizzle CLI", () => {
       if (error.stdout) {
         output = error.stdout;
       } else {
-        throw new Error(`CLI failed to run: ${error.message}`);
+        throw new Error(`CLI failed to run: ${error.message}`, {
+          cause: error,
+        });
       }
     }
 
@@ -30,7 +32,9 @@ describe("gqlmd-swizzle CLI", () => {
     try {
       jsonOutput = JSON.parse(output);
     } catch (error) {
-      throw new Error(`CLI output is not valid JSON: ${output}`);
+      throw new Error(`CLI output is not valid JSON: ${output}`, {
+        cause: error,
+      });
     }
 
     // Verify it's an array
@@ -64,12 +68,18 @@ describe("gqlmd-swizzle CLI", () => {
       if (error.stdout) {
         output = error.stdout;
       } else {
-        throw new Error(`CLI failed to run: ${error.message}`);
+        throw new Error(`CLI failed to run: ${error.message}`, {
+          cause: error,
+        });
       }
     }
 
     const jsonOutput = JSON.parse(output);
-    expect(jsonOutput.map((e) => e.id)).toEqual([
+    expect(
+      jsonOutput.map((e) => {
+        return e.id;
+      }),
+    ).toEqual([
       "SiteHeader",
       "SiteFooter",
       "SchemaCodeCard",

@@ -3,17 +3,25 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-const hooks = vi.hoisted(() => ({
-  nuxt: {
-    options: { rootDir: "", appConfig: {} as Record<string, unknown> },
-    hook: vi.fn(),
-  },
-}));
+const hooks = vi.hoisted(() => {
+  return {
+    nuxt: {
+      options: { rootDir: "", appConfig: {} as Record<string, unknown> },
+      hook: vi.fn(),
+    },
+  };
+});
 
-vi.mock("@nuxt/kit", () => ({
-  defineNuxtModule: (definition: unknown) => definition,
-  useNuxt: () => hooks.nuxt,
-}));
+vi.mock("@nuxt/kit", () => {
+  return {
+    defineNuxtModule: (definition: unknown) => {
+      return definition;
+    },
+    useNuxt: () => {
+      return hooks.nuxt;
+    },
+  };
+});
 
 const mod = await import("../../modules/prerender");
 

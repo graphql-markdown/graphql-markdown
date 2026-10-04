@@ -3,19 +3,41 @@ import { mkdtemp, readdir, readFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-vi.mock("@nuxt/kit", () => ({
-  useLogger: () => ({ info: () => {}, error: () => {} }),
-}));
+vi.mock("@nuxt/kit", () => {
+  return {
+    useLogger: () => {
+      return { info: () => {}, error: () => {} };
+    },
+  };
+});
 
 const { createGenerateDocs } = await import("../../generate");
 
-const FIXTURE_SCHEMA = join(import.meta.dirname, "../fixture/schema/fixture.graphql");
+const FIXTURE_SCHEMA = join(
+  import.meta.dirname,
+  "../fixture/schema/fixture.graphql",
+);
 const tempDirs: string[] = [];
 
-async function generateInto(
+const walk = async (dir: string, prefix = ""): Promise<string[]> => {
+  const files: string[] = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) {
+      files.push(...(await walk(join(dir, entry.name), rel)));
+    } else {
+      files.push(rel);
+    }
+  }
+  return files;
+};
+
+const generateInto = async (
   hierarchy: "api" | "entity" | "flat",
-): Promise<{ files: string[]; rootPath: string }> {
-  const rootPath = await mkdtemp(join(tmpdir(), `nuxt-theme-hierarchy-${hierarchy}-`));
+): Promise<{ files: string[]; rootPath: string }> => {
+  const rootPath = await mkdtemp(
+    join(tmpdir(), `nuxt-theme-hierarchy-${hierarchy}-`),
+  );
   tempDirs.push(rootPath);
 
   // Deliberately does not override `formatter` — this exercises nuxt-theme's
@@ -31,20 +53,7 @@ async function generateInto(
 
   const files = await walk(join(rootPath, "api-reference"));
   return { files, rootPath: join(rootPath, "api-reference") };
-}
-
-async function walk(dir: string, prefix = ""): Promise<string[]> {
-  const files: string[] = [];
-  for (const entry of await readdir(dir, { withFileTypes: true })) {
-    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) {
-      files.push(...(await walk(join(dir, entry.name), rel)));
-    } else {
-      files.push(rel);
-    }
-  }
-  return files;
-}
+};
 
 /**
  * `useApiNavigation.ts` derives its whole sidebar/search tree from generated
@@ -54,14 +63,24 @@ async function walk(dir: string, prefix = ""): Promise<string[]> {
  */
 describe("printTypeOptions.hierarchy real generation output", () => {
   afterAll(async () => {
-    await Promise.all(tempDirs.map((dir) => rm(dir, { recursive: true, force: true })));
+    await Promise.all(
+      tempDirs.map(async (dir) => {
+        return rm(dir, { recursive: true, force: true });
+      }),
+    );
   });
 
   it("groups by operations/types (api, the default) — mirrors fixture.test.ts's full-build coverage", async () => {
     const { files } = await generateInto("api");
 
-    const topLevelDirs = new Set(files.map((f) => f.split("/")[0]));
-    expect(topLevelDirs).toEqual(new Set(["generated.md", "operations", "types"]));
+    const topLevelDirs = new Set(
+      files.map((f) => {
+        return f.split("/")[0];
+      }),
+    );
+    expect(topLevelDirs).toEqual(
+      new Set(["generated.md", "operations", "types"]),
+    );
     expect(files).toContain("types/objects/user.md");
     expect(files).toContain("operations/queries/user.md");
   });
@@ -69,7 +88,11 @@ describe("printTypeOptions.hierarchy real generation output", () => {
   it("groups by GraphQL entity kind, with no operations/types wrapper (entity)", async () => {
     const { files } = await generateInto("entity");
 
-    const topLevelDirs = new Set(files.map((f) => f.split("/")[0]));
+    const topLevelDirs = new Set(
+      files.map((f) => {
+        return f.split("/")[0];
+      }),
+    );
     expect(topLevelDirs).not.toContain("operations");
     expect(topLevelDirs).not.toContain("types");
     expect(topLevelDirs).toEqual(
@@ -96,13 +119,19 @@ describe("printTypeOptions.hierarchy real generation output", () => {
     // These are the same pieces of proof useApiNavigation.ts's kind fallback
     // relies on: no folders to group by, but a real `kind:` line present in
     // the frontmatter, matching the page's actual GraphQL entity.
-    const preferencesContent = await readFile(join(rootPath, "objects-preferences.md"), "utf-8");
+    const preferencesContent = await readFile(
+      join(rootPath, "objects-preferences.md"),
+      "utf-8",
+    );
     expect(preferencesContent).toMatch(/^kind: objects$/m);
 
     const idContent = await readFile(join(rootPath, "scalars-id.md"), "utf-8");
     expect(idContent).toMatch(/^kind: scalars$/m);
 
-    const deprecatedContent = await readFile(join(rootPath, "directives-deprecated.md"), "utf-8");
+    const deprecatedContent = await readFile(
+      join(rootPath, "directives-deprecated.md"),
+      "utf-8",
+    );
     expect(deprecatedContent).toMatch(/^kind: directives$/m);
   });
 

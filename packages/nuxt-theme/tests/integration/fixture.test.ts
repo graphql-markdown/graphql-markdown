@@ -2,14 +2,14 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { execFileSync } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
-import { existsSync } from "node:fs";
+import { existsSync, rmSync } from "node:fs";
 
 const FIXTURE_DIR = join(import.meta.dirname, "../fixture");
 const NUXI = join(FIXTURE_DIR, "node_modules/.bin/nuxi");
 const SWIZZLE = join(import.meta.dirname, "../../bin/swizzle.mjs");
 const BUILD_TIMEOUT = 120_000;
 
-function runNuxi(args: string[]): void {
+const runNuxi = (args: string[]): void => {
   try {
     execFileSync(process.execPath, [NUXI, ...args], {
       cwd: FIXTURE_DIR,
@@ -19,14 +19,16 @@ function runNuxi(args: string[]): void {
   } catch (error) {
     const stdout = (error as { stdout?: string }).stdout ?? "";
     const stderr = (error as { stderr?: string }).stderr ?? "";
-    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`);
+    throw new Error(`nuxi ${args.join(" ")} failed:\n${stdout}\n${stderr}`, {
+      cause: error,
+    });
   }
-}
+};
 
 /**
  * Recursively walk a directory and collect all markdown files.
  */
-async function walkContentDirectory(dir: string): Promise<string[]> {
+const walkContentDirectory = async (dir: string): Promise<string[]> => {
   const files: string[] = [];
   try {
     for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -42,13 +44,13 @@ async function walkContentDirectory(dir: string): Promise<string[]> {
     // Directory does not exist yet
   }
   return files;
-}
+};
 
 /**
  * Map a content file to its expected route. Mirrors modules/prerender.ts's
  * own routeFor() — see that file for why the landing page is a special case.
  */
-function contentFileToRoute(contentRoot: string, filePath: string): string {
+const contentFileToRoute = (contentRoot: string, filePath: string): string => {
   const relativePath = relative(contentRoot, filePath);
   const segments = relativePath.replace(/\.md$/, "").split(sep);
 
@@ -57,7 +59,7 @@ function contentFileToRoute(contentRoot: string, filePath: string): string {
   }
 
   return `/${segments.join("/")}`;
-}
+};
 
 /**
  * All setup — cold-clean, generate, swizzle, rebuild — happens once here so
@@ -80,7 +82,7 @@ describe("Fixture app", () => {
       join(FIXTURE_DIR, ".output"),
       join(FIXTURE_DIR, "content"),
     ]) {
-      if (existsSync(dir)) rmDirSync(dir);
+      if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
     }
 
     // Cold-build regression test (see the doc comment above).
@@ -89,11 +91,15 @@ describe("Fixture app", () => {
     // Swizzle + rebuild, so every assertion below reflects the
     // post-swizzle state — proves swizzling doesn't break the build,
     // without needing a second, separately-ordered build phase.
-    execFileSync(process.execPath, [SWIZZLE, "--component", "SiteHeader", "--force"], {
-      cwd: FIXTURE_DIR,
-      stdio: "pipe",
-      encoding: "utf-8",
-    });
+    execFileSync(
+      process.execPath,
+      [SWIZZLE, "--component", "SiteHeader", "--force"],
+      {
+        cwd: FIXTURE_DIR,
+        stdio: "pipe",
+        encoding: "utf-8",
+      },
+    );
     runNuxi(["build"]);
   }, BUILD_TIMEOUT * 2);
 
@@ -102,12 +108,17 @@ describe("Fixture app", () => {
   });
 
   it("wrote generated content to content/api-reference", async () => {
-    const files = await walkContentDirectory(join(FIXTURE_DIR, "content/api-reference"));
+    const files = await walkContentDirectory(
+      join(FIXTURE_DIR, "content/api-reference"),
+    );
     expect(files.length).toBeGreaterThan(0);
   });
 
   it("prerendered the landing page as the schema overview", async () => {
-    const landingPagePath = join(FIXTURE_DIR, ".output/public/api-reference/index.html");
+    const landingPagePath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
     expect(existsSync(landingPagePath)).toBe(true);
 
     const content = await readFile(landingPagePath, "utf-8");
@@ -149,10 +160,14 @@ describe("Fixture app", () => {
       if (!existsSync(htmlPath)) missing.push(route);
     }
 
-    expect(missing, `Missing prerendered pages: ${missing.join(", ")}`).toEqual([]);
+    expect(missing, `Missing prerendered pages: ${missing.join(", ")}`).toEqual(
+      [],
+    );
     // Sanity check the walk itself found the nested type this test exists to
     // cover — a schema that's too flat wouldn't exercise the prerender fix.
-    expect(existsSync(join(outputPublic, "types/objects/preferences/index.html"))).toBe(true);
+    expect(
+      existsSync(join(outputPublic, "types/objects/preferences/index.html")),
+    ).toBe(true);
   });
 
   it("swizzled SiteHeader with a version-stamped copy", async () => {
@@ -168,12 +183,8 @@ describe("Fixture app", () => {
     // prerendered static HTML — beforeAll's `runNuxi(["build"])` would have
     // already thrown and failed the whole suite if this hadn't succeeded;
     // this test exists to give that fact its own named, reportable result.
-    expect(existsSync(join(FIXTURE_DIR, ".output/server/index.mjs"))).toBe(true);
+    expect(existsSync(join(FIXTURE_DIR, ".output/server/index.mjs"))).toBe(
+      true,
+    );
   });
 });
-
-function rmDirSync(dir: string): void {
-  // node:fs/promises' rm isn't available synchronously; beforeAll here is
-  // intentionally sync so cleanup fully completes before `runNuxi` starts.
-  require("node:fs").rmSync(dir, { recursive: true, force: true });
-}

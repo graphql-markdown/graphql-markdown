@@ -2,13 +2,21 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const runGraphQLMarkdown = vi.fn(async () => {});
 
-vi.mock("@graphql-markdown/cli", () => ({
-  runGraphQLMarkdown: (...args: unknown[]) => runGraphQLMarkdown(...args),
-}));
+vi.mock("@graphql-markdown/cli", () => {
+  return {
+    runGraphQLMarkdown: async (...args: unknown[]) => {
+      return runGraphQLMarkdown(...args);
+    },
+  };
+});
 
-vi.mock("@nuxt/kit", () => ({
-  useLogger: () => ({ info: vi.fn(), error: vi.fn() }),
-}));
+vi.mock("@nuxt/kit", () => {
+  return {
+    useLogger: () => {
+      return { info: vi.fn(), error: vi.fn() };
+    },
+  };
+});
 
 const { createGenerateDocs } = await import("../../generate");
 
@@ -90,12 +98,19 @@ describe("createGenerateDocs", () => {
   it("passes through decorators untouched, with no default", async () => {
     const decorators = {
       customTag: {
-        predicate: () => true,
+        predicate: () => {
+          return true;
+        },
         position: { into: "tags" as const },
-        render: () => "custom",
+        render: () => {
+          return "custom";
+        },
       },
     };
-    const generate = createGenerateDocs({ schema: "./schema.graphql", decorators });
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      decorators,
+    });
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
@@ -129,7 +144,9 @@ describe("createGenerateDocs", () => {
     runGraphQLMarkdown.mockRejectedValueOnce(new Error("boom"));
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
 
-    await expect(generate()).rejects.toThrow("GraphQL Markdown generation failed");
+    await expect(generate()).rejects.toThrow(
+      "GraphQL Markdown generation failed",
+    );
   });
 
   it("passes through a custom baseURL when provided", async () => {
