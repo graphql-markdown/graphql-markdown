@@ -67,6 +67,7 @@
     "@graphql-markdown/graphql",
     "@graphql-markdown/helpers",
     "@graphql-markdown/logger",
+    "@graphql-markdown/nuxt-theme",
     "@graphql-markdown/printer-legacy",
     "@graphql-markdown/tooling-config",
     "@graphql-markdown/types",
