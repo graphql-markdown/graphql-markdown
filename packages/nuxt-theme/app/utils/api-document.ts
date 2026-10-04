@@ -48,6 +48,35 @@ export const titleCase = (value: string): string => {
   });
 };
 
+export interface Breadcrumb {
+  label: string;
+  to?: string;
+}
+
+/**
+ * Breadcrumb trail for a page path. Only the root crumb navigates (to
+ * `rootPath`, and only when there are deeper segments); the category segments
+ * have no page. The leaf shows the page title when there is one.
+ */
+export const buildBreadcrumbs = (
+  segments: string[],
+  pageTitle: string | undefined,
+  rootPath: string,
+): Breadcrumb[] => {
+  const lastIndex = segments.length - 1;
+  return segments.map((segment, index) => {
+    if (index === 0) {
+      return {
+        label: "API Reference",
+        to: segments.length > 1 ? rootPath : undefined,
+      };
+    }
+    const label =
+      index === lastIndex && pageTitle ? pageTitle : titleCase(segment);
+    return { label, to: undefined };
+  });
+};
+
 // --- Queries -------------------------------------------------------------
 
 const findSectionIndex = (nodes: MdcNode[], title: string): number => {

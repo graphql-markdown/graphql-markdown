@@ -69,6 +69,7 @@ describe("useApiNavigation", () => {
     expect(typeof result.overviewGroupsFor).toBe("function");
   });
 
+  // fallow-ignore-next-line complexity
   it("builds a 2-level tree (section/group/item) with rootDepth=1", async () => {
     const mockPages = [
       {

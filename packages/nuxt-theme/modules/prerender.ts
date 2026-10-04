@@ -24,7 +24,7 @@ import { DEFAULT_BASE_URL } from "../constants";
  *   content/api-reference/types/objects/user.md -\> /api-reference/types/objects/user
  */
 
-const walk = async (dir: string): Promise<string[]> => {
+export const walk = async (dir: string): Promise<string[]> => {
   const out: string[] = [];
   try {
     for (const entry of await readdir(dir, { withFileTypes: true })) {
@@ -55,7 +55,10 @@ const walk = async (dir: string): Promise<string[]> => {
  * the existing single-schema fixture test still passes unmodified against
  * this version.
  */
-const routeFor = (contentDir: string, file: string): string | undefined => {
+export const routeFor = (
+  contentDir: string,
+  file: string,
+): string | undefined => {
   const relativePath = relative(contentDir, file);
   const segments = relativePath.replace(/\.md$/, "").split(sep);
 

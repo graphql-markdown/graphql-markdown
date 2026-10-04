@@ -1,3 +1,4 @@
+<!-- fallow-ignore-file complexity -->
 <template>
   <main
     v-if="page"
@@ -121,21 +122,11 @@ if (isFlat.value && page.value && !isLandingPage.value) {
 }
 
 const breadcrumbs = computed(() =>
-  pathSegments.value.map((segment, index) => {
-    const isLeaf = index === pathSegments.value.length - 1;
-    const isRoot = index === 0;
-
-    return {
-      label: isRoot
-        ? "API Reference"
-        : isLeaf && page.value?.title
-          ? page.value.title
-          : titleCase(segment),
-      // Only the root crumb navigates; the category segments have no page.
-      to:
-        isRoot && pathSegments.value.length > 1 ? baseURLPath.value : undefined,
-    };
-  }),
+  buildBreadcrumbs(
+    pathSegments.value,
+    page.value?.title || undefined,
+    baseURLPath.value,
+  ),
 );
 
 const { documentBody, deprecationReason, document } = useApiDocument(page);
