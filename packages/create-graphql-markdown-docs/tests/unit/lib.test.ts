@@ -1,0 +1,564 @@
+import { EventEmitter } from "node:events";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+const CANCEL = Symbol.for("cancel");
+
+const mocks = vi.hoisted(() => {
+  return {
+    spawn: vi.fn(),
+    detect: vi.fn(),
+    prompts: {
+      intro: vi.fn(),
+      outro: vi.fn(),
+      cancel: vi.fn(),
+      select: vi.fn(),
+      text: vi.fn(),
+      confirm: vi.fn(),
+      isCancel: vi.fn((v: unknown) => {
+        return v === Symbol.for("cancel");
+      }),
+      log: {
+        info: vi.fn(),
+        success: vi.fn(),
+        warn: vi.fn(),
+        error: vi.fn(),
+      },
+    },
+  };
+});
+
+vi.mock("node:child_process", () => {
+  return { spawn: mocks.spawn };
+});
+vi.mock("package-manager-detector", () => {
+  return { detect: mocks.detect };
+});
+vi.mock("@clack/prompts", () => {
+  return mocks.prompts;
+});
+
+import {
+  copyDirRecursive,
+  detectLoader,
+  initGitRepo,
+  installDependencies,
+  isRemoteSchemaSource,
+  main,
+  parseCliArgs,
+  run,
+  runCommand,
+  validateGraphQLSchema,
+  writeAppConfig,
+  writeDocusaurusConfig,
+  writeGenerateDocs,
+  writeGraphqlrc,
+  writeNuxtConfig,
+  writePackageJson,
+  writeReadme,
+} from "../../lib/create.mjs";
+
+const templates = path.join(import.meta.dirname, "../../templates");
+const VALID_SDL = "type Query { hello: String }\n";
+
+let work: string;
+
+/** Copy a template into a fresh temp dir. */
+const stage = (framework: string): string => {
+  const dir = path.join(work, `stage-${framework}`);
+  copyDirRecursive(path.join(templates, framework), dir, [/^node_modules$/]);
+  return dir;
+};
+const read = (...p: string[]): string => {
+  return fs.readFileSync(path.join(...p), "utf-8");
+};
+
+/** Make mocked spawn emit a close/error event. */
+const spawnResult = (code: Error | number): void => {
+  mocks.spawn.mockImplementation(() => {
+    const proc = new EventEmitter();
+    queueMicrotask(() => {
+      return code instanceof Error
+        ? proc.emit("error", code)
+        : proc.emit("close", code);
+    });
+    return proc;
+  });
+};
+
+beforeEach(() => {
+  work = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-test-"));
+  mocks.detect.mockResolvedValue({ name: "pnpm" });
+  spawnResult(0);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  mocks.spawn.mockReset();
+  mocks.detect.mockReset();
+  mocks.prompts.select.mockReset();
+  mocks.prompts.text.mockReset();
+  mocks.prompts.confirm.mockReset();
+  for (const fn of Object.values(mocks.prompts.log)) fn.mockClear();
+  mocks.prompts.outro.mockClear();
+  mocks.prompts.cancel.mockClear();
+  fs.rmSync(work, { recursive: true, force: true });
+});
+
+describe("pure helpers", () => {
+  it.each([
+    ["https://x.dev/graphql", "UrlLoader"],
+    ["github:a/b/c.graphql", "GithubLoader"],
+    ["git:a/b#main:c.graphql", "GitLoader"],
+    ["schema.json", "JsonFileLoader"],
+    ["schema.ts", "CodeFileLoader"],
+    ["schema.graphql", "GraphQLFileLoader"],
+    ["schema.unknown", "GraphQLFileLoader"],
+  ])("detectLoader(%s) -> %s", (source, className) => {
+    expect(detectLoader(source).className).toBe(className);
+  });
+
+  it("isRemoteSchemaSource", () => {
+    expect(isRemoteSchemaSource("https://a")).toBe(true);
+    expect(isRemoteSchemaSource("github:a")).toBe(true);
+    expect(isRemoteSchemaSource("./a.graphql")).toBe(false);
+  });
+
+  it("copyDirRecursive honors exclusions and nests", () => {
+    const src = path.join(work, "src");
+    fs.mkdirSync(path.join(src, "a/b"), { recursive: true });
+    fs.mkdirSync(path.join(src, "node_modules"));
+    fs.writeFileSync(path.join(src, "a/b/f.txt"), "x");
+    fs.writeFileSync(path.join(src, "node_modules/n.txt"), "x");
+    const dst = path.join(work, "dst");
+    copyDirRecursive(src, dst, [/^node_modules$/]);
+    expect(fs.existsSync(path.join(dst, "a/b/f.txt"))).toBe(true);
+    expect(fs.existsSync(path.join(dst, "node_modules"))).toBe(false);
+  });
+
+  it("validateGraphQLSchema", async () => {
+    const good = path.join(work, "g.graphql");
+    const bad = path.join(work, "b.graphql");
+    fs.writeFileSync(good, VALID_SDL);
+    fs.writeFileSync(bad, "type {");
+    expect(await validateGraphQLSchema(good)).toBe(true);
+    expect(await validateGraphQLSchema(bad)).toBe(false);
+    expect(await validateGraphQLSchema(path.join(work, "missing"))).toBe(false);
+  });
+
+  it("parseCliArgs", () => {
+    expect(parseCliArgs(["--yes", "-d", "x", "--no-git"])).toEqual({
+      yes: true,
+      dir: "x",
+      "no-git": true,
+    });
+  });
+});
+
+describe("write* helpers (nuxt)", () => {
+  it("writeAppConfig: no-op, title, color, and throws", () => {
+    const dir = stage("nuxt");
+    const file = path.join(dir, "app", "app.config.ts");
+    const before = read(file);
+    writeAppConfig(dir, "", "");
+    expect(read(file)).toBe(before);
+    writeAppConfig(dir, 'Ti"tle', "blue");
+    expect(read(file)).toContain('siteTitle: "Ti\\"tle"');
+    expect(read(file)).toContain('primary: "blue"');
+    expect(() => {
+      return writeAppConfig(dir, "Again", "");
+    }).toThrow(/siteTitle/);
+    fs.writeFileSync(file, "siteTitle: 'My API'\n");
+    expect(() => {
+      return writeAppConfig(dir, "", "red");
+    }).toThrow(/defineAppConfig/);
+  });
+
+  it("writeGenerateDocs: default and non-default loader, throw", () => {
+    const dir = stage("nuxt");
+    const def = detectLoader("a.graphql");
+    writeGenerateDocs(dir, "./schema/example.graphql", def);
+    writeGenerateDocs(
+      dir,
+      "https://x/graphql",
+      detectLoader("https://x/graphql"),
+    );
+    const out = read(dir, "generate-docs.ts");
+    expect(out).toContain("schema: 'https://x/graphql'");
+    expect(out).toContain("UrlLoader");
+    expect(() => {
+      return writeGenerateDocs(dir, "./other.graphql", def);
+    }).toThrow(/nothing matched/);
+  });
+
+  it("writeNuxtConfig: local, remote, throws", () => {
+    const dir = stage("nuxt");
+    const file = path.join(dir, "nuxt.config.ts");
+    const original = read(file);
+    writeNuxtConfig(dir, "./schema/schema.json", false);
+    expect(read(file)).toContain("./schema/schema.json");
+    fs.writeFileSync(file, original);
+    writeNuxtConfig(dir, "https://x", true);
+    expect(read(file)).not.toContain("fileURLToPath");
+    expect(() => {
+      return writeNuxtConfig(dir, "https://x", true);
+    }).toThrow(/watch block/);
+    fs.writeFileSync(file, "nothing");
+    expect(() => {
+      return writeNuxtConfig(dir, "./other.gql", false);
+    }).toThrow(/example.graphql/);
+    fs.writeFileSync(
+      file,
+      original.replace('import { fileURLToPath } from "node:url";\n\n', ""),
+    );
+    expect(() => {
+      return writeNuxtConfig(dir, "https://x", true);
+    }).toThrow(/fileURLToPath/);
+  });
+
+  it("writePackageJson", () => {
+    const dir = stage("nuxt");
+    writePackageJson(dir, path.join(work, "my-proj"), detectLoader("a.json"));
+    const pkg = JSON.parse(read(dir, "package.json"));
+    expect(pkg.name).toBe("my-proj");
+    expect(pkg.dependencies["@graphql-tools/json-file-loader"]).toBe("latest");
+    writePackageJson(dir, path.join(work, "p2"), detectLoader("a.graphql"));
+    expect(JSON.parse(read(dir, "package.json")).name).toBe("p2");
+  });
+
+  it("writeReadme: no-op, local, remote, throw", () => {
+    const dir = stage("nuxt");
+    const loader = detectLoader("a.graphql");
+    const before = read(dir, "README.md");
+    writeReadme(dir, undefined, "./schema/example.graphql", loader);
+    expect(read(dir, "README.md")).toBe(before);
+    writeReadme(dir, "a.graphql", "./schema/schema.graphql", loader);
+    expect(read(dir, "README.md")).toContain("`./schema/schema.graphql`");
+    fs.writeFileSync(path.join(dir, "README.md"), before);
+    writeReadme(dir, "https://x", "https://x", detectLoader("https://x"));
+    expect(read(dir, "README.md")).toContain("no local schema file");
+    fs.writeFileSync(path.join(dir, "README.md"), "# nothing\n");
+    expect(() => {
+      return writeReadme(dir, "a", "./a", loader);
+    }).toThrow(/schema section/);
+  });
+});
+
+describe("write* helpers (docusaurus)", () => {
+  it("writeGraphqlrc: default, url loader, other loader, throws", () => {
+    const dir = stage("docusaurus");
+    const file = path.join(dir, ".graphqlrc");
+    const original = read(file);
+    writeGraphqlrc(dir, "./schema/example.graphql", detectLoader("a.graphql"));
+    expect(read(file)).toBe(original);
+    writeGraphqlrc(dir, "https://x", detectLoader("https://x"));
+    expect(read(file)).toContain("method: 'POST'");
+    fs.writeFileSync(file, original);
+    writeGraphqlrc(dir, "./schema/s.json", detectLoader("s.json"));
+    expect(read(file)).toContain(
+      "JsonFileLoader: '@graphql-tools/json-file-loader'",
+    );
+    fs.writeFileSync(file, "nothing");
+    expect(() => {
+      return writeGraphqlrc(dir, "./s.gql", detectLoader("s.gql"));
+    }).toThrow(/nothing matched/);
+    fs.writeFileSync(file, "schema: './schema/example.graphql'\n");
+    expect(() => {
+      return writeGraphqlrc(dir, "./s.json", detectLoader("s.json"));
+    }).toThrow(/GraphQLFileLoader/);
+  });
+
+  it("writeDocusaurusConfig: no-op, title, throw", () => {
+    const dir = stage("docusaurus");
+    const file = path.join(dir, "docusaurus.config.js");
+    const before = read(file);
+    writeDocusaurusConfig(dir, "");
+    expect(read(file)).toBe(before);
+    writeDocusaurusConfig(dir, "Hello");
+    expect(read(file)).toContain('title: "Hello",');
+    expect(() => {
+      return writeDocusaurusConfig(dir, "Again");
+    }).toThrow(/My API/);
+  });
+});
+
+describe("process helpers", () => {
+  it("runCommand resolves, rejects on exit code and spawn error", async () => {
+    await expect(runCommand("x", [])).resolves.toBeUndefined();
+    spawnResult(2);
+    await expect(runCommand("x", [])).rejects.toThrow(/exit code 2/);
+    spawnResult(new Error("boom"));
+    await expect(runCommand("x", [])).rejects.toThrow("boom");
+  });
+
+  it("installDependencies uses the package manager's command", async () => {
+    await installDependencies("yarn", work);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "yarn",
+      [],
+      expect.objectContaining({ cwd: work }),
+    );
+    await installDependencies("unknown-pm", work);
+    expect(mocks.spawn).toHaveBeenLastCalledWith(
+      "npm",
+      ["install"],
+      expect.anything(),
+    );
+    expect(mocks.prompts.log.success).toHaveBeenCalledTimes(2);
+  });
+
+  it("failures are logged, not thrown", async () => {
+    spawnResult(1);
+    await installDependencies("npm", work);
+    expect(mocks.prompts.log.error).toHaveBeenCalled();
+    await initGitRepo(work);
+    expect(mocks.prompts.log.warn).toHaveBeenCalled();
+  });
+
+  it("initGitRepo runs init, add, commit", async () => {
+    await initGitRepo(work);
+    expect(
+      mocks.spawn.mock.calls.map((c) => {
+        return c[1][0];
+      }),
+    ).toEqual(["init", "add", "commit"]);
+    expect(mocks.prompts.log.success).toHaveBeenCalled();
+  });
+});
+
+describe("main", () => {
+  const base = (name: string): string[] => {
+    return ["--dir", path.join(work, name)];
+  };
+  const quiet = ["--yes", "--no-install", "--no-git"];
+
+  it("--yes nuxt scaffold with example schema", async () => {
+    const code = await main([...base("n"), ...quiet]);
+    expect(code).toBe(0);
+    expect(JSON.parse(read(work, "n", "package.json")).name).toBe("n");
+    expect(mocks.spawn).not.toHaveBeenCalled();
+  });
+
+  it("--yes docusaurus with local schema, title, color warning", async () => {
+    const schema = path.join(work, "my.graphql");
+    fs.writeFileSync(schema, "type {");
+    const dir = path.join(work, "d");
+    const code = await main([
+      ...base("d"),
+      "--yes",
+      "--framework",
+      "docusaurus",
+      "--schema",
+      schema,
+      "--title",
+      "Docs",
+      "--color",
+      "red",
+      "--pm",
+      "bun",
+    ]);
+    expect(code).toBe(0);
+    expect(fs.existsSync(path.join(dir, "schema/schema.graphql"))).toBe(true);
+    expect(read(dir, "docusaurus.config.js")).toContain('title: "Docs"');
+    expect(mocks.prompts.log.warn).toHaveBeenCalledTimes(2);
+    expect(mocks.spawn).toHaveBeenCalledTimes(4); // install + 3 git
+  });
+
+  it("--yes nuxt with remote schema falls back to npm", async () => {
+    mocks.detect.mockResolvedValue(null);
+    const code = await main([
+      ...base("r"),
+      ...quiet,
+      "--schema",
+      "https://x.dev/graphql",
+    ]);
+    expect(code).toBe(0);
+    expect(read(work, "r", "package.json")).toContain("url-loader");
+    expect(mocks.prompts.outro).toHaveBeenCalledWith(
+      expect.stringContaining("npm run dev"),
+    );
+  });
+
+  it("interactive path with customization, schema and installs", async () => {
+    const schema = path.join(work, "s.graphql");
+    fs.writeFileSync(schema, VALID_SDL);
+    mocks.detect.mockResolvedValue(null);
+    mocks.prompts.select
+      .mockResolvedValueOnce("nuxt")
+      .mockResolvedValueOnce("existing")
+      .mockResolvedValueOnce("yarn");
+    mocks.prompts.text
+      .mockResolvedValueOnce(path.join(work, "i"))
+      .mockResolvedValueOnce(schema)
+      .mockResolvedValueOnce("Custom Title")
+      .mockResolvedValueOnce("emerald");
+    mocks.prompts.confirm.mockResolvedValue(true);
+    expect(await main([])).toBe(0);
+    const dir = path.join(work, "i");
+    expect(read(dir, "app/app.config.ts")).toContain('"Custom Title"');
+    expect(read(dir, "app/app.config.ts")).toContain('"emerald"');
+    expect(mocks.spawn).toHaveBeenCalledTimes(4);
+  });
+
+  it("interactive docusaurus, example schema, declines everything", async () => {
+    mocks.prompts.select
+      .mockResolvedValueOnce("docusaurus")
+      .mockResolvedValueOnce("example");
+    mocks.prompts.text.mockResolvedValueOnce(path.join(work, "x"));
+    mocks.prompts.confirm.mockResolvedValue(false);
+    expect(await main([])).toBe(0);
+    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(mocks.prompts.outro).toHaveBeenCalledWith(
+      expect.stringContaining("run doc"),
+    );
+  });
+
+  it("cancelled customization sub-prompts are ignored", async () => {
+    mocks.prompts.select.mockResolvedValueOnce("example");
+    mocks.prompts.confirm.mockResolvedValueOnce(true).mockResolvedValue(CANCEL);
+    mocks.prompts.text.mockResolvedValue(CANCEL);
+    expect(
+      await main([...base("c"), "--framework", "nuxt", "--no-install"]),
+    ).toBe(0);
+  });
+
+  it("cancelled customization confirm is ignored", async () => {
+    mocks.prompts.select.mockResolvedValueOnce("example");
+    mocks.prompts.confirm.mockResolvedValue(CANCEL);
+    expect(await main([...base("cc"), "--framework", "nuxt", "--no-git"])).toBe(
+      0,
+    );
+  });
+
+  const dirArg = (): string[] => {
+    return ["--dir", path.join(work, "z")];
+  };
+  it.each([
+    [
+      "framework",
+      () => {
+        return [];
+      },
+      { select: [CANCEL] },
+    ],
+    [
+      "dir",
+      () => {
+        return ["--framework", "nuxt"];
+      },
+      { text: [CANCEL] },
+    ],
+    [
+      "schema choice",
+      () => {
+        return ["--framework", "nuxt", ...dirArg()];
+      },
+      { select: [CANCEL] },
+    ],
+    [
+      "schema path",
+      () => {
+        return ["--framework", "nuxt", ...dirArg()];
+      },
+      { select: ["existing"], text: [CANCEL] },
+    ],
+    [
+      "package manager",
+      () => {
+        return ["--framework", "nuxt", ...dirArg(), "--example"];
+      },
+      { select: [CANCEL] },
+    ],
+  ])(
+    "cancel at %s exits 1",
+    async (_name, argv, answers: { select?: unknown[]; text?: unknown[] }) => {
+      mocks.detect.mockResolvedValue(null);
+      for (const v of answers.select ?? []) {
+        mocks.prompts.select.mockResolvedValueOnce(v);
+      }
+      for (const v of answers.text ?? []) {
+        mocks.prompts.text.mockResolvedValueOnce(v);
+      }
+      expect(await main(argv())).toBe(1);
+      expect(mocks.prompts.cancel).toHaveBeenCalled();
+      expect(fs.existsSync(path.join(work, "z"))).toBe(false);
+    },
+  );
+
+  it("prompt validators", async () => {
+    mocks.prompts.select.mockResolvedValueOnce("existing");
+    mocks.prompts.text
+      .mockResolvedValueOnce(path.join(work, "v"))
+      .mockResolvedValueOnce(CANCEL);
+    await main(["--framework", "nuxt"]);
+    const dirValidate = mocks.prompts.text.mock.calls[0][0].validate;
+    expect(dirValidate("")).toMatch(/empty/);
+    expect(dirValidate("x")).toBeUndefined();
+    const schemaValidate = mocks.prompts.text.mock.calls[1][0].validate;
+    expect(schemaValidate("")).toMatch(/required/);
+    expect(schemaValidate(path.join(work, "nope"))).toMatch(/not found/);
+    expect(schemaValidate("https://x")).toBeUndefined();
+    expect(schemaValidate(work)).toBeUndefined();
+  });
+
+  it("EXDEV on rename falls back to copy", async () => {
+    const real = fs.renameSync;
+    vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
+      if (String(from).includes("gqlmd-")) {
+        throw Object.assign(new Error("exdev"), { code: "EXDEV" });
+      }
+      return real(from, to);
+    });
+    expect(await main([...base("e"), ...quiet])).toBe(0);
+    expect(fs.existsSync(path.join(work, "e", "package.json"))).toBe(true);
+  });
+
+  it("other rename errors propagate; run() reports exit 1", async () => {
+    vi.spyOn(fs, "renameSync").mockImplementation(() => {
+      throw Object.assign(new Error("denied"), { code: "EACCES" });
+    });
+    await expect(main([...base("f"), ...quiet])).rejects.toThrow("denied");
+    expect(await run([...base("f"), ...quiet])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith("denied");
+  });
+
+  it("run() passes through success", async () => {
+    expect(await run([...base("ok"), ...quiet])).toBe(0);
+  });
+
+  it("invalid --framework exits 1", async () => {
+    expect(await main(["--framework", "vue", "--yes"])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining('Invalid --framework "vue"'),
+    );
+  });
+
+  it("non-empty target dir exits 1 and is left untouched", async () => {
+    const dir = path.join(work, "full");
+    fs.mkdirSync(dir);
+    fs.writeFileSync(path.join(dir, "keep.txt"), "x");
+    expect(await main(["--dir", dir, "--yes"])).toBe(1);
+    expect(read(dir, "keep.txt")).toBe("x");
+  });
+
+  it("template drift (no match) throws and cleans up", async () => {
+    const schema = path.join(work, "s.gql");
+    fs.writeFileSync(schema, VALID_SDL);
+    const orig = fs.readFileSync;
+    vi.spyOn(fs, "readFileSync").mockImplementation(((
+      p: fs.PathOrFileDescriptor,
+      enc?: BufferEncoding,
+    ) => {
+      const out = orig(p, enc);
+      return String(p).endsWith("generate-docs.ts") && typeof out === "string"
+        ? "// drifted"
+        : out;
+    }) as never);
+    await expect(
+      main([...base("t"), ...quiet, "--schema", schema]),
+    ).rejects.toThrow(/nothing matched/);
+    expect(fs.existsSync(path.join(work, "t"))).toBe(false);
+  });
+});
