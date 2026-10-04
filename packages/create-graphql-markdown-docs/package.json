@@ -29,11 +29,11 @@
     "create-graphql-markdown-docs": "./bin/create.mjs"
   },
   "scripts": {
-    "build": "echo \"no build step — bin/ and templates/ ship as source\"",
-    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\"",
-    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\" --fix",
-    "prettier": "prettier \"bin/**/*.mjs\" \"tests/**/*.ts\" --check",
-    "prettier:fix": "prettier \"bin/**/*.mjs\" \"tests/**/*.ts\" --write",
+    "build": "echo \"no build step — bin/, lib/ and templates/ ship as source\"",
+    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"lib/**/*.mjs\" \"tests/**/*.ts\"",
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"lib/**/*.mjs\" \"tests/**/*.ts\" --fix",
+    "prettier": "prettier \"bin/**/*.mjs\" \"lib/**/*.mjs\" \"tests/**/*.ts\" --check",
+    "prettier:fix": "prettier \"bin/**/*.mjs\" \"lib/**/*.mjs\" \"tests/**/*.ts\" --write",
     "test": "vitest run --passWithNoTests",
     "test:unit": "vitest run --passWithNoTests tests/unit",
     "test:integration": "vitest run --passWithNoTests tests/integration",
@@ -42,6 +42,7 @@
   },
   "files": [
     "bin",
+    "lib",
     "templates"
   ],
   "dependencies": {

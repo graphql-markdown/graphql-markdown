@@ -53,7 +53,7 @@
       "ignoreDependencies": ["nuxt"]
     },
     "packages/create-graphql-markdown-docs": {
-      "entry": ["bin/create.mjs", "vitest.config.mjs"],
+      "entry": ["bin/create.mjs!", "lib/create.mjs!", "vitest.config.mjs"],
       "ignore": ["templates/**"]
     },
     "packages/tooling-config": {
