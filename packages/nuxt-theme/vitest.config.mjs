@@ -30,7 +30,14 @@ config.test.coverage = {
     "*.ts",
     "swizzle.manifest.mjs",
   ],
-  exclude: ["tests/**", "**/*.d.ts", "*.config.*", "**/node_modules/**"],
+  exclude: [
+    "tests/**",
+    "**/*.d.ts",
+    "*.config.*",
+    // Local dev entry point (not in package.json "files"): a no-op stub.
+    "generate-docs.ts",
+    "**/node_modules/**",
+  ],
 };
 
 export default config;
