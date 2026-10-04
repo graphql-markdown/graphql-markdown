@@ -37,6 +37,7 @@
     "test": "vitest run --passWithNoTests",
     "test:unit": "vitest run --passWithNoTests tests/unit",
     "test:integration": "vitest run --passWithNoTests tests/integration",
+    "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle",
     "test:e2e": "GQLMD_CLI_E2E=1 vitest run tests/integration/e2e-build.test.ts"
   },
   "files": [
