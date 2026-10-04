@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
-import { resolve, dirname, join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as process from "node:process";
 
@@ -91,7 +91,7 @@ function copyFileWithStamp(sourcePath, targetPath, version) {
 
   // Check if file already starts with a swizzle stamp
   const lines = sourceContent.split("\n");
-  let contentToWrite = sourceContent;
+  let contentToWrite;
 
   if (lines[0] && lines[0].includes("swizzled from @graphql-markdown/nuxt-theme@")) {
     // Replace existing stamp

@@ -48,8 +48,6 @@ describe("useApiNavigation", () => {
   });
 
   it("returns sections and overviewGroupsFor when called", async () => {
-    const mockPages = [];
-
     mockQueryCollection.mockReturnValue({
       order: vi.fn().mockReturnThis(),
       select: vi.fn().mockReturnThis(),

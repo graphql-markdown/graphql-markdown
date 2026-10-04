@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll } from "vitest";
 import { execFileSync } from "node:child_process";
 import { readdir, readFile } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
-import { existsSync, rmSync } from "node:fs";
+import { existsSync } from "node:fs";
 
 const FIXTURE_DIR = join(import.meta.dirname, "../fixture");
 const NUXI = join(FIXTURE_DIR, "node_modules/.bin/nuxi");
