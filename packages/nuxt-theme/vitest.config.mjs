@@ -19,4 +19,18 @@ config.resolve.alias = [
 
 config.test.globalSetup = ["./tests/global-setup.mjs"];
 
+// The base config's `src/**/*.ts` matches nothing in a Nuxt layer, whose
+// sources sit at the package root.
+config.test.coverage = {
+  ...config.test.coverage,
+  include: [
+    "app/**/*.{ts,vue}",
+    "modules/**/*.ts",
+    "bin/**/*.mjs",
+    "*.ts",
+    "swizzle.manifest.mjs",
+  ],
+  exclude: ["tests/**", "**/*.d.ts", "*.config.*", "**/node_modules/**"],
+};
+
 export default config;
