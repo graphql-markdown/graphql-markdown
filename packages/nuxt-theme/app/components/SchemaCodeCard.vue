@@ -90,6 +90,7 @@ onUnmounted(() => clearTimeout(resetTimer));
 <style>
 /* Shiki emits its own background and spacing; the card supplies both. The
    selectors reach into `v-html` output, so they cannot be scoped. */
+/* fallow-ignore-next-line css-selector-complexity -- overrides Shiki inline styles */
 .blueprint-code pre {
   background: transparent !important;
   color: var(--gqlmd-code-text) !important;

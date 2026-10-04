@@ -152,6 +152,7 @@ if (page.value) {
 /* Everything below styles rendered content only. Scoping to
    `.markdown-text-body` — the ContentRenderer wrapper — keeps it away from the
    hand-written landing markup that shares the `.api-document` column. */
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body :is(h1, h2, h3) {
   color: var(--ui-text-highlighted);
   font-family: var(--font-serif);
@@ -176,6 +177,7 @@ if (page.value) {
 
 /* The section heading carries the separator, so the first entry beneath it
    must not draw a second one. */
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body h3 + h4 {
   border-top: 0;
   padding-top: 0.5rem;
@@ -232,6 +234,7 @@ if (page.value) {
   text-decoration: none;
 }
 
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body a[href^="/"]:not([href^="#"]) {
   font-weight: 600;
   text-decoration: underline;
@@ -241,6 +244,7 @@ if (page.value) {
   text-underline-offset: 3px;
 }
 
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body a[href^="/"]:not([href^="#"]):hover {
   background: color-mix(in oklch, var(--ui-primary) 20%, transparent);
   border-radius: 3px;
@@ -250,6 +254,7 @@ if (page.value) {
    chip in a `.gqlmd-mdx-entity` span — the chip is a grandchild, so that never
    matches and the opaque chip also hides the anchor's own hover. Re-apply it
    for that shape, on links that actually navigate somewhere. */
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body a:not([href^="#"]) > .gqlmd-mdx-entity > code {
   border-style: dashed;
   transition:
@@ -257,6 +262,7 @@ if (page.value) {
     border-color 0.15s;
 }
 
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body a:not([href^="#"]):hover > .gqlmd-mdx-entity > code {
   border-color: var(--ui-primary);
   color: var(--ui-primary);
@@ -264,6 +270,7 @@ if (page.value) {
 
 /* Self-anchors (`Folder.id`) only mark the field they head — nothing to follow,
    so they stay inert, including Nuxt UI's own underline-on-hover. */
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body a[href^="#"]:hover {
   background: none;
   border-bottom-color: transparent;
@@ -272,6 +279,7 @@ if (page.value) {
 /* The GraphQL definition is rendered separately in the code column. Hiding the
    `<pre>` alone leaves the ProsePre wrapper behind, whose absolutely-positioned
    copy button then floats over the prose — so the whole block goes. */
+/* fallow-ignore-next-line css-selector-complexity -- targets generated markdown content */
 .markdown-text-body div:has(> pre),
 .markdown-text-body pre,
 .markdown-text-body .code-block,

@@ -110,6 +110,7 @@ const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
 
 <style scoped>
 /* Top-level section headers */
+/* fallow-ignore-next-line css-selector-complexity -- Nuxt UI navigation slots have no class hooks */
 .gqlmd-api-nav > ul > li[data-slot="itemWithChildren"] > button {
   font-size: 0.85rem;
   font-weight: 800;
@@ -118,6 +119,7 @@ const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
 }
 
 /* Nested section headers (inside content divs at any depth) */
+/* fallow-ignore-next-line css-selector-complexity -- Nuxt UI navigation slots have no class hooks */
 .gqlmd-api-nav [data-slot="content"] li[data-slot="itemWithChildren"] > button {
   font-weight: 400;
   font-size: 0.875rem;
