@@ -12,7 +12,10 @@ import { detect as detectPackageManager } from "package-manager-detector";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
-const templateDir = path.resolve(packageRoot, "template");
+const templatesRoot = path.resolve(packageRoot, "templates");
+
+/** Supported scaffold targets; each maps to `templates/<framework>`. */
+const FRAMEWORKS = ["nuxt", "docusaurus"];
 
 /**
  * Maps each package manager to its install command and arguments.
@@ -335,6 +338,71 @@ function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
 }
 
 /**
+ * Rewrite the Docusaurus template's .graphqlrc `schema` line and loader entry.
+ */
+function writeGraphqlrc(tempDir, schemaRef, loader) {
+  const graphqlrcPath = path.join(tempDir, ".graphqlrc");
+  const originalContent = fs.readFileSync(graphqlrcPath, "utf-8");
+
+  const defaultSchemaLine = "schema: './schema/example.graphql'";
+  const defaultLoaderLine =
+    "      GraphQLFileLoader: '@graphql-tools/graphql-file-loader'";
+
+  let updated = originalContent.replace(
+    defaultSchemaLine,
+    () => `schema: '${schemaRef}'`,
+  );
+
+  if (schemaRef !== "./schema/example.graphql" && updated === originalContent) {
+    throw new Error(
+      `Expected to find and replace "${defaultSchemaLine}" in ${graphqlrcPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+    );
+  }
+
+  if (!loader.isDefault) {
+    // URL sources are introspected with POST, as in the original template.
+    const loaderEntry =
+      loader.id === "url"
+        ? `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`
+        : `      ${loader.className}: '${loader.package}'`;
+    const beforeLoader = updated;
+    updated = updated.replace(defaultLoaderLine, () => loaderEntry);
+
+    if (updated === beforeLoader) {
+      throw new Error(
+        `Expected to find and replace "${defaultLoaderLine.trim()}" in ${graphqlrcPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+      );
+    }
+  }
+
+  fs.writeFileSync(graphqlrcPath, updated);
+}
+
+/**
+ * Rewrite the Docusaurus template's docusaurus.config.js site title.
+ */
+function writeDocusaurusConfig(tempDir, titleOverride) {
+  if (!titleOverride) {
+    return; // No changes needed
+  }
+
+  const configPath = path.join(tempDir, "docusaurus.config.js");
+  const originalContent = fs.readFileSync(configPath, "utf-8");
+  const updated = originalContent.replace(
+    'title: "My API",',
+    () => `title: ${JSON.stringify(titleOverride)},`,
+  );
+
+  if (updated === originalContent) {
+    throw new Error(
+      `Expected to find and replace 'title: "My API",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+    );
+  }
+
+  fs.writeFileSync(configPath, updated);
+}
+
+/**
  * Rewrite package.json to set the project name and add non-default loaders as dependencies.
  */
 function writePackageJson(tempDir, projectDir, loader) {
@@ -385,6 +453,7 @@ async function main() {
   const { values: args } = parseArgs({
     args: process.argv.slice(2),
     options: {
+      framework: { type: "string" },
       dir: { type: "string", short: "d" },
       schema: { type: "string" },
       example: { type: "boolean" },
@@ -398,6 +467,7 @@ async function main() {
     allowPositionals: false,
   });
 
+  let framework = args.framework;
   let projectDir = args.dir;
   let schemaPath = args.schema;
   const useExample = args.example || !schemaPath;
@@ -415,6 +485,36 @@ async function main() {
     // =========================================================================
     // PHASE 2: Gather decisions through prompts (project dir, schema, pm, title/color)
     // =========================================================================
+
+    // Step 2.0: Framework
+    if (framework && !FRAMEWORKS.includes(framework)) {
+      prompts.log.error(
+        `Invalid --framework "${framework}" — expected one of: ${FRAMEWORKS.join(", ")}.`,
+      );
+      process.exit(1);
+    }
+
+    if (!framework) {
+      if (isYes) {
+        framework = "nuxt";
+      } else {
+        framework = await prompts.select({
+          message: "Which framework would you like to use?",
+          options: [
+            { value: "nuxt", label: "Nuxt (@graphql-markdown/nuxt-theme)" },
+            { value: "docusaurus", label: "Docusaurus" },
+          ],
+        });
+
+        if (prompts.isCancel(framework)) {
+          prompts.cancel("Setup cancelled.");
+          process.exit(1);
+        }
+      }
+    }
+
+    const isDocusaurus = framework === "docusaurus";
+    const templateDir = path.join(templatesRoot, framework);
 
     // Step 2.1: Project directory
     if (!projectDir) {
@@ -550,6 +650,12 @@ async function main() {
     // Step 2.4: Optional title and color customization
     let titleOverride = "";
     let colorOverride = primaryColor ?? "";
+    if (isDocusaurus && colorOverride) {
+      prompts.log.warn(
+        "--color only applies to the Nuxt template — ignoring it for Docusaurus.",
+      );
+      colorOverride = "";
+    }
     if (!isYes) {
       const customizeTheme = await prompts.confirm({
         message: "Would you like to customize the site title and appearance?",
@@ -565,7 +671,7 @@ async function main() {
           titleOverride = customTitle;
         }
 
-        if (!colorOverride) {
+        if (!isDocusaurus && !colorOverride) {
           const customColor = await prompts.text({
             message:
               "Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):",
@@ -590,8 +696,12 @@ async function main() {
       /^\.output$/,
     ]);
 
-    // Step 3.1: Rewrite app.config.ts with title/color overrides
-    writeAppConfig(tempDir, titleOverride, colorOverride);
+    // Step 3.1: Rewrite the site title (and color, for Nuxt)
+    if (isDocusaurus) {
+      writeDocusaurusConfig(tempDir, titleOverride);
+    } else {
+      writeAppConfig(tempDir, titleOverride, colorOverride);
+    }
 
     // Step 3.2: Resolve the schema reference and copy local schema if needed
     let schemaRef = "./schema/example.graphql";
@@ -611,17 +721,25 @@ async function main() {
       schemaRef = `./schema/${destName}`;
     }
 
-    // Step 3.3: Rewrite generate-docs.ts for the schema and loader
-    writeGenerateDocs(tempDir, schemaRef, loader);
+    if (isDocusaurus) {
+      // Step 3.3: Rewrite .graphqlrc for the schema and loader
+      writeGraphqlrc(tempDir, schemaRef, loader);
+    } else {
+      // Step 3.3: Rewrite generate-docs.ts for the schema and loader
+      writeGenerateDocs(tempDir, schemaRef, loader);
 
-    // Step 3.4: Rewrite nuxt.config.ts for the schema
-    writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
+      // Step 3.4: Rewrite nuxt.config.ts for the schema
+      writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
+    }
 
     // Step 3.5: Rewrite package.json with project name and loader dependency
     writePackageJson(tempDir, projectDir, loader);
 
-    // Step 3.6: Rewrite README.md's schema section
-    writeReadme(tempDir, schemaPath, schemaRef, loader);
+    // Step 3.6: Rewrite README.md's schema section (Nuxt only — the
+    // Docusaurus README already documents editing .graphqlrc generically)
+    if (!isDocusaurus) {
+      writeReadme(tempDir, schemaPath, schemaRef, loader);
+    }
 
     // =========================================================================
     // PHASE 4: Move into place, install dependencies, init git, print summary
@@ -668,10 +786,13 @@ async function main() {
     }
 
     // Step 4.3: Final summary
+    const nextSteps = isDocusaurus
+      ? `  2. ${packageManager} run doc\n  3. ${packageManager} start`
+      : `  2. ${packageManager} run dev`;
     prompts.outro(`
 Next steps:
   1. cd ${projectDir}
-  2. ${packageManager} run dev
+${nextSteps}
 
 Documentation: https://graphql-markdown.dev
     `);

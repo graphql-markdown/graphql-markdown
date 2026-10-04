@@ -54,7 +54,7 @@
     },
     "packages/create-graphql-markdown-docs": {
       "entry": ["bin/create.mjs", "vitest.config.mjs"],
-      "ignore": ["template/**"]
+      "ignore": ["templates/**"]
     },
     "packages/tooling-config": {
       "project": ["**/*.{ts,mts}!"],

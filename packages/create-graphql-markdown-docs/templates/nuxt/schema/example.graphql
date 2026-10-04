@@ -1,0 +1,55 @@
+"""
+A simple example GraphQL schema demonstrating the GraphQL Markdown theme.
+"""
+scalar DateTime
+
+"""
+The root query type for the API.
+"""
+type Query {
+  """
+  Retrieve a user by their ID.
+  """
+  user(id: ID!): User
+
+  """
+  List all available users.
+  """
+  users: [User!]!
+}
+
+"""
+A user in the system.
+"""
+type User {
+  """
+  The unique identifier for this user.
+  """
+  id: ID!
+
+  """
+  The user's name.
+  """
+  name: String!
+
+  """
+  The user's email address.
+  """
+  email: String!
+
+  """
+  When this user account was created.
+  """
+  createdAt: DateTime!
+
+  """
+  The user's profile picture URL.
+  @deprecated Use `avatar` instead.
+  """
+  profilePictureUrl: String @deprecated(reason: "Use avatar field instead")
+
+  """
+  The user's avatar profile picture.
+  """
+  avatar: String
+}

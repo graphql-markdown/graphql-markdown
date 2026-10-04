@@ -1,7 +1,7 @@
 {
   "name": "create-graphql-markdown-docs",
   "version": "0.1.0",
-  "description": "Create a new GraphQL API documentation site with GraphQL Markdown and Nuxt",
+  "description": "Create a new GraphQL API documentation site with GraphQL Markdown and Nuxt or Docusaurus",
   "type": "module",
   "homepage": "https://graphql-markdown.dev",
   "bugs": {
@@ -15,6 +15,7 @@
   "keywords": [
     "create",
     "nuxt",
+    "docusaurus",
     "graphql",
     "documentation",
     "cli",
@@ -28,7 +29,7 @@
     "create-graphql-markdown-docs": "./bin/create.mjs"
   },
   "scripts": {
-    "build": "echo \"no build step — bin/ and template/ ship as source\"",
+    "build": "echo \"no build step — bin/ and templates/ ship as source\"",
     "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\"",
     "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"bin/**/*.mjs\" \"tests/**/*.ts\" --fix",
     "prettier": "prettier \"bin/**/*.mjs\" \"tests/**/*.ts\" --check",
@@ -40,7 +41,7 @@
   },
   "files": [
     "bin",
-    "template"
+    "templates"
   ],
   "dependencies": {
     "@clack/prompts": "^0.8.0",

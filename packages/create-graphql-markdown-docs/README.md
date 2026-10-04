@@ -1,6 +1,6 @@
 # create-graphql-markdown-docs
 
-Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt API reference site, built on the [`@graphql-markdown/nuxt-theme`](../nuxt-theme) layer.
+Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt or Docusaurus API reference site; the Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](../nuxt-theme) layer.
 
 ## Quick start
 
@@ -44,12 +44,13 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 
 | Flag | Description |
 | --- | --- |
+| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`; asked first in interactive mode when omitted. |
 | `--dir <path>` | Project directory. Default `./my-graphql-docs`. Must not already exist and be non-empty — the CLI exits with an error rather than overwrite anything. |
 | `--schema <path-or-url>` | Schema source — see the table above. |
 | `--example` | Use the bundled example schema (the default when `--schema` is omitted). |
 | `--pm <npm\|pnpm\|yarn\|bun>` | Package manager to use; otherwise auto-detected. |
-| `--title <name>` | Site title (`app.config.ts`'s `gqlmd.siteTitle`). |
-| `--color <name>` | Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`. |
+| `--title <name>` | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title`). |
+| `--color <name>` | Nuxt only (ignored with a warning for Docusaurus). Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`. |
 | `--no-install` | Skip dependency installation. |
 | `--no-git` | Skip git repository initialization. |
 | `--yes` | Accept all defaults; fully non-interactive. |
@@ -63,6 +64,17 @@ The scaffolded project is a real, complete Nuxt 4 project:
 - `generate-docs.ts` — calls the theme's `createGenerateDocs` factory with your schema (and, if applicable, the loader it needs).
 - `schema/` — your schema, or the bundled example.
 - `app/app.config.ts` / `app/pages/index.vue` — a minimal landing page and theme override point, yours to edit.
+
+## Docusaurus
+
+With `--framework docusaurus`, the scaffold replaces the standalone `graphql-markdown/template` repo:
+
+- `docusaurus.config.js` — Docusaurus 3 with the classic preset and `@graphql-markdown/docusaurus`.
+- `.graphqlrc` — schema and loader configuration (rewritten for your `--schema`).
+- `schema/` — your schema, or the bundled example.
+- `static/index.md`, `src/css/custom.css`, `babel.config.js` — landing page, styling and build config.
+
+Then run `npm run doc` to generate the docs and `npm start` to serve them.
 
 ## Documentation
 

@@ -13,7 +13,7 @@ import {
 import { tmpdir } from "node:os";
 
 const packageRoot = join(import.meta.dirname || __dirname, "../..");
-const templateDir = join(packageRoot, "template");
+const templateDir = join(packageRoot, "templates/nuxt");
 
 /**
  * Recursively get all files and directories from a directory.
@@ -407,6 +407,106 @@ describe("create-graphql-markdown-docs CLI", () => {
       expect(
         pkgJson.dependencies["@graphql-tools/json-file-loader"],
       ).toBeDefined();
+    });
+  });
+
+  describe("--framework docusaurus", () => {
+    const cliPath = join(packageRoot, "bin/create.mjs");
+    const run = (projectDir: string, ...extra: string[]) => {
+      return spawnSync(
+        "node",
+        [
+          cliPath,
+          "--yes",
+          "--framework",
+          "docusaurus",
+          "--dir",
+          projectDir,
+          "--no-install",
+          "--no-git",
+          ...extra,
+        ],
+        { cwd: packageRoot, encoding: "utf-8" },
+      );
+    };
+
+    it("scaffolds the docusaurus template file structure", () => {
+      const projectDir = join(testDir, "docu");
+      const result = run(projectDir);
+
+      expect(result.status).toBe(0);
+
+      const templateFiles = getAllFiles(
+        join(packageRoot, "templates/docusaurus"),
+      )
+        .map((f) => {
+          return f.path;
+        })
+        .sort();
+      const scaffoldedFiles = getAllFiles(projectDir)
+        .map((f) => {
+          return f.path;
+        })
+        .sort();
+      expect(scaffoldedFiles).toEqual(templateFiles);
+
+      const graphqlrc = readFileSync(join(projectDir, ".graphqlrc"), "utf-8");
+      expect(graphqlrc).toContain("schema: './schema/example.graphql'");
+      expect(result.stdout).toContain("run doc");
+    });
+
+    it("applies --title to docusaurus.config.js", () => {
+      const projectDir = join(testDir, "docu-title");
+      const result = run(projectDir, "--title", "Acme API");
+
+      expect(result.status).toBe(0);
+      const config = readFileSync(
+        join(projectDir, "docusaurus.config.js"),
+        "utf-8",
+      );
+      expect(config).toContain('title: "Acme API",');
+    });
+
+    it("writes the URL loader into .graphqlrc and package.json", () => {
+      const projectDir = join(testDir, "docu-url");
+      const result = run(
+        projectDir,
+        "--schema",
+        "https://api.example.com/graphql",
+      );
+
+      expect(result.status).toBe(0);
+      const graphqlrc = readFileSync(join(projectDir, ".graphqlrc"), "utf-8");
+      expect(graphqlrc).toContain("schema: 'https://api.example.com/graphql'");
+      expect(graphqlrc).toContain("UrlLoader:");
+      expect(graphqlrc).toContain("module: '@graphql-tools/url-loader'");
+      expect(graphqlrc).toContain("method: 'POST'");
+      expect(graphqlrc).not.toContain("GraphQLFileLoader");
+
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
+      expect(pkgJson.dependencies["@graphql-tools/url-loader"]).toBeDefined();
+    });
+
+    it("exits non-zero on an invalid --framework value", () => {
+      const result = spawnSync(
+        "node",
+        [
+          cliPath,
+          "--yes",
+          "--framework",
+          "gatsby",
+          "--dir",
+          join(testDir, "bad"),
+          "--no-install",
+          "--no-git",
+        ],
+        { cwd: packageRoot, encoding: "utf-8" },
+      );
+
+      expect(result.status).not.toBe(0);
+      expect(existsSync(join(testDir, "bad"))).toBe(false);
     });
   });
 });
