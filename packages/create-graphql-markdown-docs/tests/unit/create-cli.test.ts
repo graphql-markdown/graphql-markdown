@@ -156,8 +156,36 @@ describe("create-graphql-markdown-docs CLI", () => {
       join(projectDir, "app/app.config.ts"),
       "utf-8",
     );
-    expect(appConfig).toContain("siteTitle: 'My Cool API'");
-    expect(appConfig).toContain("primary: 'emerald'");
+    expect(appConfig).toContain('siteTitle: "My Cool API"');
+    expect(appConfig).toContain('primary: "emerald"');
+  });
+
+  it("should keep apostrophes in --title intact in app.config.ts", () => {
+    const cliPath = join(packageRoot, "bin/create.mjs");
+    const projectDir = join(testDir, "apostrophe-title");
+
+    const result = spawnSync(
+      "node",
+      [
+        cliPath,
+        "--yes",
+        "--dir",
+        projectDir,
+        "--title",
+        "Bob's API",
+        "--no-install",
+        "--no-git",
+      ],
+      { cwd: packageRoot, encoding: "utf-8" },
+    );
+
+    expect(result.status).toBe(0);
+
+    const appConfig = readFileSync(
+      join(projectDir, "app/app.config.ts"),
+      "utf-8",
+    );
+    expect(appConfig).toContain('"Bob\'s API"');
   });
 
   it("should replace project name in package.json", () => {

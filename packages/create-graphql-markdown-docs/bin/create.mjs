@@ -182,7 +182,7 @@ async function installDependencies(packageManager, projectDir) {
     const [command, args] =
       INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
     await runCommand(command, args, { cwd: projectDir });
-    prompts.success("Dependencies installed!");
+    prompts.log.success("Dependencies installed!");
   } catch (error) {
     prompts.log.error(`Failed to install dependencies: ${error.message}`);
   }
@@ -200,7 +200,7 @@ async function initGitRepo(projectDir) {
     await runCommand("git", ["commit", "-m", "Initial commit"], {
       cwd: projectDir,
     });
-    prompts.success("Git repository initialized!");
+    prompts.log.success("Git repository initialized!");
   } catch (error) {
     prompts.log.warn(`Could not initialize git: ${error.message}`);
   }
@@ -221,7 +221,7 @@ function writeAppConfig(tempDir, titleOverride, colorOverride) {
   if (titleOverride) {
     appConfig = appConfig.replace(
       /siteTitle: 'My API'/,
-      `siteTitle: '${titleOverride}'`,
+      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
     );
     if (appConfig === originalContent) {
       throw new Error(
@@ -237,7 +237,8 @@ function writeAppConfig(tempDir, titleOverride, colorOverride) {
     const beforeColorOverride = appConfig;
     appConfig = appConfig.replace(
       "export default defineAppConfig({",
-      `export default defineAppConfig({\n  ui: {\n    colors: {\n      primary: '${colorOverride}',\n    },\n  },`,
+      () =>
+        `export default defineAppConfig({\n  ui: {\n    colors: {\n      primary: ${JSON.stringify(colorOverride)},\n    },\n  },`,
     );
     if (appConfig === beforeColorOverride) {
       throw new Error(
@@ -470,7 +471,7 @@ async function main() {
   let framework = args.framework;
   let projectDir = args.dir;
   let schemaPath = args.schema;
-  const useExample = args.example || !schemaPath;
+  let useExample = args.example;
   let packageManager = args.pm;
   const siteTitle = args.title;
   const primaryColor = args.color;
@@ -557,7 +558,7 @@ async function main() {
     // Step 2.2: Schema choice and validation
     if (!useExample && !schemaPath) {
       if (isYes) {
-        schemaPath = null;
+        useExample = true;
       } else {
         const schemaChoice = await prompts.select({
           message: "How would you like to provide your GraphQL schema?",
@@ -575,6 +576,7 @@ async function main() {
           process.exit(1);
         }
 
+        useExample = schemaChoice === "example";
         if (schemaChoice === "existing") {
           schemaPath = await prompts.text({
             message:
@@ -648,7 +650,7 @@ async function main() {
     }
 
     // Step 2.4: Optional title and color customization
-    let titleOverride = "";
+    let titleOverride = siteTitle ?? "";
     let colorOverride = primaryColor ?? "";
     if (isDocusaurus && colorOverride) {
       prompts.log.warn(
@@ -663,12 +665,14 @@ async function main() {
       });
 
       if (!prompts.isCancel(customizeTheme) && customizeTheme) {
-        const customTitle = await prompts.text({
-          message: "Site title:",
-          defaultValue: "My API",
-        });
-        if (!prompts.isCancel(customTitle) && customTitle) {
-          titleOverride = customTitle;
+        if (!siteTitle) {
+          const customTitle = await prompts.text({
+            message: "Site title:",
+            defaultValue: "My API",
+          });
+          if (!prompts.isCancel(customTitle) && customTitle) {
+            titleOverride = customTitle;
+          }
         }
 
         if (!isDocusaurus && !colorOverride) {
@@ -681,8 +685,6 @@ async function main() {
           }
         }
       }
-    } else if (siteTitle) {
-      titleOverride = siteTitle;
     }
 
     // =========================================================================
@@ -749,7 +751,13 @@ async function main() {
     if (fs.existsSync(projectDir)) {
       fs.rmSync(projectDir, { recursive: true, force: true });
     }
-    fs.renameSync(tempDir, projectDir);
+    try {
+      fs.renameSync(tempDir, projectDir);
+    } catch (err) {
+      if (err.code !== "EXDEV") throw err;
+      // temp dir is on another filesystem; the finally block removes it
+      fs.cpSync(tempDir, projectDir, { recursive: true });
+    }
 
     prompts.log.success("Project created successfully!");
 
