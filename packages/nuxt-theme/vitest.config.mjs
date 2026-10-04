@@ -17,4 +17,6 @@ config.resolve.alias = [
   { find: "~", replacement: resolve(root, "app") },
 ];
 
+config.test.globalSetup = ["./tests/global-setup.mjs"];
+
 export default config;

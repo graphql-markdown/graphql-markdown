@@ -42,6 +42,7 @@
         "swizzle.manifest.ts",
         "modules/*.ts",
         "vitest.config.mjs",
+        "tests/global-setup.mjs",
         "app/components/*.vue"
       ],
       "ignore": [
