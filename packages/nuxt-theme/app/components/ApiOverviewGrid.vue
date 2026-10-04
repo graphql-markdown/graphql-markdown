@@ -24,27 +24,15 @@
 
 <script setup lang="ts">
 import type { ApiNavigationNode } from "~/composables/useApiNavigation";
+import {
+  countLeaves,
+  getFirstLeafPath,
+  itemKey,
+} from "~/utils/navigation-tree";
 
 defineProps<{
   items: Array<
     ApiNavigationNode | (ApiNavigationNode & { sectionTitle: string })
   >;
 }>();
-
-const itemKey = (item: any) =>
-  "sectionTitle" in item ? `${item.sectionTitle}-${item.title}` : item.title;
-
-const getFirstLeafPath = (node: ApiNavigationNode): string | undefined => {
-  if ("path" in node) return node.path;
-  for (const child of node.children) {
-    const path = getFirstLeafPath(child);
-    if (path) return path;
-  }
-  return undefined;
-};
-
-const countLeaves = (node: ApiNavigationNode): number => {
-  if ("path" in node) return 1;
-  return node.children.reduce((sum, child) => sum + countLeaves(child), 0);
-};
 </script>

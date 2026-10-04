@@ -47,44 +47,7 @@ const props = defineProps<{
   hideHeader?: boolean;
 }>();
 
-const copyLabel = computed(() =>
-  copied.value ? "Copied" : `Copy ${props.label} snippet`,
-);
-
-// `aria-label` (not `ariaLabel`): UButton has no such prop, so this falls
-// through as a raw attribute — Vue does not hyphenate an unrecognized
-// camelCase key for fallthrough attrs, so `ariaLabel` would render as the
-// DOM attribute `arialabel`, which screen readers don't recognize.
-const copyButtonProps = computed(
-  () =>
-    ({
-      icon: copied.value ? "i-lucide-check" : "i-lucide-copy",
-      color: "neutral",
-      variant: "ghost",
-      size: "xs",
-      "aria-label": copyLabel.value,
-    }) as const,
-);
-
-// `@vueuse/core` is only present as a hoisted dependency of `@nuxt/ui`, so the
-// clipboard call is written against the platform API instead.
-const copied = ref(false);
-let resetTimer: ReturnType<typeof setTimeout> | undefined;
-
-const copy = async (text: string) => {
-  try {
-    await navigator.clipboard.writeText(text);
-    copied.value = true;
-    clearTimeout(resetTimer);
-    resetTimer = setTimeout(() => (copied.value = false), 1500);
-  } catch {
-    // Clipboard access needs a secure context; leave the icon unchanged when
-    // the browser refuses rather than reporting a copy that did not happen.
-    copied.value = false;
-  }
-};
-
-onUnmounted(() => clearTimeout(resetTimer));
+const { copy, copyButtonProps } = useClipboardCopy(() => props.label);
 </script>
 
 <style>

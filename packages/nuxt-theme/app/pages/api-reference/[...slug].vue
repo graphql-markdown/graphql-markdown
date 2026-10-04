@@ -74,78 +74,23 @@
 </template>
 
 <script setup lang="ts">
-import { anchorIdFor } from "~/composables/useApiSinglePage";
-
 definePageMeta({ layout: "reference" });
 
-const route = useRoute();
-const config = useAppConfig();
-const baseURLPath = useApiBaseURL();
-
-const pathSegments = computed(() => route.path.split("/").filter(Boolean));
-
-/** `/api-reference/types/objects/user` → `OBJECT`, for the code-column badge. */
-const schemaKind = computed(() => schemaKindLabel(pathSegments.value.at(-2)));
-
-const isOperation = computed(() =>
-  isOperationCategory(pathSegments.value.at(-2)),
-);
-
-const { data: page } = await useAsyncData(route.path, async () => {
-  const exact = await queryCollection("content").path(route.path).first();
-  if (exact) return exact;
-  return queryCollection("content")
-    .path(`${route.path.replace(/\/$/, "")}/generated`)
-    .first();
-});
-
-const isLandingPage = computed(
-  () => page.value?.path?.endsWith("/generated") ?? false,
-);
-
-const { sections, overviewGroupsFor } = await useApiNavigation();
-const { isFlat } = await useHierarchyMode();
-const { buckets } = await useApiSinglePage(isFlat.value);
-const overviewGroups = computed(() =>
-  isLandingPage.value ? overviewGroupsFor(route.path) : [],
-);
-
-if (isFlat.value && page.value && !isLandingPage.value) {
-  const anchorId = anchorIdFor({
-    path: page.value.path,
-    kind:
-      typeof page.value.meta?.kind === "string"
-        ? page.value.meta.kind
-        : undefined,
-  });
-  await navigateTo(`${baseURLPath.value}#${anchorId}`, { redirectCode: 301 });
-}
-
-const breadcrumbs = computed(() =>
-  buildBreadcrumbs(
-    pathSegments.value,
-    page.value?.title || undefined,
-    baseURLPath.value,
-  ),
-);
-
-const { documentBody, deprecationReason, document } = useApiDocument(page);
-
-const { definitionCard, exampleCards } = await useApiCodeCards(
-  documentBody,
-  schemaKind,
-  isOperation,
-  config.gqlmd.shikiTheme,
-);
-
-if (page.value) {
-  useSeoMeta({
-    title: isLandingPage.value
-      ? page.value.title
-      : `API Reference | ${page.value.title}`,
-    description: page.value.description,
-  });
-}
+const {
+  route,
+  baseURLPath,
+  page,
+  isLandingPage,
+  isFlat,
+  buckets,
+  sections,
+  overviewGroups,
+  breadcrumbs,
+  deprecationReason,
+  document,
+  definitionCard,
+  exampleCards,
+} = await useApiReferencePage();
 </script>
 
 <style>

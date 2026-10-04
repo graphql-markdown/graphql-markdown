@@ -43,7 +43,9 @@
         "modules/*.ts",
         "vitest.config.mjs",
         "tests/global-setup.mjs",
-        "app/components/*.vue"
+        "app/components/*.vue",
+        "app/composables/*.ts!",
+        "app/utils/*.ts!"
       ],
       "ignore": [
         "tests/fixture/**",
