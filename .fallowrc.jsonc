@@ -49,8 +49,14 @@
 
   // website/ is a Docusaurus app outside the packages/* workspace —
   // its CSS-module exports and @docusaurus/* imports produce noise.
-  // dist/ is build output. __data__/ holds test fixtures.
-  "ignorePatterns": ["website/**", "**/dist/**", "**/__data__/**"],
+  // dist/ is build output. __data__/ holds test fixtures. The scaffolder templates
+  // declare their dependencies in each template's own package.json (mirrors knip).
+  "ignorePatterns": [
+    "website/**",
+    "**/dist/**",
+    "**/__data__/**",
+    "packages/create-graphql-markdown-docs/templates/**",
+  ],
 
   // All @graphql-markdown/* workspace packages are resolved through their
   // dist/ entries (e.g. "main": "dist/index.js"), which is excluded via
