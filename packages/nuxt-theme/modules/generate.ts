@@ -3,7 +3,7 @@ import { pathToFileURL } from "node:url";
 import { defineNuxtModule, useNuxt } from "@nuxt/kit";
 
 /**
- * Generates GraphQL API documentation before @nuxt/content indexes the
+ * Generates GraphQL API documentation before \@nuxt/content indexes the
  * content directory.
  *
  * The generation itself is an ordinary function call into the generator — the
@@ -11,28 +11,28 @@ import { defineNuxtModule, useNuxt } from "@nuxt/kit";
  * dogfooding of it. What has to be deliberate is *when* it runs.
  *
  * On a cold build (fresh clone, no generated files yet), a `build:before` hook
- * is too late: @nuxt/content parses the content directory during its own module
+ * is too late: \@nuxt/content parses the content directory during its own module
  * setup, so the collection is indexed from a directory that does not exist yet
  * and the generated pages 404. It only appears to work once a previous run has
  * left the files behind.
  *
  * FIX: run generation directly in this module's own `setup()`, awaited, and
- * list this module before "@nuxt/content" in the layer's `nuxt.config.ts`
- * `modules` array. Nuxt's `installModules` (in @nuxt/kit) installs modules
+ * list this module before `@nuxt/content` in the layer's `nuxt.config.ts`
+ * `modules` array. Nuxt's `installModules` (in \@nuxt/kit) installs modules
  * sequentially in a plain `for...of` loop with `await` on each one — verified
- * by reading `installModules`' source directly (node_modules/@nuxt/kit/dist/
+ * by reading `installModules`' source directly (node_modules/\@nuxt/kit/dist/
  * index.mjs) — so a module earlier in the resolved list is fully installed,
  * setup() included, before the next one starts. Layer modules are also
  * confirmed to resolve before the consuming app's own modules: `resolveModules`
- * (in the `nuxt` package) builds the modules Map from `nuxt.options._layers
- * .map(l => l.config).reverse()`, so an extended layer's config (later in
- * `_layers`) is processed first and its modules land earlier in the Map's
- * insertion order, which `installModules` then honors.
+ * (in the `nuxt` package) builds the modules Map from
+ * `nuxt.options._layers.map(l => l.config).reverse()`, so an extended layer's
+ * config (later in `_layers`) is processed first and its modules land earlier
+ * in the Map's insertion order, which `installModules` then honors.
  *
- * An earlier version of this module tried registering a `nuxt.hook("modules:
- * before", ...)` listener instead, reasoning that hook fires "before any
- * module's setup". That is true, but backwards for a module trying to listen
- * for it FROM one of its own setup() calls: `modules:before` is called once,
+ * An earlier version of this module tried registering a
+ * `nuxt.hook("modules:before", ...)` listener instead, reasoning that hook
+ * fires "before any module's setup". That is true, but backwards for a module
+ * trying to listen for it FROM one of its own setup() calls: `modules:before` is called once,
  * before `resolveModules`/`installModules` even run — so by the time this
  * module's own `setup()` executes (which is inside `installModules`), the
  * `modules:before` hook has already fired and the listener registered here

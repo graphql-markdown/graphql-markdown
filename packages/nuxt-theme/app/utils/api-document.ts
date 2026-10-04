@@ -240,7 +240,7 @@ export const toRenderableNode = (node: MdcNode): MdcNode => {
   return promoteBadges(promoteDeprecationCallout(normalizeAnchorId(node)));
 };
 
-export interface DocumentSection {
+interface DocumentSection {
   id: string;
   title: string;
   nodes: MdcNode[];

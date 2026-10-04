@@ -17,11 +17,11 @@ import { DEFAULT_BASE_URL } from "../constants";
  * directly, registering them with Nitro's prerenderer to ensure nothing gets
  * missed.
  *
- * The mapping from file to route is the same one @nuxt/content applies, so the
+ * The mapping from file to route is the same one \@nuxt/content applies, so the
  * directory can be walked directly rather than queried:
  *
- *   content/api-reference/queries/user.md -> /api-reference/queries/user
- *   content/api-reference/types/objects/user.md -> /api-reference/types/objects/user
+ *   content/api-reference/queries/user.md -\> /api-reference/queries/user
+ *   content/api-reference/types/objects/user.md -\> /api-reference/types/objects/user
  */
 
 const walk = async (dir: string): Promise<string[]> => {
@@ -45,9 +45,9 @@ const walk = async (dir: string): Promise<string[]> => {
 /**
  * Maps a content file path to its final route.
  * Special case: any `.../generated.md` becomes the route for its own
- * directory — `content/api-reference/generated.md` -> `/api-reference`, and
+ * directory — `content/api-reference/generated.md` -\> `/api-reference`, and
  * for a multi-schema namespace, `content/api-reference/schema-a/generated.md`
- * -> `/api-reference/schema-a`, with no assumption about how many segments
+ * -\> `/api-reference/schema-a`, with no assumption about how many segments
  * precede `generated`. "generated" is only ever emitted once per
  * `createGenerateDocs` call, at that call's own baseURL root, so "drop the
  * trailing `generated` segment" is correct regardless of nesting depth — a

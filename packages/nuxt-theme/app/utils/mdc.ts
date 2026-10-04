@@ -21,7 +21,8 @@ export const childrenOf = (node: MdcNode): MdcNode[] => {
 };
 
 /**
- * Flattened text of a node. Inline markup such as ``Replaced by `Project` ``
+ * Flattened text of a node. Inline markup, such as a code span inside
+ * "Replaced by `Project`",
  * splits a single sentence across several children, so prose has to be read
  * from the flattened text rather than from any one child.
  */

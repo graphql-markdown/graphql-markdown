@@ -36,7 +36,7 @@ interface Branch {
 /**
  * Groups `items` into a tree keyed by their path segments, skipping the
  * leading `rootDepth` segments (the shared baseURL prefix, e.g.
- * "api-reference" -> 1 segment) and the item's own trailing slug segment
+ * "api-reference" -\> 1 segment) and the item's own trailing slug segment
  * (its leaf identity, not a category). Works for any remaining depth: 0
  * extra segments (a page directly under the root) up to arbitrarily many
  * (multi-schema namespaces stacked above section/group). This is the fix

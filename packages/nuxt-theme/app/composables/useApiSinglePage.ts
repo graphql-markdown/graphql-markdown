@@ -36,6 +36,12 @@ interface CodeCard {
   html: string;
 }
 
+/**
+ * One entry of the single-page view. Typed by the swizzlable
+ * `ApiSinglePageEntry.vue` component, whose import knip can't see.
+ *
+ * @public
+ */
 export interface ApiSinglePageEntry {
   anchorId: string;
   title: string;
@@ -185,8 +191,8 @@ const buildEntry = async (
  * Deliberately independent of `useApiNavigation.ts` (which drives the
  * existing per-page sidebar/search): it groups by folder-path segments with a
  * `kind`-based fallback for flat hierarchy, whereas this always groups by the
- * `kind` frontmatter directly, so it groups correctly under `hierarchy: "api"
- * | "entity" | "flat"` alike, with a single code path.
+ * `kind` frontmatter directly, so it groups correctly under `hierarchy: "api" | "entity" | "flat"`
+ * alike, with a single code path.
  *
  * Not built to scale indefinitely: every entry's definition/examples are
  * Shiki-highlighted up front (one build-time cost, parallelized across

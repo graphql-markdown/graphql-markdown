@@ -22,14 +22,14 @@ const DEFAULT_LOADERS = {
  * from a GraphQL schema. The returned function can be invoked during a Nuxt module's
  * setup or from the consumer's own entry point (e.g., generate-docs.ts).
  *
- * @param userOptions - Configuration options for the generator
- * @param userOptions.schema - Path to the GraphQL schema file (required)
- * @param userOptions.rootPath - Root directory for generated content (default: "./content")
- * @param userOptions.baseURL - Base URL for the API reference (default: "api-reference")
- * @param userOptions.printTypeOptions - Formatting options merged with defaults
- * @param userOptions.decorators - Custom decorators for the schema output
- * @param userOptions.formatter - Path/URL to custom formatter module (default: this package's formatter.ts)
- * @param userOptions.loaders - Custom schema loaders (default: GraphQLFileLoader)
+ * @param userOptions - Configuration options for the generator:
+ *   - schema: Path to the GraphQL schema file (required)
+ *   - rootPath: Root directory for generated content (default: "./content")
+ *   - baseURL: Base URL for the API reference (default: "api-reference")
+ *   - printTypeOptions: Formatting options merged with defaults
+ *   - decorators: Custom decorators for the schema output
+ *   - formatter: Path/URL to custom formatter module (default: this package's formatter.ts)
+ *   - loaders: Custom schema loaders (default: GraphQLFileLoader)
  * @returns A function that generates the documentation when called
  */
 export const createGenerateDocs = (userOptions: {
