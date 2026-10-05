@@ -15,12 +15,13 @@ GraphQL-Markdown supports multiple documentation frameworks through formatter pr
 
 Use the path that matches your documentation stack:
 
-| If you are using...                        | Recommended path                                                                                                                                       |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Docusaurus**                             | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior.             |
-| **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems. |
-| **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                 |
-| **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                     |
+| If you are using...                        | Recommended path                                                                                                                                                                                                                        |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Docusaurus**                             | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior.                                                                                              |
+| **Nuxt**                                   | Use the `@graphql-markdown/nuxt-theme` layer (or scaffold one with `npm create graphql-markdown-docs`) for a full reference site — layout, navigation and search included, not just formatted Markdown. See [Nuxt Theme](./nuxt-theme). |
+| **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems.                                                                                  |
+| **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                                                                                                  |
+| **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                                                                                                      |
 
 For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
 

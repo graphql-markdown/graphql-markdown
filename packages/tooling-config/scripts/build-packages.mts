@@ -4,6 +4,7 @@
 import { pathToFileURL } from "node:url";
 
 import { getWorkspacePackagesMap } from "./shared/dependencies-utils.mts";
+import { ORG_NAME, shortName } from "./shared/package-names.mts";
 
 type PackageMeta = {
   private?: boolean;
@@ -11,14 +12,12 @@ type PackageMeta = {
   peerDependencies?: Record<string, string>;
 };
 
-const orgName = "@graphql-markdown";
-
 const getWorkspaceBuildNeeds = (packageMeta: PackageMeta = {}): string[] => {
   return Object.keys({
     ...packageMeta.dependencies,
     ...packageMeta.peerDependencies,
   }).filter((dependencyName) => {
-    return dependencyName.startsWith(orgName);
+    return dependencyName.startsWith(ORG_NAME);
   });
 };
 
@@ -64,12 +63,13 @@ const getBuildDependency = (): string[] => {
   return buildSequence;
 };
 
-// Publishable workspace package short names (org prefix stripped), ordered so
-// each package's `@graphql-markdown/*` dependencies are built before it.
+// Publishable workspace package short names (org prefix stripped where the
+// package is actually scoped under it — a deliberately unscoped package like
+// `create-graphql-markdown-docs` has no prefix to strip and is returned as
+// is), ordered so each package's `@graphql-markdown/*` dependencies are built
+// before it.
 const getBuildSequence = (): string[] => {
-  return getBuildDependency().map((packageName) => {
-    return packageName.slice(orgName.length + 1);
-  });
+  return getBuildDependency().map(shortName);
 };
 
 export { getBuildSequence };

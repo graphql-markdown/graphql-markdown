@@ -1,0 +1,16 @@
+{
+  "name": "nuxt-theme-fixture",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "@nuxt/content": "^3.16.0",
+    "@nuxt/ui": "^4.11.0",
+    "better-sqlite3": "^13.0.3",
+    "shiki": "^4.4.3",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@graphql-markdown/nuxt-theme": "workspace:",
+    "nuxt": "^4.5.2"
+  }
+}

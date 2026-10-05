@@ -1,0 +1,13 @@
+schema: './schema/example.graphql'
+extensions:
+  graphql-markdown:
+    baseURL: '.'
+    homepage: 'static/index.md'
+    loaders:
+      GraphQLFileLoader: '@graphql-tools/graphql-file-loader'
+    docOptions:
+      frontMatter:
+        pagination_next: null
+        pagination_prev: null
+    printTypeOptions:
+      deprecated: 'group'

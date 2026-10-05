@@ -56,17 +56,17 @@ You can use [nvm](https://github.com/nvm-sh/nvm), installed on a single machine,
 
 ### Generate a new site
 
-Generate a new Docusaurus site using the [GraphQL-Markdown template](https://github.com/graphql-markdown/template).
-
-The template will automatically be added to your project after you run the command:
+Generate a new Docusaurus site using the `create-graphql-markdown-docs` CLI:
 
 ```shell title="shell"
-npm init docusaurus my-website https://github.com/graphql-markdown/template.git
+npm create graphql-markdown-docs@latest -- --framework docusaurus
 ```
 
 You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
 
-The command also installs all the necessary dependencies you need to run Docusaurus.
+The command scaffolds a new site and installs all the necessary dependencies you need to run Docusaurus.
+
+The same CLI also scaffolds a [Nuxt site](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) with `--framework nuxt` (or without the flag to choose interactively).
 
 ### Add a GraphQL schema loader
 

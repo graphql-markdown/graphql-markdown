@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+  --gqlmd-sidebar-width: 20rem;
+  --gqlmd-badge-bg: color-mix(
+    in oklch,
+    var(--ui-color-neutral-500) 15%,
+    transparent
+  );
+  --gqlmd-badge-text: var(--ui-text-muted);
+  --gqlmd-badge-deprecated-bg: color-mix(
+    in oklch,
+    var(--ui-color-warning-500) 20%,
+    transparent
+  );
+  --gqlmd-badge-deprecated-text: var(--ui-color-warning-700);
+  --gqlmd-callout-deprecated-bg: color-mix(
+    in oklch,
+    var(--ui-color-error-500) 10%,
+    transparent
+  );
+  --gqlmd-callout-deprecated-border: var(--ui-color-error-500);
+  --gqlmd-code-text: #e4e4e7;
+}
+
+/*
+ * Nuxt UI resolves `primary`/`neutral` from app.config.ts. The reference keeps
+ * its own near-black chrome and violet accent, so the semantic tokens are
+ * retuned here once and every component consumes them via `bg-default`,
+ * `text-muted`, `border-default`, `text-primary`, etc.
+ */
+@theme static {
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer theme {
+  .light,
+  :root {
+    --ui-primary: var(--ui-color-primary-700);
+    --ui-bg: #fafafa;
+    --ui-bg-muted: #ffffff;
+    --ui-bg-elevated: #ffffff;
+    --ui-bg-accented: #f4f4f5;
+    --ui-border: #d4d4d8;
+    --ui-border-muted: #e4e4e7;
+    --ui-border-accented: #d4d4d8;
+    --ui-text: #3f3f46;
+    --ui-text-muted: #52525b;
+    --ui-text-dimmed: #52525b;
+    --ui-text-highlighted: #18181b;
+  }
+
+  .dark {
+    --ui-primary: #b9a4ff;
+    --ui-bg: #0d0d0d;
+    --ui-bg-muted: #0b0b0b;
+    --ui-bg-elevated: #1b1b1b;
+    --ui-bg-accented: #242424;
+    --ui-border: #292929;
+    --ui-border-muted: #262626;
+    --ui-border-accented: #363636;
+    --ui-text: #b3b3b9;
+    --ui-text-muted: #a1a1aa;
+    --ui-text-dimmed: #71717a;
+    --ui-text-highlighted: #fafafa;
+  }
+
+  .gqlmd-mdx-badge {
+    background-color: var(--gqlmd-badge-bg);
+    color: var(--gqlmd-badge-text);
+  }
+
+  .gqlmd-mdx-badge-deprecated {
+    background-color: var(--gqlmd-badge-deprecated-bg);
+    color: var(--gqlmd-badge-deprecated-text);
+  }
+
+  .api-deprecation-callout {
+    background-color: var(--gqlmd-callout-deprecated-bg);
+    border-color: var(--gqlmd-callout-deprecated-border);
+  }
+}

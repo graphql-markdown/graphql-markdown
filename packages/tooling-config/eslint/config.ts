@@ -76,6 +76,16 @@ const config: Linter.FlatConfig[] = [
     },
     rules: {
       ...prettierRules,
+      // `no-undef` does its scope analysis from syntax alone — it doesn't see
+      // ambient global declarations (e.g. Nuxt's auto-imported composables
+      // and its `utils`/`composables` auto-imports, declared in the
+      // generated `.nuxt/imports.d.ts`), so it false-positives on every one
+      // of those. `tsc`/`tsgo --build`/`vue-tsc` (already run separately in
+      // every package's `ts:check`) fully cover "used an undefined
+      // identifier" with real type information; this rule can't add
+      // anything they don't already catch. Recommended by typescript-eslint
+      // itself: https://typescript-eslint.io/rules/no-undef.
+      "no-undef": "off",
       "brace-style": [
         "error",
         "1tbs",
@@ -190,6 +200,23 @@ const config: Linter.FlatConfig[] = [
       "@typescript-eslint/explicit-module-boundary-types": "off",
       "@typescript-eslint/no-confusing-void-expression": "off",
       "@typescript-eslint/no-floating-promises": "off",
+    },
+  },
+
+  // Root-level standalone scripts (e.g. a Nuxt layer's own nuxt.config.ts,
+  // content.config.ts, generation scripts) that live outside a package's
+  // src/app/tests trees and so aren't covered by its main tsconfig.json.
+  // Only takes effect for a package that opts in with its own
+  // tsconfig.scripts.json — most packages have none, so this glob matches
+  // nothing for them.
+  {
+    files: ["**/packages/*/*.ts", "*.ts"],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ["./packages/*/tsconfig.scripts.json"],
+        tsconfigRootDir: projectRoot,
+      },
     },
   },
 
