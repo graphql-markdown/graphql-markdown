@@ -536,6 +536,32 @@ describe("link", () => {
       `);
     });
 
+    test("returns fallback link when hierarchy is flat and type has no category", () => {
+      expect.hasAssertions();
+
+      // Arguments and fields have no page of their own: under flat hierarchy
+      // they must not get a `<basePath>/<name>` URL pointing at a missing file.
+      const entityName = "id";
+      const type = { name: entityName, type: { name: "ID" } };
+
+      mockGraphQL.getNamedType.mockReturnValue(
+        entityName as unknown as GraphQLNamedType,
+      );
+      mockUtils.slugify.mockReturnValue(entityName);
+
+      const link = Link.toLink(type, entityName, undefined, {
+        ...DEFAULT_OPTIONS,
+        basePath,
+        hierarchy: { [TypeHierarchy.FLAT]: {} },
+      });
+
+      expect(link).toStrictEqual({
+        text: entityName,
+        url: "#",
+        id: entityName,
+      });
+    });
+
     test("returns a link matching renderer.ts's flat filename for a namespaced operation", () => {
       expect.hasAssertions();
 

@@ -308,11 +308,13 @@ export const toLink = (
   let groupFolder = "";
   let apiGroupFolder = "";
 
-  if (!isFlat) {
-    if (!category) {
-      return fallback;
-    }
+  // Arguments, fields and other entities without a category have no page of
+  // their own in either layout, so they keep the in-page fallback link.
+  if (!category) {
+    return fallback;
+  }
 
+  if (!isFlat) {
     deprecatedFolder = options.deprecated
       ? getLinkDeprecatedFolder(type, options.deprecated)
       : "";
@@ -353,7 +355,7 @@ export const toLink = (
     formatFolder(deprecatedFolder),
     formatFolder(groupFolder),
     formatFolder(apiGroupFolder),
-    isFlat ? "" : formatFolder(category ?? ""),
+    isFlat ? "" : formatFolder(category),
     ...namespaceFolders,
     leafSegment,
   );
