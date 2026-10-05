@@ -121,7 +121,7 @@ describe("useApiNavigation", () => {
     const sections = result.sections.value;
 
     // Verify top-level sections (Types, Operations)
-    expect(sections.length).toBe(2);
+    expect(sections).toHaveLength(2);
 
     const typeSection = sections.find(
       (s): s is ApiNavigationNode & { title: string } => {
@@ -139,14 +139,14 @@ describe("useApiNavigation", () => {
 
     // Verify Types has Objects group with User and Profile
     if (typeSection && "children" in typeSection) {
-      expect(typeSection.children.length).toBe(1);
+      expect(typeSection.children).toHaveLength(1);
       const objectsGroup = typeSection.children[0];
       if (
         objectsGroup &&
         "children" in objectsGroup &&
         objectsGroup.title === "Objects"
       ) {
-        expect(objectsGroup.children.length).toBe(2);
+        expect(objectsGroup.children).toHaveLength(2);
         const userLeaf = objectsGroup.children.find(
           (c): c is ApiNavigationLeaf => {
             return (
@@ -161,14 +161,14 @@ describe("useApiNavigation", () => {
 
     // Verify Operations has Queries group with GetUser
     if (operationsSection && "children" in operationsSection) {
-      expect(operationsSection.children.length).toBe(1);
+      expect(operationsSection.children).toHaveLength(1);
       const queriesGroup = operationsSection.children[0];
       if (
         queriesGroup &&
         "children" in queriesGroup &&
         queriesGroup.title === "Queries"
       ) {
-        expect(queriesGroup.children.length).toBe(1);
+        expect(queriesGroup.children).toHaveLength(1);
         const getUserLeaf = queriesGroup.children.find(
           (c): c is ApiNavigationLeaf => {
             return (
@@ -258,7 +258,7 @@ describe("useApiNavigation", () => {
 
     // Verify schema-b has its own Types and Operations groups
     if (schemaB && "children" in schemaB) {
-      expect(schemaB.children.length).toBe(2); // Types and Operations
+      expect(schemaB.children).toHaveLength(2); // Types and Operations
       const typesGroup = schemaB.children.find(
         (c): c is ApiNavigationNode & { title: string } => {
           return "children" in c && c.title === "Types";
@@ -511,7 +511,7 @@ describe("useApiNavigation", () => {
     expect(queries).toBeDefined();
 
     if (objects && "children" in objects) {
-      expect(objects.children.length).toBe(2);
+      expect(objects.children).toHaveLength(2);
       const userLeaf = objects.children.find((c): c is ApiNavigationLeaf => {
         return "path" in c && c.path === "/api-reference/user";
       });
@@ -543,7 +543,7 @@ describe("useApiNavigation", () => {
     const result = await useApiNavigation();
     const sections = result.sections.value;
 
-    expect(sections.length).toBe(1);
+    expect(sections).toHaveLength(1);
     expect("path" in sections[0]! && sections[0].path).toBe(
       "/api-reference/user",
     );
