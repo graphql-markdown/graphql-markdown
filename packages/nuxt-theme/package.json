@@ -45,7 +45,7 @@
     "test:ci": "vitest run --passWithNoTests --silent --sequence.shuffle"
   },
   "dependencies": {
-    "@clack/prompts": "^0.8.0",
+    "@clack/prompts": "^1.0.0",
     "@graphql-markdown/cli": "workspace:",
     "@nuxt/content": "^3.16.0",
     "@nuxt/kit": "^4.5.2",
