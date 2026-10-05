@@ -120,6 +120,7 @@ describe("useApiReferencePage", () => {
 
     expect(mocks.path).toHaveBeenCalledTimes(1);
     expect(result.isLandingPage.value).toBe(false);
+    expect(result.isNamespaceChooser.value).toBe(false);
     expect(result.overviewGroups.value).toEqual([]);
     expect(result.breadcrumbs.value).toEqual([
       "api-reference/types/objects/user",
@@ -177,6 +178,7 @@ describe("useApiReferencePage", () => {
     expect(result.breadcrumbs.value[1]).toBeUndefined();
     expect(mocks.useSeoMeta).not.toHaveBeenCalled();
     expect(mocks.createError).not.toHaveBeenCalled();
+    expect(result.isNamespaceChooser.value).toBe(true);
   });
 
   it("throws a 404 for a path with no generated page", async () => {

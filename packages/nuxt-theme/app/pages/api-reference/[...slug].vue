@@ -48,10 +48,7 @@
       :example-cards="exampleCards"
     />
   </main>
-  <main
-    v-else-if="isNamespaceChooser"
-    class="grid flex-1 grid-cols-1"
-  >
+  <main v-else-if="isNamespaceChooser" class="grid flex-1 grid-cols-1">
     <section
       class="api-document max-w-none overflow-y-auto p-8 lg:px-16 lg:py-20"
     >
@@ -81,6 +78,7 @@ const {
   baseURLPath,
   page,
   isLandingPage,
+  isNamespaceChooser,
   isFlat,
   buckets,
   sections,
