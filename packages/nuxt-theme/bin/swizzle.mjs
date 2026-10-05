@@ -97,10 +97,7 @@ function copyFileWithStamp(sourcePath, targetPath, version) {
   const lines = sourceContent.split("\n");
   let contentToWrite;
 
-  if (
-    lines[0] &&
-    lines[0].includes("swizzled from @graphql-markdown/nuxt-theme@")
-  ) {
+  if (lines[0]?.includes("swizzled from @graphql-markdown/nuxt-theme@")) {
     // Replace existing stamp
     contentToWrite = [versionStamp, ...lines.slice(1)].join("\n");
   } else {
@@ -116,9 +113,10 @@ function copyFileWithStamp(sourcePath, targetPath, version) {
 function parseSwizzleStamp(filepath) {
   try {
     const content = readFileSync(filepath, "utf-8");
-    const match = content.match(
-      /(?:<!--\s*)?swizzled from @graphql-markdown\/nuxt-theme@([^\s]+)(?:\s*-->)?/,
-    );
+    const match =
+      /(?:<!--\s*)?swizzled from @graphql-markdown\/nuxt-theme@([^\s]+)(?:\s*-->)?/.exec(
+        content,
+      );
     return match ? match[1] : null;
   } catch {
     return null;
@@ -249,8 +247,10 @@ const isDirectRun =
     realpathSync(fileURLToPath(import.meta.url));
 
 if (isDirectRun) {
-  main().catch((error) => {
+  try {
+    await main();
+  } catch (error) {
     console.error("Fatal error:", error);
     process.exit(1);
-  });
+  }
 }

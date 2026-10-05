@@ -97,3 +97,29 @@ describe("useApiDocument", () => {
     expect(deprecationReason.value).toContain("Replaced by");
   });
 });
+
+describe("extractAnchor", () => {
+  it("splits a trailing {#id} marker", () => {
+    expect(apiDocument.extractAnchor("Title  {#my-id} ")).toEqual({
+      id: "my-id",
+      text: "Title",
+    });
+    expect(apiDocument.extractAnchor("{#only}")).toEqual({
+      id: "only",
+      text: "",
+    });
+  });
+
+  it("returns null without a valid marker", () => {
+    expect(apiDocument.extractAnchor("Title")).toBeNull();
+    expect(apiDocument.extractAnchor("Title {#}")).toBeNull();
+    expect(apiDocument.extractAnchor("{#a} tail")).toBeNull();
+  });
+
+  it("stays linear on adversarial input", () => {
+    const evil = " ".repeat(100000) + "{#";
+    const start = Date.now();
+    expect(apiDocument.extractAnchor(evil)).toBeNull();
+    expect(Date.now() - start).toBeLessThan(1000);
+  });
+});

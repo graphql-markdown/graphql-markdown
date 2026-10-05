@@ -54,8 +54,10 @@ const buildTree = (
     // Falls back to the page's `kind` frontmatter (see RawPage) when there
     // are no folder segments left to group by — i.e. `hierarchy: "flat"`,
     // which otherwise has nothing else to group the sidebar/landing grid on.
-    const categoryPath =
-      pathCategory.length > 0 ? pathCategory : item.kind ? [item.kind] : [];
+    let categoryPath: string[] = pathCategory;
+    if (pathCategory.length === 0) {
+      categoryPath = item.kind ? [item.kind] : [];
+    }
     let node = root;
     for (const segment of categoryPath) {
       let child = node.children.get(segment);

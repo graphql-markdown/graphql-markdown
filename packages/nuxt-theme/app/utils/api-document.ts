@@ -28,10 +28,10 @@ const SCHEMA_KIND_LABELS: Record<string, string> = {
 };
 
 /** Categories whose pages document an operation rather than a schema type. */
-const OPERATION_CATEGORIES = ["queries", "mutations", "subscriptions"];
+const OPERATION_CATEGORIES = new Set(["queries", "mutations", "subscriptions"]);
 
 export const isOperationCategory = (category?: string): boolean => {
-  return Boolean(category && OPERATION_CATEGORIES.includes(category));
+  return Boolean(category && OPERATION_CATEGORIES.has(category));
 };
 
 /** Badge for a page's schema kind, taken from its category path segment. */
@@ -43,7 +43,7 @@ export const schemaKindLabel = (category?: string): string => {
 
 /** `create-project` → `Create Project`, for path segments used as labels. */
 export const titleCase = (value: string): string => {
-  return value.replace(/-/g, " ").replace(/\b\w/g, (letter) => {
+  return value.replaceAll("-", " ").replace(/\b\w/g, (letter) => {
     return letter.toUpperCase();
   });
 };
@@ -246,6 +246,27 @@ const promoteBadges = (node: MdcNode): MdcNode => {
 };
 
 /**
+ * Splits a trailing `{#id}` marker off a string in linear time (equivalent to
+ * matching `/\s*\{#([^}]+)\}\s*$/`, without its backtracking).
+ */
+export const extractAnchor = (
+  value: string,
+): { id: string; text: string } | null => {
+  const trimmed = value.trimEnd();
+  if (!trimmed.endsWith("}")) return null;
+  const closeIdx = trimmed.length - 1;
+  const open = trimmed.indexOf(
+    "{#",
+    trimmed.lastIndexOf("}", closeIdx - 1) + 1,
+  );
+  if (open === -1 || open + 2 >= closeIdx) return null;
+  return {
+    id: trimmed.slice(open + 2, closeIdx),
+    text: trimmed.slice(0, open).trimEnd(),
+  };
+};
+
+/**
  * Headings carry their anchor as a trailing `{#id}` marker; lift it into the
  * element's own id so in-page links resolve.
  */
@@ -253,15 +274,14 @@ const normalizeAnchorId = (node: MdcNode): MdcNode => {
   if (!isElement(node) || !/^h[1-6]$/.test(node[0])) return node;
 
   const lastChild = node.at(-1);
-  const anchorMatch =
-    typeof lastChild === "string" && /\s*\{#([^}]+)\}\s*$/.exec(lastChild);
-  if (!anchorMatch) return node;
+  const anchor =
+    typeof lastChild === "string" ? extractAnchor(lastChild) : null;
+  if (!anchor) return node;
 
   const children = node.slice(2, -1) as MdcNode[];
-  const remainingText = lastChild.replace(anchorMatch[0], "");
-  if (remainingText) children.push(remainingText);
+  if (anchor.text) children.push(anchor.text);
 
-  return [node[0], { ...node[1], id: anchorMatch[1] }, ...children];
+  return [node[0], { ...node[1], id: anchor.id }, ...children];
 };
 
 /** Every generated-markup fixup the reference layout applies to a node. */

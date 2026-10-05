@@ -82,7 +82,7 @@ interface RawPage {
  * the single-page view — one source of truth, so the two can't drift apart.
  */
 export const anchorIdFor = (page: { path: string; kind?: string }): string => {
-  return page.path.split("/").filter(Boolean).at(-1) ?? page.path;
+  return page.path.split("/").findLast(Boolean) ?? page.path;
 };
 
 const bucketIdFor = (kind: string | undefined): BucketId => {

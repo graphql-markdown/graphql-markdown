@@ -31,7 +31,7 @@ export const walk = async (dir: string): Promise<string[]> => {
       if (entry.name.startsWith("_") || entry.name.startsWith(".")) continue;
       const full = join(dir, entry.name);
       if (entry.isDirectory()) {
-        out.push(...(await walk(full)));
+        out.push(...(await walk(full))); // NOSONAR sequential recursive walk keeps route order deterministic
       } else if (entry.name.endsWith(".md")) {
         out.push(full);
       }

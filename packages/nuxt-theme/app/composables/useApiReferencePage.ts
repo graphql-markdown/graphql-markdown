@@ -115,7 +115,7 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
 
   if (page.value) {
     const current = page.value;
-    await nuxtApp.runWithContext(async () => {
+    await nuxtApp.runWithContext(() => {
       useSeoMeta({
         title: isLandingPage.value
           ? current.title
