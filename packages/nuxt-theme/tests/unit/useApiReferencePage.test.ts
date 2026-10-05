@@ -13,6 +13,10 @@ const mocks = vi.hoisted(() => {
       return ["group"];
     }),
     useApiCodeCards: vi.fn(),
+    sections: { value: ["section"] as string[] },
+    createError: vi.fn((input: Record<string, unknown>) => {
+      return Object.assign(new Error(String(input.statusMessage)), input);
+    }),
   };
 });
 
@@ -63,7 +67,7 @@ Object.assign(globalThis, {
   },
   useApiNavigation: async () => {
     return {
-      sections: ["section"],
+      sections: mocks.sections,
       overviewGroupsFor: mocks.overviewGroupsFor,
     };
   },
@@ -85,6 +89,7 @@ Object.assign(globalThis, {
   },
   useApiCodeCards: mocks.useApiCodeCards,
   navigateTo: mocks.navigateTo,
+  createError: mocks.createError,
   useSeoMeta: mocks.useSeoMeta,
 });
 
@@ -96,6 +101,7 @@ describe("useApiReferencePage", () => {
     vi.clearAllMocks();
     mocks.route.path = "/api-reference/types/objects/user";
     mocks.isFlat.value = false;
+    mocks.sections.value = ["section"];
     mocks.path.mockReturnValue({ first: mocks.first });
     mocks.useApiCodeCards.mockResolvedValue({
       definitionCard: "def",
@@ -161,7 +167,8 @@ describe("useApiReferencePage", () => {
     );
   });
 
-  it("skips SEO and breadcrumb title when no page is found", async () => {
+  it("keeps the namespace chooser at the base route when no page is found", async () => {
+    mocks.route.path = "/api-reference/";
     mocks.first.mockResolvedValue(null);
 
     const result = await useApiReferencePage();
@@ -169,5 +176,26 @@ describe("useApiReferencePage", () => {
     expect(result.page.value).toBeNull();
     expect(result.breadcrumbs.value[1]).toBeUndefined();
     expect(mocks.useSeoMeta).not.toHaveBeenCalled();
+    expect(mocks.createError).not.toHaveBeenCalled();
+  });
+
+  it("throws a 404 for a path with no generated page", async () => {
+    mocks.route.path = "/api-reference/operations/queries/missing";
+    mocks.first.mockResolvedValue(null);
+
+    await expect(useApiReferencePage()).rejects.toMatchObject({
+      statusCode: 404,
+      fatal: true,
+    });
+  });
+
+  it("throws a 404 at the base route when there are no sections", async () => {
+    mocks.route.path = "/api-reference";
+    mocks.sections.value = [];
+    mocks.first.mockResolvedValue(null);
+
+    await expect(useApiReferencePage()).rejects.toMatchObject({
+      statusCode: 404,
+    });
   });
 });

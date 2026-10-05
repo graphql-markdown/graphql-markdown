@@ -79,6 +79,21 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
     return isLandingPage.value ? overviewGroupsFor(route.path) : [];
   });
 
+  // Nothing generated at this path — and not the shared base route of a
+  // multi-schema site, which renders the namespace chooser instead — so it's
+  // a stale or mistyped link: surface a real 404 (which also fails prerender
+  // crawls) rather than leaving the page stuck on its loading placeholder.
+  const isNamespaceChooser =
+    route.path.replace(/\/$/, "") === baseURLPath.value &&
+    sections.value.length > 0;
+  if (!page.value && !isNamespaceChooser) {
+    throw createError({
+      statusCode: 404,
+      statusMessage: `No API reference page at ${route.path}`,
+      fatal: true,
+    });
+  }
+
   if (isFlat.value && page.value && !isLandingPage.value) {
     const anchorId = anchorIdFor({
       path: page.value.path,
