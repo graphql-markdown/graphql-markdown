@@ -37,9 +37,9 @@ export const createGenerateDocs = (userOptions: {
   rootPath?: string;
   baseURL?: string;
   printTypeOptions?: Partial<GraphQLMarkdownOptions["printTypeOptions"]>;
-  decorators?: GraphQLMarkdownOptions["decorators"];
+  decorators?: NonNullable<GraphQLMarkdownOptions["decorators"]>;
   formatter?: string;
-  loaders?: GraphQLMarkdownOptions["loaders"];
+  loaders?: NonNullable<GraphQLMarkdownOptions["loaders"]>;
 }): (() => Promise<void>) => {
   const {
     schema,
