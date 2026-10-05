@@ -55,6 +55,7 @@ import {
   writeDocusaurusConfig,
   writeGenerateDocs,
   writeGraphqlrc,
+  removeWatchBlock,
   writeNuxtConfig,
   writePackageJson,
   writeReadme,
@@ -191,6 +192,17 @@ describe("write* helpers (nuxt)", () => {
     expect(() => {
       return writeGenerateDocs(dir, "./other.graphql", def);
     }).toThrow(/nothing matched/);
+  });
+
+  it("removeWatchBlock: removes block, is linear on adversarial input", () => {
+    const src =
+      "a: 1,\n  // The layer's gqlmd-generate module\n  // more\n  watch: [x, y],\n  b: 2,\n";
+    expect(removeWatchBlock(src)).toBe("a: 1,\n  b: 2,\n");
+    expect(removeWatchBlock("nothing")).toBe("nothing");
+    const evil = `// The layer's gqlmd-generate module${"\n ".repeat(50000)}`;
+    const start = Date.now();
+    expect(removeWatchBlock(evil)).toBe(evil);
+    expect(Date.now() - start).toBeLessThan(1000);
   });
 
   it("writeNuxtConfig: local, remote, throws", () => {

@@ -117,7 +117,7 @@ export function copyDirRecursive(src, dst, excludePatterns = []) {
   const files = fs.readdirSync(src);
   for (const file of files) {
     // Skip excluded patterns
-    if (excludePatterns.some((pattern) => file.match(pattern))) {
+    if (excludePatterns.some((pattern) => pattern.exec(file))) {
       continue;
     }
 
@@ -281,6 +281,30 @@ export function writeGenerateDocs(tempDir, schemaRef, loader) {
 }
 
 /**
+ * Removes the layer's `watch: [...]` block (and its leading comment) using
+ * linear string scanning, replacing it with a single newline. Returns the
+ * input unchanged when the block isn't found.
+ */
+export function removeWatchBlock(content) {
+  const marker = "// The layer's gqlmd-generate module";
+  const markerIdx = content.indexOf(marker);
+  if (markerIdx === -1) return content;
+  const watchIdx = content.indexOf("watch: [", markerIdx);
+  if (watchIdx === -1) return content;
+  const lineStart = content.lastIndexOf("\n", watchIdx);
+  if (lineStart < markerIdx || content.slice(lineStart + 1, watchIdx).trim()) {
+    return content;
+  }
+  const closeIdx = content.indexOf("]", watchIdx);
+  if (closeIdx === -1 || !content.startsWith(",\n", closeIdx + 1)) {
+    return content;
+  }
+  let start = markerIdx;
+  while (start > 0 && /\s/.test(content[start - 1])) start--;
+  return `${content.slice(0, start)}\n${content.slice(closeIdx + 3)}`;
+}
+
+/**
  * Rewrite nuxt.config.ts's `watch` entry and/or schema filename to match the resolved schema.
  */
 export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
@@ -295,10 +319,7 @@ export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
     // so the entry is dropped rather than left pointing at a path that no longer
     // means anything.
     const beforeWatchRemoval = updated;
-    updated = updated.replace(
-      /\s*\/\/ The layer's gqlmd-generate module[\s\S]*?\n\s*watch: \[[^\]]*\],\n/,
-      "\n",
-    );
+    updated = removeWatchBlock(updated);
 
     if (updated === beforeWatchRemoval) {
       throw new Error(
@@ -520,7 +541,6 @@ async function resolveProjectDir(args) {
             if (!value || value.trim() === "") {
               return "Project directory cannot be empty";
             }
-            return;
           },
         });
   }
@@ -545,7 +565,6 @@ function validateSchemaSource(value) {
   if (!isRemoteSchemaSource(value) && !fs.existsSync(value)) {
     return "Schema file not found";
   }
-  return;
 }
 
 /** Resolves the custom schema source, or undefined to use the bundled example. */
@@ -603,7 +622,7 @@ async function resolveLoader(schemaPath) {
 async function resolvePackageManager(args) {
   if (args.pm) return args.pm;
   const detected = await detectPackageManager({ cwd: process.cwd() });
-  if (detected && detected.name) return detected.name;
+  if (detected?.name) return detected.name;
   if (args.yes) return "npm";
   return unlessCancelled(
     await prompts.select({
