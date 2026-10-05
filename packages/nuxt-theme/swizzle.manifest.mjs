@@ -7,6 +7,30 @@
  */
 
 /**
+ * Builds a manifest entry. Swizzled files land at the same relative path in
+ * the consumer's project, so `targetPath` mirrors `sourcePath`.
+ *
+ * @param {string} id
+ * @param {string} path
+ * @param {string} description
+ * @returns {SwizzleEntry}
+ */
+const entry = (id, path, description) => {
+  return { id, sourcePath: path, targetPath: path, description };
+};
+
+/**
+ * Builds an entry for a component living at `app/components/<id>.vue`.
+ *
+ * @param {string} id
+ * @param {string} description
+ * @returns {SwizzleEntry}
+ */
+const component = (id, description) => {
+  return entry(id, `app/components/${id}.vue`, description);
+};
+
+/**
  * Single source of truth for the swizzle manifest — loaded directly by
  * `bin/swizzle.mjs` (plain JS, no TypeScript loader required at runtime so
  * the CLI works on any Node >=22.12 without relying on experimental type
@@ -17,70 +41,44 @@
  * @type {SwizzleEntry[]}
  */
 export const swizzleManifest = [
-  {
-    id: "SiteHeader",
-    sourcePath: "app/components/SiteHeader.vue",
-    targetPath: "app/components/SiteHeader.vue",
-    description: "Top navigation bar",
-  },
-  {
-    id: "SiteFooter",
-    sourcePath: "app/components/SiteFooter.vue",
-    targetPath: "app/components/SiteFooter.vue",
-    description: "Bottom attribution bar",
-  },
-  {
-    id: "SchemaCodeCard",
-    sourcePath: "app/components/SchemaCodeCard.vue",
-    targetPath: "app/components/SchemaCodeCard.vue",
-    description: "Highlighted code panel (schema definitions and examples)",
-  },
-  {
-    id: "ApiOverviewGrid",
-    sourcePath: "app/components/ApiOverviewGrid.vue",
-    targetPath: "app/components/ApiOverviewGrid.vue",
-    description: "Card grid for displaying API reference overview and namespace sections",
-  },
-  {
-    id: "ApiNamespaceLanding",
-    sourcePath: "app/components/ApiNamespaceLanding.vue",
-    targetPath: "app/components/ApiNamespaceLanding.vue",
-    description: "Header and grid for API reference landing pages and namespace chooser",
-  },
-  {
-    id: "ApiDocumentContent",
-    sourcePath: "app/components/ApiDocumentContent.vue",
-    targetPath: "app/components/ApiDocumentContent.vue",
-    description: "Document content with collapsible sections for API reference pages",
-  },
-  {
-    id: "ApiCodeColumn",
-    sourcePath: "app/components/ApiCodeColumn.vue",
-    targetPath: "app/components/ApiCodeColumn.vue",
-    description: "Code column sidebar with highlighted schema definitions and examples",
-  },
-  {
-    id: "ApiSinglePageSection",
-    sourcePath: "app/components/ApiSinglePageSection.vue",
-    targetPath: "app/components/ApiSinglePageSection.vue",
-    description: "Bucket heading + entries for the single-page reference view",
-  },
-  {
-    id: "ApiSinglePageEntry",
-    sourcePath: "app/components/ApiSinglePageEntry.vue",
-    targetPath: "app/components/ApiSinglePageEntry.vue",
-    description: "One query/mutation/type's content on the single-page reference view",
-  },
-  {
-    id: "ReferenceLayout",
-    sourcePath: "app/layouts/reference.vue",
-    targetPath: "app/layouts/reference.vue",
-    description: "Sidebar + header chrome around the reference page",
-  },
-  {
-    id: "ReferencePage",
-    sourcePath: "app/pages/api-reference/[...slug].vue",
-    targetPath: "app/pages/api-reference/[...slug].vue",
-    description: "The two-column reference page itself",
-  },
+  component("SiteHeader", "Top navigation bar"),
+  component("SiteFooter", "Bottom attribution bar"),
+  component(
+    "SchemaCodeCard",
+    "Highlighted code panel (schema definitions and examples)",
+  ),
+  component(
+    "ApiOverviewGrid",
+    "Card grid for displaying API reference overview and namespace sections",
+  ),
+  component(
+    "ApiNamespaceLanding",
+    "Header and grid for API reference landing pages and namespace chooser",
+  ),
+  component(
+    "ApiDocumentContent",
+    "Document content with collapsible sections for API reference pages",
+  ),
+  component(
+    "ApiCodeColumn",
+    "Code column sidebar with highlighted schema definitions and examples",
+  ),
+  component(
+    "ApiSinglePageSection",
+    "Bucket heading + entries for the single-page reference view",
+  ),
+  component(
+    "ApiSinglePageEntry",
+    "One query/mutation/type's content on the single-page reference view",
+  ),
+  entry(
+    "ReferenceLayout",
+    "app/layouts/reference.vue",
+    "Sidebar + header chrome around the reference page",
+  ),
+  entry(
+    "ReferencePage",
+    "app/pages/api-reference/[...slug].vue",
+    "The two-column reference page itself",
+  ),
 ];
