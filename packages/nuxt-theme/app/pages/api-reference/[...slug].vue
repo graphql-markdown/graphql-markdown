@@ -49,7 +49,7 @@
     />
   </main>
   <main
-    v-else-if="!page && route.path === baseURLPath && sections.length > 0"
+    v-else-if="isNamespaceChooser"
     class="grid flex-1 grid-cols-1"
   >
     <section

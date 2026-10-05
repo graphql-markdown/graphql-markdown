@@ -9,6 +9,7 @@ export interface ApiReferencePage {
   baseURLPath: Ref<string>;
   page: Ref<Page>;
   isLandingPage: ComputedRef<boolean>;
+  isNamespaceChooser: boolean;
   isFlat: Ref<boolean>;
   buckets: Resolved<typeof useApiSinglePage>["buckets"];
   sections: Resolved<typeof useApiNavigation>["sections"];
@@ -145,6 +146,7 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
     baseURLPath,
     page,
     isLandingPage,
+    isNamespaceChooser,
     isFlat,
     buckets,
     sections,
