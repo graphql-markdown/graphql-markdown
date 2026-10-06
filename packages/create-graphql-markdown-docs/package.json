@@ -47,7 +47,7 @@
   ],
   "dependencies": {
     "@clack/prompts": "^1.0.0",
-    "graphql": "^16.8.0",
+    "graphql": "^17.0.0",
     "package-manager-detector": "^1.0.0"
   },
   "devDependencies": {
