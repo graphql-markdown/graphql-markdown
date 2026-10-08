@@ -172,8 +172,22 @@ export function runCommand(command, args, options = {}) {
         reject(new Error(`Command failed with exit code ${code}`));
       }
     });
-    proc.on("error", reject);
+    proc.on("error", (err) => {
+      reject(
+        err?.code === "ENOENT"
+          ? new Error(`${command} is not installed or not on your PATH`)
+          : err,
+      );
+    });
   });
+}
+
+/** Whether `git` is installed and runnable. */
+export async function isGitAvailable() {
+  return runCommand("git", ["--version"], { stdio: "ignore" }).then(
+    () => true,
+    () => false,
+  );
 }
 
 /**
@@ -224,6 +238,12 @@ export async function initGitRepo(projectDir) {
   try {
     await runCommand("git", ["init"], options);
     await runCommand("git", ["add", "."], options);
+  } catch (error) {
+    spinner.stop("Git initialization incomplete.");
+    prompts.log.warn(`Could not initialize git: ${error.message}`);
+    return;
+  }
+  try {
     await runCommand("git", ["commit", "-m", "Initial commit"], options);
     spinner.stop("Git repository initialized!");
   } catch (error) {
@@ -925,9 +945,13 @@ async function finalize(args, ctx) {
     );
   }
   if (!args["no-git"]) {
-    await confirmThen(isYes, "Initialize a git repository?", () =>
-      initGitRepo(projectDir),
-    );
+    if (await isGitAvailable()) {
+      await confirmThen(isYes, "Initialize a git repository?", () =>
+        initGitRepo(projectDir),
+      );
+    } else {
+      prompts.log.info("git not found — skipping repository initialization.");
+    }
   }
 
   // Relative path reads better than an absolute one; omitted when already there.

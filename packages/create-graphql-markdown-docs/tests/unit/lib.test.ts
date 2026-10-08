@@ -48,6 +48,7 @@ import {
   copyDirRecursive,
   detectLoader,
   initGitRepo,
+  isGitAvailable,
   installDependencies,
   isRemoteSchemaSource,
   main,
@@ -370,6 +371,52 @@ describe("process helpers", () => {
     await expect(runCommand("x", [])).rejects.toThrow("boom");
   });
 
+  it("runCommand reports a missing executable on ENOENT", async () => {
+    spawnResult(
+      Object.assign(new Error("spawn git ENOENT"), { code: "ENOENT" }),
+    );
+    await expect(runCommand("git", [])).rejects.toThrow(
+      "git is not installed or not on your PATH",
+    );
+  });
+
+  it("isGitAvailable resolves true or false", async () => {
+    spawnResult(0);
+    await expect(isGitAvailable()).resolves.toBe(true);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "git",
+      ["--version"],
+      expect.objectContaining({ stdio: "ignore" }),
+    );
+    spawnResult(new Error("spawn git ENOENT"));
+    await expect(isGitAvailable()).resolves.toBe(false);
+  });
+
+  it("initGitRepo hints at user.name only when the commit fails", async () => {
+    mocks.spawn.mockImplementation((cmd: string, args: string[]) => {
+      const proc = new EventEmitter();
+      queueMicrotask(() => {
+        return proc.emit(
+          "close",
+          args[0] === "init" ? 0 : args[0] === "add" ? 0 : 1,
+        );
+      });
+      return proc;
+    });
+    await initGitRepo(work);
+    expect(mocks.prompts.log.warn).toHaveBeenLastCalledWith(
+      expect.stringContaining("user.name"),
+    );
+  });
+
+  it("initGitRepo omits the user.name hint when init fails", async () => {
+    spawnResult(1);
+    await initGitRepo(work);
+    const message = mocks.prompts.log.warn.mock.calls.at(-1)?.[0];
+    expect(message).toContain("Could not initialize git");
+    expect(message).not.toContain("user.name");
+  });
+
   it("installDependencies uses the package manager's command", async () => {
     await installDependencies("yarn", work);
     expect(mocks.spawn).toHaveBeenCalledWith(
@@ -453,7 +500,7 @@ describe("main", () => {
     expect(fs.existsSync(path.join(dir, "schema/schema.graphql"))).toBe(true);
     expect(read(dir, "docusaurus.config.js")).toContain('title: "Docs"');
     expect(mocks.prompts.log.warn).toHaveBeenCalledTimes(2);
-    expect(mocks.spawn).toHaveBeenCalledTimes(5); // install + probe + 3 git
+    expect(mocks.spawn).toHaveBeenCalledTimes(6); // install + git --version + probe + 3 git
   });
 
   it("--yes nuxt with remote schema falls back to npm", async () => {
@@ -489,7 +536,7 @@ describe("main", () => {
     const dir = path.join(work, "i");
     expect(read(dir, "app/app.config.ts")).toContain('"Custom Title"');
     expect(read(dir, "app/app.config.ts")).toContain('"emerald"');
-    expect(mocks.spawn).toHaveBeenCalledTimes(5);
+    expect(mocks.spawn).toHaveBeenCalledTimes(6);
   });
 
   it("interactive docusaurus, example schema, declines everything", async () => {
@@ -499,9 +546,20 @@ describe("main", () => {
     mocks.prompts.text.mockResolvedValueOnce(path.join(work, "x"));
     mocks.prompts.confirm.mockResolvedValue(false);
     expect(await main([])).toBe(0);
-    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(mocks.spawn).toHaveBeenCalledTimes(1); // git --version only
     expect(mocks.prompts.outro).toHaveBeenCalledWith(
       expect.stringContaining("run doc"),
+    );
+  });
+
+  it("skips the git prompt when git is not installed", async () => {
+    spawnResult(
+      Object.assign(new Error("spawn git ENOENT"), { code: "ENOENT" }),
+    );
+    expect(await main([...base("ng"), "--yes", "--no-install"])).toBe(0);
+    expect(mocks.prompts.confirm).not.toHaveBeenCalled();
+    expect(mocks.prompts.log.info).toHaveBeenCalledWith(
+      expect.stringContaining("git not found"),
     );
   });
 
