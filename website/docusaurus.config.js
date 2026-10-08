@@ -154,14 +154,20 @@ const config = {
     // img-src allows contrib.rocks for the homepage's contributors image
     // (src/pages/index.js), and connect-src allows the npm downloads API used
     // by src/hooks/useNpmDownloads.js.
-    {
-      tagName: "meta",
-      attributes: {
-        "http-equiv": "Content-Security-Policy",
-        content:
-          "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contrib.rocks; connect-src 'self' https://api.npmjs.org; object-src 'none'; base-uri 'self';",
-      },
-    },
+    // Production only: the dev server's eval-based source maps need
+    // 'unsafe-eval', so the policy would leave `docusaurus start` blank.
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          {
+            tagName: "meta",
+            attributes: {
+              "http-equiv": "Content-Security-Policy",
+              content:
+                "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://contrib.rocks; connect-src 'self' https://api.npmjs.org; object-src 'none'; base-uri 'self';",
+            },
+          },
+        ]
+      : []),
     {
       tagName: "script",
       attributes: {
