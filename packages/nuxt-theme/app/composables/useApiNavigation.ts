@@ -19,7 +19,7 @@ interface RawPage {
   path: string;
   title: string;
   isDeprecated: boolean;
-  /** The GraphQL entity kind (`objects`, `scalars`, `queries`, …) stamped by `formatter.ts`'s `formatMDXFrontmatter`. */
+  /** The GraphQL entity kind (`objects`, `scalars`, `queries`, …) stamped by `formatter.mjs`'s `formatMDXFrontmatter`. */
   kind?: string;
 }
 

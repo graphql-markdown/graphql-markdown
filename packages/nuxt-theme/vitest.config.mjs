@@ -28,6 +28,7 @@ config.test.coverage = {
     "modules/**/*.ts",
     "bin/**/*.mjs",
     "*.ts",
+    "formatter.mjs",
     "swizzle.manifest.mjs",
   ],
   exclude: [

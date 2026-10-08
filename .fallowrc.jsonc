@@ -34,11 +34,11 @@
   // `vue` is provided by Nuxt, not listed in the layer's package.json.
   "ignoreUnresolvedImports": ["vue"],
 
-  // formatter.ts is loaded dynamically by @graphql-markdown/cli as a formatter
+  // formatter.mjs is loaded dynamically by @graphql-markdown/cli as a formatter
   // module; SwizzleEntry is the public type of the manifest.
   "ignoreExports": [
     {
-      "file": "packages/nuxt-theme/formatter.ts",
+      "file": "packages/nuxt-theme/formatter.mjs",
       "exports": ["*"],
     },
     {

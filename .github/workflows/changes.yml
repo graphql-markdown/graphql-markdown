@@ -29,6 +29,9 @@ on:
       smoke_docusaurus:
         description: The Docusaurus smoke targets are affected
         value: ${{ jobs.changes.outputs.smoke_docusaurus }}
+      smoke_nuxt:
+        description: The Nuxt smoke target is affected
+        value: ${{ jobs.changes.outputs.smoke_nuxt }}
       workflows:
         description: Something under .github/ changed
         value: ${{ jobs.changes.outputs.workflows }}
@@ -53,6 +56,7 @@ jobs:
       smoke: ${{ steps.affected.outputs.smoke }}
       smoke_cli: ${{ steps.affected.outputs.smoke_cli }}
       smoke_docusaurus: ${{ steps.affected.outputs.smoke_docusaurus }}
+      smoke_nuxt: ${{ steps.affected.outputs.smoke_nuxt }}
       workflows: ${{ steps.affected.outputs.workflows }}
       docs: ${{ steps.affected.outputs.docs }}
       website: ${{ steps.affected.outputs.website }}
@@ -88,6 +92,7 @@ jobs:
             echo "| direct_packages | \`${{ steps.affected.outputs.direct_packages }}\` |"
             echo "| smoke_cli | ${{ steps.affected.outputs.smoke_cli }} |"
             echo "| smoke_docusaurus | ${{ steps.affected.outputs.smoke_docusaurus }} |"
+            echo "| smoke_nuxt | ${{ steps.affected.outputs.smoke_nuxt }} |"
             echo "| workflows | ${{ steps.affected.outputs.workflows }} |"
             echo "| docs | ${{ steps.affected.outputs.docs }} |"
             echo "| website | ${{ steps.affected.outputs.website }} |"

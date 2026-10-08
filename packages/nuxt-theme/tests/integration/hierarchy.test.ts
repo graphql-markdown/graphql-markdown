@@ -41,7 +41,7 @@ const generateInto = async (
   tempDirs.push(rootPath);
 
   // Deliberately does not override `formatter` — this exercises nuxt-theme's
-  // own real `formatter.ts` (the same one `demo-nuxt` and the fixture apps
+  // own real `formatter.mjs` (the same one `demo-nuxt` and the fixture apps
   // use), which is what actually stamps the `kind:` frontmatter field
   // `useApiNavigation.ts` falls back to for flat-hierarchy grouping.
   const generate = createGenerateDocs({
