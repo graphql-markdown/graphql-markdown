@@ -252,17 +252,17 @@ The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI i
 
 The custom module can export individual formatter functions:
 
-| Export                     | Type                                      | Description                       |
-| -------------------------- | ----------------------------------------- | --------------------------------- |
-| `formatMDXBadge`           | `(badge: { text, classname? }) => string` | Format type badges                |
-| `formatMDXAdmonition`      | `(admonition, meta?) => string`           | Format callout/warning blocks     |
-| `formatMDXBullet`          | `(text?: string) => string`               | Format bullet point separators    |
-| `formatMDXDetails`         | `(option) => string`                      | Format collapsible sections       |
-| `formatMDXFrontmatter`     | `(props?, formatted?) => string`          | Format page frontmatter           |
-| `formatMDXLink`            | `(link) => { text, url }`                 | Transform type links              |
-| `formatMDXNameEntity`      | `(name, parentType?) => string`           | Format named entity references    |
-| `formatMDXPermalink`       | `(id) => string`                          | Format section header permalinks  |
-| `formatMDXSpecifiedByLink` | `(url) => string`                         | Format scalar specification links |
+| Export                     | Type                                       | Description                       |
+| -------------------------- | ------------------------------------------ | --------------------------------- |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`  | Format type badges                |
+| `formatMDXAdmonition`      | `(admonition, meta?) => string`            | Format callout/warning blocks     |
+| `formatMDXBullet`          | `(text?: string) => string`                | Format bullet point separators    |
+| `formatMDXDetails`         | `(option) => string`                       | Format collapsible sections       |
+| `formatMDXFrontmatter`     | `(props?, formatted?, context?) => string` | Format page frontmatter           |
+| `formatMDXLink`            | `(link) => { text, url }`                  | Transform type links              |
+| `formatMDXNameEntity`      | `(name, parentType?) => string`            | Format named entity references    |
+| `formatMDXPermalink`       | `(id) => string`                           | Format section header permalinks  |
+| `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links |
 
 For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
 
@@ -389,7 +389,7 @@ Use these options to toggle the type of information rendered on pages:
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
-  - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)).
+  - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)). Filenames are prefixed with the entity kind to keep them unique, e.g. `objects-user.mdx` and `queries-user.mdx` (since 1.38.0).
   - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/namespaced-operations))._
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `typeBadges`: add field type attributes badges.

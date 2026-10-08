@@ -70,7 +70,7 @@ The same CLI also scaffolds a [Nuxt site](https://github.com/graphql-markdown/gr
 
 ### Add a GraphQL schema loader
 
-A schema loader is required to load your GraphQL schema. The template comes with `@graphql-tools/url-loader` pre-configured for remote schemas.
+A schema loader is required to load your GraphQL schema. Without `--schema`, the site uses a bundled example schema with `@graphql-tools/graphql-file-loader`. Pass `--schema <path-or-url>` to use your own: the CLI picks the matching loader (URL, JSON, code file, git or GitHub), adds it as a dependency, and writes it into `.graphqlrc`.
 
 See [schema loading](/docs/advanced/schema-loading) for other loaders and configuration options.
 
@@ -79,13 +79,13 @@ See [schema loading](/docs/advanced/schema-loading) for other loaders and config
 Run the development server:
 
 ```shell title="shell"
-cd my-website
+cd my-graphql-docs
 npm start
 ```
 
 :::tip
 
-The `npm run doc` command is a shortcut in the template for command-line document generation: `npm run docusaurus graphql-to-doc`.
+The `npm run doc` command is a shortcut in the scaffolded site for command-line document generation: `npm run docusaurus graphql-to-doc`.
 
 :::
 

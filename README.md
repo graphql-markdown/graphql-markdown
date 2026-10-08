@@ -14,7 +14,13 @@ Generate **Markdown and MDX documentation** from **GraphQL schemas** for Docusau
 
 ## Installation
 
-GraphQL-Markdown supports two main setup paths:
+To start a new documentation site, scaffold one with Nuxt (default) or Docusaurus:
+
+```shell
+npm create graphql-markdown-docs@latest
+```
+
+To add GraphQL-Markdown to an existing site, there are two main setup paths:
 
 - use the official Docusaurus integration for Docusaurus sites
 - use the CLI with formatter presets for other supported ecosystems such as Hugo, MkDocs, DocFX, and mdBook
@@ -71,11 +77,11 @@ extensions:
 For programmatic usage, you can use the CLI package:
 
 ```typescript
-import { runGraphQLMarkdown } from '@graphql-markdown/cli';
+import { runGraphQLMarkdown } from "@graphql-markdown/cli";
 
 const config = {
-  schema: './schema.graphql',
-  rootPath: './docs',
+  schema: "./schema.graphql",
+  rootPath: "./docs",
 };
 
 await runGraphQLMarkdown(config);
