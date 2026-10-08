@@ -103,7 +103,7 @@ function HomepageHeader() {
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
-            to="/docs/get-started#new-docusaurus-site"
+            to="/docs/get-started#create-a-new-site"
           >
             Docusaurus →
           </Link>

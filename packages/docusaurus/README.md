@@ -14,7 +14,7 @@
 npm create graphql-markdown-docs@latest -- --framework docusaurus
 ```
 
-> _If you already have an existing Docusaurus installation, then see the [documentation](https://graphql-markdown.dev/docs/get-started/#existing-docusaurus-site) for alternative options._
+> _If you already have an existing Docusaurus installation, then see the [documentation](https://graphql-markdown.dev/docs/get-started/#docusaurus) for alternative options._
 
 ## Usage
 

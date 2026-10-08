@@ -2,6 +2,8 @@
 
 Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt or Docusaurus API reference site; the Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](../nuxt-theme) layer.
 
+Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).
+
 ## Quick start
 
 ```bash
