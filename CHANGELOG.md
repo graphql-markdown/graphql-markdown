@@ -1,3 +1,27 @@
+<a id="1.38.1"></a>
+# [1.38.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.1) - 2026-10-08
+
+1.38.1 fixes `@graphql-markdown/nuxt-theme`, which did not work when installed from npm. If you use the Nuxt theme, upgrade to `0.1.2`. No other package changes.
+
+### Fixed
+
+- **Nuxt theme**: `0.1.1` crashed on startup with `Cannot find module '../constants'`, because a source file was missing from the published package ([#3393](https://github.com/graphql-markdown/graphql-markdown/pull/3393)).
+- **Nuxt theme**: the theme's own formatter was silently ignored in projects that installed it from npm, so generated pages used the default formatter instead. Pages lost the `kind` frontmatter that `flat` hierarchy navigation groups by, and badges lost their per-type styling ([#3393](https://github.com/graphql-markdown/graphql-markdown/pull/3393)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/nuxt-theme | 0.1.2 |
+
+All other packages are unchanged from [1.38.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.0).
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.0...1.38.1
+
+
+[Changes][1.38.1]
+
+
 <a id="1.38.0"></a>
 # [1.38.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.0) - 2026-10-08
 
@@ -2590,6 +2614,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.38.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.0...1.38.1
 [1.38.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.37.0...1.38.0
 [1.37.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.36.0...1.37.0
 [1.36.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.35.2...1.36.0
