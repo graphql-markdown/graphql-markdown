@@ -106,7 +106,7 @@ const hasUncommittedChanges = (): boolean => {
 // age, so a version published minutes ago would look unpublished and the
 // script would try (and fail) to publish over it.
 const isPublished = async (name: string, version: string): Promise<boolean> => {
-  const url = `https://registry.npmjs.org/${name.replace("/", "%2F")}/${version}`;
+  const url = `https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`;
   try {
     const response = await fetch(url, {
       headers: { accept: "application/json" },
