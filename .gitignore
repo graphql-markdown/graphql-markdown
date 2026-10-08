@@ -12,6 +12,7 @@ build
 api
 website/examples
 website/api
+website/docs
 
 # stryker temp files
 .stryker-tmp
