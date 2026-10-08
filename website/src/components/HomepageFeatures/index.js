@@ -59,8 +59,8 @@ const FeatureList = [
     description: (
       <>
         GraphQL-Markdown generates Markdown or MDX, and formatter presets adapt
-        the output for Docusaurus, Hugo, MkDocs, DocFX, mdBook, Astro, Next.js,
-        and other supported targets while preserving each ecosystem's
+        the output for Docusaurus, Nuxt, Hugo, MkDocs, DocFX, mdBook, Astro,
+        Next.js, and other supported targets while preserving each ecosystem's
         conventions.{" "}
         <Link to="/docs/advanced/integration-with-frameworks">
           Explore formatter presets

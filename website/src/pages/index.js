@@ -26,7 +26,7 @@ const MORE_COUNT =
 
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
-  const cmd = "npm install @graphql-markdown/cli graphql";
+  const cmd = "npm create graphql-markdown-docs@latest";
 
   function handleCopy() {
     navigator.clipboard
@@ -54,8 +54,9 @@ function InstallCommand() {
         </button>
       </div>
       <p className="margin-top--sm margin-bottom--lg">
-        Start with the CLI, then choose the Docusaurus plugin or a formatter
-        preset for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems.
+        Scaffolds a new Nuxt or Docusaurus site. Adding docs to an existing
+        site? Use the Docusaurus plugin, or the CLI with a formatter preset for
+        Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems.
       </p>
     </>
   );
@@ -79,8 +80,8 @@ function HomepageHeader() {
         </h1>
 
         <p className={styles.heroSubtitle}>
-          Use the Docusaurus plugin for Docusaurus sites, or formatter presets
-          for{" "}
+          Start a new site with the Nuxt theme, add the Docusaurus plugin to an
+          existing site, or use formatter presets for{" "}
           <span className={styles.accentGreen}>
             Hugo, MkDocs, DocFX, mdBook
           </span>{" "}
@@ -94,6 +95,16 @@ function HomepageHeader() {
             className={clsx(
               "button button--primary button--lg",
               styles.heroButton,
+            )}
+            to="/docs/advanced/nuxt-theme"
+          >
+            Nuxt theme →
+          </Link>
+          <Link
+            className={clsx(
+              "button button--outline button--lg",
+              styles.heroButton,
+              styles.heroButtonSecondary,
             )}
             to="/docs/get-started"
           >
@@ -176,7 +187,7 @@ export default function Home() {
   return (
     <Layout
       title="GraphQL-Markdown — GraphQL schema documentation generator"
-      description="Generate Markdown and MDX documentation from any GraphQL schema. Use the official Docusaurus plugin or formatter presets for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems."
+      description="Generate Markdown and MDX documentation from any GraphQL schema. Scaffold a Nuxt or Docusaurus site, or use formatter presets for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems."
     >
       <HomepageHeader />
       <TrustedBy />
