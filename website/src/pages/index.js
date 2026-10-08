@@ -53,11 +53,6 @@ function InstallCommand() {
           {copied ? "✓ Copied" : "Copy"}
         </button>
       </div>
-      <p className="margin-top--sm margin-bottom--lg">
-        Scaffolds a new Nuxt or Docusaurus site. Adding docs to an existing
-        site? Use the Docusaurus plugin, or the CLI with a formatter preset for
-        Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems.
-      </p>
     </>
   );
 }
@@ -80,17 +75,16 @@ function HomepageHeader() {
         </h1>
 
         <p className={styles.heroSubtitle}>
-          Start a new site with the Nuxt theme, add the Docusaurus plugin to an
-          existing site, or use formatter presets for{" "}
+          Scaffold a new Nuxt or Docusaurus site, or add docs to an existing{" "}
           <span className={styles.accentGreen}>
-            Hugo, MkDocs, DocFX, mdBook
+            Docusaurus, Hugo, MkDocs, DocFX, mdBook
           </span>{" "}
-          and other supported documentation ecosystems.
+          and more.
         </p>
 
         <InstallCommand />
 
-        <div className={clsx("margin-vert--md", styles.buttons)}>
+        <div className={clsx("margin-top--lg margin-bottom--md", styles.buttons)}>
           <Link
             className={clsx(
               "button button--primary button--lg",
