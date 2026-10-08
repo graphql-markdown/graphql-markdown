@@ -5,11 +5,11 @@ import styles from "./styles.module.css";
 const HowItWorksSteps = [
   {
     step: "1",
-    title: "Install",
+    title: "Set up",
     description: (
       <>
-        Install GraphQL-Markdown, then choose the Docusaurus plugin or a
-        formatter preset that matches your docs stack.
+        Scaffold a new Nuxt or Docusaurus site, or add the Docusaurus plugin or
+        a formatter preset to your existing docs.
       </>
     ),
   },
@@ -18,8 +18,8 @@ const HowItWorksSteps = [
     title: "Configure",
     description: (
       <>
-        Point it at your schema with SDL, introspection, GraphQL Config, or a
-        code-first TS/JS schema source.
+        Point it at your schema: SDL files, an introspection endpoint, GraphQL
+        Config, or a code-first TS/JS schema.
       </>
     ),
   },
@@ -28,8 +28,7 @@ const HowItWorksSteps = [
     title: "Generate",
     description: (
       <>
-        Run the CLI and generate Markdown or MDX documentation ready for your
-        target ecosystem.{" "}
+        Run the CLI to get Markdown or MDX pages, ready for your docs site.{" "}
         <Link to="/docs/advanced/integration-with-frameworks">
           Choose a path →
         </Link>
