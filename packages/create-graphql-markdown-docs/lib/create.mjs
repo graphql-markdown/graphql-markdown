@@ -6,7 +6,10 @@ import os from "node:os";
 import { parseArgs } from "node:util";
 
 import * as prompts from "@clack/prompts";
-import { detect as detectPackageManager } from "package-manager-detector";
+import {
+  detect as detectPackageManager,
+  getUserAgent,
+} from "package-manager-detector";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -14,6 +17,9 @@ const templatesRoot = path.resolve(packageRoot, "templates");
 
 /** Supported scaffold targets; each maps to `templates/<framework>`. */
 const FRAMEWORKS = ["nuxt", "docusaurus"];
+
+/** Directory name used when the user gives none (empty prompt or --yes). */
+const DEFAULT_PROJECT_DIR = "my-graphql-docs";
 
 /**
  * Maps each package manager to its install command and arguments.
@@ -173,6 +179,7 @@ export function runCommand(command, args, options = {}) {
 /**
  * Install dependencies for a project using the specified package manager.
  * Logs info, runs the install command, logs success, and catches+logs errors.
+ * Resolves to whether the install succeeded.
  */
 export async function installDependencies(packageManager, projectDir) {
   prompts.log.info(`Installing dependencies with ${packageManager}...`);
@@ -181,26 +188,49 @@ export async function installDependencies(packageManager, projectDir) {
       INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
     await runCommand(command, args, { cwd: projectDir });
     prompts.log.success("Dependencies installed!");
+    return true;
   } catch (error) {
     prompts.log.error(`Failed to install dependencies: ${error.message}`);
+    return false;
   }
 }
 
 /**
  * Initialize a git repository in the project directory.
- * Runs git init, git add, and git commit with an initial commit message.
+ * Skips when already inside a git work tree (no nested repos); otherwise runs
+ * git init, git add, and git commit with an initial commit message.
  * Logs success and catches+logs errors.
  */
 export async function initGitRepo(projectDir) {
+  // Git output is silenced (stdio "ignore") so it doesn't garble the prompt UI.
+  const options = { cwd: projectDir, stdio: "ignore" };
+
+  // A nested repo inside an existing one is almost never wanted.
+  const insideRepo = await runCommand(
+    "git",
+    ["rev-parse", "--is-inside-work-tree"],
+    options,
+  ).then(
+    () => true,
+    () => false,
+  );
+  if (insideRepo) {
+    prompts.log.info("Already inside a git repository — skipping git init.");
+    return;
+  }
+
+  const spinner = prompts.spinner();
+  spinner.start("Initializing git repository...");
   try {
-    await runCommand("git", ["init"], { cwd: projectDir });
-    await runCommand("git", ["add", "."], { cwd: projectDir });
-    await runCommand("git", ["commit", "-m", "Initial commit"], {
-      cwd: projectDir,
-    });
-    prompts.log.success("Git repository initialized!");
+    await runCommand("git", ["init"], options);
+    await runCommand("git", ["add", "."], options);
+    await runCommand("git", ["commit", "-m", "Initial commit"], options);
+    spinner.stop("Git repository initialized!");
   } catch (error) {
-    prompts.log.warn(`Could not initialize git: ${error.message}`);
+    spinner.stop("Git initialization incomplete.");
+    prompts.log.warn(
+      `Could not initialize git: ${error.message} (the commit can fail when git user.name / user.email are not configured).`,
+    );
   }
 }
 
@@ -423,13 +453,27 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
 }
 
 /**
+ * Derive a valid npm package name from a directory path (lowercase, no
+ * spaces or special characters, no leading dot/underscore/dash).
+ */
+export function toPackageName(dir) {
+  const name = path
+    .basename(dir)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9._~-]+/g, "-")
+    .replace(/^[._-]+/, "")
+    .replace(/-+$/, "");
+  return name || DEFAULT_PROJECT_DIR;
+}
+
+/**
  * Rewrite package.json to set the project name and add non-default loaders as dependencies.
  */
 export function writePackageJson(tempDir, projectDir, loader) {
   const pkgJsonPath = path.join(tempDir, "package.json");
   let pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
-  const projectName = path.basename(projectDir);
-  pkgJson.name = projectName;
+  pkgJson.name = toPackageName(projectDir);
   if (!loader.isDefault) {
     pkgJson.dependencies[loader.package] = loader.version;
   }
@@ -487,9 +531,34 @@ function fail(message) {
   throw new CliExit(1);
 }
 
+const HELP_TEXT = `Usage: create-graphql-markdown-docs [dir] [options]
+
+Options:
+  --framework <name>   Site framework: nuxt | docusaurus (default: nuxt)
+  -d, --dir <path>     Directory to create the project in (or pass it as [dir])
+  --schema <source>    Schema source: <path|url|git:|github:> (default: bundled example)
+  --example            Use the bundled example schema
+  --pm <name>          Package manager: npm | pnpm | yarn | bun
+  --title <text>       Site title
+  --color <name>       Primary color (Nuxt only)
+  --no-install         Skip installing dependencies
+  --no-git             Skip git repository initialization
+  -y, --yes            Accept defaults and skip all prompts
+  -h, --help           Show this help
+  -v, --version        Show the version
+`;
+
+/** Reads this package's version from its package.json. */
+function readVersion() {
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(packageRoot, "package.json"), "utf-8"),
+  );
+  return pkg.version;
+}
+
 /** Phase 1: parse command-line arguments. */
 export function parseCliArgs(argv) {
-  const { values } = parseArgs({
+  const { values, positionals } = parseArgs({
     args: argv,
     options: {
       framework: { type: "string" },
@@ -501,11 +570,22 @@ export function parseCliArgs(argv) {
       color: { type: "string" },
       "no-install": { type: "boolean" },
       "no-git": { type: "boolean" },
-      yes: { type: "boolean" },
+      yes: { type: "boolean", short: "y" },
+      help: { type: "boolean", short: "h" },
+      version: { type: "boolean", short: "v" },
     },
-    allowPositionals: false,
+    allowPositionals: true,
   });
-  return values;
+  return { ...values, dir: values.dir ?? positionals[0], positionals };
+}
+
+/** Fails on an unsupported --pm value. */
+function validatePackageManager(args) {
+  if (args.pm && !Object.hasOwn(INSTALL_COMMANDS, args.pm)) {
+    fail(
+      `Invalid --pm "${args.pm}" — expected one of: ${Object.keys(INSTALL_COMMANDS).join(", ")}.`,
+    );
+  }
 }
 
 async function resolveFramework(args) {
@@ -522,27 +602,48 @@ async function resolveFramework(args) {
     await prompts.select({
       message: "Which framework would you like to use?",
       options: [
-        { value: "nuxt", label: "Nuxt (@graphql-markdown/nuxt-theme)" },
-        { value: "docusaurus", label: "Docusaurus" },
+        {
+          value: "nuxt",
+          label: "Nuxt (@graphql-markdown/nuxt-theme)",
+          hint: "Nuxt UI theme, live reload on schema changes",
+        },
+        {
+          value: "docusaurus",
+          label: "Docusaurus",
+          hint: "React + MDX, classic docs site",
+        },
       ],
     }),
   );
+}
+
+/** Prompt validator: empty input means the default; the target must be free. */
+export function validateProjectDir(value) {
+  const target = path.resolve(value?.trim() || DEFAULT_PROJECT_DIR);
+  if (fs.existsSync(target)) {
+    if (!fs.statSync(target).isDirectory()) {
+      return `${target} is a file — pick another directory.`;
+    }
+    if (fs.readdirSync(target).length > 0) {
+      return `${target} is not empty — pick another directory.`;
+    }
+  }
+  return undefined;
 }
 
 async function resolveProjectDir(args) {
   let projectDir = args.dir;
   if (!projectDir) {
     projectDir = args.yes
-      ? "./my-graphql-docs"
-      : await prompts.text({
-          message: "Where should we create your project?",
-          defaultValue: "./my-graphql-docs",
-          validate: (value) => {
-            if (!value || value.trim() === "") {
-              return "Project directory cannot be empty";
-            }
-          },
-        });
+      ? DEFAULT_PROJECT_DIR
+      : unlessCancelled(
+          await prompts.text({
+            message: "Where should we create your project?",
+            placeholder: DEFAULT_PROJECT_DIR,
+            defaultValue: DEFAULT_PROJECT_DIR,
+            validate: validateProjectDir,
+          }),
+        ).trim() || DEFAULT_PROJECT_DIR;
   }
   projectDir = path.resolve(unlessCancelled(projectDir));
 
@@ -554,22 +655,23 @@ async function resolveProjectDir(args) {
   // into that directory, empty or remove it yourself first.
   if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
     fail(
-      `${projectDir} already exists and is not empty — refusing to overwrite it.`,
+      `${projectDir} already exists and is not empty — refusing to overwrite it. Pass a different --dir, or empty that directory first.`,
     );
   }
   return projectDir;
 }
 
 function validateSchemaSource(value) {
-  if (!value) return "Schema source is required";
-  if (!isRemoteSchemaSource(value) && !fs.existsSync(value)) {
+  const source = value?.trim();
+  if (!source) return "Schema source is required";
+  if (!isRemoteSchemaSource(source) && !fs.existsSync(source)) {
     return "Schema file not found";
   }
 }
 
 /** Resolves the custom schema source, or undefined to use the bundled example. */
 async function resolveSchemaPath(args) {
-  if (args.example || args.schema || args.yes) return args.schema;
+  if (args.example || args.schema || args.yes) return args.schema?.trim();
 
   const schemaChoice = unlessCancelled(
     await prompts.select({
@@ -579,19 +681,23 @@ async function resolveSchemaPath(args) {
           value: "example",
           label: "Use example schema (recommended for first-time)",
         },
-        { value: "existing", label: "Use an existing schema file" },
+        {
+          value: "existing",
+          label: "Use my own schema (file, URL or git ref)",
+        },
       ],
     }),
   );
   if (schemaChoice !== "existing") return undefined;
 
-  return unlessCancelled(
+  const entered = unlessCancelled(
     await prompts.text({
       message:
         "Path or URL to your GraphQL schema (local file, introspection endpoint, git:/github: ref):",
       validate: validateSchemaSource,
     }),
   );
+  return entered.trim();
 }
 
 /** Validates a local schema and detects the loader it needs. */
@@ -621,8 +727,13 @@ async function resolveLoader(schemaPath) {
 
 async function resolvePackageManager(args) {
   if (args.pm) return args.pm;
+  // Set when launched via `<pm> create`, so it reflects what the user ran.
+  const agent = getUserAgent()?.split("/")[0];
+  if (agent && Object.hasOwn(INSTALL_COMMANDS, agent)) return agent;
   const detected = await detectPackageManager({ cwd: process.cwd() });
-  if (detected?.name) return detected.name;
+  if (detected?.name && Object.hasOwn(INSTALL_COMMANDS, detected.name)) {
+    return detected.name;
+  }
   if (args.yes) return "npm";
   return unlessCancelled(
     await prompts.select({
@@ -637,10 +748,47 @@ async function resolvePackageManager(args) {
   );
 }
 
-/** Asks for a value; a cancelled or empty answer yields `fallback`. */
+/** Asks for a value; an empty answer yields `fallback`, a cancel aborts. */
 async function askOptional(options, fallback) {
-  const answer = await prompts.text(options);
-  return !prompts.isCancel(answer) && answer ? answer : fallback;
+  const answer = unlessCancelled(await prompts.text(options));
+  return answer || fallback;
+}
+
+/** Nuxt UI / Tailwind color names offered for the primary color. */
+const COLORS = [
+  "blue",
+  "sky",
+  "cyan",
+  "teal",
+  "emerald",
+  "green",
+  "lime",
+  "amber",
+  "orange",
+  "red",
+  "rose",
+  "pink",
+  "fuchsia",
+  "purple",
+  "indigo",
+  "slate",
+  "zinc",
+  "neutral",
+];
+
+/** Asks for the primary color; violet is the layer default, so it means no override. */
+async function askColor() {
+  const color = unlessCancelled(
+    await prompts.select({
+      message: "Primary color:",
+      initialValue: "violet",
+      options: [
+        { value: "violet", label: "violet", hint: "default" },
+        ...COLORS.map((value) => ({ value, label: value })),
+      ],
+    }),
+  );
+  return color === "violet" ? "" : color;
 }
 
 /** Warns when --color is passed to a framework that ignores it. */
@@ -656,19 +804,25 @@ function initialColor(args, isDocusaurus) {
 }
 
 /** Whether the user wants to customize title/color interactively. */
-async function wantsCustomization() {
-  const answer = await prompts.confirm({
-    message: "Would you like to customize the site title and appearance?",
-    initialValue: false,
-  });
-  return !prompts.isCancel(answer) && Boolean(answer);
+async function wantsCustomization(isDocusaurus) {
+  const answer = unlessCancelled(
+    await prompts.confirm({
+      message: isDocusaurus
+        ? "Customize the site title?"
+        : "Customize the site title and primary color?",
+      initialValue: false,
+    }),
+  );
+  return Boolean(answer);
 }
 
 /** Optional title and color customization. */
 async function promptCustomization(args, isDocusaurus) {
   let title = args.title ?? "";
   let color = initialColor(args, isDocusaurus);
-  if (args.yes || !(await wantsCustomization())) return { title, color };
+  if (args.yes || !(await wantsCustomization(isDocusaurus))) {
+    return { title, color };
+  }
 
   if (!args.title) {
     title = await askOptional(
@@ -677,13 +831,7 @@ async function promptCustomization(args, isDocusaurus) {
     );
   }
   if (!isDocusaurus && !color) {
-    color = await askOptional(
-      {
-        message:
-          "Primary color (any Nuxt UI / Tailwind color name, e.g. violet, blue, emerald):",
-      },
-      color,
-    );
+    color = await askColor();
   }
   return { title, color };
 }
@@ -755,8 +903,10 @@ function moveIntoPlace(tempDir, projectDir) {
 /** Runs `action` immediately with --yes, otherwise only after a confirmed prompt. */
 async function confirmThen(isYes, message, action) {
   if (isYes) return action();
-  const confirmed = await prompts.confirm({ message, initialValue: true });
-  if (!prompts.isCancel(confirmed) && confirmed) return action();
+  const confirmed = unlessCancelled(
+    await prompts.confirm({ message, initialValue: true }),
+  );
+  if (confirmed) return action();
 }
 
 /** Phase 4: install dependencies, init git, print summary. */
@@ -764,9 +914,12 @@ async function finalize(args, ctx) {
   const { projectDir, packageManager, framework } = ctx;
   const isYes = Boolean(args.yes);
 
+  let installed = false;
   if (!args["no-install"]) {
-    await confirmThen(isYes, "Install dependencies now?", () =>
-      installDependencies(packageManager, projectDir),
+    installed = Boolean(
+      await confirmThen(isYes, "Install dependencies now?", () =>
+        installDependencies(packageManager, projectDir),
+      ),
     );
   }
   if (!args["no-git"]) {
@@ -775,20 +928,29 @@ async function finalize(args, ctx) {
     );
   }
 
-  const nextSteps =
-    framework === "docusaurus"
-      ? `  2. ${packageManager} run doc\n  3. ${packageManager} start`
-      : `  2. ${packageManager} run dev`;
+  // Relative path reads better than an absolute one; omitted when already there.
+  const rel = path.relative(process.cwd(), projectDir);
+  const steps = [];
+  if (rel !== "") {
+    steps.push(`cd ${rel.includes(" ") ? JSON.stringify(rel) : rel}`);
+  }
+  if (!installed) steps.push(`${packageManager} install`);
+  if (framework === "docusaurus") {
+    steps.push(`${packageManager} run doc`, `${packageManager} run start`);
+  } else {
+    steps.push(`${packageManager} run dev`);
+  }
+  const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
 Next steps:
-  1. cd ${projectDir}
-${nextSteps}
+${list}
 
 Documentation: https://graphql-markdown.dev
     `);
 }
 
 async function scaffold(args, tempDir) {
+  validatePackageManager(args);
   const framework = await resolveFramework(args);
   const projectDir = await resolveProjectDir(args);
   const schemaPath = await resolveSchemaPath(args);
@@ -817,8 +979,35 @@ async function scaffold(args, tempDir) {
  * Run the scaffolder; resolves to the process exit code (never exits itself).
  */
 export async function main(argv = process.argv.slice(2)) {
+  let args;
+  try {
+    args = parseCliArgs(argv);
+  } catch (error) {
+    if (error?.code?.startsWith("ERR_PARSE_ARGS")) {
+      console.error(
+        `${error.message}\nRun with --help to see available options.`,
+      );
+      return 1;
+    }
+    throw error;
+  }
+
+  if (args.help) {
+    console.log(HELP_TEXT);
+    return 0;
+  }
+  if (args.version) {
+    console.log(readVersion());
+    return 0;
+  }
+
   prompts.intro(`✨ Welcome to GraphQL Markdown Docs`);
-  const args = parseCliArgs(argv);
+  if (args.positionals.length > 1) {
+    prompts.log.error(
+      `Unexpected arguments: ${args.positionals.slice(1).join(" ")}\nRun with --help to see available options.`,
+    );
+    return 1;
+  }
 
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-"));
   try {

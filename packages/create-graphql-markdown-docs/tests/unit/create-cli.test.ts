@@ -438,6 +438,68 @@ describe("create-graphql-markdown-docs CLI", () => {
     });
   });
 
+  describe("command-line interface", () => {
+    const cliPath = join(packageRoot, "bin/create.mjs");
+    const exec = (...args: string[]) => {
+      return spawnSync("node", [cliPath, ...args], {
+        cwd: packageRoot,
+        encoding: "utf-8",
+      });
+    };
+
+    it("--help exits 0 and prints usage", () => {
+      const result = exec("--help");
+      expect(result.status).toBe(0);
+      expect(result.stdout).toContain("Usage");
+    });
+
+    it("--version prints the package version", () => {
+      const pkg = JSON.parse(
+        readFileSync(join(packageRoot, "package.json"), "utf-8"),
+      );
+      const result = exec("--version");
+      expect(result.status).toBe(0);
+      expect(result.stdout.trim()).toBe(pkg.version);
+    });
+
+    it("an unknown flag exits 1 with a --help hint", () => {
+      const result = exec("--bogus");
+      expect(result.status).toBe(1);
+      expect(result.stderr).toContain("--help");
+    });
+
+    it("scaffolds into a positional directory", () => {
+      const projectDir = join(testDir, "positional");
+      const result = exec(projectDir, "--yes", "--no-install", "--no-git");
+      expect(result.status).toBe(0);
+      expect(existsSync(join(projectDir, "package.json"))).toBe(true);
+    });
+
+    it("an invalid --pm exits 1", () => {
+      const result = exec(
+        "--yes",
+        "--pm",
+        "pip",
+        "--dir",
+        join(testDir, "badpm"),
+        "--no-install",
+        "--no-git",
+      );
+      expect(result.status).toBe(1);
+      expect(existsSync(join(testDir, "badpm"))).toBe(false);
+    });
+
+    it("derives a valid package name from a directory like 'My Docs'", () => {
+      const projectDir = join(testDir, "My Docs");
+      const result = exec(projectDir, "--yes", "--no-install", "--no-git");
+      expect(result.status).toBe(0);
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
+      expect(pkgJson.name).toBe("my-docs");
+    });
+  });
+
   describe("--framework docusaurus", () => {
     const cliPath = join(packageRoot, "bin/create.mjs");
     const run = (projectDir: string, ...extra: string[]) => {
