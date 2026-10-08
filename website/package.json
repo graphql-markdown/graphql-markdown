@@ -38,5 +38,13 @@
   },
   "engines": {
     "node": ">=24.14"
+  },
+  "overrides": {
+    "js-yaml@^3": {
+      "argparse": "^2.0.1"
+    },
+    "katex": "^0.18.2",
+    "postcss-selector-parser": "^7.1.6",
+    "tinypool": "^2.1.2"
   }
 }
