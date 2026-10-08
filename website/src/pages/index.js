@@ -94,7 +94,7 @@ function HomepageHeader() {
             )}
             to="/docs/advanced/nuxt-theme"
           >
-            Nuxt theme →
+            Nuxt →
           </Link>
           <Link
             className={clsx(
@@ -104,7 +104,7 @@ function HomepageHeader() {
             )}
             to="/docs/get-started#new-docusaurus-site"
           >
-            Docusaurus quickstart →
+            Docusaurus →
           </Link>
           <Link
             className={clsx(
