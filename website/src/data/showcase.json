@@ -1,8 +1,20 @@
 [
   {
+    "name": "Altium",
+    "href": "https://altiumdeveloper.github.io/platform-api-docs/",
+    "image": "d54ee03c-86ba-4f1b-8422-295a3ae87b1f",
+    "featured": false
+  },
+  {
     "name": "Annict",
     "href": "https://developers.annict.com/docs/graphql-api/beta",
     "image": "437686456-2a63f51c-5554-4d6a-97ad-0366d89625a1",
+    "featured": false
+  },
+  {
+    "name": "Ansarada",
+    "href": "https://ansarada.dev/reference",
+    "image": "c9a0486a-361b-48ee-9b03-2738e7159958",
     "featured": false
   },
   {
@@ -75,6 +87,12 @@
     "name": "Crowded Kingdoms",
     "href": "https://docs.crowdedkingdoms.com/",
     "image": "18c4b355-121c-4caa-9f3f-98f96134cea3",
+    "featured": false
+  },
+  {
+    "name": "Embrace",
+    "href": "https://docs.api.dev.embrace.ai/docs/schema",
+    "image": "ba4b6922-210f-4dde-9703-967251985434",
     "featured": false
   },
   {
