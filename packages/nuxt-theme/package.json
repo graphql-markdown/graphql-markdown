@@ -73,6 +73,7 @@
     "app",
     "modules",
     "bin",
+    "constants.ts",
     "content.config.ts",
     "formatter.ts",
     "generate.ts",
