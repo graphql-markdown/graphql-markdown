@@ -170,7 +170,31 @@ jobs:
       - name: Run CLI Smoke Tests
         run: .github/scripts/e2e/smoke-test.sh cli "$PROJECT_DIR"
 
-  # See test.yml's `gate` job for the general pattern. These four jobs skip
+  smoke-nuxt:
+    name: Smoke Tests on Nuxt theme
+    runs-on: ubuntu-latest
+    needs: [changes, build-packages]
+    # `build-packages` success is asserted explicitly: `!cancelled()` in this
+    # expression would otherwise let the smoke tests run without the packed
+    # tarballs they install.
+    if: >-
+      !cancelled() && needs.build-packages.result == 'success'
+      && (needs.changes.result != 'success'
+        || needs.changes.outputs.smoke_nuxt == 'true')
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/prepare-scaffold
+        with:
+          project-name: nuxt-gqlmd
+
+      - name: Scaffold, install packed packages and generate
+        run: .github/scripts/e2e/smoke-nuxt.sh "$PROJECT_DIR" "$PKG_DIR"
+
+  # See test.yml's `gate` job for the general pattern. These five jobs skip
   # at the *job* level (gated on `needs.changes.outputs.smoke*`, which -- unlike
   # test.yml/mutation.yml's per-package skip -- doesn't need a dynamic matrix,
   # since none of these `if:` conditions depend on `matrix.*`), so `skipped`
@@ -178,7 +202,14 @@ jobs:
   gate:
     name: Smoke Gate
     runs-on: ubuntu-latest
-    needs: [build-packages, smoke-docusaurus-test, smoke-docusaurus-build, smoke-cli]
+    needs:
+      [
+        build-packages,
+        smoke-docusaurus-test,
+        smoke-docusaurus-build,
+        smoke-cli,
+        smoke-nuxt,
+      ]
     if: always()
     permissions:
       actions: read
@@ -190,7 +221,8 @@ jobs:
             "${{ needs.build-packages.result }}" \
             "${{ needs.smoke-docusaurus-test.result }}" \
             "${{ needs.smoke-docusaurus-build.result }}" \
-            "${{ needs.smoke-cli.result }}"; do
+            "${{ needs.smoke-cli.result }}" \
+            "${{ needs.smoke-nuxt.result }}"; do
             if [ "$result" != "success" ] && [ "$result" != "skipped" ]; then
               echo "::error::required job result was '$result'"
               exit 1

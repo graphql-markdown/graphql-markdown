@@ -134,24 +134,32 @@ describe("computeAffected() smoke targets", () => {
   test("runs every smoke target when any package changes", () => {
     expect(
       computeAffected(["packages/logger/src/index.ts"], packagesMap),
-    ).toMatchObject({ smoke_cli: true, smoke_docusaurus: true });
+    ).toMatchObject({
+      smoke_cli: true,
+      smoke_docusaurus: true,
+      smoke_nuxt: true,
+    });
   });
 
   test.each([
-    ["tests/e2e/cli/specs/cli.spec.mjs", true, false],
-    ["tests/e2e/docusaurus/specs/cli.spec.mjs", false, true],
+    ["tests/e2e/cli/specs/cli.spec.mjs", true, false, false],
+    ["tests/e2e/docusaurus/specs/cli.spec.mjs", false, true, false],
     // Markdown under tests/ is generator input, not documentation.
-    ["tests/e2e/__data__/anilist.md", true, true],
-    ["tests/e2e/helpers/cli.mjs", true, true],
-    [".github/workflows/smoke.yml", true, true],
-  ])("scopes %s to the smoke targets it exercises", (file, cli, docusaurus) => {
-    const outputs = computeAffected([file], packagesMap);
+    ["tests/e2e/__data__/anilist.md", true, true, true],
+    ["tests/e2e/helpers/cli.mjs", true, true, true],
+    [".github/workflows/smoke.yml", true, true, true],
+  ])(
+    "scopes %s to the smoke targets it exercises",
+    (file, cli, docusaurus, nuxt) => {
+      const outputs = computeAffected([file], packagesMap);
 
-    expect(outputs.smoke_cli).toBe(cli);
-    expect(outputs.smoke_docusaurus).toBe(docusaurus);
-    // e2e specs are outside every Stryker `mutate` glob.
-    expect(outputs.direct_packages).toStrictEqual([]);
-  });
+      expect(outputs.smoke_cli).toBe(cli);
+      expect(outputs.smoke_docusaurus).toBe(docusaurus);
+      expect(outputs.smoke_nuxt).toBe(nuxt);
+      // e2e specs are outside every Stryker `mutate` glob.
+      expect(outputs.direct_packages).toStrictEqual([]);
+    },
+  );
 });
 
 describe("computeAffected() documentation and tooling", () => {

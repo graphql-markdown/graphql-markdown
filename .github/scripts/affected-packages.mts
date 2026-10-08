@@ -23,7 +23,10 @@ import { appendFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { ORG_NAME, shortName } from "../../packages/tooling-config/scripts/shared/package-names.mts";
+import {
+  ORG_NAME,
+  shortName,
+} from "../../packages/tooling-config/scripts/shared/package-names.mts";
 
 // Real workspace packages, but with no `test:ci` script: `types` is pure
 // `.d.ts` (erased before anything could run against it) and `tooling-config`
@@ -48,6 +51,7 @@ type AffectedOutputs = {
   smoke: boolean;
   smoke_cli: boolean;
   smoke_docusaurus: boolean;
+  smoke_nuxt: boolean;
   workflows: boolean;
   docs: boolean;
   website: boolean;
@@ -105,6 +109,9 @@ const WEBSITE_PATTERNS = [/^website\//u];
 const SMOKE_PATTERNS = {
   cli: [/^tests\/e2e\/cli\//u],
   docusaurus: [/^tests\/e2e\/docusaurus\//u],
+  // No spec directory of its own: its script lives under `.github/scripts/`,
+  // a global pattern, so editing it already runs every smoke target.
+  nuxt: [],
   both: [
     /^tests\/e2e\/__data__\//u,
     /^tests\/e2e\/helpers\//u,
@@ -213,7 +220,7 @@ const getTouchedPackages = (
 const getSmokeTargets = (
   files: string[],
   packagesTouched: boolean,
-): { cli: boolean; docusaurus: boolean; any: boolean } => {
+): { cli: boolean; docusaurus: boolean; nuxt: boolean; any: boolean } => {
   const touches = (patterns: RegExp[]): boolean => {
     return files.some((file) => {
       return matches(file, patterns) || matches(file, SMOKE_PATTERNS.both);
@@ -222,8 +229,9 @@ const getSmokeTargets = (
 
   const cli = packagesTouched || touches(SMOKE_PATTERNS.cli);
   const docusaurus = packagesTouched || touches(SMOKE_PATTERNS.docusaurus);
+  const nuxt = packagesTouched || touches(SMOKE_PATTERNS.nuxt);
 
-  return { cli, docusaurus, any: cli || docusaurus };
+  return { cli, docusaurus, nuxt, any: cli || docusaurus || nuxt };
 };
 
 /**
@@ -309,6 +317,7 @@ const computeAffected = (
     smoke: smoke.any,
     smoke_cli: smoke.cli,
     smoke_docusaurus: smoke.docusaurus,
+    smoke_nuxt: smoke.nuxt,
     workflows,
     docs,
     website,

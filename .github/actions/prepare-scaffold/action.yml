@@ -1,6 +1,6 @@
 name: Prepare scaffold environment
 description: >-
-  Shared setup for the CLI/Docusaurus scaffold actions: installs the toolchain
+  Shared setup for the CLI/Docusaurus/Nuxt smoke scaffolds: installs the toolchain
   and downloads the prebuilt workspace package tarballs (from the
   build-packages job). Exports PROJECT_DIR and PKG_DIR for later steps
   (REPO_ROOT comes from the caller workflow's top-level env).
