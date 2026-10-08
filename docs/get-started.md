@@ -89,14 +89,14 @@ See [Nuxt Theme](/docs/advanced/nuxt-theme) for what the Nuxt layer provides.
 
 A schema loader is required to load your GraphQL schema. Without `--schema`, the site uses a bundled example schema. Pass `--schema <path-or-url>` (or answer the prompt) to use your own: the CLI picks the matching [graphql-tools loader](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders), adds it as a dependency, and writes it into the site configuration (`.graphqlrc` for Docusaurus, `generate-docs.ts` for Nuxt).
 
-| Schema source | Example | Loader added |
-| --- | --- | --- |
-| Local `.graphql`/`.gql` file | `./schema/api.graphql` | None (default loader) |
-| Local `.json` introspection result | `./introspection.json` | `@graphql-tools/json-file-loader` |
-| Local code-first schema | `./schema.ts` | `@graphql-tools/code-file-loader` |
-| Introspection/SDL endpoint | `https://api.example.com/graphql` | `@graphql-tools/url-loader` |
-| Git-hosted file | `git:branch:path/schema.graphql` | `@graphql-tools/git-loader` |
-| GitHub-hosted file | `github:owner/repo#branch:path/schema.graphql` | `@graphql-tools/github-loader` |
+| Schema source                      | Example                                        | Loader added                      |
+| ---------------------------------- | ---------------------------------------------- | --------------------------------- |
+| Local `.graphql`/`.gql` file       | `./schema/api.graphql`                         | None (default loader)             |
+| Local `.json` introspection result | `./introspection.json`                         | `@graphql-tools/json-file-loader` |
+| Local code-first schema            | `./schema.ts`                                  | `@graphql-tools/code-file-loader` |
+| Introspection/SDL endpoint         | `https://api.example.com/graphql`              | `@graphql-tools/url-loader`       |
+| Git-hosted file                    | `git:branch:path/schema.graphql`               | `@graphql-tools/git-loader`       |
+| GitHub-hosted file                 | `github:owner/repo#branch:path/schema.graphql` | `@graphql-tools/github-loader`    |
 
 A local file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is.
 
@@ -139,20 +139,20 @@ Use `--yes` to accept all defaults and skip every prompt:
 npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
 ```
 
-| Flag | Description |
-| --- | --- |
-| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`. |
-| `[dir]`, `-d, --dir <path>` | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. The CLI exits with an error if it exists and is not empty. |
-| `--schema <path-or-url>` | Schema source, see the table above. |
-| `--example` | Use the bundled example schema (the default when `--schema` is omitted). |
-| `--pm <npm\|pnpm\|yarn\|bun>` | Package manager to use; otherwise detected from the invoking command, then from lockfiles. |
-| `--title <name>` | Site title. |
-| `--color <name>` | Nuxt only. Primary color, any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`). |
-| `--no-install` | Skip dependency installation. |
-| `--no-git` | Skip git repository initialization. |
-| `-y, --yes` | Accept all defaults; fully non-interactive. |
-| `-h, --help` | Show usage and exit. |
-| `-v, --version` | Print the CLI version and exit. |
+| Flag                             | Description                                                                                                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`.                                                                                                                             |
+| `[dir]`, `-d, --dir <path>`      | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. The CLI exits with an error if it exists and is not empty. |
+| `--schema <path-or-url>`         | Schema source, see the table above.                                                                                                                           |
+| `--example`                      | Use the bundled example schema (the default when `--schema` is omitted).                                                                                      |
+| `--pm <npm\|pnpm\|yarn\|bun>`    | Package manager to use; otherwise detected from the invoking command, then from lockfiles.                                                                    |
+| `--title <name>`                 | Site title.                                                                                                                                                   |
+| `--color <name>`                 | Nuxt only. Primary color, any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`).                                                                       |
+| `--no-install`                   | Skip dependency installation.                                                                                                                                 |
+| `--no-git`                       | Skip git repository initialization.                                                                                                                           |
+| `-y, --yes`                      | Accept all defaults; fully non-interactive.                                                                                                                   |
+| `-h, --help`                     | Show usage and exit.                                                                                                                                          |
+| `-v, --version`                  | Print the CLI version and exit.                                                                                                                               |
 
 ## Add to an existing site
 
