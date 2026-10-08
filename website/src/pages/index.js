@@ -84,7 +84,9 @@ function HomepageHeader() {
 
         <InstallCommand />
 
-        <div className={clsx("margin-top--lg margin-bottom--md", styles.buttons)}>
+        <div
+          className={clsx("margin-top--lg margin-bottom--md", styles.buttons)}
+        >
           <Link
             className={clsx(
               "button button--primary button--lg",
@@ -100,7 +102,7 @@ function HomepageHeader() {
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
-            to="/docs/get-started"
+            to="/docs/get-started#new-docusaurus-site"
           >
             Docusaurus quickstart →
           </Link>
