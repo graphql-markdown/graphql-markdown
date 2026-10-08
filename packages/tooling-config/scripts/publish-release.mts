@@ -22,7 +22,7 @@
 // Run directly by Node (>= 22.18) through type stripping, so it must stay
 // within erasable syntax: no enums, no parameter properties, no namespaces.
 
-import { spawn, spawnSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
@@ -101,25 +101,22 @@ const hasUncommittedChanges = (): boolean => {
   return status.stdout.trim().length > 0;
 };
 
-const isPublished = (name: string, version: string): Promise<boolean> => {
-  return new Promise((resolvePromise) => {
-    const child = spawn("npm", ["view", `${name}@${version}`, "version"], {
-      cwd: repoRoot,
+// Asks the registry directly rather than through `npm view`: in CI `npm` is
+// wrapped by safe-chain, which hides versions younger than its minimum package
+// age, so a version published minutes ago would look unpublished and the
+// script would try (and fail) to publish over it.
+const isPublished = async (name: string, version: string): Promise<boolean> => {
+  const url = `https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`;
+  try {
+    const response = await fetch(url, {
+      headers: { accept: "application/json" },
     });
-    let stdout = "";
-    child.stdout.on("data", (chunk) => {
-      stdout += chunk;
-    });
-    child.on("error", () => {
-      resolvePromise(false);
-    });
-    child.on("close", (code) => {
-      // A non-zero exit (E404: package or version never published) is the
-      // expected "not published yet" case; treat any other npm view failure
-      // the same way and let the publish attempt itself surface the error.
-      resolvePromise(code === 0 && stdout.trim() === version);
-    });
-  });
+    // 404 is the expected "not published yet" case; treat any other failure
+    // the same way and let the publish attempt itself surface the error.
+    return response.ok;
+  } catch {
+    return false;
+  }
 };
 
 const packTarball = (packageDir: string, tarballPath: string): boolean => {
@@ -251,7 +248,9 @@ let published = 0;
 let failed = 0;
 
 for (const { pkg, name, version } of toPublish) {
-  console.log(`\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version}`);
+  console.log(
+    `\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version}`,
+  );
   if (packAndPublish(pkg, name, version)) {
     published++;
     continue;

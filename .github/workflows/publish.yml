@@ -1,5 +1,5 @@
 name: Publish
-run-name: ${{ format('Publish release {0} to npm', github.event.release.name) }}
+run-name: ${{ format('Publish release {0} to npm', github.event.release.name || github.ref_name) }}
 
 env:
   HUSKY: 0
@@ -7,6 +7,11 @@ env:
 on:
   release:
     types: [published]
+  # Retries a release whose publish failed partway: re-running the failed job
+  # would replay the release's own commit, including any bug in the publish
+  # script itself. Still gated by the npm-publish environment, and the script
+  # skips every version already on npm.
+  workflow_dispatch:
 
 concurrency:
   group: publish
