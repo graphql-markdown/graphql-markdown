@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { formatMDXFrontmatter } from "../../formatter";
+import { formatMDXFrontmatter } from "../../formatter.mjs";
 
 describe("formatMDXFrontmatter", () => {
   it("wraps pre-formatted lines in --- delimiters, matching the default shape", () => {

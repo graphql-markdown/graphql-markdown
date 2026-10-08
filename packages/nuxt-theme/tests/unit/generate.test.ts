@@ -45,7 +45,9 @@ describe("createGenerateDocs", () => {
       loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
       printTypeOptions: { parentTypePrefix: false, typeBadges: true },
     });
-    expect(options.formatter).toMatch(/formatter\.(ts|js)$/);
+    // Loaded by a native import() from node_modules, where Node will not strip
+    // types — the default must stay plain JS.
+    expect(options.formatter).toMatch(/formatter\.mjs$/);
     expect(options.formatter).toMatch(/^file:\/\//);
   });
 

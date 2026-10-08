@@ -1,39 +1,55 @@
+// @ts-check
+
 /**
  * Formatter overrides handed to `graphql-markdown` (see `generate.ts`).
  *
- * The library loads this module by URL at generation time, so it is typed
+ * The library loads this module by URL with a native `import()` at
+ * generation time, and Node refuses to strip types from files under
+ * `node_modules` — so it ships as plain JS (typed via JSDoc), or every npm
+ * install would silently fall back to the default formatter. It is typed
  * structurally: `@graphql-markdown/types` is not a direct dependency, and its
  * `MDXString` return type is opaque and cannot be produced from here.
  */
 
-interface Badge {
-  text: string;
-  classname?: string[] | string;
-}
+/**
+ * @typedef {object} Badge
+ * @property {string} text
+ * @property {string[] | string} [classname]
+ */
 
-interface Admonition {
-  icon?: string | null;
-  text: string;
-  title: string | null;
-  type: string;
-}
+/**
+ * @typedef {object} Admonition
+ * @property {string | null} [icon]
+ * @property {string} text
+ * @property {string | null} title
+ * @property {string} type
+ */
 
-/** ` · ` instead of the default ` ● `, as text rather than a styled span. */
-export const formatMDXBullet = (text = ""): string => {
+/**
+ * ` · ` instead of the default ` ● `, as text rather than a styled span.
+ *
+ * @param {string} [text]
+ * @returns {string}
+ */
+export const formatMDXBullet = (text = "") => {
   return `&nbsp;·&nbsp;${text}`;
 };
 
-export const formatMDXBadge = ({ text }: Badge): string => {
+/**
+ * @param {Badge} badge
+ * @returns {string}
+ */
+export const formatMDXBadge = ({ text }) => {
   const suffix = String(text).toLowerCase();
 
   return `<mark class="gqlmd-mdx-badge gqlmd-mdx-badge-${suffix}">${text}</mark>`;
 };
 
-export const formatMDXAdmonition = ({
-  text,
-  title,
-  type,
-}: Admonition): string => {
+/**
+ * @param {Admonition} admonition
+ * @returns {string}
+ */
+export const formatMDXAdmonition = ({ text, title, type }) => {
   if (
     type.toLowerCase() === "warning" &&
     title?.toLowerCase() === "deprecated"
@@ -63,12 +79,13 @@ export const mdxExtension = ".md";
  * grid by entity kind whenever a page has no folder segments left to group
  * by — today, that's `printTypeOptions.hierarchy: "flat"`, which otherwise
  * has nothing else to group on.
+ *
+ * @param {unknown} _props
+ * @param {string[] | null | undefined} formatted
+ * @param {{ entity?: string | null }} [context]
+ * @returns {string}
  */
-export const formatMDXFrontmatter = (
-  _props: unknown,
-  formatted: string[] | null | undefined,
-  context?: { entity?: string | null },
-): string => {
+export const formatMDXFrontmatter = (_props, formatted, context) => {
   if (!formatted) return "";
   const lines = context?.entity
     ? [...formatted, `kind: ${context.entity}`]

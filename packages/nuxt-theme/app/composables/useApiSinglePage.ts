@@ -63,7 +63,7 @@ export interface ApiSinglePageBucket {
 interface RawPage {
   path: string;
   title: string;
-  /** Undeclared custom frontmatter, stamped by `formatter.ts`; Nuxt Content
+  /** Undeclared custom frontmatter, stamped by `formatter.mjs`; Nuxt Content
    * surfaces it under `meta`, not as a top-level field. */
   kind?: string;
   body: { [key: string]: unknown; value: MdcNode[] };

@@ -28,7 +28,7 @@ const DEFAULT_LOADERS = {
  *   - baseURL: Base URL for the API reference (default: "api-reference")
  *   - printTypeOptions: Formatting options merged with defaults
  *   - decorators: Custom decorators for the schema output
- *   - formatter: Path/URL to custom formatter module (default: this package's formatter.ts)
+ *   - formatter: Path/URL to custom formatter module (default: this package's formatter.mjs)
  *   - loaders: Custom schema loaders (default: GraphQLFileLoader)
  * @returns A function that generates the documentation when called
  */
@@ -47,7 +47,7 @@ export const createGenerateDocs = (userOptions: {
     baseURL = DEFAULT_BASE_URL,
     printTypeOptions,
     decorators,
-    formatter = new URL("./formatter.ts", import.meta.url).href,
+    formatter = new URL("./formatter.mjs", import.meta.url).href,
     loaders = DEFAULT_LOADERS,
   } = userOptions;
 

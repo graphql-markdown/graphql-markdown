@@ -38,7 +38,7 @@
         "content.config.ts",
         "generate.ts",
         "generate-docs.ts",
-        "formatter.ts",
+        "formatter.mjs",
         "swizzle.manifest.ts",
         "modules/*.ts",
         "vitest.config.mjs",
