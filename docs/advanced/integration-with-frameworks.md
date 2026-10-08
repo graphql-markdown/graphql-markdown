@@ -117,17 +117,17 @@ For frameworks not listed above, or to customize formatting behavior, create a c
 
 A custom MDX module can export individual formatter functions:
 
-| Export                     | Type                                                          | Description                                     |
-| -------------------------- | ------------------------------------------------------------- | ----------------------------------------------- |
-| `formatMDXBadge`           | `(badge: { text, classname? }) => string`                     | Format type badges (deprecated, required, etc.) |
-| `formatMDXAdmonition`      | `(admonition: { text, title, type, icon? }, meta?) => string` | Format callout/warning blocks                   |
-| `formatMDXBullet`          | `(text?: string) => string`                                   | Format bullet point separators                  |
-| `formatMDXDetails`         | `(option: { dataOpen, dataClose? }) => string`                | Format collapsible sections                     |
-| `formatMDXFrontmatter`     | `(props?, formatted?: string[]) => string`                    | Format page frontmatter                         |
-| `formatMDXLink`            | `(link: { text, url }) => { text, url }`                      | Transform type links                            |
-| `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`               | Format named entity references                  |
-| `formatMDXPermalink`       | `(id: string) => string`                                      | Format section header permalinks                |
-| `formatMDXSpecifiedByLink` | `(url: string) => string`                                     | Format scalar specification links               |
+| Export                     | Type                                                              | Description                                                                                     |
+| -------------------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`                         | Format type badges (deprecated, required, etc.)                                                 |
+| `formatMDXAdmonition`      | `(admonition: { text, title, type, icon? }, meta?) => string`     | Format callout/warning blocks                                                                   |
+| `formatMDXBullet`          | `(text?: string) => string`                                       | Format bullet point separators                                                                  |
+| `formatMDXDetails`         | `(option: { dataOpen, dataClose? }) => string`                    | Format collapsible sections                                                                     |
+| `formatMDXFrontmatter`     | `(props?, formatted?: string[], context?: { entity? }) => string` | Format page frontmatter; `context.entity` is the page's entity kind (e.g. `objects`, `queries`) |
+| `formatMDXLink`            | `(link: { text, url }) => { text, url }`                          | Transform type links                                                                            |
+| `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                   | Format named entity references                                                                  |
+| `formatMDXPermalink`       | `(id: string) => string`                                          | Format section header permalinks                                                                |
+| `formatMDXSpecifiedByLink` | `(url: string) => string`                                         | Format scalar specification links                                                               |
 
 Optional exports:
 
