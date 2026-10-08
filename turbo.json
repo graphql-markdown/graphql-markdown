@@ -46,7 +46,7 @@
     },
     "test:unit": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "inputs": [
         "src/**/*.ts",
         "tests/unit/**/*.ts",
@@ -58,7 +58,7 @@
     },
     "test:integration": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"],
+      "outputs": [],
       "inputs": [
         "src/**/*.ts",
         "tests/integration/**/*.ts",
