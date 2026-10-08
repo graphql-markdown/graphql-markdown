@@ -457,13 +457,15 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
  * spaces or special characters, no leading dot/underscore/dash).
  */
 export function toPackageName(dir) {
-  const name = path
+  let name = path
     .basename(dir)
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9._~-]+/g, "-")
-    .replace(/^[._-]+/, "")
-    .replace(/-+$/, "");
+    .replace(/^[._-]+/, "");
+  let end = name.length;
+  while (end > 0 && name[end - 1] === "-") end--;
+  name = name.slice(0, end);
   return name || DEFAULT_PROJECT_DIR;
 }
 

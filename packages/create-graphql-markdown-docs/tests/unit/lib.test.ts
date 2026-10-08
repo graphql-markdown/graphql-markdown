@@ -216,6 +216,10 @@ describe("pure helpers", () => {
     expect(toPackageName("/x/My Docs!")).toBe("my-docs");
     expect(toPackageName("/x/.hidden")).toBe("hidden");
     expect(toPackageName("/x/___")).toBe("my-graphql-docs");
+    expect(toPackageName("docs---")).toBe("docs");
+    expect(toPackageName(`a${"-".repeat(50000)}b`)).toBe(
+      `a${"-".repeat(50000)}b`,
+    );
   });
 });
 
