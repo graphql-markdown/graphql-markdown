@@ -14,7 +14,7 @@ keywords:
 
 # Introduction
 
-GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can use the official Docusaurus integration for Docusaurus sites, or use the CLI with formatter presets for other supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.
+GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command, add the official Docusaurus integration to an existing Docusaurus site, or use the CLI with formatter presets for other supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.
 
 ## Why GraphQL Markdown?
 
@@ -23,7 +23,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Automatically generating documentation from your schema
 - Keeping documentation in sync with your API
 - Providing a consistent documentation structure
-- Integrating with Docusaurus and supported formatter-based documentation ecosystems
+- Integrating with Docusaurus, Nuxt, and supported formatter-based documentation ecosystems
 
 ## Features
 
@@ -38,7 +38,15 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 
 ## Quick Install
 
-For **Docusaurus** projects:
+For a **new site** (Nuxt by default, or Docusaurus):
+
+```bash
+npm create graphql-markdown-docs@latest
+```
+
+See [Nuxt Theme](/docs/advanced/nuxt-theme) for the Nuxt layer it uses.
+
+For an **existing Docusaurus** site:
 
 ```bash
 npm install @graphql-markdown/docusaurus graphql

@@ -26,7 +26,7 @@ const MORE_COUNT =
 
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
-  const cmd = "npm install @graphql-markdown/cli graphql";
+  const cmd = "npm create graphql-markdown-docs@latest";
 
   function handleCopy() {
     navigator.clipboard
@@ -53,10 +53,6 @@ function InstallCommand() {
           {copied ? "✓ Copied" : "Copy"}
         </button>
       </div>
-      <p className="margin-top--sm margin-bottom--lg">
-        Start with the CLI, then choose the Docusaurus plugin or a formatter
-        preset for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems.
-      </p>
     </>
   );
 }
@@ -79,25 +75,37 @@ function HomepageHeader() {
         </h1>
 
         <p className={styles.heroSubtitle}>
-          Use the Docusaurus plugin for Docusaurus sites, or formatter presets
-          for{" "}
+          Scaffold a new Nuxt or Docusaurus site, or add docs to an existing{" "}
           <span className={styles.accentGreen}>
-            Hugo, MkDocs, DocFX, mdBook
+            Docusaurus, Hugo, MkDocs, DocFX, mdBook
           </span>{" "}
-          and other supported documentation ecosystems.
+          and more.
         </p>
 
         <InstallCommand />
 
-        <div className={clsx("margin-vert--md", styles.buttons)}>
+        <div
+          className={clsx("margin-top--lg margin-bottom--md", styles.buttons)}
+        >
           <Link
             className={clsx(
-              "button button--primary button--lg",
+              "button button--outline button--lg",
               styles.heroButton,
+              styles.heroButtonSecondary,
             )}
-            to="/docs/get-started"
+            to="/docs/advanced/nuxt-theme"
           >
-            Docusaurus quickstart →
+            Nuxt →
+          </Link>
+          <Link
+            className={clsx(
+              "button button--outline button--lg",
+              styles.heroButton,
+              styles.heroButtonSecondary,
+            )}
+            to="/docs/get-started#new-docusaurus-site"
+          >
+            Docusaurus →
           </Link>
           <Link
             className={clsx(
@@ -176,7 +184,7 @@ export default function Home() {
   return (
     <Layout
       title="GraphQL-Markdown — GraphQL schema documentation generator"
-      description="Generate Markdown and MDX documentation from any GraphQL schema. Use the official Docusaurus plugin or formatter presets for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems."
+      description="Generate Markdown and MDX documentation from any GraphQL schema. Scaffold a Nuxt or Docusaurus site, or use formatter presets for Hugo, MkDocs, DocFX, mdBook, and other supported ecosystems."
     >
       <HomepageHeader />
       <TrustedBy />

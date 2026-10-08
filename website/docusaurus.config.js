@@ -181,7 +181,7 @@ const config = {
         applicationSubCategory: "DocumentationTool",
         operatingSystem: "Linux, macOS, Windows",
         description:
-          "Generate customizable Markdown and MDX documentation from GraphQL schemas. Use the official Docusaurus integration or formatter presets for supported documentation ecosystems.",
+          "Generate customizable Markdown and MDX documentation from GraphQL schemas. Scaffold a Nuxt or Docusaurus site, use the official Docusaurus integration, or use formatter presets for supported documentation ecosystems.",
         url: "https://graphql-markdown.dev",
         downloadUrl: "https://www.npmjs.com/package/@graphql-markdown/cli",
         softwareVersion: "latest",
@@ -213,7 +213,7 @@ const config = {
             name: "What is GraphQL-Markdown?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "GraphQL-Markdown is an open-source command-line tool and JavaScript/TypeScript library that auto-generates human-friendly Markdown and MDX documentation from any GraphQL schema. It includes an official Docusaurus integration and formatter presets for supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.",
+              text: "GraphQL-Markdown is an open-source command-line tool and JavaScript/TypeScript library that auto-generates human-friendly Markdown and MDX documentation from any GraphQL schema. It includes a site scaffolder for Nuxt and Docusaurus, an official Docusaurus integration, a Nuxt theme, and formatter presets for supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.",
             },
           },
           {
@@ -237,7 +237,7 @@ const config = {
             name: "How is GraphQL-Markdown different from SpectaQL or GraphDoc?",
             acceptedAnswer: {
               "@type": "Answer",
-              text: "SpectaQL and GraphDoc produce standalone HTML sites. GraphQL-Markdown produces Markdown and MDX files that you commit alongside your existing docs site, so you keep your theme, search, versioning, and navigation. It is a good fit for Docusaurus and for supported formatter-based ecosystems such as Hugo, MkDocs, DocFX, and mdBook.",
+              text: "SpectaQL and GraphDoc produce standalone HTML sites. GraphQL-Markdown produces Markdown and MDX files that you commit alongside your existing docs site, so you keep your theme, search, versioning, and navigation. It is a good fit for Docusaurus and Nuxt, and for supported formatter-based ecosystems such as Hugo, MkDocs, DocFX, and mdBook.",
             },
           },
           {
@@ -298,7 +298,7 @@ const config = {
       ],
       announcementBar: {
         content:
-          '🚀 Now compatible with Astro, Next.js and more — see <a href="/docs/advanced/integration-with-frameworks">MDX framework integration</a> 🚀',
+          '🚀 New: scaffold a full API reference site with <strong>npm create graphql-markdown-docs</strong> — see the <a href="/docs/advanced/nuxt-theme">Nuxt theme</a> 🚀',
         // content:
         //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",

@@ -13,26 +13,11 @@ keywords:
 
 :::info
 
-GraphQL-Markdown supports two main setup paths:
-
-- the official Docusaurus integration for Docusaurus sites
-- the CLI with formatter presets for other supported documentation ecosystems
-
-This guide focuses on the Docusaurus path. If you are using Hugo, MkDocs, DocFX, mdBook, or another supported formatter-based setup, start with our [Framework Integration Guide](/docs/advanced/integration-with-frameworks).
+This guide covers Docusaurus. For a Nuxt site, see [Nuxt Theme](/docs/advanced/nuxt-theme). For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
 :::
 
-If you are setting up Docusaurus, get started by [creating a new site](#new-docusaurus-site).
-
-Or try GraphQL-Markdown immediately with our [demo](/docs/try-it).
-
-If you are not using Docusaurus, install the CLI and formatter presets:
-
-```shell title="shell"
-npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
-```
-
-Then continue with [Integration with Frameworks](/docs/advanced/integration-with-frameworks) to choose the preset for your documentation stack.
+Start by [creating a new site](#new-docusaurus-site) or [adding GraphQL-Markdown to an existing one](#existing-docusaurus-site). Or try it right away with one of our [demos](/docs/try-it).
 
 ## New Docusaurus site
 
@@ -66,7 +51,7 @@ You can type this command into Command Prompt, Powershell, Terminal, or any othe
 
 The command scaffolds a new site and installs all the necessary dependencies you need to run Docusaurus.
 
-The same CLI also scaffolds a [Nuxt site](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) with `--framework nuxt` (or without the flag to choose interactively).
+The same CLI also scaffolds a [Nuxt site](/docs/advanced/nuxt-theme) with `--framework nuxt` (or without the flag to choose interactively).
 
 ### Add a GraphQL schema loader
 
