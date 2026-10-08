@@ -1,6 +1,6 @@
 {
   "name": "create-graphql-markdown-docs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a new GraphQL API documentation site with GraphQL Markdown and Nuxt or Docusaurus",
   "type": "module",
   "homepage": "https://graphql-markdown.dev",

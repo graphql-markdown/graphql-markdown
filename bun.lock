@@ -99,7 +99,7 @@
     },
     "packages/create-graphql-markdown-docs": {
       "name": "create-graphql-markdown-docs",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "bin": {
         "create-graphql-markdown-docs": "./bin/create.mjs",
       },
@@ -201,7 +201,7 @@
     },
     "packages/nuxt-theme": {
       "name": "@graphql-markdown/nuxt-theme",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "bin": {
         "gqlmd-swizzle": "./bin/swizzle.mjs",
       },
