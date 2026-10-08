@@ -213,25 +213,33 @@ const getTouchedPackages = (
   );
 };
 
+type SmokeTarget = "cli" | "docusaurus" | "nuxt";
+
 /**
- * Both smoke scaffolds install every workspace package, so any package change
+ * Every smoke scaffold installs every workspace package, so any package change
  * runs every smoke job; only the e2e spec directories are target-specific.
  */
 const getSmokeTargets = (
   files: string[],
   packagesTouched: boolean,
-): { cli: boolean; docusaurus: boolean; nuxt: boolean; any: boolean } => {
-  const touches = (patterns: RegExp[]): boolean => {
-    return files.some((file) => {
-      return matches(file, patterns) || matches(file, SMOKE_PATTERNS.both);
-    });
+): Record<SmokeTarget | "any", boolean> => {
+  const runs = (target: SmokeTarget): boolean => {
+    const patterns = [...SMOKE_PATTERNS[target], ...SMOKE_PATTERNS.both];
+    return (
+      packagesTouched ||
+      files.some((file) => {
+        return matches(file, patterns);
+      })
+    );
   };
 
-  const cli = packagesTouched || touches(SMOKE_PATTERNS.cli);
-  const docusaurus = packagesTouched || touches(SMOKE_PATTERNS.docusaurus);
-  const nuxt = packagesTouched || touches(SMOKE_PATTERNS.nuxt);
+  const targets = {
+    cli: runs("cli"),
+    docusaurus: runs("docusaurus"),
+    nuxt: runs("nuxt"),
+  };
 
-  return { cli, docusaurus, nuxt, any: cli || docusaurus || nuxt };
+  return { ...targets, any: Object.values(targets).includes(true) };
 };
 
 /**
