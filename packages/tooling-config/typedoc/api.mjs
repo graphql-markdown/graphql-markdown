@@ -20,6 +20,8 @@ export default {
   entryPointStrategy: "packages",
   exclude: [
     `${projectRoot}/packages/types`,
+    `${projectRoot}/packages/create-graphql-markdown-docs`,
+    `${projectRoot}/packages/nuxt-theme`,
     `${projectRoot}/packages/tooling-config`,
     `${projectRoot}/packages/core/src/index.ts`,
     `${projectRoot}/packages/graphql/src/index.ts`,
