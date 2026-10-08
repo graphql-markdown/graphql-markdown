@@ -38,15 +38,15 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 
 ## Quick Install
 
-For a **new site** (Nuxt by default, or Docusaurus):
+The recommended start is the scaffolder, which creates a **new site** (Nuxt by default, or Docusaurus):
 
 ```bash
 npm create graphql-markdown-docs@latest
 ```
 
-See [Nuxt Theme](/docs/advanced/nuxt-theme) for the Nuxt layer it uses.
+See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/advanced/nuxt-theme) for the Nuxt layer it uses.
 
-For an **existing Docusaurus** site:
+To add to an **existing Docusaurus** site instead:
 
 ```bash
 npm install @graphql-markdown/docusaurus graphql

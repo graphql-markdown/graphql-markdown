@@ -20,7 +20,7 @@ This is the recommended path if your documentation stack is [Nuxt](https://nuxt.
 npm create graphql-markdown-docs@latest
 ```
 
-Answers a few prompts (project directory, schema source, package manager, optional title/color) and produces a ready-to-run project. See [`create-graphql-markdown-docs`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) for the full flag reference and non-interactive usage.
+Answers a few prompts (project directory, schema source, package manager, optional title/color) and produces a ready-to-run project. See [Getting started](/docs/get-started#create-a-new-site) for the full prompt and flag reference, including non-interactive usage, or the [`create-graphql-markdown-docs` README](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs).
 
 ## Extending the layer directly
 

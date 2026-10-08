@@ -2,20 +2,24 @@
 
 Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt or Docusaurus API reference site; the Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](../nuxt-theme) layer.
 
+Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).
+
 ## Quick start
 
 ```bash
 npm create graphql-markdown-docs@latest
+# or pass the project directory directly
+npm create graphql-markdown-docs@latest my-docs
 ```
 
 Follow the interactive prompts to:
 
-1. Choose a project directory (must not already exist, or must be empty — the CLI refuses to touch a non-empty directory).
+1. Choose a project directory — press Enter to accept `my-graphql-docs`. It must not exist yet or must be empty; a non-empty directory is rejected and you're asked again.
 2. Provide a GraphQL schema, or use the bundled example.
 3. Confirm the package manager (auto-detected from how you invoked the command; only asked if detection fails).
 4. Optionally customize the site title and primary color.
 5. Install dependencies.
-6. Initialize a git repository.
+6. Initialize a git repository (skipped when the project is already inside one, e.g. a monorepo).
 
 ## Schema sources
 
@@ -45,15 +49,17 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 | Flag | Description |
 | --- | --- |
 | `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`; asked first in interactive mode when omitted. |
-| `--dir <path>` | Project directory. Default `./my-graphql-docs`. Must not already exist and be non-empty — the CLI exits with an error rather than overwrite anything. |
+| `[dir]`, `-d, --dir <path>` | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. Must not already exist and be non-empty — the CLI exits with an error rather than overwrite anything. The `package.json` name is derived from it (lowercased, invalid characters replaced with `-`). |
 | `--schema <path-or-url>` | Schema source — see the table above. |
 | `--example` | Use the bundled example schema (the default when `--schema` is omitted). |
-| `--pm <npm\|pnpm\|yarn\|bun>` | Package manager to use; otherwise auto-detected. |
+| `--pm <npm\|pnpm\|yarn\|bun>` | Package manager to use; otherwise detected from the invoking command (`pnpm create`, `yarn create`, …), then from lockfiles. |
 | `--title <name>` | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title`). |
 | `--color <name>` | Nuxt only (ignored with a warning for Docusaurus). Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`. |
 | `--no-install` | Skip dependency installation. |
 | `--no-git` | Skip git repository initialization. |
-| `--yes` | Accept all defaults; fully non-interactive. |
+| `-y, --yes` | Accept all defaults; fully non-interactive. |
+| `-h, --help` | Show usage and exit. |
+| `-v, --version` | Print the CLI version and exit. |
 
 ## What's included
 

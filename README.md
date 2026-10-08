@@ -20,6 +20,8 @@ To start a new documentation site, scaffold one with Nuxt (default) or Docusauru
 npm create graphql-markdown-docs@latest
 ```
 
+See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
+
 To add GraphQL-Markdown to an existing site, there are two main setup paths:
 
 - use the official Docusaurus integration for Docusaurus sites

@@ -10,6 +10,7 @@ const mocks = vi.hoisted(() => {
   return {
     spawn: vi.fn(),
     detect: vi.fn(),
+    getUserAgent: vi.fn(),
     prompts: {
       intro: vi.fn(),
       outro: vi.fn(),
@@ -17,6 +18,9 @@ const mocks = vi.hoisted(() => {
       select: vi.fn(),
       text: vi.fn(),
       confirm: vi.fn(),
+      spinner: vi.fn(() => {
+        return { start: vi.fn(), stop: vi.fn() };
+      }),
       isCancel: vi.fn((v: unknown) => {
         return v === Symbol.for("cancel");
       }),
@@ -34,7 +38,7 @@ vi.mock("node:child_process", () => {
   return { spawn: mocks.spawn };
 });
 vi.mock("package-manager-detector", () => {
-  return { detect: mocks.detect };
+  return { detect: mocks.detect, getUserAgent: mocks.getUserAgent };
 });
 vi.mock("@clack/prompts", () => {
   return mocks.prompts;
@@ -44,12 +48,14 @@ import {
   copyDirRecursive,
   detectLoader,
   initGitRepo,
+  isGitAvailable,
   installDependencies,
   isRemoteSchemaSource,
   main,
   parseCliArgs,
   run,
   runCommand,
+  toPackageName,
   validateGraphQLSchema,
   writeAppConfig,
   writeDocusaurusConfig,
@@ -58,6 +64,7 @@ import {
   removeWatchBlock,
   writeNuxtConfig,
   writePackageJson,
+  validateProjectDir,
   writeReadme,
 } from "../../lib/create.mjs";
 
@@ -92,13 +99,23 @@ const spawnResult = (code: Error | number): void => {
 beforeEach(() => {
   work = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-test-"));
   mocks.detect.mockResolvedValue({ name: "pnpm" });
-  spawnResult(0);
+  mocks.getUserAgent.mockReturnValue(null);
+  // Default: not inside a git work tree, so initGitRepo proceeds to git init.
+  mocks.spawn.mockImplementation((cmd: string, args: string[]) => {
+    const proc = new EventEmitter();
+    const isProbe = cmd === "git" && args[0] === "rev-parse";
+    queueMicrotask(() => {
+      return proc.emit("close", isProbe ? 1 : 0);
+    });
+    return proc;
+  });
 });
 
 afterEach(() => {
   vi.restoreAllMocks();
   mocks.spawn.mockReset();
   mocks.detect.mockReset();
+  mocks.getUserAgent.mockReset();
   mocks.prompts.select.mockReset();
   mocks.prompts.text.mockReset();
   mocks.prompts.confirm.mockReset();
@@ -149,12 +166,61 @@ describe("pure helpers", () => {
     expect(await validateGraphQLSchema(path.join(work, "missing"))).toBe(false);
   });
 
+  describe("validateProjectDir", () => {
+    it("accepts empty input when the default dir does not exist", () => {
+      // process.chdir is unsupported in vitest workers; path.resolve reads cwd().
+      vi.spyOn(process, "cwd").mockReturnValue(work);
+      expect(validateProjectDir("")).toBeUndefined();
+      expect(validateProjectDir(undefined)).toBeUndefined();
+    });
+
+    it("accepts a non-existent path and an empty dir", () => {
+      const empty = path.join(work, "empty");
+      fs.mkdirSync(empty);
+      expect(validateProjectDir(path.join(work, "nope"))).toBeUndefined();
+      expect(validateProjectDir(empty)).toBeUndefined();
+    });
+
+    it("rejects a non-empty dir", () => {
+      const full = path.join(work, "full");
+      fs.mkdirSync(full);
+      fs.writeFileSync(path.join(full, "f.txt"), "x");
+      expect(validateProjectDir(full)).toMatch(/is not empty/);
+    });
+
+    it("rejects a path that is a file", () => {
+      const file = path.join(work, "file.txt");
+      fs.writeFileSync(file, "x");
+      expect(validateProjectDir(file)).toMatch(/is a file/);
+    });
+  });
+
   it("parseCliArgs", () => {
     expect(parseCliArgs(["--yes", "-d", "x", "--no-git"])).toEqual({
       yes: true,
       dir: "x",
       "no-git": true,
+      positionals: [],
     });
+  });
+
+  it("parseCliArgs takes a positional dir, --dir wins", () => {
+    expect(parseCliArgs(["my-docs", "-y"])).toMatchObject({
+      dir: "my-docs",
+      yes: true,
+    });
+    expect(parseCliArgs(["a", "--dir", "b"]).dir).toBe("b");
+  });
+
+  it("toPackageName", () => {
+    expect(toPackageName("/x/Workspace")).toBe("workspace");
+    expect(toPackageName("/x/My Docs!")).toBe("my-docs");
+    expect(toPackageName("/x/.hidden")).toBe("hidden");
+    expect(toPackageName("/x/___")).toBe("my-graphql-docs");
+    expect(toPackageName("docs---")).toBe("docs");
+    expect(toPackageName(`a${"-".repeat(50000)}b`)).toBe(
+      `a${"-".repeat(50000)}b`,
+    );
   });
 });
 
@@ -305,6 +371,52 @@ describe("process helpers", () => {
     await expect(runCommand("x", [])).rejects.toThrow("boom");
   });
 
+  it("runCommand reports a missing executable on ENOENT", async () => {
+    spawnResult(
+      Object.assign(new Error("spawn git ENOENT"), { code: "ENOENT" }),
+    );
+    await expect(runCommand("git", [])).rejects.toThrow(
+      "git is not installed or not on your PATH",
+    );
+  });
+
+  it("isGitAvailable resolves true or false", async () => {
+    spawnResult(0);
+    await expect(isGitAvailable()).resolves.toBe(true);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "git",
+      ["--version"],
+      expect.objectContaining({ stdio: "ignore" }),
+    );
+    spawnResult(new Error("spawn git ENOENT"));
+    await expect(isGitAvailable()).resolves.toBe(false);
+  });
+
+  it("initGitRepo hints at user.name only when the commit fails", async () => {
+    mocks.spawn.mockImplementation((cmd: string, args: string[]) => {
+      const proc = new EventEmitter();
+      queueMicrotask(() => {
+        return proc.emit(
+          "close",
+          args[0] === "init" ? 0 : args[0] === "add" ? 0 : 1,
+        );
+      });
+      return proc;
+    });
+    await initGitRepo(work);
+    expect(mocks.prompts.log.warn).toHaveBeenLastCalledWith(
+      expect.stringContaining("user.name"),
+    );
+  });
+
+  it("initGitRepo omits the user.name hint when init fails", async () => {
+    spawnResult(1);
+    await initGitRepo(work);
+    const message = mocks.prompts.log.warn.mock.calls.at(-1)?.[0];
+    expect(message).toContain("Could not initialize git");
+    expect(message).not.toContain("user.name");
+  });
+
   it("installDependencies uses the package manager's command", async () => {
     await installDependencies("yarn", work);
     expect(mocks.spawn).toHaveBeenCalledWith(
@@ -329,14 +441,27 @@ describe("process helpers", () => {
     expect(mocks.prompts.log.warn).toHaveBeenCalled();
   });
 
-  it("initGitRepo runs init, add, commit", async () => {
+  it("initGitRepo probes, then runs init, add, commit silently", async () => {
     await initGitRepo(work);
     expect(
       mocks.spawn.mock.calls.map((c) => {
         return c[1][0];
       }),
-    ).toEqual(["init", "add", "commit"]);
-    expect(mocks.prompts.log.success).toHaveBeenCalled();
+    ).toEqual(["rev-parse", "init", "add", "commit"]);
+    expect(mocks.spawn).toHaveBeenLastCalledWith(
+      "git",
+      expect.anything(),
+      expect.objectContaining({ stdio: "ignore" }),
+    );
+  });
+
+  it("initGitRepo skips inside an existing work tree", async () => {
+    spawnResult(0);
+    await initGitRepo(work);
+    expect(mocks.spawn).toHaveBeenCalledTimes(1);
+    expect(mocks.prompts.log.info).toHaveBeenCalledWith(
+      expect.stringContaining("Already inside a git repository"),
+    );
   });
 });
 
@@ -375,7 +500,7 @@ describe("main", () => {
     expect(fs.existsSync(path.join(dir, "schema/schema.graphql"))).toBe(true);
     expect(read(dir, "docusaurus.config.js")).toContain('title: "Docs"');
     expect(mocks.prompts.log.warn).toHaveBeenCalledTimes(2);
-    expect(mocks.spawn).toHaveBeenCalledTimes(4); // install + 3 git
+    expect(mocks.spawn).toHaveBeenCalledTimes(6); // install + git --version + probe + 3 git
   });
 
   it("--yes nuxt with remote schema falls back to npm", async () => {
@@ -400,18 +525,18 @@ describe("main", () => {
     mocks.prompts.select
       .mockResolvedValueOnce("nuxt")
       .mockResolvedValueOnce("existing")
-      .mockResolvedValueOnce("yarn");
+      .mockResolvedValueOnce("yarn")
+      .mockResolvedValueOnce("emerald");
     mocks.prompts.text
       .mockResolvedValueOnce(path.join(work, "i"))
       .mockResolvedValueOnce(schema)
-      .mockResolvedValueOnce("Custom Title")
-      .mockResolvedValueOnce("emerald");
+      .mockResolvedValueOnce("Custom Title");
     mocks.prompts.confirm.mockResolvedValue(true);
     expect(await main([])).toBe(0);
     const dir = path.join(work, "i");
     expect(read(dir, "app/app.config.ts")).toContain('"Custom Title"');
     expect(read(dir, "app/app.config.ts")).toContain('"emerald"');
-    expect(mocks.spawn).toHaveBeenCalledTimes(4);
+    expect(mocks.spawn).toHaveBeenCalledTimes(6);
   });
 
   it("interactive docusaurus, example schema, declines everything", async () => {
@@ -421,26 +546,54 @@ describe("main", () => {
     mocks.prompts.text.mockResolvedValueOnce(path.join(work, "x"));
     mocks.prompts.confirm.mockResolvedValue(false);
     expect(await main([])).toBe(0);
-    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(mocks.spawn).toHaveBeenCalledTimes(1); // git --version only
     expect(mocks.prompts.outro).toHaveBeenCalledWith(
       expect.stringContaining("run doc"),
     );
   });
 
-  it("cancelled customization sub-prompts are ignored", async () => {
+  it("skips the git prompt when git is not installed", async () => {
+    spawnResult(
+      Object.assign(new Error("spawn git ENOENT"), { code: "ENOENT" }),
+    );
+    expect(await main([...base("ng"), "--yes", "--no-install"])).toBe(0);
+    expect(mocks.prompts.confirm).not.toHaveBeenCalled();
+    expect(mocks.prompts.log.info).toHaveBeenCalledWith(
+      expect.stringContaining("git not found"),
+    );
+  });
+
+  it("cancelled customization sub-prompt exits 1", async () => {
     mocks.prompts.select.mockResolvedValueOnce("example");
-    mocks.prompts.confirm.mockResolvedValueOnce(true).mockResolvedValue(CANCEL);
+    mocks.prompts.confirm.mockResolvedValueOnce(true);
     mocks.prompts.text.mockResolvedValue(CANCEL);
     expect(
       await main([...base("c"), "--framework", "nuxt", "--no-install"]),
-    ).toBe(0);
+    ).toBe(1);
   });
 
-  it("cancelled customization confirm is ignored", async () => {
+  it("cancelled customization confirm exits 1", async () => {
     mocks.prompts.select.mockResolvedValueOnce("example");
     mocks.prompts.confirm.mockResolvedValue(CANCEL);
     expect(await main([...base("cc"), "--framework", "nuxt", "--no-git"])).toBe(
-      0,
+      1,
+    );
+  });
+
+  it("invalid --pm exits 1", async () => {
+    expect(await main(["--pm", "pip", "--yes"])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining('Invalid --pm "pip"'),
+    );
+  });
+
+  it("package manager comes from the user agent before detection", async () => {
+    mocks.getUserAgent.mockReturnValue("bun");
+    expect(await main([...base("ua"), "--yes", "--no-git"])).toBe(0);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "bun",
+      ["install"],
+      expect.anything(),
     );
   });
 
@@ -506,7 +659,7 @@ describe("main", () => {
       .mockResolvedValueOnce(CANCEL);
     await main(["--framework", "nuxt"]);
     const dirValidate = mocks.prompts.text.mock.calls[0][0].validate;
-    expect(dirValidate("")).toMatch(/empty/);
+    expect(dirValidate("")).toBeUndefined();
     expect(dirValidate("x")).toBeUndefined();
     const schemaValidate = mocks.prompts.text.mock.calls[1][0].validate;
     expect(schemaValidate("")).toMatch(/required/);
