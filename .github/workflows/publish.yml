@@ -23,6 +23,9 @@ permissions:
 jobs:
   publish:
     name: Publish to npm
+    # npm trusted publishing does not check the branch, so a manual dispatch
+    # must come from main or it could publish unreleased versions.
+    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
