@@ -89,8 +89,9 @@ function HomepageHeader() {
         >
           <Link
             className={clsx(
-              "button button--primary button--lg",
+              "button button--outline button--lg",
               styles.heroButton,
+              styles.heroButtonSecondary,
             )}
             to="/docs/advanced/nuxt-theme"
           >
