@@ -292,7 +292,7 @@ const config = {
       ],
       announcementBar: {
         content:
-          '🚀 New: scaffold a full API reference site with <code>npm create graphql-markdown-docs</code> — see the <a href="/docs/advanced/nuxt-theme">Nuxt theme</a> 🚀',
+          '🚀 New: scaffold a full API reference site with <strong>npm create graphql-markdown-docs</strong> — see the <a href="/docs/advanced/nuxt-theme">Nuxt theme</a> 🚀',
         // content:
         //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",
