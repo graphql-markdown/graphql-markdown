@@ -360,6 +360,16 @@ describe("write* helpers (docusaurus)", () => {
       return writeDocusaurusConfig(dir, "Again");
     }).toThrow(/My API/);
   });
+
+  it("writeDocusaurusConfig: title identical to the template's does not throw", () => {
+    const dir = stage("docusaurus");
+    const file = path.join(dir, "docusaurus.config.js");
+    const before = read(file);
+    expect(() => {
+      return writeDocusaurusConfig(dir, "My API");
+    }).not.toThrow();
+    expect(read(file)).toBe(before);
+  });
 });
 
 describe("process helpers", () => {

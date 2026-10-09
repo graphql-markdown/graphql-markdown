@@ -458,16 +458,20 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
 
   const configPath = path.join(tempDir, "docusaurus.config.js");
   const originalContent = fs.readFileSync(configPath, "utf-8");
-  const updated = originalContent.replace(
-    'title: "My API",',
-    () => `title: ${JSON.stringify(titleOverride)},`,
-  );
+  const searchString = 'title: "My API",';
 
-  if (updated === originalContent) {
+  // A replacement identical to the original (e.g. the title is already
+  // "My API") is fine; only a missing search string means template drift.
+  if (!originalContent.includes(searchString)) {
     throw new Error(
       `Expected to find and replace 'title: "My API",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
+
+  const updated = originalContent.replace(
+    searchString,
+    () => `title: ${JSON.stringify(titleOverride)},`,
+  );
 
   fs.writeFileSync(configPath, updated);
 }
