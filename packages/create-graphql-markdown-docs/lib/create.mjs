@@ -295,8 +295,8 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
 function toSingleQuotedLiteral(value) {
   const escaped = value
     .replace(/[\\']/g, (c) => `\\${c}`)
-    .replace(/\n/g, "\\n")
-    .replace(/\r/g, "\\r");
+    .replaceAll("\n", String.raw`\n`)
+    .replaceAll("\r", String.raw`\r`);
   return `'${escaped}'`;
 }
 
