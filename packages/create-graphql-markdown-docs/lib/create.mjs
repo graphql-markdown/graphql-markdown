@@ -689,14 +689,25 @@ async function resolveProjectDir(args) {
 function validateSchemaSource(value) {
   const source = value?.trim();
   if (!source) return "Schema source is required";
-  if (!isRemoteSchemaSource(source) && !fs.existsSync(source)) {
-    return "Schema file not found";
+  if (isRemoteSchemaSource(source)) return undefined;
+  if (!fs.existsSync(source)) {
+    return `Schema file not found: ${source}`;
   }
+  if (fs.statSync(source).isDirectory()) {
+    return `${source} is a directory — provide a schema file, URL or git ref.`;
+  }
+  return undefined;
 }
 
 /** Resolves the custom schema source, or undefined to use the bundled example. */
 async function resolveSchemaPath(args) {
-  if (args.example || args.schema || args.yes) return args.schema?.trim();
+  if (args.schema) {
+    const source = args.schema.trim();
+    const problem = validateSchemaSource(source);
+    if (problem) fail(problem);
+    return source;
+  }
+  if (args.example || args.yes) return undefined;
 
   const schemaChoice = unlessCancelled(
     await prompts.select({
@@ -727,10 +738,14 @@ async function resolveSchemaPath(args) {
 
 /** Validates a local schema and detects the loader it needs. */
 async function resolveLoader(schemaPath) {
-  // Validate a local schema file's syntax (skipped for remote sources —
-  // fetching one just to lint it isn't worth the network round trip here;
-  // `nuxi generate` will surface a real error if it's actually invalid).
-  if (schemaPath && !isRemoteSchemaSource(schemaPath)) {
+  // Every schema source needs the matching graphql-tools loader — detect it
+  // from the source and report the choice.
+  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
+
+  // Only an SDL file can be checked with buildSchema — introspection JSON and
+  // code files need their own loader, and remote sources aren't fetched just
+  // to lint them (`nuxi generate` surfaces a real error if one is invalid).
+  if (schemaPath && loader.isDefault && !isRemoteSchemaSource(schemaPath)) {
     const isValid = await validateGraphQLSchema(schemaPath);
     if (!isValid) {
       prompts.log.warn(
@@ -739,9 +754,6 @@ async function resolveLoader(schemaPath) {
     }
   }
 
-  // Every schema source needs the matching graphql-tools loader — detect it
-  // from the source and report the choice.
-  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
   if (schemaPath && !loader.isDefault) {
     prompts.log.info(
       `Detected schema source needs ${loader.package} (${loader.className}) — adding it as a dependency.`,

@@ -687,7 +687,7 @@ describe("main", () => {
     expect(schemaValidate("")).toMatch(/required/);
     expect(schemaValidate(path.join(work, "nope"))).toMatch(/not found/);
     expect(schemaValidate("https://x")).toBeUndefined();
-    expect(schemaValidate(work)).toBeUndefined();
+    expect(schemaValidate(work)).toMatch(/is a directory/);
   });
 
   it("scaffolding into an existing empty dir preserves its inode", async () => {
@@ -698,6 +698,33 @@ describe("main", () => {
     expect(fs.statSync(dir).ino).toBe(before);
     expect(fs.existsSync(path.join(dir, "package.json"))).toBe(true);
     expect(fs.existsSync(path.join(dir, ".gitignore"))).toBe(true);
+  });
+
+  it("--schema pointing at a missing path or a directory exits 1 early", async () => {
+    const missing = path.join(work, "nope.graphql");
+    expect(await main([...base("m"), ...quiet, "--schema", missing])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("not found"),
+    );
+    expect(await main([...base("m"), ...quiet, "--schema", work])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("is a directory"),
+    );
+    expect(fs.existsSync(path.join(work, "m"))).toBe(false);
+  });
+
+  it("SDL validation only runs for the default SDL loader", async () => {
+    const bad = "type {";
+    const sdl = path.join(work, "bad.graphql");
+    const json = path.join(work, "bad.json");
+    fs.writeFileSync(sdl, bad);
+    fs.writeFileSync(json, bad);
+    expect(await main([...base("s1"), ...quiet, "--schema", json])).toBe(0);
+    expect(mocks.prompts.log.warn).not.toHaveBeenCalled();
+    expect(await main([...base("s2"), ...quiet, "--schema", sdl])).toBe(0);
+    expect(mocks.prompts.log.warn).toHaveBeenCalledWith(
+      expect.stringContaining("did not parse"),
+    );
   });
 
   it("EXDEV on rename falls back to copy", async () => {
