@@ -98,6 +98,8 @@ A schema loader is required to load your GraphQL schema. Without `--schema`, the
 | Git-hosted file                    | `git:branch:path/schema.graphql`               | `@graphql-tools/git-loader`       |
 | GitHub-hosted file                 | `github:owner/repo#branch:path/schema.graphql` | `@graphql-tools/github-loader`    |
 
+`github:` sources call the GitHub API and need a token: set the `GITHUB_TOKEN` environment variable before generating the docs (the scaffolded config reads it).
+
 A local file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is.
 
 See [schema loading](/docs/advanced/schema-loading) for other loaders and configuration options.
@@ -139,20 +141,20 @@ Use `--yes` to accept all defaults and skip every prompt:
 npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
 ```
 
-| Flag                             | Description                                                                                                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`.                                                                                                                             |
-| `[dir]`, `-d, --dir <path>`      | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. The CLI exits with an error if it exists and is not empty. |
-| `--schema <path-or-url>`         | Schema source, see the table above.                                                                                                                           |
-| `--example`                      | Use the bundled example schema (the default when `--schema` is omitted).                                                                                      |
-| `--pm <npm\|pnpm\|yarn\|bun>`    | Package manager to use; otherwise detected from the invoking command, then from lockfiles.                                                                    |
-| `--title <name>`                 | Site title.                                                                                                                                                   |
-| `--color <name>`                 | Nuxt only. Primary color, any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`).                                                                       |
-| `--no-install`                   | Skip dependency installation.                                                                                                                                 |
-| `--no-git`                       | Skip git repository initialization.                                                                                                                           |
-| `-y, --yes`                      | Accept all defaults; fully non-interactive.                                                                                                                   |
-| `-h, --help`                     | Show usage and exit.                                                                                                                                          |
-| `-v, --version`                  | Print the CLI version and exit.                                                                                                                               |
+| Flag                             | Description                                                                                                                                                                                                                                                                               |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`.                                                                                                                                                                                                                                                         |
+| `[dir]`, `-d, --dir <path>`      | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. Must be a directory that doesn't exist yet or is empty (an existing empty directory, including `.`, is scaffolded in place); the CLI exits with an error if it is a file or not empty. |
+| `--schema <path-or-url>`         | Schema source, see the table above. A local path must point to an existing file; the CLI exits with an error otherwise.                                                                                                                                                                   |
+| `--example`                      | Use the bundled example schema (the default when `--schema` is omitted).                                                                                                                                                                                                                  |
+| `--pm <npm\|pnpm\|yarn\|bun>`    | Package manager to use; otherwise detected from the invoking command, then from lockfiles.                                                                                                                                                                                                |
+| `--title <name>`                 | Site title.                                                                                                                                                                                                                                                                               |
+| `--color <name>`                 | Nuxt only. Primary color, any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`).                                                                                                                                                                                                   |
+| `--no-install`                   | Skip dependency installation.                                                                                                                                                                                                                                                             |
+| `--no-git`                       | Skip git repository initialization.                                                                                                                                                                                                                                                       |
+| `-y, --yes`                      | Accept all defaults; fully non-interactive.                                                                                                                                                                                                                                               |
+| `-h, --help`                     | Show usage and exit.                                                                                                                                                                                                                                                                      |
+| `-v, --version`                  | Print the CLI version and exit.                                                                                                                                                                                                                                                           |
 
 ## Add to an existing site
 

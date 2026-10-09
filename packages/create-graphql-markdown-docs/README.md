@@ -25,14 +25,16 @@ Follow the interactive prompts to:
 
 Point `--schema` (or the equivalent prompt) at any of the following — the CLI detects which [graphql-tools loader](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders) it needs and adds that dependency to the scaffolded project automatically:
 
-| Schema source | Example | Loader added |
-| --- | --- | --- |
-| Local `.graphql`/`.gql` file | `./schema/api.graphql` | None — `@graphql-markdown/nuxt-theme`'s built-in default. |
-| Local `.json` introspection result | `./introspection.json` | `@graphql-tools/json-file-loader` |
-| Local code-first schema | `./schema.ts` | `@graphql-tools/code-file-loader` |
-| Introspection/SDL endpoint | `https://api.example.com/graphql` | `@graphql-tools/url-loader` |
-| Git-hosted file | `git:branch:path/schema.graphql` | `@graphql-tools/git-loader` |
-| GitHub-hosted file | `github:owner/repo#branch:path/schema.graphql` | `@graphql-tools/github-loader` |
+| Schema source                      | Example                                        | Loader added                                              |
+| ---------------------------------- | ---------------------------------------------- | --------------------------------------------------------- |
+| Local `.graphql`/`.gql` file       | `./schema/api.graphql`                         | None — `@graphql-markdown/nuxt-theme`'s built-in default. |
+| Local `.json` introspection result | `./introspection.json`                         | `@graphql-tools/json-file-loader`                         |
+| Local code-first schema            | `./schema.ts`                                  | `@graphql-tools/code-file-loader`                         |
+| Introspection/SDL endpoint         | `https://api.example.com/graphql`              | `@graphql-tools/url-loader`                               |
+| Git-hosted file                    | `git:branch:path/schema.graphql`               | `@graphql-tools/git-loader`                               |
+| GitHub-hosted file                 | `github:owner/repo#branch:path/schema.graphql` | `@graphql-tools/github-loader`                            |
+
+`github:` sources call the GitHub API and need a token: set the `GITHUB_TOKEN` environment variable before generating the docs (the scaffolded config reads it).
 
 A local file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is, with no local file to copy. Either way, `generate-docs.ts` and `nuxt.config.ts`'s `watch` entry are both written to match — never left pointing at the bundled `schema/example.graphql` once a real schema is provided.
 
@@ -46,20 +48,20 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 
 ### Flags
 
-| Flag | Description |
-| --- | --- |
-| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`; asked first in interactive mode when omitted. |
-| `[dir]`, `-d, --dir <path>` | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. Must not already exist and be non-empty — the CLI exits with an error rather than overwrite anything. The `package.json` name is derived from it (lowercased, invalid characters replaced with `-`). |
-| `--schema <path-or-url>` | Schema source — see the table above. |
-| `--example` | Use the bundled example schema (the default when `--schema` is omitted). |
-| `--pm <npm\|pnpm\|yarn\|bun>` | Package manager to use; otherwise detected from the invoking command (`pnpm create`, `yarn create`, …), then from lockfiles. |
-| `--title <name>` | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title`). |
-| `--color <name>` | Nuxt only (ignored with a warning for Docusaurus). Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`. |
-| `--no-install` | Skip dependency installation. |
-| `--no-git` | Skip git repository initialization. |
-| `-y, --yes` | Accept all defaults; fully non-interactive. |
-| `-h, --help` | Show usage and exit. |
-| `-v, --version` | Print the CLI version and exit. |
+| Flag                             | Description                                                                                                                                                                                                                                                                                                                                                                                                              |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `--framework <nuxt\|docusaurus>` | Framework preset. Default `nuxt`; asked first in interactive mode when omitted.                                                                                                                                                                                                                                                                                                                                          |
+| `[dir]`, `-d, --dir <path>`      | Project directory, as the first argument or via `--dir` (`--dir` wins). Default `my-graphql-docs`. Must be a directory that doesn't exist yet or is empty (an existing empty directory, including `.`, is scaffolded in place); the CLI exits with an error if it is a file or not empty, rather than overwrite anything. The `package.json` name is derived from it (lowercased, invalid characters replaced with `-`). |
+| `--schema <path-or-url>`         | Schema source — see the table above. A local path must point to an existing file; the CLI exits with an error otherwise.                                                                                                                                                                                                                                                                                                 |
+| `--example`                      | Use the bundled example schema (the default when `--schema` is omitted).                                                                                                                                                                                                                                                                                                                                                 |
+| `--pm <npm\|pnpm\|yarn\|bun>`    | Package manager to use; otherwise detected from the invoking command (`pnpm create`, `yarn create`, …), then from lockfiles.                                                                                                                                                                                                                                                                                             |
+| `--title <name>`                 | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title`).                                                                                                                                                                                                                                                                                                                    |
+| `--color <name>`                 | Nuxt only (ignored with a warning for Docusaurus). Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`.                                                                                                                                                                                                                                     |
+| `--no-install`                   | Skip dependency installation.                                                                                                                                                                                                                                                                                                                                                                                            |
+| `--no-git`                       | Skip git repository initialization.                                                                                                                                                                                                                                                                                                                                                                                      |
+| `-y, --yes`                      | Accept all defaults; fully non-interactive.                                                                                                                                                                                                                                                                                                                                                                              |
+| `-h, --help`                     | Show usage and exit.                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `-v, --version`                  | Print the CLI version and exit.                                                                                                                                                                                                                                                                                                                                                                                          |
 
 ## What's included
 
