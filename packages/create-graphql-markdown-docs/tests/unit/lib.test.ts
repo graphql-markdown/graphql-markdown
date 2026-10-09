@@ -260,6 +260,19 @@ describe("write* helpers (nuxt)", () => {
     }).toThrow(/nothing matched/);
   });
 
+  it("writeGenerateDocs/writeNuxtConfig/writeReadme: escape quotes and $ patterns in schemaRef", () => {
+    const ref = "https://x/it's$&$'$$";
+    const dir = stage("nuxt");
+    writeGenerateDocs(dir, ref, detectLoader(ref));
+    expect(read(dir, "generate-docs.ts")).toContain(
+      "schema: 'https://x/it\\'s$&$\\'$$',",
+    );
+    writeNuxtConfig(dir, "./s$&.graphql", false);
+    expect(read(dir, "nuxt.config.ts")).toContain("./s$&.graphql");
+    writeReadme(dir, ref, ref, detectLoader(ref));
+    expect(read(dir, "README.md")).toContain(`\`${ref}\``);
+  });
+
   it("removeWatchBlock: removes block, is linear on adversarial input", () => {
     const src =
       "a: 1,\n  // The layer's gqlmd-generate module\n  // more\n  watch: [x, y],\n  b: 2,\n";
@@ -346,6 +359,15 @@ describe("write* helpers (docusaurus)", () => {
     expect(() => {
       return writeGraphqlrc(dir, "./s.json", detectLoader("s.json"));
     }).toThrow(/GraphQLFileLoader/);
+  });
+
+  it("writeGraphqlrc: escapes quotes and keeps $ patterns literal", () => {
+    const dir = stage("docusaurus");
+    const ref = "https://x/it's$&$'$$";
+    writeGraphqlrc(dir, ref, detectLoader(ref));
+    expect(read(dir, ".graphqlrc")).toContain(
+      "schema: 'https://x/it''s$&$''$$'",
+    );
   });
 
   it("writeDocusaurusConfig: no-op, title, throw", () => {

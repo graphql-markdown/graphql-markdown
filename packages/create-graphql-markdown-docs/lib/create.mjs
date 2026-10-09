@@ -298,6 +298,15 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
   fs.writeFileSync(appConfigPath, appConfig);
 }
 
+/** Single-quoted JS/TS string literal with backslashes, quotes and newlines escaped. */
+function toSingleQuotedLiteral(value) {
+  const escaped = value
+    .replace(/[\\']/g, (c) => `\\${c}`)
+    .replace(/\n/g, "\\n")
+    .replace(/\r/g, "\\r");
+  return `'${escaped}'`;
+}
+
 /**
  * Rewrite generate-docs.ts to use the resolved schema path and loader.
  */
@@ -308,13 +317,14 @@ export function writeGenerateDocs(tempDir, schemaRef, loader) {
   // The default (bundled example, GraphQLFileLoader) needs no `loaders` option
   // at all — createGenerateDocs already defaults to it — so only inject
   // one when the detected loader differs.
+  const schemaLiteral = toSingleQuotedLiteral(schemaRef);
   const replacement = loader.isDefault
-    ? `  schema: '${schemaRef}',`
-    : `  schema: '${schemaRef}',\n  loaders: { ${loader.className}: '${loader.package}' },`;
+    ? `  schema: ${schemaLiteral},`
+    : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${toSingleQuotedLiteral(loader.package)} },`;
 
   const updated = originalContent.replace(
     "  schema: './schema/example.graphql',",
-    replacement,
+    () => replacement,
   );
 
   // Only validate the replacement if we expected a change (i.e., the replacement differs from the original pattern).
@@ -392,7 +402,7 @@ export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
     // Local schema: replace the example filename with the actual one.
     // Only validate if we expect a change (schemaRef differs from the default).
     const beforeSchemaReplace = updated;
-    updated = updated.replace("./schema/example.graphql", schemaRef);
+    updated = updated.replace("./schema/example.graphql", () => schemaRef);
 
     if (
       schemaRef !== "./schema/example.graphql" &&
@@ -420,7 +430,7 @@ export function writeGraphqlrc(tempDir, schemaRef, loader) {
 
   let updated = originalContent.replace(
     defaultSchemaLine,
-    () => `schema: '${schemaRef}'`,
+    () => `schema: '${schemaRef.replaceAll("'", "''")}'`,
   );
 
   if (schemaRef !== "./schema/example.graphql" && updated === originalContent) {
@@ -523,7 +533,7 @@ export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
     ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n`
     : `### Your GraphQL Schema\n\nYour schema lives at \`${schemaRef}\`. To point at a different file, update both \`generate-docs.ts\`'s \`schema\` option and \`nuxt.config.ts\`'s \`watch\` entry.\n`;
 
-  const updated = originalContent.replace(schemaSectionRe, replacement);
+  const updated = originalContent.replace(schemaSectionRe, () => replacement);
 
   if (updated === originalContent) {
     throw new Error(
