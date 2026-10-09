@@ -478,6 +478,18 @@ describe("main", () => {
     expect(mocks.spawn).not.toHaveBeenCalled();
   });
 
+  it.each(["nuxt", "docusaurus"])(
+    "%s scaffold contains .gitignore and no gitignore",
+    async (framework) => {
+      expect(
+        await main([...base(framework), ...quiet, "--framework", framework]),
+      ).toBe(0);
+      const dir = path.join(work, framework);
+      expect(fs.existsSync(path.join(dir, ".gitignore"))).toBe(true);
+      expect(fs.existsSync(path.join(dir, "gitignore"))).toBe(false);
+    },
+  );
+
   it("--yes docusaurus with local schema, title, color warning", async () => {
     const schema = path.join(work, "my.graphql");
     fs.writeFileSync(schema, "type {");
@@ -671,7 +683,10 @@ describe("main", () => {
   it("EXDEV on rename falls back to copy", async () => {
     const real = fs.renameSync;
     vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
-      if (String(from).includes("gqlmd-")) {
+      if (
+        String(from).includes("gqlmd-") &&
+        !String(from).endsWith("gitignore")
+      ) {
         throw Object.assign(new Error("exdev"), { code: "EXDEV" });
       }
       return real(from, to);

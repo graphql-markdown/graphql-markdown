@@ -890,6 +890,13 @@ function applyTemplate(tempDir, ctx) {
     /^\.output$/,
   ]);
 
+  // npm strips `.gitignore` from published tarballs, so templates ship it as
+  // `gitignore` and it is renamed back here.
+  const gitignore = path.join(tempDir, "gitignore");
+  if (fs.existsSync(gitignore)) {
+    fs.renameSync(gitignore, path.join(tempDir, ".gitignore"));
+  }
+
   const schemaRef = placeSchema(tempDir, schemaPath);
 
   if (isDocusaurus) {
