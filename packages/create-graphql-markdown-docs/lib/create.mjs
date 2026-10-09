@@ -255,15 +255,20 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
   const originalContent = appConfig;
 
   if (titleOverride) {
-    appConfig = appConfig.replace(
-      /siteTitle: 'My API'/,
-      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
-    );
-    if (appConfig === originalContent) {
+    const searchString = "siteTitle: 'My API'";
+
+    // A replacement identical to the original (e.g. the title is already
+    // "My API") is fine; only a missing search string means template drift.
+    if (!originalContent.includes(searchString)) {
       throw new Error(
         `Expected to find and replace "siteTitle: 'My API'" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
+
+    appConfig = appConfig.replace(
+      searchString,
+      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
+    );
   }
 
   if (colorOverride) {

@@ -243,6 +243,15 @@ describe("write* helpers (nuxt)", () => {
     }).toThrow(/defineAppConfig/);
   });
 
+  it("writeAppConfig: title identical to the template's does not throw", () => {
+    const dir = stage("nuxt");
+    const file = path.join(dir, "app", "app.config.ts");
+    expect(() => {
+      return writeAppConfig(dir, "My API", "");
+    }).not.toThrow();
+    expect(read(file)).toContain('siteTitle: "My API"');
+  });
+
   it("writeGenerateDocs: default and non-default loader, throw", () => {
     const dir = stage("nuxt");
     const def = detectLoader("a.graphql");
