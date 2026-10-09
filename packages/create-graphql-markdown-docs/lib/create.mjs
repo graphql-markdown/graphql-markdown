@@ -675,10 +675,9 @@ async function resolveProjectDir(args) {
 
   // Refuse a non-empty target outright — never overwrite existing files,
   // in interactive mode or --yes. There is no confirm-to-overwrite path:
-  // the scaffold later does an unconditional `rmSync(projectDir, {
-  // recursive: true })` before writing, so "confirm then proceed" would
-  // still mean deleting whatever was there first. If you want to scaffold
-  // into that directory, empty or remove it yourself first.
+  // "confirm then proceed" would still mean clobbering whatever was there.
+  // If you want to scaffold into that directory, empty or remove it
+  // yourself first.
   if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
     fail(
       `${projectDir} already exists and is not empty — refusing to overwrite it. Pass a different --dir, or empty that directory first.`,
@@ -922,7 +921,11 @@ function applyTemplate(tempDir, ctx) {
 
 function moveIntoPlace(tempDir, projectDir) {
   if (fs.existsSync(projectDir)) {
-    fs.rmSync(projectDir, { recursive: true, force: true });
+    // Existing (empty) target, possibly the cwd: copy into it rather than
+    // replacing it, so the directory itself (and its inode) is preserved.
+    fs.cpSync(tempDir, projectDir, { recursive: true });
+    fs.rmSync(tempDir, { recursive: true, force: true });
+    return;
   }
   try {
     fs.renameSync(tempDir, projectDir);

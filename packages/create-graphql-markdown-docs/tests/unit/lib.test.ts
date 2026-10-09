@@ -690,6 +690,16 @@ describe("main", () => {
     expect(schemaValidate(work)).toBeUndefined();
   });
 
+  it("scaffolding into an existing empty dir preserves its inode", async () => {
+    const dir = path.join(work, "empty");
+    fs.mkdirSync(dir);
+    const before = fs.statSync(dir).ino;
+    expect(await main(["--dir", dir, ...quiet])).toBe(0);
+    expect(fs.statSync(dir).ino).toBe(before);
+    expect(fs.existsSync(path.join(dir, "package.json"))).toBe(true);
+    expect(fs.existsSync(path.join(dir, ".gitignore"))).toBe(true);
+  });
+
   it("EXDEV on rename falls back to copy", async () => {
     const real = fs.renameSync;
     vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
