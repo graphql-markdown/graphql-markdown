@@ -678,11 +678,8 @@ async function resolveProjectDir(args) {
   // "confirm then proceed" would still mean clobbering whatever was there.
   // If you want to scaffold into that directory, empty or remove it
   // yourself first.
-  if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
-    fail(
-      `${projectDir} already exists and is not empty — refusing to overwrite it. Pass a different --dir, or empty that directory first.`,
-    );
-  }
+  const problem = validateProjectDir(projectDir);
+  if (problem) fail(problem);
   return projectDir;
 }
 

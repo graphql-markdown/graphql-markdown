@@ -727,6 +727,16 @@ describe("main", () => {
     );
   });
 
+  it("--dir pointing at an existing file exits 1 with a friendly message", async () => {
+    const file = path.join(work, "afile");
+    fs.writeFileSync(file, "x");
+    expect(await main(["--dir", file, "--yes"])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("is a file"),
+    );
+    expect(read(file)).toBe("x");
+  });
+
   it("EXDEV on rename falls back to copy", async () => {
     const real = fs.renameSync;
     vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
