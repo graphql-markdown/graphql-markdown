@@ -273,6 +273,17 @@ describe("write* helpers (nuxt)", () => {
     expect(read(dir, "README.md")).toContain(`\`${ref}\``);
   });
 
+  it("github: sources wire GITHUB_TOKEN into the loader and README", () => {
+    const ref = "github:owner/repo#main:schema.graphql";
+    const dir = stage("nuxt");
+    writeGenerateDocs(dir, ref, detectLoader(ref));
+    expect(read(dir, "generate-docs.ts")).toContain(
+      "GithubLoader: { module: '@graphql-tools/github-loader', options: { token: process.env.GITHUB_TOKEN } }",
+    );
+    writeReadme(dir, ref, ref, detectLoader(ref));
+    expect(read(dir, "README.md")).toContain("GITHUB_TOKEN");
+  });
+
   it("removeWatchBlock: removes block, is linear on adversarial input", () => {
     const src =
       "a: 1,\n  // The layer's gqlmd-generate module\n  // more\n  watch: [x, y],\n  b: 2,\n";
@@ -368,6 +379,13 @@ describe("write* helpers (docusaurus)", () => {
     expect(read(dir, ".graphqlrc")).toContain(
       "schema: 'https://x/it''s$&$''$$'",
     );
+  });
+
+  it("writeGraphqlrc: github loader takes GITHUB_TOKEN", () => {
+    const dir = stage("docusaurus");
+    const ref = "github:owner/repo#main:schema.graphql";
+    writeGraphqlrc(dir, ref, detectLoader(ref));
+    expect(read(dir, ".graphqlrc")).toContain("token: '${GITHUB_TOKEN}'");
   });
 
   it("writeDocusaurusConfig: no-op, title, throw", () => {
@@ -757,6 +775,17 @@ describe("main", () => {
       expect.stringContaining("is a file"),
     );
     expect(read(file)).toBe("x");
+  });
+
+  it("github: schema source prints a GITHUB_TOKEN hint in the outro", async () => {
+    const ref = "github:owner/repo#main:schema.graphql";
+    expect(await main([...base("gh"), ...quiet, "--schema", ref])).toBe(0);
+    expect(mocks.prompts.outro).toHaveBeenCalledWith(
+      expect.stringContaining("GITHUB_TOKEN"),
+    );
+    expect(read(work, "gh", "generate-docs.ts")).toContain(
+      "process.env.GITHUB_TOKEN",
+    );
   });
 
   it("EXDEV on rename falls back to copy", async () => {

@@ -318,9 +318,16 @@ export function writeGenerateDocs(tempDir, schemaRef, loader) {
   // at all — createGenerateDocs already defaults to it — so only inject
   // one when the detected loader differs.
   const schemaLiteral = toSingleQuotedLiteral(schemaRef);
+  const packageLiteral = toSingleQuotedLiteral(loader.package);
+  // GithubLoader needs an API token, passed as a loadSchema option through
+  // the `{ module, options }` form of the loader entry.
+  const loaderEntry =
+    loader.id === "github"
+      ? `{ module: ${packageLiteral}, options: { token: process.env.GITHUB_TOKEN } }`
+      : packageLiteral;
   const replacement = loader.isDefault
     ? `  schema: ${schemaLiteral},`
-    : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${toSingleQuotedLiteral(loader.package)} },`;
+    : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${loaderEntry} },`;
 
   const updated = originalContent.replace(
     "  schema: './schema/example.graphql',",
@@ -441,10 +448,14 @@ export function writeGraphqlrc(tempDir, schemaRef, loader) {
 
   if (!loader.isDefault) {
     // URL sources are introspected with POST, as in the original template.
-    const loaderEntry =
-      loader.id === "url"
-        ? `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`
-        : `      ${loader.className}: '${loader.package}'`;
+    // GithubLoader reads its API token from the GITHUB_TOKEN env var
+    // (graphql-config interpolates `${VAR}` in .graphqlrc).
+    let loaderEntry = `      ${loader.className}: '${loader.package}'`;
+    if (loader.id === "url") {
+      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`;
+    } else if (loader.id === "github") {
+      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          token: '\${GITHUB_TOKEN}'`;
+    }
     const beforeLoader = updated;
     updated = updated.replace(defaultLoaderLine, () => loaderEntry);
 
@@ -528,9 +539,12 @@ export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
   const originalContent = fs.readFileSync(readmePath, "utf-8");
   const schemaSectionRe = /### Your GraphQL Schema\n\n[\s\S]*?(?=\n### |\n## )/;
 
-  const isRemoteSource = /^(https?|git|github):/i.test(schemaRef);
-  const replacement = isRemoteSource
-    ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n`
+  const githubNote =
+    loader.id === "github"
+      ? "\nGitHub sources require an API token: set the `GITHUB_TOKEN` environment variable before running `generate`, `dev` or `build`.\n"
+      : "";
+  const replacement = isRemoteSchemaSource(schemaRef)
+    ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n${githubNote}`
     : `### Your GraphQL Schema\n\nYour schema lives at \`${schemaRef}\`. To point at a different file, update both \`generate-docs.ts\`'s \`schema\` option and \`nuxt.config.ts\`'s \`watch\` entry.\n`;
 
   const updated = originalContent.replace(schemaSectionRe, () => replacement);
@@ -966,7 +980,7 @@ async function confirmThen(isYes, message, action) {
 
 /** Phase 4: install dependencies, init git, print summary. */
 async function finalize(args, ctx) {
-  const { projectDir, packageManager, framework } = ctx;
+  const { projectDir, packageManager, framework, loader } = ctx;
   const isYes = Boolean(args.yes);
 
   let installed = false;
@@ -999,11 +1013,15 @@ async function finalize(args, ctx) {
   } else {
     steps.push(`${packageManager} run dev`);
   }
+  const githubHint =
+    loader.id === "github"
+      ? "\nNote: set the GITHUB_TOKEN environment variable so the GitHub schema can be loaded.\n"
+      : "";
   const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
 Next steps:
 ${list}
-
+${githubHint}
 Documentation: https://graphql-markdown.dev
     `);
 }
@@ -1031,7 +1049,7 @@ async function scaffold(args, tempDir) {
   moveIntoPlace(tempDir, projectDir);
   prompts.log.success("Project created successfully!");
 
-  await finalize(args, { projectDir, packageManager, framework });
+  await finalize(args, { projectDir, packageManager, framework, loader });
 }
 
 /**
