@@ -113,30 +113,18 @@ export function isRemoteSchemaSource(source) {
 }
 
 /**
- * Copy a directory recursively, excluding certain patterns.
+ * Copy a directory recursively, excluding entries whose name matches any pattern.
  */
 export function copyDirRecursive(src, dst, excludePatterns = []) {
-  if (!fs.existsSync(dst)) {
-    fs.mkdirSync(dst, { recursive: true });
-  }
-
-  const files = fs.readdirSync(src);
-  for (const file of files) {
-    // Skip excluded patterns
-    if (excludePatterns.some((pattern) => pattern.exec(file))) {
-      continue;
-    }
-
-    const srcPath = path.join(src, file);
-    const dstPath = path.join(dst, file);
-    const stat = fs.statSync(srcPath);
-
-    if (stat.isDirectory()) {
-      copyDirRecursive(srcPath, dstPath, excludePatterns);
-    } else {
-      fs.copyFileSync(srcPath, dstPath);
-    }
-  }
+  fs.cpSync(src, dst, {
+    recursive: true,
+    filter: (source) => {
+      // The root itself is always copied; patterns apply to entry names.
+      if (source === src) return true;
+      const name = path.basename(source);
+      return !excludePatterns.some((pattern) => pattern.test(name));
+    },
+  });
 }
 
 /**
@@ -144,8 +132,8 @@ export function copyDirRecursive(src, dst, excludePatterns = []) {
  */
 export async function validateGraphQLSchema(schemaPath) {
   try {
-    const fs = await import("node:fs/promises");
-    const schemaText = await fs.readFile(schemaPath, "utf-8");
+    const fsPromises = await import("node:fs/promises");
+    const schemaText = await fsPromises.readFile(schemaPath, "utf-8");
 
     // Use graphql's buildSchema to validate
     const { buildSchema } = await import("graphql");
