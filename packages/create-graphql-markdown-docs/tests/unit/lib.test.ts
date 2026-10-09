@@ -243,6 +243,15 @@ describe("write* helpers (nuxt)", () => {
     }).toThrow(/defineAppConfig/);
   });
 
+  it("writeAppConfig: title identical to the template's does not throw", () => {
+    const dir = stage("nuxt");
+    const file = path.join(dir, "app", "app.config.ts");
+    expect(() => {
+      return writeAppConfig(dir, "My API", "");
+    }).not.toThrow();
+    expect(read(file)).toContain('siteTitle: "My API"');
+  });
+
   it("writeGenerateDocs: default and non-default loader, throw", () => {
     const dir = stage("nuxt");
     const def = detectLoader("a.graphql");
@@ -258,6 +267,30 @@ describe("write* helpers (nuxt)", () => {
     expect(() => {
       return writeGenerateDocs(dir, "./other.graphql", def);
     }).toThrow(/nothing matched/);
+  });
+
+  it("writeGenerateDocs/writeNuxtConfig/writeReadme: escape quotes and $ patterns in schemaRef", () => {
+    const ref = "https://x/it's$&$'$$";
+    const dir = stage("nuxt");
+    writeGenerateDocs(dir, ref, detectLoader(ref));
+    expect(read(dir, "generate-docs.ts")).toContain(
+      "schema: 'https://x/it\\'s$&$\\'$$',",
+    );
+    writeNuxtConfig(dir, "./s$&.graphql", false);
+    expect(read(dir, "nuxt.config.ts")).toContain("./s$&.graphql");
+    writeReadme(dir, ref, ref, detectLoader(ref));
+    expect(read(dir, "README.md")).toContain(`\`${ref}\``);
+  });
+
+  it("github: sources wire GITHUB_TOKEN into the loader and README", () => {
+    const ref = "github:owner/repo#main:schema.graphql";
+    const dir = stage("nuxt");
+    writeGenerateDocs(dir, ref, detectLoader(ref));
+    expect(read(dir, "generate-docs.ts")).toContain(
+      "GithubLoader: { module: '@graphql-tools/github-loader', options: { token: process.env.GITHUB_TOKEN } }",
+    );
+    writeReadme(dir, ref, ref, detectLoader(ref));
+    expect(read(dir, "README.md")).toContain("GITHUB_TOKEN");
   });
 
   it("removeWatchBlock: removes block, is linear on adversarial input", () => {
@@ -348,6 +381,22 @@ describe("write* helpers (docusaurus)", () => {
     }).toThrow(/GraphQLFileLoader/);
   });
 
+  it("writeGraphqlrc: escapes quotes and keeps $ patterns literal", () => {
+    const dir = stage("docusaurus");
+    const ref = "https://x/it's$&$'$$";
+    writeGraphqlrc(dir, ref, detectLoader(ref));
+    expect(read(dir, ".graphqlrc")).toContain(
+      "schema: 'https://x/it''s$&$''$$'",
+    );
+  });
+
+  it("writeGraphqlrc: github loader takes GITHUB_TOKEN", () => {
+    const dir = stage("docusaurus");
+    const ref = "github:owner/repo#main:schema.graphql";
+    writeGraphqlrc(dir, ref, detectLoader(ref));
+    expect(read(dir, ".graphqlrc")).toContain("token: '${GITHUB_TOKEN}'");
+  });
+
   it("writeDocusaurusConfig: no-op, title, throw", () => {
     const dir = stage("docusaurus");
     const file = path.join(dir, "docusaurus.config.js");
@@ -359,6 +408,16 @@ describe("write* helpers (docusaurus)", () => {
     expect(() => {
       return writeDocusaurusConfig(dir, "Again");
     }).toThrow(/My API/);
+  });
+
+  it("writeDocusaurusConfig: title identical to the template's does not throw", () => {
+    const dir = stage("docusaurus");
+    const file = path.join(dir, "docusaurus.config.js");
+    const before = read(file);
+    expect(() => {
+      return writeDocusaurusConfig(dir, "My API");
+    }).not.toThrow();
+    expect(read(file)).toBe(before);
   });
 });
 
@@ -477,6 +536,18 @@ describe("main", () => {
     expect(JSON.parse(read(work, "n", "package.json")).name).toBe("n");
     expect(mocks.spawn).not.toHaveBeenCalled();
   });
+
+  it.each(["nuxt", "docusaurus"])(
+    "%s scaffold contains .gitignore and no gitignore",
+    async (framework) => {
+      expect(
+        await main([...base(framework), ...quiet, "--framework", framework]),
+      ).toBe(0);
+      const dir = path.join(work, framework);
+      expect(fs.existsSync(path.join(dir, ".gitignore"))).toBe(true);
+      expect(fs.existsSync(path.join(dir, "gitignore"))).toBe(false);
+    },
+  );
 
   it("--yes docusaurus with local schema, title, color warning", async () => {
     const schema = path.join(work, "my.graphql");
@@ -665,13 +736,74 @@ describe("main", () => {
     expect(schemaValidate("")).toMatch(/required/);
     expect(schemaValidate(path.join(work, "nope"))).toMatch(/not found/);
     expect(schemaValidate("https://x")).toBeUndefined();
-    expect(schemaValidate(work)).toBeUndefined();
+    expect(schemaValidate(work)).toMatch(/is a directory/);
+  });
+
+  it("scaffolding into an existing empty dir preserves its inode", async () => {
+    const dir = path.join(work, "empty");
+    fs.mkdirSync(dir);
+    const before = fs.statSync(dir).ino;
+    expect(await main(["--dir", dir, ...quiet])).toBe(0);
+    expect(fs.statSync(dir).ino).toBe(before);
+    expect(fs.existsSync(path.join(dir, "package.json"))).toBe(true);
+    expect(fs.existsSync(path.join(dir, ".gitignore"))).toBe(true);
+  });
+
+  it("--schema pointing at a missing path or a directory exits 1 early", async () => {
+    const missing = path.join(work, "nope.graphql");
+    expect(await main([...base("m"), ...quiet, "--schema", missing])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("not found"),
+    );
+    expect(await main([...base("m"), ...quiet, "--schema", work])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("is a directory"),
+    );
+    expect(fs.existsSync(path.join(work, "m"))).toBe(false);
+  });
+
+  it("SDL validation only runs for the default SDL loader", async () => {
+    const bad = "type {";
+    const sdl = path.join(work, "bad.graphql");
+    const json = path.join(work, "bad.json");
+    fs.writeFileSync(sdl, bad);
+    fs.writeFileSync(json, bad);
+    expect(await main([...base("s1"), ...quiet, "--schema", json])).toBe(0);
+    expect(mocks.prompts.log.warn).not.toHaveBeenCalled();
+    expect(await main([...base("s2"), ...quiet, "--schema", sdl])).toBe(0);
+    expect(mocks.prompts.log.warn).toHaveBeenCalledWith(
+      expect.stringContaining("did not parse"),
+    );
+  });
+
+  it("--dir pointing at an existing file exits 1 with a friendly message", async () => {
+    const file = path.join(work, "afile");
+    fs.writeFileSync(file, "x");
+    expect(await main(["--dir", file, "--yes"])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("is a file"),
+    );
+    expect(read(file)).toBe("x");
+  });
+
+  it("github: schema source prints a GITHUB_TOKEN hint in the outro", async () => {
+    const ref = "github:owner/repo#main:schema.graphql";
+    expect(await main([...base("gh"), ...quiet, "--schema", ref])).toBe(0);
+    expect(mocks.prompts.outro).toHaveBeenCalledWith(
+      expect.stringContaining("GITHUB_TOKEN"),
+    );
+    expect(read(work, "gh", "generate-docs.ts")).toContain(
+      "process.env.GITHUB_TOKEN",
+    );
   });
 
   it("EXDEV on rename falls back to copy", async () => {
     const real = fs.renameSync;
     vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
-      if (String(from).includes("gqlmd-")) {
+      if (
+        String(from).includes("gqlmd-") &&
+        !String(from).endsWith("gitignore")
+      ) {
         throw Object.assign(new Error("exdev"), { code: "EXDEV" });
       }
       return real(from, to);

@@ -113,30 +113,18 @@ export function isRemoteSchemaSource(source) {
 }
 
 /**
- * Copy a directory recursively, excluding certain patterns.
+ * Copy a directory recursively, excluding entries whose name matches any pattern.
  */
 export function copyDirRecursive(src, dst, excludePatterns = []) {
-  if (!fs.existsSync(dst)) {
-    fs.mkdirSync(dst, { recursive: true });
-  }
-
-  const files = fs.readdirSync(src);
-  for (const file of files) {
-    // Skip excluded patterns
-    if (excludePatterns.some((pattern) => pattern.exec(file))) {
-      continue;
-    }
-
-    const srcPath = path.join(src, file);
-    const dstPath = path.join(dst, file);
-    const stat = fs.statSync(srcPath);
-
-    if (stat.isDirectory()) {
-      copyDirRecursive(srcPath, dstPath, excludePatterns);
-    } else {
-      fs.copyFileSync(srcPath, dstPath);
-    }
-  }
+  fs.cpSync(src, dst, {
+    recursive: true,
+    filter: (source) => {
+      // The root itself is always copied; patterns apply to entry names.
+      if (source === src) return true;
+      const name = path.basename(source);
+      return !excludePatterns.some((pattern) => pattern.test(name));
+    },
+  });
 }
 
 /**
@@ -144,8 +132,8 @@ export function copyDirRecursive(src, dst, excludePatterns = []) {
  */
 export async function validateGraphQLSchema(schemaPath) {
   try {
-    const fs = await import("node:fs/promises");
-    const schemaText = await fs.readFile(schemaPath, "utf-8");
+    const fsPromises = await import("node:fs/promises");
+    const schemaText = await fsPromises.readFile(schemaPath, "utf-8");
 
     // Use graphql's buildSchema to validate
     const { buildSchema } = await import("graphql");
@@ -267,15 +255,20 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
   const originalContent = appConfig;
 
   if (titleOverride) {
-    appConfig = appConfig.replace(
-      /siteTitle: 'My API'/,
-      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
-    );
-    if (appConfig === originalContent) {
+    const searchString = "siteTitle: 'My API'";
+
+    // A replacement identical to the original (e.g. the title is already
+    // "My API") is fine; only a missing search string means template drift.
+    if (!originalContent.includes(searchString)) {
       throw new Error(
         `Expected to find and replace "siteTitle: 'My API'" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
+
+    appConfig = appConfig.replace(
+      searchString,
+      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
+    );
   }
 
   if (colorOverride) {
@@ -298,6 +291,15 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
   fs.writeFileSync(appConfigPath, appConfig);
 }
 
+/** Single-quoted JS/TS string literal with backslashes, quotes and newlines escaped. */
+function toSingleQuotedLiteral(value) {
+  const escaped = value
+    .replace(/[\\']/g, (c) => `\\${c}`)
+    .replaceAll("\n", String.raw`\n`)
+    .replaceAll("\r", String.raw`\r`);
+  return `'${escaped}'`;
+}
+
 /**
  * Rewrite generate-docs.ts to use the resolved schema path and loader.
  */
@@ -308,13 +310,21 @@ export function writeGenerateDocs(tempDir, schemaRef, loader) {
   // The default (bundled example, GraphQLFileLoader) needs no `loaders` option
   // at all — createGenerateDocs already defaults to it — so only inject
   // one when the detected loader differs.
+  const schemaLiteral = toSingleQuotedLiteral(schemaRef);
+  const packageLiteral = toSingleQuotedLiteral(loader.package);
+  // GithubLoader needs an API token, passed as a loadSchema option through
+  // the `{ module, options }` form of the loader entry.
+  const loaderEntry =
+    loader.id === "github"
+      ? `{ module: ${packageLiteral}, options: { token: process.env.GITHUB_TOKEN } }`
+      : packageLiteral;
   const replacement = loader.isDefault
-    ? `  schema: '${schemaRef}',`
-    : `  schema: '${schemaRef}',\n  loaders: { ${loader.className}: '${loader.package}' },`;
+    ? `  schema: ${schemaLiteral},`
+    : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${loaderEntry} },`;
 
   const updated = originalContent.replace(
     "  schema: './schema/example.graphql',",
-    replacement,
+    () => replacement,
   );
 
   // Only validate the replacement if we expected a change (i.e., the replacement differs from the original pattern).
@@ -392,7 +402,7 @@ export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
     // Local schema: replace the example filename with the actual one.
     // Only validate if we expect a change (schemaRef differs from the default).
     const beforeSchemaReplace = updated;
-    updated = updated.replace("./schema/example.graphql", schemaRef);
+    updated = updated.replace("./schema/example.graphql", () => schemaRef);
 
     if (
       schemaRef !== "./schema/example.graphql" &&
@@ -420,7 +430,7 @@ export function writeGraphqlrc(tempDir, schemaRef, loader) {
 
   let updated = originalContent.replace(
     defaultSchemaLine,
-    () => `schema: '${schemaRef}'`,
+    () => `schema: '${schemaRef.replaceAll("'", "''")}'`,
   );
 
   if (schemaRef !== "./schema/example.graphql" && updated === originalContent) {
@@ -431,10 +441,14 @@ export function writeGraphqlrc(tempDir, schemaRef, loader) {
 
   if (!loader.isDefault) {
     // URL sources are introspected with POST, as in the original template.
-    const loaderEntry =
-      loader.id === "url"
-        ? `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`
-        : `      ${loader.className}: '${loader.package}'`;
+    // GithubLoader reads its API token from the GITHUB_TOKEN env var
+    // (graphql-config interpolates `${VAR}` in .graphqlrc).
+    let loaderEntry = `      ${loader.className}: '${loader.package}'`;
+    if (loader.id === "url") {
+      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`;
+    } else if (loader.id === "github") {
+      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          token: '\${GITHUB_TOKEN}'`;
+    }
     const beforeLoader = updated;
     updated = updated.replace(defaultLoaderLine, () => loaderEntry);
 
@@ -458,16 +472,20 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
 
   const configPath = path.join(tempDir, "docusaurus.config.js");
   const originalContent = fs.readFileSync(configPath, "utf-8");
-  const updated = originalContent.replace(
-    'title: "My API",',
-    () => `title: ${JSON.stringify(titleOverride)},`,
-  );
+  const searchString = 'title: "My API",';
 
-  if (updated === originalContent) {
+  // A replacement identical to the original (e.g. the title is already
+  // "My API") is fine; only a missing search string means template drift.
+  if (!originalContent.includes(searchString)) {
     throw new Error(
       `Expected to find and replace 'title: "My API",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
+
+  const updated = originalContent.replace(
+    searchString,
+    () => `title: ${JSON.stringify(titleOverride)},`,
+  );
 
   fs.writeFileSync(configPath, updated);
 }
@@ -514,12 +532,15 @@ export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
   const originalContent = fs.readFileSync(readmePath, "utf-8");
   const schemaSectionRe = /### Your GraphQL Schema\n\n[\s\S]*?(?=\n### |\n## )/;
 
-  const isRemoteSource = /^(https?|git|github):/i.test(schemaRef);
-  const replacement = isRemoteSource
-    ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n`
+  const githubNote =
+    loader.id === "github"
+      ? "\nGitHub sources require an API token: set the `GITHUB_TOKEN` environment variable before running `generate`, `dev` or `build`.\n"
+      : "";
+  const replacement = isRemoteSchemaSource(schemaRef)
+    ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n${githubNote}`
     : `### Your GraphQL Schema\n\nYour schema lives at \`${schemaRef}\`. To point at a different file, update both \`generate-docs.ts\`'s \`schema\` option and \`nuxt.config.ts\`'s \`watch\` entry.\n`;
 
-  const updated = originalContent.replace(schemaSectionRe, replacement);
+  const updated = originalContent.replace(schemaSectionRe, () => replacement);
 
   if (updated === originalContent) {
     throw new Error(
@@ -671,29 +692,36 @@ async function resolveProjectDir(args) {
 
   // Refuse a non-empty target outright — never overwrite existing files,
   // in interactive mode or --yes. There is no confirm-to-overwrite path:
-  // the scaffold later does an unconditional `rmSync(projectDir, {
-  // recursive: true })` before writing, so "confirm then proceed" would
-  // still mean deleting whatever was there first. If you want to scaffold
-  // into that directory, empty or remove it yourself first.
-  if (fs.existsSync(projectDir) && fs.readdirSync(projectDir).length > 0) {
-    fail(
-      `${projectDir} already exists and is not empty — refusing to overwrite it. Pass a different --dir, or empty that directory first.`,
-    );
-  }
+  // "confirm then proceed" would still mean clobbering whatever was there.
+  // If you want to scaffold into that directory, empty or remove it
+  // yourself first.
+  const problem = validateProjectDir(projectDir);
+  if (problem) fail(problem);
   return projectDir;
 }
 
 function validateSchemaSource(value) {
   const source = value?.trim();
   if (!source) return "Schema source is required";
-  if (!isRemoteSchemaSource(source) && !fs.existsSync(source)) {
-    return "Schema file not found";
+  if (isRemoteSchemaSource(source)) return undefined;
+  if (!fs.existsSync(source)) {
+    return `Schema file not found: ${source}`;
   }
+  if (fs.statSync(source).isDirectory()) {
+    return `${source} is a directory — provide a schema file, URL or git ref.`;
+  }
+  return undefined;
 }
 
 /** Resolves the custom schema source, or undefined to use the bundled example. */
 async function resolveSchemaPath(args) {
-  if (args.example || args.schema || args.yes) return args.schema?.trim();
+  if (args.schema) {
+    const source = args.schema.trim();
+    const problem = validateSchemaSource(source);
+    if (problem) fail(problem);
+    return source;
+  }
+  if (args.example || args.yes) return undefined;
 
   const schemaChoice = unlessCancelled(
     await prompts.select({
@@ -724,10 +752,14 @@ async function resolveSchemaPath(args) {
 
 /** Validates a local schema and detects the loader it needs. */
 async function resolveLoader(schemaPath) {
-  // Validate a local schema file's syntax (skipped for remote sources —
-  // fetching one just to lint it isn't worth the network round trip here;
-  // `nuxi generate` will surface a real error if it's actually invalid).
-  if (schemaPath && !isRemoteSchemaSource(schemaPath)) {
+  // Every schema source needs the matching graphql-tools loader — detect it
+  // from the source and report the choice.
+  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
+
+  // Only an SDL file can be checked with buildSchema — introspection JSON and
+  // code files need their own loader, and remote sources aren't fetched just
+  // to lint them (`nuxi generate` surfaces a real error if one is invalid).
+  if (schemaPath && loader.isDefault && !isRemoteSchemaSource(schemaPath)) {
     const isValid = await validateGraphQLSchema(schemaPath);
     if (!isValid) {
       prompts.log.warn(
@@ -736,9 +768,6 @@ async function resolveLoader(schemaPath) {
     }
   }
 
-  // Every schema source needs the matching graphql-tools loader — detect it
-  // from the source and report the choice.
-  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
   if (schemaPath && !loader.isDefault) {
     prompts.log.info(
       `Detected schema source needs ${loader.package} (${loader.className}) — adding it as a dependency.`,
@@ -890,6 +919,13 @@ function applyTemplate(tempDir, ctx) {
     /^\.output$/,
   ]);
 
+  // npm strips `.gitignore` from published tarballs, so templates ship it as
+  // `gitignore` and it is renamed back here.
+  const gitignore = path.join(tempDir, "gitignore");
+  if (fs.existsSync(gitignore)) {
+    fs.renameSync(gitignore, path.join(tempDir, ".gitignore"));
+  }
+
   const schemaRef = placeSchema(tempDir, schemaPath);
 
   if (isDocusaurus) {
@@ -911,7 +947,11 @@ function applyTemplate(tempDir, ctx) {
 
 function moveIntoPlace(tempDir, projectDir) {
   if (fs.existsSync(projectDir)) {
-    fs.rmSync(projectDir, { recursive: true, force: true });
+    // Existing (empty) target, possibly the cwd: copy into it rather than
+    // replacing it, so the directory itself (and its inode) is preserved.
+    fs.cpSync(tempDir, projectDir, { recursive: true });
+    fs.rmSync(tempDir, { recursive: true, force: true });
+    return;
   }
   try {
     fs.renameSync(tempDir, projectDir);
@@ -933,7 +973,7 @@ async function confirmThen(isYes, message, action) {
 
 /** Phase 4: install dependencies, init git, print summary. */
 async function finalize(args, ctx) {
-  const { projectDir, packageManager, framework } = ctx;
+  const { projectDir, packageManager, framework, loader } = ctx;
   const isYes = Boolean(args.yes);
 
   let installed = false;
@@ -966,11 +1006,15 @@ async function finalize(args, ctx) {
   } else {
     steps.push(`${packageManager} run dev`);
   }
+  const githubHint =
+    loader.id === "github"
+      ? "\nNote: set the GITHUB_TOKEN environment variable so the GitHub schema can be loaded.\n"
+      : "";
   const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
 Next steps:
 ${list}
-
+${githubHint}
 Documentation: https://graphql-markdown.dev
     `);
 }
@@ -998,7 +1042,7 @@ async function scaffold(args, tempDir) {
   moveIntoPlace(tempDir, projectDir);
   prompts.log.success("Project created successfully!");
 
-  await finalize(args, { projectDir, packageManager, framework });
+  await finalize(args, { projectDir, packageManager, framework, loader });
 }
 
 /**

@@ -29,7 +29,10 @@ const getAllFiles = (dir, prefix = "") => {
     }
 
     const fullPath = join(dir, entry.name);
-    const relPath = prefix ? `${prefix}/${entry.name}` : entry.name;
+    // Templates ship `gitignore`; the scaffold renames it to `.gitignore`.
+    const name =
+      !prefix && entry.name === "gitignore" ? ".gitignore" : entry.name;
+    const relPath = prefix ? `${prefix}/${name}` : name;
 
     files.push({
       path: relPath,
