@@ -24,7 +24,7 @@ const ADD_DEV_COMMANDS = {
   bun: ["bun", ["add", "--dev"]],
 };
 
-export function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
+function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
   const [command, args] = ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
   const rootFlag = workspaceRoot
     ? { pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? []
