@@ -7,12 +7,11 @@
         : ''
     "
   >
-    <ProseCodeGroup v-if="cards.length > 1">
+    <!-- Even a lone SDL card goes through the code group so every type gets
+         the same tab-bar frame, keeping the code box identical across types. -->
+    <ProseCodeGroup v-if="cards.length">
       <SchemaCodeCard v-for="card in cards" :key="card.label" v-bind="card" />
     </ProseCodeGroup>
-    <template v-else-if="cards.length === 1">
-      <SchemaCodeCard v-bind="singleCard!" />
-    </template>
   </section>
 </template>
 
@@ -45,9 +44,5 @@ const cards = computed<CodeCard[]>(() => {
     ...props.exampleCards,
   ];
   return allCards.filter((card): card is CodeCard => Boolean(card));
-});
-
-const singleCard = computed<CodeCard | undefined>(() => {
-  return cards.value.length === 1 ? cards.value[0] : undefined;
 });
 </script>
