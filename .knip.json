@@ -84,7 +84,6 @@
         "@typescript-eslint/eslint-plugin",
         "@typescript-eslint/parser",
         "eslint-config-prettier",
-        "eslint-plugin-import",
         "@vitest/eslint-plugin",
         "vitest",
         "eslint-plugin-jsonc",
