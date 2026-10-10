@@ -63,7 +63,7 @@ export const useActiveEntry = (
   const activateLastEntryAtBottom = (): void => {
     if (
       window.innerHeight + window.scrollY <
-      document.documentElement.scrollHeight
+      document.documentElement.scrollHeight - 1
     ) {
       return;
     }
@@ -124,11 +124,13 @@ export const useActiveEntry = (
     removePageFinishHook = useNuxtApp().hook("page:finish", onPageFinish);
     // rootMargin depends on the viewport height, so rebuild on resize.
     window.addEventListener("resize", observe);
+    window.addEventListener("scroll", activateLastEntryAtBottom, { passive: true });
   });
 
   onBeforeUnmount(() => {
     removePageFinishHook?.();
     window.removeEventListener("resize", observe);
+    window.removeEventListener("scroll", activateLastEntryAtBottom);
     disconnect();
   });
 
