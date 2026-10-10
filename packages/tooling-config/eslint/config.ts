@@ -6,7 +6,6 @@ import tsParser from "@typescript-eslint/parser";
 import prettierConfig from "eslint-config-prettier";
 import prettierPlugin from "eslint-plugin-prettier";
 import vitestPlugin from "@vitest/eslint-plugin";
-import importPlugin from "eslint-plugin-import";
 import tsdocPlugin from "eslint-plugin-tsdoc";
 import jsoncPlugin from "eslint-plugin-jsonc";
 import * as jsoncParser from "jsonc-eslint-parser";
@@ -50,7 +49,6 @@ const config: Linter.FlatConfig[] = [
     plugins: {
       "@typescript-eslint": tsPlugin as unknown as ESLint.Plugin,
       prettier: prettierPlugin,
-      import: importPlugin,
       tsdoc: tsdocPlugin,
     },
     languageOptions: {
@@ -58,20 +56,6 @@ const config: Linter.FlatConfig[] = [
       parserOptions: {
         project: true,
         tsconfigRootDir: projectRoot,
-      },
-    },
-    settings: {
-      "import/parsers": {
-        "@typescript-eslint/parser": [".ts", ".tsx"],
-      },
-      "import/resolver": {
-        typescript: {
-          project: [
-            "./tsconfig.json",
-            "./packages/*/tsconfig.json",
-            "./packages/*/tsconfig.test.json",
-          ],
-        },
       },
     },
     rules: {
@@ -171,8 +155,6 @@ const config: Linter.FlatConfig[] = [
       "prefer-arrow-callback": ["error", { allowNamedFunctions: true }],
       "func-style": ["error", "expression", { allowArrowFunctions: true }],
       // Disable expensive rules if not critical
-      "import/no-cycle": "off",
-      "import/no-deprecated": "off",
       "sonarjs/cognitive-complexity": "off",
     },
   },
