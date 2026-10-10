@@ -5,7 +5,7 @@ import { WIRE_FRAMEWORKS } from "./frameworks/index.mjs";
 import { isRemoteSchemaSource } from "./schema.mjs";
 
 /** Entries that do not make a folder a "project". */
-const IGNORED_ENTRIES = [".git", ".DS_Store", "Thumbs.db"];
+const IGNORED_ENTRIES = new Set([".git", ".DS_Store", "Thumbs.db"]);
 
 /** Flags that only make sense when creating a new project. */
 const SCAFFOLD_ONLY_FLAGS = ["example", "title", "color", "no-git"];
@@ -27,7 +27,7 @@ const WIRE_ONLY_FLAGS = [
  */
 export function isEffectivelyEmpty(dir) {
   if (!fs.existsSync(dir)) return true;
-  return fs.readdirSync(dir).every((entry) => IGNORED_ENTRIES.includes(entry));
+  return fs.readdirSync(dir).every((entry) => IGNORED_ENTRIES.has(entry));
 }
 
 /**
