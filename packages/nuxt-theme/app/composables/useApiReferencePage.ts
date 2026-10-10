@@ -1,5 +1,6 @@
 import type { ComputedRef, Ref } from "vue";
 import { anchorIdFor } from "~/composables/useApiSinglePage";
+import { LANDING_DOC_NAME, isLandingDocPath } from "../../constants";
 
 type Page = Record<string, any> | null | undefined;
 type Resolved<T extends (...args: any[]) => any> = Awaited<ReturnType<T>>;
@@ -11,6 +12,8 @@ export interface ApiReferencePage {
   isLandingPage: ComputedRef<boolean>;
   isNamespaceChooser: ComputedRef<boolean>;
   isFlat: Ref<boolean>;
+  landingDocument: ComputedRef<Record<string, any> | undefined>;
+  landingTitle: ComputedRef<string | undefined>;
   buckets: Resolved<typeof useApiSinglePage>["buckets"];
   sections: Resolved<typeof useApiNavigation>["sections"];
   overviewGroups: ComputedRef<
@@ -55,14 +58,34 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
     const exact = await queryCollection("content").path(route.path).first();
     if (exact) return exact;
     return queryCollection("content")
-      .path(`${route.path.replace(/\/$/, "")}/generated`)
+      .path(`${route.path.replace(/\/$/, "")}/${LANDING_DOC_NAME}`)
       .first();
   });
 
   const page = data as Ref<Page>;
 
   const isLandingPage = computed(() => {
-    return page.value?.path?.endsWith("/generated") ?? false;
+    return isLandingDocPath(page.value?.path ?? "");
+  });
+
+  // The schema homepage: its body goes through the same generated-markup
+  // fixups as every other document before `ContentRenderer` sees it.
+  const landingDocument = computed<Record<string, any> | undefined>(() => {
+    if (!isLandingPage.value || !page.value) {
+      return undefined;
+    }
+    const nodes: MdcNode[] = page.value.body?.value ?? [];
+
+    return {
+      ...page.value,
+      body: { ...page.value.body, value: nodes.map(toRenderableNode) },
+    };
+  });
+
+  const landingTitle = computed<string | undefined>(() => {
+    // Empty titles are treated as absent, hence `||`.
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+    return page.value?.title || undefined;
   });
 
   const { sections, overviewGroupsFor } = await nuxtApp.runWithContext(
@@ -152,6 +175,8 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
     isLandingPage,
     isNamespaceChooser,
     isFlat,
+    landingDocument,
+    landingTitle,
     buckets,
     sections,
     overviewGroups,

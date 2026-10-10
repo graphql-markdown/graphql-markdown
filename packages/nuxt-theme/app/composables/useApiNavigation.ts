@@ -1,4 +1,5 @@
 import { findDeprecationNotice, titleCase } from "~/utils/api-document";
+import { isLandingDocPath } from "../../constants";
 
 export interface ApiNavigationLeaf {
   title: string;
@@ -23,11 +24,6 @@ interface RawPage {
   /** The GraphQL entity kind (`objects`, `scalars`, `queries`, …) stamped by `formatter.mjs`'s `formatMDXFrontmatter`. */
   kind?: string;
 }
-
-/** True for a namespace/schema's own generated landing doc, never a real nav entry. */
-const isLandingDoc = (path: string): boolean => {
-  return path.endsWith("/generated");
-};
 
 interface Branch {
   children: Map<string, Branch>;
@@ -146,7 +142,7 @@ export const useApiNavigation = async (): Promise<{
         .then((items) => {
           return items
             .filter((item) => {
-              return !isLandingDoc(item.path);
+              return !isLandingDocPath(item.path);
             })
             .map<RawPage>((item) => {
               return {

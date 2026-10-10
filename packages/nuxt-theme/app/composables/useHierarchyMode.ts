@@ -1,3 +1,5 @@
+import { isLandingDocPath } from "../../constants";
+
 /**
  * Detects whether the generated API reference content is using
  * `printTypeOptions.hierarchy: "flat"` (see `@graphql-markdown/core`'s
@@ -26,7 +28,7 @@ export const useHierarchyMode = async (): Promise<{
     async () => {
       const items = await queryCollection("content").select("path").all();
       const nonLanding = items.filter((item) => {
-        return !item.path.endsWith("/generated");
+        return !isLandingDocPath(item.path);
       });
 
       return (

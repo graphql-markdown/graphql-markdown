@@ -1,3 +1,4 @@
+import { isLandingDocPath } from "../../constants";
 import {
   codeColumnNodeIndexes,
   findDeprecationNotice,
@@ -14,11 +15,6 @@ import type {
   ApiNavigationLeaf,
   ApiNavigationNode,
 } from "./useApiNavigation";
-
-/** True for a namespace/schema's own generated landing doc, never a real entry. */
-const isLandingDoc = (path: string): boolean => {
-  return path.endsWith("/generated");
-};
 
 /** Anvil's own order: queries, then mutations, then subscriptions, then types. */
 const OPERATION_KINDS = ["queries", "mutations", "subscriptions"] as const;
@@ -182,7 +178,7 @@ export const useApiSinglePage = async (
 
       const rawPages = items
         .filter((item) => {
-          return !isLandingDoc(item.path);
+          return !isLandingDocPath(item.path);
         })
         .map<RawPage>((item) => {
           return {
