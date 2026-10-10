@@ -67,6 +67,47 @@ describe("useApiCodeCards", () => {
     ).toEqual(["Example"]);
   });
 
+  const nodesWithVariables = [
+    ["pre", { language: "graphql", code: "type A" }],
+    ["h3", {}, "Example"],
+    ["pre", { language: "graphql", code: "query { a }" }],
+    ["h3", {}, "Example Variables"],
+    ["pre", { language: "json", code: '{"id": "1"}' }],
+    ["h3", {}, "Example Response"],
+    ["pre", { language: "graphql", code: '{"b": 2}' }],
+  ];
+
+  it("stacks example variables under the Example card", async () => {
+    const result = await useApiCodeCards(
+      { value: nodesWithVariables } as never,
+      { value: "Query" },
+      { value: true },
+      "github-dark",
+    );
+
+    expect(
+      result.exampleCards.map((c) => {
+        return c.label;
+      }),
+    ).toEqual(["Example", "Response"]);
+    expect(result.exampleCards[0].variables?.code).toBe('{"id": "1"}');
+    expect(result.exampleCards[0].variables?.html).toContain(
+      'data-lang="json"',
+    );
+  });
+
+  it("ignores example variables for non-operations", async () => {
+    const result = await useApiCodeCards(
+      { value: nodesWithVariables } as never,
+      { value: "Object" },
+      { value: false },
+      "github-dark",
+    );
+
+    expect(result.exampleCards).toHaveLength(1);
+    expect(result.exampleCards[0].variables).toBeUndefined();
+  });
+
   it("drops cards without code", async () => {
     const result = await useApiCodeCards(
       { value: [] } as never,

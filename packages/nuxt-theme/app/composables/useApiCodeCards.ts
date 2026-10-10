@@ -7,6 +7,16 @@ import {
 } from "~/utils/api-document";
 import type { MdcNode } from "~/utils/mdc";
 
+/** One highlighted card of the code column. */
+export interface CodeCard {
+  label: string;
+  kind: string;
+  code: string;
+  html: string;
+  /** Example variables stacked under the card's snippet. */
+  variables?: { code: string; html: string };
+}
+
 /**
  * Object and input examples are JSON payloads, operation examples and every
  * definition are GraphQL. Highlighting JSON with the GraphQL grammar drops
@@ -23,29 +33,81 @@ export const detectLanguage = (code: string): "graphql" | "json" => {
   }
 };
 
+const highlight = async (code: string, shikiTheme: string): Promise<string> => {
+  return codeToHtml(code, { lang: detectLanguage(code), theme: shikiTheme });
+};
+
 /**
- * Highlights the code column's cards, dropping any the page carries no snippet
- * for: the landing page has no definition, and most types define no example.
+ * Builds one page's highlighted cards: the SDL definition (if any) plus every
+ * `CODE_COLUMN_SECTIONS` card the page carries code for. Sections with
+ * `attachTo` become the `variables` of the card they attach to instead of
+ * cards of their own. Shared by `useApiCodeCards` and `useApiSinglePage`.
  */
-const toCards = async (
-  cards: { label: string; kind: string; code?: string }[],
+export const buildCodeCards = async (
+  documentBody: MdcNode[],
+  kindLabel: string,
+  isOperation: boolean,
   shikiTheme: string,
-): Promise<{ label: string; kind: string; code: string; html: string }[]> => {
-  return Promise.all(
-    cards
-      .filter((card): card is typeof card & { code: string } => {
-        return Boolean(card.code);
+): Promise<{ definitionCard?: CodeCard; exampleCards: CodeCard[] }> => {
+  const definition = definitionCode(documentBody);
+  const definitionCard: CodeCard | undefined = definition
+    ? {
+        label: "SDL",
+        kind: kindLabel,
+        code: definition,
+        html: await highlight(definition, shikiTheme),
+      }
+    : undefined;
+
+  const sections = CODE_COLUMN_SECTIONS.filter((section) => {
+    return !section.operationOnly || isOperation;
+  });
+
+  const cardEntries = await Promise.all(
+    sections
+      .filter((section) => {
+        return !section.attachTo;
       })
-      .map(async (card) => {
-        return {
-          ...card,
-          html: await codeToHtml(card.code, {
-            lang: detectLanguage(card.code),
-            theme: shikiTheme,
-          }),
+      .map(async (section) => {
+        const code = sectionCode(documentBody, section.title);
+        if (!code) return undefined;
+        const card: CodeCard = {
+          label: section.label ?? section.title,
+          kind: section.kind ?? kindLabel,
+          code,
+          html: await highlight(code, shikiTheme),
+        };
+        return { title: section.title, card };
+      }),
+  );
+  const built = cardEntries.filter((entry) => {
+    return entry !== undefined;
+  });
+
+  await Promise.all(
+    sections
+      .filter((section) => {
+        return section.attachTo;
+      })
+      .map(async (section) => {
+        const code = sectionCode(documentBody, section.title);
+        const target = built.find((entry) => {
+          return entry.title === section.attachTo;
+        });
+        if (!code || !target) return;
+        target.card.variables = {
+          code,
+          html: await highlight(code, shikiTheme),
         };
       }),
   );
+
+  return {
+    definitionCard,
+    exampleCards: built.map((entry) => {
+      return entry.card;
+    }),
+  };
 };
 
 /**
@@ -61,36 +123,14 @@ export const useApiCodeCards = async (
   isOperation: Ref<boolean>,
   shikiTheme: string,
 ): Promise<{
-  definitionCard:
-    | { label: string; kind: string; code: string; html: string }
-    | undefined;
-  exampleCards: { label: string; kind: string; code: string; html: string }[];
+  definitionCard: CodeCard | undefined;
+  exampleCards: CodeCard[];
 }> => {
-  const [definitionCard] = await toCards(
-    [
-      {
-        label: "SDL",
-        kind: schemaKind.value,
-        code: definitionCode(documentBody.value),
-      },
-    ],
+  const { definitionCard, exampleCards } = await buildCodeCards(
+    documentBody.value,
+    schemaKind.value,
+    isOperation.value,
     shikiTheme,
   );
-
-  const filteredSections = CODE_COLUMN_SECTIONS.filter((section) => {
-    return !section.operationOnly || isOperation.value;
-  });
-
-  const exampleCards = await toCards(
-    filteredSections.map(({ title, label, kind }) => {
-      return {
-        label: label ?? title,
-        kind: kind ?? schemaKind.value,
-        code: sectionCode(documentBody.value, title),
-      };
-    }),
-    shikiTheme,
-  );
-
   return { definitionCard, exampleCards };
 };

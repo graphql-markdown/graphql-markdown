@@ -18,12 +18,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
-interface CodeCard {
-  label: string;
-  kind: string;
-  code: string;
-  html: string;
-}
+import type { CodeCard } from "~/composables/useApiCodeCards";
 
 const props = withDefaults(
   defineProps<{
