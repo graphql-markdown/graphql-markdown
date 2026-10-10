@@ -46,7 +46,7 @@
   },
   "dependencies": {
     "@clack/prompts": "^1.0.0",
-    "@graphql-markdown/cli": "workspace:",
+    "@graphql-markdown/cli": "workspace:^",
     "@nuxt/content": "^3.16.0",
     "@nuxt/kit": "^4.5.2",
     "@nuxt/ui": "^4.11.0",
@@ -55,7 +55,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:",
+    "@graphql-markdown/tooling-config": "workspace:^",
     "nuxt": "^4.5.2",
     "typescript": "6.0.3",
     "vue-router": "^5.3.1",
