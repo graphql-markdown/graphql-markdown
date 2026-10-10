@@ -91,16 +91,37 @@ export const buildCodeCards = async (
       })
       .map(async (section) => {
         const code = sectionCode(documentBody, section.title);
+        if (!code) return;
+        const html = await highlight(code, shikiTheme);
         const target = built.find((entry) => {
           return entry.title === section.attachTo;
         });
-        if (!code || !target) return;
-        target.card.variables = {
-          code,
-          html: await highlight(code, shikiTheme),
-        };
+        if (target) {
+          target.card.variables = { code, html };
+          return;
+        }
+        // Nothing to stack under (no Example, or an empty one): the section
+        // is already stripped from the prose column, so show it as a card of
+        // its own rather than losing it.
+        built.push({
+          title: section.title,
+          card: {
+            label: section.label ?? section.title,
+            kind: section.kind ?? kindLabel,
+            code,
+            html,
+          },
+        });
       }),
   );
+
+  // Fallback cards were appended last; restore CODE_COLUMN_SECTIONS order.
+  const order = sections.map((section) => {
+    return section.title;
+  });
+  built.sort((a, b) => {
+    return order.indexOf(a.title) - order.indexOf(b.title);
+  });
 
   return {
     definitionCard,

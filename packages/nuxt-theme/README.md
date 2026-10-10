@@ -92,7 +92,7 @@ These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-d
 
 ### Example variables
 
-A section titled exactly `Example Variables` (for example emitted by a consumer decorator for an `@exampleVariables` directive, as a `### Example Variables` heading followed by a ` ```json ` code block) is moved to the code column on operation pages and stacked under the `Example` query card, with its own copy button. It is not a card of its own, and it is ignored on non-operation types or when there is no `Example` card.
+A section titled exactly `Example Variables` (for example emitted by a consumer decorator for an `@exampleVariables` directive, as a `### Example Variables` heading followed by a ` ```json ` code block) is moved to the code column on operation pages and stacked under the `Example` query card, with its own copy button. It is not a card of its own — unless the operation has no (or an empty) `Example`, in which case it is shown as a standalone `Variables` card. On non-operation types it is dropped: variables only apply to operations.
 
 ### Single-page reference
 

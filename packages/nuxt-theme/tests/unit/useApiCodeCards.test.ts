@@ -108,6 +108,30 @@ describe("useApiCodeCards", () => {
     expect(result.exampleCards[0].variables).toBeUndefined();
   });
 
+  it("shows example variables as their own card when there is no Example", async () => {
+    const result = await useApiCodeCards(
+      {
+        value: nodesWithVariables.filter((_, index) => {
+          // Drop the `### Example` heading and its code block.
+          return index !== 1 && index !== 2;
+        }),
+      } as never,
+      { value: "Query" },
+      { value: true },
+      "github-dark",
+    );
+
+    expect(
+      result.exampleCards.map((c) => {
+        return [c.label, c.kind];
+      }),
+    ).toEqual([
+      ["Variables", "JSON"],
+      ["Response", "JSON"],
+    ]);
+    expect(result.exampleCards[0].code).toBe('{"id": "1"}');
+  });
+
   it("drops cards without code", async () => {
     const result = await useApiCodeCards(
       { value: [] } as never,

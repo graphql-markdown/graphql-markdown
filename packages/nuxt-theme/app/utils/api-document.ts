@@ -159,7 +159,13 @@ export const CODE_COLUMN_SECTIONS: {
   attachTo?: string;
 }[] = [
   { title: "Example" },
-  { title: "Example Variables", attachTo: "Example", operationOnly: true },
+  {
+    title: "Example Variables",
+    label: "Variables",
+    kind: "JSON",
+    attachTo: "Example",
+    operationOnly: true,
+  },
   {
     title: "Example Response",
     label: "Response",
