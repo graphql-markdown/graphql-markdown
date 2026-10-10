@@ -1,7 +1,10 @@
 // @ts-check
 
-// Installs every non-CLI/non-Docusaurus package tgz into the current project,
-// mirroring the old Earthfile `INSTALL_GQLMD` UDC. Replaces install-gqlmd.sh:
+// Installs every non-Docusaurus package tgz (cli included) into the current
+// project, mirroring the old Earthfile `INSTALL_GQLMD` UDC. cli must be
+// installed alongside the packages that depend on it (e.g. nuxt-theme) so
+// their `^x.y.z` ranges resolve to the local tarballs, not the registry.
+// Replaces install-gqlmd.sh:
 // consumes the workspace build order directly instead of word-splitting
 // `node build-packages.mts` stdout in the shell.
 //
@@ -24,13 +27,12 @@ if (!pkgDirArg) {
 const projectDir = process.cwd();
 const pkgDir = resolve(projectDir, pkgDirArg);
 
-const { getBuildSequence } = await import(
-  "../../packages/tooling-config/scripts/build-packages.mts"
-);
+const { getBuildSequence } =
+  await import("../../packages/tooling-config/scripts/build-packages.mts");
 
 const tarballs = getBuildSequence()
   .filter((pkg) => {
-    return pkg !== "cli" && pkg !== "docusaurus";
+    return pkg !== "docusaurus";
   })
   .map((pkg) => {
     return resolve(pkgDir, `graphql-markdown-${pkg}.tgz`);
