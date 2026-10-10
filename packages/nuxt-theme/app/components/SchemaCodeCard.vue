@@ -20,15 +20,37 @@
 
     <div class="relative overflow-x-auto p-5 font-mono text-sm">
       <!-- Inside a code group the tab bar carries the label, so the card drops
-           its header and the copy button floats over the snippet instead. -->
-      <UButton
+           its header. The kind badge and copy button float over the snippet
+           instead, so the kind stays visible for every type. -->
+      <div
         v-if="hideHeader"
-        v-bind="copyButtonProps"
-        class="absolute top-3 right-3 z-10"
-        @click="copy(code)"
-      />
+        class="absolute top-3 right-3 z-10 flex items-center gap-2"
+      >
+        <UBadge color="primary" variant="subtle" size="sm">{{ kind }}</UBadge>
+
+        <UButton v-bind="copyButtonProps" @click="copy(code)" />
+      </div>
 
       <div class="blueprint-code" v-html="html" />
+    </div>
+
+    <!-- Example variables stack under the query, with their own copy button. -->
+    <div
+      v-if="variables"
+      class="overflow-x-auto border-t border-accented p-5 font-mono text-sm"
+    >
+      <div class="mb-3 flex items-center justify-between">
+        <span class="font-mono text-xs tracking-wider text-muted uppercase"
+          >Variables</span
+        >
+
+        <UButton
+          v-bind="variablesCopyButtonProps"
+          @click="copyVariables(variables.code)"
+        />
+      </div>
+
+      <div class="blueprint-code" v-html="variables.html" />
     </div>
   </div>
 </template>
@@ -45,9 +67,15 @@ const props = defineProps<{
   code: string;
   /** Set by `ProseCodeGroup` on its children; drops the card's own header. */
   hideHeader?: boolean;
+  /** Example variables, highlighted, stacked under the snippet. */
+  variables?: { code: string; html: string };
 }>();
 
 const { copy, copyButtonProps } = useClipboardCopy(() => props.label);
+
+// Its own instance, so the variables' copied state is independent.
+const { copy: copyVariables, copyButtonProps: variablesCopyButtonProps } =
+  useClipboardCopy(() => `${props.label} variables`);
 </script>
 
 <style>
