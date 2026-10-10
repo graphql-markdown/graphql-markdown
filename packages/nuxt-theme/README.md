@@ -103,6 +103,10 @@ Under `"api"`/`"entity"` hierarchy, nothing changes — you still get the per-ty
 
 This view isn't meant to scale indefinitely: every entry's definition and examples are Shiki-highlighted up front, and every entry hydrates its own copy-button state, so a schema with hundreds of types renders as hundreds of small interactive islands on one page. For a very large schema, prefer `"api"` or `"entity"` hierarchy instead of `"flat"`.
 
+### Homepage
+
+`createGenerateDocs({ homepage })` accepts the path of a markdown template (or `false` to disable the homepage). Its frontmatter `title` / `description` set the page title and SEO metadata, and its body renders as the intro above the reference in both views; the sidebar's header link returns to it. Whatever the file is named, it is stored as `generated.md` in the generated content, which is how the theme finds it. GraphQL-Markdown replaces the `##baseURL##` and `##generated-date-time##` placeholders in the template.
+
 ## Customize by swizzling
 
 For changes config and CSS can't reach — different markup, different components entirely — eject a file into your own project with:

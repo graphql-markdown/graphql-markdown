@@ -37,6 +37,17 @@
 
       <template v-if="isLandingPage">
         <template v-if="isFlat">
+          <header
+            v-if="landingDocument || landingTitle"
+            class="api-landing-intro mb-16"
+          >
+            <h1 v-if="landingTitle">{{ landingTitle }}</h1>
+            <ContentRenderer
+              v-if="landingDocument"
+              :value="landingDocument"
+              class="markdown-text-body markdown-lead"
+            />
+          </header>
           <ApiSinglePageSection
             v-for="bucket in buckets"
             :key="bucket.id"
@@ -45,8 +56,9 @@
         </template>
         <ApiNamespaceLanding
           v-else
-          title="Schema Documentation"
-          description="Browse the workspace API by operation or schema type. Every page includes its definition, related fields, and examples when available."
+          :title="landingTitle || 'Schema Documentation'"
+          description="Browse the API by operation or schema type."
+          :document="landingDocument"
           :items="overviewGroups"
         />
       </template>
@@ -91,6 +103,8 @@ const {
   isLandingPage,
   isNamespaceChooser,
   isFlat,
+  landingDocument,
+  landingTitle,
   buckets,
   sections,
   overviewGroups,
@@ -103,6 +117,16 @@ const {
 </script>
 
 <style>
+/* The schema homepage title in the single-page view, styled like the entry
+   headings of `ApiSinglePageSection`. */
+.api-landing-intro h1 {
+  color: var(--ui-text-highlighted);
+  font-family: var(--font-serif);
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
 /* Everything below styles rendered content only. Scoping to
    `.markdown-text-body` — the ContentRenderer wrapper — keeps it away from the
    hand-written landing markup that shares the `.api-document` column. */

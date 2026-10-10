@@ -105,12 +105,17 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@d209202bc7d53ff1cc128f7f907dac145c9d6ae9 # v8.3
         with:
           projectBaseDir: ${{ github.workspace }}
+          # `.vue` components (nuxt-theme only) are still analyzed, but kept
+          # out of coverage: unit tests can't load them, so the lcov report has
+          # no data for them and their new code would always count as
+          # uncovered (see packages/nuxt-theme/vitest.config.mjs).
           args: >
             -Dsonar.organization=graphql-markdown
             -Dsonar.projectKey=graphql-markdown_${{ matrix.package }}
             -Dsonar.sources=${{ steps.sonar-sources.outputs.sources }}
             -Dsonar.tests=./packages/${{ matrix.package }}/tests
             -Dsonar.javascript.lcov.reportPaths=./packages/${{ matrix.package }}/coverage/lcov.info
+            -Dsonar.coverage.exclusions=**/*.vue
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
