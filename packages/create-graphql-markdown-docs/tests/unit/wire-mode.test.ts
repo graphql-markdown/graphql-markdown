@@ -349,6 +349,29 @@ describe("scaffold vs wire mode (end to end)", () => {
     );
   });
 
+  it("16b. --output . (the project root) exits 1 and writes nothing", async () => {
+    const dir = path.join(work, "output-root");
+    seed(dir, { "README.md": "# Hello\n" });
+    const schema = schemaIn(dir);
+    expect(
+      await main([
+        "--dir",
+        dir,
+        "--yes",
+        "--framework",
+        "generic",
+        "--schema",
+        schema,
+        "--output",
+        ".",
+      ]),
+    ).toBe(1);
+    expect(errors()).toContain(
+      "Output folder must be a subfolder of the project.",
+    );
+    expect(fs.existsSync(path.join(dir, ".graphqlrc"))).toBe(false);
+  });
+
   it("17. --dry-run writes nothing and shows the plan", async () => {
     const dir = path.join(work, "dry");
     seed(dir, { "package.json": STARLIGHT_PKG });
@@ -372,5 +395,261 @@ describe("scaffold vs wire mode (end to end)", () => {
       expect.anything(),
       expect.stringContaining("Dry run"),
     );
+  });
+});
+
+describe("wire mode interactive prompts", () => {
+  interface PromptConfig {
+    message: string;
+    options?: { value: string }[];
+    initialValue?: string;
+    validate?: (value: string) => string | undefined;
+  }
+
+  /** Non-empty project dir (wire mode needs files) with a ready-to-use schema. */
+  const project = (
+    name: string,
+    files: Record<string, string> = {},
+  ): { dir: string; schema: string } => {
+    const dir = path.join(work, name);
+    seed(dir, { "README.md": "# Project\n", ...files });
+    return { dir, schema: schemaIn(dir) };
+  };
+
+  /** Runs wire mode interactively: `--existing` on an explicit dir, no `--yes`. */
+  const runInteractive = async (
+    dir: string,
+    flags: string[],
+  ): Promise<number> => {
+    mocks.prompts.confirm.mockResolvedValue(true);
+    return main(["--dir", dir, "--existing", ...flags]);
+  };
+
+  /** Config passed to the nth call of a mocked prompt. */
+  const callConfig = (
+    fn: typeof mocks.prompts.select,
+    index = 0,
+  ): PromptConfig => {
+    return fn.mock.calls[index][0] as PromptConfig;
+  };
+
+  /** Texts of every prompts.log.warn call, joined. */
+  const warnings = (): string => {
+    return mocks.prompts.log.warn.mock.calls
+      .map((call) => {
+        return String(call[0]);
+      })
+      .join("\n");
+  };
+
+  /** Flags for a generic-framework run with a valid schema and output. */
+  const genericFlags = (schema: string, extra: string[] = []): string[] => {
+    return [
+      "--framework",
+      "generic",
+      "--schema",
+      schema,
+      "--output",
+      "docs/api",
+      ...extra,
+    ];
+  };
+
+  describe("resolveWireFramework", () => {
+    it("one detected framework: full list, preselects the detected id", async () => {
+      const { dir, schema } = project("fw-one", {
+        "package.json": STARLIGHT_PKG,
+      });
+      mocks.prompts.select.mockResolvedValue("starlight");
+      mocks.prompts.text.mockResolvedValue("");
+      const flags = ["--schema", schema, "--output", "docs/api"];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      const config = callConfig(mocks.prompts.select);
+      expect(config.options?.length).toBeGreaterThan(2);
+      expect(
+        config.options?.map((o) => {
+          return o.value;
+        }),
+      ).toContain("generic");
+      expect(config.initialValue).toBe("starlight");
+    });
+
+    it("two detected frameworks: list narrowed to the matches, no initialValue", async () => {
+      const { dir, schema } = project("fw-two", {
+        "package.json": JSON.stringify({
+          dependencies: { "@astrojs/starlight": "1", vocs: "1" },
+        }),
+      });
+      mocks.prompts.select.mockResolvedValue("vocs");
+      mocks.prompts.text.mockResolvedValue("");
+      const flags = ["--schema", schema, "--output", "docs/api"];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      const config = callConfig(mocks.prompts.select);
+      expect(
+        config.options
+          ?.map((o) => {
+            return o.value;
+          })
+          .sort(),
+      ).toEqual(["starlight", "vocs"]);
+      expect(config.initialValue).toBeUndefined();
+    });
+
+    it("none detected: full list, preselects generic", async () => {
+      const { dir, schema } = project("fw-none");
+      mocks.prompts.select.mockResolvedValue("mkdocs");
+      const flags = ["--schema", schema, "--output", "docs/api"];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      const config = callConfig(mocks.prompts.select);
+      expect(config.options?.length).toBeGreaterThan(2);
+      expect(config.initialValue).toBe("generic");
+    });
+
+    it("invalid --framework exits 1", async () => {
+      const { dir, schema } = project("fw-invalid");
+      const flags = ["--framework", "foo", "--schema", schema];
+      expect(
+        await runInteractive(dir, [...flags, "--output", "docs/api"]),
+      ).toBe(1);
+      expect(errors()).toContain('Invalid --framework "foo"');
+      expect(mocks.prompts.select).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("resolveWireSchema", () => {
+    it("without --schema asks for a path with a text prompt", async () => {
+      const { dir, schema } = project("schema-prompt");
+      mocks.prompts.text
+        .mockResolvedValueOnce(` ${schema} `)
+        .mockResolvedValue("");
+      const flags = ["--framework", "generic", "--output", "docs/api"];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      const config = callConfig(mocks.prompts.text);
+      expect(config.message).toContain("Schema source");
+      expect(config.validate?.("")).toBe("Schema source is required");
+      expect(read(dir, ".graphqlrc")).toContain("s.graphql");
+    });
+
+    it("an invalid --schema value exits 1", async () => {
+      const { dir } = project("schema-invalid");
+      const missing = path.join(dir, "nope.graphql");
+      expect(await runInteractive(dir, genericFlags(missing))).toBe(1);
+      expect(errors()).toContain("Schema file not found");
+    });
+  });
+
+  describe("resolveWireOutput", () => {
+    it("without --output asks with the framework hint and validates the answer", async () => {
+      const { dir, schema } = project("output-prompt", {
+        "package.json": STARLIGHT_PKG,
+      });
+      mocks.prompts.select.mockResolvedValue("starlight");
+      mocks.prompts.text
+        .mockResolvedValueOnce("docs/api")
+        .mockResolvedValue("");
+      const flags = ["--schema", schema];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      const config = callConfig(mocks.prompts.text);
+      expect(config.message).toContain("Output folder");
+      expect(config.message).toContain(
+        "Astro Starlight reads content from src/content/docs/",
+      );
+      expect(config.validate?.("../outside")).toBe(
+        "Output folder must be inside the project.",
+      );
+      expect(config.validate?.("docs/api")).toBeUndefined();
+    });
+
+    it("warns when the output folder already has files", async () => {
+      const { dir, schema } = project("output-warn", {
+        "docs/api/old.md": "# Old\n",
+      });
+      mocks.prompts.text.mockResolvedValue("");
+      expect(await runInteractive(dir, genericFlags(schema))).toBe(0);
+      expect(warnings()).toContain("already exists and is not empty");
+    });
+  });
+
+  describe("site base and link root", () => {
+    const starlightRun = (name: string): Promise<number> & { dir: string } => {
+      const { dir, schema } = project(name, { "package.json": STARLIGHT_PKG });
+      mocks.prompts.select.mockResolvedValue("starlight");
+      const flags = [
+        "--schema",
+        schema,
+        "--output",
+        "src/content/docs/guides/api",
+      ];
+      return Object.assign(runInteractive(dir, flags), { dir });
+    };
+
+    it("absolute links: site-base prompt (blank gives /) then pre-filled link root", async () => {
+      mocks.prompts.text
+        .mockResolvedValueOnce("  ")
+        .mockResolvedValueOnce("/guides");
+      const run = starlightRun("links-absolute");
+      expect(await run).toBe(0);
+      const siteBase = callConfig(mocks.prompts.text, 0);
+      const linkRoot = callConfig(mocks.prompts.text, 1);
+      expect(siteBase.message).toContain("Base path");
+      expect(linkRoot.message).toContain("Link root");
+      expect(linkRoot.initialValue).toBe("/guides");
+      expect(read(run.dir, ".graphqlrc")).toContain("linkRoot: '/guides'");
+    });
+
+    it("blank link root leaves linkRoot out of .graphqlrc", async () => {
+      mocks.prompts.text.mockResolvedValueOnce("/").mockResolvedValueOnce("");
+      const run = starlightRun("links-blank");
+      expect(await run).toBe(0);
+      expect(read(run.dir, ".graphqlrc")).not.toContain("linkRoot");
+    });
+
+    it("relative links (MkDocs) show neither prompt", async () => {
+      const { dir, schema } = project("links-relative");
+      mocks.prompts.select.mockResolvedValue("mkdocs");
+      const flags = ["--schema", schema, "--output", "docs/api"];
+      expect(await runInteractive(dir, flags)).toBe(0);
+      expect(mocks.prompts.text).not.toHaveBeenCalled();
+    });
+
+    it("generic: link-root prompt without a suggestion", async () => {
+      const { dir, schema } = project("links-generic");
+      mocks.prompts.text.mockResolvedValue("");
+      expect(await runInteractive(dir, genericFlags(schema))).toBe(0);
+      expect(mocks.prompts.text).toHaveBeenCalledTimes(1);
+      const config = callConfig(mocks.prompts.text);
+      expect(config.message).toContain("Link root");
+      expect(config.initialValue).toBeUndefined();
+    });
+  });
+
+  describe("checkFormatter", () => {
+    const withFormatter = async (
+      name: string,
+      formatter: string,
+    ): Promise<void> => {
+      const { dir, schema } = project(name, { "local.mjs": "export {};\n" });
+      mocks.prompts.text.mockResolvedValue("");
+      const flags = genericFlags(schema, ["--formatter", formatter]);
+      expect(await runInteractive(dir, flags)).toBe(0);
+    };
+
+    it("warns when a local formatter file is missing", async () => {
+      await withFormatter("fmt-missing", "./missing.mjs");
+      expect(warnings()).toContain("./missing.mjs does not exist.");
+    });
+
+    it("warns when a formatter package is not installed", async () => {
+      await withFormatter("fmt-pkg", "some-uninstalled-pkg");
+      expect(warnings()).toContain(
+        "some-uninstalled-pkg is not installed in the project yet.",
+      );
+    });
+
+    it("does not warn for an existing local formatter", async () => {
+      await withFormatter("fmt-ok", "./local.mjs");
+      expect(warnings()).not.toContain("does not exist");
+      expect(warnings()).not.toContain("not installed");
+    });
   });
 });

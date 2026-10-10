@@ -215,6 +215,14 @@ describe("validateOutput", () => {
       error: "Output folder must be inside the project.",
     });
   });
+  it.each([".", "./", " . "])("rejects the project root (%j)", (output) => {
+    expect(validateOutput(dir, output).error).toBe(
+      "Output folder must be a subfolder of the project.",
+    );
+  });
+  it("rejects an empty output before the project-root check", () => {
+    expect(validateOutput(dir, "").error).toBe("Output folder is required.");
+  });
   it("rejects a file", () => {
     fs.writeFileSync(path.join(dir, "out"), "");
     expect(validateOutput(dir, "out").error).toBeDefined();
