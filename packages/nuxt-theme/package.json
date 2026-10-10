@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/nuxt-theme",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A Nuxt layer for building GraphQL API reference sites",
   "homepage": "https://graphql-markdown.dev",
   "bugs": {
