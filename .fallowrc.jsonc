@@ -73,7 +73,6 @@
   //                                      virtual module name/fixture `formatter` value in
   //                                      packages/core/tests/unit/generator.test.ts, standing in
   //                                      for a user-loaded MDX formatter module
-  //   eslint-import-resolver-typescript — ESLint import/resolver setting
   //   jest-environment-node           — jest testEnvironment: "node"
   //   typedoc-docusaurus-theme        — TypeDoc plugin string in typedoc config
   //
@@ -109,7 +108,6 @@
     "@docusaurus/logger",
     "cz-emoji",
     "custom-mdx-parser",
-    "eslint-import-resolver-typescript",
     "jest-environment-node",
     "typedoc-docusaurus-theme",
     "diff",
