@@ -36,7 +36,7 @@
         title="GraphQL API"
         :ui="{
           container:
-            'top-(--ui-header-height) h-[calc(100vh-var(--ui-header-height))] border-r border-default bg-muted',
+            'top-(--ui-header-height) h-[calc(100vh-var(--ui-header-height)-var(--gqlmd-footer-height))] border-r border-default bg-muted',
           header: 'px-8',
           body: 'p-8 pt-4',
         }"
@@ -70,7 +70,7 @@
       <slot />
     </div>
 
-    <SiteFooter />
+    <SiteFooter sticky container-class="max-w-none px-4 md:px-8" />
 
     <ClientOnly>
       <!-- Nuxt UI reads the dialog's accessible name from `contentSearch.title`
