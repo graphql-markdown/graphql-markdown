@@ -12,7 +12,6 @@
 
 <script setup lang="ts">
 import { buildFooterUi } from "~/utils/footer-ui";
-
 // The reference layout pins the footer like the header and makes it full-bleed
 // so it spans under the fixed sidebar; the landing page keeps the default
 // flow footer.
