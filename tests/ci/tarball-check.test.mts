@@ -1,6 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { findUnsafeInternalRanges } from "../../packages/tooling-config/scripts/tarball-check.mts";
+import {
+  checkPackedManifest,
+  findUnsafeInternalRanges,
+} from "../../packages/tooling-config/scripts/tarball-check.mts";
 
 describe("findUnsafeInternalRanges()", () => {
   test("accepts pinned internal ranges", () => {
@@ -35,7 +38,9 @@ describe("findUnsafeInternalRanges()", () => {
       }),
     ).toHaveLength(1);
   });
+});
 
+describe("findUnsafeInternalRanges() scope", () => {
   test("ignores external dependencies even with wildcard ranges", () => {
     expect(
       findUnsafeInternalRanges({
@@ -61,5 +66,28 @@ describe("findUnsafeInternalRanges()", () => {
         devDependencies: { "@graphql-markdown/core": "workspace:^" },
       }),
     ).toEqual([]);
+  });
+});
+
+describe("checkPackedManifest()", () => {
+  test("reports invalid JSON", () => {
+    expect(checkPackedManifest("{ not json")).toEqual(["invalid package.json"]);
+  });
+
+  test("accepts a clean manifest", () => {
+    const manifest = JSON.stringify({
+      dependencies: { "@graphql-markdown/core": "^1.2.3", graphql: "*" },
+    });
+    expect(checkPackedManifest(manifest)).toEqual([]);
+  });
+
+  test("reports unsafe internal ranges under one prefixed entry", () => {
+    const manifest = JSON.stringify({
+      dependencies: { "@graphql-markdown/core": "workspace:^" },
+      peerDependencies: { "@graphql-markdown/utils": "" },
+    });
+    expect(checkPackedManifest(manifest)).toEqual([
+      'unpinned internal dependency ranges: dependencies.@graphql-markdown/core = "workspace:^", peerDependencies.@graphql-markdown/utils = ""',
+    ]);
   });
 });

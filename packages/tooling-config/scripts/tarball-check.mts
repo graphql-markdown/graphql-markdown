@@ -29,20 +29,38 @@ const isUnpinned = (range: string): boolean => {
   );
 };
 
+const asRecord = (value: unknown): Record<string, unknown> =>
+  typeof value === "object" && value !== null
+    ? (value as Record<string, unknown>)
+    : {};
+
 export const findUnsafeInternalRanges = (
   pkg: Record<string, unknown>,
 ): string[] => {
-  const problems: string[] = [];
-  for (const field of CHECKED_FIELDS) {
-    const deps = pkg[field];
-    if (typeof deps !== "object" || deps === null) {
-      continue;
-    }
-    for (const [name, range] of Object.entries(deps)) {
-      if (isInternal(name) && typeof range === "string" && isUnpinned(range)) {
-        problems.push(`${field}.${name} = "${range}"`);
-      }
-    }
+  return CHECKED_FIELDS.flatMap((field) => {
+    return Object.entries(asRecord(pkg[field]))
+      .filter(([name, range]) => {
+        return (
+          isInternal(name) && typeof range === "string" && isUnpinned(range)
+        );
+      })
+      .map(([name, range]) => {
+        return `${field}.${name} = "${String(range)}"`;
+      });
+  });
+};
+
+// Takes the raw package.json text from a packed tarball and returns the list
+// of problems; an empty list means the manifest is safe to publish.
+export const checkPackedManifest = (json: string): string[] => {
+  let pkg: Record<string, unknown>;
+  try {
+    pkg = JSON.parse(json);
+  } catch {
+    return ["invalid package.json"];
   }
-  return problems;
+  const problems = findUnsafeInternalRanges(pkg);
+  return problems.length > 0
+    ? [`unpinned internal dependency ranges: ${problems.join(", ")}`]
+    : [];
 };

@@ -29,7 +29,7 @@ import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
-import { findUnsafeInternalRanges } from "./tarball-check.mts";
+import { checkPackedManifest } from "./tarball-check.mts";
 
 type PublishPlanEntry = {
   pkg: string;
@@ -146,19 +146,10 @@ const isTarballSafe = (
     );
     return false;
   }
-  let packedPkg: Record<string, unknown>;
-  try {
-    packedPkg = JSON.parse(packedPackageJson.stdout);
-  } catch {
-    console.error(
-      `failed to inspect tarball for ${name}@${version}: invalid package.json`,
-    );
-    return false;
-  }
-  const problems = findUnsafeInternalRanges(packedPkg);
+  const problems = checkPackedManifest(packedPackageJson.stdout);
   if (problems.length > 0) {
     console.error(
-      `refusing to publish ${name}@${version}: unpinned internal dependency ranges: ${problems.join(", ")}`,
+      `refusing to publish ${name}@${version}: ${problems.join(", ")}`,
     );
     return false;
   }
