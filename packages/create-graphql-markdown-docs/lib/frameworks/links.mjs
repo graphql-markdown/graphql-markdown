@@ -6,7 +6,12 @@ import path from "node:path";
  * @returns {string}
  */
 export function normalizeOutput(output) {
-  return output.replace(/\\/g, "/").replace(/^\.\//, "").replace(/\/+$/, "");
+  const normalized = output.replaceAll("\\", "/").replace(/^\.\//, "");
+  let end = normalized.length;
+  while (end > 0 && normalized[end - 1] === "/") {
+    end--;
+  }
+  return normalized.slice(0, end);
 }
 
 /**
