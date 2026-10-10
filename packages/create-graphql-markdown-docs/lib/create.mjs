@@ -921,11 +921,11 @@ export function placeSchema(tempDir, projectDir, schemaPath) {
     if (isRemoteSchemaSource(schemaPath)) {
       return schemaPath;
     }
-    const relativePath = path
-      .relative(projectDir, path.resolve(schemaPath))
-      .split(path.sep)
-      .join("/");
-    return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
+    const relative = path.relative(projectDir, path.resolve(schemaPath));
+    // Another drive on Windows yields an absolute path: use it as-is.
+    if (path.isAbsolute(relative)) return relative.split(path.sep).join("/");
+    const relativePath = relative.split(path.sep).join("/");
+    return relativePath.startsWith("../") ? relativePath : `./${relativePath}`;
   }
 
   const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
