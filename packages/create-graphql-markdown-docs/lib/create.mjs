@@ -6,6 +6,7 @@ import os from "node:os";
 import { parseArgs } from "node:util";
 
 import * as prompts from "@clack/prompts";
+import { buildSchema } from "graphql";
 import {
   detect as detectPackageManager,
   getUserAgent,
@@ -145,9 +146,6 @@ export function copyDirRecursive(src, dst, excludePatterns = []) {
 export async function validateGraphQLSchema(schemaPath) {
   try {
     const schemaText = await fs.promises.readFile(schemaPath, "utf-8");
-
-    // Use graphql's buildSchema to validate
-    const { buildSchema } = await import("graphql");
     buildSchema(schemaText);
     return true;
   } catch {
