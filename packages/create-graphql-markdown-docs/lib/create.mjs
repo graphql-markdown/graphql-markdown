@@ -352,37 +352,153 @@ async function promptCustomization(args, fw) {
   return { title, color };
 }
 
-/** Runs `action` immediately with --yes, otherwise only after a confirmed prompt. */
-async function confirmThen(isYes, message, action) {
-  if (isYes) return action();
-  const confirmed = unlessCancelled(
-    await prompts.confirm({ message, initialValue: true }),
-  );
-  if (confirmed) return action();
-}
-
-/** Phase 4: install dependencies, init git, print summary. */
-async function finalize(args, ctx) {
-  const { projectDir, packageManager, framework, loader } = ctx;
-  const isYes = Boolean(args.yes);
-
-  let installed = false;
-  if (!args["no-install"]) {
-    installed = Boolean(
-      await confirmThen(isYes, "Install dependencies now?", () =>
-        installDependencies(packageManager, projectDir),
-      ),
-    );
-  }
-  if (!args["no-git"]) {
-    if (await isGitAvailable()) {
-      await confirmThen(isYes, "Initialize a git repository?", () =>
-        initGitRepo(projectDir),
-      );
-    } else {
+/**
+ * Ordered scaffold steps. Each step is a plain object:
+ * - `id`, `title`: identifier and human-readable name (used in failure notes).
+ * - `run(ctx)`: does the work, reading from and writing to the shared `ctx`.
+ *   Optional steps may return `{ skipped: true, catchUp: false }` to be
+ *   recorded as skipped with nothing left to do; any other result is `done`.
+ * - `when?(ctx)`: resolves to `false` to skip the step.
+ * - `confirm?`: prompt shown in interactive mode; `--yes` runs without asking,
+ *   declining skips the step.
+ * - `optional?`: errors are logged and recorded as `failed` instead of aborting.
+ * - `catchUp?(ctx)`: manual commands that finish the step when it did not
+ *   complete (skipped or failed).
+ */
+const STEPS = [
+  {
+    id: "framework",
+    title: "Choose framework",
+    async run(ctx) {
+      ctx.framework = await resolveFramework(ctx.args);
+      ctx.fw = FRAMEWORKS[ctx.framework];
+    },
+  },
+  {
+    id: "projectDir",
+    title: "Choose project directory",
+    async run(ctx) {
+      ctx.projectDir = await resolveProjectDir(ctx.args);
+    },
+  },
+  {
+    id: "schema",
+    title: "Choose schema",
+    async run(ctx) {
+      ctx.schemaPath = await resolveSchemaPath(ctx.args);
+    },
+  },
+  {
+    id: "loader",
+    title: "Detect schema loader",
+    async run(ctx) {
+      ctx.loader = await resolveLoader(ctx.schemaPath);
+    },
+  },
+  {
+    id: "packageManager",
+    title: "Choose package manager",
+    async run(ctx) {
+      ctx.packageManager = await resolvePackageManager(ctx.args);
+    },
+  },
+  {
+    id: "customization",
+    title: "Customize site",
+    async run(ctx) {
+      const { title, color } = await promptCustomization(ctx.args, ctx.fw);
+      ctx.title = title;
+      ctx.color = color;
+    },
+  },
+  {
+    id: "createProject",
+    title: "Create project",
+    run(ctx) {
+      applyTemplate(ctx.tempDir, ctx);
+      moveIntoPlace(ctx.tempDir, ctx.projectDir);
+      prompts.log.success("Project created successfully!");
+    },
+  },
+  {
+    id: "install",
+    title: "Install dependencies",
+    optional: true,
+    confirm: "Install dependencies now?",
+    when: (ctx) => !ctx.args["no-install"],
+    run: (ctx) => installDependencies(ctx.packageManager, ctx.projectDir),
+    catchUp: (ctx) => [`${ctx.packageManager} install`],
+  },
+  {
+    id: "git",
+    title: "Initialize git repository",
+    optional: true,
+    confirm: "Initialize a git repository?",
+    async when(ctx) {
+      if (ctx.args["no-git"]) return false;
+      if (await isGitAvailable()) return true;
+      ctx.gitMissing = true;
       prompts.log.info("git not found — skipping repository initialization.");
+      return false;
+    },
+    async run(ctx) {
+      // Inside an existing repo there is nothing to do, and nothing to catch up.
+      if (!(await initGitRepo(ctx.projectDir))) {
+        return { skipped: true, catchUp: false };
+      }
+    },
+    // Without git (or when opted out with --no-git) there is nothing to suggest.
+    catchUp: (ctx) =>
+      ctx.args["no-git"] || ctx.gitMissing
+        ? []
+        : ["git init", "git add -A", 'git commit -m "Initial commit"'],
+  },
+];
+
+/**
+ * Runs the steps in order, recording an outcome (`done`, `skipped` or
+ * `failed`) for each. Errors in required steps propagate; errors in optional
+ * steps are logged and recorded so the flow can continue.
+ */
+async function runSteps(steps, ctx) {
+  const outcomes = [];
+  for (const step of steps) {
+    const outcome = { step, status: "done", catchUp: true };
+    outcomes.push(outcome);
+
+    if (step.when && (await step.when(ctx)) === false) {
+      outcome.status = "skipped";
+      continue;
+    }
+    if (step.confirm && !ctx.args.yes) {
+      const confirmed = unlessCancelled(
+        await prompts.confirm({ message: step.confirm, initialValue: true }),
+      );
+      if (!confirmed) {
+        outcome.status = "skipped";
+        continue;
+      }
+    }
+
+    try {
+      const result = await step.run(ctx);
+      if (result?.skipped) {
+        outcome.status = "skipped";
+        outcome.catchUp = result.catchUp !== false;
+      }
+    } catch (error) {
+      if (!step.optional) throw error;
+      outcome.status = "failed";
+      outcome.error = error;
+      prompts.log.error(`${step.title} failed: ${error.message}`);
     }
   }
+  return outcomes;
+}
+
+/** Prints the closing summary: failures, catch-up commands and next steps. */
+function printOutro(ctx, outcomes) {
+  const { projectDir, packageManager, fw, loader } = ctx;
 
   // Relative path reads better than an absolute one; omitted when already there.
   const rel = path.relative(process.cwd(), projectDir);
@@ -390,18 +506,28 @@ async function finalize(args, ctx) {
   if (rel !== "") {
     steps.push(`cd ${rel.includes(" ") ? JSON.stringify(rel) : rel}`);
   }
-  if (!installed) steps.push(`${packageManager} install`);
+  for (const { step, status, catchUp } of outcomes) {
+    if (step.optional && status !== "done" && catchUp && step.catchUp) {
+      steps.push(...step.catchUp(ctx));
+    }
+  }
   steps.push(
-    ...FRAMEWORKS[framework].runScripts.map(
-      (script) => `${packageManager} run ${script}`,
-    ),
+    ...fw.runScripts.map((script) => `${packageManager} run ${script}`),
   );
+
+  const failures = outcomes
+    .filter(({ status }) => status === "failed")
+    .map(({ step, error }) => `  - ${step.title}: ${error.message}`);
+  const failureNote =
+    failures.length > 0
+      ? `Some steps did not complete:\n${failures.join("\n")}\n\n`
+      : "";
   const githubHint = loader.tokenEnvVar
     ? `\nNote: set the ${loader.tokenEnvVar} environment variable so the GitHub schema can be loaded.\n`
     : "";
   const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
-Next steps:
+${failureNote}Next steps:
 ${list}
 ${githubHint}
 Documentation: ${DOCS_URL}
@@ -410,28 +536,9 @@ Documentation: ${DOCS_URL}
 
 async function scaffold(args, tempDir) {
   validatePackageManager(args);
-  const framework = await resolveFramework(args);
-  const projectDir = await resolveProjectDir(args);
-  const schemaPath = await resolveSchemaPath(args);
-  const loader = await resolveLoader(schemaPath);
-  const packageManager = await resolvePackageManager(args);
-  const { title, color } = await promptCustomization(
-    args,
-    FRAMEWORKS[framework],
-  );
-
-  applyTemplate(tempDir, {
-    framework,
-    projectDir,
-    schemaPath,
-    loader,
-    title,
-    color,
-  });
-  moveIntoPlace(tempDir, projectDir);
-  prompts.log.success("Project created successfully!");
-
-  await finalize(args, { projectDir, packageManager, framework, loader });
+  const ctx = { args, tempDir };
+  const outcomes = await runSteps(STEPS, ctx);
+  printOutro(ctx, outcomes);
 }
 
 /**

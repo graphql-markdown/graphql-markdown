@@ -551,18 +551,17 @@ describe("process helpers", () => {
       });
       return proc;
     });
-    await initGitRepo(work);
-    expect(mocks.prompts.log.warn).toHaveBeenLastCalledWith(
-      expect.stringContaining("user.name"),
-    );
+    await expect(initGitRepo(work)).rejects.toThrow(/user\.name/);
   });
 
   it("initGitRepo omits the user.name hint when init fails", async () => {
     spawnResult(1);
-    await initGitRepo(work);
-    const message = mocks.prompts.log.warn.mock.calls.at(-1)?.[0];
-    expect(message).toContain("Could not initialize git");
-    expect(message).not.toContain("user.name");
+    const error = await initGitRepo(work).catch((e: Error) => {
+      return e;
+    });
+    expect(error).toBeInstanceOf(Error);
+    expect((error as Error).message).toContain("exit code 1");
+    expect((error as Error).message).not.toContain("user.name");
   });
 
   it("installDependencies uses the package manager's command", async () => {
@@ -581,12 +580,13 @@ describe("process helpers", () => {
     expect(mocks.prompts.log.success).toHaveBeenCalledTimes(2);
   });
 
-  it("failures are logged, not thrown", async () => {
+  it("failures are thrown, not logged", async () => {
     spawnResult(1);
-    await installDependencies("npm", work);
-    expect(mocks.prompts.log.error).toHaveBeenCalled();
-    await initGitRepo(work);
-    expect(mocks.prompts.log.warn).toHaveBeenCalled();
+    await expect(installDependencies("npm", work)).rejects.toThrow(
+      /exit code 1/,
+    );
+    await expect(initGitRepo(work)).rejects.toThrow(/exit code 1/);
+    expect(mocks.prompts.log.error).not.toHaveBeenCalled();
   });
 
   it("initGitRepo probes, then runs init, add, commit silently", async () => {
@@ -721,6 +721,105 @@ describe("main", () => {
     expect(mocks.prompts.log.info).toHaveBeenCalledWith(
       expect.stringContaining("git not found"),
     );
+  });
+
+  describe("optional step failures", () => {
+    const outroText = (): string => {
+      return mocks.prompts.outro.mock.calls.at(-1)?.[0] as string;
+    };
+    /** Make spawn fail for commands whose first arg matches `failing`. */
+    const failOn = (
+      failing: (cmd: string, args: string[]) => boolean,
+    ): void => {
+      mocks.spawn.mockImplementation((cmd: string, args: string[]) => {
+        const proc = new EventEmitter();
+        const isProbe = cmd === "git" && args[0] === "rev-parse";
+        queueMicrotask(() => {
+          return proc.emit("close", isProbe || failing(cmd, args) ? 1 : 0);
+        });
+        return proc;
+      });
+    };
+
+    it("install failure is reported and the flow continues", async () => {
+      failOn((cmd) => {
+        return cmd === "yarn";
+      });
+      expect(await main([...base("if"), "--yes", "--pm", "yarn"])).toBe(0);
+      expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+        expect.stringContaining("Install dependencies failed:"),
+      );
+      expect(mocks.spawn).toHaveBeenCalledWith(
+        "git",
+        ["init"],
+        expect.anything(),
+      );
+      const outro = outroText();
+      expect(outro).toContain("Some steps did not complete:");
+      expect(outro).toContain("- Install dependencies:");
+      expect(outro).toContain("yarn install");
+      expect(outro.indexOf("Some steps")).toBeLessThan(
+        outro.indexOf("Next steps:"),
+      );
+    });
+
+    it("git commit failure lists the git catch-up commands", async () => {
+      failOn((cmd, args) => {
+        return cmd === "git" && args[0] === "commit";
+      });
+      expect(await main([...base("gf"), "--yes", "--no-install"])).toBe(0);
+      const outro = outroText();
+      expect(outro).toContain("- Initialize git repository:");
+      expect(outro).toContain("user.name");
+      expect(outro).toContain("git init");
+      expect(outro).toContain("git add -A");
+      expect(outro).toContain('git commit -m "Initial commit"');
+    });
+
+    it("already inside a git repository adds no git catch-up", async () => {
+      spawnResult(0);
+      expect(await main([...base("ig"), "--yes", "--no-install"])).toBe(0);
+      const outro = outroText();
+      expect(outro).not.toContain("git init");
+      expect(outro).not.toContain("Some steps did not complete");
+    });
+
+    it("--no-install puts the install command in next steps", async () => {
+      expect(
+        await main([
+          ...base("ni"),
+          "--yes",
+          "--no-install",
+          "--no-git",
+          "--pm",
+          "pnpm",
+        ]),
+      ).toBe(0);
+      expect(mocks.spawn).not.toHaveBeenCalled();
+      expect(outroText()).toContain("pnpm install");
+    });
+
+    it("a required step failure aborts with exit 1 and cleans up", async () => {
+      const tempDirs = (): string[] => {
+        return fs
+          .readdirSync(os.tmpdir())
+          .filter((name) => {
+            return name.startsWith("gqlmd-");
+          })
+          .sort();
+      };
+      const before = tempDirs();
+      vi.spyOn(fs, "renameSync").mockImplementation(() => {
+        throw new Error("disk exploded");
+      });
+      vi.spyOn(fs, "cpSync").mockImplementation(() => {
+        throw new Error("disk exploded");
+      });
+      await expect(
+        main([...base("rf"), "--yes", "--no-install", "--no-git"]),
+      ).rejects.toThrow("disk exploded");
+      expect(tempDirs()).toEqual(before);
+    });
   });
 
   it("cancelled customization sub-prompt exits 1", async () => {

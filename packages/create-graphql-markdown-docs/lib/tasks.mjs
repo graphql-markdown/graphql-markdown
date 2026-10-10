@@ -49,28 +49,22 @@ export async function isGitAvailable() {
 
 /**
  * Install dependencies for a project using the specified package manager.
- * Logs info, runs the install command, logs success, and catches+logs errors.
- * Resolves to whether the install succeeded.
+ * Logs info, runs the install command and logs success; throws on failure.
  */
 export async function installDependencies(packageManager, projectDir) {
   prompts.log.info(`Installing dependencies with ${packageManager}...`);
-  try {
-    const [command, args] =
-      INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
-    await runCommand(command, args, { cwd: projectDir });
-    prompts.log.success("Dependencies installed!");
-    return true;
-  } catch (error) {
-    prompts.log.error(`Failed to install dependencies: ${error.message}`);
-    return false;
-  }
+  const [command, args] =
+    INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
+  await runCommand(command, args, { cwd: projectDir });
+  prompts.log.success("Dependencies installed!");
 }
 
 /**
  * Initialize a git repository in the project directory.
- * Skips when already inside a git work tree (no nested repos); otherwise runs
- * git init, git add, and git commit with an initial commit message.
- * Logs success and catches+logs errors.
+ * Skips when already inside a git work tree (no nested repos) and resolves to
+ * `false`; otherwise runs git init, git add, and git commit with an initial
+ * commit message and resolves to `true`. Throws on failure (after stopping the
+ * spinner).
  */
 export async function initGitRepo(projectDir) {
   // Git output is silenced (stdio "ignore") so it doesn't garble the prompt UI.
@@ -87,7 +81,7 @@ export async function initGitRepo(projectDir) {
   );
   if (insideRepo) {
     prompts.log.info("Already inside a git repository — skipping git init.");
-    return;
+    return false;
   }
 
   const spinner = prompts.spinner();
@@ -97,16 +91,17 @@ export async function initGitRepo(projectDir) {
     await runCommand("git", ["add", "."], options);
   } catch (error) {
     spinner.stop("Git initialization incomplete.");
-    prompts.log.warn(`Could not initialize git: ${error.message}`);
-    return;
+    throw error;
   }
   try {
     await runCommand("git", ["commit", "-m", "Initial commit"], options);
     spinner.stop("Git repository initialized!");
   } catch (error) {
     spinner.stop("Git initialization incomplete.");
-    prompts.log.warn(
-      `Could not initialize git: ${error.message} (the commit can fail when git user.name / user.email are not configured).`,
+    throw new Error(
+      `${error.message} (the commit can fail when git user.name / user.email are not configured).`,
+      { cause: error },
     );
   }
+  return true;
 }
