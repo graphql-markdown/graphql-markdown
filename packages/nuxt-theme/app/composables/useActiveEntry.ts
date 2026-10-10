@@ -68,9 +68,7 @@ export const useActiveEntry = (
       return;
     }
     const entries = document.querySelectorAll(".api-single-page-entry");
-    const id = entries
-      .item(entries.length - 1)
-      ?.querySelector("h2[id]")?.id;
+    const id = entries.item(entries.length - 1)?.querySelector("h2[id]")?.id;
     if (id) {
       activeAnchor.value = id;
     }
@@ -124,7 +122,9 @@ export const useActiveEntry = (
     removePageFinishHook = useNuxtApp().hook("page:finish", onPageFinish);
     // rootMargin depends on the viewport height, so rebuild on resize.
     window.addEventListener("resize", observe);
-    window.addEventListener("scroll", activateLastEntryAtBottom, { passive: true });
+    window.addEventListener("scroll", activateLastEntryAtBottom, {
+      passive: true,
+    });
   });
 
   onBeforeUnmount(() => {
@@ -140,10 +140,13 @@ export const useActiveEntry = (
     }
   });
 
-  watch(() => route.hash, (hash) => {
-    const id = hash.replace(/^#/, "");
-    if (id) activeAnchor.value = id;
-  });
+  watch(
+    () => route.hash,
+    (hash) => {
+      const id = hash.replace(/^#/, "");
+      if (id) activeAnchor.value = id;
+    },
+  );
 
   return { activeAnchor };
 };
