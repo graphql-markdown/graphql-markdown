@@ -62,6 +62,8 @@ defineProps<{ entry: ApiSinglePageEntry }>();
   font-weight: 600;
   color: var(--ui-text-highlighted);
   margin-bottom: 1.5rem;
+  /* Anchor jumps land the title below the sticky header, not under it. */
+  scroll-margin-top: calc(var(--ui-header-height) + 1.5rem);
 }
 
 .api-single-page-entry h3 {

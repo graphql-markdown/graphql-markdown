@@ -79,13 +79,36 @@ export const useActiveEntry = (
     });
   };
 
+  /**
+   * A link in the content (`<baseURL>/<slug>`) redirects to `<baseURL>#<slug>`,
+   * a path change that re-mounts the page — but not this layout-level
+   * composable — so the entries observed so far are detached, and the
+   * router's own hash scroll ran before the new ones existed. Once the page
+   * has rendered, re-observe and scroll the hash target into view (its `h2`
+   * carries a `scroll-margin-top` that clears the sticky header).
+   */
+  const onPageFinish = (): void => {
+    void nextTick(() => {
+      observe();
+      const id = route.hash.replace(/^#/, "");
+      if (id && toValue(enabled)) {
+        activeAnchor.value = id;
+        document.getElementById(id)?.scrollIntoView();
+      }
+    });
+  };
+
+  let removePageFinishHook: (() => void) | undefined;
+
   onMounted(() => {
     void nextTick(observe);
+    removePageFinishHook = useNuxtApp().hook("page:finish", onPageFinish);
     // rootMargin depends on the viewport height, so rebuild on resize.
     window.addEventListener("resize", observe);
   });
 
   onBeforeUnmount(() => {
+    removePageFinishHook?.();
     window.removeEventListener("resize", observe);
     disconnect();
   });
