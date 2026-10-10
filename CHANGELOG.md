@@ -1,3 +1,70 @@
+<a id="1.39.0"></a>
+# [1.39.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.39.0) - 2026-10-10
+
+1.39.0 brings `create-graphql-markdown-docs` to **1.0.0**: the same command that creates a new docs site now also adds GraphQL-Markdown to a site you already have 🚀 
+
+### What's New
+
+**`create-graphql-markdown-docs` 1.0.0: add GraphQL-Markdown to an existing site.** Run it inside your project:
+
+```shell
+cd my-docs-site
+npm create graphql-markdown-docs@latest
+```
+
+The command picks its mode from the target folder. An empty folder gets a new Nuxt or Docusaurus site, as before. A folder that already holds a project gets GraphQL-Markdown wired in:
+
+- It detects the framework from `package.json`, or asks. Supported: Docusaurus, Astro Starlight, Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, mdBook, Nuxt, and `generic` for any other Markdown/MDX site.
+- It asks for your schema (path, glob or URL) and the output folder, which is never guessed, and suggests the right `linkRoot` for the framework.
+- It writes a `.graphqlrc` and a `docs:api` script, then prints the one step left for your framework, such as a sidebar entry.
+- It never edits your framework config and never overwrites a file. If you already have a GraphQL config, it prints the block to merge instead.
+- It installs nothing unless you pass `--install`. `--dry-run` previews the changes.
+
+For CI or scripts:
+
+```shell
+npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
+```
+
+([#3415](https://github.com/graphql-markdown/graphql-markdown/pull/3415), [#3416](https://github.com/graphql-markdown/graphql-markdown/pull/3416), [#3418](https://github.com/graphql-markdown/graphql-markdown/pull/3418), [#3420](https://github.com/graphql-markdown/graphql-markdown/pull/3420), [#3421](https://github.com/graphql-markdown/graphql-markdown/pull/3421))
+
+> Docs: https://graphql-markdown.dev/docs/get-started#with-the-scaffolder-recommended
+
+**Scaffolder prompts and flags.** Pass the target as a positional argument (`npm create graphql-markdown-docs my-docs`). Added `--help`/`-h`, `--version`/`-v`, `-y`, and `--new` / `--existing` to force a mode. The package manager now comes from the command you ran (`pnpm create`, `bun create`, …) before lockfiles ([#3401](https://github.com/graphql-markdown/graphql-markdown/pull/3401), [#3418](https://github.com/graphql-markdown/graphql-markdown/pull/3418)).
+
+### Fixed
+
+- **Scaffolder**: pressing Enter at the "Where should we create your project?" prompt now accepts the default `my-graphql-docs` instead of failing validation. Ctrl+C exits from every prompt instead of skipping it ([#3401](https://github.com/graphql-markdown/graphql-markdown/pull/3401)).
+- **Scaffolder**: new projects get a `.gitignore` again. It was stripped from the published package, so the first commit included `node_modules` ([#3409](https://github.com/graphql-markdown/graphql-markdown/pull/3409)).
+- **Scaffolder**: scaffolding into an existing empty folder such as `.` copies in place instead of recreating your current directory, and the default "My API" title no longer crashes the config writers ([#3409](https://github.com/graphql-markdown/graphql-markdown/pull/3409)).
+- **Scaffolder**: `github:` schema sources read their token from `GITHUB_TOKEN`, and `.json` / `.ts` schemas no longer trigger false SDL warnings ([#3409](https://github.com/graphql-markdown/graphql-markdown/pull/3409)).
+- **Scaffolder**: code-first (`.ts` / `.js`) schemas are referenced in place, so their relative imports keep working. `--title` also sets the Docusaurus navbar title, and unexpected extra arguments are rejected ([#3412](https://github.com/graphql-markdown/graphql-markdown/pull/3412)).
+- **Nuxt theme**: `nuxi typecheck` no longer warns that `vue-router/volar/sfc-route-blocks` can't be resolved ([#3402](https://github.com/graphql-markdown/graphql-markdown/pull/3402)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/docusaurus | 1.38.1 |
+| @graphql-markdown/core | 1.24.1 |
+| @graphql-markdown/printer-legacy | 1.19.1 |
+| @graphql-markdown/types | 1.16.1 |
+| @graphql-markdown/cli | 1.1.2 |
+| @graphql-markdown/diff | 1.1.21 |
+| @graphql-markdown/formatters | 1.1.3 |
+| @graphql-markdown/graphql | 1.3.2 |
+| @graphql-markdown/helpers | 1.2.2 |
+| @graphql-markdown/logger | 1.1.2 |
+| @graphql-markdown/utils | 1.13.3 |
+| create-graphql-markdown-docs | 1.0.0 |
+| @graphql-markdown/nuxt-theme | 0.1.3 |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.1...1.39.0
+
+
+[Changes][1.39.0]
+
+
 <a id="1.38.1"></a>
 # [1.38.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.1) - 2026-10-08
 
@@ -33,7 +100,7 @@ All other packages are unchanged from [1.38.0](https://github.com/graphql-markdo
 It also adds a config lifecycle hook, and fixes filename collisions under the `flat` hierarchy.
 
 > [!IMPORTANT]
-> **`flat` hierarchy users: generated filenames change.** The entity kind now prefixes each filename. For example, `user.mdx` becomes `objects-user.mdx` or `queries-user.mdx`. Before, a `type User` and a `Query.user` field wrote to the same file, and one silently overwrote the other. Cross-reference links are updated to match. If you link to these pages from outside the generated docs, update those links ([#3342](https://github.com/graphql-markdown/graphql-markdown/pull/3342)).
+> **[`flat` hierarchy](https://graphql-markdown.dev/docs/settings#printtypeoptions): generated filenames change.** The entity kind now prefixes each filename. For example, `user.mdx` becomes `objects-user.mdx` or `queries-user.mdx`. Before, a `type User` and a `Query.user` field wrote to the same file, and one silently overwrote the other. Cross-reference links are updated to match. If you link to these pages from outside the generated docs, update those links ([#3342](https://github.com/graphql-markdown/graphql-markdown/pull/3342)).
 
 ### What's New
 
@@ -53,11 +120,14 @@ The Docusaurus starter replaces the standalone [graphql-markdown/template](https
 - Customizable through `app.config.ts` (`gqlmd.*`), `--gqlmd-*` CSS variables, and the `gqlmd-swizzle` CLI.
 - Supports the `api`, `entity` and `flat` hierarchies ([#3380](https://github.com/graphql-markdown/graphql-markdown/pull/3380)).
 
+> Docs: https://graphql-markdown.dev/docs/advanced/nuxt-theme
+> Demo: https://github.com/graphql-markdown/demo-nuxt
+
 **Other additions:**
 
-- **Core**: new `afterConfigBuildHook` event. It fires once the final configuration has been resolved ([#3341](https://github.com/graphql-markdown/graphql-markdown/pull/3341)).
-- **Core / Types**: formatters' `formatMDXFrontmatter` receives an optional `context` with the page's entity kind, so frontmatter can vary by entity ([#3380](https://github.com/graphql-markdown/graphql-markdown/pull/3380)).
-- **Printer**: `Printer.printBadge` renders a single badge through the configured formatter ([#3323](https://github.com/graphql-markdown/graphql-markdown/pull/3323)).
+- **Core**: new [`afterConfigBuildHook` event](https://graphql-markdown.dev/docs/advanced/hook-recipes). It fires once the final configuration has been resolved ([#3341](https://github.com/graphql-markdown/graphql-markdown/pull/3341)).
+- **Core / Types**: formatters' [`formatMDXFrontmatter`](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#custom-mdx-formatter) receives an optional `context` with the page's entity kind, so frontmatter can vary by entity ([#3380](https://github.com/graphql-markdown/graphql-markdown/pull/3380)).
+- **Printer**: [`Printer.printBadge`](https://graphql-markdown.dev/api/printer-legacy/printer#printbadge) renders a single badge through the configured formatter ([#3323](https://github.com/graphql-markdown/graphql-markdown/pull/3323)).
 
 ### Fixed
 
@@ -2614,6 +2684,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.39.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.1...1.39.0
 [1.38.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.0...1.38.1
 [1.38.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.37.0...1.38.0
 [1.37.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.36.0...1.37.0
