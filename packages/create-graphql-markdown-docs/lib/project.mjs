@@ -11,7 +11,7 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const packageRoot = path.resolve(__dirname, "..");
-export const templatesRoot = path.resolve(packageRoot, "templates");
+const templatesRoot = path.resolve(packageRoot, "templates");
 
 /** Directory name used when the user gives none (empty prompt or --yes). */
 export const DEFAULT_PROJECT_DIR = "my-graphql-docs";

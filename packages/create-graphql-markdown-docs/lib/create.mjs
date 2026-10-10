@@ -456,78 +456,90 @@ const STEPS = [
 ];
 
 /**
- * Runs the steps in order, recording an outcome (`done`, `skipped` or
- * `failed`) for each. Errors in required steps propagate; errors in optional
- * steps are logged and recorded so the flow can continue.
+ * Whether a step should run: `when` can skip it and, without --yes, a
+ * `confirm` prompt can decline it (a cancel aborts the run).
  */
+async function shouldRun(step, ctx) {
+  if (step.when && (await step.when(ctx)) === false) return false;
+  if (!step.confirm || ctx.args.yes) return true;
+  return Boolean(
+    unlessCancelled(
+      await prompts.confirm({ message: step.confirm, initialValue: true }),
+    ),
+  );
+}
+
+/**
+ * Runs one step and returns its outcome. Errors in required steps propagate;
+ * errors in optional steps are logged and recorded so the flow can continue.
+ */
+async function runStep(step, ctx) {
+  if (!(await shouldRun(step, ctx))) {
+    return { step, status: "skipped", catchUp: true };
+  }
+  try {
+    const result = await step.run(ctx);
+    return result?.skipped
+      ? { step, status: "skipped", catchUp: result.catchUp !== false }
+      : { step, status: "done" };
+  } catch (error) {
+    if (!step.optional) throw error;
+    prompts.log.error(`${step.title} failed: ${error.message}`);
+    return { step, status: "failed", catchUp: true, error };
+  }
+}
+
+/** Runs the steps in order, recording a `done`/`skipped`/`failed` outcome for each. */
 async function runSteps(steps, ctx) {
   const outcomes = [];
   for (const step of steps) {
-    const outcome = { step, status: "done", catchUp: true };
-    outcomes.push(outcome);
-
-    if (step.when && (await step.when(ctx)) === false) {
-      outcome.status = "skipped";
-      continue;
-    }
-    if (step.confirm && !ctx.args.yes) {
-      const confirmed = unlessCancelled(
-        await prompts.confirm({ message: step.confirm, initialValue: true }),
-      );
-      if (!confirmed) {
-        outcome.status = "skipped";
-        continue;
-      }
-    }
-
-    try {
-      const result = await step.run(ctx);
-      if (result?.skipped) {
-        outcome.status = "skipped";
-        outcome.catchUp = result.catchUp !== false;
-      }
-    } catch (error) {
-      if (!step.optional) throw error;
-      outcome.status = "failed";
-      outcome.error = error;
-      prompts.log.error(`${step.title} failed: ${error.message}`);
-    }
+    outcomes.push(await runStep(step, ctx));
   }
   return outcomes;
 }
 
-/** Prints the closing summary: failures, catch-up commands and next steps. */
-function printOutro(ctx, outcomes) {
-  const { projectDir, packageManager, fw, loader } = ctx;
+/** Commands to finish what did not complete, then the framework's run scripts. */
+function nextSteps(ctx, outcomes) {
+  const { projectDir, packageManager, fw } = ctx;
+  const steps = [];
 
   // Relative path reads better than an absolute one; omitted when already there.
   const rel = path.relative(process.cwd(), projectDir);
-  const steps = [];
   if (rel !== "") {
     steps.push(`cd ${rel.includes(" ") ? JSON.stringify(rel) : rel}`);
   }
   for (const { step, status, catchUp } of outcomes) {
-    if (step.optional && status !== "done" && catchUp && step.catchUp) {
+    if (status !== "done" && catchUp && step.catchUp) {
       steps.push(...step.catchUp(ctx));
     }
   }
   steps.push(
     ...fw.runScripts.map((script) => `${packageManager} run ${script}`),
   );
+  return steps;
+}
 
+/** Lists failed steps ahead of the next steps; empty when nothing failed. */
+function failureNote(outcomes) {
   const failures = outcomes
     .filter(({ status }) => status === "failed")
     .map(({ step, error }) => `  - ${step.title}: ${error.message}`);
-  const failureNote =
-    failures.length > 0
-      ? `Some steps did not complete:\n${failures.join("\n")}\n\n`
-      : "";
-  const githubHint = loader.tokenEnvVar
-    ? `\nNote: set the ${loader.tokenEnvVar} environment variable so the GitHub schema can be loaded.\n`
+  return failures.length > 0
+    ? `Some steps did not complete:\n${failures.join("\n")}\n\n`
     : "";
-  const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
+}
+
+/** Prints the closing summary: failures, catch-up commands and next steps. */
+function printOutro(ctx, outcomes) {
+  const { tokenEnvVar } = ctx.loader;
+  const githubHint = tokenEnvVar
+    ? `\nNote: set the ${tokenEnvVar} environment variable so the GitHub schema can be loaded.\n`
+    : "";
+  const list = nextSteps(ctx, outcomes)
+    .map((step, i) => `  ${i + 1}. ${step}`)
+    .join("\n");
   prompts.outro(`
-${failureNote}Next steps:
+${failureNote(outcomes)}Next steps:
 ${list}
 ${githubHint}
 Documentation: ${DOCS_URL}
