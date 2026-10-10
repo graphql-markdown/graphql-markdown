@@ -1,565 +1,35 @@
 import fs from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
-import { spawn } from "node:child_process";
 import os from "node:os";
 import { parseArgs } from "node:util";
 
 import * as prompts from "@clack/prompts";
-import { buildSchema } from "graphql";
 import {
   detect as detectPackageManager,
   getUserAgent,
 } from "package-manager-detector";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const packageRoot = path.resolve(__dirname, "..");
-const templatesRoot = path.resolve(packageRoot, "templates");
-const EXAMPLE_SCHEMA_REF = "./schema/example.graphql";
-const defaultSchemaLine = `schema: '${EXAMPLE_SCHEMA_REF}'`;
+import { DEFAULT_FRAMEWORK, FRAMEWORKS } from "./frameworks/index.mjs";
+import {
+  DEFAULT_PROJECT_DIR,
+  applyTemplate,
+  moveIntoPlace,
+  packageRoot,
+} from "./project.mjs";
+import {
+  EXAMPLE_SCHEMA_REF,
+  detectLoader,
+  isRemoteSchemaSource,
+  validateGraphQLSchema,
+} from "./schema.mjs";
+import {
+  INSTALL_COMMANDS,
+  initGitRepo,
+  installDependencies,
+  isGitAvailable,
+} from "./tasks.mjs";
+
 const DOCS_URL = "https://graphql-markdown.dev";
-
-/**
- * Supported scaffold targets; each maps to `templates/<framework>`.
- * `runScripts` are the package scripts to run after install, in order.
- */
-const FRAMEWORKS = {
-  nuxt: { runScripts: ["dev"] },
-  docusaurus: { runScripts: ["doc", "start"] },
-};
-
-/** Directory name used when the user gives none (empty prompt or --yes). */
-const DEFAULT_PROJECT_DIR = "my-graphql-docs";
-
-/**
- * Maps each package manager to its install command and arguments.
- * Each entry is [command, args] to be passed to spawn().
- */
-const INSTALL_COMMANDS = {
-  npm: ["npm", ["install"]],
-  pnpm: ["pnpm", ["install"]],
-  yarn: ["yarn", []],
-  bun: ["bun", ["install"]],
-};
-
-/**
- * The official graphql-tools loaders (github.com/ardatan/graphql-tools/tree/
- * master/packages/loaders) that make sense as a schema *source* for
- * graphql-markdown — excludes loaders for things that aren't ever a whole
- * schema's source (e.g. `@graphql-tools/apollo-engine-loader` targets a
- * managed-federation registry, out of scope here).
- *
- * `version: 'latest'` deliberately, not a pinned range: a scaffolded project
- * runs `npm install` (or equivalent) immediately, once, right after this
- * file is written — there's no ongoing lockfile for this CLI to keep in sync
- * with graphql-tools' own release cadence, so pinning a version here would
- * just silently go stale the day graphql-tools cuts a release. Same
- * rationale most `create-*` scaffolding CLIs use for freshly-installed deps.
- *
- * `match` runs against the raw schema source string the user provided (a
- * path or a URL) to pick the loader graphql-markdown needs to actually read
- * it; order matters, first match wins.
- */
-const LOADERS = [
-  {
-    id: "url",
-    match: (source) => /^https?:\/\//i.test(source),
-    className: "UrlLoader",
-    package: "@graphql-tools/url-loader",
-    version: "latest",
-    // URL sources are introspected with POST.
-    options: { method: "POST" },
-  },
-  {
-    id: "github",
-    match: (source) => /^github:/i.test(source),
-    className: "GithubLoader",
-    package: "@graphql-tools/github-loader",
-    version: "latest",
-    // GithubLoader needs an API token, read from this env var.
-    tokenEnvVar: "GITHUB_TOKEN",
-  },
-  {
-    id: "git",
-    match: (source) => /^git:/i.test(source),
-    className: "GitLoader",
-    package: "@graphql-tools/git-loader",
-    version: "latest",
-  },
-  {
-    id: "json",
-    match: (source) => /\.json$/i.test(source),
-    className: "JsonFileLoader",
-    package: "@graphql-tools/json-file-loader",
-    version: "latest",
-  },
-  {
-    id: "code",
-    match: (source) => /\.(js|mjs|cjs|ts|mts|cts)$/i.test(source),
-    className: "CodeFileLoader",
-    package: "@graphql-tools/code-file-loader",
-    version: "latest",
-  },
-  {
-    // Default: a local .graphql/.gql SDL file. This is the loader
-    // `createGenerateDocs` already defaults to internally, so scaffolds that
-    // land here emit no explicit `loaders` option at all — one less thing
-    // for the common case to carry, and no version to track either.
-    id: "file",
-    match: (source) => /\.(graphql|gql)$/i.test(source),
-    className: "GraphQLFileLoader",
-    package: "@graphql-tools/graphql-file-loader",
-    isDefault: true,
-  },
-];
-
-const DEFAULT_LOADER = LOADERS.find((loader) => loader.isDefault);
-
-/** Picks the loader for a schema source string, falling back to the local-file loader. */
-export function detectLoader(schemaSource) {
-  return LOADERS.find((loader) => loader.match(schemaSource)) ?? DEFAULT_LOADER;
-}
-
-/** A schema "path" that's actually a remote/VCS reference, not a local file to copy. */
-export function isRemoteSchemaSource(source) {
-  return /^(https?|git|github):/i.test(source);
-}
-
-/**
- * Copy a directory recursively, excluding entries whose name matches any pattern.
- */
-export function copyDirRecursive(src, dst, excludePatterns = []) {
-  fs.cpSync(src, dst, {
-    recursive: true,
-    filter: (source) => {
-      // The root itself is always copied; patterns apply to entry names.
-      if (source === src) return true;
-      const name = path.basename(source);
-      return !excludePatterns.some((pattern) => pattern.test(name));
-    },
-  });
-}
-
-/**
- * Validate a GraphQL schema file by attempting to parse it with buildSchema.
- */
-export async function validateGraphQLSchema(schemaPath) {
-  try {
-    const schemaText = await fs.promises.readFile(schemaPath, "utf-8");
-    buildSchema(schemaText);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-/**
- * Run a command in a shell.
- */
-export function runCommand(command, args, options = {}) {
-  return new Promise((resolve, reject) => {
-    const proc = spawn(command, args, {
-      stdio: "inherit",
-      ...options,
-    });
-    proc.on("close", (code) => {
-      if (code === 0) {
-        resolve();
-      } else {
-        reject(new Error(`Command failed with exit code ${code}`));
-      }
-    });
-    proc.on("error", (err) => {
-      reject(
-        err?.code === "ENOENT"
-          ? new Error(`${command} is not installed or not on your PATH`)
-          : err,
-      );
-    });
-  });
-}
-
-/** Whether `git` is installed and runnable. */
-export async function isGitAvailable() {
-  return runCommand("git", ["--version"], { stdio: "ignore" }).then(
-    () => true,
-    () => false,
-  );
-}
-
-/**
- * Install dependencies for a project using the specified package manager.
- * Logs info, runs the install command, logs success, and catches+logs errors.
- * Resolves to whether the install succeeded.
- */
-export async function installDependencies(packageManager, projectDir) {
-  prompts.log.info(`Installing dependencies with ${packageManager}...`);
-  try {
-    const [command, args] =
-      INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
-    await runCommand(command, args, { cwd: projectDir });
-    prompts.log.success("Dependencies installed!");
-    return true;
-  } catch (error) {
-    prompts.log.error(`Failed to install dependencies: ${error.message}`);
-    return false;
-  }
-}
-
-/**
- * Initialize a git repository in the project directory.
- * Skips when already inside a git work tree (no nested repos); otherwise runs
- * git init, git add, and git commit with an initial commit message.
- * Logs success and catches+logs errors.
- */
-export async function initGitRepo(projectDir) {
-  // Git output is silenced (stdio "ignore") so it doesn't garble the prompt UI.
-  const options = { cwd: projectDir, stdio: "ignore" };
-
-  // A nested repo inside an existing one is almost never wanted.
-  const insideRepo = await runCommand(
-    "git",
-    ["rev-parse", "--is-inside-work-tree"],
-    options,
-  ).then(
-    () => true,
-    () => false,
-  );
-  if (insideRepo) {
-    prompts.log.info("Already inside a git repository — skipping git init.");
-    return;
-  }
-
-  const spinner = prompts.spinner();
-  spinner.start("Initializing git repository...");
-  try {
-    await runCommand("git", ["init"], options);
-    await runCommand("git", ["add", "."], options);
-  } catch (error) {
-    spinner.stop("Git initialization incomplete.");
-    prompts.log.warn(`Could not initialize git: ${error.message}`);
-    return;
-  }
-  try {
-    await runCommand("git", ["commit", "-m", "Initial commit"], options);
-    spinner.stop("Git repository initialized!");
-  } catch (error) {
-    spinner.stop("Git initialization incomplete.");
-    prompts.log.warn(
-      `Could not initialize git: ${error.message} (the commit can fail when git user.name / user.email are not configured).`,
-    );
-  }
-}
-
-/**
- * Rewrite app.config.ts with custom title and/or color overrides.
- */
-export function writeAppConfig(tempDir, titleOverride, colorOverride) {
-  if (!titleOverride && !colorOverride) {
-    return; // No changes needed
-  }
-
-  const appConfigPath = path.join(tempDir, "app", "app.config.ts");
-  let appConfig = fs.readFileSync(appConfigPath, "utf-8");
-  const originalContent = appConfig;
-
-  if (titleOverride) {
-    const searchString = "siteTitle: 'My API'";
-
-    // A replacement identical to the original (e.g. the title is already
-    // "My API") is fine; only a missing search string means template drift.
-    if (!originalContent.includes(searchString)) {
-      throw new Error(
-        `Expected to find and replace "${searchString}" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-
-    appConfig = appConfig.replace(
-      searchString,
-      () => `siteTitle: ${JSON.stringify(titleOverride)}`,
-    );
-  }
-
-  if (colorOverride) {
-    // The template ships no `ui.colors` block at all (the layer's own
-    // violet/zinc defaults apply via `extends` until overridden) — add
-    // one rather than trying to replace a value that isn't there.
-    const beforeColorOverride = appConfig;
-    const searchString = "export default defineAppConfig({";
-    appConfig = appConfig.replace(
-      searchString,
-      () =>
-        `${searchString}\n  ui: {\n    colors: {\n      primary: ${JSON.stringify(colorOverride)},\n    },\n  },`,
-    );
-    if (appConfig === beforeColorOverride) {
-      throw new Error(
-        `Expected to find and replace "${searchString}" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-  }
-
-  fs.writeFileSync(appConfigPath, appConfig);
-}
-
-/** Single-quoted JS/TS string literal with backslashes, quotes and newlines escaped. */
-function toSingleQuotedLiteral(value) {
-  const escaped = value
-    .replace(/[\\']/g, (c) => `\\${c}`)
-    .replaceAll("\n", String.raw`\n`)
-    .replaceAll("\r", String.raw`\r`);
-  return `'${escaped}'`;
-}
-
-/**
- * Rewrite generate-docs.ts to use the resolved schema path and loader.
- */
-export function writeGenerateDocs(tempDir, schemaRef, loader) {
-  const generateDocsPath = path.join(tempDir, "generate-docs.ts");
-  const originalContent = fs.readFileSync(generateDocsPath, "utf-8");
-
-  // The default (bundled example, GraphQLFileLoader) needs no `loaders` option
-  // at all — createGenerateDocs already defaults to it — so only inject
-  // one when the detected loader differs.
-  const defaultSchema = `  ${defaultSchemaLine},`;
-  const schemaLiteral = toSingleQuotedLiteral(schemaRef);
-  const packageLiteral = toSingleQuotedLiteral(loader.package);
-  // Loaders needing an API token get it as a loadSchema option through
-  // the `{ module, options }` form of the loader entry.
-  const loaderEntry = loader.tokenEnvVar
-    ? `{ module: ${packageLiteral}, options: { token: process.env.${loader.tokenEnvVar} } }`
-    : packageLiteral;
-  const replacement = loader.isDefault
-    ? `  schema: ${schemaLiteral},`
-    : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${loaderEntry} },`;
-
-  const updated = originalContent.replace(defaultSchema, () => replacement);
-
-  // Only validate the replacement if we expected a change (i.e., the replacement differs from the original pattern).
-  if (replacement !== defaultSchema && updated === originalContent) {
-    throw new Error(
-      `Expected to find and replace "${defaultSchema}" in ${generateDocsPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-    );
-  }
-
-  fs.writeFileSync(generateDocsPath, updated);
-}
-
-/**
- * Removes the layer's `watch: [...]` block (and its leading comment) using
- * linear string scanning, replacing it with a single newline. Returns the
- * input unchanged when the block isn't found.
- */
-export function removeWatchBlock(content) {
-  const marker = "// The layer's gqlmd-generate module";
-  const markerIdx = content.indexOf(marker);
-  if (markerIdx === -1) return content;
-  const watchIdx = content.indexOf("watch: [", markerIdx);
-  if (watchIdx === -1) return content;
-  const lineStart = content.lastIndexOf("\n", watchIdx);
-  if (lineStart < markerIdx || content.slice(lineStart + 1, watchIdx).trim()) {
-    return content;
-  }
-  const closeIdx = content.indexOf("]", watchIdx);
-  if (closeIdx === -1 || !content.startsWith(",\n", closeIdx + 1)) {
-    return content;
-  }
-  let start = markerIdx;
-  while (start > 0 && /\s/.test(content[start - 1])) start--;
-  return `${content.slice(0, start)}\n${content.slice(closeIdx + 3)}`;
-}
-
-/**
- * Rewrite nuxt.config.ts's `watch` entry and/or schema filename to match the resolved schema.
- */
-export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
-  const nuxtConfigPath = path.join(tempDir, "nuxt.config.ts");
-  const originalContent = fs.readFileSync(nuxtConfigPath, "utf-8");
-
-  let updated = originalContent;
-
-  if (isRemoteSource) {
-    // A remote schema source (URL/git/github) has no local file to watch at all —
-    // dev-server restarts on schema change simply aren't available for those,
-    // so the entry is dropped rather than left pointing at a path that no longer
-    // means anything.
-    const beforeWatchRemoval = updated;
-    updated = removeWatchBlock(updated);
-
-    if (updated === beforeWatchRemoval) {
-      throw new Error(
-        `Expected to find and replace the watch block in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-
-    const beforeImportRemoval = updated;
-    updated = updated.replace(
-      'import { fileURLToPath } from "node:url";\n\n',
-      "",
-    );
-
-    if (updated === beforeImportRemoval) {
-      throw new Error(
-        `Expected to find and replace the fileURLToPath import in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-  } else {
-    // Local schema: replace the example filename with the actual one.
-    // Only validate if we expect a change (schemaRef differs from the default).
-    const beforeSchemaReplace = updated;
-    updated = updated.replace(EXAMPLE_SCHEMA_REF, () => schemaRef);
-
-    if (schemaRef !== EXAMPLE_SCHEMA_REF && updated === beforeSchemaReplace) {
-      throw new Error(
-        `Expected to find and replace "${EXAMPLE_SCHEMA_REF}" in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-  }
-
-  fs.writeFileSync(nuxtConfigPath, updated);
-}
-
-/**
- * Rewrite the Docusaurus template's .graphqlrc `schema` line and loader entry.
- */
-export function writeGraphqlrc(tempDir, schemaRef, loader) {
-  const graphqlrcPath = path.join(tempDir, ".graphqlrc");
-  const originalContent = fs.readFileSync(graphqlrcPath, "utf-8");
-
-  const defaultLoaderLine = `      ${DEFAULT_LOADER.className}: '${DEFAULT_LOADER.package}'`;
-
-  let updated = originalContent.replace(
-    defaultSchemaLine,
-    () => `schema: '${schemaRef.replaceAll("'", "''")}'`,
-  );
-
-  if (schemaRef !== EXAMPLE_SCHEMA_REF && updated === originalContent) {
-    throw new Error(
-      `Expected to find and replace "${defaultSchemaLine}" in ${graphqlrcPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-    );
-  }
-
-  if (!loader.isDefault) {
-    // Loader options are rendered as-is; a token env var becomes a `${VAR}`
-    // reference (graphql-config interpolates `${VAR}` in .graphqlrc).
-    const options = {
-      ...loader.options,
-      ...(loader.tokenEnvVar && { token: `\${${loader.tokenEnvVar}}` }),
-    };
-    const optionLines = Object.entries(options).map(
-      ([key, value]) => `\n          ${key}: '${value}'`,
-    );
-    const loaderEntry =
-      optionLines.length === 0
-        ? `      ${loader.className}: '${loader.package}'`
-        : `      ${loader.className}:\n        module: '${loader.package}'\n        options:${optionLines.join("")}`;
-    const beforeLoader = updated;
-    updated = updated.replace(defaultLoaderLine, () => loaderEntry);
-
-    if (updated === beforeLoader) {
-      throw new Error(
-        `Expected to find and replace "${defaultLoaderLine.trim()}" in ${graphqlrcPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-      );
-    }
-  }
-
-  fs.writeFileSync(graphqlrcPath, updated);
-}
-
-/**
- * Rewrite the Docusaurus template's docusaurus.config.js site title.
- */
-export function writeDocusaurusConfig(tempDir, titleOverride) {
-  if (!titleOverride) {
-    return; // No changes needed
-  }
-
-  const configPath = path.join(tempDir, "docusaurus.config.js");
-  const originalContent = fs.readFileSync(configPath, "utf-8");
-  const searchString = 'title: "My API",';
-  const navbarSearchString = 'title: "GraphQL-Markdown",';
-
-  // A replacement identical to the original (e.g. the title is already
-  // "My API") is fine; only a missing search string means template drift.
-  if (!originalContent.includes(searchString)) {
-    throw new Error(
-      `Expected to find and replace '${searchString}' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-    );
-  }
-  if (!originalContent.includes(navbarSearchString)) {
-    throw new Error(
-      `Expected to find and replace 'title: "GraphQL-Markdown",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-    );
-  }
-
-  const updated = originalContent
-    .replace(searchString, () => `title: ${JSON.stringify(titleOverride)},`)
-    .replace(
-      navbarSearchString,
-      () => `title: ${JSON.stringify(titleOverride)},`,
-    );
-
-  fs.writeFileSync(configPath, updated);
-}
-
-/**
- * Derive a valid npm package name from a directory path (lowercase, no
- * spaces or special characters, no leading dot/underscore/dash).
- */
-export function toPackageName(dir) {
-  let name = path
-    .basename(dir)
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9._~-]+/g, "-")
-    .replace(/^[._-]+/, "");
-  let end = name.length;
-  while (end > 0 && name[end - 1] === "-") end--;
-  name = name.slice(0, end);
-  return name || DEFAULT_PROJECT_DIR;
-}
-
-/**
- * Rewrite package.json to set the project name and add non-default loaders as dependencies.
- */
-export function writePackageJson(tempDir, projectDir, loader) {
-  const pkgJsonPath = path.join(tempDir, "package.json");
-  let pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, "utf-8"));
-  pkgJson.name = toPackageName(projectDir);
-  if (!loader.isDefault) {
-    pkgJson.dependencies[loader.package] = loader.version;
-  }
-  fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2) + "\n");
-}
-
-/**
- * Rewrite README.md's schema section to document the actual schema source.
- */
-export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
-  if (!schemaPath) {
-    return; // No custom schema, keep the template's instructions
-  }
-
-  const readmePath = path.join(tempDir, "README.md");
-  const originalContent = fs.readFileSync(readmePath, "utf-8");
-  const schemaSectionRe = /### Your GraphQL Schema\n\n[\s\S]*?(?=\n### |\n## )/;
-
-  const githubNote = loader.tokenEnvVar
-    ? `\nGitHub sources require an API token: set the \`${loader.tokenEnvVar}\` environment variable before running \`generate\`, \`dev\` or \`build\`.\n`
-    : "";
-  const replacement = isRemoteSchemaSource(schemaRef)
-    ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n${githubNote}`
-    : `### Your GraphQL Schema\n\nYour schema lives at \`${schemaRef}\`. To point at a different file, update both \`generate-docs.ts\`'s \`schema\` option and \`nuxt.config.ts\`'s \`watch\` entry.\n`;
-
-  const updated = originalContent.replace(schemaSectionRe, () => replacement);
-
-  if (updated === originalContent) {
-    throw new Error(
-      `Expected to find and replace the schema section in ${readmePath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
-    );
-  }
-
-  fs.writeFileSync(readmePath, updated);
-}
 
 /** Thrown to abort the scaffold with an exit code; the message was already logged. */
 class CliExit extends Error {
@@ -584,16 +54,21 @@ function fail(message) {
   throw new CliExit(1);
 }
 
+/** Names of the frameworks that support a primary color. */
+const colorFrameworkNames = Object.values(FRAMEWORKS)
+  .filter((fw) => fw.supportsColor)
+  .map((fw) => fw.name);
+
 const HELP_TEXT = `Usage: create-graphql-markdown-docs [dir] [options]
 
 Options:
-  --framework <name>   Site framework: nuxt | docusaurus (default: nuxt)
+  --framework <name>   Site framework: ${Object.keys(FRAMEWORKS).join(" | ")} (default: ${DEFAULT_FRAMEWORK})
   -d, --dir <path>     Directory to create the project in (or pass it as [dir])
   --schema <source>    Schema source: <path|url|git:|github:> (default: bundled example)
   --example            Use the bundled example schema
   --pm <name>          Package manager: npm | pnpm | yarn | bun
   --title <text>       Site title
-  --color <name>       Primary color (Nuxt only)
+  --color <name>       Primary color (${colorFrameworkNames.join(" / ")} only)
   --no-install         Skip installing dependencies
   --no-git             Skip git repository initialization
   -y, --yes            Accept defaults and skip all prompts
@@ -659,22 +134,15 @@ async function resolveFramework(args) {
     }
     return args.framework;
   }
-  if (args.yes) return "nuxt";
+  if (args.yes) return DEFAULT_FRAMEWORK;
   return unlessCancelled(
     await prompts.select({
       message: "Which framework would you like to use?",
-      options: [
-        {
-          value: "nuxt",
-          label: "Nuxt (@graphql-markdown/nuxt-theme)",
-          hint: "Nuxt UI theme, live reload on schema changes",
-        },
-        {
-          value: "docusaurus",
-          label: "Docusaurus",
-          hint: "React + MDX, classic docs site",
-        },
-      ],
+      options: Object.entries(FRAMEWORKS).map(([value, fw]) => ({
+        value,
+        label: fw.label,
+        hint: fw.hint,
+      })),
     }),
   );
 }
@@ -824,49 +292,27 @@ async function askOptional(options, fallback) {
   return answer || fallback;
 }
 
-/** Nuxt UI / Tailwind color names offered for the primary color. */
-const COLORS = [
-  "blue",
-  "sky",
-  "cyan",
-  "teal",
-  "emerald",
-  "green",
-  "lime",
-  "amber",
-  "orange",
-  "red",
-  "rose",
-  "pink",
-  "fuchsia",
-  "purple",
-  "indigo",
-  "slate",
-  "zinc",
-  "neutral",
-];
-
-/** Asks for the primary color; violet is the layer default, so it means no override. */
-async function askColor() {
+/** Asks for the primary color; the default color is the layer default, so it means no override. */
+async function askColor(fw) {
   const color = unlessCancelled(
     await prompts.select({
       message: "Primary color:",
-      initialValue: "violet",
+      initialValue: fw.defaultColor,
       options: [
-        { value: "violet", label: "violet", hint: "default" },
-        ...COLORS.map((value) => ({ value, label: value })),
+        { value: fw.defaultColor, label: fw.defaultColor, hint: "default" },
+        ...fw.colors.map((value) => ({ value, label: value })),
       ],
     }),
   );
-  return color === "violet" ? "" : color;
+  return color === fw.defaultColor ? "" : color;
 }
 
 /** Warns when --color is passed to a framework that ignores it. */
-function initialColor(args, isDocusaurus) {
+function initialColor(args, fw) {
   const color = args.color ?? "";
-  if (isDocusaurus && color) {
+  if (!fw.supportsColor && color) {
     prompts.log.warn(
-      "--color only applies to the Nuxt template — ignoring it for Docusaurus.",
+      `--color only applies to the ${colorFrameworkNames.join(" / ")} template — ignoring it for ${fw.name}.`,
     );
     return "";
   }
@@ -874,12 +320,12 @@ function initialColor(args, isDocusaurus) {
 }
 
 /** Whether the user wants to customize title/color interactively. */
-async function wantsCustomization(isDocusaurus) {
+async function wantsCustomization(fw) {
   const answer = unlessCancelled(
     await prompts.confirm({
-      message: isDocusaurus
-        ? "Customize the site title?"
-        : "Customize the site title and primary color?",
+      message: fw.supportsColor
+        ? "Customize the site title and primary color?"
+        : "Customize the site title?",
       initialValue: false,
     }),
   );
@@ -887,10 +333,10 @@ async function wantsCustomization(isDocusaurus) {
 }
 
 /** Optional title and color customization. */
-async function promptCustomization(args, isDocusaurus) {
+async function promptCustomization(args, fw) {
   let title = args.title ?? "";
-  let color = initialColor(args, isDocusaurus);
-  if (args.yes || !(await wantsCustomization(isDocusaurus))) {
+  let color = initialColor(args, fw);
+  if (args.yes || !(await wantsCustomization(fw))) {
     return { title, color };
   }
 
@@ -900,97 +346,10 @@ async function promptCustomization(args, isDocusaurus) {
       title,
     );
   }
-  if (!isDocusaurus && !color) {
-    color = await askColor();
+  if (fw.supportsColor && !color) {
+    color = await askColor(fw);
   }
   return { title, color };
-}
-
-/**
- * Copies a local SDL/JSON schema into the scaffold. Remote sources and local
- * code-first schemas are referenced in place (code files may import siblings,
- * so they must not be copied). Drops the bundled example in both cases.
- */
-export function placeSchema(tempDir, projectDir, schemaPath) {
-  const templateExamplePath = path.join(tempDir, EXAMPLE_SCHEMA_REF);
-  if (!schemaPath) return EXAMPLE_SCHEMA_REF;
-
-  const isCodeSchema = detectLoader(schemaPath).id === "code";
-  if (isRemoteSchemaSource(schemaPath) || isCodeSchema) {
-    // Nothing to copy — the bundled example is unused, drop it so it
-    // doesn't sit there implying it's still what gets generated.
-    fs.rmSync(templateExamplePath, { force: true });
-    if (isRemoteSchemaSource(schemaPath)) {
-      return schemaPath;
-    }
-    const relative = path.relative(projectDir, path.resolve(schemaPath));
-    // Another drive on Windows yields an absolute path: use it as-is.
-    if (path.isAbsolute(relative)) return relative.split(path.sep).join("/");
-    const relativePath = relative.split(path.sep).join("/");
-    return relativePath.startsWith("../") ? relativePath : `./${relativePath}`;
-  }
-
-  const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
-  const destSchema = path.join(tempDir, "schema", destName);
-  if (destSchema !== templateExamplePath) {
-    fs.rmSync(templateExamplePath, { force: true });
-  }
-  fs.copyFileSync(schemaPath, destSchema);
-  return `./schema/${destName}`;
-}
-
-/** Phase 3: copy the template and apply all rewrites. */
-function applyTemplate(tempDir, ctx) {
-  const { framework, projectDir, schemaPath, loader, title, color } = ctx;
-  const isDocusaurus = framework === "docusaurus";
-
-  copyDirRecursive(path.join(templatesRoot, framework), tempDir, [
-    /^node_modules$/,
-    /^\.nuxt$/,
-    /^\.output$/,
-  ]);
-
-  // npm strips `.gitignore` from published tarballs, so templates ship it as
-  // `gitignore` and it is renamed back here.
-  const gitignore = path.join(tempDir, "gitignore");
-  if (fs.existsSync(gitignore)) {
-    fs.renameSync(gitignore, path.join(tempDir, ".gitignore"));
-  }
-
-  const schemaRef = placeSchema(tempDir, projectDir, schemaPath);
-
-  if (isDocusaurus) {
-    writeDocusaurusConfig(tempDir, title);
-    writeGraphqlrc(tempDir, schemaRef, loader);
-  } else {
-    writeAppConfig(tempDir, title, color);
-    writeGenerateDocs(tempDir, schemaRef, loader);
-    writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
-  }
-
-  writePackageJson(tempDir, projectDir, loader);
-
-  // The Docusaurus README already documents editing .graphqlrc generically.
-  if (!isDocusaurus) {
-    writeReadme(tempDir, schemaPath, schemaRef, loader);
-  }
-}
-
-function moveIntoPlace(tempDir, projectDir) {
-  if (fs.existsSync(projectDir)) {
-    // Existing (empty) target, possibly the cwd: copy into it rather than
-    // replacing it, so the directory itself (and its inode) is preserved.
-    fs.cpSync(tempDir, projectDir, { recursive: true });
-    fs.rmSync(tempDir, { recursive: true, force: true });
-    return;
-  }
-  try {
-    fs.renameSync(tempDir, projectDir);
-  } catch (err) {
-    if (err.code !== "EXDEV") throw err;
-    // temp dir is on another filesystem; the caller removes it afterwards
-    fs.cpSync(tempDir, projectDir, { recursive: true });
-  }
 }
 
 /** Runs `action` immediately with --yes, otherwise only after a confirmed prompt. */
@@ -1058,7 +417,7 @@ async function scaffold(args, tempDir) {
   const packageManager = await resolvePackageManager(args);
   const { title, color } = await promptCustomization(
     args,
-    framework === "docusaurus",
+    FRAMEWORKS[framework],
   );
 
   applyTemplate(tempDir, {

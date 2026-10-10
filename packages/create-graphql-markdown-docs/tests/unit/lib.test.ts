@@ -45,29 +45,38 @@ vi.mock("@clack/prompts", () => {
 });
 
 import {
-  copyDirRecursive,
-  detectLoader,
-  initGitRepo,
-  isGitAvailable,
-  installDependencies,
-  isRemoteSchemaSource,
   main,
   parseCliArgs,
-  placeSchema,
   run,
-  runCommand,
-  toPackageName,
-  validateGraphQLSchema,
-  writeAppConfig,
-  writeDocusaurusConfig,
-  writeGenerateDocs,
-  writeGraphqlrc,
-  removeWatchBlock,
-  writeNuxtConfig,
-  writePackageJson,
   validateProjectDir,
-  writeReadme,
 } from "../../lib/create.mjs";
+import { writeDocusaurusConfig } from "../../lib/frameworks/docusaurus.mjs";
+import { writeGraphqlrc } from "../../lib/rewrites/graphqlrc.mjs";
+import { findIndentedLine } from "../../lib/rewrites/lines.mjs";
+import {
+  removeWatchBlock,
+  writeAppConfig,
+  writeGenerateDocs,
+  writeNuxtConfig,
+  writeReadme,
+} from "../../lib/frameworks/nuxt.mjs";
+import {
+  copyDirRecursive,
+  placeSchema,
+  toPackageName,
+  writePackageJson,
+} from "../../lib/project.mjs";
+import {
+  detectLoader,
+  isRemoteSchemaSource,
+  validateGraphQLSchema,
+} from "../../lib/schema.mjs";
+import {
+  initGitRepo,
+  installDependencies,
+  isGitAvailable,
+  runCommand,
+} from "../../lib/tasks.mjs";
 
 const templates = path.join(import.meta.dirname, "../../templates");
 const VALID_SDL = "type Query { hello: String }\n";
@@ -229,6 +238,16 @@ describe("pure helpers", () => {
     expect(toPackageName(`a${"-".repeat(50000)}b`)).toBe(
       `a${"-".repeat(50000)}b`,
     );
+  });
+  it("findIndentedLine", () => {
+    const text = "a:\n    loaders:\n\t  X: 'p.q'\n";
+    expect(findIndentedLine(text, "X: 'p.q'")).toEqual({
+      line: "\t  X: 'p.q'",
+      indent: "\t  ",
+    });
+    // Content is matched literally, not as a pattern.
+    expect(findIndentedLine(text, "X: 'p?q'")).toBeUndefined();
+    expect(findIndentedLine(text, "missing")).toBeUndefined();
   });
 });
 
