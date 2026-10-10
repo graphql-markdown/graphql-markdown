@@ -28,6 +28,16 @@ export function unlessCancelled(value) {
   return value;
 }
 
+/** Lists failed steps ahead of the next steps; empty when nothing failed. */
+export function failureNote(outcomes) {
+  const failures = outcomes
+    .filter(({ status }) => status === "failed")
+    .map(({ step, error }) => `  - ${step.title}: ${error.message}`);
+  return failures.length > 0
+    ? `Some steps did not complete:\n${failures.join("\n")}\n\n`
+    : "";
+}
+
 /** Log an error and abort the run. */
 export function fail(message) {
   prompts.log.error(message);

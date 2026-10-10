@@ -396,6 +396,124 @@ describe("scaffold vs wire mode (end to end)", () => {
       expect.stringContaining("Dry run"),
     );
   });
+
+  const ADD_STARLIGHT = [
+    "add",
+    "--save-dev",
+    "@graphql-markdown/cli",
+    "@graphql-markdown/formatters",
+    "@graphql-tools/graphql-file-loader",
+  ];
+
+  /** Text passed to prompts.outro (the closing summary). */
+  const outro = (): string => {
+    return String(mocks.prompts.outro.mock.calls.at(-1)?.[0] ?? "");
+  };
+
+  /** Argv for a starlight wire run into `dir`, with the given extra flags. */
+  const starlightArgs = (dir: string, ...extra: string[]): string[] => {
+    return [
+      "--dir",
+      dir,
+      "--yes",
+      "--schema",
+      schemaIn(dir),
+      "--output",
+      "src/content/docs/api",
+      ...extra,
+    ];
+  };
+
+  it("18. --install on a starlight wire run adds the packages in the target dir", async () => {
+    const dir = path.join(work, "install");
+    seed(dir, { "package.json": STARLIGHT_PKG });
+    expect(await main(starlightArgs(dir, "--install"))).toBe(0);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "pnpm",
+      ADD_STARLIGHT,
+      expect.objectContaining({ cwd: dir }),
+    );
+    expect(outro()).not.toContain("--save-dev");
+  });
+
+  it("19. --install whose command fails exits 0, keeps .graphqlrc and shows the catch-up command", async () => {
+    const dir = path.join(work, "install-fails");
+    seed(dir, { "package.json": STARLIGHT_PKG });
+    mocks.spawn.mockImplementation(() => {
+      const proc = new EventEmitter();
+      queueMicrotask(() => {
+        return proc.emit("close", 1);
+      });
+      return proc;
+    });
+    expect(await main(starlightArgs(dir, "--install"))).toBe(0);
+    expect(fs.existsSync(path.join(dir, ".graphqlrc"))).toBe(true);
+    expect(errors()).toContain("Install dev dependencies failed");
+    expect(outro()).toContain("Some steps did not complete");
+    expect(outro()).toContain(
+      "pnpm add --save-dev @graphql-markdown/cli @graphql-markdown/formatters",
+    );
+  });
+
+  it("20. without --install nothing is installed and the add command is the next step", async () => {
+    const dir = path.join(work, "no-install");
+    seed(dir, { "package.json": STARLIGHT_PKG });
+    expect(await main(starlightArgs(dir))).toBe(0);
+    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(outro()).toContain(
+      "pnpm add --save-dev @graphql-markdown/cli @graphql-markdown/formatters",
+    );
+  });
+
+  it("21. --install without package.json warns and installs nothing", async () => {
+    const dir = path.join(work, "install-nopkg");
+    seed(dir, { "README.md": "# Hello\n" });
+    expect(
+      await main([
+        "--dir",
+        dir,
+        "--yes",
+        "--framework",
+        "generic",
+        "--schema",
+        schemaIn(dir),
+        "--output",
+        "docs/api",
+        "--install",
+      ]),
+    ).toBe(0);
+    expect(mocks.prompts.log.warn).toHaveBeenCalledWith(
+      expect.stringContaining("--install ignored"),
+    );
+    expect(mocks.spawn).not.toHaveBeenCalled();
+  });
+
+  it("22. --dry-run --install reports the install and runs nothing", async () => {
+    const dir = path.join(work, "dry-install");
+    seed(dir, { "package.json": STARLIGHT_PKG });
+    expect(await main(starlightArgs(dir, "--dry-run", "--install"))).toBe(0);
+    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(mocks.prompts.log.info).toHaveBeenCalledWith(
+      expect.stringContaining("Would install:"),
+    );
+  });
+
+  it("23. packages already in devDependencies are not installed even with --install", async () => {
+    const dir = path.join(work, "all-present");
+    seed(dir, {
+      "package.json": JSON.stringify({
+        devDependencies: {
+          "@astrojs/starlight": "1",
+          "@graphql-markdown/cli": "1",
+          "@graphql-markdown/formatters": "1",
+          "@graphql-tools/graphql-file-loader": "1",
+        },
+      }),
+    });
+    expect(await main(starlightArgs(dir, "--install"))).toBe(0);
+    expect(mocks.spawn).not.toHaveBeenCalled();
+    expect(outro()).not.toContain("--save-dev");
+  });
 });
 
 describe("wire mode interactive prompts", () => {

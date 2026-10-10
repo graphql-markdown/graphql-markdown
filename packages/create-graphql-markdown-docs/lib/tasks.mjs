@@ -14,6 +14,26 @@ export const INSTALL_COMMANDS = {
 };
 
 /**
+ * Maps each package manager to the command that adds dev dependencies.
+ * Each entry is [command, args]; the packages are appended to args.
+ */
+const ADD_DEV_COMMANDS = {
+  npm: ["npm", ["install", "--save-dev"]],
+  pnpm: ["pnpm", ["add", "--save-dev"]],
+  yarn: ["yarn", ["add", "--dev"]],
+  bun: ["bun", ["add", "--dev"]],
+};
+
+function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
+  const [command, args] =
+    ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
+  const rootFlag = workspaceRoot
+    ? ({ pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? [])
+    : [];
+  return [command, [...args, ...rootFlag, ...packages]];
+}
+
+/**
  * Run a command in a shell.
  */
 export function runCommand(command, args, options = {}) {
@@ -57,6 +77,33 @@ export async function installDependencies(packageManager, projectDir) {
     INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
   await runCommand(command, args, { cwd: projectDir });
   prompts.log.success("Dependencies installed!");
+}
+
+/**
+ * Command line that adds packages as dev dependencies, e.g. "bun add --dev a b".
+ * @param {string} packageManager
+ * @param {string[]} packages
+ * @returns {string}
+ */
+export function addDevCommand(packageManager, packages, options = {}) {
+  const [command, args] = addDevArgs(packageManager, packages, options);
+  return [command, ...args].join(" ");
+}
+
+/**
+ * Add packages as dev dependencies using the specified package manager.
+ * Logs info, runs the add command and logs success; throws on failure.
+ */
+export async function addDevDependencies(
+  packageManager,
+  projectDir,
+  packages,
+  options = {},
+) {
+  prompts.log.info(`Adding ${packages.join(", ")} with ${packageManager}...`);
+  const [command, args] = addDevArgs(packageManager, packages, options);
+  await runCommand(command, args, { cwd: projectDir });
+  prompts.log.success("Dev dependencies added!");
 }
 
 /**
