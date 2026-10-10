@@ -25,9 +25,10 @@ const ADD_DEV_COMMANDS = {
 };
 
 function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
-  const [command, args] = ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
+  const [command, args] =
+    ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
   const rootFlag = workspaceRoot
-    ? { pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? []
+    ? ({ pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? [])
     : [];
   return [command, [...args, ...rootFlag, ...packages]];
 }
