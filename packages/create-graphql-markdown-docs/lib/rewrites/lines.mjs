@@ -12,8 +12,7 @@ function escapeRegExp(value) {
  * `line` and its leading `indent`, or `undefined` when no line matches.
  */
 export function findIndentedLine(text, content) {
-  const match = new RegExp(`^([ \\t]*)${escapeRegExp(content)}$`, "m").exec(
-    text,
-  );
+  const pattern = String.raw`^([ \t]*)${escapeRegExp(content)}$`;
+  const match = new RegExp(pattern, "m").exec(text);
   return match ? { line: match[0], indent: match[1] } : undefined;
 }
