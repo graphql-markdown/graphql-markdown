@@ -121,6 +121,38 @@ describe("buildGraphqlrc", () => {
     expect(gm.formatter).toBe("custom-formatter");
     expect(gm.linkRoot).toBe("/custom");
   });
+
+  it("omits linkRoot when none is passed for a router framework", () => {
+    const cfg = buildGraphqlrc({
+      descriptor: { ...fw.generic, links: "router" },
+      schema: local,
+      loader: detectLoader(local),
+      output: "docs/api",
+    });
+    expect(cfg.extensions["graphql-markdown"]).not.toHaveProperty("linkRoot");
+  });
+
+  it("omits linkRoot when it is null for a router framework", () => {
+    const cfg = buildGraphqlrc({
+      descriptor: { ...fw.generic, links: "router" },
+      schema: local,
+      loader: detectLoader(local),
+      output: "docs/api",
+      linkRoot: null,
+    } as any);
+    expect(cfg.extensions["graphql-markdown"]).not.toHaveProperty("linkRoot");
+  });
+
+  it("includes linkRoot when it is a non-empty string for a router framework", () => {
+    const cfg = buildGraphqlrc({
+      descriptor: { ...fw.generic, links: "router" },
+      schema: local,
+      loader: detectLoader(local),
+      output: "docs/api",
+      linkRoot: "/docs/api",
+    });
+    expect(cfg.extensions["graphql-markdown"].linkRoot).toBe("/docs/api");
+  });
 });
 
 describe("inspectProject", () => {
@@ -172,6 +204,16 @@ describe("validateOutput", () => {
     expect(validateOutput(dir, "..").error).toBe(
       "Output folder must be inside the project.",
     );
+  });
+  it.each([
+    "docs/../..",
+    "docs/../../outside",
+    "docs\\..\\..",
+    "docs\\..\\..\\x",
+  ])("rejects %s, which normalises to the parent", (output) => {
+    expect(validateOutput(dir, output)).toEqual({
+      error: "Output folder must be inside the project.",
+    });
   });
   it("rejects a file", () => {
     fs.writeFileSync(path.join(dir, "out"), "");
