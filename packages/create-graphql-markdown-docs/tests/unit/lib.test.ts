@@ -457,6 +457,38 @@ describe("write* helpers (docusaurus)", () => {
     const inside = placeSchema(dir, srcDir, path.join(srcDir, "schema.ts"));
     expect(inside).toBe("./schema.ts");
   });
+
+  it("placeSchema: dot-named folder keeps the ./ prefix", () => {
+    const dir = stage("docusaurus");
+    const projectDir = path.join(work, "dot-proj");
+    fs.mkdirSync(path.join(projectDir, ".schemas"), { recursive: true });
+    fs.writeFileSync(
+      path.join(projectDir, ".schemas", "schema.ts"),
+      "export {};\n",
+    );
+    const ref = placeSchema(
+      dir,
+      projectDir,
+      path.join(projectDir, ".schemas", "schema.ts"),
+    );
+    expect(ref).toBe("./.schemas/schema.ts");
+  });
+
+  it("placeSchema: absolute relative path is returned as-is with forward slashes", () => {
+    const dir = stage("docusaurus");
+    const projectDir = path.join(work, "abs-proj");
+    fs.mkdirSync(projectDir, { recursive: true });
+    const other = path.resolve("/other/schema.ts");
+    vi.spyOn(path, "relative").mockReturnValueOnce(other);
+    const ref = placeSchema(
+      dir,
+      projectDir,
+      path.join(work, "abs-src", "schema.ts"),
+    );
+    expect(ref).toBe(other.split(path.sep).join("/"));
+    expect(ref.startsWith("./")).toBe(false);
+    vi.restoreAllMocks();
+  });
 });
 
 describe("process helpers", () => {
