@@ -1,19 +1,15 @@
-import { codeToHtml } from "shiki";
 import { isLandingDocPath } from "../../constants";
 import {
-  CODE_COLUMN_SECTIONS,
   codeColumnNodeIndexes,
-  definitionCode,
   findDeprecationNotice,
   isOperationCategory,
   schemaKindLabel,
-  sectionCode,
   splitDocumentSections,
   toRenderableNode,
   withoutDeprecationNotice,
 } from "~/utils/api-document";
 import type { MdcNode } from "~/utils/mdc";
-import { detectLanguage } from "./useApiCodeCards";
+import { buildCodeCards, type CodeCard } from "./useApiCodeCards";
 import type {
   ApiNavigationBranch,
   ApiNavigationLeaf,
@@ -24,13 +20,6 @@ import type {
 const OPERATION_KINDS = ["queries", "mutations", "subscriptions"] as const;
 type OperationKind = (typeof OPERATION_KINDS)[number];
 type BucketId = OperationKind | "types";
-
-interface CodeCard {
-  label: string;
-  kind: string;
-  code: string;
-  html: string;
-}
 
 /**
  * One entry of the single-page view. Typed by the swizzlable
@@ -94,30 +83,6 @@ const BUCKET_TITLES: Record<BucketId, string> = {
   types: "Types",
 };
 
-/** Highlights every card a single page carries, dropping any it has no
- * snippet for — mirrors `useApiCodeCards`'s own `toCards`, one page at a
- * time, so per-page work can run in parallel across the whole schema. */
-const highlightCards = async (
-  requests: { label: string; kind: string; code?: string }[],
-  shikiTheme: string,
-): Promise<CodeCard[]> => {
-  return Promise.all(
-    requests
-      .filter((request): request is typeof request & { code: string } => {
-        return Boolean(request.code);
-      })
-      .map(async (request) => {
-        return {
-          ...request,
-          html: await codeToHtml(request.code, {
-            lang: detectLanguage(request.code),
-            theme: shikiTheme,
-          }),
-        };
-      }),
-  );
-};
-
 const buildEntry = async (
   page: RawPage,
   shikiTheme: string,
@@ -137,28 +102,13 @@ const buildEntry = async (
     return { ...page, body: { ...page.body, value: nodes } };
   };
 
-  const isOperation = isOperationCategory(page.kind);
   const kindLabel = schemaKindLabel(page.kind);
-  const filteredSections = CODE_COLUMN_SECTIONS.filter((section) => {
-    return !section.operationOnly || isOperation;
-  });
-
-  const [definitionCard, exampleCards] = await Promise.all([
-    highlightCards(
-      [{ label: "SDL", kind: kindLabel, code: definitionCode(documentBody) }],
-      shikiTheme,
-    ),
-    highlightCards(
-      filteredSections.map(({ title, label, kind }) => {
-        return {
-          label: label ?? title,
-          kind: kind ?? kindLabel,
-          code: sectionCode(documentBody, title),
-        };
-      }),
-      shikiTheme,
-    ),
-  ]);
+  const { definitionCard, exampleCards } = await buildCodeCards(
+    documentBody,
+    kindLabel,
+    isOperationCategory(page.kind),
+    shikiTheme,
+  );
 
   return {
     anchorId: anchorIdFor(page),
@@ -170,7 +120,7 @@ const buildEntry = async (
     sections: sections.map(({ nodes, ...section }) => {
       return { ...section, document: asDocument(nodes) };
     }),
-    definitionCard: definitionCard[0],
+    definitionCard,
     exampleCards,
   };
 };

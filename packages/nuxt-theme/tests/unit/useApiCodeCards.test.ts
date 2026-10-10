@@ -67,6 +67,71 @@ describe("useApiCodeCards", () => {
     ).toEqual(["Example"]);
   });
 
+  const nodesWithVariables = [
+    ["pre", { language: "graphql", code: "type A" }],
+    ["h3", {}, "Example"],
+    ["pre", { language: "graphql", code: "query { a }" }],
+    ["h3", {}, "Example Variables"],
+    ["pre", { language: "json", code: '{"id": "1"}' }],
+    ["h3", {}, "Example Response"],
+    ["pre", { language: "graphql", code: '{"b": 2}' }],
+  ];
+
+  it("stacks example variables under the Example card", async () => {
+    const result = await useApiCodeCards(
+      { value: nodesWithVariables } as never,
+      { value: "Query" },
+      { value: true },
+      "github-dark",
+    );
+
+    expect(
+      result.exampleCards.map((c) => {
+        return c.label;
+      }),
+    ).toEqual(["Example", "Response"]);
+    expect(result.exampleCards[0].variables?.code).toBe('{"id": "1"}');
+    expect(result.exampleCards[0].variables?.html).toContain(
+      'data-lang="json"',
+    );
+  });
+
+  it("ignores example variables for non-operations", async () => {
+    const result = await useApiCodeCards(
+      { value: nodesWithVariables } as never,
+      { value: "Object" },
+      { value: false },
+      "github-dark",
+    );
+
+    expect(result.exampleCards).toHaveLength(1);
+    expect(result.exampleCards[0].variables).toBeUndefined();
+  });
+
+  it("shows example variables as their own card when there is no Example", async () => {
+    const result = await useApiCodeCards(
+      {
+        value: nodesWithVariables.filter((_, index) => {
+          // Drop the `### Example` heading and its code block.
+          return index !== 1 && index !== 2;
+        }),
+      } as never,
+      { value: "Query" },
+      { value: true },
+      "github-dark",
+    );
+
+    expect(
+      result.exampleCards.map((c) => {
+        return [c.label, c.kind];
+      }),
+    ).toEqual([
+      ["Variables", "JSON"],
+      ["Response", "JSON"],
+    ]);
+    expect(result.exampleCards[0].code).toBe('{"id": "1"}');
+  });
+
   it("drops cards without code", async () => {
     const result = await useApiCodeCards(
       { value: [] } as never,

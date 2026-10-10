@@ -30,7 +30,7 @@
     </section>
 
     <ApiCodeColumn
-      :sticky="false"
+      variant="entry"
       :definition-card="entry.definitionCard"
       :example-cards="entry.exampleCards"
     />

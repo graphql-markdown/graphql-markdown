@@ -90,6 +90,10 @@ These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-d
 
 `hierarchy` (`"api"` default, `"entity"`, `"flat"`) controls the generated folder structure — and this layer's navigation and landing-page grid adapt to it automatically. Under `"flat"`, where there's no folder to group by at all, every generated page's frontmatter carries a `kind` field (the GraphQL entity kind — `objects`, `scalars`, `queries`, `directives`, …), and the sidebar/landing grid group by that instead, so the site stays organized whichever `hierarchy` value you choose.
 
+### Example variables
+
+A section titled exactly `Example Variables` (for example emitted by a consumer decorator for an `@exampleVariables` directive, as a `### Example Variables` heading followed by a ` ```json ` code block) is moved to the code column on operation pages and stacked under the `Example` query card, with its own copy button. It is not a card of its own — unless the operation has no (or an empty) `Example`, in which case it is shown as a standalone `Variables` card. On non-operation types it is dropped: variables only apply to operations.
+
 ### Single-page reference
 
 Set `printTypeOptions.hierarchy: "flat"` in your `generate-docs.ts` (a `@graphql-markdown/core` option — see the `hierarchy` paragraph above) and this layer automatically shows the entire API as one continuous page at the base route (`<baseURL>`, e.g. `/api-reference`) instead of the per-type catalog: every query, mutation, and type grouped into Queries / Mutations / Subscriptions / Types (only non-empty groups shown), with a sidebar of in-page anchor links — modeled on references like [Anvil's GraphQL API docs](https://www.useanvil.com/docs/api/graphql/reference/). There's no separate flag or route for this: it's detected automatically from the generated content (every page having no folder nesting), and it replaces the multi-page catalog entirely rather than adding an alternative to it. Any direct link to an old per-type page (e.g. `<baseURL>/user`) still resolves — it redirects to that entry's anchor on the single page (`<baseURL>#<kind>-<slug>`) instead of 404ing.
@@ -193,7 +197,7 @@ set it to, and `content.config.ts`'s glob prefix needs to match.
 Two things remain load-bearing assumptions rather than options, by design for now:
 
 - **`content.config.ts` must exist in your own project**, not just the layer — Nuxt Content scopes each layer's own `content.config.ts` to that layer's directory, so a collection declared only in the layer would never see files your project generates. Copy the snippet under "Quick start" above.
-- **The reference page's code-column parsing (`app/utils/api-document.ts`) assumes graphql-markdown's default section/heading structure.** Custom `decorators`/`customSections` with unusual `position` values can render into the wrong column or go missing from it.
+- **The reference page's code-column parsing (`app/utils/api-document.ts`) assumes graphql-markdown's default section/heading structure.** Custom `decorators`/`customSections` with unusual `position` values can render into the wrong column or go missing from it. The parsing relies on exact section titles (`Example`, `Example Response`, `Example Variables`).
 
 ## Design notes
 
