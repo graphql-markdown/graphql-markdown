@@ -16,6 +16,10 @@ export const GRAPHQL_CONFIG_FILES = [
   ".graphqlrc.json",
   ".graphqlrc.js",
   ".graphqlrc.ts",
+  ".graphqlrc.cjs",
+  ".graphqlrc.mjs",
+  ".graphqlrc.cts",
+  ".graphqlrc.mts",
   ".graphqlrc.toml",
   "graphql.config.yml",
   "graphql.config.yaml",
@@ -24,6 +28,8 @@ export const GRAPHQL_CONFIG_FILES = [
   "graphql.config.cjs",
   "graphql.config.mjs",
   "graphql.config.ts",
+  "graphql.config.cts",
+  "graphql.config.mts",
   "graphql.config.toml",
 ];
 
@@ -70,7 +76,7 @@ export function validateOutput(projectDir, output) {
   if (path.isAbsolute(output)) {
     return { error: "Output folder must be relative to the project root." };
   }
-  const normalized = normalizeOutput(output.trim());
+  const normalized = path.posix.normalize(normalizeOutput(output.trim()));
   if (normalized === ".." || normalized.startsWith("../")) {
     return { error: "Output folder must be inside the project." };
   }
