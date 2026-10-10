@@ -6,5 +6,5 @@ export const LANDING_DOC_NAME = "generated";
 
 /** True when the last path segment is the landing doc name (`/api-reference/generated`), never for lookalikes such as `generated-things`. */
 export const isLandingDocPath = (path: string): boolean => {
-  return path.split("/").filter(Boolean).at(-1) === LANDING_DOC_NAME;
+  return path.split("/").findLast(Boolean) === LANDING_DOC_NAME;
 };
