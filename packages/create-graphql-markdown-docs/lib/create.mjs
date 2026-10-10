@@ -473,6 +473,7 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
   const configPath = path.join(tempDir, "docusaurus.config.js");
   const originalContent = fs.readFileSync(configPath, "utf-8");
   const searchString = 'title: "My API",';
+  const navbarSearchString = 'title: "GraphQL-Markdown",';
 
   // A replacement identical to the original (e.g. the title is already
   // "My API") is fine; only a missing search string means template drift.
@@ -481,11 +482,18 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
       `Expected to find and replace 'title: "My API",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
+  if (!originalContent.includes(navbarSearchString)) {
+    throw new Error(
+      `Expected to find and replace 'title: "GraphQL-Markdown",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+    );
+  }
 
-  const updated = originalContent.replace(
-    searchString,
-    () => `title: ${JSON.stringify(titleOverride)},`,
-  );
+  const updated = originalContent
+    .replace(searchString, () => `title: ${JSON.stringify(titleOverride)},`)
+    .replace(
+      navbarSearchString,
+      () => `title: ${JSON.stringify(titleOverride)},`,
+    );
 
   fs.writeFileSync(configPath, updated);
 }
@@ -619,7 +627,16 @@ export function parseCliArgs(argv) {
     },
     allowPositionals: true,
   });
-  return { ...values, dir: values.dir ?? positionals[0], positionals };
+  // The first positional is the directory only when --dir was not given;
+  // anything else is an unexpected argument.
+  const extraPositionals =
+    values.dir === undefined ? positionals.slice(1) : positionals;
+  return {
+    ...values,
+    dir: values.dir ?? positionals[0],
+    positionals,
+    extraPositionals,
+  };
 }
 
 /** Fails on an unsupported --pm value. */
@@ -887,16 +904,28 @@ async function promptCustomization(args, isDocusaurus) {
   return { title, color };
 }
 
-/** Copies a local schema into the scaffold (or drops the example for remote ones). */
-function placeSchema(tempDir, schemaPath) {
+/**
+ * Copies a local SDL/JSON schema into the scaffold. Remote sources and local
+ * code-first schemas are referenced in place (code files may import siblings,
+ * so they must not be copied). Drops the bundled example in both cases.
+ */
+export function placeSchema(tempDir, projectDir, schemaPath) {
   const templateExamplePath = path.join(tempDir, "schema", "example.graphql");
   if (!schemaPath) return "./schema/example.graphql";
 
-  if (isRemoteSchemaSource(schemaPath)) {
+  const isCodeSchema = detectLoader(schemaPath).id === "code";
+  if (isRemoteSchemaSource(schemaPath) || isCodeSchema) {
     // Nothing to copy — the bundled example is unused, drop it so it
     // doesn't sit there implying it's still what gets generated.
     fs.rmSync(templateExamplePath, { force: true });
-    return schemaPath;
+    if (isRemoteSchemaSource(schemaPath)) {
+      return schemaPath;
+    }
+    const relativePath = path
+      .relative(projectDir, path.resolve(schemaPath))
+      .split(path.sep)
+      .join("/");
+    return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
   }
 
   const destName = `schema${path.extname(schemaPath) || ".graphql"}`;
@@ -926,7 +955,7 @@ function applyTemplate(tempDir, ctx) {
     fs.renameSync(gitignore, path.join(tempDir, ".gitignore"));
   }
 
-  const schemaRef = placeSchema(tempDir, schemaPath);
+  const schemaRef = placeSchema(tempDir, projectDir, schemaPath);
 
   if (isDocusaurus) {
     writeDocusaurusConfig(tempDir, title);
@@ -1072,9 +1101,9 @@ export async function main(argv = process.argv.slice(2)) {
   }
 
   prompts.intro(`✨ Welcome to GraphQL Markdown Docs`);
-  if (args.positionals.length > 1) {
+  if (args.extraPositionals.length > 0) {
     prompts.log.error(
-      `Unexpected arguments: ${args.positionals.slice(1).join(" ")}\nRun with --help to see available options.`,
+      `Unexpected arguments: ${args.extraPositionals.join(" ")}\nRun with --help to see available options.`,
     );
     return 1;
   }

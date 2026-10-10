@@ -471,6 +471,21 @@ describe("create-graphql-markdown-docs CLI", () => {
       expect(result.stderr).toContain("--help");
     });
 
+    it("--dir with an extra positional exits 1 with unexpected arguments", () => {
+      const result = exec(
+        "--dir",
+        join(testDir, "extra"),
+        "stray",
+        "--yes",
+        "--no-install",
+        "--no-git",
+      );
+      expect(result.status).toBe(1);
+      expect(`${result.stdout}${result.stderr}`).toContain(
+        "Unexpected arguments: stray",
+      );
+    });
+
     it("scaffolds into a positional directory", () => {
       const projectDir = join(testDir, "positional");
       const result = exec(projectDir, "--yes", "--no-install", "--no-git");

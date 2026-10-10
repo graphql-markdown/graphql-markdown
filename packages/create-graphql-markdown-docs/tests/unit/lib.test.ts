@@ -53,6 +53,7 @@ import {
   isRemoteSchemaSource,
   main,
   parseCliArgs,
+  placeSchema,
   run,
   runCommand,
   toPackageName,
@@ -201,7 +202,14 @@ describe("pure helpers", () => {
       dir: "x",
       "no-git": true,
       positionals: [],
+      extraPositionals: [],
     });
+  });
+
+  it("parseCliArgs flags extra positionals when --dir is given", () => {
+    expect(parseCliArgs(["a", "b"]).extraPositionals).toEqual(["b"]);
+    expect(parseCliArgs(["--dir", "x", "b"]).extraPositionals).toEqual(["b"]);
+    expect(parseCliArgs(["--dir", "x"]).extraPositionals).toEqual([]);
   });
 
   it("parseCliArgs takes a positional dir, --dir wins", () => {
@@ -417,7 +425,37 @@ describe("write* helpers (docusaurus)", () => {
     expect(() => {
       return writeDocusaurusConfig(dir, "My API");
     }).not.toThrow();
-    expect(read(file)).toBe(before);
+    expect(read(file)).toBe(
+      before.replace('title: "GraphQL-Markdown",', 'title: "My API",'),
+    );
+  });
+
+  it("writeDocusaurusConfig: replaces the navbar title too, leaves tagline", () => {
+    const dir = stage("docusaurus");
+    const file = path.join(dir, "docusaurus.config.js");
+    const tagline = /tagline: .*/.exec(read(file))?.[0];
+    writeDocusaurusConfig(dir, 'My "Docs"');
+    const content = read(file);
+    expect(content).toContain('title: "My \\"Docs\\"",');
+    expect(content).not.toContain('title: "GraphQL-Markdown",');
+    expect(/tagline: .*/.exec(content)?.[0]).toBe(tagline);
+  });
+
+  it("placeSchema: local code-first schema is referenced in place, not copied", () => {
+    const dir = stage("docusaurus");
+    const projectDir = path.join(work, "code-proj");
+    const srcDir = path.join(work, "code-src");
+    fs.mkdirSync(projectDir, { recursive: true });
+    fs.mkdirSync(srcDir, { recursive: true });
+    fs.writeFileSync(path.join(srcDir, "schema.mjs"), "export const s = 1;\n");
+    const ref = placeSchema(dir, projectDir, path.join(srcDir, "schema.mjs"));
+    expect(ref).toBe("../code-src/schema.mjs");
+    expect(fs.existsSync(path.join(dir, "schema", "schema.mjs"))).toBe(false);
+    expect(fs.existsSync(path.join(dir, "schema", "example.graphql"))).toBe(
+      false,
+    );
+    const inside = placeSchema(dir, srcDir, path.join(srcDir, "schema.ts"));
+    expect(inside).toBe("./schema.ts");
   });
 });
 
