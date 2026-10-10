@@ -105,10 +105,17 @@ export const sectionCode = (
   title: string,
 ): string | undefined => {
   const index = findSectionIndex(nodes, title);
-  const code =
+  // Example Variables arrive as a ```json block, so JSON blocks count too.
+  const block =
     index >= 0
-      ? findGraphqlCode(nodes, index + 1)?.[1]?.code?.trim()
+      ? nodes.slice(index + 1).find((node): node is MdcElement => {
+          return (
+            isElement(node, "pre") &&
+            (node[1].language === "graphql" || node[1].language === "json")
+          );
+        })
       : undefined;
+  const code = block?.[1]?.code?.trim();
 
   // Types without a schema-defined example still emit an empty `{}` block.
   return code && code !== "{}" ? code : undefined;
@@ -145,8 +152,14 @@ export const CODE_COLUMN_SECTIONS: {
   label?: string;
   kind?: string;
   operationOnly?: boolean;
+  /**
+   * A section with `attachTo` is not its own card: it is stacked under the
+   * card whose section title matches this value.
+   */
+  attachTo?: string;
 }[] = [
   { title: "Example" },
+  { title: "Example Variables", attachTo: "Example", operationOnly: true },
   {
     title: "Example Response",
     label: "Response",
