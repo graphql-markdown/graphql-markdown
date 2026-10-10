@@ -237,20 +237,30 @@ const COLORS = [
 
 /** Nuxt scaffold descriptor (templates/nuxt). */
 export const nuxt = {
+  id: "nuxt",
   name: "Nuxt",
   label: "Nuxt (@graphql-markdown/nuxt-theme)",
   hint: "Nuxt UI theme, live reload on schema changes",
-  runScripts: ["dev"],
-  copyExcludes: [/^\.nuxt$/, /^\.output$/],
-  supportsColor: true,
-  colors: COLORS,
-  defaultColor: "violet",
-  apply(tempDir, { schemaRef, schemaPath, loader, title, color }) {
-    writeAppConfig(tempDir, title, color);
-    writeGenerateDocs(tempDir, schemaRef, loader);
-    writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
-    // README.md is independent of package.json, so running it here (before
-    // the shared writePackageJson) is equivalent to running it after.
-    writeReadme(tempDir, schemaPath, schemaRef, loader);
+  detect: ["nuxt", "docus"],
+  links: "router",
+  contentRoot: "content",
+  contentRoute: "/",
+  outputHint: "Nuxt (@graphql-markdown/nuxt-theme) reads content from content/",
+  nextSteps: ({ outputDir, route }) =>
+    `Nuxt Content serves \`${outputDir}\` at \`${route}\`; add a navigation link to it.`,
+  scaffold: {
+    runScripts: ["dev"],
+    copyExcludes: [/^\.nuxt$/, /^\.output$/],
+    supportsColor: true,
+    colors: COLORS,
+    defaultColor: "violet",
+    apply(tempDir, { schemaRef, schemaPath, loader, title, color }) {
+      writeAppConfig(tempDir, title, color);
+      writeGenerateDocs(tempDir, schemaRef, loader);
+      writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
+      // README.md is independent of package.json, so running it here (before
+      // the shared writePackageJson) is equivalent to running it after.
+      writeReadme(tempDir, schemaPath, schemaRef, loader);
+    },
   },
 };
