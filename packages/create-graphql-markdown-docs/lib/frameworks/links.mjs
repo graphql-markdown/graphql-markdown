@@ -32,7 +32,7 @@ export function joinRoute(...parts) {
  * @param {string} output
  * @returns {{ rootPath: string, baseURL: string }}
  */
-function splitOutput(descriptor, output) {
+export function splitOutput(descriptor, output) {
   const out = normalizeOutput(output);
   if (descriptor.contentRoot && out === descriptor.contentRoot) {
     return { rootPath: out, baseURL: "." };
@@ -69,7 +69,7 @@ function getOutputRoute(outputRoute, baseURL) {
  * @param {{ siteBase?: string }} [options]
  * @returns {string | undefined}
  */
-function suggestLinkRoot(descriptor, output, { siteBase = "/" } = {}) {
+export function suggestLinkRoot(descriptor, output, { siteBase = "/" } = {}) {
   if (descriptor.links !== "router" && descriptor.links !== "absolute") {
     return undefined;
   }
