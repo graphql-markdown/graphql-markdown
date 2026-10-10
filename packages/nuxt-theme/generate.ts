@@ -100,10 +100,15 @@ export const createGenerateDocs = (userOptions: {
         typeof homepage === "string" &&
         basename(homepage) !== `${LANDING_DOC_NAME}.md`
       ) {
-        await rename(
-          join(rootPath, baseURL, basename(homepage)),
-          join(rootPath, baseURL, `${LANDING_DOC_NAME}.md`),
-        );
+        try {
+          await rename(
+            join(rootPath, baseURL, basename(homepage)),
+            join(rootPath, baseURL, `${LANDING_DOC_NAME}.md`),
+          );
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+          logger.warn(`Homepage ${homepage} was not rendered; skipping rename`);
+        }
       }
 
       logger.info(`GraphQL Markdown generated in ${rootPath}/${baseURL}/`);
