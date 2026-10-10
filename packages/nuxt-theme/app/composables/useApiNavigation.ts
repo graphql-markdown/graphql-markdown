@@ -4,6 +4,7 @@ export interface ApiNavigationLeaf {
   title: string;
   path: string;
   isDeprecated: boolean;
+  active?: boolean;
   ui?: Record<string, unknown>;
   badge?: { label: string; color: "error"; variant: "subtle" };
 }

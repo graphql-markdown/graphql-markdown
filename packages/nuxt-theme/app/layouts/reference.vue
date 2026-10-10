@@ -51,10 +51,14 @@
           </NuxtLink>
         </template>
 
+        <!-- `default-open` opens only branches holding a leaf whose `path`
+             equals the route path. Single-page leaves are `#anchor` links that
+             never match, so there it would collapse every bucket and hide the
+             active entry; leaving it unset opens every bucket instead. -->
         <UContentNavigation
           class="gqlmd-api-nav"
           :navigation="navigationSections as unknown as ContentNavigationItem[]"
-          default-open
+          :default-open="isFlat ? undefined : true"
           :ui="{ link: 'text-sm', trigger: 'font-normal' }"
         />
       </USidebar>
@@ -99,8 +103,30 @@ const { isFlat } = await useHierarchyMode();
 const { buckets } = await useApiSinglePage(isFlat.value);
 const { sections } = await useApiNavigation();
 
+const { activeAnchor } = useActiveEntry(isFlat);
+
 const navigationSections = computed(() =>
-  isFlat.value ? useApiSinglePageNavigation(buckets.value) : sections.value,
+  isFlat.value
+    ? useApiSinglePageNavigation(buckets.value, activeAnchor.value)
+    : sections.value,
+);
+
+// Keep the highlighted sidebar link visible as the page scrolls.
+watch(
+  activeAnchor,
+  (id) => {
+    if (!id) {
+      return;
+    }
+    const links = document.querySelectorAll<HTMLAnchorElement>(
+      ".gqlmd-api-nav a[href]",
+    );
+    const link = Array.from(links).find((candidate) => {
+      return candidate.getAttribute("href")?.endsWith(`#${id}`);
+    });
+    link?.scrollIntoView({ block: "nearest" });
+  },
+  { flush: "post" },
 );
 
 const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
