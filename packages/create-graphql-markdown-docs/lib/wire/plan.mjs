@@ -9,7 +9,7 @@ import {
 import { toYaml } from "./yaml.mjs";
 
 /** GraphQL config file names that may already hold a project's configuration. */
-export const GRAPHQL_CONFIG_FILES = [
+const GRAPHQL_CONFIG_FILES = [
   ".graphqlrc",
   ".graphqlrc.yml",
   ".graphqlrc.yaml",
