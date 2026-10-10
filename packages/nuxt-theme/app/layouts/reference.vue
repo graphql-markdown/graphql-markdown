@@ -49,7 +49,7 @@
           <NuxtLink
             :to="baseURLPath"
             class="block text-sm font-semibold text-dimmed transition hover:text-primary"
-            @click="scrollToIntro"
+            @click="onHeaderClick"
           >
             GraphQL API
           </NuxtLink>
@@ -85,16 +85,15 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
 import { useApiSinglePageNavigation } from "~/composables/useApiSinglePage";
+import { scrollToIntro } from "~/utils/scroll-to-intro";
 
 const config = useAppConfig();
 const baseURLPath = useApiBaseURL();
 const isSidebarOpen = ref(true);
 const route = useRoute();
 
-const scrollToIntro = (): void => {
-  if (route.path.replace(/\/$/, "") === baseURLPath.value) {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+const onHeaderClick = (): void => {
+  scrollToIntro(route.path, baseURLPath.value);
 };
 
 // @nuxt/content's ContentNavigationItem requires a `path` on every node,

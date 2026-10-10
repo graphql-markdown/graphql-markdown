@@ -52,6 +52,9 @@ Object.assign(globalThis, {
   useApiBaseURL: () => {
     return { value: "/api-reference" };
   },
+  toRenderableNode: (node: Record<string, unknown>) => {
+    return { ...node, rendered: true };
+  },
   schemaKindLabel: (category?: string) => {
     return `kind:${category}`;
   },
@@ -150,6 +153,49 @@ describe("useApiReferencePage", () => {
       title: "Schema",
       description: undefined,
     });
+  });
+
+  it("exposes the landing document with renderable body nodes and its title", async () => {
+    mocks.route.path = "/api-reference/";
+    mocks.first.mockResolvedValueOnce(null).mockResolvedValueOnce({
+      path: "/api-reference/generated",
+      title: "Schema",
+      body: { type: "minimark", value: [{ tag: "p" }] },
+    });
+
+    const result = await useApiReferencePage();
+
+    expect(result.landingTitle.value).toBe("Schema");
+    expect(result.landingDocument.value).toEqual({
+      path: "/api-reference/generated",
+      title: "Schema",
+      body: { type: "minimark", value: [{ tag: "p", rendered: true }] },
+    });
+  });
+
+  it("exposes a landing document with an empty body when the page has none", async () => {
+    mocks.route.path = "/api-reference/";
+    mocks.first.mockResolvedValueOnce(null).mockResolvedValueOnce({
+      path: "/api-reference/generated",
+      title: "",
+    });
+
+    const result = await useApiReferencePage();
+
+    expect(result.landingTitle.value).toBeUndefined();
+    expect(result.landingDocument.value?.body.value).toEqual([]);
+  });
+
+  it("has no landing document on a regular page", async () => {
+    mocks.first.mockResolvedValueOnce({
+      path: "/api-reference/types/objects/user",
+      title: "User",
+    });
+
+    const result = await useApiReferencePage();
+
+    expect(result.landingDocument.value).toBeUndefined();
+    expect(result.landingTitle.value).toBe("User");
   });
 
   it("redirects to the anchor in flat mode", async () => {
