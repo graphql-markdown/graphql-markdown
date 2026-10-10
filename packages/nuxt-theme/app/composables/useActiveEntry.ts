@@ -50,6 +50,32 @@ export const useActiveEntry = (
     observer = undefined;
   };
 
+  const updateActiveAnchor = (record: IntersectionObserverEntry): void => {
+    if (!record.isIntersecting) {
+      return;
+    }
+    const id = record.target.querySelector("h2[id]")?.id;
+    if (id) {
+      activeAnchor.value = id;
+    }
+  };
+
+  const activateLastEntryAtBottom = (): void => {
+    if (
+      window.innerHeight + window.scrollY <
+      document.documentElement.scrollHeight
+    ) {
+      return;
+    }
+    const entries = document.querySelectorAll(".api-single-page-entry");
+    const id = entries
+      .item(entries.length - 1)
+      ?.querySelector("h2[id]")?.id;
+    if (id) {
+      activeAnchor.value = id;
+    }
+  };
+
   const observe = (): void => {
     disconnect();
     if (!toValue(enabled)) {
@@ -59,15 +85,8 @@ export const useActiveEntry = (
     const header = readHeaderHeight();
     observer = new IntersectionObserver(
       (records) => {
-        for (const record of records) {
-          if (!record.isIntersecting) {
-            continue;
-          }
-          const id = record.target.querySelector("h2[id]")?.id;
-          if (id) {
-            activeAnchor.value = id;
-          }
-        }
+        records.forEach(updateActiveAnchor);
+        activateLastEntryAtBottom();
       },
       {
         rootMargin: `-${header}px 0px -${Math.max(window.innerHeight - header - 1, 0)}px 0px`,
@@ -117,6 +136,11 @@ export const useActiveEntry = (
     if (import.meta.client && id && toValue(enabled)) {
       history.replaceState(history.state, "", `#${id}`);
     }
+  });
+
+  watch(() => route.hash, (hash) => {
+    const id = hash.replace(/^#/, "");
+    if (id) activeAnchor.value = id;
   });
 
   return { activeAnchor };
