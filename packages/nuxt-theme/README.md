@@ -77,6 +77,7 @@ Defined in the layer's `main.css`, overridable from your own project's styleshee
 | Property                                                              | Default        | Controls                                                                                                       |
 | --------------------------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------- |
 | `--gqlmd-sidebar-width`                                               | `20rem`        | Reference page sidebar width.                                                                                  |
+| `--gqlmd-footer-height`                                               | `3.5rem`       | Sticky reference footer height; the sidebar and pinned code columns stop above it.                             |
 | `--gqlmd-badge-bg` / `--gqlmd-badge-text`                             | neutral-tinted | Default schema badge (`scalar`, `object`, `non-null`, …) colors.                                               |
 | `--gqlmd-badge-deprecated-bg` / `--gqlmd-badge-deprecated-text`       | warning-tinted | The `deprecated` badge specifically.                                                                           |
 | `--gqlmd-callout-deprecated-bg` / `--gqlmd-callout-deprecated-border` | error-tinted   | The deprecation notice callout.                                                                                |
