@@ -2,7 +2,7 @@ const BARE_KEY = /^[A-Za-z_][\w-]*$/;
 
 const INDENT = "  ";
 
-const quoteSingle = (text) => `'${text.replace(/'/g, "''")}'`;
+const quoteSingle = (text) => `'${text.replaceAll("'", "''")}'`;
 
 const isPlainObject = (value) => {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {

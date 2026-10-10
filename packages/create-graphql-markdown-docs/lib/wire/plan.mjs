@@ -45,7 +45,7 @@ export function inspectProject(projectDir) {
   if (fs.existsSync(pkgPath)) {
     const raw = fs.readFileSync(pkgPath, "utf8");
     packageJson = JSON.parse(raw);
-    const match = raw.match(/^([ \t]+)\S/m);
+    const match = /^([ \t]+)\S/m.exec(raw);
     if (match) {
       packageJsonIndent = match[1];
     }
@@ -70,7 +70,7 @@ export function inspectProject(projectDir) {
  * @returns {{ error?: string, warning?: string }}
  */
 export function validateOutput(projectDir, output) {
-  if (!output || !output.trim()) {
+  if (!output?.trim()) {
     return { error: "Output folder is required." };
   }
   if (path.isAbsolute(output)) {
