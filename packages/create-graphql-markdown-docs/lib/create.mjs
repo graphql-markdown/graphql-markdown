@@ -4,12 +4,20 @@ import os from "node:os";
 import { parseArgs } from "node:util";
 
 import * as prompts from "@clack/prompts";
-import {
-  detect as detectPackageManager,
-  getUserAgent,
-} from "package-manager-detector";
 
-import { DEFAULT_FRAMEWORK, FRAMEWORKS } from "./frameworks/index.mjs";
+import {
+  DEFAULT_FRAMEWORK,
+  FRAMEWORKS,
+  WIRE_FRAMEWORKS,
+} from "./frameworks/index.mjs";
+import {
+  CliExit,
+  DOCS_URL,
+  fail,
+  resolvePackageManager,
+  unlessCancelled,
+  validateSchemaSource,
+} from "./helpers.mjs";
 import {
   DEFAULT_PROJECT_DIR,
   applyTemplate,
@@ -22,37 +30,14 @@ import {
   isRemoteSchemaSource,
   validateGraphQLSchema,
 } from "./schema.mjs";
+import { WIRE_STEPS, printWireOutro } from "./wire/steps.mjs";
+import { flagModeError, isEffectivelyEmpty, modeFor } from "./target.mjs";
 import {
   INSTALL_COMMANDS,
   initGitRepo,
   installDependencies,
   isGitAvailable,
 } from "./tasks.mjs";
-
-const DOCS_URL = "https://graphql-markdown.dev";
-
-/** Thrown to abort the scaffold with an exit code; the message was already logged. */
-class CliExit extends Error {
-  constructor(code = 1) {
-    super("cli-exit");
-    this.code = code;
-  }
-}
-
-/** Abort the run when a prompt was cancelled; otherwise return its value. */
-function unlessCancelled(value) {
-  if (prompts.isCancel(value)) {
-    prompts.cancel("Setup cancelled.");
-    throw new CliExit(1);
-  }
-  return value;
-}
-
-/** Log an error and abort the run. */
-function fail(message) {
-  prompts.log.error(message);
-  throw new CliExit(1);
-}
 
 /** Names of the frameworks that support a primary color. */
 const colorFrameworkNames = Object.values(FRAMEWORKS)
@@ -61,19 +46,34 @@ const colorFrameworkNames = Object.values(FRAMEWORKS)
 
 const HELP_TEXT = `Usage: create-graphql-markdown-docs [dir] [options]
 
-Options:
-  --framework <name>   Site framework: ${Object.keys(FRAMEWORKS).join(" | ")} (default: ${DEFAULT_FRAMEWORK})
-  -d, --dir <path>     Directory to create the project in (or pass it as [dir])
-  --schema <source>    Schema source: <path|url|git:|github:> (default: bundled example)
-  --example            Use the bundled example schema
-  --pm <name>          Package manager: npm | pnpm | yarn | bun
-  --title <text>       Site title
-  --color <name>       Primary color (${colorFrameworkNames.join(" / ")} only)
-  --no-install         Skip installing dependencies
-  --no-git             Skip git repository initialization
-  -y, --yes            Accept defaults and skip all prompts
-  -h, --help           Show this help
-  -v, --version        Show the version
+An empty or missing folder creates a new project (scaffold); a folder with
+files adds GraphQL-Markdown to the existing project (wire).
+
+Shared:
+  [dir], -d, --dir <path>  Target folder (default: ask, or the current folder with --existing)
+  --new | --existing       Force scaffold or wire mode (default: picked from the folder)
+  --framework <name>       Scaffold: ${Object.keys(FRAMEWORKS).join(" | ")} (default: ${DEFAULT_FRAMEWORK})
+                           Wire: ${Object.keys(WIRE_FRAMEWORKS).join(" | ")}
+  --schema <source>        Schema source: <path|url|git:|github:>
+  --pm <name>              Package manager: npm | pnpm | yarn | bun
+  --install / --no-install Install dependencies (or skip it)
+  -y, --yes                Accept defaults and skip all prompts
+  -h, --help               Show this help
+  -v, --version            Show the version
+
+Scaffold only:
+  --example                Use the bundled example schema
+  --title <text>           Site title
+  --color <name>           Primary color (${colorFrameworkNames.join(" / ")} only)
+  --no-git                 Skip git repository initialization
+
+Wire only:
+  --formatter <name>       Formatter module or path (default: the framework's)
+  --output <folder>        Folder for the generated docs, relative to the project
+  --link-root <route>      Route prefix used in generated links
+  --site-base <route>      Base path the site is served from
+  --script <name>          package.json script to add (default: docs:api)
+  --dry-run                Show what would be written without writing it
 `;
 
 /** Reads this package's version from its package.json. */
@@ -96,7 +96,16 @@ export function parseCliArgs(argv) {
       pm: { type: "string" },
       title: { type: "string" },
       color: { type: "string" },
+      new: { type: "boolean" },
+      existing: { type: "boolean" },
+      install: { type: "boolean" },
       "no-install": { type: "boolean" },
+      formatter: { type: "string" },
+      output: { type: "string" },
+      "link-root": { type: "string" },
+      "site-base": { type: "string" },
+      script: { type: "string" },
+      "dry-run": { type: "boolean" },
       "no-git": { type: "boolean" },
       yes: { type: "boolean", short: "y" },
       help: { type: "boolean", short: "h" },
@@ -127,6 +136,17 @@ function validatePackageManager(args) {
 
 async function resolveFramework(args) {
   if (args.framework) {
+    if (
+      !Object.hasOwn(FRAMEWORKS, args.framework) &&
+      Object.hasOwn(WIRE_FRAMEWORKS, args.framework)
+    ) {
+      const { label, createCommand } = WIRE_FRAMEWORKS[args.framework];
+      fail(
+        createCommand
+          ? `No template for ${label} — create the site first (${createCommand}), then run this command inside it.`
+          : `No template for ${label} — create your site first, then run this command inside it.`,
+      );
+    }
     if (!Object.hasOwn(FRAMEWORKS, args.framework)) {
       fail(
         `Invalid --framework "${args.framework}" — expected one of: ${Object.keys(FRAMEWORKS).join(", ")}.`,
@@ -154,50 +174,109 @@ export function validateProjectDir(value) {
     if (!fs.statSync(target).isDirectory()) {
       return `${target} is a file — pick another directory.`;
     }
-    if (fs.readdirSync(target).length > 0) {
+    if (!isEffectivelyEmpty(target)) {
       return `${target} is not empty — pick another directory.`;
     }
   }
   return undefined;
 }
 
-async function resolveProjectDir(args) {
-  let projectDir = args.dir;
-  if (!projectDir) {
-    projectDir = args.yes
-      ? DEFAULT_PROJECT_DIR
-      : unlessCancelled(
-          await prompts.text({
-            message: "Where should we create your project?",
-            placeholder: DEFAULT_PROJECT_DIR,
-            defaultValue: DEFAULT_PROJECT_DIR,
-            validate: validateProjectDir,
-          }),
-        ).trim() || DEFAULT_PROJECT_DIR;
-  }
-  projectDir = path.resolve(unlessCancelled(projectDir));
-
-  // Refuse a non-empty target outright — never overwrite existing files,
-  // in interactive mode or --yes. There is no confirm-to-overwrite path:
-  // "confirm then proceed" would still mean clobbering whatever was there.
-  // If you want to scaffold into that directory, empty or remove it
-  // yourself first.
-  const problem = validateProjectDir(projectDir);
-  if (problem) fail(problem);
-  return projectDir;
+/** Prompts for the folder of a new project and refuses a non-empty one. */
+async function askNewProjectDir() {
+  const answer = unlessCancelled(
+    await prompts.text({
+      message: "Where should we create your project?",
+      placeholder: DEFAULT_PROJECT_DIR,
+      defaultValue: DEFAULT_PROJECT_DIR,
+      validate: validateProjectDir,
+    }),
+  );
+  return path.resolve(answer.trim() || DEFAULT_PROJECT_DIR);
 }
 
-function validateSchemaSource(value) {
-  const source = value?.trim();
-  if (!source) return "Schema source is required";
-  if (isRemoteSchemaSource(source)) return undefined;
-  if (!fs.existsSync(source)) {
-    return `Schema file not found: ${source}`;
+/** Picks the target folder when no dir was given; returns { dir, confirmed? }. */
+async function chooseTargetDir(args) {
+  const cwd = process.cwd();
+  if (args.existing) return { dir: cwd };
+  if (args.yes) return { dir: path.resolve(DEFAULT_PROJECT_DIR) };
+  if (isEffectivelyEmpty(cwd)) return { dir: await askNewProjectDir() };
+  const choice = unlessCancelled(
+    await prompts.select({
+      message: "This folder is not empty. What would you like to do?",
+      options: [
+        {
+          value: "wire",
+          label: "Add GraphQL-Markdown to this project",
+        },
+        {
+          value: "scaffold",
+          label: "Create a new project in a subfolder",
+        },
+      ],
+    }),
+  );
+  return choice === "wire"
+    ? { dir: cwd, confirmed: true }
+    : { dir: await askNewProjectDir() };
+}
+
+/** Resolves an explicit dir argument; a file is refused. */
+function resolveGivenDir(arg) {
+  const dir = path.resolve(arg);
+  if (fs.existsSync(dir) && !fs.statSync(dir).isDirectory()) {
+    fail(`${dir} is a file — pick another directory.`);
   }
-  if (fs.statSync(source).isDirectory()) {
-    return `${source} is a directory — provide a schema file, URL or git ref.`;
+  return dir;
+}
+
+/** Fails when --new / --existing contradict the mode the folder implies. */
+function checkModeOverrides(args, dir, mode) {
+  if (args.new && mode === "wire") {
+    fail(
+      `${dir} is not empty — --new never writes into an existing project. Pick an empty or new folder.`,
+    );
   }
-  return undefined;
+  if (args.existing && mode === "scaffold") {
+    fail(
+      `${dir} is empty — there is no project to add GraphQL-Markdown to. Drop --existing to create one.`,
+    );
+  }
+  const flagError = flagModeError(args, mode, dir);
+  if (flagError) fail(flagError);
+}
+
+/** Announces wire mode and asks to continue unless already confirmed. */
+async function confirmWire(args, dir, confirmed) {
+  prompts.log.info(
+    `Existing project detected — adding GraphQL-Markdown to ${dir}`,
+  );
+  if (confirmed || args.yes) return;
+  const answer = await prompts.confirm({
+    message: "Continue?",
+    initialValue: true,
+  });
+  if (answer === false || prompts.isCancel(answer)) {
+    prompts.cancel("Setup cancelled.");
+    throw new CliExit(1);
+  }
+}
+
+/** Resolves the target folder and the mode (scaffold or wire) into ctx. */
+async function resolveTarget(ctx) {
+  const { args } = ctx;
+  if (args.new && args.existing) {
+    fail("--new and --existing cannot be used together.");
+  }
+  const chosen = args.dir
+    ? { dir: resolveGivenDir(args.dir) }
+    : await chooseTargetDir(args);
+  const mode = modeFor(chosen.dir);
+  checkModeOverrides(args, chosen.dir, mode);
+  if (mode === "wire") {
+    await confirmWire(args, chosen.dir, Boolean(chosen.confirmed));
+  }
+  ctx.projectDir = chosen.dir;
+  ctx.mode = mode;
 }
 
 /** Resolves the custom schema source, or undefined to use the bundled example. */
@@ -261,29 +340,6 @@ async function resolveLoader(schemaPath) {
     );
   }
   return loader;
-}
-
-async function resolvePackageManager(args) {
-  if (args.pm) return args.pm;
-  // Set when launched via `<pm> create`, so it reflects what the user ran.
-  const agent = getUserAgent()?.split("/")[0];
-  if (agent && Object.hasOwn(INSTALL_COMMANDS, agent)) return agent;
-  const detected = await detectPackageManager({ cwd: process.cwd() });
-  if (detected?.name && Object.hasOwn(INSTALL_COMMANDS, detected.name)) {
-    return detected.name;
-  }
-  if (args.yes) return "npm";
-  return unlessCancelled(
-    await prompts.select({
-      message: "Which package manager would you like to use?",
-      options: [
-        { value: "npm", label: "npm" },
-        { value: "pnpm", label: "pnpm" },
-        { value: "yarn", label: "yarn" },
-        { value: "bun", label: "bun" },
-      ],
-    }),
-  );
 }
 
 /** Asks for a value; an empty answer yields `fallback`, a cancel aborts. */
@@ -369,20 +425,13 @@ async function promptCustomization(args, fw) {
  * - `catchUp?(ctx)`: manual commands that finish the step when it did not
  *   complete (skipped or failed).
  */
-const STEPS = [
+const SCAFFOLD_STEPS = [
   {
     id: "framework",
     title: "Choose framework",
     async run(ctx) {
       ctx.framework = await resolveFramework(ctx.args);
       ctx.fw = FRAMEWORKS[ctx.framework];
-    },
-  },
-  {
-    id: "projectDir",
-    title: "Choose project directory",
-    async run(ctx) {
-      ctx.projectDir = await resolveProjectDir(ctx.args);
     },
   },
   {
@@ -554,11 +603,21 @@ Documentation: ${DOCS_URL}
     `);
 }
 
-async function scaffold(args, tempDir) {
+async function scaffold(ctx) {
+  const outcomes = await runSteps(SCAFFOLD_STEPS, ctx);
+  printOutro(ctx, outcomes);
+}
+
+async function wire(ctx) {
+  await runSteps(WIRE_STEPS, ctx);
+  printWireOutro(ctx);
+}
+
+async function runMode(args, tempDir) {
   validatePackageManager(args);
   const ctx = { args, tempDir };
-  const outcomes = await runSteps(STEPS, ctx);
-  printOutro(ctx, outcomes);
+  await resolveTarget(ctx);
+  await (ctx.mode === "wire" ? wire(ctx) : scaffold(ctx));
 }
 
 /**
@@ -597,7 +656,7 @@ export async function main(argv = process.argv.slice(2)) {
 
   const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-"));
   try {
-    await scaffold(args, tempDir);
+    await runMode(args, tempDir);
     return 0;
   } catch (error) {
     if (error instanceof CliExit) return error.code;

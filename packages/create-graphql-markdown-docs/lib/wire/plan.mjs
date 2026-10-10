@@ -76,7 +76,12 @@ export function validateOutput(projectDir, output) {
   if (path.isAbsolute(output)) {
     return { error: "Output folder must be relative to the project root." };
   }
-  const normalized = path.posix.normalize(normalizeOutput(output.trim()));
+  const normalized = path.posix.normalize(
+    normalizeOutput(output.trim()) || ".",
+  );
+  if (normalized === ".") {
+    return { error: "Output folder must be a subfolder of the project." };
+  }
   if (normalized === ".." || normalized.startsWith("../")) {
     return { error: "Output folder must be inside the project." };
   }
@@ -101,7 +106,7 @@ export function validateOutput(projectDir, output) {
  * @param {string} inputs.schema
  * @param {object} inputs.loader
  * @param {string} inputs.output
- * @param {string} [inputs.linkRoot]
+ * @param {string | null} [inputs.linkRoot] `null` omits linkRoot from the config.
  * @param {string} [inputs.siteBase]
  * @param {string} [inputs.formatter]
  * @returns {object}
@@ -117,7 +122,7 @@ export function buildGraphqlrc({
 }) {
   const { rootPath, baseURL } = splitOutput(descriptor, output);
   const resolvedLinkRoot =
-    descriptor.links === "relative"
+    descriptor.links === "relative" || linkRoot === null
       ? undefined
       : (linkRoot ?? suggestLinkRoot(descriptor, output, { siteBase }));
   const resolvedFormatter = formatter ?? descriptor.formatter;

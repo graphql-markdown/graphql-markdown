@@ -682,6 +682,10 @@ describe("main", () => {
     const schema = path.join(work, "s.graphql");
     fs.writeFileSync(schema, VALID_SDL);
     mocks.detect.mockResolvedValue(null);
+    // Run from an empty cwd so the scaffold prompt is asked directly.
+    const cwd = path.join(work, "cwd");
+    fs.mkdirSync(cwd);
+    vi.spyOn(process, "cwd").mockReturnValue(cwd);
     mocks.prompts.select
       .mockResolvedValueOnce("nuxt")
       .mockResolvedValueOnce("existing")
@@ -700,6 +704,7 @@ describe("main", () => {
   });
 
   it("interactive docusaurus, example schema, declines everything", async () => {
+    vi.spyOn(process, "cwd").mockReturnValue(work);
     mocks.prompts.select
       .mockResolvedValueOnce("docusaurus")
       .mockResolvedValueOnce("example");
@@ -912,6 +917,9 @@ describe("main", () => {
   );
 
   it("prompt validators", async () => {
+    const cwd = path.join(work, "cwd");
+    fs.mkdirSync(cwd);
+    vi.spyOn(process, "cwd").mockReturnValue(cwd);
     mocks.prompts.select.mockResolvedValueOnce("existing");
     mocks.prompts.text
       .mockResolvedValueOnce(path.join(work, "v"))
@@ -1024,7 +1032,10 @@ describe("main", () => {
     const dir = path.join(work, "full");
     fs.mkdirSync(dir);
     fs.writeFileSync(path.join(dir, "keep.txt"), "x");
-    expect(await main(["--dir", dir, "--yes"])).toBe(1);
+    expect(await main(["--dir", dir, "--yes", "--new"])).toBe(1);
+    expect(mocks.prompts.log.error).toHaveBeenCalledWith(
+      expect.stringContaining("--new never writes into an existing project"),
+    );
     expect(read(dir, "keep.txt")).toBe("x");
   });
 
