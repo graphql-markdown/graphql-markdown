@@ -14,7 +14,7 @@ keywords:
 
 # Getting started
 
-The fastest way to start is the [`create-graphql-markdown-docs`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) scaffolder, which creates a ready-to-run Nuxt or Docusaurus site. You can also [add GraphQL-Markdown to an existing site](#add-to-an-existing-site). Or try it right away with one of our [demos](/docs/try-it).
+The fastest way to start is the [`create-graphql-markdown-docs`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) scaffolder, which creates a ready-to-run Nuxt or Docusaurus site, or [adds GraphQL-Markdown to an existing site](#add-to-an-existing-site). Or try it right away with one of our [demos](/docs/try-it).
 
 ## Create a new site
 
@@ -157,6 +157,31 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 | `-v, --version`                  | Print the CLI version and exit.                                                                                                                                                                                                                                                           |
 
 ## Add to an existing site
+
+### With the scaffolder (recommended)
+
+Run the scaffolder inside your existing project. When the folder already holds a project, it adds GraphQL-Markdown to it instead of creating a new site. It detects your framework from `package.json` (or asks you), then asks for your schema (a path, glob or URL) and the output folder for the generated docs. It writes a `.graphqlrc` file and a `docs:api` script, and prints the one step left for your framework, such as adding a sidebar or navigation entry.
+
+```shell title="shell"
+cd my-starlight-site
+npm create graphql-markdown-docs@latest
+```
+
+To skip the prompts, for example in CI, pass the options explicitly:
+
+```shell title="shell"
+npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
+```
+
+:::info
+
+The scaffolder never edits your framework configuration files and never overwrites existing files. It installs nothing unless you pass `--install`. Use `--dry-run` to preview the changes first.
+
+:::
+
+For every option, see the [create-graphql-markdown-docs flags](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs#flags).
+
+Prefer to set it up by hand? Follow the steps for your framework.
 
 ### Docusaurus
 

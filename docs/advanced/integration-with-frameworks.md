@@ -23,6 +23,8 @@ Use the path that matches your documentation stack:
 | **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                                                                                                  |
 | **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                                                                                                      |
 
+The quickest way to wire any supported framework is to run `npm create graphql-markdown-docs@latest` inside your existing site. It detects the framework, asks for your schema and output folder, and writes the configuration for you. See [Add to an existing site](/docs/get-started#with-the-scaffolder-recommended).
+
 For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
 
 ## Common Setup
