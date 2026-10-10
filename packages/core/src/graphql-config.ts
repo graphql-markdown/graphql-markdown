@@ -154,8 +154,8 @@ export const loadConfiguration = async (
 
   try {
     graphQLConfig = await import("graphql-config");
-  } catch {
-    log("Cannot find module 'graphql-config'!");
+  } catch (error) {
+    log(`Cannot load module 'graphql-config': ${(error as Error).message}`);
     return undefined;
   }
 
