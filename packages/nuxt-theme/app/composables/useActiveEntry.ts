@@ -61,14 +61,18 @@ export const useActiveEntry = (
   };
 
   const activateLastEntryAtBottom = (): void => {
-    if (
-      window.innerHeight + window.scrollY <
-      document.documentElement.scrollHeight - 1
-    ) {
-      return;
-    }
     const entries = document.querySelectorAll(".api-single-page-entry");
-    const id = entries.item(entries.length - 1)?.querySelector("h2[id]")?.id;
+    const atBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 1;
+    const header = readHeaderHeight();
+    const target = atBottom
+      ? entries.item(entries.length - 1)
+      : [...entries].find((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= header && r.bottom > header;
+        });
+    const id = target?.querySelector("h2[id]")?.id;
     if (id) {
       activeAnchor.value = id;
     }
