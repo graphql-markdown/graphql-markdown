@@ -493,7 +493,9 @@ async function runStep(step, ctx) {
 async function runSteps(steps, ctx) {
   const outcomes = [];
   for (const step of steps) {
-    outcomes.push(await runStep(step, ctx));
+    // Sequential on purpose: steps prompt the user and read what earlier
+    // steps put on ctx, so they cannot run in parallel.
+    outcomes.push(await runStep(step, ctx)); // NOSONAR: S9382
   }
   return outcomes;
 }
