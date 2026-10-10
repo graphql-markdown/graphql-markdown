@@ -1,6 +1,6 @@
 # create-graphql-markdown-docs
 
-Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt or Docusaurus API reference site; the Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](../nuxt-theme) layer.
+Interactive scaffolding CLI that generates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) + Nuxt or Docusaurus API reference site; the Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) layer.
 
 Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).
 
@@ -36,7 +36,7 @@ Point `--schema` (or the equivalent prompt) at any of the following — the CLI 
 
 `github:` sources call the GitHub API and need a token: set the `GITHUB_TOKEN` environment variable before generating the docs (the scaffolded config reads it).
 
-A local file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is, with no local file to copy. Either way, `generate-docs.ts` and `nuxt.config.ts`'s `watch` entry are both written to match — never left pointing at the bundled `schema/example.graphql` once a real schema is provided.
+A local SDL/JSON file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is, with no local file to copy. For Nuxt, `generate-docs.ts` is rewritten to match and `nuxt.config.ts`'s `watch` entry points at the local file (or is removed for a remote source); for Docusaurus, `.graphqlrc` is rewritten. Local code-first schemas are referenced in place rather than copied, so their imports keep working.
 
 ## Non-interactive mode
 
@@ -55,7 +55,7 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 | `--schema <path-or-url>`         | Schema source — see the table above. A local path must point to an existing file; the CLI exits with an error otherwise.                                                                                                                                                                                                                                                                                                 |
 | `--example`                      | Use the bundled example schema (the default when `--schema` is omitted).                                                                                                                                                                                                                                                                                                                                                 |
 | `--pm <npm\|pnpm\|yarn\|bun>`    | Package manager to use; otherwise detected from the invoking command (`pnpm create`, `yarn create`, …), then from lockfiles.                                                                                                                                                                                                                                                                                             |
-| `--title <name>`                 | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title`).                                                                                                                                                                                                                                                                                                                    |
+| `--title <name>`                 | Site title (Nuxt: `app.config.ts`'s `gqlmd.siteTitle`; Docusaurus: `docusaurus.config.js`'s `title` and navbar title).                                                                                                                                                                                                                                                                                                   |
 | `--color <name>`                 | Nuxt only (ignored with a warning for Docusaurus). Primary color — any Nuxt UI / Tailwind color name (e.g. `violet`, `emerald`, `blue`). Sets `app.config.ts`'s `ui.colors.primary`.                                                                                                                                                                                                                                     |
 | `--no-install`                   | Skip dependency installation.                                                                                                                                                                                                                                                                                                                                                                                            |
 | `--no-git`                       | Skip git repository initialization.                                                                                                                                                                                                                                                                                                                                                                                      |
@@ -86,7 +86,7 @@ Then run `npm run doc` to generate the docs and `npm start` to serve them.
 
 ## Documentation
 
-- [`@graphql-markdown/nuxt-theme`](../nuxt-theme) — the layer this scaffolds, including the full customization/swizzling reference.
+- [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) — the layer this scaffolds, including the full customization/swizzling reference.
 - [GraphQL-Markdown documentation](https://graphql-markdown.dev)
 - [Nuxt documentation](https://nuxt.com)
 

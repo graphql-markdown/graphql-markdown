@@ -1,0 +1,46 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "lint": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "bin/**/*.mjs",
+        "lib/**/*.mjs",
+        "templates/**"
+      ]
+    },
+    "ts:check": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "bin/**/*.mjs",
+        "lib/**/*.mjs",
+        "templates/**"
+      ]
+    },
+    "test:unit": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "bin/**/*.mjs",
+        "lib/**/*.mjs",
+        "templates/**"
+      ]
+    },
+    "test:integration": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "bin/**/*.mjs",
+        "lib/**/*.mjs",
+        "templates/**"
+      ]
+    },
+    "test:ci": {
+      "inputs": [
+        "$TURBO_EXTENDS$",
+        "bin/**/*.mjs",
+        "lib/**/*.mjs",
+        "templates/**"
+      ]
+    }
+  }
+}

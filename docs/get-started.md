@@ -100,7 +100,7 @@ A schema loader is required to load your GraphQL schema. Without `--schema`, the
 
 `github:` sources call the GitHub API and need a token: set the `GITHUB_TOKEN` environment variable before generating the docs (the scaffolded config reads it).
 
-A local file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is.
+A local SDL/JSON file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is. Local code-first schemas are referenced in place rather than copied, so their imports keep working.
 
 See [schema loading](/docs/advanced/schema-loading) for other loaders and configuration options.
 
@@ -198,7 +198,7 @@ Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `co
 
 For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
-## Regenerate the documentation (Docusaurus)
+## Regenerate the documentation
 
 In a Docusaurus site, build your website:
 
