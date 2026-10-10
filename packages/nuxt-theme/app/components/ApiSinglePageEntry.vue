@@ -1,7 +1,5 @@
 <template>
-  <article
-    class="api-single-page-entry grid grid-cols-1 lg:grid-cols-2 lg:items-start"
-  >
+  <article class="api-single-page-entry grid grid-cols-1 lg:grid-cols-2">
     <section class="border-r-0 pr-0 lg:border-r lg:border-default lg:pr-8">
       <h2 :id="entry.anchorId" class="flex items-center gap-3">
         {{ entry.title }}
