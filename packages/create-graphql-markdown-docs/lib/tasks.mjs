@@ -24,6 +24,14 @@ const ADD_DEV_COMMANDS = {
   bun: ["bun", ["add", "--dev"]],
 };
 
+export function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
+  const [command, args] = ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
+  const rootFlag = workspaceRoot
+    ? { pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? []
+    : [];
+  return [command, [...args, ...rootFlag, ...packages]];
+}
+
 /**
  * Run a command in a shell.
  */
@@ -76,21 +84,24 @@ export async function installDependencies(packageManager, projectDir) {
  * @param {string[]} packages
  * @returns {string}
  */
-export function addDevCommand(packageManager, packages) {
-  const [command, args] =
-    ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
-  return [command, ...args, ...packages].join(" ");
+export function addDevCommand(packageManager, packages, options = {}) {
+  const [command, args] = addDevArgs(packageManager, packages, options);
+  return [command, ...args].join(" ");
 }
 
 /**
  * Add packages as dev dependencies using the specified package manager.
  * Logs info, runs the add command and logs success; throws on failure.
  */
-export async function addDevDependencies(packageManager, projectDir, packages) {
+export async function addDevDependencies(
+  packageManager,
+  projectDir,
+  packages,
+  options = {},
+) {
   prompts.log.info(`Adding ${packages.join(", ")} with ${packageManager}...`);
-  const [command, args] =
-    ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
-  await runCommand(command, [...args, ...packages], { cwd: projectDir });
+  const [command, args] = addDevArgs(packageManager, packages, options);
+  await runCommand(command, args, { cwd: projectDir });
   prompts.log.success("Dev dependencies added!");
 }
 
