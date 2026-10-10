@@ -124,7 +124,11 @@ export const useActiveEntry = (
 
   onMounted(() => {
     headerHeight = readHeaderHeight();
-    void nextTick(update);
+    // With a hash, the router scrolls to the target (firing `scroll`); a scan
+    // now would run before that and replace the hash anchor with the top entry.
+    if (!route.hash) {
+      void nextTick(update);
+    }
     removePageFinishHook = useNuxtApp().hook("page:finish", onPageFinish);
     window.addEventListener("resize", onResize);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -147,7 +151,9 @@ export const useActiveEntry = (
   });
 
   watch(
-    () => route.hash,
+    () => {
+      return route.hash;
+    },
     (hash) => {
       const id = hash.replace(/^#/, "");
       if (id) {
