@@ -23,11 +23,15 @@ config.test.globalSetup = ["./tests/global-setup.mjs"];
 config.define = { ...config.define, "import.meta.client": "true" };
 
 // The base config's `src/**/*.ts` matches nothing in a Nuxt layer, whose
-// sources sit at the package root.
+// sources sit at the package root. `.vue` files are left out: unit tests run
+// without the Vue plugin, so v8 can't parse an un-imported SFC (it fails on
+// `<template>` and drops the file anyway). Components are exercised by the
+// integration fixtures' `nuxi generate` builds instead, and the SonarCloud
+// scan excludes them from coverage to match (see .github/workflows/test.yml).
 config.test.coverage = {
   ...config.test.coverage,
   include: [
-    "app/**/*.{ts,vue}",
+    "app/**/*.ts",
     "modules/**/*.ts",
     "bin/**/*.mjs",
     "*.ts",
