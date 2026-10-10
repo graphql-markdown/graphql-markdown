@@ -3,6 +3,8 @@
 
 :root {
   --gqlmd-sidebar-width: 20rem;
+  /* Height of the sticky reference footer; the sidebar and pinned code columns stop above it. */
+  --gqlmd-footer-height: 3.5rem;
   --gqlmd-badge-bg: color-mix(
     in oklch,
     var(--ui-color-neutral-500) 15%,
