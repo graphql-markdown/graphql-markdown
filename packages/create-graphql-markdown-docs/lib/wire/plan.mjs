@@ -76,7 +76,10 @@ export function validateOutput(projectDir, output) {
   if (path.isAbsolute(output)) {
     return { error: "Output folder must be relative to the project root." };
   }
-  const normalized = path.posix.normalize(normalizeOutput(output.trim()));
+  const normalized = path.posix.normalize(normalizeOutput(output.trim()) || ".");
+  if (normalized === ".") {
+    return { error: "Output folder must be a subfolder of the project." };
+  }
   if (normalized === ".." || normalized.startsWith("../")) {
     return { error: "Output folder must be inside the project." };
   }
