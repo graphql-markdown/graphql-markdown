@@ -5,13 +5,13 @@ import { WIRE_FRAMEWORKS } from "./frameworks/index.mjs";
 import { isRemoteSchemaSource } from "./schema.mjs";
 
 /** Entries that do not make a folder a "project". */
-export const IGNORED_ENTRIES = [".git", ".DS_Store", "Thumbs.db"];
+const IGNORED_ENTRIES = [".git", ".DS_Store", "Thumbs.db"];
 
 /** Flags that only make sense when creating a new project. */
-export const SCAFFOLD_ONLY_FLAGS = ["example", "title", "color", "no-git"];
+const SCAFFOLD_ONLY_FLAGS = ["example", "title", "color", "no-git"];
 
 /** Flags that only make sense when adding to an existing project. */
-export const WIRE_ONLY_FLAGS = [
+const WIRE_ONLY_FLAGS = [
   "formatter",
   "output",
   "link-root",

@@ -125,40 +125,43 @@ async function resolveWireOutput(ctx) {
   ctx.output = output.trim();
 }
 
-async function resolveWireLinks(ctx) {
-  const { args, descriptor, output } = ctx;
-  if (descriptor.links === "relative") return;
-  if (descriptor.links === "absolute") {
-    ctx.siteBase =
-      args["site-base"] ??
-      (args.yes
-        ? "/"
-        : unlessCancelled(
-            await prompts.text({
-              message: "Base path the site is served from",
-              placeholder: "/",
-              defaultValue: "/",
-            }),
-          ).trim() || "/");
-  }
+async function resolveSiteBase(ctx) {
+  const { args } = ctx;
+  if (args["site-base"] !== undefined) return args["site-base"];
+  if (args.yes) return "/";
+  const answer = unlessCancelled(
+    await prompts.text({
+      message: "Base path the site is served from",
+      placeholder: "/",
+      defaultValue: "/",
+    }),
+  );
+  return answer.trim() || "/";
+}
+
+async function resolveLinkRoot(ctx) {
+  const { args } = ctx;
   if (args["link-root"] !== undefined) {
-    ctx.linkRoot = args["link-root"].trim() || undefined;
-    return;
+    return args["link-root"].trim() || undefined;
   }
-  const suggestion = suggestLinkRoot(descriptor, output, {
+  const suggestion = suggestLinkRoot(ctx.descriptor, ctx.output, {
     siteBase: ctx.siteBase,
   });
-  if (args.yes) {
-    ctx.linkRoot = suggestion;
-    return;
-  }
+  if (args.yes) return suggestion;
   const answer = unlessCancelled(
     await prompts.text({
       message: "Link root (route of the generated docs, blank for none)",
       initialValue: suggestion,
     }),
   );
-  ctx.linkRoot = answer.trim() || undefined;
+  return answer.trim() || undefined;
+}
+
+async function resolveWireLinks(ctx) {
+  const { links } = ctx.descriptor;
+  if (links === "relative") return;
+  if (links === "absolute") ctx.siteBase = await resolveSiteBase(ctx);
+  ctx.linkRoot = await resolveLinkRoot(ctx);
 }
 
 /** Warns when the requested formatter cannot be found yet. */

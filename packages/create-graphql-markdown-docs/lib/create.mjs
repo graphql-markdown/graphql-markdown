@@ -220,23 +220,17 @@ async function chooseTargetDir(args) {
     : { dir: await askNewProjectDir() };
 }
 
-/** Resolves the target folder and the mode (scaffold or wire) into ctx. */
-async function resolveTarget(ctx) {
-  const { args } = ctx;
-  if (args.new && args.existing) {
-    fail("--new and --existing cannot be used together.");
+/** Resolves an explicit dir argument; a file is refused. */
+function resolveGivenDir(arg) {
+  const dir = path.resolve(arg);
+  if (fs.existsSync(dir) && !fs.statSync(dir).isDirectory()) {
+    fail(`${dir} is a file — pick another directory.`);
   }
-  let dir;
-  let confirmed = false;
-  if (args.dir) {
-    dir = path.resolve(args.dir);
-    if (fs.existsSync(dir) && !fs.statSync(dir).isDirectory()) {
-      fail(`${dir} is a file — pick another directory.`);
-    }
-  } else {
-    ({ dir, confirmed = false } = await chooseTargetDir(args));
-  }
-  const mode = modeFor(dir);
+  return dir;
+}
+
+/** Fails when --new / --existing contradict the mode the folder implies. */
+function checkModeOverrides(args, dir, mode) {
   if (args.new && mode === "wire") {
     fail(
       `${dir} is not empty — --new never writes into an existing project. Pick an empty or new folder.`,
@@ -249,23 +243,39 @@ async function resolveTarget(ctx) {
   }
   const flagError = flagModeError(args, mode, dir);
   if (flagError) fail(flagError);
+}
 
-  if (mode === "wire") {
-    prompts.log.info(
-      `Existing project detected — adding GraphQL-Markdown to ${dir}`,
-    );
-    if (!confirmed && !args.yes) {
-      const answer = await prompts.confirm({
-        message: "Continue?",
-        initialValue: true,
-      });
-      if (answer === false || prompts.isCancel(answer)) {
-        prompts.cancel("Setup cancelled.");
-        throw new CliExit(1);
-      }
-    }
+/** Announces wire mode and asks to continue unless already confirmed. */
+async function confirmWire(args, dir, confirmed) {
+  prompts.log.info(
+    `Existing project detected — adding GraphQL-Markdown to ${dir}`,
+  );
+  if (confirmed || args.yes) return;
+  const answer = await prompts.confirm({
+    message: "Continue?",
+    initialValue: true,
+  });
+  if (answer === false || prompts.isCancel(answer)) {
+    prompts.cancel("Setup cancelled.");
+    throw new CliExit(1);
   }
-  ctx.projectDir = dir;
+}
+
+/** Resolves the target folder and the mode (scaffold or wire) into ctx. */
+async function resolveTarget(ctx) {
+  const { args } = ctx;
+  if (args.new && args.existing) {
+    fail("--new and --existing cannot be used together.");
+  }
+  const chosen = args.dir
+    ? { dir: resolveGivenDir(args.dir) }
+    : await chooseTargetDir(args);
+  const mode = modeFor(chosen.dir);
+  checkModeOverrides(args, chosen.dir, mode);
+  if (mode === "wire") {
+    await confirmWire(args, chosen.dir, Boolean(chosen.confirmed));
+  }
+  ctx.projectDir = chosen.dir;
   ctx.mode = mode;
 }
 
