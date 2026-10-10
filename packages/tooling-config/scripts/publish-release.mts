@@ -29,6 +29,8 @@ import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
+import { checkPackedManifest } from "./tarball-check.mts";
+
 type PublishPlanEntry = {
   pkg: string;
   name: string;
@@ -144,9 +146,10 @@ const isTarballSafe = (
     );
     return false;
   }
-  if (packedPackageJson.stdout.includes('"workspace:')) {
+  const problems = checkPackedManifest(packedPackageJson.stdout);
+  if (problems.length > 0) {
     console.error(
-      `refusing to publish ${name}@${version}: tarball still contains "workspace:" references`,
+      `refusing to publish ${name}@${version}: ${problems.join(", ")}`,
     );
     return false;
   }
