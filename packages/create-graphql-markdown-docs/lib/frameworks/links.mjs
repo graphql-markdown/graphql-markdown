@@ -38,6 +38,25 @@ export function splitOutput(descriptor, output) {
   };
 }
 
+function getOutputRest(root, output) {
+  if (root === ".") {
+    return `/${output}`;
+  }
+  if (output === root) {
+    return "";
+  }
+  if (!output.startsWith(`${root}/`)) {
+    return undefined;
+  }
+  return output.slice(root.length);
+}
+
+function getOutputRoute(outputRoute, baseURL) {
+  return baseURL === "."
+    ? outputRoute
+    : joinRoute(path.posix.dirname(outputRoute));
+}
+
 /**
  * Suggest a link root for router/absolute link frameworks, or undefined.
  * @param {{ links?: string, contentRoot?: string, contentRoute?: string }} descriptor
@@ -53,21 +72,13 @@ export function suggestLinkRoot(descriptor, output, { siteBase = "/" } = {}) {
     return undefined;
   }
   const out = normalizeOutput(output);
-  const root = descriptor.contentRoot;
-  let rest;
-  if (root === ".") {
-    rest = `/${out}`;
-  } else if (out === root) {
-    rest = "";
-  } else if (out.startsWith(`${root}/`)) {
-    rest = out.slice(root.length);
-  } else {
+  const rest = getOutputRest(descriptor.contentRoot, out);
+  if (rest === undefined) {
     return undefined;
   }
   const outputRoute = joinRoute(descriptor.contentRoute ?? "/", rest);
   const { baseURL } = splitOutput(descriptor, out);
-  const route =
-    baseURL === "." ? outputRoute : joinRoute(path.posix.dirname(outputRoute));
+  const route = getOutputRoute(outputRoute, baseURL);
   return descriptor.links === "absolute" ? joinRoute(siteBase, route) : route;
 }
 
