@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const runGraphQLMarkdown = vi.fn(async () => {});
@@ -6,6 +7,16 @@ vi.mock("@graphql-markdown/cli", () => {
   return {
     runGraphQLMarkdown: async (...args: unknown[]) => {
       return runGraphQLMarkdown(...args);
+    },
+  };
+});
+
+const rename = vi.fn(async () => {});
+
+vi.mock("node:fs/promises", () => {
+  return {
+    rename: async (...args: unknown[]) => {
+      return rename(...args);
     },
   };
 });
@@ -23,6 +34,54 @@ const { createGenerateDocs } = await import("../../generate");
 describe("createGenerateDocs", () => {
   beforeEach(() => {
     runGraphQLMarkdown.mockClear();
+    rename.mockClear();
+  });
+
+  it("forwards a custom homepage and stores it as generated.md", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: "./docs/intro.md",
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.homepage).toBe("./docs/intro.md");
+    expect(rename).toHaveBeenCalledTimes(1);
+    expect(rename).toHaveBeenCalledWith(
+      join("./content", "api-reference", "intro.md"),
+      join("./content", "api-reference", "generated.md"),
+    );
+  });
+
+  it("does not rename a homepage already named generated.md", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: "./docs/generated.md",
+    });
+    await generate();
+
+    expect(rename).not.toHaveBeenCalled();
+  });
+
+  it("forwards `homepage: false` without renaming anything", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: false,
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.homepage).toBe(false);
+    expect(rename).not.toHaveBeenCalled();
+  });
+
+  it("omits `homepage` from options when not provided", async () => {
+    const generate = createGenerateDocs({ schema: "./schema.graphql" });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options).not.toHaveProperty("homepage");
+    expect(rename).not.toHaveBeenCalled();
   });
 
   it("returns a callable function", () => {

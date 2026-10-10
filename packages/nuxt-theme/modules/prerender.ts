@@ -2,7 +2,7 @@ import { readdir } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 
 import { defineNuxtModule, useNuxt } from "@nuxt/kit";
-import { DEFAULT_BASE_URL } from "../constants";
+import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "../constants";
 
 /**
  * Enumerates every generated content route for the prerenderer.
@@ -62,7 +62,7 @@ export const routeFor = (
   const relativePath = relative(contentDir, file);
   const segments = relativePath.replace(/\.md$/, "").split(sep);
 
-  if (segments.at(-1) === "generated") {
+  if (segments.at(-1) === LANDING_DOC_NAME) {
     return `/${segments.slice(0, -1).join("/")}`;
   }
 

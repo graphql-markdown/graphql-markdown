@@ -43,9 +43,13 @@
         class="[--sidebar-width:var(--gqlmd-sidebar-width)]"
       >
         <template #header>
+          <!-- The base route is where the schema homepage renders as the intro.
+               Already on it (the single-page view, scrolled down an entry), the
+               router sees no route change and wouldn't move, so scroll back up. -->
           <NuxtLink
             :to="baseURLPath"
             class="block text-sm font-semibold text-dimmed transition hover:text-primary"
+            @click="scrollToIntro"
           >
             GraphQL API
           </NuxtLink>
@@ -85,6 +89,13 @@ import { useApiSinglePageNavigation } from "~/composables/useApiSinglePage";
 const config = useAppConfig();
 const baseURLPath = useApiBaseURL();
 const isSidebarOpen = ref(true);
+const route = useRoute();
+
+const scrollToIntro = (): void => {
+  if (route.path.replace(/\/$/, "") === baseURLPath.value) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+};
 
 // @nuxt/content's ContentNavigationItem requires a `path` on every node,
 // including branches — real Nuxt Content trees always have one (folder index

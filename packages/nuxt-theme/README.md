@@ -25,7 +25,10 @@ import { defineContentConfig, defineCollection } from "@nuxt/content";
 
 export default defineContentConfig({
   collections: {
-    content: defineCollection({ type: "page", source: "api-reference/**/*.md" }),
+    content: defineCollection({
+      type: "page",
+      source: "api-reference/**/*.md",
+    }),
   },
 });
 ```
@@ -50,20 +53,20 @@ Everything here is config- or CSS-driven — no file copying, and every value ke
 ```ts
 export default defineAppConfig({
   gqlmd: {
-    siteTitle: "GraphQL API",   // SiteHeader's link label
-    githubUrl: undefined,        // set to show a GitHub button in the header; omitted, the button doesn't render
-    shikiTheme: "github-dark",   // Shiki theme for the code column
-    baseURL: "api-reference",    // must match content.config.ts's glob prefix and every createGenerateDocs call's baseURL
+    siteTitle: "GraphQL API", // SiteHeader's link label
+    githubUrl: undefined, // set to show a GitHub button in the header; omitted, the button doesn't render
+    shikiTheme: "github-dark", // Shiki theme for the code column
+    baseURL: "api-reference", // must match content.config.ts's glob prefix and every createGenerateDocs call's baseURL
   },
 });
 ```
 
-| Key | Default | Description |
-| --- | --- | --- |
-| `gqlmd.siteTitle` | `'GraphQL API'` | Text shown in the header's home link. |
-| `gqlmd.githubUrl` | `undefined` | Repository URL for the header's GitHub button. Unset, the button is omitted entirely rather than rendered disabled. |
-| `gqlmd.shikiTheme` | `'github-dark'` | [Shiki](https://shiki.style/) theme name used to highlight the schema/example code column. |
-| `gqlmd.baseURL` | `'api-reference'` | The shared route prefix navigation, search, and the landing page all resolve against. See "Multi-schema setups" below — this must agree with `content.config.ts`'s glob and every `createGenerateDocs` call's own `baseURL`. |
+| Key                | Default           | Description                                                                                                                                                                                                                  |
+| ------------------ | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `gqlmd.siteTitle`  | `'GraphQL API'`   | Text shown in the header's home link.                                                                                                                                                                                        |
+| `gqlmd.githubUrl`  | `undefined`       | Repository URL for the header's GitHub button. Unset, the button is omitted entirely rather than rendered disabled.                                                                                                          |
+| `gqlmd.shikiTheme` | `'github-dark'`   | [Shiki](https://shiki.style/) theme name used to highlight the schema/example code column.                                                                                                                                   |
+| `gqlmd.baseURL`    | `'api-reference'` | The shared route prefix navigation, search, and the landing page all resolve against. See "Multi-schema setups" below — this must agree with `content.config.ts`'s glob and every `createGenerateDocs` call's own `baseURL`. |
 
 Your own `app.config.ts` deep-merges over these — Nuxt's built-in behavior across `extends` layers, nothing this package does itself. You can also set `ui.colors.primary`/`ui.colors.neutral` (Nuxt UI's own keys) the same way.
 
@@ -71,15 +74,15 @@ Your own `app.config.ts` deep-merges over these — Nuxt's built-in behavior acr
 
 Defined in the layer's `main.css`, overridable from your own project's stylesheet (imported after the layer's, or targeting `:root` directly):
 
-| Property | Default | Controls |
-| --- | --- | --- |
-| `--gqlmd-sidebar-width` | `20rem` | Reference page sidebar width. |
-| `--gqlmd-badge-bg` / `--gqlmd-badge-text` | neutral-tinted | Default schema badge (`scalar`, `object`, `non-null`, …) colors. |
-| `--gqlmd-badge-deprecated-bg` / `--gqlmd-badge-deprecated-text` | warning-tinted | The `deprecated` badge specifically. |
-| `--gqlmd-callout-deprecated-bg` / `--gqlmd-callout-deprecated-border` | error-tinted | The deprecation notice callout. |
-| `--gqlmd-code-text` | `#e4e4e7` | The code column's text color (its background comes from Nuxt UI's own `bg-accented`, not a `--gqlmd-*` token). |
+| Property                                                              | Default        | Controls                                                                                                       |
+| --------------------------------------------------------------------- | -------------- | -------------------------------------------------------------------------------------------------------------- |
+| `--gqlmd-sidebar-width`                                               | `20rem`        | Reference page sidebar width.                                                                                  |
+| `--gqlmd-badge-bg` / `--gqlmd-badge-text`                             | neutral-tinted | Default schema badge (`scalar`, `object`, `non-null`, …) colors.                                               |
+| `--gqlmd-badge-deprecated-bg` / `--gqlmd-badge-deprecated-text`       | warning-tinted | The `deprecated` badge specifically.                                                                           |
+| `--gqlmd-callout-deprecated-bg` / `--gqlmd-callout-deprecated-border` | error-tinted   | The deprecation notice callout.                                                                                |
+| `--gqlmd-code-text`                                                   | `#e4e4e7`      | The code column's text color (its background comes from Nuxt UI's own `bg-accented`, not a `--gqlmd-*` token). |
 
-These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-deprecation-callout`) directly in the generated markdown — they don't reach every page, though: `app/utils/api-document.ts` promotes badges and the deprecation callout into `UBadge`/`UAlert` Nuxt UI components before render on the reference page itself, so those two properties style the *generated markdown* as parsed content, while the reference page's own badges/callouts follow Nuxt UI's own `color`/`variant` styling instead. Both code paths exist because the raw classes still matter for anything that renders the markdown directly (search results, raw content queries).
+These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-deprecation-callout`) directly in the generated markdown — they don't reach every page, though: `app/utils/api-document.ts` promotes badges and the deprecation callout into `UBadge`/`UAlert` Nuxt UI components before render on the reference page itself, so those two properties style the _generated markdown_ as parsed content, while the reference page's own badges/callouts follow Nuxt UI's own `color`/`variant` styling instead. Both code paths exist because the raw classes still matter for anything that renders the markdown directly (search results, raw content queries).
 
 ### `printTypeOptions`
 
@@ -95,6 +98,10 @@ Under `"api"`/`"entity"` hierarchy, nothing changes — you still get the per-ty
 
 This view isn't meant to scale indefinitely: every entry's definition and examples are Shiki-highlighted up front, and every entry hydrates its own copy-button state, so a schema with hundreds of types renders as hundreds of small interactive islands on one page. For a very large schema, prefer `"api"` or `"entity"` hierarchy instead of `"flat"`.
 
+### Homepage
+
+`createGenerateDocs({ homepage })` accepts the path of a markdown template (or `false` to disable the homepage). Its frontmatter `title` / `description` set the page title and SEO metadata, and its body renders as the intro above the reference in both views; the sidebar's header link returns to it. Whatever the file is named, it is stored as `generated.md` in the generated content, which is how the theme finds it. GraphQL-Markdown replaces the `##baseURL##` and `##generated-date-time##` placeholders in the template.
+
 ## Customize by swizzling
 
 For changes config and CSS can't reach — different markup, different components entirely — eject a file into your own project with:
@@ -107,17 +114,17 @@ npx gqlmd-swizzle --component SiteHeader --force   # overwrite without prompting
 npx gqlmd-swizzle --check                      # warn about swizzled files older than the installed layer version
 ```
 
-| id | Description |
-| --- | --- |
-| `SiteHeader` | Top navigation bar. |
-| `SiteFooter` | Bottom attribution bar. |
-| `SchemaCodeCard` | Highlighted code panel (schema definitions and examples). |
-| `ApiOverviewGrid` | Card grid for displaying API reference overview and namespace sections. |
-| `ApiNamespaceLanding` | Header and grid for API reference landing pages and namespace chooser. |
-| `ApiDocumentContent` | Document content with collapsible sections for API reference pages. |
-| `ApiCodeColumn` | Code column sidebar with highlighted schema definitions and examples. |
-| `ReferenceLayout` | Sidebar + header chrome around the reference page. |
-| `ReferencePage` | The two-column reference page itself. |
+| id                    | Description                                                             |
+| --------------------- | ----------------------------------------------------------------------- |
+| `SiteHeader`          | Top navigation bar.                                                     |
+| `SiteFooter`          | Bottom attribution bar.                                                 |
+| `SchemaCodeCard`      | Highlighted code panel (schema definitions and examples).               |
+| `ApiOverviewGrid`     | Card grid for displaying API reference overview and namespace sections. |
+| `ApiNamespaceLanding` | Header and grid for API reference landing pages and namespace chooser.  |
+| `ApiDocumentContent`  | Document content with collapsible sections for API reference pages.     |
+| `ApiCodeColumn`       | Code column sidebar with highlighted schema definitions and examples.   |
+| `ReferenceLayout`     | Sidebar + header chrome around the reference page.                      |
+| `ReferencePage`       | The two-column reference page itself.                                   |
 
 A swizzled file is copied into your project at the same relative path (Nuxt's own layer file-resolution then picks it up automatically — no config needed) and stamped with a comment recording the layer version it came from:
 
@@ -168,11 +175,11 @@ back to a "choose a namespace" page listing every top-level section.
 **These three settings are independent by design, not auto-synced — keep
 them in agreement yourself:**
 
-| Setting | Where | Purpose |
-| --- | --- | --- |
-| `createGenerateDocs({ baseURL })` | `generate-docs.ts`, once per schema | Where that schema's files get written. |
-| `gqlmd.baseURL` | `app.config.ts` | The shared prefix the UI resolves navigation/search/landing against. |
-| `source` glob prefix | `content.config.ts` | What Nuxt Content actually indexes. |
+| Setting                           | Where                               | Purpose                                                              |
+| --------------------------------- | ----------------------------------- | -------------------------------------------------------------------- |
+| `createGenerateDocs({ baseURL })` | `generate-docs.ts`, once per schema | Where that schema's files get written.                               |
+| `gqlmd.baseURL`                   | `app.config.ts`                     | The shared prefix the UI resolves navigation/search/landing against. |
+| `source` glob prefix              | `content.config.ts`                 | What Nuxt Content actually indexes.                                  |
 
 They can't be synced automatically: `content.config.ts`'s glob is evaluated
 statically by Nuxt Content, in a context neither the build-time generator nor

@@ -1,8 +1,11 @@
 // generate.ts
+import { rename } from "node:fs/promises";
+import { basename, join } from "node:path";
+
 import { useLogger } from "@nuxt/kit";
 
 import { runGraphQLMarkdown } from "@graphql-markdown/cli";
-import { DEFAULT_BASE_URL } from "./constants";
+import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants";
 
 /**
  * `@graphql-markdown/types` is a transitive dependency, so the option shape is
@@ -30,6 +33,9 @@ const DEFAULT_LOADERS = {
  *   - decorators: Custom decorators for the schema output
  *   - formatter: Path/URL to custom formatter module (default: this package's formatter.mjs)
  *   - loaders: Custom schema loaders (default: GraphQLFileLoader)
+ *   - homepage: Path to a markdown template rendered as the intro of the API
+ *     reference, or `false` to disable it (default: GraphQL-Markdown's built-in
+ *     homepage). Whatever its file name, it is stored as `generated.md`.
  * @returns A function that generates the documentation when called
  */
 export const createGenerateDocs = (userOptions: {
@@ -40,6 +46,7 @@ export const createGenerateDocs = (userOptions: {
   decorators?: NonNullable<GraphQLMarkdownOptions["decorators"]>;
   formatter?: string;
   loaders?: NonNullable<GraphQLMarkdownOptions["loaders"]>;
+  homepage?: string | false;
 }): (() => Promise<void>) => {
   const {
     schema,
@@ -49,6 +56,7 @@ export const createGenerateDocs = (userOptions: {
     decorators,
     formatter = new URL("./formatter.mjs", import.meta.url).href,
     loaders = DEFAULT_LOADERS,
+    homepage,
   } = userOptions;
 
   const logger = useLogger("gqlmd-generate");
@@ -76,11 +84,27 @@ export const createGenerateDocs = (userOptions: {
 
     // Custom decorators, if provided
     ...(decorators && { decorators }),
+
+    // Homepage template (or `false` to disable), only when set
+    ...(homepage !== undefined && { homepage }),
   };
 
   return async () => {
     try {
       await runGraphQLMarkdown(options, {}, import.meta.resolve("consola"));
+
+      // The theme finds the landing doc by name, so a custom template keeps
+      // working whatever it's called: GraphQL-Markdown copies it under its own
+      // file name, which is renamed (overwriting) to the expected one.
+      if (
+        typeof homepage === "string" &&
+        basename(homepage) !== `${LANDING_DOC_NAME}.md`
+      ) {
+        await rename(
+          join(rootPath, baseURL, basename(homepage)),
+          join(rootPath, baseURL, `${LANDING_DOC_NAME}.md`),
+        );
+      }
 
       logger.info(`GraphQL Markdown generated in ${rootPath}/${baseURL}/`);
     } catch (error) {
