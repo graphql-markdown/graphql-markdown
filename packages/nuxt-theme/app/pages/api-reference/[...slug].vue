@@ -5,9 +5,20 @@
     class="grid flex-1 grid-cols-1"
     :class="{ 'lg:grid-cols-2': !isLandingPage }"
   >
+    <!-- `overflow-y-auto` makes this a scroll container that never actually
+         scrolls (the page scrolls, not this column), which would break
+         `position: sticky` for the code column's descendants. So it is applied
+         only where this column is not the scroll owner; the flat single-page
+         view uses `overflow-x-clip` instead. -->
     <section
-      class="api-document max-w-none overflow-y-auto p-8 lg:px-16 lg:py-20"
-      :class="{ 'border-r border-default': !isLandingPage }"
+      class="api-document max-w-none p-8 lg:px-16 lg:py-20"
+      :class="[
+        {
+          'border-r border-default': !isLandingPage,
+          'overflow-y-auto': !(isLandingPage && isFlat),
+        },
+        { 'overflow-x-clip': isLandingPage && isFlat },
+      ]"
     >
       <UBreadcrumb
         :items="breadcrumbs"
