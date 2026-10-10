@@ -921,10 +921,9 @@ export function placeSchema(tempDir, projectDir, schemaPath) {
     if (isRemoteSchemaSource(schemaPath)) {
       return schemaPath;
     }
-    const relativePath = path
-      .relative(projectDir, path.resolve(schemaPath))
-      .split(path.sep)
-      .join("/");
+    const rel = path.relative(projectDir, path.resolve(schemaPath));
+    const relativePath = rel.split(path.sep).join("/");
+    if (path.isAbsolute(rel)) return relativePath;
     return relativePath.startsWith(".") ? relativePath : `./${relativePath}`;
   }
 
