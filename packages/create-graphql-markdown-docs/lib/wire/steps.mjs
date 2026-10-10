@@ -306,7 +306,7 @@ export function printWireOutro(ctx, outcomes = []) {
   const hasScript = plan.script.name || plan.script.skipped?.includes("exists");
   const generate = hasScript
     ? `${ctx.packageManager} run ${scriptName}`
-    : "npx -p @graphql-markdown/cli gqlmd graphql-to-doc";
+    : "npx -p @graphql-markdown/cli@latest gqlmd graphql-to-doc";
   // Commands for steps that did not finish (e.g. the install), then the generate step.
   const catchUp = outcomes
     .filter((outcome) => outcome.status !== "done" && outcome.catchUp)
