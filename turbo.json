@@ -5,6 +5,7 @@
     "tsconfig.base.json",
     "package.json"
   ],
+  "globalPassThroughEnv": ["TMPDIR"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
