@@ -101,7 +101,7 @@ export function validateOutput(projectDir, output) {
  * @param {string} inputs.schema
  * @param {object} inputs.loader
  * @param {string} inputs.output
- * @param {string} [inputs.linkRoot]
+ * @param {string | null} [inputs.linkRoot] `null` omits linkRoot from the config.
  * @param {string} [inputs.siteBase]
  * @param {string} [inputs.formatter]
  * @returns {object}
