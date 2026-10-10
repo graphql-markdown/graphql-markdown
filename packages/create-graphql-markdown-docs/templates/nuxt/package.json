@@ -11,7 +11,7 @@
     "preview": "nuxi preview"
   },
   "dependencies": {
-    "@graphql-markdown/nuxt-theme": "^0.1.0",
+    "@graphql-markdown/nuxt-theme": "^0.1.3",
     "@nuxt/content": "^3.16.0",
     "@nuxt/ui": "^4.11.0",
     "better-sqlite3": "^13.0.3",

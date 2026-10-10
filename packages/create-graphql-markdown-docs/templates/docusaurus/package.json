@@ -15,7 +15,7 @@
   "dependencies": {
     "@docusaurus/core": "^3.10.0",
     "@docusaurus/preset-classic": "^3.10.0",
-    "@graphql-markdown/docusaurus": "^1.38.0",
+    "@graphql-markdown/docusaurus": "^1.38.1",
     "@graphql-tools/graphql-file-loader": "^8.0.0",
     "@mdx-js/react": "^3.1.1",
     "graphql": "^16.13.2",
