@@ -117,7 +117,7 @@ export function buildGraphqlrc({
 }) {
   const { rootPath, baseURL } = splitOutput(descriptor, output);
   const resolvedLinkRoot =
-    descriptor.links === "relative"
+    descriptor.links === "relative" || linkRoot === null
       ? undefined
       : (linkRoot ?? suggestLinkRoot(descriptor, output, { siteBase }));
   const resolvedFormatter = formatter ?? descriptor.formatter;

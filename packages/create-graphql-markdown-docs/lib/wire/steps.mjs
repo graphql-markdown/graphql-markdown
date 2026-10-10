@@ -142,7 +142,7 @@ async function resolveSiteBase(ctx) {
 async function resolveLinkRoot(ctx) {
   const { args } = ctx;
   if (args["link-root"] !== undefined) {
-    return args["link-root"].trim() || undefined;
+    return args["link-root"].trim() || null;
   }
   const suggestion = suggestLinkRoot(ctx.descriptor, ctx.output, {
     siteBase: ctx.siteBase,
@@ -154,7 +154,7 @@ async function resolveLinkRoot(ctx) {
       initialValue: suggestion,
     }),
   );
-  return answer.trim() || undefined;
+  return answer.trim() || null;
 }
 
 async function resolveWireLinks(ctx) {
