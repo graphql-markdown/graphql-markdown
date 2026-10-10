@@ -14,6 +14,7 @@ import {
   CliExit,
   DOCS_URL,
   fail,
+  failureNote,
   resolvePackageManager,
   unlessCancelled,
   validateSchemaSource,
@@ -576,16 +577,6 @@ function nextSteps(ctx, outcomes) {
   return steps;
 }
 
-/** Lists failed steps ahead of the next steps; empty when nothing failed. */
-function failureNote(outcomes) {
-  const failures = outcomes
-    .filter(({ status }) => status === "failed")
-    .map(({ step, error }) => `  - ${step.title}: ${error.message}`);
-  return failures.length > 0
-    ? `Some steps did not complete:\n${failures.join("\n")}\n\n`
-    : "";
-}
-
 /** Prints the closing summary: failures, catch-up commands and next steps. */
 function printOutro(ctx, outcomes) {
   const { tokenEnvVar } = ctx.loader;
@@ -609,8 +600,8 @@ async function scaffold(ctx) {
 }
 
 async function wire(ctx) {
-  await runSteps(WIRE_STEPS, ctx);
-  printWireOutro(ctx);
+  const outcomes = await runSteps(WIRE_STEPS, ctx);
+  printWireOutro(ctx, outcomes);
 }
 
 async function runMode(args, tempDir) {

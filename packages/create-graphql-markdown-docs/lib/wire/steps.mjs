@@ -9,12 +9,15 @@ import { normalizeOutput, suggestLinkRoot } from "../frameworks/links.mjs";
 import {
   DOCS_URL,
   fail,
+  failureNote,
   resolvePackageManager,
   unlessCancelled,
   validateSchemaSource,
 } from "../helpers.mjs";
 import { detectLoader } from "../schema.mjs";
+import { addDevCommand, addDevDependencies } from "../tasks.mjs";
 import { detectFrameworks, toSchemaRef } from "../target.mjs";
+import { requiredPackages } from "./deps.mjs";
 import {
   applyWirePlan,
   formatWirePlan,
@@ -24,6 +27,11 @@ import {
 } from "./plan.mjs";
 
 const labelOf = (id) => WIRE_FRAMEWORKS[id].label;
+
+/** Whether wire mode has dependencies to add: a package.json and packages not yet listed. */
+const needsInstall = (ctx) => {
+  return Boolean(ctx.project.packageJson) && ctx.packages.length > 0;
+};
 
 /** Frameworks found in package.json plus the --framework value (empty counts as absent). */
 function requestedFramework(args) {
@@ -181,6 +189,22 @@ function checkFormatter(ctx) {
   }
 }
 
+/** Works out the packages wire mode needs and warns when --install has no package.json to use. */
+function planDependencies(ctx) {
+  const { args, project, descriptor, loader } = ctx;
+  ctx.packages = requiredPackages({
+    descriptor,
+    loader,
+    formatter: args.formatter,
+    packageJson: project.packageJson,
+  });
+  if (args.install && !project.packageJson) {
+    prompts.log.warn(
+      "--install ignored: there is no package.json — run the generator with npx instead.",
+    );
+  }
+}
+
 function writePlan(ctx) {
   const { args, projectDir, project, descriptor } = ctx;
   const plan = planWire(
@@ -198,6 +222,7 @@ function writePlan(ctx) {
   );
   ctx.plan = plan;
   checkFormatter(ctx);
+  planDependencies(ctx);
   if (args["dry-run"]) {
     prompts.note(formatWirePlan(plan), "Dry run — nothing written");
     return;
@@ -238,7 +263,9 @@ export const WIRE_STEPS = [
   {
     id: "packageManager",
     title: "Choose package manager",
-    when: (ctx) => Boolean(ctx.project.packageJson) && !ctx.args["dry-run"],
+    when: (ctx) =>
+      Boolean(ctx.project.packageJson) &&
+      (!ctx.args["dry-run"] || ctx.packages.length > 0),
     async run(ctx) {
       ctx.packageManager = await resolvePackageManager(
         ctx.args,
@@ -246,11 +273,32 @@ export const WIRE_STEPS = [
       );
     },
   },
+  {
+    id: "install",
+    title: "Install dev dependencies",
+    optional: true,
+    when: (ctx) =>
+      Boolean(ctx.args.install) && !ctx.args["dry-run"] && needsInstall(ctx),
+    run: (ctx) =>
+      addDevDependencies(ctx.packageManager, ctx.projectDir, ctx.packages),
+    catchUp: (ctx) =>
+      needsInstall(ctx)
+        ? [addDevCommand(ctx.packageManager, ctx.packages)]
+        : [],
+  },
 ];
 
-/** Prints the closing summary for wire mode. */
-export function printWireOutro(ctx) {
+/** Prints the closing summary for wire mode; `outcomes` are the step results. */
+export function printWireOutro(ctx, outcomes = []) {
   if (ctx.args["dry-run"]) {
+    if (needsInstall(ctx)) {
+      const command = addDevCommand(ctx.packageManager, ctx.packages);
+      prompts.log.info(
+        ctx.args.install
+          ? `Would install: ${command}`
+          : `Install with: ${command}`,
+      );
+    }
     prompts.outro("Dry run complete — nothing was written.");
     return;
   }
@@ -259,7 +307,12 @@ export function printWireOutro(ctx) {
   const generate = hasScript
     ? `${ctx.packageManager} run ${scriptName}`
     : "npx -p @graphql-markdown/cli gqlmd graphql-to-doc";
+  // Commands for steps that did not finish (e.g. the install), then the generate step.
+  const catchUp = outcomes
+    .filter((outcome) => outcome.status !== "done" && outcome.catchUp)
+    .flatMap(({ step }) => step.catchUp?.(ctx) ?? []);
   const steps = [
+    ...catchUp,
     generate,
     descriptor.nextSteps({
       outputDir: normalizeOutput(ctx.output),
@@ -272,7 +325,7 @@ export function printWireOutro(ctx) {
     : "";
   const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
-Next steps:
+${failureNote(outcomes)}Next steps:
 ${list}
 ${tokenHint}
 Documentation: ${DOCS_URL}
