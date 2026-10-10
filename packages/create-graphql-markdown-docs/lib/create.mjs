@@ -14,9 +14,18 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
 const templatesRoot = path.resolve(packageRoot, "templates");
+const EXAMPLE_SCHEMA_REF = "./schema/example.graphql";
+const defaultSchemaLine = `schema: '${EXAMPLE_SCHEMA_REF}'`;
+const DOCS_URL = "https://graphql-markdown.dev";
 
-/** Supported scaffold targets; each maps to `templates/<framework>`. */
-const FRAMEWORKS = ["nuxt", "docusaurus"];
+/**
+ * Supported scaffold targets; each maps to `templates/<framework>`.
+ * `runScripts` are the package scripts to run after install, in order.
+ */
+const FRAMEWORKS = {
+  nuxt: { runScripts: ["dev"] },
+  docusaurus: { runScripts: ["doc", "start"] },
+};
 
 /** Directory name used when the user gives none (empty prompt or --yes). */
 const DEFAULT_PROJECT_DIR = "my-graphql-docs";
@@ -57,6 +66,8 @@ const LOADERS = [
     className: "UrlLoader",
     package: "@graphql-tools/url-loader",
     version: "latest",
+    // URL sources are introspected with POST.
+    options: { method: "POST" },
   },
   {
     id: "github",
@@ -64,6 +75,8 @@ const LOADERS = [
     className: "GithubLoader",
     package: "@graphql-tools/github-loader",
     version: "latest",
+    // GithubLoader needs an API token, read from this env var.
+    tokenEnvVar: "GITHUB_TOKEN",
   },
   {
     id: "git",
@@ -99,12 +112,11 @@ const LOADERS = [
   },
 ];
 
+const DEFAULT_LOADER = LOADERS.find((loader) => loader.isDefault);
+
 /** Picks the loader for a schema source string, falling back to the local-file loader. */
 export function detectLoader(schemaSource) {
-  return (
-    LOADERS.find((loader) => loader.match(schemaSource)) ??
-    LOADERS.find((l) => l.isDefault)
-  );
+  return LOADERS.find((loader) => loader.match(schemaSource)) ?? DEFAULT_LOADER;
 }
 
 /** A schema "path" that's actually a remote/VCS reference, not a local file to copy. */
@@ -261,7 +273,7 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
     // "My API") is fine; only a missing search string means template drift.
     if (!originalContent.includes(searchString)) {
       throw new Error(
-        `Expected to find and replace "siteTitle: 'My API'" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+        `Expected to find and replace "${searchString}" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
 
@@ -276,14 +288,15 @@ export function writeAppConfig(tempDir, titleOverride, colorOverride) {
     // violet/zinc defaults apply via `extends` until overridden) — add
     // one rather than trying to replace a value that isn't there.
     const beforeColorOverride = appConfig;
+    const searchString = "export default defineAppConfig({";
     appConfig = appConfig.replace(
-      "export default defineAppConfig({",
+      searchString,
       () =>
-        `export default defineAppConfig({\n  ui: {\n    colors: {\n      primary: ${JSON.stringify(colorOverride)},\n    },\n  },`,
+        `${searchString}\n  ui: {\n    colors: {\n      primary: ${JSON.stringify(colorOverride)},\n    },\n  },`,
     );
     if (appConfig === beforeColorOverride) {
       throw new Error(
-        `Expected to find and replace "export default defineAppConfig({" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+        `Expected to find and replace "${searchString}" in ${appConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   }
@@ -310,30 +323,24 @@ export function writeGenerateDocs(tempDir, schemaRef, loader) {
   // The default (bundled example, GraphQLFileLoader) needs no `loaders` option
   // at all — createGenerateDocs already defaults to it — so only inject
   // one when the detected loader differs.
+  const defaultSchema = `  ${defaultSchemaLine},`;
   const schemaLiteral = toSingleQuotedLiteral(schemaRef);
   const packageLiteral = toSingleQuotedLiteral(loader.package);
-  // GithubLoader needs an API token, passed as a loadSchema option through
+  // Loaders needing an API token get it as a loadSchema option through
   // the `{ module, options }` form of the loader entry.
-  const loaderEntry =
-    loader.id === "github"
-      ? `{ module: ${packageLiteral}, options: { token: process.env.GITHUB_TOKEN } }`
-      : packageLiteral;
+  const loaderEntry = loader.tokenEnvVar
+    ? `{ module: ${packageLiteral}, options: { token: process.env.${loader.tokenEnvVar} } }`
+    : packageLiteral;
   const replacement = loader.isDefault
     ? `  schema: ${schemaLiteral},`
     : `  schema: ${schemaLiteral},\n  loaders: { ${loader.className}: ${loaderEntry} },`;
 
-  const updated = originalContent.replace(
-    "  schema: './schema/example.graphql',",
-    () => replacement,
-  );
+  const updated = originalContent.replace(defaultSchema, () => replacement);
 
   // Only validate the replacement if we expected a change (i.e., the replacement differs from the original pattern).
-  if (
-    replacement !== "  schema: './schema/example.graphql'," &&
-    updated === originalContent
-  ) {
+  if (replacement !== defaultSchema && updated === originalContent) {
     throw new Error(
-      `Expected to find and replace "  schema: './schema/example.graphql'," in ${generateDocsPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+      `Expected to find and replace "${defaultSchema}" in ${generateDocsPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
 
@@ -402,14 +409,11 @@ export function writeNuxtConfig(tempDir, schemaRef, isRemoteSource) {
     // Local schema: replace the example filename with the actual one.
     // Only validate if we expect a change (schemaRef differs from the default).
     const beforeSchemaReplace = updated;
-    updated = updated.replace("./schema/example.graphql", () => schemaRef);
+    updated = updated.replace(EXAMPLE_SCHEMA_REF, () => schemaRef);
 
-    if (
-      schemaRef !== "./schema/example.graphql" &&
-      updated === beforeSchemaReplace
-    ) {
+    if (schemaRef !== EXAMPLE_SCHEMA_REF && updated === beforeSchemaReplace) {
       throw new Error(
-        `Expected to find and replace "./schema/example.graphql" in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+        `Expected to find and replace "${EXAMPLE_SCHEMA_REF}" in ${nuxtConfigPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
       );
     }
   }
@@ -424,31 +428,33 @@ export function writeGraphqlrc(tempDir, schemaRef, loader) {
   const graphqlrcPath = path.join(tempDir, ".graphqlrc");
   const originalContent = fs.readFileSync(graphqlrcPath, "utf-8");
 
-  const defaultSchemaLine = "schema: './schema/example.graphql'";
-  const defaultLoaderLine =
-    "      GraphQLFileLoader: '@graphql-tools/graphql-file-loader'";
+  const defaultLoaderLine = `      ${DEFAULT_LOADER.className}: '${DEFAULT_LOADER.package}'`;
 
   let updated = originalContent.replace(
     defaultSchemaLine,
     () => `schema: '${schemaRef.replaceAll("'", "''")}'`,
   );
 
-  if (schemaRef !== "./schema/example.graphql" && updated === originalContent) {
+  if (schemaRef !== EXAMPLE_SCHEMA_REF && updated === originalContent) {
     throw new Error(
       `Expected to find and replace "${defaultSchemaLine}" in ${graphqlrcPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
 
   if (!loader.isDefault) {
-    // URL sources are introspected with POST, as in the original template.
-    // GithubLoader reads its API token from the GITHUB_TOKEN env var
-    // (graphql-config interpolates `${VAR}` in .graphqlrc).
-    let loaderEntry = `      ${loader.className}: '${loader.package}'`;
-    if (loader.id === "url") {
-      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          method: 'POST'`;
-    } else if (loader.id === "github") {
-      loaderEntry = `      ${loader.className}:\n        module: '${loader.package}'\n        options:\n          token: '\${GITHUB_TOKEN}'`;
-    }
+    // Loader options are rendered as-is; a token env var becomes a `${VAR}`
+    // reference (graphql-config interpolates `${VAR}` in .graphqlrc).
+    const options = {
+      ...loader.options,
+      ...(loader.tokenEnvVar && { token: `\${${loader.tokenEnvVar}}` }),
+    };
+    const optionLines = Object.entries(options).map(
+      ([key, value]) => `\n          ${key}: '${value}'`,
+    );
+    const loaderEntry =
+      optionLines.length === 0
+        ? `      ${loader.className}: '${loader.package}'`
+        : `      ${loader.className}:\n        module: '${loader.package}'\n        options:${optionLines.join("")}`;
     const beforeLoader = updated;
     updated = updated.replace(defaultLoaderLine, () => loaderEntry);
 
@@ -479,7 +485,7 @@ export function writeDocusaurusConfig(tempDir, titleOverride) {
   // "My API") is fine; only a missing search string means template drift.
   if (!originalContent.includes(searchString)) {
     throw new Error(
-      `Expected to find and replace 'title: "My API",' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
+      `Expected to find and replace '${searchString}' in ${configPath}, but nothing matched — the template may have changed. Update the CLI's rewrite logic.`,
     );
   }
   if (!originalContent.includes(navbarSearchString)) {
@@ -540,10 +546,9 @@ export function writeReadme(tempDir, schemaPath, schemaRef, loader) {
   const originalContent = fs.readFileSync(readmePath, "utf-8");
   const schemaSectionRe = /### Your GraphQL Schema\n\n[\s\S]*?(?=\n### |\n## )/;
 
-  const githubNote =
-    loader.id === "github"
-      ? "\nGitHub sources require an API token: set the `GITHUB_TOKEN` environment variable before running `generate`, `dev` or `build`.\n"
-      : "";
+  const githubNote = loader.tokenEnvVar
+    ? `\nGitHub sources require an API token: set the \`${loader.tokenEnvVar}\` environment variable before running \`generate\`, \`dev\` or \`build\`.\n`
+    : "";
   const replacement = isRemoteSchemaSource(schemaRef)
     ? `### Your GraphQL Schema\n\nThis project reads its schema from \`${schemaRef}\` via ${loader.package} (${loader.className}) — configured in \`generate-docs.ts\`. There is no local schema file to edit; point \`generate-docs.ts\`'s \`schema\` option at a different source to change it.\n${githubNote}`
     : `### Your GraphQL Schema\n\nYour schema lives at \`${schemaRef}\`. To point at a different file, update both \`generate-docs.ts\`'s \`schema\` option and \`nuxt.config.ts\`'s \`watch\` entry.\n`;
@@ -650,9 +655,9 @@ function validatePackageManager(args) {
 
 async function resolveFramework(args) {
   if (args.framework) {
-    if (!FRAMEWORKS.includes(args.framework)) {
+    if (!Object.hasOwn(FRAMEWORKS, args.framework)) {
       fail(
-        `Invalid --framework "${args.framework}" — expected one of: ${FRAMEWORKS.join(", ")}.`,
+        `Invalid --framework "${args.framework}" — expected one of: ${Object.keys(FRAMEWORKS).join(", ")}.`,
       );
     }
     return args.framework;
@@ -771,7 +776,7 @@ async function resolveSchemaPath(args) {
 async function resolveLoader(schemaPath) {
   // Every schema source needs the matching graphql-tools loader — detect it
   // from the source and report the choice.
-  const loader = detectLoader(schemaPath ?? "schema/example.graphql");
+  const loader = detectLoader(schemaPath ?? EXAMPLE_SCHEMA_REF);
 
   // Only an SDL file can be checked with buildSchema — introspection JSON and
   // code files need their own loader, and remote sources aren't fetched just
@@ -910,8 +915,8 @@ async function promptCustomization(args, isDocusaurus) {
  * so they must not be copied). Drops the bundled example in both cases.
  */
 export function placeSchema(tempDir, projectDir, schemaPath) {
-  const templateExamplePath = path.join(tempDir, "schema", "example.graphql");
-  if (!schemaPath) return "./schema/example.graphql";
+  const templateExamplePath = path.join(tempDir, EXAMPLE_SCHEMA_REF);
+  if (!schemaPath) return EXAMPLE_SCHEMA_REF;
 
   const isCodeSchema = detectLoader(schemaPath).id === "code";
   if (isRemoteSchemaSource(schemaPath) || isCodeSchema) {
@@ -1030,21 +1035,20 @@ async function finalize(args, ctx) {
     steps.push(`cd ${rel.includes(" ") ? JSON.stringify(rel) : rel}`);
   }
   if (!installed) steps.push(`${packageManager} install`);
-  if (framework === "docusaurus") {
-    steps.push(`${packageManager} run doc`, `${packageManager} run start`);
-  } else {
-    steps.push(`${packageManager} run dev`);
-  }
-  const githubHint =
-    loader.id === "github"
-      ? "\nNote: set the GITHUB_TOKEN environment variable so the GitHub schema can be loaded.\n"
-      : "";
+  steps.push(
+    ...FRAMEWORKS[framework].runScripts.map(
+      (script) => `${packageManager} run ${script}`,
+    ),
+  );
+  const githubHint = loader.tokenEnvVar
+    ? `\nNote: set the ${loader.tokenEnvVar} environment variable so the GitHub schema can be loaded.\n`
+    : "";
   const list = steps.map((step, i) => `  ${i + 1}. ${step}`).join("\n");
   prompts.outro(`
 Next steps:
 ${list}
 ${githubHint}
-Documentation: https://graphql-markdown.dev
+Documentation: ${DOCS_URL}
     `);
 }
 
