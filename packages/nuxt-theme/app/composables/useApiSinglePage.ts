@@ -239,9 +239,15 @@ export const useApiSinglePage = async (
  * in-page hash (`#<anchorId>`) instead of a route — `UContentNavigation`'s
  * link already treats a hash-only `to` as an in-page scroll, so no custom
  * click handling is needed.
+ *
+ * Every leaf carries an explicit `active` flag (`true` only for the entry
+ * matching `activeAnchor`, `false` for the rest): Nuxt UI's `ULink`
+ * `isLinkActive` returns `props.active` when it is defined, and otherwise
+ * every `#hash` leaf on the same path would count as active.
  */
 export const useApiSinglePageNavigation = (
   buckets: ApiSinglePageBucket[],
+  activeAnchor?: string,
 ): ApiNavigationNode[] => {
   return buckets.map((bucket): ApiNavigationBranch => {
     return {
@@ -251,6 +257,7 @@ export const useApiSinglePageNavigation = (
           title: entry.title,
           path: `#${entry.anchorId}`,
           isDeprecated: entry.isDeprecated,
+          active: entry.anchorId === activeAnchor,
           ui: { linkTitle: "font-mono text-[small]" },
           badge: entry.isDeprecated
             ? {

@@ -19,6 +19,9 @@ config.resolve.alias = [
 
 config.test.globalSetup = ["./tests/global-setup.mjs"];
 
+// Nuxt's build injects `import.meta.client`; mirror it for unit tests.
+config.define = { ...config.define, "import.meta.client": "true" };
+
 // The base config's `src/**/*.ts` matches nothing in a Nuxt layer, whose
 // sources sit at the package root.
 config.test.coverage = {

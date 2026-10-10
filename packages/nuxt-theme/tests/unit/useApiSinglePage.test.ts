@@ -269,4 +269,45 @@ describe("useApiSinglePageNavigation", () => {
     expect(branch.title).toBe("Queries");
     expect(branch.children[0]!.path).toBe("#queries-get-user");
   });
+
+  describe("active flag", () => {
+    const buckets: ApiSinglePageBucket[] = [
+      {
+        id: "queries",
+        title: "Queries",
+        entries: [
+          {
+            anchorId: "queries-get-user",
+            title: "GetUser",
+            kindLabel: "QUERY",
+            isDeprecated: false,
+            sections: [],
+          },
+          {
+            anchorId: "queries-list-users",
+            title: "ListUsers",
+            kindLabel: "QUERY",
+            isDeprecated: false,
+            sections: [],
+          },
+        ],
+      },
+    ];
+    const activeFlags = (activeAnchor?: string) => {
+      const nav = useApiSinglePageNavigation(buckets, activeAnchor);
+      return (nav[0] as { children: { active?: boolean }[] }).children.map(
+        (leaf) => {
+          return leaf.active;
+        },
+      );
+    };
+
+    it("marks only the matching leaf active and the others explicitly false", () => {
+      expect(activeFlags("queries-list-users")).toEqual([false, true]);
+    });
+
+    it("marks every leaf false when no anchor is active", () => {
+      expect(activeFlags(undefined)).toEqual([false, false]);
+    });
+  });
 });
