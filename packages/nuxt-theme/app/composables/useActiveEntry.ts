@@ -26,10 +26,12 @@ const readHeaderHeight = (): number => {
  *
  * Nuxt UI's `useScrollspy` is deliberately not used: it only tracks headings
  * that are currently visible, so it loses track of the active entry midway
- * through a long entry whose `h2` has already scrolled out of view. Here the
- * observer watches whole `.api-single-page-entry` articles against a 1px
- * trigger line just under the header, so the entry crossing that line stays
- * active for as long as any part of it is there.
+ * through a long entry whose `h2` has already scrolled out of view. Here a
+ * `requestAnimationFrame`-throttled `scroll` listener picks the entry spanning
+ * the line just under the header (or the last entry when scrolled to the
+ * bottom), so the entry crossing that line stays active for as long as any
+ * part of it is there. When the page is scrolled back above the first entry,
+ * the anchor and the URL hash are cleared.
  *
  * `history.replaceState` (not `router.replace`) keeps the hash in sync without
  * triggering navigation or a scroll jump; a reload then returns to the same
@@ -43,78 +45,77 @@ export const useActiveEntry = (
     route.hash.replace(/^#/, "") || undefined,
   );
 
-  let observer: IntersectionObserver | undefined;
+  let headerHeight = DEFAULT_HEADER_HEIGHT;
+  let frame: number | undefined;
 
-  const disconnect = (): void => {
-    observer?.disconnect();
-    observer = undefined;
-  };
-
-  const updateActiveAnchor = (record: IntersectionObserverEntry): void => {
-    if (!record.isIntersecting) {
-      return;
-    }
-    const id = record.target.querySelector("h2[id]")?.id;
-    if (id) {
-      activeAnchor.value = id;
-    }
-  };
-
-  const activateLastEntryAtBottom = (): void => {
-    const entries = document.querySelectorAll(".api-single-page-entry");
-    const atBottom =
-      window.innerHeight + window.scrollY >=
-      document.documentElement.scrollHeight - 1;
-    const header = readHeaderHeight();
-    const target = atBottom
-      ? entries.item(entries.length - 1)
-      : [...entries].find((el) => {
-          const r = el.getBoundingClientRect();
-          return r.top <= header && r.bottom > header;
-        });
-    const id = target?.querySelector("h2[id]")?.id;
-    if (id) {
-      activeAnchor.value = id;
-    }
-  };
-
-  const observe = (): void => {
-    disconnect();
+  const update = (): void => {
+    frame = undefined;
     if (!toValue(enabled)) {
       return;
     }
+    const entries = [...document.querySelectorAll(".api-single-page-entry")];
+    if (entries.length === 0) {
+      return;
+    }
 
-    const header = readHeaderHeight();
-    observer = new IntersectionObserver(
-      (records) => {
-        records.forEach(updateActiveAnchor);
-        activateLastEntryAtBottom();
-      },
-      {
-        rootMargin: `-${header}px 0px -${Math.max(window.innerHeight - header - 1, 0)}px 0px`,
-      },
-    );
+    const atBottom =
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 1;
+    const target = atBottom
+      ? entries.at(-1)
+      : entries.find((el) => {
+          const r = el.getBoundingClientRect();
+          return r.top <= headerHeight && r.bottom > headerHeight;
+        });
 
-    document.querySelectorAll(".api-single-page-entry").forEach((element) => {
-      observer?.observe(element);
-    });
+    if (target) {
+      const id = target.querySelector("h2[id]")?.id;
+      if (id) {
+        activeAnchor.value = id;
+      }
+      return;
+    }
+
+    // No entry spans the line: if the page is above the first entry, we are
+    // back on the intro, so nothing should stay highlighted.
+    if (entries[0]!.getBoundingClientRect().top > headerHeight) {
+      activeAnchor.value = undefined;
+      if (location.hash) {
+        history.replaceState(
+          history.state,
+          "",
+          location.pathname + location.search,
+        );
+      }
+    }
+  };
+
+  const onScroll = (): void => {
+    frame ??= requestAnimationFrame(update);
+  };
+
+  const onResize = (): void => {
+    headerHeight = readHeaderHeight();
+    onScroll();
   };
 
   /**
    * A link in the content (`<baseURL>/<slug>`) redirects to `<baseURL>#<slug>`,
    * a path change that re-mounts the page — but not this layout-level
-   * composable — so the entries observed so far are detached, and the
-   * router's own hash scroll ran before the new ones existed. Once the page
-   * has rendered, re-observe and scroll the hash target into view (its `h2`
-   * carries a `scroll-margin-top` that clears the sticky header).
+   * composable — and the router's own hash scroll ran before the new entries
+   * existed. Once the page has rendered, re-scan and scroll the hash target
+   * into view (its `h2` carries a `scroll-margin-top` that clears the sticky
+   * header).
    */
   const onPageFinish = (): void => {
     void nextTick(() => {
-      observe();
+      headerHeight = readHeaderHeight();
       const id = route.hash.replace(/^#/, "");
       if (id && toValue(enabled)) {
         activeAnchor.value = id;
         document.getElementById(id)?.scrollIntoView();
+      } else {
+        update();
       }
     });
   };
@@ -122,20 +123,21 @@ export const useActiveEntry = (
   let removePageFinishHook: (() => void) | undefined;
 
   onMounted(() => {
-    void nextTick(observe);
+    headerHeight = readHeaderHeight();
+    void nextTick(update);
     removePageFinishHook = useNuxtApp().hook("page:finish", onPageFinish);
-    // rootMargin depends on the viewport height, so rebuild on resize.
-    window.addEventListener("resize", observe);
-    window.addEventListener("scroll", activateLastEntryAtBottom, {
-      passive: true,
-    });
+    window.addEventListener("resize", onResize);
+    window.addEventListener("scroll", onScroll, { passive: true });
   });
 
   onBeforeUnmount(() => {
     removePageFinishHook?.();
-    window.removeEventListener("resize", observe);
-    window.removeEventListener("scroll", activateLastEntryAtBottom);
-    disconnect();
+    window.removeEventListener("resize", onResize);
+    window.removeEventListener("scroll", onScroll);
+    if (frame !== undefined) {
+      cancelAnimationFrame(frame);
+      frame = undefined;
+    }
   });
 
   watch(activeAnchor, (id) => {
@@ -148,7 +150,9 @@ export const useActiveEntry = (
     () => route.hash,
     (hash) => {
       const id = hash.replace(/^#/, "");
-      if (id) activeAnchor.value = id;
+      if (id) {
+        activeAnchor.value = id;
+      }
     },
   );
 
