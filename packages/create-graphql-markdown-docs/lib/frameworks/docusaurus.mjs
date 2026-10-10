@@ -44,12 +44,14 @@ export const docusaurus = {
   name: "Docusaurus",
   label: "Docusaurus",
   hint: "React + MDX, classic docs site",
-  runScripts: ["doc", "start"],
-  copyExcludes: [],
-  supportsColor: false,
-  // The Docusaurus README already documents editing .graphqlrc generically.
-  apply(tempDir, { schemaRef, loader, title }) {
-    writeDocusaurusConfig(tempDir, title);
-    writeGraphqlrc(tempDir, schemaRef, loader);
+  scaffold: {
+    runScripts: ["doc", "start"],
+    copyExcludes: [],
+    supportsColor: false,
+    // The Docusaurus README already documents editing .graphqlrc generically.
+    apply(tempDir, { schemaRef, loader, title }) {
+      writeDocusaurusConfig(tempDir, title);
+      writeGraphqlrc(tempDir, schemaRef, loader);
+    },
   },
 };

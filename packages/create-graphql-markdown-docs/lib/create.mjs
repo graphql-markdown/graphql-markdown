@@ -56,7 +56,7 @@ function fail(message) {
 
 /** Names of the frameworks that support a primary color. */
 const colorFrameworkNames = Object.values(FRAMEWORKS)
-  .filter((fw) => fw.supportsColor)
+  .filter((fw) => fw.scaffold.supportsColor)
   .map((fw) => fw.name);
 
 const HELP_TEXT = `Usage: create-graphql-markdown-docs [dir] [options]
@@ -297,20 +297,24 @@ async function askColor(fw) {
   const color = unlessCancelled(
     await prompts.select({
       message: "Primary color:",
-      initialValue: fw.defaultColor,
+      initialValue: fw.scaffold.defaultColor,
       options: [
-        { value: fw.defaultColor, label: fw.defaultColor, hint: "default" },
-        ...fw.colors.map((value) => ({ value, label: value })),
+        {
+          value: fw.scaffold.defaultColor,
+          label: fw.scaffold.defaultColor,
+          hint: "default",
+        },
+        ...fw.scaffold.colors.map((value) => ({ value, label: value })),
       ],
     }),
   );
-  return color === fw.defaultColor ? "" : color;
+  return color === fw.scaffold.defaultColor ? "" : color;
 }
 
 /** Warns when --color is passed to a framework that ignores it. */
 function initialColor(args, fw) {
   const color = args.color ?? "";
-  if (!fw.supportsColor && color) {
+  if (!fw.scaffold.supportsColor && color) {
     prompts.log.warn(
       `--color only applies to the ${colorFrameworkNames.join(" / ")} template — ignoring it for ${fw.name}.`,
     );
@@ -323,7 +327,7 @@ function initialColor(args, fw) {
 async function wantsCustomization(fw) {
   const answer = unlessCancelled(
     await prompts.confirm({
-      message: fw.supportsColor
+      message: fw.scaffold.supportsColor
         ? "Customize the site title and primary color?"
         : "Customize the site title?",
       initialValue: false,
@@ -346,7 +350,7 @@ async function promptCustomization(args, fw) {
       title,
     );
   }
-  if (fw.supportsColor && !color) {
+  if (fw.scaffold.supportsColor && !color) {
     color = await askColor(fw);
   }
   return { title, color };
@@ -516,7 +520,9 @@ function nextSteps(ctx, outcomes) {
     }
   }
   steps.push(
-    ...fw.runScripts.map((script) => `${packageManager} run ${script}`),
+    ...fw.scaffold.runScripts.map(
+      (script) => `${packageManager} run ${script}`,
+    ),
   );
   return steps;
 }

@@ -101,7 +101,7 @@ export function applyTemplate(tempDir, ctx) {
 
   copyDirRecursive(path.join(templatesRoot, framework), tempDir, [
     /^node_modules$/,
-    ...fw.copyExcludes,
+    ...fw.scaffold.copyExcludes,
   ]);
 
   // npm strips `.gitignore` from published tarballs, so templates ship it as
@@ -113,7 +113,7 @@ export function applyTemplate(tempDir, ctx) {
 
   const schemaRef = placeSchema(tempDir, projectDir, schemaPath);
 
-  fw.apply(tempDir, { schemaRef, schemaPath, loader, title, color });
+  fw.scaffold.apply(tempDir, { schemaRef, schemaPath, loader, title, color });
 
   writePackageJson(tempDir, projectDir, loader);
 }

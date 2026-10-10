@@ -240,17 +240,19 @@ export const nuxt = {
   name: "Nuxt",
   label: "Nuxt (@graphql-markdown/nuxt-theme)",
   hint: "Nuxt UI theme, live reload on schema changes",
-  runScripts: ["dev"],
-  copyExcludes: [/^\.nuxt$/, /^\.output$/],
-  supportsColor: true,
-  colors: COLORS,
-  defaultColor: "violet",
-  apply(tempDir, { schemaRef, schemaPath, loader, title, color }) {
-    writeAppConfig(tempDir, title, color);
-    writeGenerateDocs(tempDir, schemaRef, loader);
-    writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
-    // README.md is independent of package.json, so running it here (before
-    // the shared writePackageJson) is equivalent to running it after.
-    writeReadme(tempDir, schemaPath, schemaRef, loader);
+  scaffold: {
+    runScripts: ["dev"],
+    copyExcludes: [/^\.nuxt$/, /^\.output$/],
+    supportsColor: true,
+    colors: COLORS,
+    defaultColor: "violet",
+    apply(tempDir, { schemaRef, schemaPath, loader, title, color }) {
+      writeAppConfig(tempDir, title, color);
+      writeGenerateDocs(tempDir, schemaRef, loader);
+      writeNuxtConfig(tempDir, schemaRef, isRemoteSchemaSource(schemaRef));
+      // README.md is independent of package.json, so running it here (before
+      // the shared writePackageJson) is equivalent to running it after.
+      writeReadme(tempDir, schemaPath, schemaRef, loader);
+    },
   },
 };
