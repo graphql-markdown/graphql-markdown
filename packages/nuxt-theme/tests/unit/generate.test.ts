@@ -24,7 +24,7 @@ vi.mock("node:fs/promises", () => {
 vi.mock("@nuxt/kit", () => {
   return {
     useLogger: () => {
-      return { info: vi.fn(), error: vi.fn() };
+      return { info: vi.fn(), error: vi.fn(), warn: vi.fn() };
     },
   };
 });
@@ -50,6 +50,32 @@ describe("createGenerateDocs", () => {
     expect(rename).toHaveBeenCalledWith(
       join("./content", "api-reference", "intro.md"),
       join("./content", "api-reference", "generated.md"),
+    );
+  });
+
+  it("skips the rename when core did not render the homepage (ENOENT)", async () => {
+    rename.mockRejectedValueOnce(
+      Object.assign(new Error("missing"), { code: "ENOENT" }),
+    );
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: "./docs/intro.md",
+    });
+
+    await expect(generate()).resolves.toBeUndefined();
+  });
+
+  it("fails generation when the homepage rename fails for another reason", async () => {
+    rename.mockRejectedValueOnce(
+      Object.assign(new Error("denied"), { code: "EACCES" }),
+    );
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: "./docs/intro.md",
+    });
+
+    await expect(generate()).rejects.toThrow(
+      "GraphQL Markdown generation failed",
     );
   });
 
