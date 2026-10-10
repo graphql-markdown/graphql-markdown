@@ -29,6 +29,8 @@ import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
+import { findUnsafeInternalRanges } from "./tarball-check.mts";
+
 type PublishPlanEntry = {
   pkg: string;
   name: string;
@@ -144,9 +146,19 @@ const isTarballSafe = (
     );
     return false;
   }
-  if (packedPackageJson.stdout.includes('"workspace:')) {
+  let packedPkg: Record<string, unknown>;
+  try {
+    packedPkg = JSON.parse(packedPackageJson.stdout);
+  } catch {
     console.error(
-      `refusing to publish ${name}@${version}: tarball still contains "workspace:" references`,
+      `failed to inspect tarball for ${name}@${version}: invalid package.json`,
+    );
+    return false;
+  }
+  const problems = findUnsafeInternalRanges(packedPkg);
+  if (problems.length > 0) {
+    console.error(
+      `refusing to publish ${name}@${version}: unpinned internal dependency ranges: ${problems.join(", ")}`,
     );
     return false;
   }
