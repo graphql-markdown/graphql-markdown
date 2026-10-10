@@ -144,8 +144,7 @@ export function copyDirRecursive(src, dst, excludePatterns = []) {
  */
 export async function validateGraphQLSchema(schemaPath) {
   try {
-    const fsPromises = await import("node:fs/promises");
-    const schemaText = await fsPromises.readFile(schemaPath, "utf-8");
+    const schemaText = await fs.promises.readFile(schemaPath, "utf-8");
 
     // Use graphql's buildSchema to validate
     const { buildSchema } = await import("graphql");
