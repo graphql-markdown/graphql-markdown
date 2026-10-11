@@ -5,7 +5,7 @@ import { basename, join } from "node:path";
 import { useLogger } from "@nuxt/kit";
 
 import { runGraphQLMarkdown } from "@graphql-markdown/cli";
-import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants";
+import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants.ts";
 
 /**
  * `@graphql-markdown/types` is a transitive dependency, so the option shape is

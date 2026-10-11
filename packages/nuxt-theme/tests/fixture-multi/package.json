@@ -11,6 +11,6 @@
   },
   "devDependencies": {
     "@graphql-markdown/nuxt-theme": "workspace:",
-    "nuxt": "^4.5.2"
+    "nuxt": "^4.6.0"
   }
 }
