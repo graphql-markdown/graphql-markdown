@@ -24,26 +24,49 @@ One event is sent for each distinct configuration, at most once per process. The
   "v": 1,
   "event": "config",
   "pkg": "@graphql-markdown/core",
-  "pkgVersion": "1.24.1",
-  "nodeMajor": 22,
+  "pkgVersion": "0.1.0",
+  "nodeMajor": 24,
   "graphqlMajor": 16,
   "os": "darwin",
   "ci": false,
-  "pm": "npm",
+  "pm": "unknown",
   "firstRun": false,
   "trigger": "cli",
   "container": false,
   "wsl": false,
-  "loader": "url",
   "config": {
-    "formatter": "@graphql-markdown/formatters/vitepress",
-    "baseURL": "<url>",
+    "schema": "<url>",
     "rootPath": "<path>",
-    "printTypeOptions": { "deprecated": "group", "typeBadges": true },
-    "skipDocDirective": ["<string>"],
-    "outputAdapter": "<object>"
+    "baseURL": "<url>",
+    "linkRoot": "<path>",
+    "homepage": "<path>",
+    "formatter": "@graphql-markdown/docusaurus",
+    "skipDocDirective": [
+      "<string>"
+    ],
+    "groupByDirective": {
+      "directive": "<string>",
+      "field": "<string>",
+      "fallback": "<string>"
+    },
+    "printTypeOptions": {
+      "deprecated": "group",
+      "typeBadges": true
+    },
+    "metatags": [
+      {
+        "<key:0>": "<string>",
+        "<key:1>": "<string>"
+      }
+    ],
+    "loaders": {
+      "UrlLoader": "@graphql-tools/url-loader"
+    }
   },
-  "cli": { "force": true }
+  "loader": "url",
+  "cli": {
+    "force": true
+  }
 }
 ```
 
@@ -58,7 +81,7 @@ One event is sent for each distinct configuration, at most once per process. The
 | `firstRun`                  | `true` only when no telemetry preference file existed before the run. Never `true` in CI.               |
 | `trigger`                   | Entry point: `cli`, `docusaurus-build`, `docusaurus-dev`, `nuxt` or `programmatic`.                     |
 | `container`, `wsl`          | Running in a container or in WSL.                                                                       |
-| `loader`                    | Kind of schema pointer: `url`, `file-sdl`, `file-json`, `glob`, `code-file`, `inline-sdl` or `unknown`. |
+| `loader`                    | Kind of schema pointer: `url`, `git`, `github`, `file-sdl`, `file-json`, `code-file` (`.ts`, `.tsx`, `.js`, `.vue`, `.svelte`, `.astro`…), `glob`, `inline-sdl` or `unknown`. |
 | `config`, `cli`             | The settings used, from the config sources and from CLI flags, with custom values masked.               |
 
 ## Masking
@@ -70,7 +93,10 @@ Settings are sent with their values, but every custom string, URL and path is re
 | boolean, number, `null`                                                                                                                                                            | as-is                                            |
 | string in a known enum (`diffMethod`, `printTypeOptions.deprecated`, `hierarchy`, `docOptions.*` enums, `formatter` presets and `@graphql-markdown/*` packages, `homepage: false`) | as-is                                            |
 | URL-like string (`baseURL`, schema URL, any `scheme://`)                                                                                                                           | `"<url>"`                                        |
+| schema pointer (`schema`): a URL, git ref, GitHub repo, file, glob, code file or inline SDL. Local paths, git refs, URLs and request headers are never sent                       | `"<url>"`, `"<git>"`, `"<github>"`, `"<file:sdl>"`, `"<file:json>"`, `"<file:code>"`, `"<glob>"`, `"<inline-sdl>"` or `"<unknown>"` |
 | path-like string (`rootPath`, `linkRoot`, `tmpDir`, `homepage`, a custom formatter path, anything containing `/`, `\` or a leading `.`)                                            | `"<path>"`                                       |
+| `formatter` or `mdxParser` outside the `@graphql-markdown` ecosystem (a third-party package, a local path or a URL)                                                              | `"<custom-formatter>"`                           |
+| schema loaders outside `@graphql-tools` (`loaders`)                                                                                                                                | `"<custom-loader>"`                              |
 | any other string (directive names, `id`, `metatags`, `fallback`, front matter values)                                                                                              | `"<string>"`                                     |
 | array                                                                                                                                                                              | array of sanitized items (length preserved)      |
 | object with user-defined keys (`customDirective`, `decorators`, `metatags`, `frontMatter`, loader options)                                                                         | keys replaced with `"<key:n>"`, values sanitized |
@@ -161,6 +187,6 @@ Telemetry never slows down or breaks a run: it runs in parallel with generation,
 
 | Payload `v` | Notice version | Changes                                                                                                                                                                    |
 | ----------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind, masked configuration. |
+| `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind (including `git` and `github`), masked configuration. |
 
 The notice version is bumped, and the notice shown again, whenever a new category of data is added to the payload. Nothing carrying the new fields is sent before the new notice has been shown.
