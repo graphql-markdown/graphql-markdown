@@ -1071,18 +1071,14 @@ export const buildConfig = async (
     config.printTypeOptions,
   );
 
-  try {
-    // fire and forget: never awaited, never throws
-    void reportTelemetry({
-      configFileOpts,
-      extension: graphqlConfig as Maybe<ConfigOptions>,
-      cliOpts,
-      id,
-      trigger: context?.trigger,
-    });
-  } catch {
-    // telemetry must never affect a run
-  }
+  // fire and forget: async, never throws nor rejects (see reportTelemetry)
+  void reportTelemetry({
+    configFileOpts,
+    extension: graphqlConfig as Maybe<ConfigOptions>,
+    cliOpts,
+    id,
+    trigger: context?.trigger,
+  });
 
   return {
     baseURL,
