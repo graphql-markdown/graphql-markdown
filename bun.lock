@@ -106,6 +106,7 @@
       },
       "dependencies": {
         "@clack/prompts": "^1.0.0",
+        "@graphql-markdown/telemetry": "workspace:^",
         "graphql": "^16.8.0 || ^17.0.0",
         "package-manager-detector": "^1.8.0",
       },
@@ -290,6 +291,7 @@
       },
       "devDependencies": {
         "@graphql-markdown/tooling-config": "workspace:^",
+        "@stryker-mutator/api": "10.0.0",
       },
     },
     "packages/tooling-config": {
