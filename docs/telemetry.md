@@ -41,9 +41,7 @@ One event is sent for each distinct configuration, at most once per process. The
     "linkRoot": "<path>",
     "homepage": "<path>",
     "formatter": "@graphql-markdown/docusaurus",
-    "skipDocDirective": [
-      "<string>"
-    ],
+    "skipDocDirective": ["<string>"],
     "groupByDirective": {
       "directive": "<string>",
       "field": "<string>",
@@ -70,38 +68,38 @@ One event is sent for each distinct configuration, at most once per process. The
 }
 ```
 
-| Field                       | Meaning                                                                                                 |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `v`                         | Payload schema version.                                                                                 |
-| `event`                     | `config`, `create_scaffold` or `create_wire`.                                                           |
-| `pkg`, `pkgVersion`         | Package that reported the event and its version.                                                        |
-| `nodeMajor`, `graphqlMajor` | Major versions only.                                                                                    |
-| `os`, `pm`                  | Platform (`darwin`, `linux`, `win32`) and package manager (`npm`, `pnpm`, `yarn`, `bun`).               |
-| `ci`, `ciProvider`          | Whether a CI environment was detected, and which one (see [CI behaviour](#ci-behaviour)).               |
-| `firstRun`                  | `true` only when no telemetry preference file existed before the run. Never `true` in CI.               |
-| `trigger`                   | Entry point: `cli`, `docusaurus`, `nuxt` or `programmatic`.                                             |
-| `container`, `wsl`          | Running in a container or in WSL.                                                                       |
+| Field                       | Meaning                                                                                                                                                                       |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v`                         | Payload schema version.                                                                                                                                                       |
+| `event`                     | `config`, `create_scaffold` or `create_wire`.                                                                                                                                 |
+| `pkg`, `pkgVersion`         | Package that reported the event and its version.                                                                                                                              |
+| `nodeMajor`, `graphqlMajor` | Major versions only.                                                                                                                                                          |
+| `os`, `pm`                  | Platform (`darwin`, `linux`, `win32`) and package manager (`npm`, `pnpm`, `yarn`, `bun`).                                                                                     |
+| `ci`, `ciProvider`          | Whether a CI environment was detected, and which one (see [CI behaviour](#ci-behaviour)).                                                                                     |
+| `firstRun`                  | `true` only when no telemetry preference file existed before the run. Never `true` in CI.                                                                                     |
+| `trigger`                   | Entry point: `cli`, `docusaurus`, `nuxt` or `programmatic`.                                                                                                                   |
+| `container`, `wsl`          | Running in a container or in WSL.                                                                                                                                             |
 | `loader`                    | Kind of schema pointer: `url`, `git`, `github`, `file-sdl`, `file-json`, `code-file` (`.ts`, `.tsx`, `.js`, `.vue`, `.svelte`, `.astro`…), `glob`, `inline-sdl` or `unknown`. |
-| `config`, `cli`             | The settings used, from the config sources and from CLI flags, with custom values masked.               |
+| `config`, `cli`             | The settings used, from the config sources and from CLI flags, with custom values masked.                                                                                     |
 
 ## Masking
 
 Settings are sent with their values, but every custom string, URL and path is replaced by a mask token. The rules are allowlist-first: anything not covered is masked.
 
-| Value kind                                                                                                                                                                         | Sent as                                          |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| boolean, number, `null`                                                                                                                                                            | as-is                                            |
-| string in a known enum (`diffMethod`, `printTypeOptions.deprecated`, `hierarchy`, `docOptions.*` enums, `formatter` presets and `@graphql-markdown/*` packages, `homepage: false`) | as-is                                            |
-| URL-like string (`baseURL`, schema URL, any `scheme://`)                                                                                                                           | `"<url>"`                                        |
-| schema pointer (`schema`): a URL, git ref, GitHub repo, file, glob, code file or inline SDL. Local paths, git refs, URLs and request headers are never sent                       | `"<url>"`, `"<git>"`, `"<github>"`, `"<file:sdl>"`, `"<file:json>"`, `"<file:code>"`, `"<glob>"`, `"<inline-sdl>"` or `"<unknown>"` |
-| path-like string (`rootPath`, `linkRoot`, `tmpDir`, `homepage`, a custom formatter path, anything containing `/`, `\` or a leading `.`)                                            | `"<path>"`                                       |
-| `formatter` or `mdxParser` outside the `@graphql-markdown` ecosystem (a third-party package, a local path or a URL)                                                              | `"<custom-formatter>"`                           |
-| schema loaders outside `@graphql-tools` (`loaders`)                                                                                                                                | `"<custom-loader>"`                              |
-| any other string (directive names, `id`, `metatags`, `fallback`, front matter values)                                                                                              | `"<string>"`                                     |
-| array                                                                                                                                                                              | array of sanitized items (length preserved)      |
-| object with user-defined keys (`customDirective`, `decorators`, `metatags`, `frontMatter`, loader options)                                                                         | keys replaced with `"<key:n>"`, values sanitized |
-| function or class instance (`outputAdapter`, hooks, decorator predicates)                                                                                                          | `"<function>"` or `"<object>"`                   |
-| top-level key that is not a known setting                                                                                                                                          | dropped (only a count is kept, `unknownKeys`)    |
+| Value kind                                                                                                                                                                         | Sent as                                                                                                                             |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| boolean, number, `null`                                                                                                                                                            | as-is                                                                                                                               |
+| string in a known enum (`diffMethod`, `printTypeOptions.deprecated`, `hierarchy`, `docOptions.*` enums, `formatter` presets and `@graphql-markdown/*` packages, `homepage: false`) | as-is                                                                                                                               |
+| URL-like string (`baseURL`, schema URL, any `scheme://`)                                                                                                                           | `"<url>"`                                                                                                                           |
+| schema pointer (`schema`): a URL, git ref, GitHub repo, file, glob, code file or inline SDL. Local paths, git refs, URLs and request headers are never sent                        | `"<url>"`, `"<git>"`, `"<github>"`, `"<file:sdl>"`, `"<file:json>"`, `"<file:code>"`, `"<glob>"`, `"<inline-sdl>"` or `"<unknown>"` |
+| path-like string (`rootPath`, `linkRoot`, `tmpDir`, `homepage`, a custom formatter path, anything containing `/`, `\` or a leading `.`)                                            | `"<path>"`                                                                                                                          |
+| `formatter` or `mdxParser` outside the `@graphql-markdown` ecosystem (a third-party package, a local path or a URL)                                                                | `"<custom-formatter>"`                                                                                                              |
+| schema loaders outside `@graphql-tools` (`loaders`)                                                                                                                                | `"<custom-loader>"`                                                                                                                 |
+| any other string (directive names, `id`, `metatags`, `fallback`, front matter values)                                                                                              | `"<string>"`                                                                                                                        |
+| array                                                                                                                                                                              | array of sanitized items (length preserved)                                                                                         |
+| object with user-defined keys (`customDirective`, `decorators`, `metatags`, `frontMatter`, loader options)                                                                         | keys replaced with `"<key:n>"`, values sanitized                                                                                    |
+| function or class instance (`outputAdapter`, hooks, decorator predicates)                                                                                                          | `"<function>"` or `"<object>"`                                                                                                      |
+| top-level key that is not a known setting                                                                                                                                          | dropped (only a count is kept, `unknownKeys`)                                                                                       |
 
 ## What is never sent
 
@@ -185,8 +183,8 @@ Telemetry never slows down or breaks a run: it runs in parallel with generation,
 
 ## Telemetry changelog
 
-| Payload `v` | Notice version | Changes                                                                                                                                                                    |
-| ----------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Payload `v` | Notice version | Changes                                                                                                                                                                                                   |
+| ----------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind (including `git` and `github`), masked configuration. |
 
 The notice version is bumped, and the notice shown again, whenever a new category of data is added to the payload. Nothing carrying the new fields is sent before the new notice has been shown.
