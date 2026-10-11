@@ -112,7 +112,7 @@
     },
     "packages/diff": {
       "name": "@graphql-markdown/diff",
-      "version": "1.1.21",
+      "version": "1.1.22",
       "dependencies": {
         "@graphql-inspector/core": "^8.0.0",
         "@graphql-markdown/graphql": "workspace:",
@@ -127,7 +127,7 @@
     },
     "packages/docusaurus": {
       "name": "@graphql-markdown/docusaurus",
-      "version": "1.38.1",
+      "version": "1.38.2",
       "dependencies": {
         "@docusaurus/utils": "catalog:docusaurus",
         "@graphql-markdown/cli": "workspace:",
@@ -158,7 +158,7 @@
     },
     "packages/graphql": {
       "name": "@graphql-markdown/graphql",
-      "version": "1.3.2",
+      "version": "1.3.3",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
@@ -173,7 +173,7 @@
     },
     "packages/helpers": {
       "name": "@graphql-markdown/helpers",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "dependencies": {
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
@@ -268,7 +268,7 @@
     },
     "packages/printer-legacy": {
       "name": "@graphql-markdown/printer-legacy",
-      "version": "1.19.1",
+      "version": "1.19.2",
       "dependencies": {
         "@graphql-markdown/formatters": "workspace:^",
         "@graphql-markdown/graphql": "workspace:^",
