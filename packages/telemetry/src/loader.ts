@@ -23,9 +23,11 @@ const classifyScheme = (p: string): LoaderKind | undefined => {
 };
 
 const isInlineSdl = (p: string): boolean => {
-  return /\b(type|schema|interface|enum|input|union|scalar|extend|directive)\b[^\n]*[{@]/.test(
-    p,
-  ) && /\s/.test(p);
+  return (
+    /\b(type|schema|interface|enum|input|union|scalar|extend|directive)\b[^\n]*[{@]/.test(
+      p,
+    ) && /\s/.test(p)
+  );
 };
 
 const classifyPath = (p: string): LoaderKind => {
