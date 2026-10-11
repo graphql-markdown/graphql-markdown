@@ -84,7 +84,7 @@ Wire only:
   --output <folder>        Folder for the generated docs, relative to the project
   --link-root <route>      Route prefix used in generated links
   --site-base <route>      Base path the site is served from
-  --script <name>          package.json script to add (default: docs:api)
+  --script <name>          package.json script to add (default: gqlmd)
   --dry-run                Show what would be written without writing it
 `;
 

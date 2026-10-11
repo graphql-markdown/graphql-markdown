@@ -20,7 +20,7 @@ Run the scaffolder in an empty folder to create a new project, or inside an exis
 npm create graphql-markdown-docs@latest
 ```
 
-New projects can be a Nuxt site (default), a Docusaurus site, or plain Markdown or MDX output with no site (`--framework markdown` or `--framework mdx`). In an existing site, the scaffolder detects the framework and writes a `.graphqlrc` and a `docs:api` script. See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
+New projects can be a Nuxt site (default), a Docusaurus site, or plain Markdown or MDX output with no site (`--framework markdown` or `--framework mdx`). In an existing site, the scaffolder detects the framework and writes a `.graphqlrc` and a `gqlmd` script. See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
 
 To set it up by hand instead, there are two main setup paths:
 

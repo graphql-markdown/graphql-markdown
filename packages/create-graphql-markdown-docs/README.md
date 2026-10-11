@@ -39,7 +39,7 @@ In wire mode the CLI:
 1. Detects the framework from `package.json`, or asks you to choose one (`generic` for anything unlisted).
 2. Asks for the schema (a path, glob or URL, written as you enter it) and the output folder. The output folder is always asked, never guessed.
 3. Suggests a link root for the generated pages.
-4. Writes a `.graphqlrc` file and a `docs:api` script that runs `gqlmd graphql-to-doc`.
+4. Writes a `.graphqlrc` file and a `gqlmd` script that runs `gqlmd graphql-to-doc`.
 5. Prints the next step for your framework, such as adding a sidebar or navigation entry.
 
 It never edits your framework configuration files and never overwrites existing files. If the project already has a GraphQL config, the CLI prints the block to merge into it instead. It installs nothing unless you pass `--install`; otherwise it prints the install command. Use `--dry-run` to see what it would write without writing anything.
@@ -127,7 +127,7 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 | `--output <folder>`   | Folder for the generated docs, relative to the project.                   |
 | `--link-root <route>` | Route prefix used in generated links.                                     |
 | `--site-base <route>` | Base path the site is served from.                                        |
-| `--script <name>`     | `package.json` script to add (default: `docs:api`).                       |
+| `--script <name>`     | `package.json` script to add (default: `gqlmd`).                       |
 | `--dry-run`           | Show what would be written without writing it.                            |
 
 ## What's included
