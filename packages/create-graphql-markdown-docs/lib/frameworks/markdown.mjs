@@ -61,7 +61,7 @@ export const mdx = {
   id: "mdx",
   name: "MDX",
   label: "MDX (plain .mdx files)",
-  hint: "No site — just MDX files in docs/",
+  hint: "Framework-neutral .mdx pages (plain HTML, no components)",
   formatter: MDX_FORMATTER,
   links: "relative",
   contentRoot: "docs",
