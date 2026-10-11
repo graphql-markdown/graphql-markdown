@@ -2,7 +2,7 @@ import { readdir } from "node:fs/promises";
 import { join, relative, sep } from "node:path";
 
 import { defineNuxtModule, useNuxt } from "@nuxt/kit";
-import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "../constants";
+import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "../constants.ts";
 
 /**
  * Enumerates every generated content route for the prerenderer.
