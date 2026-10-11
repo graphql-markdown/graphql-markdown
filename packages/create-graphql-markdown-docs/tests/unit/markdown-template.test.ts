@@ -71,7 +71,7 @@ describe("mdx scaffold", () => {
       "    formatter: '@graphql-markdown/formatters/mdx'\n    loaders:\n",
     );
     const pkg = JSON.parse(read(dir, "package.json"));
-    expect(pkg.dependencies["@graphql-markdown/formatters"]).toMatch(/^\^/);
+    expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe("^1.2.0");
   });
 
   it("throws when the loaders line is missing", () => {
