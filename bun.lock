@@ -72,7 +72,7 @@
     },
     "packages/core": {
       "name": "@graphql-markdown/core",
-      "version": "1.24.1",
+      "version": "1.24.2",
       "dependencies": {
         "@fastify/deepmerge": "^3.2.2",
         "@graphql-markdown/graphql": "workspace:^",
@@ -97,7 +97,7 @@
     },
     "packages/create-graphql-markdown-docs": {
       "name": "create-graphql-markdown-docs",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "bin": {
         "create-graphql-markdown-docs": "./bin/create.mjs",
       },
@@ -199,7 +199,7 @@
     },
     "packages/nuxt-theme": {
       "name": "@graphql-markdown/nuxt-theme",
-      "version": "0.1.3",
+      "version": "0.2.0",
       "bin": {
         "gqlmd-swizzle": "./bin/swizzle.mjs",
       },
