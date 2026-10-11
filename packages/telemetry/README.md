@@ -70,7 +70,7 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
   "container": false,
   "wsl": false,
   "config": {
-    "schema": "url",
+    "schema": "<url>",
     "rootPath": "<path>",
     "baseURL": "<url>",
     "linkRoot": "<path>",
@@ -107,7 +107,9 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
 
 Masking rules:
 
-- `<url>`: a URL value (for example `baseURL`). The host and path are never sent.
+- `<url>`, `<git>`, `<github>`: the kind of a schema pointer, or a URL value (for example `baseURL`). The host, path and any headers are never sent.
+- `<file:sdl>`, `<file:json>`, `<file:code>`, `<glob>`, `<inline-sdl>`, `<unknown>`: the kind of a schema pointer (for example `schema`). The pointer itself is never sent.
+- `<custom-formatter>`: a third-party or local `formatter` or `mdxParser`. Only presets and `@graphql-markdown/*` packages are kept as-is.
 - `<path>`: a filesystem path (for example `rootPath`, `linkRoot`, `homepage`).
 - `<string>`: a custom string (for example directive names, field names, fallback labels, metatag values).
 - `<key:n>`: a custom object key, replaced by its position (for example metatag names). Only present when a custom key is used.

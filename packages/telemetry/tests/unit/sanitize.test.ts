@@ -66,12 +66,20 @@ describe("sanitizeConfig masking table", () => {
     expect(
       run({ formatter: "@graphql-markdown/formatters/docusaurus" }).value,
     ).toEqual({ formatter: "@graphql-markdown/formatters/docusaurus" });
-    expect(run({ formatter: "./my/formatter.js" }).value).toEqual({
-      formatter: "<path>",
+    expect(run({ formatter: "@graphql-markdown/docusaurus" }).value).toEqual({
+      formatter: "@graphql-markdown/docusaurus",
     });
-    expect(run({ formatter: "acme-formatter" }).value).toEqual({
-      formatter: "<string>",
-    });
+    for (const f of [
+      "docusaurus-graphql-formatter",
+      "./my-formatter.mjs",
+      "/abs/f.js",
+      "https://x.test/f.js",
+    ]) {
+      expect(run({ formatter: f, mdxParser: f }).value).toEqual({
+        formatter: "<custom-formatter>",
+        mdxParser: "<custom-formatter>",
+      });
+    }
   });
 
   test("directive names and arrays keep length", () => {
@@ -138,8 +146,42 @@ describe("sanitizeConfig masking table", () => {
 
   test("schema is classified, never sent", () => {
     expect(run({ schema: "https://x.test/graphql" }).value).toEqual({
-      schema: "url",
+      schema: "<url>",
     });
+  });
+
+  test("schema pointer forms become mask tokens", () => {
+    const secret = "Bearer s3cr3t";
+    const cases: [unknown, unknown][] = [
+      ["git:main:schema.graphql", "<git>"],
+      ["github:acme/repo#main:schema.graphql", "<github>"],
+      ["./schema.graphql", "<file:sdl>"],
+      ["/abs/schema.graphql", "<file:sdl>"],
+      ["C:\\x\\schema.graphql", "<file:sdl>"],
+      ["C:\\x\\schema.json", "<file:json>"],
+      ["C:\\x\\schema.ts", "<file:code>"],
+      ["C:\\x\\App.vue", "<file:code>"],
+      ["src/**/*.graphql", "<glob>"],
+      ["type Query { a: Int }", "<inline-sdl>"],
+      [
+        ["a.graphql", "https://x.test/g"],
+        ["<file:sdl>", "<url>"],
+      ],
+    ];
+    for (const [schema, expected] of cases) {
+      expect(run({ schema }).value).toEqual({ schema: expected });
+    }
+    const out = JSON.stringify(
+      run({
+        schema: {
+          "https://api.acme.internal/graphql": {
+            headers: { Authorization: secret },
+          },
+        },
+      }).value,
+    );
+    expect(out).toBe('{"schema":"<url>"}');
+    expect(out).not.toContain(secret);
   });
 
   test("loaders: known pass, custom become <custom-loader>", () => {

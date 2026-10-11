@@ -91,7 +91,16 @@ const buildPlantedInputs = () => {
       hierarchy: planted(6),
     },
     rootPath: planted(0),
-    schema: [planted(1), planted(2)],
+    schema: [
+      planted(1),
+      `git:main:${planted(2)}.graphql`,
+      `github:${planted(3)}/repo:schema.graphql`,
+      {
+        [`https://${planted(4)}.test/graphql`]: {
+          headers: { Authorization: planted(5) },
+        },
+      },
+    ],
     tmpDir: planted(3),
     [planted(4)]: planted(5),
   };

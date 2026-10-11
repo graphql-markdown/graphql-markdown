@@ -58,8 +58,8 @@ const isContainer = (env: NodeJS.ProcessEnv): boolean => {
 
 const applySanitizedSection = (
   payload: TelemetryPayload,
-  section: "config" | "cli",
-  source: ConfigOptions | CliOptions,
+  section: "cli" | "config",
+  source: CliOptions | ConfigOptions,
   rules: Parameters<typeof sanitizeConfig>[1],
 ): number => {
   const result = sanitizeConfig(source, rules);
@@ -112,12 +112,7 @@ export const buildPayload = (input: PayloadInput): TelemetryPayload => {
     );
   }
   if (input.cli) {
-    unknownKeys += applySanitizedSection(
-      payload,
-      "cli",
-      input.cli,
-      CLI_RULES,
-    );
+    unknownKeys += applySanitizedSection(payload, "cli", input.cli, CLI_RULES);
   }
   if (unknownKeys > 0) {
     payload.unknownKeys = unknownKeys;

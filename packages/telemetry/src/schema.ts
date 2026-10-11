@@ -40,6 +40,8 @@ export const LOADER_KINDS = [
   "url",
   "file-sdl",
   "file-json",
+  "git",
+  "github",
   "glob",
   "code-file",
   "inline-sdl",
@@ -86,6 +88,15 @@ export const MASK_TOKENS = [
   "<function>",
   "<object>",
   "<custom-loader>",
+  "<custom-formatter>",
+  "<git>",
+  "<github>",
+  "<file:sdl>",
+  "<file:json>",
+  "<file:code>",
+  "<glob>",
+  "<inline-sdl>",
+  "<unknown>",
 ] as const;
 /** Pattern of masked object keys, e.g. `<key:0>`. */
 export const KEY_TOKEN_PATTERN = "^<key:\\d+>$";

@@ -1,6 +1,6 @@
 import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
 
-import { classifyPointer } from "./loader";
+import { maskPointer } from "./loader";
 import {
   DEPRECATED_OPTIONS,
   DIFF_METHODS,
@@ -138,7 +138,7 @@ const sanitizeFormatter = (value: string): string => {
   ) {
     return value;
   }
-  return maskString(value);
+  return "<custom-formatter>";
 };
 
 const sanitizeLoaderName = (value: string): string => {
@@ -260,7 +260,7 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
     return typeof value === "string" ? "<string>" : "<object>";
   }
   if (rule.kind === "pointer") {
-    return classifyPointer(value);
+    return maskPointer(value);
   }
   if (rule.kind === "loaders") {
     return sanitizeLoaders(value, depth);
@@ -273,7 +273,7 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
       return sanitizeValue(item, rule, depth + 1);
     });
   }
-  if (typeof value === "object") {
+  if (typeof value === "object" && value !== null) {
     return sanitizeObjectByRule(value, rule, depth);
   }
   return "<object>";
