@@ -34,7 +34,7 @@ import {
 import { WIRE_STEPS, printWireOutro } from "./wire/steps.mjs";
 import { flagModeError, isEffectivelyEmpty, modeFor } from "./target.mjs";
 import {
-  INSTALL_COMMANDS,
+  SUPPORTED_PACKAGE_MANAGERS,
   initGitRepo,
   installDependencies,
   isGitAvailable,
@@ -128,9 +128,9 @@ export function parseCliArgs(argv) {
 
 /** Fails on an unsupported --pm value. */
 function validatePackageManager(args) {
-  if (args.pm && !Object.hasOwn(INSTALL_COMMANDS, args.pm)) {
+  if (args.pm && !SUPPORTED_PACKAGE_MANAGERS.includes(args.pm)) {
     fail(
-      `Invalid --pm "${args.pm}" — expected one of: ${Object.keys(INSTALL_COMMANDS).join(", ")}.`,
+      `Invalid --pm "${args.pm}" — expected one of: ${SUPPORTED_PACKAGE_MANAGERS.join(", ")}.`,
     );
   }
 }

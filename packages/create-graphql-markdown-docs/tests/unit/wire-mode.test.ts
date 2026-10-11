@@ -399,7 +399,7 @@ describe("scaffold vs wire mode (end to end)", () => {
 
   const ADD_STARLIGHT = [
     "add",
-    "--save-dev",
+    "-D",
     "@graphql-markdown/cli",
     "@graphql-markdown/formatters",
     "@graphql-tools/graphql-file-loader",
@@ -433,7 +433,21 @@ describe("scaffold vs wire mode (end to end)", () => {
       ADD_STARLIGHT,
       expect.objectContaining({ cwd: dir }),
     );
-    expect(outro()).not.toContain("--save-dev");
+    expect(outro()).not.toContain("pnpm add");
+  });
+
+  it("18b. --install at a pnpm workspace root passes -w", async () => {
+    const dir = path.join(work, "install-ws");
+    seed(dir, {
+      "package.json": STARLIGHT_PKG,
+      "pnpm-workspace.yaml": "packages: []\n",
+    });
+    expect(await main(starlightArgs(dir, "--install"))).toBe(0);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "pnpm",
+      expect.arrayContaining(["-w"]),
+      expect.objectContaining({ cwd: dir }),
+    );
   });
 
   it("19. --install whose command fails exits 0, keeps .graphqlrc and shows the catch-up command", async () => {
@@ -451,7 +465,7 @@ describe("scaffold vs wire mode (end to end)", () => {
     expect(errors()).toContain("Install dev dependencies failed");
     expect(outro()).toContain("Some steps did not complete");
     expect(outro()).toContain(
-      "pnpm add --save-dev @graphql-markdown/cli @graphql-markdown/formatters",
+      "pnpm add -D @graphql-markdown/cli @graphql-markdown/formatters",
     );
   });
 
@@ -461,7 +475,7 @@ describe("scaffold vs wire mode (end to end)", () => {
     expect(await main(starlightArgs(dir))).toBe(0);
     expect(mocks.spawn).not.toHaveBeenCalled();
     expect(outro()).toContain(
-      "pnpm add --save-dev @graphql-markdown/cli @graphql-markdown/formatters",
+      "pnpm add -D @graphql-markdown/cli @graphql-markdown/formatters",
     );
   });
 
@@ -512,7 +526,7 @@ describe("scaffold vs wire mode (end to end)", () => {
     });
     expect(await main(starlightArgs(dir, "--install"))).toBe(0);
     expect(mocks.spawn).not.toHaveBeenCalled();
-    expect(outro()).not.toContain("--save-dev");
+    expect(outro()).not.toContain("pnpm add");
   });
 });
 

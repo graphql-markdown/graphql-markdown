@@ -161,7 +161,40 @@ describe("inspectProject", () => {
       packageJson: null,
       packageJsonIndent: 2,
       existingConfig: null,
+      workspaceRoot: false,
+      pnpmWorkspace: false,
+      yarnBerry: false,
     });
+  });
+
+  it("detects a workspace root", () => {
+    fs.writeFileSync(
+      path.join(dir, "package.json"),
+      JSON.stringify({ workspaces: ["packages/*"] }),
+    );
+    expect(inspectProject(dir).workspaceRoot).toBe(true);
+  });
+
+  it("detects pnpm-workspace.yaml", () => {
+    fs.writeFileSync(path.join(dir, "package.json"), "{}");
+    fs.writeFileSync(path.join(dir, "pnpm-workspace.yaml"), "");
+    expect(inspectProject(dir).workspaceRoot).toBe(true);
+  });
+
+  it.each([
+    ["yarn@4.1.0", true],
+    ["yarn@1.22.0", false],
+  ])("detects yarn berry from packageManager %s", (pm, expected) => {
+    fs.writeFileSync(
+      path.join(dir, "package.json"),
+      JSON.stringify({ packageManager: pm }),
+    );
+    expect(inspectProject(dir).yarnBerry).toBe(expected);
+  });
+
+  it("detects yarn berry from .yarnrc.yml", () => {
+    fs.writeFileSync(path.join(dir, ".yarnrc.yml"), "");
+    expect(inspectProject(dir).yarnBerry).toBe(true);
   });
 
   it("detects 4-space indent", () => {
