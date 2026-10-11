@@ -137,6 +137,8 @@ function validatePackageManager(args) {
 
 async function resolveFramework(args) {
   if (args.framework) {
+    // Scaffolding has no "generic" template: plain Markdown is its equivalent.
+    if (args.framework === "generic") return "markdown";
     if (
       !Object.hasOwn(FRAMEWORKS, args.framework) &&
       Object.hasOwn(WIRE_FRAMEWORKS, args.framework)
@@ -380,6 +382,11 @@ function initialColor(args, fw) {
   return color;
 }
 
+/** Whether the template has nothing to customize (no title, no color). */
+function hasNoCustomization(fw) {
+  return fw.scaffold.supportsTitle === false && !fw.scaffold.supportsColor;
+}
+
 /** Whether the user wants to customize title/color interactively. */
 async function wantsCustomization(fw) {
   const answer = unlessCancelled(
@@ -395,6 +402,12 @@ async function wantsCustomization(fw) {
 
 /** Optional title and color customization. */
 async function promptCustomization(args, fw) {
+  if (hasNoCustomization(fw)) {
+    if (args.title) {
+      prompts.log.warn(`--title does not apply to ${fw.name} — ignoring it.`);
+    }
+    return { title: "", color: initialColor(args, fw) };
+  }
   let title = args.title ?? "";
   let color = initialColor(args, fw);
   if (args.yes || !(await wantsCustomization(fw))) {
