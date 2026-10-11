@@ -213,6 +213,18 @@ describe("events", () => {
       expect(event.data.name).toBe("User");
       expect(event.data.filePath).toBe("/docs/types/user.md");
     });
+
+    it("should carry linkRoot when provided", () => {
+      const event = new RenderTypeEntitiesEvent({
+        baseURL: ".",
+        linkRoot: "/docs",
+        name: "User",
+        filePath: "/docs/types/user.md",
+        outputDir: "/docs",
+      });
+
+      expect(event.data.linkRoot).toBe("/docs");
+    });
   });
 
   describe("getEvents", () => {

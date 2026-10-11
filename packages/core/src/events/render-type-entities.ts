@@ -15,6 +15,8 @@ import { DataEvent } from "@graphql-markdown/utils";
  */
 export class RenderTypeEntitiesEvent extends DataEvent<{
   baseURL: string;
+  /** Root for documentation links, as used when printing them. */
+  linkRoot?: string;
   name: string;
   filePath: string;
   outputDir: string;
@@ -24,6 +26,7 @@ export class RenderTypeEntitiesEvent extends DataEvent<{
   constructor(
     data: {
       baseURL: string;
+      linkRoot?: string;
       name: string;
       filePath: string;
       outputDir: string;

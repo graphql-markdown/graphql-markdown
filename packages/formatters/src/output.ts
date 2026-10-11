@@ -130,13 +130,15 @@ export const rewriteRenderedPage = async (
     filePath: string,
     outputDir: string,
     baseURL: string,
+    linkRoot?: string,
   ) => string,
 ): Promise<void> => {
-  const { baseURL, filePath, outputAdapter, outputDir } = (
+  const { baseURL, filePath, linkRoot, outputAdapter, outputDir } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
+        linkRoot?: string;
         outputAdapter?: OutputAdapter;
         outputDir: string;
       };
@@ -149,7 +151,7 @@ export const rewriteRenderedPage = async (
     return;
   }
 
-  const rewritten = rewrite(content, filePath, outputDir, baseURL);
+  const rewritten = rewrite(content, filePath, outputDir, baseURL, linkRoot);
 
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);
@@ -169,8 +171,9 @@ export const createInternalLinksRewriter = (
   filePath: string,
   outputDir: string,
   baseURL: string,
+  linkRoot?: string,
 ) => string) => {
-  return (content, filePath, outputDir, baseURL) => {
+  return (content, filePath, outputDir, baseURL, linkRoot) => {
     return content.replaceAll(
       /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
       (_match, urlPath, hash = "") => {
@@ -178,6 +181,7 @@ export const createInternalLinksRewriter = (
           baseURL,
           currentFilePath: filePath,
           ...(extension !== undefined && { extension }),
+          ...(linkRoot !== undefined && { linkRoot }),
           outputDir,
           targetUrlPath: urlPath,
         });

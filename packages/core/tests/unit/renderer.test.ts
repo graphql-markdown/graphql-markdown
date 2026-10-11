@@ -1606,6 +1606,23 @@ describe("renderer", () => {
           options: DEFAULT_RENDERER_OPTIONS,
         });
       });
+
+      test("keeps linkRoot to expose it to render hooks", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: ".",
+          linkRoot: "/docs",
+          group: undefined,
+          prettify: false,
+          docOptions: DEFAULT_RENDERER_OPTIONS,
+          mdxExtension: "mdx",
+        });
+
+        expect(renderer.linkRoot).toBe("/docs");
+      });
     });
 
     describe("category sorting", () => {

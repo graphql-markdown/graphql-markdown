@@ -508,6 +508,7 @@ export const generateDocFromSchema = async (
     printer,
     outputDir,
     baseURL,
+    linkRoot,
     group: groups,
     prettify,
     docOptions: {

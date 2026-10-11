@@ -237,6 +237,7 @@ describe("generator", () => {
           printer: {},
           outputDir: options.outputDir,
           baseURL: options.baseURL,
+          linkRoot: options.linkRoot,
           group: undefined,
           prettify: options.prettify,
           docOptions: {

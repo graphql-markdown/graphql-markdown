@@ -348,6 +348,8 @@ export interface RendererOptions {
   outputDir: string;
   /** Base URL for the documentation */
   baseURL: string;
+  /** Root for documentation links, forwarded to render hooks */
+  linkRoot?: string;
   /** Optional grouping configuration for schema entities */
   group: Maybe<SchemaEntitiesGroupMap>;
   /** Whether to format the generated markdown */
@@ -377,6 +379,7 @@ export class Renderer {
   readonly group: Maybe<SchemaEntitiesGroupMap>;
   readonly outputDir: string;
   readonly baseURL: string;
+  readonly linkRoot?: string;
   readonly prettify: boolean;
   readonly options: Maybe<RendererDocOptions>;
   readonly mdxExtension: string;
@@ -396,6 +399,7 @@ export class Renderer {
     printer,
     outputDir,
     baseURL,
+    linkRoot,
     group,
     prettify,
     docOptions,
@@ -407,6 +411,9 @@ export class Renderer {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
+    if (linkRoot !== undefined) {
+      this.linkRoot = linkRoot;
+    }
     this.prettify = prettify;
     this.options = docOptions;
     this.mdxExtension = mdxExtension;
@@ -765,6 +772,7 @@ export class Renderer {
     const events = getEvents();
     const event = new RenderTypeEntitiesEvent({
       baseURL: this.baseURL,
+      ...(this.linkRoot !== undefined && { linkRoot: this.linkRoot }),
       name,
       filePath,
       outputDir: this.outputDir,
@@ -1103,6 +1111,7 @@ export const getRenderer = async ({
   printer,
   outputDir,
   baseURL,
+  linkRoot,
   group,
   prettify,
   docOptions,
@@ -1117,6 +1126,7 @@ export const getRenderer = async ({
     printer,
     outputDir,
     baseURL,
+    ...(linkRoot !== undefined && { linkRoot }),
     group,
     prettify,
     docOptions,

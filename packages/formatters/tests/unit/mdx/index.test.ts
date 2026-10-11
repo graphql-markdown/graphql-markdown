@@ -154,4 +154,23 @@ describe("afterRenderTypeEntitiesHook", () => {
     expect(result).not.toContain("](/graphql/");
     expect(result).toContain("](../scalars/id.mdx#field)");
   });
+
+  test("uses linkRoot to rewrite links under a root baseURL", async () => {
+    const outputDir = mkdtempSync(join(tmpdir(), "mdx-hook-root-"));
+    const filePath = join(outputDir, "types", "objects", "country.mdx");
+    mkdirSync(join(outputDir, "types", "objects"), { recursive: true });
+    writeFileSync(
+      filePath,
+      "[ID](/docs/types/scalars/id) and [Auth](/guides/auth)\n",
+      "utf-8",
+    );
+
+    await afterRenderTypeEntitiesHook({
+      data: { baseURL: ".", filePath, linkRoot: "/docs", outputDir },
+    });
+
+    const result = readFileSync(filePath, "utf-8");
+    expect(result).toContain("](../scalars/id.mdx)");
+    expect(result).toContain("](/guides/auth)");
+  });
 });
