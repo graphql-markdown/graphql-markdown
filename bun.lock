@@ -279,6 +279,16 @@
         "@graphql-markdown/tooling-config": "workspace:^",
       },
     },
+    "packages/telemetry": {
+      "name": "@graphql-markdown/telemetry",
+      "version": "0.1.0",
+      "dependencies": {
+        "@graphql-markdown/types": "workspace:^",
+      },
+      "devDependencies": {
+        "@graphql-markdown/tooling-config": "workspace:^",
+      },
+    },
     "packages/tooling-config": {
       "name": "@graphql-markdown/tooling-config",
       "version": "1.0.0",
@@ -603,6 +613,8 @@
     "@graphql-markdown/nuxt-theme": ["@graphql-markdown/nuxt-theme@workspace:packages/nuxt-theme"],
 
     "@graphql-markdown/printer-legacy": ["@graphql-markdown/printer-legacy@workspace:packages/printer-legacy"],
+
+    "@graphql-markdown/telemetry": ["@graphql-markdown/telemetry@workspace:packages/telemetry"],
 
     "@graphql-markdown/tooling-config": ["@graphql-markdown/tooling-config@workspace:packages/tooling-config"],
 

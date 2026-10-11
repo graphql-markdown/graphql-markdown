@@ -1,0 +1,25 @@
+{
+  "extends": "./tsconfig.json",
+
+  "compilerOptions": {
+    "rootDir": "./",
+
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "ignoreDeprecations": "6.0",
+    "noEmit": true,
+    "tsBuildInfoFile": "tsconfig.test.tsbuildinfo",
+
+    "isolatedModules": true,
+
+    "types": ["node", "vitest/globals"],
+
+    "paths": {
+      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/*": ["../*/src/index.ts"]
+    }
+  },
+
+  "include": ["tests", "src", "assets"],
+  "exclude": ["**/data", "*.js", "**/dist"]
+}
