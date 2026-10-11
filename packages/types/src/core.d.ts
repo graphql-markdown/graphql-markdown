@@ -440,6 +440,8 @@ export interface ConfigOptions {
   schema?: Maybe<Pointer>;
   /** Skip documenting types with these directives */
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  /** Anonymous usage telemetry; `false` opts out */
+  telemetry?: boolean;
   /** Temporary directory for processing */
   tmpDir?: Maybe<string>;
 }
@@ -509,6 +511,8 @@ export interface CliOptions {
   skip?: string[] | string;
   /** Directives to only include */
   only?: string[] | string;
+  /** Anonymous usage telemetry (`--no-telemetry` sets false) */
+  telemetry?: boolean;
   /** Temporary directory */
   tmp?: string;
 }

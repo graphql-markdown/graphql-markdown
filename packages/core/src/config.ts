@@ -163,6 +163,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "mdxParser"
         | "outputAdapter"
         | "printTypeOptions"
+        | "telemetry"
       >
     >
 > & {
