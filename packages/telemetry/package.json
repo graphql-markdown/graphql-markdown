@@ -68,7 +68,8 @@
     "@graphql-markdown/types": "workspace:^"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:^",
+    "@stryker-mutator/api": "10.0.0"
   },
   "directories": {
     "test": "tests"

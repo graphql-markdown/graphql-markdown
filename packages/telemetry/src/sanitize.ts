@@ -159,6 +159,7 @@ const sanitizeLoaders = (value: unknown, depth: number): unknown => {
   }
   if (typeof value === "object" && value !== null && isPlainObject(value)) {
     const out: Record<string, unknown> = {};
+    let n = 0;
     for (const [key, item] of Object.entries(value)) {
       let masked: unknown;
       if (typeof item === "object" && item !== null && isPlainObject(item)) {
@@ -180,11 +181,56 @@ const sanitizeLoaders = (value: unknown, depth: number): unknown => {
       } else {
         masked = sanitizeLoaders(item, depth + 1);
       }
-      out[sanitizeLoaderName(key)] = masked;
+      const name = sanitizeLoaderName(key);
+      out[name === "<custom-loader>" ? `<custom-loader:${n++}>` : name] = masked;
     }
     return out;
   }
   return sanitizeValue(value, any, depth);
+};
+
+const sanitizeStringByRule = (value: string, rule: Rule): string => {
+  switch (rule.kind) {
+    case "enum":
+      return rule.values.includes(value) ? value : maskString(value);
+    case "url":
+      return "<url>";
+    case "path":
+      return "<path>";
+    case "formatter":
+      return sanitizeFormatter(value);
+    default:
+      return rule.kind === "string" ? "<string>" : maskString(value);
+  }
+};
+
+const sanitizeObjectByRule = (
+  value: object,
+  rule: Rule,
+  depth: number,
+): Record<string, unknown> | "<object>" => {
+  if (!isPlainObject(value)) {
+    return "<object>";
+  }
+  const entries = Object.entries(value as Record<string, unknown>);
+  const out: Record<string, unknown> = {};
+  let n = 0;
+  for (const [key, item] of entries) {
+    if (rule.kind === "object" && Object.hasOwn(rule.fields, key)) {
+      const next = sanitizeValue(item, rule.fields[key], depth + 1);
+      if (next !== undefined) {
+        out[key] = next;
+      }
+      continue;
+    }
+    const itemRule = rule.kind === "map" ? rule.value : any;
+    const next = sanitizeValue(item, itemRule, depth + 1);
+    if (next !== undefined) {
+      out[`<key:${n}>`] = next;
+      n += 1;
+    }
+  }
+  return out;
 };
 
 const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
@@ -213,18 +259,7 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
     return sanitizeLoaders(value, depth);
   }
   if (typeof value === "string") {
-    switch (rule.kind) {
-      case "enum":
-        return rule.values.includes(value) ? value : maskString(value);
-      case "url":
-        return "<url>";
-      case "path":
-        return "<path>";
-      case "formatter":
-        return sanitizeFormatter(value);
-      default:
-        return rule.kind === "string" ? "<string>" : maskString(value);
-    }
+    return sanitizeStringByRule(value, rule);
   }
   if (Array.isArray(value)) {
     return value.map((item) => {
@@ -232,28 +267,7 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
     });
   }
   if (typeof value === "object") {
-    if (!isPlainObject(value)) {
-      return "<object>";
-    }
-    const entries = Object.entries(value as Record<string, unknown>);
-    const out: Record<string, unknown> = {};
-    let n = 0;
-    for (const [key, item] of entries) {
-      if (rule.kind === "object" && Object.hasOwn(rule.fields, key)) {
-        const next = sanitizeValue(item, rule.fields[key], depth + 1);
-        if (next !== undefined) {
-          out[key] = next;
-        }
-        continue;
-      }
-      const itemRule = rule.kind === "map" ? rule.value : any;
-      const next = sanitizeValue(item, itemRule, depth + 1);
-      if (next !== undefined) {
-        out[`<key:${n}>`] = next;
-        n += 1;
-      }
-    }
-    return out;
+    return sanitizeObjectByRule(value, rule, depth);
   }
   return "<object>";
 };

@@ -49,6 +49,97 @@ const collectKeys = (value: unknown, out: string[] = []): string[] => {
   return out;
 };
 
+const buildPlantedInputs = () => {
+  const planted = (i: number) => {
+    return SECRETS[i % SECRETS.length];
+  };
+  const config = {
+    baseURL: planted(0),
+    customDirective: { [planted(1)]: { descriptor: planted(2) } },
+    decorators: { [planted(3)]: planted(4) },
+    diffMethod: planted(5),
+    docOptions: {
+      frontMatter: { [planted(6)]: planted(0) },
+      generatorFrameworkName: planted(1),
+      generatorFrameworkVersion: planted(2),
+      categorySort: planted(3),
+    },
+    groupByDirective: {
+      directive: planted(4),
+      field: planted(5),
+      fallback: planted(6),
+      [planted(0)]: planted(1),
+    },
+    homepage: planted(2),
+    id: planted(3),
+    linkRoot: planted(4),
+    loaders: {
+      [planted(5)]: {
+        module: planted(6),
+        options: { [planted(0)]: planted(1) },
+      },
+      Another: planted(2),
+    },
+    formatter: planted(3),
+    mdxParser: planted(4),
+    metatags: [{ [planted(5)]: planted(6) }],
+    onlyDocDirective: [planted(0), planted(1)],
+    skipDocDirective: planted(2),
+    printTypeOptions: {
+      deprecated: planted(3),
+      exampleSection: { [planted(4)]: planted(5) },
+      hierarchy: planted(6),
+    },
+    rootPath: planted(0),
+    schema: [planted(1), planted(2)],
+    tmpDir: planted(3),
+    [planted(4)]: planted(5),
+  };
+  const cli = {
+    base: planted(0),
+    deprecated: planted(1),
+    diff: planted(2),
+    groupByDirective: planted(3),
+    homepage: planted(4),
+    link: planted(5),
+    hierarchy: planted(6),
+    formatter: planted(0),
+    mdxParser: planted(1),
+    root: planted(2),
+    schema: planted(3),
+    skip: [planted(4)],
+    only: planted(5),
+    tmp: planted(6),
+  };
+  return { config, cli };
+};
+
+const expectNoSecrets = (json: string) => {
+  for (const secret of SECRETS) {
+    expect(json).not.toContain(secret);
+    expect(json).not.toContain(JSON.stringify(secret).slice(1, -1));
+  }
+};
+
+const expectAllowlistedStrings = (p: ReturnType<typeof buildPayload>) => {
+  const allowed = new Set<string>([
+    ...ALLOWLIST.maskTokens,
+    ...ALLOWLIST.loaderKinds,
+    ...ALLOWLIST.knownLoaders,
+    "unknown",
+  ]);
+  const keyToken = new RegExp(ALLOWLIST.keyTokenPattern);
+  for (const s of collectStrings({
+    config: p.config,
+    cli: p.cli,
+    loader: p.loader,
+  })) {
+    const ok = allowed.has(s) || keyToken.test(s) || /^[A-Za-z]+$/.test(s);
+    expect(ok, s).toBe(true);
+    expect(s).not.toMatch(/[/\\]/);
+  }
+};
+
 describe("buildPayload", () => {
   test("envelope", () => {
     const p = buildPayload({ ...base, graphqlMajor: 16, noStateBefore: true });
@@ -138,95 +229,25 @@ describe("buildPayload", () => {
   });
 
   test("fuzz: planted secrets never appear", () => {
-    const planted = (i: number) => {
-      return SECRETS[i % SECRETS.length];
-    };
-    const config = {
-      baseURL: planted(0),
-      customDirective: { [planted(1)]: { descriptor: planted(2) } },
-      decorators: { [planted(3)]: planted(4) },
-      diffMethod: planted(5),
-      docOptions: {
-        frontMatter: { [planted(6)]: planted(0) },
-        generatorFrameworkName: planted(1),
-        generatorFrameworkVersion: planted(2),
-        categorySort: planted(3),
-      },
-      groupByDirective: {
-        directive: planted(4),
-        field: planted(5),
-        fallback: planted(6),
-        [planted(0)]: planted(1),
-      },
-      homepage: planted(2),
-      id: planted(3),
-      linkRoot: planted(4),
-      loaders: {
-        [planted(5)]: {
-          module: planted(6),
-          options: { [planted(0)]: planted(1) },
-        },
-        Another: planted(2),
-      },
-      formatter: planted(3),
-      mdxParser: planted(4),
-      metatags: [{ [planted(5)]: planted(6) }],
-      onlyDocDirective: [planted(0), planted(1)],
-      skipDocDirective: planted(2),
-      printTypeOptions: {
-        deprecated: planted(3),
-        exampleSection: { [planted(4)]: planted(5) },
-        hierarchy: planted(6),
-      },
-      rootPath: planted(0),
-      schema: [planted(1), planted(2)],
-      tmpDir: planted(3),
-      [planted(4)]: planted(5),
-    };
-    const cli = {
-      base: planted(0),
-      deprecated: planted(1),
-      diff: planted(2),
-      groupByDirective: planted(3),
-      homepage: planted(4),
-      link: planted(5),
-      hierarchy: planted(6),
-      formatter: planted(0),
-      mdxParser: planted(1),
-      root: planted(2),
-      schema: planted(3),
-      skip: [planted(4)],
-      only: planted(5),
-      tmp: planted(6),
-    };
+    const { config, cli } = buildPlantedInputs();
     const p = buildPayload({
       ...base,
       config: config as never,
       cli: cli as never,
       target: undefined,
     });
-    const json = JSON.stringify(p);
-    for (const secret of SECRETS) {
-      expect(json).not.toContain(secret);
-      expect(json).not.toContain(JSON.stringify(secret).slice(1, -1));
-    }
-    // every string is an allowlisted enum, a mask token or a key token
-    const allowed = new Set<string>([
-      ...ALLOWLIST.maskTokens,
-      ...ALLOWLIST.loaderKinds,
-      ...ALLOWLIST.knownLoaders,
-      "unknown",
-    ]);
-    const keyToken = new RegExp(ALLOWLIST.keyTokenPattern);
-    for (const s of collectStrings({
-      config: p.config,
-      cli: p.cli,
-      loader: p.loader,
-    })) {
-      const ok = allowed.has(s) || keyToken.test(s) || /^[A-Za-z]+$/.test(s);
-      expect(ok, s).toBe(true);
-      expect(s).not.toMatch(/[/\\]/);
-    }
+    expectNoSecrets(JSON.stringify(p));
+  });
+
+  test("every emitted string is allowlisted", () => {
+    const { config, cli } = buildPlantedInputs();
+    const p = buildPayload({
+      ...base,
+      config: config as never,
+      cli: cli as never,
+      target: undefined,
+    });
+    expectAllowlistedStrings(p);
   });
 });
 
