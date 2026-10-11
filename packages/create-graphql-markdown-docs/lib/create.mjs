@@ -7,6 +7,7 @@ import * as prompts from "@clack/prompts";
 
 import {
   DEFAULT_FRAMEWORK,
+  FRAMEWORK_ALIASES,
   FRAMEWORKS,
   WIRE_FRAMEWORKS,
 } from "./frameworks/index.mjs";
@@ -45,6 +46,15 @@ const colorFrameworkNames = Object.values(FRAMEWORKS)
   .filter((fw) => fw.scaffold.supportsColor)
   .map((fw) => fw.name);
 
+const aliasText = [
+  ...Object.entries(FRAMEWORK_ALIASES.scaffold).map(
+    ([alias, id]) => `${alias} = ${id} (scaffold)`,
+  ),
+  ...Object.entries(FRAMEWORK_ALIASES.wire).map(
+    ([alias, id]) => `${alias} = ${id} (wire)`,
+  ),
+].join(", ");
+
 const HELP_TEXT = `Usage: create-graphql-markdown-docs [dir] [options]
 
 An empty or missing folder creates a new project (scaffold); a folder with
@@ -55,6 +65,7 @@ Shared:
   --new | --existing       Force scaffold or wire mode (default: picked from the folder)
   --framework <name>       Scaffold: ${Object.keys(FRAMEWORKS).join(" | ")} (default: ${DEFAULT_FRAMEWORK})
                            Wire: ${Object.keys(WIRE_FRAMEWORKS).join(" | ")}
+                           Aliases: ${aliasText}
   --schema <source>        Schema source: <path|url|git:|github:>
   --pm <name>              Package manager: npm | pnpm | yarn | bun
   --install / --no-install Install dependencies (or skip it)
@@ -137,8 +148,8 @@ function validatePackageManager(args) {
 
 async function resolveFramework(args) {
   if (args.framework) {
-    // Scaffolding has no "generic" template: plain Markdown is its equivalent.
-    if (args.framework === "generic") return "markdown";
+    const aliases = FRAMEWORK_ALIASES.scaffold;
+    if (Object.hasOwn(aliases, args.framework)) return aliases[args.framework];
     if (
       !Object.hasOwn(FRAMEWORKS, args.framework) &&
       Object.hasOwn(WIRE_FRAMEWORKS, args.framework)

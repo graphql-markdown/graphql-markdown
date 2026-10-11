@@ -52,4 +52,14 @@ export const WIRE_FRAMEWORKS = {
   generic,
 };
 
+/**
+ * Accepted `--framework` aliases per mode: alias -> framework id in that mode.
+ * Scaffolding has no "generic" template (plain Markdown is its equivalent);
+ * wiring has no "markdown" target (generic is its equivalent).
+ */
+export const FRAMEWORK_ALIASES = {
+  scaffold: { generic: "markdown" },
+  wire: { markdown: "generic" },
+};
+
 export const DEFAULT_FRAMEWORK = "nuxt";
