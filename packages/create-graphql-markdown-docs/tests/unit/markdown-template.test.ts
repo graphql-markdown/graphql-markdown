@@ -57,8 +57,10 @@ describe("markdown scaffold", () => {
   });
 
   it("adds the url loader for a remote schema", () => {
-    const dir = scaffold("markdown", "https://api.example.com/graphql");
+    const remoteSchema = "https://example.com/graphql";
+    const dir = scaffold("markdown", remoteSchema);
     expect(read(dir, ".graphqlrc")).toContain("UrlLoader:");
+    expect(read(dir, ".graphqlrc")).toContain(remoteSchema);
     const pkg = JSON.parse(read(dir, "package.json"));
     expect(pkg.dependencies["@graphql-tools/url-loader"]).toBeDefined();
   });
