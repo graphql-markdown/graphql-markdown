@@ -805,9 +805,14 @@ describe("main", () => {
     });
 
     it("a required step failure aborts with exit 1 and cleans up", async () => {
+      // Isolate the staging directory from other test files that create
+      // `gqlmd-*` directories in the shared system temp dir concurrently.
+      const isolatedTmp = path.join(work, "isolated-tmp");
+      fs.mkdirSync(isolatedTmp);
+      vi.spyOn(os, "tmpdir").mockReturnValue(isolatedTmp);
       const tempDirs = (): string[] => {
         return fs
-          .readdirSync(os.tmpdir())
+          .readdirSync(isolatedTmp)
           .filter((name) => {
             return name.startsWith("gqlmd-");
           })
