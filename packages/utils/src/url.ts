@@ -19,6 +19,8 @@ export interface RelativeGeneratedDocLinkOptions {
   extension?: string;
   /** Optional URL prefix (e.g. `/docs`) the printer puts before generated paths. */
   linkRoot?: string;
+  /** Root-level generated doc paths (without extensions), known before they are written. */
+  knownDocPaths?: ReadonlySet<string>;
   outputDir: string;
   targetUrlPath: string;
 }
@@ -55,12 +57,18 @@ const isGeneratedRootPath = (
   currentFilePath: string,
   outputDir: string,
   extension: string,
+  knownDocPaths?: ReadonlySet<string>,
 ): boolean => {
   const segment = firstSegment(docPath);
   if (segment === "") return false;
   if (GENERATED_ROOT_FOLDERS.has(segment)) return true;
   // flat hierarchy: pages live directly at the root
-  if (existsSync(resolveFs(outputDir, `${docPath}${extension}`))) return true;
+  if (
+    knownDocPaths?.has(docPath) ||
+    existsSync(resolveFs(outputDir, `${docPath}${extension}`))
+  ) {
+    return true;
+  }
   const currentRelative = relativeFs(outputDir, currentFilePath).replaceAll(
     "\\",
     "/",
@@ -84,6 +92,7 @@ export const toRelativeGeneratedDocLink = ({
   currentFilePath,
   extension = ".md",
   linkRoot,
+  knownDocPaths,
   outputDir,
   targetUrlPath,
 }: RelativeGeneratedDocLinkOptions): string | undefined => {
@@ -118,7 +127,13 @@ export const toRelativeGeneratedDocLink = ({
 
   if (
     basePrefix === "/" &&
-    !isGeneratedRootPath(relativeDocPath, currentFilePath, outputDir, extension)
+    !isGeneratedRootPath(
+      relativeDocPath,
+      currentFilePath,
+      outputDir,
+      extension,
+      knownDocPaths,
+    )
   ) {
     return undefined;
   }

@@ -22,6 +22,8 @@ export class RenderTypeEntitiesEvent extends DataEvent<{
   outputDir: string;
   /** Destination the page was written to; use it to read the page back. */
   outputAdapter?: OutputAdapter;
+  /** Root-level generated doc paths, known before concurrent pages are written. */
+  knownDocPaths?: ReadonlySet<string>;
 }> {
   constructor(
     data: {
@@ -31,6 +33,7 @@ export class RenderTypeEntitiesEvent extends DataEvent<{
       filePath: string;
       outputDir: string;
       outputAdapter?: OutputAdapter;
+      knownDocPaths?: ReadonlySet<string>;
     },
     options?: CancellableEventOptions,
   ) {

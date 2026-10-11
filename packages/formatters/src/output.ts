@@ -131,13 +131,22 @@ export const rewriteRenderedPage = async (
     outputDir: string,
     baseURL: string,
     linkRoot?: string,
+    knownDocPaths?: ReadonlySet<string>,
   ) => string,
 ): Promise<void> => {
-  const { baseURL, filePath, linkRoot, outputAdapter, outputDir } = (
+  const {
+    baseURL,
+    filePath,
+    knownDocPaths,
+    linkRoot,
+    outputAdapter,
+    outputDir,
+  } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
+        knownDocPaths?: ReadonlySet<string>;
         linkRoot?: string;
         outputAdapter?: OutputAdapter;
         outputDir: string;
@@ -151,7 +160,14 @@ export const rewriteRenderedPage = async (
     return;
   }
 
-  const rewritten = rewrite(content, filePath, outputDir, baseURL, linkRoot);
+  const rewritten = rewrite(
+    content,
+    filePath,
+    outputDir,
+    baseURL,
+    linkRoot,
+    knownDocPaths,
+  );
 
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);
@@ -172,8 +188,9 @@ export const createInternalLinksRewriter = (
   outputDir: string,
   baseURL: string,
   linkRoot?: string,
+  knownDocPaths?: ReadonlySet<string>,
 ) => string) => {
-  return (content, filePath, outputDir, baseURL, linkRoot) => {
+  return (content, filePath, outputDir, baseURL, linkRoot, knownDocPaths) => {
     return content.replaceAll(
       /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
       (_match, urlPath, hash = "") => {
@@ -182,6 +199,7 @@ export const createInternalLinksRewriter = (
           currentFilePath: filePath,
           ...(extension !== undefined && { extension }),
           ...(linkRoot !== undefined && { linkRoot }),
+          knownDocPaths,
           outputDir,
           targetUrlPath: urlPath,
         });

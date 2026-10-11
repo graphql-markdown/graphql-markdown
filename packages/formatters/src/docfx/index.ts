@@ -178,6 +178,7 @@ const resolveLink = (
   outputDir: string,
   normalizedBaseURL: string,
   baseSegment: string,
+  knownDocPaths?: ReadonlySet<string>,
 ): string => {
   const sepIdx = urlWithHash.indexOf("#");
   const [urlPath, hash] =
@@ -194,6 +195,7 @@ const resolveLink = (
     baseURL: normalizedBaseURL,
     currentFilePath: filePath,
     extension: mdxExtension,
+    knownDocPaths,
     outputDir,
     targetUrlPath: urlPath.slice(baseIndex),
   });
@@ -210,6 +212,7 @@ const rewriteInternalLinks = (
   filePath: string,
   outputDir: string,
   baseURL: string,
+  knownDocPaths?: ReadonlySet<string>,
 ): string => {
   const normalizedBaseURL = baseURL.split("/").filter(Boolean).join("/");
   const baseSegment = `/${normalizedBaseURL}/`;
@@ -239,6 +242,7 @@ const rewriteInternalLinks = (
         outputDir,
         normalizedBaseURL,
         baseSegment,
+        knownDocPaths,
       ),
     );
     pos = match.closePos + 1;
@@ -401,11 +405,19 @@ const updateTocChain = async (
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const { baseURL, filePath, name, outputAdapter, outputDir } = (
+  const {
+    baseURL,
+    filePath,
+    knownDocPaths,
+    name,
+    outputAdapter,
+    outputDir,
+  } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
+        knownDocPaths?: ReadonlySet<string>;
         name: string;
         outputAdapter?: OutputAdapter;
         outputDir: string;
@@ -428,7 +440,13 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   // matches newlines, which would overlap with the `m`-flag line anchors and
   // cause polynomial backtracking when no "uid:" line is present.
   const withUid = content.replace(/^([ \t]*)uid:.*$/m, `$1uid: ${uid}`);
-  const rewritten = rewriteInternalLinks(withUid, filePath, outputDir, baseURL);
+  const rewritten = rewriteInternalLinks(
+    withUid,
+    filePath,
+    outputDir,
+    baseURL,
+    knownDocPaths,
+  );
 
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);

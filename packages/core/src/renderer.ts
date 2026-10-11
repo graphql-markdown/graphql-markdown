@@ -388,6 +388,7 @@ export class Renderer {
   private readonly printer: typeof IPrinter;
   private readonly rootLevelPositionManager: CategoryPositionManager;
   private readonly categoryPositionManager: CategoryPositionManager;
+  private readonly knownDocPaths = new Set<string>();
 
   /**
    * Creates a new Renderer instance.
@@ -777,6 +778,7 @@ export class Renderer {
       filePath,
       outputDir: this.outputDir,
       outputAdapter: this.outputAdapter,
+      knownDocPaths: this.knownDocPaths,
     });
     const { errors } = await events.emitAsync(
       RenderTypeEntitiesEvents.AFTER_RENDER,
@@ -789,6 +791,27 @@ export class Renderer {
       filePath,
       name,
     };
+  }
+
+  /**
+   * Pre-collects root-level generated document paths for flat hierarchy.
+   *
+   * @param rootTypes - Map of schema entity names to their generated types
+   */
+  preCollectGeneratedDocPaths(rootTypes: object): void {
+    if (!isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return;
+    }
+
+    for (const [entity, type] of Object.entries(rootTypes)) {
+      if (typeof type !== "object" || type === null) {
+        continue;
+      }
+
+      for (const name of Object.keys(type)) {
+        this.knownDocPaths.add(`${entity}-${slugify(name)}`);
+      }
+    }
   }
 
   /**

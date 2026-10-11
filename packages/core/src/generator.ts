@@ -523,6 +523,7 @@ export const generateDocFromSchema = async (
 
   // Pre-collect all categories before rendering to ensure consistent positions
   renderer.preCollectCategories(Object.keys(rootTypes));
+  renderer.preCollectGeneratedDocPaths(rootTypes);
 
   const beforeRenderRootTypesEvent = new RenderRootTypesEvent({
     rootTypes,

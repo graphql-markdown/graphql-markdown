@@ -84,6 +84,18 @@ describe("url", () => {
         );
       });
 
+      test("rewrites a flat page before it exists on disk", () => {
+        expect(
+          toRelativeGeneratedDocLink({
+            baseURL: "",
+            currentFilePath: "/workspace/docs/objects-user.md",
+            knownDocPaths: new Set(["queries-book-by-id"]),
+            outputDir: "/workspace/docs",
+            targetUrlPath: "/queries-book-by-id",
+          }),
+        ).toBe("./queries-book-by-id.md");
+      });
+
       test("rewrites pages in the current page's group folder", () => {
         expect(
           toRelativeGeneratedDocLink({
