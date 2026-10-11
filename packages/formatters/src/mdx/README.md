@@ -46,7 +46,12 @@ extensions:
 
 ```js
 // modules/custom-mdx.cjs
-const mdx = require("@graphql-markdown/formatters/mdx");
+// Omit `createMDXFormatter`: when present, it is used instead of the
+// individual exports, so overrides placed next to it would be ignored.
+const {
+  createMDXFormatter,
+  ...mdx
+} = require("@graphql-markdown/formatters/mdx");
 
 module.exports = {
   ...mdx,
