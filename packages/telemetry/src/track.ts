@@ -13,6 +13,8 @@ export interface TrackInput extends Omit<PayloadInput, "noStateBefore"> {
   option?: boolean;
   /** Override of the `telemetry.json` location (tests). */
   statePath?: string;
+  /** Receives the full notice instead of stderr (e.g. a prompt UI). */
+  onFullNotice?: (notice: string) => void;
 }
 
 /** Builds the request body, gzipped above the size threshold. */
@@ -48,7 +50,7 @@ export const track = async (input: TrackInput): Promise<void> => {
     }
 
     const ci = detectCi(env);
-    if (printDisclaimer(state, ci)) {
+    if (printDisclaimer(state, ci, input.onFullNotice)) {
       // Nothing is sent when the notice cannot be recorded.
       writeState({ enabled: true, noticeVersion: NOTICE_VERSION }, statePath);
     }

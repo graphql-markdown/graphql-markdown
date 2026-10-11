@@ -77,7 +77,7 @@ One event is sent for each distinct configuration, at most once per process. The
 | `os`, `pm`                  | Platform (`darwin`, `linux`, `win32`) and package manager (`npm`, `pnpm`, `yarn`, `bun`).                                                                                     |
 | `ci`, `ciProvider`          | Whether a CI environment was detected, and which one (see [CI behaviour](#ci-behaviour)).                                                                                     |
 | `firstRun`                  | `true` only when no telemetry preference file existed before the run. Never `true` in CI.                                                                                     |
-| `trigger`                   | Entry point: `cli`, `docusaurus`, `nuxt` or `programmatic`.                                                                                                                   |
+| `trigger`                   | Entry point: `cli`, `create`, `docusaurus`, `nuxt` or `programmatic`.                                                                                                         |
 | `container`, `wsl`          | Running in a container or in WSL.                                                                                                                                             |
 | `loader`                    | Kind of schema pointer: `url`, `git`, `github`, `file-sdl`, `file-json`, `code-file` (`.ts`, `.tsx`, `.js`, `.vue`, `.svelte`, `.astro`…), `glob`, `inline-sdl` or `unknown`. |
 | `config`, `cli`             | The settings used, from the config sources and from CLI flags, with custom values masked.                                                                                     |
