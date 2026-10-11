@@ -12,8 +12,10 @@ function resolveOrNpm(packageManager, intent, args) {
   const agent = SUPPORTED_PACKAGE_MANAGERS.includes(packageManager)
     ? packageManager
     : "npm";
-  const resolved =
-    resolveCommand(agent, intent, args) ?? resolveCommand("npm", intent, args);
+  const resolved = resolveCommand(agent, intent, args);
+  if (!resolved) {
+    throw new Error(`Unsupported ${intent} command for ${agent}`);
+  }
   return [resolved.command, resolved.args];
 }
 
@@ -70,7 +72,7 @@ export async function installDependencies(packageManager, projectDir) {
 }
 
 /**
- * Command line that adds packages as dev dependencies, e.g. "bun add --dev a b".
+ * Command line that adds packages as dev dependencies, e.g. "bun add -D a b".
  * @param {string} packageManager
  * @param {string[]} packages
  * @returns {string}

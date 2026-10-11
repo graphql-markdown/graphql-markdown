@@ -62,7 +62,7 @@ export function validateSchemaSource(value) {
 export async function resolvePackageManager(args, cwd = process.cwd()) {
   if (args.pm) return args.pm;
   // Set when launched via `<pm> create`, so it reflects what the user ran.
-  const agent = getUserAgent()?.split("/")[0];
+  const agent = getUserAgent();
   if (agent && SUPPORTED_PACKAGE_MANAGERS.includes(agent)) return agent;
   const detected = await detectPackageManager({ cwd });
   if (detected?.name && SUPPORTED_PACKAGE_MANAGERS.includes(detected.name)) {
