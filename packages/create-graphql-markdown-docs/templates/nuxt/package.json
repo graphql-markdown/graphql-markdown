@@ -15,7 +15,7 @@
     "@nuxt/content": "^3.16.0",
     "@nuxt/ui": "^4.11.0",
     "better-sqlite3": "^13.0.3",
-    "nuxt": "^4.5.2",
+    "nuxt": "^4.6.0",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {},
