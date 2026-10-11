@@ -159,7 +159,6 @@ const sanitizeLoaders = (value: unknown, depth: number): unknown => {
   }
   if (typeof value === "object" && value !== null && isPlainObject(value)) {
     const out: Record<string, unknown> = {};
-    let n = 0;
     for (const [key, item] of Object.entries(value)) {
       let masked: unknown;
       if (typeof item === "object" && item !== null && isPlainObject(item)) {
@@ -181,8 +180,7 @@ const sanitizeLoaders = (value: unknown, depth: number): unknown => {
       } else {
         masked = sanitizeLoaders(item, depth + 1);
       }
-      const name = sanitizeLoaderName(key);
-      out[name === "<custom-loader>" ? `<custom-loader:${n++}>` : name] = masked;
+      out[sanitizeLoaderName(key)] = masked;
     }
     return out;
   }
