@@ -162,6 +162,7 @@ describe("inspectProject", () => {
       packageJsonIndent: 2,
       existingConfig: null,
       workspaceRoot: false,
+      pnpmWorkspace: false,
       yarnBerry: false,
     });
   });
