@@ -259,6 +259,10 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
   if (depth > MAX_DEPTH || rule.kind === "opaque") {
     return typeof value === "string" ? "<string>" : "<object>";
   }
+  return sanitizeByRule(value, rule, depth);
+};
+
+const sanitizeByRule = (value: unknown, rule: Rule, depth: number): unknown => {
   if (rule.kind === "pointer") {
     return maskPointer(value);
   }
@@ -268,6 +272,14 @@ const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
   if (typeof value === "string") {
     return sanitizeStringByRule(value, rule);
   }
+  return sanitizeCollection(value, rule, depth);
+};
+
+const sanitizeCollection = (
+  value: unknown,
+  rule: Rule,
+  depth: number,
+): unknown => {
   if (Array.isArray(value)) {
     return value.map((item) => {
       return sanitizeValue(item, rule, depth + 1);
