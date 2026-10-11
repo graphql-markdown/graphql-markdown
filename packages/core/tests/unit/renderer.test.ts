@@ -3609,6 +3609,54 @@ describe("renderer", () => {
         ).toBe(false);
       });
 
+      test("preCollectGeneratedDocPaths collects root doc paths for flat hierarchy", async () => {
+        expect.assertions(3);
+
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.FLAT]: {} },
+          },
+          mdxExtension: "mdx",
+        });
+
+        renderer.preCollectGeneratedDocPaths({
+          objects: { UserProfile: {} },
+          queries: null,
+        });
+
+        const known = renderer["knownDocPaths"];
+        expect(known.has("objects-user-profile")).toBe(true);
+        expect(known.has("queries-user-profile")).toBe(false);
+        expect(known.size).toBe(1);
+      });
+
+      test("preCollectGeneratedDocPaths skips non-flat hierarchy", async () => {
+        expect.assertions(1);
+
+        const renderer = await getRenderer({
+          printer: Printer as unknown as typeof IPrinter,
+          outputDir: "/output",
+          baseURL: baseURL,
+          group: undefined,
+          prettify: false,
+          docOptions: {
+            ...DEFAULT_RENDERER_OPTIONS,
+            hierarchy: { [TypeHierarchy.ENTITY]: {} },
+          },
+          mdxExtension: "mdx",
+        });
+
+        renderer.preCollectGeneratedDocPaths({ objects: { User: {} } });
+
+        expect(renderer["knownDocPaths"].size).toBe(0);
+      });
+
       test("registerCustomGroups handles empty group configuration", async () => {
         expect.assertions(1);
 

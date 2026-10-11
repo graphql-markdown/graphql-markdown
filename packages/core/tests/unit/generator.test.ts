@@ -396,6 +396,26 @@ describe("generator", () => {
       );
     });
 
+    test("pre-collects generated doc paths from the root types before rendering", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+
+      const rootTypes = { objects: {} } as SchemaMap;
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce(rootTypes);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({ ...options });
+
+      expect(mockRenderer.preCollectGeneratedDocPaths).toHaveBeenCalledWith(
+        rootTypes,
+      );
+    });
+
     test("returns early when loadGraphqlSchema returns undefined", async () => {
       expect.assertions(2);
 

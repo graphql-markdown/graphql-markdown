@@ -405,14 +405,7 @@ const updateTocChain = async (
 export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   event,
 ): Promise<void> => {
-  const {
-    baseURL,
-    filePath,
-    knownDocPaths,
-    name,
-    outputAdapter,
-    outputDir,
-  } = (
+  const { baseURL, filePath, knownDocPaths, name, outputAdapter, outputDir } = (
     event as {
       data: {
         baseURL: string;
