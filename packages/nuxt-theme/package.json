@@ -56,7 +56,7 @@
   },
   "devDependencies": {
     "@graphql-markdown/tooling-config": "workspace:^",
-    "nuxt": "^4.5.2",
+    "nuxt": "^4.6.0",
     "typescript": "6.0.3",
     "vue-router": "^5.4.0",
     "vue-tsc": "^3.3.11"
