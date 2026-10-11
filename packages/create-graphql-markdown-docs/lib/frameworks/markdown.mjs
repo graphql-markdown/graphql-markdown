@@ -42,9 +42,6 @@ export const markdown = {
   name: "Markdown",
   label: "Markdown (plain .md files)",
   hint: "No site — just Markdown files in docs/",
-  links: "relative",
-  contentRoot: "docs",
-  nextSteps,
   scaffold: {
     template: "markdown",
     runScripts: ["doc"],
@@ -65,6 +62,9 @@ export const mdx = {
   label: "MDX (plain .mdx files)",
   hint: "Framework-neutral .mdx pages (plain HTML, no components)",
   formatter: MDX_FORMATTER,
+  links: "relative",
+  contentRoot: "docs",
+  nextSteps,
   scaffold: {
     ...markdown.scaffold,
     apply(tempDir, { schemaRef, loader }) {
