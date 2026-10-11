@@ -11,7 +11,6 @@
 
 import type {
   AdmonitionType,
-  Badge,
   CollapsibleOption,
   Formatter,
   Maybe,
@@ -26,6 +25,7 @@ import {
 } from "@graphql-markdown/helpers";
 import { MARKDOWN_EOL, MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
+  formatMDXBadge,
   formatMDXBullet,
   formatMDXEscapedPermalink,
   formatMDXFrontmatter,
@@ -36,15 +36,6 @@ import { createInternalLinksRewriter, rewriteRenderedPage } from "../output";
 
 /** Generic MDX pages use the `.mdx` extension. */
 export const mdxExtension = ".mdx";
-
-/**
- * Formats a badge as an HTML `<mark>` element (valid JSX, no component).
- * @param badge - Badge data containing text
- * @returns Formatted badge string
- */
-export const formatMDXBadge = ({ text }: Badge): MDXString => {
-  return `<mark class="gqlmd-mdx-badge">${text as string}</mark>` as MDXString;
-};
 
 /**
  * Formats an admonition as a Markdown blockquote with a bold type/title label.
@@ -91,6 +82,7 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
 };
 
 export {
+  formatMDXBadge,
   formatMDXBullet,
   formatMDXFrontmatter,
   formatMDXNameEntity,
