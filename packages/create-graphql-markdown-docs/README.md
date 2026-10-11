@@ -153,7 +153,7 @@ Then run `npm run doc` to generate the docs and `npm start` to serve them.
 
 ## Telemetry
 
-The scaffolder reports one anonymous event per run (scaffold or wire): the framework, mode and schema loader type, with custom strings, URLs and paths masked. No schema content is sent. The first run shows a notice.
+The scaffolder reports one anonymous event per run (scaffold or wire): the framework, mode and schema loader type, with custom strings, URLs and paths masked. No schema content is sent. Nothing is sent on `--dry-run`. The first run shows a notice.
 
 Opt out with the `--no-telemetry` flag, `DO_NOT_TRACK=1`, or `gqlmd telemetry disable`. See [what is collected](https://graphql-markdown.dev/telemetry).
 

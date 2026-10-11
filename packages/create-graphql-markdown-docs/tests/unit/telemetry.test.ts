@@ -152,6 +152,18 @@ describe("create telemetry", () => {
     expect(fs.existsSync(path.join(dir, ".graphqlrc"))).toBe(true);
   });
 
+  it("wire --dry-run does not report", async () => {
+    const dir = seedProject("wire-dry");
+    expect(await main([...wireArgs(dir), "--dry-run"])).toBe(0);
+    expect(mocks.track).not.toHaveBeenCalled();
+  });
+
+  it("a normal wire run reports once", async () => {
+    const dir = seedProject("wire-once");
+    expect(await main(wireArgs(dir))).toBe(0);
+    expect(mocks.track).toHaveBeenCalledTimes(1);
+  });
+
   it("sends when nothing opts out", async () => {
     mocks.track.mockImplementation(trackLikeReal);
     const dir = path.join(work, "optin");

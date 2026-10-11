@@ -20,9 +20,10 @@ function configFor(ctx) {
 /**
  * Reports one anonymous create event (`create_scaffold` or `create_wire`).
  * Never throws: telemetry must not affect a run. The full notice is shown
- * as a clack note instead of raw stderr output.
+ * as a clack note instead of raw stderr output. Nothing is sent on `--dry-run`.
  */
 export async function reportTelemetry(ctx) {
+  if (ctx.args?.["dry-run"]) return;
   try {
     const { version } = JSON.parse(
       fs.readFileSync(path.join(packageRoot, "package.json"), "utf-8"),
