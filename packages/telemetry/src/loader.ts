@@ -9,11 +9,7 @@ export type LoaderKind =
   | "unknown"
   | "url";
 
-const classifyOne = (pointer: unknown): LoaderKind => {
-  if (typeof pointer !== "string") {
-    return "unknown";
-  }
-  const p = pointer.trim();
+const classifyScheme = (p: string): LoaderKind | undefined => {
   if (/^https?:\/\//i.test(p)) {
     return "url";
   }
@@ -23,14 +19,15 @@ const classifyOne = (pointer: unknown): LoaderKind => {
   if (/^git:/i.test(p)) {
     return "git";
   }
-  if (
-    /\b(type|schema|interface|enum|input|union|scalar|extend|directive)\b[^\n]*[{@]/.test(
-      p,
-    ) &&
-    /\s/.test(p)
-  ) {
-    return "inline-sdl";
-  }
+  return undefined;
+};
+
+const isInlineSdl = (p: string): boolean =>
+  /\b(type|schema|interface|enum|input|union|scalar|extend|directive)\b[^\n]*[{@]/.test(
+    p,
+  ) && /\s/.test(p);
+
+const classifyPath = (p: string): LoaderKind => {
   if (/[*?{}[\]!]/.test(p)) {
     return "glob";
   }
@@ -44,6 +41,14 @@ const classifyOne = (pointer: unknown): LoaderKind => {
     return "code-file";
   }
   return "unknown";
+};
+
+const classifyOne = (pointer: unknown): LoaderKind => {
+  if (typeof pointer !== "string") {
+    return "unknown";
+  }
+  const p = pointer.trim();
+  return classifyScheme(p) ?? (isInlineSdl(p) ? "inline-sdl" : classifyPath(p));
 };
 
 const classifyEntry = (pointer: unknown): LoaderKind[] => {
