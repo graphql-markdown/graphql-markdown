@@ -1,0 +1,13 @@
+{
+  "name": "graphql-markdown-docs",
+  "private": true,
+  "scripts": {
+    "doc": "gqlmd graphql-to-doc"
+  },
+  "dependencies": {
+    "@graphql-markdown/cli": "^1.1.2",
+    "@graphql-tools/graphql-file-loader": "^8.0.0",
+    "graphql": "^16.13.2",
+    "graphql-config": "^5.1.6"
+  }
+}

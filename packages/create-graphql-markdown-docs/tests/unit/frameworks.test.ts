@@ -37,8 +37,13 @@ describe("WIRE_FRAMEWORKS descriptors", () => {
 });
 
 describe("FRAMEWORKS scaffold registry", () => {
-  it("keys are exactly nuxt and docusaurus, in order", () => {
-    expect(Object.keys(FRAMEWORKS)).toEqual(["nuxt", "docusaurus"]);
+  it("keys are nuxt, docusaurus, markdown and mdx, in order", () => {
+    expect(Object.keys(FRAMEWORKS)).toEqual([
+      "nuxt",
+      "docusaurus",
+      "markdown",
+      "mdx",
+    ]);
   });
 
   it("each scaffold framework has a scaffold key", () => {

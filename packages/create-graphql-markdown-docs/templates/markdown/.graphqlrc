@@ -1,0 +1,9 @@
+schema: './schema/example.graphql'
+extensions:
+  graphql-markdown:
+    rootPath: './docs'
+    baseURL: '.'
+    loaders:
+      GraphQLFileLoader: '@graphql-tools/graphql-file-loader'
+    printTypeOptions:
+      deprecated: 'group'

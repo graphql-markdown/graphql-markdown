@@ -1,4 +1,5 @@
 import { docusaurus } from "./docusaurus.mjs";
+import { markdown, mdx } from "./markdown.mjs";
 import { nuxt } from "./nuxt.mjs";
 import {
   docfx,
@@ -7,7 +8,6 @@ import {
   honkit,
   hugo,
   mdbook,
-  mdx,
   mkdocs,
   starlight,
   vocs,
@@ -34,7 +34,7 @@ import {
  * Supported scaffold targets; each key maps to `templates/<framework>`.
  * `scaffold.runScripts` are the package scripts to run after install, in order.
  */
-export const FRAMEWORKS = { nuxt, docusaurus };
+export const FRAMEWORKS = { nuxt, docusaurus, markdown, mdx };
 
 /** Every framework descriptor available in wire mode, keyed by id. */
 export const WIRE_FRAMEWORKS = {

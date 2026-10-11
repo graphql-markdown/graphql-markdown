@@ -99,10 +99,11 @@ export function applyTemplate(tempDir, ctx) {
   const { framework, projectDir, schemaPath, loader, title, color } = ctx;
   const fw = FRAMEWORKS[framework];
 
-  copyDirRecursive(path.join(templatesRoot, framework), tempDir, [
-    /^node_modules$/,
-    ...fw.scaffold.copyExcludes,
-  ]);
+  copyDirRecursive(
+    path.join(templatesRoot, fw.scaffold.template ?? framework),
+    tempDir,
+    [/^node_modules$/, ...fw.scaffold.copyExcludes],
+  );
 
   // npm strips `.gitignore` from published tarballs, so templates ship it as
   // `gitignore` and it is renamed back here.
