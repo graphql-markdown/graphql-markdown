@@ -160,7 +160,7 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 
 ### With the scaffolder (recommended)
 
-Run the scaffolder inside your existing project. When the folder already holds a project, it adds GraphQL-Markdown to it instead of creating a new site. It detects your framework from `package.json` (or asks you), then asks for your schema (a path, glob or URL) and the output folder for the generated docs. It writes a `.graphqlrc` file and a `docs:api` script, and prints the one step left for your framework, such as adding a sidebar or navigation entry.
+Run the scaffolder inside your existing project. When the folder already holds a project, it adds GraphQL-Markdown to it instead of creating a new site. It detects your framework from `package.json` (or asks you), then asks for your schema (a path, glob or URL) and the output folder for the generated docs. It writes a `.graphqlrc` file and a `gqlmd` script, and prints the one step left for your framework, such as adding a sidebar or navigation entry.
 
 ```shell title="shell"
 cd my-starlight-site

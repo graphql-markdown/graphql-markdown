@@ -166,6 +166,9 @@ export function buildGraphqlrc({
   };
 }
 
+/** Default package.json script added in wire mode; namespaced to avoid clashes. */
+export const DEFAULT_SCRIPT_NAME = "gqlmd";
+
 /**
  * Plan the files and package.json changes needed to wire a project.
  * @param {object} inputs Arguments for buildGraphqlrc.
@@ -173,7 +176,11 @@ export function buildGraphqlrc({
  * @param {{ scriptName?: string }} [options]
  * @returns {{ files: { path: string, content: string }[], mergeBlock?: string, script: object, warnings: string[] }}
  */
-export function planWire(inputs, project, { scriptName = "docs:api" } = {}) {
+export function planWire(
+  inputs,
+  project,
+  { scriptName = DEFAULT_SCRIPT_NAME } = {},
+) {
   const config = buildGraphqlrc(inputs);
   const warnings = [];
   let files = [];

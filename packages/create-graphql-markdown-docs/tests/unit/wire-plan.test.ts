@@ -294,7 +294,7 @@ describe("planWire", () => {
     expect(plan.files[0].path).toBe(".graphqlrc");
     expect(plan.mergeBlock).toBeUndefined();
     expect(plan.script).toEqual({
-      name: "docs:api",
+      name: "gqlmd",
       command: "gqlmd graphql-to-doc",
     });
   });
@@ -318,10 +318,10 @@ describe("planWire", () => {
   it("skips the script on a name clash", () => {
     const plan = planWire(
       inputs,
-      project({ packageJson: { scripts: { "docs:api": "x" } } }),
+      project({ packageJson: { scripts: { gqlmd: "x" } } }),
     );
     expect(plan.script).toEqual({
-      skipped: 'script "docs:api" already exists',
+      skipped: 'script "gqlmd" already exists',
     });
   });
 });
@@ -345,7 +345,7 @@ describe("applyWirePlan", () => {
     expect(fs.existsSync(path.join(dir, ".graphqlrc"))).toBe(true);
     expect(fs.readFileSync(path.join(dir, "package.json"), "utf8")).toBe(
       JSON.stringify(
-        { name: "x", scripts: { "docs:api": "gqlmd graphql-to-doc" } },
+        { name: "x", scripts: { gqlmd: "gqlmd graphql-to-doc" } },
         null,
         4,
       ) + "\n",
@@ -380,7 +380,7 @@ describe("formatWirePlan", () => {
       }),
     );
     expect(text).toContain(".graphqlrc");
-    expect(text).toContain('"docs:api": "gqlmd graphql-to-doc"');
+    expect(text).toContain('"gqlmd": "gqlmd graphql-to-doc"');
   });
 
   it("includes the merge block", () => {
