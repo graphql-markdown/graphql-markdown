@@ -348,6 +348,8 @@ export interface RendererOptions {
   outputDir: string;
   /** Base URL for the documentation */
   baseURL: string;
+  /** Root for documentation links, forwarded to render hooks */
+  linkRoot?: string;
   /** Optional grouping configuration for schema entities */
   group: Maybe<SchemaEntitiesGroupMap>;
   /** Whether to format the generated markdown */
@@ -377,6 +379,7 @@ export class Renderer {
   readonly group: Maybe<SchemaEntitiesGroupMap>;
   readonly outputDir: string;
   readonly baseURL: string;
+  readonly linkRoot?: string;
   readonly prettify: boolean;
   readonly options: Maybe<RendererDocOptions>;
   readonly mdxExtension: string;
@@ -385,6 +388,7 @@ export class Renderer {
   private readonly printer: typeof IPrinter;
   private readonly rootLevelPositionManager: CategoryPositionManager;
   private readonly categoryPositionManager: CategoryPositionManager;
+  private readonly knownDocPaths = new Set<string>();
 
   /**
    * Creates a new Renderer instance.
@@ -396,6 +400,7 @@ export class Renderer {
     printer,
     outputDir,
     baseURL,
+    linkRoot,
     group,
     prettify,
     docOptions,
@@ -407,6 +412,9 @@ export class Renderer {
     this.group = group;
     this.outputDir = outputDir;
     this.baseURL = baseURL;
+    if (linkRoot !== undefined) {
+      this.linkRoot = linkRoot;
+    }
     this.prettify = prettify;
     this.options = docOptions;
     this.mdxExtension = mdxExtension;
@@ -765,10 +773,12 @@ export class Renderer {
     const events = getEvents();
     const event = new RenderTypeEntitiesEvent({
       baseURL: this.baseURL,
+      ...(this.linkRoot !== undefined && { linkRoot: this.linkRoot }),
       name,
       filePath,
       outputDir: this.outputDir,
       outputAdapter: this.outputAdapter,
+      knownDocPaths: this.knownDocPaths,
     });
     const { errors } = await events.emitAsync(
       RenderTypeEntitiesEvents.AFTER_RENDER,
@@ -781,6 +791,27 @@ export class Renderer {
       filePath,
       name,
     };
+  }
+
+  /**
+   * Pre-collects root-level generated document paths for flat hierarchy.
+   *
+   * @param rootTypes - Map of schema entity names to their generated types
+   */
+  preCollectGeneratedDocPaths(rootTypes: object): void {
+    if (!isHierarchy(this.options, TypeHierarchy.FLAT)) {
+      return;
+    }
+
+    for (const [entity, type] of Object.entries(rootTypes)) {
+      if (typeof type !== "object" || type === null) {
+        continue;
+      }
+
+      for (const name of Object.keys(type)) {
+        this.knownDocPaths.add(`${entity}-${slugify(name)}`);
+      }
+    }
   }
 
   /**
@@ -1103,6 +1134,7 @@ export const getRenderer = async ({
   printer,
   outputDir,
   baseURL,
+  linkRoot,
   group,
   prettify,
   docOptions,
@@ -1117,6 +1149,7 @@ export const getRenderer = async ({
     printer,
     outputDir,
     baseURL,
+    ...(linkRoot !== undefined && { linkRoot }),
     group,
     prettify,
     docOptions,

@@ -4,6 +4,7 @@
  * @packageDocumentation
  */
 
+import { existsSync } from "node:fs";
 import {
   dirname,
   relative as relativeFs,
@@ -16,6 +17,10 @@ export interface RelativeGeneratedDocLinkOptions {
   baseURL: string;
   currentFilePath: string;
   extension?: string;
+  /** Optional URL prefix (e.g. `/docs`) the printer puts before generated paths. */
+  linkRoot?: string;
+  /** Root-level generated doc paths (without extensions), known before they are written. */
+  knownDocPaths?: ReadonlySet<string>;
   outputDir: string;
   targetUrlPath: string;
 }
@@ -37,6 +42,48 @@ const stripTrailingSlashes = (value: string): string => {
   return value.slice(0, end);
 };
 
+// Folders the renderer always creates at the root of the output directory.
+const GENERATED_ROOT_FOLDERS = new Set(["operations", "types"]);
+
+const firstSegment = (path: string): string => {
+  return path.split("/").find(Boolean) ?? "";
+};
+
+// With a root baseURL every absolute URL starts with "/", so a page link can
+// only be told apart from `/guides/auth` or `/img/logo.png` by its first
+// segment: a built-in root folder, a folder already present in the output
+// directory, or the folder of the page being rewritten (group folders).
+const isGeneratedRootPath = (
+  docPath: string,
+  currentFilePath: string,
+  outputDir: string,
+  extension: string,
+  knownDocPaths?: ReadonlySet<string>,
+): boolean => {
+  const segment = firstSegment(docPath);
+  if (segment === "") return false;
+  if (GENERATED_ROOT_FOLDERS.has(segment)) return true;
+  // flat hierarchy: pages live directly at the root
+  if (
+    knownDocPaths?.has(docPath) ||
+    existsSync(resolveFs(outputDir, `${docPath}${extension}`))
+  ) {
+    return true;
+  }
+  const currentRelative = relativeFs(outputDir, currentFilePath).replaceAll(
+    "\\",
+    "/",
+  );
+  if (
+    !currentRelative.startsWith("..") &&
+    currentRelative.includes("/") &&
+    firstSegment(currentRelative) === segment
+  ) {
+    return true;
+  }
+  return existsSync(resolveFs(outputDir, segment));
+};
+
 /**
  * Converts a generated absolute GraphQL-Markdown doc URL into a page-relative file path.
  * Returns `undefined` when the target URL does not belong to the configured `baseURL`.
@@ -45,19 +92,53 @@ export const toRelativeGeneratedDocLink = ({
   baseURL,
   currentFilePath,
   extension = ".md",
+  linkRoot,
+  knownDocPaths,
   outputDir,
   targetUrlPath,
 }: RelativeGeneratedDocLinkOptions): string | undefined => {
   const normalizedBaseURL = stripTrailingSlashes(
     baseURL.replaceAll(/^\/+/g, ""),
   );
-  const basePrefix = `/${normalizedBaseURL}/`;
+  // A "." (or empty) baseURL means docs are generated at the root, and their
+  // URLs carry no base segment.
+  const basePrefix =
+    normalizedBaseURL === "" || normalizedBaseURL === "."
+      ? "/"
+      : `/${normalizedBaseURL}/`;
 
-  if (!targetUrlPath.startsWith(basePrefix)) {
+  // Protocol-relative URLs are never generated pages.
+  if (targetUrlPath.startsWith("//")) {
     return undefined;
   }
 
-  const relativeDocPath = targetUrlPath.slice(basePrefix.length);
+  const normalizedLinkRoot = stripTrailingSlashes(linkRoot ?? "");
+  const urlPath =
+    normalizedLinkRoot !== "" &&
+    (targetUrlPath === normalizedLinkRoot ||
+      targetUrlPath.startsWith(`${normalizedLinkRoot}/`))
+      ? targetUrlPath.slice(normalizedLinkRoot.length) || "/"
+      : targetUrlPath;
+
+  if (!urlPath.startsWith(basePrefix)) {
+    return undefined;
+  }
+
+  const relativeDocPath = urlPath.slice(basePrefix.length);
+
+  if (
+    basePrefix === "/" &&
+    !isGeneratedRootPath(
+      relativeDocPath,
+      currentFilePath,
+      outputDir,
+      extension,
+      knownDocPaths,
+    )
+  ) {
+    return undefined;
+  }
+
   const docPathWithExt = relativeDocPath.endsWith(extension)
     ? relativeDocPath
     : `${relativeDocPath}${extension}`;

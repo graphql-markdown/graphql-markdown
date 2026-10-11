@@ -7,6 +7,7 @@ import {
   honkit,
   hugo,
   mdbook,
+  mdx,
   mkdocs,
   starlight,
   vocs,
@@ -47,6 +48,7 @@ export const WIRE_FRAMEWORKS = {
   docfx,
   mdbook,
   nuxt,
+  mdx,
   generic,
 };
 

@@ -19,18 +19,14 @@ import type {
   RenderTypeEntitiesHook,
 } from "@graphql-markdown/types";
 import { indentMarkdownLines } from "@graphql-markdown/helpers";
-import {
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  toRelativeGeneratedDocLink,
-} from "@graphql-markdown/utils";
+import { MARKDOWN_EOL, MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
   formatMDXFrontmatterTitleOnly,
   formatMDXLink,
   formatMDXPermalink,
 } from "../defaults";
-import { rewriteRenderedPage } from "../output";
+import { createInternalLinksRewriter, rewriteRenderedPage } from "../output";
 
 export const __default = {
   formatMDXBullet,
@@ -49,27 +45,7 @@ const ADMONITION_TYPE_MAP: Record<string, string> = {
   success: "success",
 };
 
-const rewriteInternalLinks = (
-  content: string,
-  filePath: string,
-  outputDir: string,
-  baseURL: string,
-): string => {
-  return content.replaceAll(
-    /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
-    (_match, urlPath, hash = "") => {
-      const relativePath = toRelativeGeneratedDocLink({
-        baseURL,
-        currentFilePath: filePath,
-        outputDir,
-        targetUrlPath: urlPath,
-      });
-
-      const target = relativePath ?? urlPath;
-      return `](${target}${hash})`;
-    },
-  );
-};
+const rewriteInternalLinks = createInternalLinksRewriter();
 
 /**
  * Formats a badge as an inline HTML mark element.

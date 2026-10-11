@@ -10,7 +10,10 @@
  */
 
 import type { Maybe, OutputAdapter } from "@graphql-markdown/types";
-import { fsOutputAdapter } from "@graphql-markdown/utils";
+import {
+  fsOutputAdapter,
+  toRelativeGeneratedDocLink,
+} from "@graphql-markdown/utils";
 
 /**
  * Resolves the destination a hook must use, falling back to the filesystem.
@@ -127,13 +130,24 @@ export const rewriteRenderedPage = async (
     filePath: string,
     outputDir: string,
     baseURL: string,
+    linkRoot?: string,
+    knownDocPaths?: ReadonlySet<string>,
   ) => string,
 ): Promise<void> => {
-  const { baseURL, filePath, outputAdapter, outputDir } = (
+  const {
+    baseURL,
+    filePath,
+    knownDocPaths,
+    linkRoot,
+    outputAdapter,
+    outputDir,
+  } = (
     event as {
       data: {
         baseURL: string;
         filePath: string;
+        knownDocPaths?: ReadonlySet<string>;
+        linkRoot?: string;
         outputAdapter?: OutputAdapter;
         outputDir: string;
       };
@@ -146,9 +160,53 @@ export const rewriteRenderedPage = async (
     return;
   }
 
-  const rewritten = rewrite(content, filePath, outputDir, baseURL);
+  const rewritten = rewrite(
+    content,
+    filePath,
+    outputDir,
+    baseURL,
+    linkRoot,
+    knownDocPaths,
+  );
 
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);
   }
+};
+
+/**
+ * Creates a rewriter turning absolute generated doc links into page-relative ones.
+ *
+ * @param extension - Page extension to resolve targets with (defaults to `.md`)
+ * @returns A rewrite function usable with {@link rewriteRenderedPage}
+ */
+export const createInternalLinksRewriter = (
+  extension?: string,
+): ((
+  content: string,
+  filePath: string,
+  outputDir: string,
+  baseURL: string,
+  linkRoot?: string,
+  knownDocPaths?: ReadonlySet<string>,
+) => string) => {
+  return (content, filePath, outputDir, baseURL, linkRoot, knownDocPaths) => {
+    return content.replaceAll(
+      /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
+      (_match, urlPath, hash = "") => {
+        const relativePath = toRelativeGeneratedDocLink({
+          baseURL,
+          currentFilePath: filePath,
+          ...(extension !== undefined && { extension }),
+          ...(linkRoot !== undefined && { linkRoot }),
+          knownDocPaths,
+          outputDir,
+          targetUrlPath: urlPath,
+        });
+
+        const target = relativePath ?? urlPath;
+        return `](${target}${hash})`;
+      },
+    );
+  };
 };

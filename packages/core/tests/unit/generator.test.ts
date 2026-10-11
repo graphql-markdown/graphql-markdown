@@ -114,6 +114,7 @@ const mockRenderer = {
   renderTypeEntities: vi.fn(),
   renderHomepage: vi.fn(),
   preCollectCategories: vi.fn(),
+  preCollectGeneratedDocPaths: vi.fn(),
 } as unknown as CoreRenderer.Renderer;
 
 import { generateDocFromSchema } from "../../src";
@@ -237,6 +238,7 @@ describe("generator", () => {
           printer: {},
           outputDir: options.outputDir,
           baseURL: options.baseURL,
+          linkRoot: options.linkRoot,
           group: undefined,
           prettify: options.prettify,
           docOptions: {
@@ -391,6 +393,26 @@ describe("generator", () => {
 
       expect(rendererSpy).toHaveBeenCalledWith(
         expect.objectContaining({ baseURL: "mutated base URL" }),
+      );
+    });
+
+    test("pre-collects generated doc paths from the root types before rendering", async () => {
+      expect.assertions(1);
+
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+
+      const rootTypes = { objects: {} } as SchemaMap;
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce(rootTypes);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+
+      await generateDocFromSchema({ ...options });
+
+      expect(mockRenderer.preCollectGeneratedDocPaths).toHaveBeenCalledWith(
+        rootTypes,
       );
     });
 

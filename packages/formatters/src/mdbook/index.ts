@@ -33,7 +33,6 @@ import {
   firstUppercase,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
-  toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
@@ -42,7 +41,11 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults";
-import { rewriteRenderedPage, writeOutput } from "../output";
+import {
+  createInternalLinksRewriter,
+  rewriteRenderedPage,
+  writeOutput,
+} from "../output";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -127,28 +130,7 @@ export {
   formatMDXSpecifiedByLink,
 } from "../defaults";
 
-const rewriteInternalLinks = (
-  content: string,
-  filePath: string,
-  outputDir: string,
-  baseURL: string,
-): string => {
-  return content.replaceAll(
-    /\]\((\/[^)\s#]+)(#[^)\s]+)?\)/g,
-    (_match, urlPath, hash = "") => {
-      const relativePath = toRelativeGeneratedDocLink({
-        baseURL,
-        currentFilePath: filePath,
-        extension: mdxExtension,
-        outputDir,
-        targetUrlPath: urlPath,
-      });
-
-      const target = relativePath ?? urlPath;
-      return `](${target}${hash})`;
-    },
-  );
-};
+const rewriteInternalLinks = createInternalLinksRewriter(mdxExtension);
 
 /**
  * Rewrites absolute generated doc links to page-relative `.md` paths after each page is rendered.

@@ -54,19 +54,20 @@ With `--yes`, `--schema` and `--output` are required, and so is `--framework` wh
 
 ### Supported frameworks (existing sites)
 
-| Framework       | Typical output folder  | Notes                                                     |
-| --------------- | ---------------------- | --------------------------------------------------------- |
-| Docusaurus      | `docs/api`             | Router links; the suggested link root follows the route.  |
-| Nuxt            | `content/api`          | Router links; the suggested link root follows the route.  |
-| Astro Starlight | `src/content/docs/api` | Set `--site-base` if the site is served under a sub-path. |
-| Fumadocs        | `content/docs/api`     | Router links; the suggested link root follows the route.  |
-| Vocs            | `docs/pages/api`       | Router links; the suggested link root follows the route.  |
-| HonKit          | `api`                  | Set `--site-base` if the site is served under a sub-path. |
-| Hugo            | `content/api`          | Set `--site-base` if the site is served under a sub-path. |
-| MkDocs          | `docs/api`             | Links relative to pages.                                  |
-| DocFX           | `docs/api`             | Links relative to pages.                                  |
-| mdBook          | `src/api`              | Links relative to pages.                                  |
-| Generic         | Any folder you choose  | Any Markdown/MDX site — you set the link root.            |
+| Framework       | Typical output folder  | Notes                                                                                |
+| --------------- | ---------------------- | ------------------------------------------------------------------------------------ |
+| Docusaurus      | `docs/api`             | Router links; the suggested link root follows the route.                             |
+| Nuxt            | `content/api`          | Router links; the suggested link root follows the route.                             |
+| Astro Starlight | `src/content/docs/api` | Set `--site-base` if the site is served under a sub-path.                            |
+| Fumadocs        | `content/docs/api`     | Router links; the suggested link root follows the route.                             |
+| Vocs            | `docs/pages/api`       | Router links; the suggested link root follows the route.                             |
+| HonKit          | `api`                  | Set `--site-base` if the site is served under a sub-path.                            |
+| Hugo            | `content/api`          | Set `--site-base` if the site is served under a sub-path.                            |
+| MkDocs          | `docs/api`             | Links relative to pages.                                                             |
+| DocFX           | `docs/api`             | Links relative to pages.                                                             |
+| mdBook          | `src/api`              | Links relative to pages.                                                             |
+| Generic MDX     | Any folder you choose  | Framework-neutral `.mdx` pages (plain HTML, no components); links relative to pages. |
+| Generic         | Any folder you choose  | Any Markdown/MDX site — you set the link root.                                       |
 
 ## Schema sources
 
@@ -97,17 +98,17 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 
 #### Shared
 
-| Flag                         | Description                                                                                                                                                                                   |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `[dir]`, `-d, --dir <path>`  | Target folder (default: ask, or the current folder with `--existing`).                                                                                                                        |
-| `--new` \| `--existing`      | Force scaffold or wire mode (default: picked from the folder).                                                                                                                                |
-| `--framework <name>`         | Scaffold: `nuxt` \| `docusaurus` (default `nuxt`). Wire: `docusaurus` \| `starlight` \| `fumadocs` \| `vocs` \| `honkit` \| `hugo` \| `mkdocs` \| `docfx` \| `mdbook` \| `nuxt` \| `generic`. |
-| `--schema <source>`          | Schema source: `<path\|url\|git:\|github:>`. See the table above.                                                                                                                             |
-| `--pm <name>`                | Package manager: `npm` \| `pnpm` \| `yarn` \| `bun`. Otherwise detected from the invoking command, then from lockfiles.                                                                       |
-| `--install` / `--no-install` | Install dependencies (or skip it). Wire mode installs nothing unless `--install` is passed.                                                                                                   |
-| `-y, --yes`                  | Accept defaults and skip all prompts.                                                                                                                                                         |
-| `-h, --help`                 | Show usage and exit.                                                                                                                                                                          |
-| `-v, --version`              | Print the CLI version and exit.                                                                                                                                                               |
+| Flag                         | Description                                                                                                                                                                                            |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `[dir]`, `-d, --dir <path>`  | Target folder (default: ask, or the current folder with `--existing`).                                                                                                                                 |
+| `--new` \| `--existing`      | Force scaffold or wire mode (default: picked from the folder).                                                                                                                                         |
+| `--framework <name>`         | Scaffold: `nuxt` \| `docusaurus` (default `nuxt`). Wire: `docusaurus` \| `starlight` \| `fumadocs` \| `vocs` \| `honkit` \| `hugo` \| `mkdocs` \| `docfx` \| `mdbook` \| `nuxt` \| `mdx` \| `generic`. |
+| `--schema <source>`          | Schema source: `<path\|url\|git:\|github:>`. See the table above.                                                                                                                                      |
+| `--pm <name>`                | Package manager: `npm` \| `pnpm` \| `yarn` \| `bun`. Otherwise detected from the invoking command, then from lockfiles.                                                                                |
+| `--install` / `--no-install` | Install dependencies (or skip it). Wire mode installs nothing unless `--install` is passed.                                                                                                            |
+| `-y, --yes`                  | Accept defaults and skip all prompts.                                                                                                                                                                  |
+| `-h, --help`                 | Show usage and exit.                                                                                                                                                                                   |
+| `-v, --version`              | Print the CLI version and exit.                                                                                                                                                                        |
 
 #### Scaffold only
 

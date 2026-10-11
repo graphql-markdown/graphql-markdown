@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/formatters",
   "homepage": "https://graphql-markdown.dev",
-  "description": "Formatter presets for Docusaurus, Starlight, Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, and mdBook.",
+  "description": "Formatter presets for Docusaurus, Starlight, Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, mdBook, and generic MDX.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
@@ -24,6 +24,7 @@
     "mkdocs",
     "docfx",
     "mdbook",
+    "mdx",
     "documentation",
     "formatter"
   ],
@@ -129,6 +130,20 @@
       "default": {
         "types": "./dist/mdbook/index.d.ts",
         "default": "./dist/mdbook/index.js"
+      }
+    },
+    "./mdx": {
+      "require": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      },
+      "import": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
+      },
+      "default": {
+        "types": "./dist/mdx/index.d.ts",
+        "default": "./dist/mdx/index.js"
       }
     },
     "./mkdocs": {
