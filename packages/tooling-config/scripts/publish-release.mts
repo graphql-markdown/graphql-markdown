@@ -23,7 +23,13 @@
 // within erasable syntax: no enums, no parameter properties, no namespaces.
 
 import { spawnSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
@@ -76,7 +82,57 @@ const repoRoot = resolve(scriptDir, "../../../");
 // spawnSync/spawn call below passes an explicit `cwd` for the same reason.
 const { getBuildSequence } = await import("./build-packages.mts");
 
-const buildSequence: string[] = getBuildSequence();
+// Packages that ship `templates/*/package.json` (scaffolders) reference other
+// workspace packages by version range. Those packages must be live on npm
+// before the scaffolder, or new scaffolds would resolve a missing version.
+// The build sequence only knows real dependencies, so move each such package
+// after every workspace package its templates reference.
+const orderTemplateConsumersLast = (sequence: string[]): string[] => {
+  const readJson = (file: string) => {
+    return JSON.parse(readFileSync(file, "utf-8"));
+  };
+  const nameToDir = new Map<string, string>();
+  for (const dir of sequence) {
+    nameToDir.set(
+      readJson(resolve(repoRoot, "packages", dir, "package.json")).name,
+      dir,
+    );
+  }
+  const result = [...sequence];
+  for (const dir of sequence) {
+    const templatesDir = resolve(repoRoot, "packages", dir, "templates");
+    if (!existsSync(templatesDir)) {
+      continue;
+    }
+    let lastDep = -1;
+    for (const entry of readdirSync(templatesDir, { withFileTypes: true })) {
+      const manifest = resolve(templatesDir, entry.name, "package.json");
+      if (!entry.isDirectory() || !existsSync(manifest)) {
+        continue;
+      }
+      const json = readJson(manifest);
+      const deps = {
+        ...json.dependencies,
+        ...json.devDependencies,
+        ...json.peerDependencies,
+      };
+      for (const depName of Object.keys(deps)) {
+        const depDir = nameToDir.get(depName);
+        if (depDir && depDir !== dir) {
+          lastDep = Math.max(lastDep, result.indexOf(depDir));
+        }
+      }
+    }
+    const index = result.indexOf(dir);
+    if (lastDep > index) {
+      result.splice(index, 1);
+      result.splice(lastDep, 0, dir);
+    }
+  }
+  return result;
+};
+
+const buildSequence: string[] = orderTemplateConsumersLast(getBuildSequence());
 const packageArg = positional[0];
 
 if (packageArg && !buildSequence.includes(packageArg)) {
