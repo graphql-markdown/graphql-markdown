@@ -474,6 +474,27 @@ describe("CLI Module", () => {
           Option {
             "argChoices": undefined,
             "conflictsWith": [],
+            "defaultValue": undefined,
+            "defaultValueDescription": undefined,
+            "description": "Disable anonymous usage telemetry",
+            "envVar": undefined,
+            "flags": "--no-telemetry",
+            "helpGroupHeading": undefined,
+            "hidden": false,
+            "implied": undefined,
+            "long": "--no-telemetry",
+            "mandatory": false,
+            "negate": true,
+            "optional": false,
+            "parseArg": undefined,
+            "presetArg": undefined,
+            "required": false,
+            "short": undefined,
+            "variadic": false,
+          },
+          Option {
+            "argChoices": undefined,
+            "conflictsWith": [],
             "defaultValue": "@graphql-markdown/docusaurus/mdx",
             "defaultValueDescription": undefined,
             "description": "Set formatter package",
@@ -949,6 +970,27 @@ describe("CLI Module", () => {
           "short": undefined,
           "variadic": false,
         },
+        Option {
+          "argChoices": undefined,
+          "conflictsWith": [],
+          "defaultValue": undefined,
+          "defaultValueDescription": undefined,
+          "description": "Disable anonymous usage telemetry",
+          "envVar": undefined,
+          "flags": "--no-telemetry",
+          "helpGroupHeading": undefined,
+          "hidden": false,
+          "implied": undefined,
+          "long": "--no-telemetry",
+          "mandatory": false,
+          "negate": true,
+          "optional": false,
+          "parseArg": undefined,
+          "presetArg": undefined,
+          "required": false,
+          "short": undefined,
+          "variadic": false,
+        },
       ]
     `);
   });
@@ -967,6 +1009,7 @@ describe("CLI Module", () => {
     expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
       options,
       expect.objectContaining({ config: true }),
+      undefined,
       undefined,
     );
   });
@@ -1056,6 +1099,7 @@ describe("CLI Module", () => {
         options,
         undefined,
         undefined,
+        undefined,
       );
       expect(vi.mocked(core.generateDocFromSchema)).toHaveBeenCalled();
     });
@@ -1077,6 +1121,54 @@ describe("CLI Module", () => {
         options,
         cliOptions,
         undefined,
+        undefined,
+      );
+    });
+
+    test("forwards the context to buildConfig", async () => {
+      expect.assertions(1);
+
+      const options = { schema: "./schema.graphql" };
+
+      await runGraphQLMarkdown(options, {}, undefined, { trigger: "cli" });
+
+      expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
+        options,
+        {},
+        undefined,
+        { trigger: "cli" },
+      );
+    });
+  });
+
+  describe("telemetry option", () => {
+    test("maps --no-telemetry to telemetry: false and passes the context", async () => {
+      expect.assertions(1);
+
+      const options = { schema: "./schema.graphql" };
+      const command = getGraphQLMarkdownCli(options, undefined, undefined, {
+        trigger: "cli",
+      });
+
+      await command.parseAsync(["node", "graphql-to-doc", "--no-telemetry"]);
+
+      expect(vi.mocked(core.buildConfig)).toHaveBeenCalledWith(
+        options,
+        expect.objectContaining({ telemetry: false }),
+        undefined,
+        { trigger: "cli" },
+      );
+    });
+
+    test("leaves telemetry unset without the flag", async () => {
+      expect.assertions(1);
+
+      const command = getGraphQLMarkdownCli({ schema: "./schema.graphql" });
+
+      await command.parseAsync(["node", "graphql-to-doc"]);
+
+      expect(vi.mocked(core.buildConfig).mock.calls[0][1]).not.toHaveProperty(
+        "telemetry",
       );
     });
   });
