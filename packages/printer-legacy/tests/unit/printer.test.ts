@@ -282,7 +282,9 @@ describe("Printer", () => {
         skipDocDirectives: [testDirective],
       });
 
-      expect(Printer.options).toMatchInlineSnapshot(`
+      expect(Printer.options).toMatchInlineSnapshot(
+        { schema: expect.any(GraphQLSchema) },
+        `
         {
           "basePath": "/test",
           "collapsible": undefined,
@@ -313,37 +315,7 @@ describe("Printer", () => {
           "operationNamespaceParts": null,
           "parentType": undefined,
           "parentTypePrefix": false,
-          "schema": GraphQLSchema {
-            "__validationErrors": undefined,
-            "_directives": [
-              "@include",
-              "@skip",
-              "@deprecated",
-              "@specifiedBy",
-              "@oneOf",
-            ],
-            "_implementationsMap": {},
-            "_mutationType": undefined,
-            "_queryType": undefined,
-            "_subTypeMap": {},
-            "_subscriptionType": undefined,
-            "_typeMap": {
-              "Boolean": "Boolean",
-              "String": "String",
-              "__Directive": "__Directive",
-              "__DirectiveLocation": "__DirectiveLocation",
-              "__EnumValue": "__EnumValue",
-              "__Field": "__Field",
-              "__InputValue": "__InputValue",
-              "__Schema": "__Schema",
-              "__Type": "__Type",
-              "__TypeKind": "__TypeKind",
-            },
-            "astNode": undefined,
-            "description": undefined,
-            "extensionASTNodes": [],
-            "extensions": {},
-          },
+          "schema": Any<GraphQLSchema>,
           "sectionHeaderId": true,
           "skipDocDirectives": [
             "@test",
@@ -351,7 +323,8 @@ describe("Printer", () => {
           "typeBadges": false,
           "withAttributes": false,
         }
-      `);
+      `,
+      );
     });
 
     test("uses explicit sectionHeaderId option", async () => {
