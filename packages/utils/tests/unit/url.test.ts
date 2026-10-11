@@ -61,14 +61,15 @@ describe("url", () => {
     );
 
     describe("with a root baseURL", () => {
-      const run = (targetUrlPath: string, linkRoot?: string) =>
-        toRelativeGeneratedDocLink({
+      const run = (targetUrlPath: string, linkRoot?: string) => {
+        return toRelativeGeneratedDocLink({
           baseURL: "",
           currentFilePath: "/workspace/docs/types/objects/book.md",
           outputDir: "/workspace/docs",
           targetUrlPath,
           ...(linkRoot !== undefined && { linkRoot }),
         });
+      };
 
       test.each(["/guides/auth", "/img/logo.png", "//cdn.example.com/x"])(
         "leaves %s untouched",
