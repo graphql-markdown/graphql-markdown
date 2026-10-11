@@ -295,11 +295,14 @@ export const WIRE_STEPS = [
 
 /** Options for adding dev deps; yarn berry has no -W workspace-root flag. */
 function addDevOptions(ctx) {
-  return {
-    workspaceRoot:
-      Boolean(ctx.project.workspaceRoot) &&
-      !(ctx.packageManager === "yarn" && ctx.project.yarnBerry),
-  };
+  const { project, packageManager } = ctx;
+  const workspaceRoot =
+    packageManager === "pnpm"
+      ? Boolean(project.pnpmWorkspace)
+      : packageManager === "yarn"
+        ? Boolean(project.packageJson?.workspaces) && !project.yarnBerry
+        : false;
+  return { workspaceRoot };
 }
 
 /** Prints the closing summary for wire mode; `outcomes` are the step results. */

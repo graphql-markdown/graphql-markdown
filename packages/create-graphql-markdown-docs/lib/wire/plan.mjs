@@ -36,7 +36,7 @@ const GRAPHQL_CONFIG_FILES = [
 /**
  * Inspect a project directory for package.json and an existing GraphQL config.
  * @param {string} projectDir
- * @returns {{ packageJson: object | null, packageJsonIndent: string | number, existingConfig: string | null, workspaceRoot: boolean, yarnBerry: boolean }}
+ * @returns {{ packageJson: object | null, packageJsonIndent: string | number, existingConfig: string | null, workspaceRoot: boolean, pnpmWorkspace: boolean, yarnBerry: boolean }}
  */
 export function inspectProject(projectDir) {
   let packageJson = null;
@@ -56,9 +56,11 @@ export function inspectProject(projectDir) {
   if (!existingConfig && packageJson && "graphql" in packageJson) {
     existingConfig = "package.json#graphql";
   }
+  const pnpmWorkspace = fs.existsSync(
+    path.join(projectDir, "pnpm-workspace.yaml"),
+  );
   const workspaceRoot =
-    Boolean(packageJson && "workspaces" in packageJson) ||
-    fs.existsSync(path.join(projectDir, "pnpm-workspace.yaml"));
+    Boolean(packageJson && "workspaces" in packageJson) || pnpmWorkspace;
   const yarnBerry =
     fs.existsSync(path.join(projectDir, ".yarnrc.yml")) ||
     /^yarn@(?:[2-9]|\d{2,})\./.test(packageJson?.packageManager ?? "");
@@ -67,6 +69,7 @@ export function inspectProject(projectDir) {
     packageJsonIndent,
     existingConfig: existingConfig ?? null,
     workspaceRoot,
+    pnpmWorkspace,
     yarnBerry,
   };
 }
