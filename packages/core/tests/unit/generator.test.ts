@@ -114,6 +114,7 @@ const mockRenderer = {
   renderTypeEntities: vi.fn(),
   renderHomepage: vi.fn(),
   preCollectCategories: vi.fn(),
+  preCollectGeneratedDocPaths: vi.fn(),
 } as unknown as CoreRenderer.Renderer;
 
 import { generateDocFromSchema } from "../../src";
