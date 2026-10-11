@@ -37,6 +37,12 @@ describe("createGenerateDocs", () => {
     rename.mockClear();
   });
 
+  it("passes the nuxt telemetry trigger", async () => {
+    await createGenerateDocs({ schema: "./schema.graphql" })();
+
+    expect(runGraphQLMarkdown.mock.calls[0]![3]).toEqual({ trigger: "nuxt" });
+  });
+
   it("forwards a custom homepage and stores it as generated.md", async () => {
     const generate = createGenerateDocs({
       schema: "./schema.graphql",

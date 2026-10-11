@@ -68,6 +68,24 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus-build" },
+      );
+    });
+
+    test("uses the docusaurus-dev trigger when the dev server runs", async () => {
+      const argv = process.argv;
+      process.argv = [...argv, "start"];
+      try {
+        const plugin = await pluginGraphQLDocGenerator({} as LoadContext, {});
+        plugin.extendCli!(mockCli);
+      } finally {
+        process.argv = argv;
+      }
+      expect(getGraphQLMarkdownCli).toHaveBeenCalledWith(
+        expect.anything(),
+        "@docusaurus/logger",
+        "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus-dev" },
       );
     });
 
@@ -94,6 +112,7 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus-build" },
       );
     });
 
@@ -120,6 +139,7 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus-build" },
       );
     });
 
