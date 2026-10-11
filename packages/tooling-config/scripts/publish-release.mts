@@ -87,42 +87,60 @@ const { getBuildSequence } = await import("./build-packages.mts");
 // before the scaffolder, or new scaffolds would resolve a missing version.
 // The build sequence only knows real dependencies, so move each such package
 // after every workspace package its templates reference.
-const orderTemplateConsumersLast = (sequence: string[]): string[] => {
-  const readJson = (file: string) => {
-    return JSON.parse(readFileSync(file, "utf-8"));
-  };
-  const nameToDir = new Map<string, string>();
-  for (const dir of sequence) {
-    nameToDir.set(
-      readJson(resolve(repoRoot, "packages", dir, "package.json")).name,
-      dir,
-    );
+const readJson = (file: string) => {
+  return JSON.parse(readFileSync(file, "utf-8"));
+};
+
+// Names of every dependency declared by the scaffolder's template manifests.
+const getTemplateDependencies = (dir: string): string[] => {
+  const templatesDir = resolve(repoRoot, "packages", dir, "templates");
+  if (!existsSync(templatesDir)) {
+    return [];
   }
-  const result = [...sequence];
-  for (const dir of sequence) {
-    const templatesDir = resolve(repoRoot, "packages", dir, "templates");
-    if (!existsSync(templatesDir)) {
-      continue;
-    }
-    let lastDep = -1;
-    for (const entry of readdirSync(templatesDir, { withFileTypes: true })) {
-      const manifest = resolve(templatesDir, entry.name, "package.json");
-      if (!entry.isDirectory() || !existsSync(manifest)) {
-        continue;
-      }
+  return readdirSync(templatesDir, { withFileTypes: true })
+    .filter((entry) => {
+      return entry.isDirectory();
+    })
+    .map((entry) => {
+      return resolve(templatesDir, entry.name, "package.json");
+    })
+    .filter((manifest) => {
+      return existsSync(manifest);
+    })
+    .flatMap((manifest) => {
       const json = readJson(manifest);
-      const deps = {
+      return Object.keys({
         ...json.dependencies,
         ...json.devDependencies,
         ...json.peerDependencies,
-      };
-      for (const depName of Object.keys(deps)) {
-        const depDir = nameToDir.get(depName);
-        if (depDir && depDir !== dir) {
-          lastDep = Math.max(lastDep, result.indexOf(depDir));
-        }
-      }
-    }
+      });
+    });
+};
+
+const orderTemplateConsumersLast = (sequence: string[]): string[] => {
+  const nameToDir = new Map<string, string>(
+    sequence.map((dir) => {
+      return [
+        readJson(resolve(repoRoot, "packages", dir, "package.json")).name,
+        dir,
+      ];
+    }),
+  );
+  const result = [...sequence];
+  for (const dir of sequence) {
+    const lastDep = Math.max(
+      -1,
+      ...getTemplateDependencies(dir)
+        .map((depName) => {
+          return nameToDir.get(depName);
+        })
+        .filter((depDir) => {
+          return depDir !== undefined && depDir !== dir;
+        })
+        .map((depDir) => {
+          return result.indexOf(depDir!);
+        }),
+    );
     const index = result.indexOf(dir);
     if (lastDep > index) {
       result.splice(index, 1);
