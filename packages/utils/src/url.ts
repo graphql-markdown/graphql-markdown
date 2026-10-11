@@ -45,8 +45,9 @@ const stripTrailingSlashes = (value: string): string => {
 // Folders the renderer always creates at the root of the output directory.
 const GENERATED_ROOT_FOLDERS = new Set(["operations", "types"]);
 
-const firstSegment = (path: string): string =>
-  path.split("/").find(Boolean) ?? "";
+const firstSegment = (path: string): string => {
+  return path.split("/").find(Boolean) ?? "";
+};
 
 // With a root baseURL every absolute URL starts with "/", so a page link can
 // only be told apart from `/guides/auth` or `/img/logo.png` by its first
