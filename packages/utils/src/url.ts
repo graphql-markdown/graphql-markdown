@@ -51,7 +51,12 @@ export const toRelativeGeneratedDocLink = ({
   const normalizedBaseURL = stripTrailingSlashes(
     baseURL.replaceAll(/^\/+/g, ""),
   );
-  const basePrefix = `/${normalizedBaseURL}/`;
+  // A "." (or empty) baseURL means docs are generated at the root, and their
+  // URLs carry no base segment.
+  const basePrefix =
+    normalizedBaseURL === "" || normalizedBaseURL === "."
+      ? "/"
+      : `/${normalizedBaseURL}/`;
 
   if (!targetUrlPath.startsWith(basePrefix)) {
     return undefined;

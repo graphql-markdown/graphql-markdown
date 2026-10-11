@@ -45,6 +45,21 @@ describe("url", () => {
       ).toBe("../../operations/queries/book-by-id.md");
     });
 
+    test.each([".", "", "/"])(
+      "treats baseURL %j as the output root",
+      (baseURL) => {
+        expect(
+          toRelativeGeneratedDocLink({
+            baseURL,
+            currentFilePath: "/workspace/docs/types/objects/book.mdx",
+            extension: ".mdx",
+            outputDir: "/workspace/docs",
+            targetUrlPath: "/types/scalars/id",
+          }),
+        ).toBe("../scalars/id.mdx");
+      },
+    );
+
     test("returns undefined for URLs outside the configured baseURL", () => {
       expect(
         toRelativeGeneratedDocLink({
