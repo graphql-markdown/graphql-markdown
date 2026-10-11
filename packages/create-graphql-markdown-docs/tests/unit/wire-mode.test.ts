@@ -174,7 +174,7 @@ describe("scaffold vs wire mode (end to end)", () => {
     expect(rc).toContain("formatters/starlight");
     expect(rc).toContain("rootPath: './src/content/docs'");
     const pkg = JSON.parse(read(dir, "package.json"));
-    expect(pkg.scripts["docs:api"]).toBe("gqlmd graphql-to-doc");
+    expect(pkg.scripts["gqlmd"]).toBe("gqlmd graphql-to-doc");
   });
 
   it("6. two detected frameworks without --framework exit 1", async () => {

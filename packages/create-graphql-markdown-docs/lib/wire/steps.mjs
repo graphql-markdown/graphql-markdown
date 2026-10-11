@@ -20,6 +20,7 @@ import { detectFrameworks, toSchemaRef } from "../target.mjs";
 import { requiredPackages } from "./deps.mjs";
 import {
   applyWirePlan,
+  DEFAULT_SCRIPT_NAME,
   formatWirePlan,
   inspectProject,
   planWire,
@@ -246,7 +247,7 @@ export const WIRE_STEPS = [
     run(ctx) {
       ctx.project = inspectProject(ctx.projectDir);
       ctx.detected = detectFrameworks(ctx.project.packageJson);
-      ctx.scriptName = ctx.args.script || "docs:api";
+      ctx.scriptName = ctx.args.script || DEFAULT_SCRIPT_NAME;
       preflight(ctx);
     },
   },
