@@ -57,7 +57,7 @@ export const formatMDXAdmonition = (
   _meta: Maybe<MetaInfo>,
 ): MDXString => {
   const label = title?.trim() ? title.trim() : type.toUpperCase();
-  return `${MARKDOWN_EOP}> **${label}**${MARKDOWN_EOL}>${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
+  return `${MARKDOWN_EOP}> **${label}**${MARKDOWN_EOL}>${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOP}` as MDXString;
 };
 
 /**

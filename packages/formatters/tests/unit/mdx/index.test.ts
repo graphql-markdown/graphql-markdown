@@ -35,6 +35,14 @@ describe("formatMDXAdmonition", () => {
     expect(result).toContain("> body");
   });
 
+  test("ends with a blank line so following text is not absorbed", () => {
+    const result = formatMDXAdmonition(
+      { text: "body", title: "T", type: "note" },
+      null,
+    );
+    expect(result.endsWith("> body\n\n")).toBe(true);
+  });
+
   test("falls back to the uppercase type when title is blank", () => {
     const result = formatMDXAdmonition(
       { text: "body", title: "  ", type: "warning" },
