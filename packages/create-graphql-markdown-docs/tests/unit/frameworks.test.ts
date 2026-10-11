@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
+import { hasNoCustomization } from "../../lib/create.mjs";
 import { FRAMEWORKS, WIRE_FRAMEWORKS } from "../../lib/frameworks/index.mjs";
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
@@ -50,6 +51,19 @@ describe("FRAMEWORKS scaffold registry", () => {
     for (const descriptor of Object.values(FRAMEWORKS)) {
       expect(descriptor.scaffold).toBeDefined();
     }
+  });
+});
+
+describe("hasNoCustomization", () => {
+  it.each([
+    ["nuxt", false],
+    ["docusaurus", false],
+    ["markdown", true],
+    ["mdx", true],
+  ])("%s -> %s", (id, expected) => {
+    expect(hasNoCustomization(FRAMEWORKS[id as keyof typeof FRAMEWORKS])).toBe(
+      expected,
+    );
   });
 });
 

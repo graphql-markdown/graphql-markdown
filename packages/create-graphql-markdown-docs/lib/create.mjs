@@ -394,8 +394,10 @@ function initialColor(args, fw) {
 }
 
 /** Whether the template has nothing to customize (no title, no color). */
-function hasNoCustomization(fw) {
-  return fw.scaffold.supportsTitle === false && !fw.scaffold.supportsColor;
+export function hasNoCustomization(fw) {
+  return (
+    fw.scaffold.supportsTitle === false && fw.scaffold.supportsColor === false
+  );
 }
 
 /** Whether the user wants to customize title/color interactively. */
