@@ -54,10 +54,13 @@ const isGeneratedRootPath = (
   docPath: string,
   currentFilePath: string,
   outputDir: string,
+  extension: string,
 ): boolean => {
   const segment = firstSegment(docPath);
   if (segment === "") return false;
   if (GENERATED_ROOT_FOLDERS.has(segment)) return true;
+  // flat hierarchy: pages live directly at the root
+  if (existsSync(resolveFs(outputDir, `${docPath}${extension}`))) return true;
   const currentRelative = relativeFs(outputDir, currentFilePath).replaceAll(
     "\\",
     "/",
@@ -115,7 +118,7 @@ export const toRelativeGeneratedDocLink = ({
 
   if (
     basePrefix === "/" &&
-    !isGeneratedRootPath(relativeDocPath, currentFilePath, outputDir)
+    !isGeneratedRootPath(relativeDocPath, currentFilePath, outputDir, extension)
   ) {
     return undefined;
   }
