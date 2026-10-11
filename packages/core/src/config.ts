@@ -838,16 +838,23 @@ export const getDecoratorsOption = (
   return decorators;
 };
 
+const resolveDeprecatedOption = (
+  cliOpts: Maybe<CliOptions>,
+  configOptions: Maybe<ConfigPrintTypeOptions>,
+): TypeDeprecatedOption => {
+  return (
+    (cliOpts?.deprecated ??
+      configOptions?.deprecated ??
+      DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
+  ).toLocaleLowerCase() as TypeDeprecatedOption;
+};
+
 const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
   return {
-    deprecated: (
-      (cliOpts?.deprecated ??
-        configOptions?.deprecated ??
-        DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
-    ).toLocaleLowerCase() as TypeDeprecatedOption,
+    deprecated: resolveDeprecatedOption(cliOpts, configOptions),
     exampleSection:
       configOptions?.exampleSection ??
       DEFAULT_OPTIONS.printTypeOptions.exampleSection,

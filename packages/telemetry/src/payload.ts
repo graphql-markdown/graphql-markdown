@@ -56,6 +56,24 @@ const isContainer = (env: NodeJS.ProcessEnv): boolean => {
   );
 };
 
+const applySanitizedSection = (
+  payload: TelemetryPayload,
+  section: "config" | "cli",
+  source: ConfigOptions | CliOptions,
+  rules: Parameters<typeof sanitizeConfig>[1],
+): number => {
+  const result = sanitizeConfig(source, rules);
+  if (section === "config") {
+    payload.config = result.value;
+  } else {
+    payload.cli = result.value;
+  }
+  if (payload.loader === undefined && source.schema !== undefined) {
+    payload.loader = classifyPointer(source.schema);
+  }
+  return result.unknownKeys;
+};
+
 export const buildPayload = (input: PayloadInput): TelemetryPayload => {
   const env = input.env ?? process.env;
   const { ci, ciProvider } = detectCi(env);
@@ -86,20 +104,20 @@ export const buildPayload = (input: PayloadInput): TelemetryPayload => {
   }
   let unknownKeys = 0;
   if (input.config) {
-    const r = sanitizeConfig(input.config, CONFIG_RULES);
-    payload.config = r.value;
-    unknownKeys += r.unknownKeys;
-    if (input.config.schema !== undefined) {
-      payload.loader = classifyPointer(input.config.schema);
-    }
+    unknownKeys += applySanitizedSection(
+      payload,
+      "config",
+      input.config,
+      CONFIG_RULES,
+    );
   }
   if (input.cli) {
-    const r = sanitizeConfig(input.cli, CLI_RULES);
-    payload.cli = r.value;
-    unknownKeys += r.unknownKeys;
-    if (payload.loader === undefined && input.cli.schema !== undefined) {
-      payload.loader = classifyPointer(input.cli.schema);
-    }
+    unknownKeys += applySanitizedSection(
+      payload,
+      "cli",
+      input.cli,
+      CLI_RULES,
+    );
   }
   if (unknownKeys > 0) {
     payload.unknownKeys = unknownKeys;

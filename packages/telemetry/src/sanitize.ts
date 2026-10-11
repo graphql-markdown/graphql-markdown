@@ -148,6 +148,25 @@ const sanitizeLoaderName = (value: string): string => {
 };
 
 /* eslint-disable @typescript-eslint/no-use-before-define -- mutual recursion */
+const sanitizeLoaderEntry = (item: unknown, depth: number): unknown => {
+  if (typeof item === "object" && item !== null && isPlainObject(item)) {
+    const cfg = item as Record<string, unknown>;
+    return {
+      ...(cfg.module !== undefined && {
+        module: sanitizeLoaders(cfg.module, depth + 2),
+      }),
+      ...(cfg.options !== undefined && {
+        options: sanitizeValue(
+          cfg.options,
+          { kind: "map", value: any },
+          depth + 2,
+        ),
+      }),
+    };
+  }
+  return sanitizeLoaders(item, depth + 1);
+};
+
 const sanitizeLoaders = (value: unknown, depth: number): unknown => {
   if (typeof value === "string") {
     return sanitizeLoaderName(value);
@@ -160,27 +179,7 @@ const sanitizeLoaders = (value: unknown, depth: number): unknown => {
   if (typeof value === "object" && value !== null && isPlainObject(value)) {
     const out: Record<string, unknown> = {};
     for (const [key, item] of Object.entries(value)) {
-      let masked: unknown;
-      if (typeof item === "object" && item !== null && isPlainObject(item)) {
-        const cfg = item as Record<string, unknown>;
-        masked = {
-          module: sanitizeLoaders(cfg.module, depth + 2),
-          options: sanitizeValue(
-            cfg.options,
-            { kind: "map", value: any },
-            depth + 2,
-          ),
-        };
-        if (cfg.module === undefined) {
-          delete (masked as Record<string, unknown>).module;
-        }
-        if (cfg.options === undefined) {
-          delete (masked as Record<string, unknown>).options;
-        }
-      } else {
-        masked = sanitizeLoaders(item, depth + 1);
-      }
-      out[sanitizeLoaderName(key)] = masked;
+      out[sanitizeLoaderName(key)] = sanitizeLoaderEntry(item, depth);
     }
     return out;
   }
@@ -231,21 +230,31 @@ const sanitizeObjectByRule = (
   return out;
 };
 
-const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
+const sanitizePrimitive = (
+  value: unknown,
+): { handled: false } | { handled: true; value: unknown } => {
   if (value === null || typeof value === "boolean") {
-    return value;
+    return { handled: true, value };
   }
   if (typeof value === "number") {
-    return Number.isFinite(value) ? value : null;
+    return { handled: true, value: Number.isFinite(value) ? value : null };
   }
   if (typeof value === "function") {
-    return "<function>";
+    return { handled: true, value: "<function>" };
   }
   if (value === undefined) {
-    return undefined;
+    return { handled: true, value: undefined };
   }
   if (typeof value === "symbol" || typeof value === "bigint") {
-    return "<object>";
+    return { handled: true, value: "<object>" };
+  }
+  return { handled: false };
+};
+
+const sanitizeValue = (value: unknown, rule: Rule, depth: number): unknown => {
+  const primitive = sanitizePrimitive(value);
+  if (primitive.handled) {
+    return primitive.value;
   }
   if (depth > MAX_DEPTH || rule.kind === "opaque") {
     return typeof value === "string" ? "<string>" : "<object>";
