@@ -123,17 +123,6 @@ export const mdbook = {
     "List the generated pages in src/SUMMARY.md — mdBook only builds listed pages.",
 };
 
-/** Generic framework-neutral MDX output (.mdx pages, plain HTML, no components). */
-export const mdx = {
-  id: "mdx",
-  name: "Generic MDX",
-  label: "Generic MDX",
-  formatter: "@graphql-markdown/formatters/mdx",
-  links: "relative",
-  nextSteps: ({ outputDir }) =>
-    `Point your site navigation at \`${outputDir}\` (.mdx pages, plain HTML, no framework components).`,
-};
-
 /** Generic Markdown fallback (no formatter preset). */
 export const generic = {
   id: "generic",

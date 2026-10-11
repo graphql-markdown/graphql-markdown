@@ -617,4 +617,73 @@ describe("create-graphql-markdown-docs CLI", () => {
       expect(existsSync(join(testDir, "bad"))).toBe(false);
     });
   });
+
+  describe("file-only targets (markdown, mdx)", () => {
+    const cliPath = join(packageRoot, "bin/create.mjs");
+    const run = (framework: string, projectDir: string, ...extra: string[]) => {
+      return spawnSync(
+        "node",
+        [
+          cliPath,
+          "--yes",
+          "--framework",
+          framework,
+          "--dir",
+          projectDir,
+          "--no-install",
+          "--no-git",
+          ...extra,
+        ],
+        { cwd: packageRoot, encoding: "utf-8" },
+      );
+    };
+
+    it("scaffolds --framework markdown without a formatter", () => {
+      const projectDir = join(testDir, "md");
+      const result = run("markdown", projectDir);
+
+      expect(result.status).toBe(0);
+      expect(existsSync(join(projectDir, "docs/.gitkeep"))).toBe(true);
+      const graphqlrc = readFileSync(join(projectDir, ".graphqlrc"), "utf-8");
+      expect(graphqlrc).not.toContain("formatter");
+      expect(result.stdout).toContain("run doc");
+      expect(result.stdout).not.toContain("run start");
+    });
+
+    it("scaffolds --framework mdx with the mdx formatter", () => {
+      const projectDir = join(testDir, "mdx");
+      const result = run("mdx", projectDir);
+
+      expect(result.status).toBe(0);
+      const graphqlrc = readFileSync(join(projectDir, ".graphqlrc"), "utf-8");
+      expect(graphqlrc).toContain(
+        "formatter: '@graphql-markdown/formatters/mdx'",
+      );
+      const pkgJson = JSON.parse(
+        readFileSync(join(projectDir, "package.json"), "utf-8"),
+      );
+      expect(
+        pkgJson.dependencies["@graphql-markdown/formatters"],
+      ).toBeDefined();
+    });
+
+    it("treats --framework generic as markdown", () => {
+      const projectDir = join(testDir, "gen");
+      const result = run("generic", projectDir);
+
+      expect(result.status).toBe(0);
+      expect(
+        readFileSync(join(projectDir, ".graphqlrc"), "utf-8"),
+      ).not.toContain("formatter");
+    });
+
+    it("warns that --title does not apply", () => {
+      const result = run("markdown", join(testDir, "md-title"), "--title", "X");
+
+      expect(result.status).toBe(0);
+      expect(result.stdout + result.stderr).toContain(
+        "--title does not apply to Markdown",
+      );
+    });
+  });
 });

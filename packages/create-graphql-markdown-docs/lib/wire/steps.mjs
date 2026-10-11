@@ -4,7 +4,7 @@ import path from "node:path";
 
 import * as prompts from "@clack/prompts";
 
-import { WIRE_FRAMEWORKS } from "../frameworks/index.mjs";
+import { FRAMEWORK_ALIASES, WIRE_FRAMEWORKS } from "../frameworks/index.mjs";
 import { normalizeOutput, suggestLinkRoot } from "../frameworks/links.mjs";
 import {
   DOCS_URL,
@@ -70,6 +70,8 @@ async function resolveWireFramework(ctx) {
   const { args, detected } = ctx;
   const requested = requestedFramework(args);
   if (requested) {
+    const aliases = FRAMEWORK_ALIASES.wire;
+    if (Object.hasOwn(aliases, requested)) return aliases[requested];
     if (!Object.hasOwn(WIRE_FRAMEWORKS, requested)) {
       fail(
         `Invalid --framework "${requested}" — expected one of: ${Object.keys(WIRE_FRAMEWORKS).join(", ")}.`,

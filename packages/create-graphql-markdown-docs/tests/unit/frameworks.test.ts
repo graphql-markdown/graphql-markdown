@@ -3,6 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
+import { hasNoCustomization } from "../../lib/create.mjs";
 import { FRAMEWORKS, WIRE_FRAMEWORKS } from "../../lib/frameworks/index.mjs";
 
 const testDir = path.dirname(fileURLToPath(import.meta.url));
@@ -37,14 +38,32 @@ describe("WIRE_FRAMEWORKS descriptors", () => {
 });
 
 describe("FRAMEWORKS scaffold registry", () => {
-  it("keys are exactly nuxt and docusaurus, in order", () => {
-    expect(Object.keys(FRAMEWORKS)).toEqual(["nuxt", "docusaurus"]);
+  it("keys are nuxt, docusaurus, markdown and mdx, in order", () => {
+    expect(Object.keys(FRAMEWORKS)).toEqual([
+      "nuxt",
+      "docusaurus",
+      "markdown",
+      "mdx",
+    ]);
   });
 
   it("each scaffold framework has a scaffold key", () => {
     for (const descriptor of Object.values(FRAMEWORKS)) {
       expect(descriptor.scaffold).toBeDefined();
     }
+  });
+});
+
+describe("hasNoCustomization", () => {
+  it.each([
+    ["nuxt", false],
+    ["docusaurus", false],
+    ["markdown", true],
+    ["mdx", true],
+  ])("%s -> %s", (id, expected) => {
+    expect(hasNoCustomization(FRAMEWORKS[id as keyof typeof FRAMEWORKS])).toBe(
+      expected,
+    );
   });
 });
 

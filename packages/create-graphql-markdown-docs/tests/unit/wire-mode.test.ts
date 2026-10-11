@@ -588,6 +588,17 @@ describe("wire mode interactive prompts", () => {
   };
 
   describe("resolveWireFramework", () => {
+    it("--framework markdown is an alias for generic", async () => {
+      const { dir, schema } = project("fw-markdown-alias");
+      mocks.prompts.text.mockResolvedValue("");
+      const flags = genericFlags(schema).map((f) => {
+        return f === "generic" ? "markdown" : f;
+      });
+      expect(await runInteractive(dir, flags)).toBe(0);
+      expect(errors()).not.toContain("Invalid --framework");
+      expect(read(dir, ".graphqlrc")).not.toContain("formatter");
+    });
+
     it("one detected framework: full list, preselects the detected id", async () => {
       const { dir, schema } = project("fw-one", {
         "package.json": STARLIGHT_PKG,
