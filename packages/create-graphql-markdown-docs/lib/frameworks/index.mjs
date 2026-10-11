@@ -31,7 +31,8 @@ import {
  */
 
 /**
- * Supported scaffold targets; each key maps to `templates/<framework>`.
+ * Supported scaffold targets; each key maps to `templates/<framework>`, unless
+ * `scaffold.template` overrides it (mdx uses the markdown template).
  * `scaffold.runScripts` are the package scripts to run after install, in order.
  */
 export const FRAMEWORKS = { nuxt, docusaurus, markdown, mdx };
