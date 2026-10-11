@@ -433,7 +433,21 @@ describe("scaffold vs wire mode (end to end)", () => {
       ADD_STARLIGHT,
       expect.objectContaining({ cwd: dir }),
     );
-    expect(outro()).not.toContain("-D");
+    expect(outro()).not.toContain("pnpm add");
+  });
+
+  it("18b. --install at a pnpm workspace root passes -w", async () => {
+    const dir = path.join(work, "install-ws");
+    seed(dir, {
+      "package.json": STARLIGHT_PKG,
+      "pnpm-workspace.yaml": "packages: []\n",
+    });
+    expect(await main(starlightArgs(dir, "--install"))).toBe(0);
+    expect(mocks.spawn).toHaveBeenCalledWith(
+      "pnpm",
+      expect.arrayContaining(["-w"]),
+      expect.objectContaining({ cwd: dir }),
+    );
   });
 
   it("19. --install whose command fails exits 0, keeps .graphqlrc and shows the catch-up command", async () => {
@@ -512,7 +526,7 @@ describe("scaffold vs wire mode (end to end)", () => {
     });
     expect(await main(starlightArgs(dir, "--install"))).toBe(0);
     expect(mocks.spawn).not.toHaveBeenCalled();
-    expect(outro()).not.toContain("-D");
+    expect(outro()).not.toContain("pnpm add");
   });
 });
 

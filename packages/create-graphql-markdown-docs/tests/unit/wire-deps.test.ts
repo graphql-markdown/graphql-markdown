@@ -99,4 +99,11 @@ describe("addDevCommand", () => {
     expect(addDevCommand("yarn", ["a"])).toBe("yarn add -D a");
     expect(addDevCommand("bun", ["a", "b"])).toBe("bun add -D a b");
   });
+
+  it("adds the workspace-root flag for pnpm and yarn only", () => {
+    const options = { workspaceRoot: true };
+    expect(addDevCommand("pnpm", ["a"], options)).toContain("-w");
+    expect(addDevCommand("yarn", ["a"], options)).toContain("-W");
+    expect(addDevCommand("npm", ["a"], options)).toBe("npm i -D a");
+  });
 });

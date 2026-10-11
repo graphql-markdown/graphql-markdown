@@ -280,19 +280,37 @@ export const WIRE_STEPS = [
     when: (ctx) =>
       Boolean(ctx.args.install) && !ctx.args["dry-run"] && needsInstall(ctx),
     run: (ctx) =>
-      addDevDependencies(ctx.packageManager, ctx.projectDir, ctx.packages),
+      addDevDependencies(
+        ctx.packageManager,
+        ctx.projectDir,
+        ctx.packages,
+        addDevOptions(ctx),
+      ),
     catchUp: (ctx) =>
       needsInstall(ctx)
-        ? [addDevCommand(ctx.packageManager, ctx.packages)]
+        ? [addDevCommand(ctx.packageManager, ctx.packages, addDevOptions(ctx))]
         : [],
   },
 ];
+
+/** Options for adding dev deps; yarn berry has no -W workspace-root flag. */
+function addDevOptions(ctx) {
+  return {
+    workspaceRoot:
+      Boolean(ctx.project.workspaceRoot) &&
+      !(ctx.packageManager === "yarn" && ctx.project.yarnBerry),
+  };
+}
 
 /** Prints the closing summary for wire mode; `outcomes` are the step results. */
 export function printWireOutro(ctx, outcomes = []) {
   if (ctx.args["dry-run"]) {
     if (needsInstall(ctx)) {
-      const command = addDevCommand(ctx.packageManager, ctx.packages);
+      const command = addDevCommand(
+        ctx.packageManager,
+        ctx.packages,
+        addDevOptions(ctx),
+      );
       prompts.log.info(
         ctx.args.install
           ? `Would install: ${command}`
