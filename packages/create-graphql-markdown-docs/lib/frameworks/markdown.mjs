@@ -59,20 +59,14 @@ export const markdown = {
 
 /** Plain MDX scaffold and wire descriptor (templates/markdown + mdx formatter). */
 export const mdx = {
+  ...markdown,
   id: "mdx",
   name: "MDX",
   label: "MDX (plain .mdx files)",
   hint: "Framework-neutral .mdx pages (plain HTML, no components)",
   formatter: MDX_FORMATTER,
-  links: "relative",
-  contentRoot: "docs",
-  nextSteps,
   scaffold: {
-    template: "markdown",
-    runScripts: ["doc"],
-    copyExcludes: [],
-    supportsColor: false,
-    supportsTitle: false,
+    ...markdown.scaffold,
     apply(tempDir, { schemaRef, loader }) {
       writeGraphqlrc(tempDir, schemaRef, loader);
       writeMdxFormatter(tempDir);
