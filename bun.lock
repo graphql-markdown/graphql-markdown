@@ -78,6 +78,7 @@
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/logger": "workspace:^",
         "@graphql-markdown/printer-legacy": "workspace:^",
+        "@graphql-markdown/telemetry": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
       },
@@ -87,6 +88,7 @@
       "peerDependencies": {
         "@graphql-markdown/diff": "workspace:^",
         "@graphql-markdown/helpers": "workspace:^",
+        "graphql": "catalog:",
         "graphql-config": "catalog:",
       },
       "optionalPeers": [

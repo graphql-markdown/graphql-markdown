@@ -46,6 +46,8 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
 import { loadConfiguration } from "./graphql-config";
+import { reportTelemetry } from "./telemetry";
+import type { BuildConfigContext } from "./telemetry";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
 import { OptionBuilder } from "./options/builder";
@@ -954,6 +956,7 @@ export const parseHomepageOption = (
  * @param configFileOpts - Options from the configuration file
  * @param cliOpts - Options from the command line interface
  * @param id - The configuration ID used when referencing multiple schemas
+ * @param context - Internal context set by GraphQL-Markdown entry points (telemetry trigger)
  * @returns A promise resolving to the final merged configuration object
  * @example
  * ```typescript
@@ -996,6 +999,7 @@ export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts?: Maybe<CliOptions>,
   id: Maybe<string> = "default",
+  context?: BuildConfigContext,
 ): Promise<Options> => {
   cliOpts ??= {};
 
@@ -1066,6 +1070,19 @@ export const buildConfig = async (
     cliOpts,
     config.printTypeOptions,
   );
+
+  try {
+    // fire and forget: never awaited, never throws
+    void reportTelemetry({
+      configFileOpts,
+      extension: graphqlConfig as Maybe<ConfigOptions>,
+      cliOpts,
+      id,
+      trigger: context?.trigger,
+    });
+  } catch {
+    // telemetry must never affect a run
+  }
 
   return {
     baseURL,
