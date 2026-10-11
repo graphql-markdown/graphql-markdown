@@ -126,6 +126,14 @@ export const buildPayload = (input: PayloadInput): TelemetryPayload => {
   return payload;
 };
 
+/** Locale-independent code-unit comparison, so fingerprints are deterministic. */
+const compareKeys = (a: string, b: string): number => {
+  if (a === b) {
+    return 0;
+  }
+  return a < b ? -1 : 1;
+};
+
 const canonical = (value: unknown): unknown => {
   if (Array.isArray(value)) {
     return value.map(canonical);
@@ -133,7 +141,7 @@ const canonical = (value: unknown): unknown => {
   if (typeof value === "object" && value !== null) {
     return Object.fromEntries(
       Object.keys(value)
-        .sort()
+        .sort(compareKeys)
         .map((k) => {
           return [k, canonical((value as Record<string, unknown>)[k])];
         }),
