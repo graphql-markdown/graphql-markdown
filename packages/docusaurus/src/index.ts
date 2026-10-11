@@ -86,11 +86,7 @@ export default async function pluginGraphQLDocGenerator(
         },
         LOGGER_MODULE,
         options.formatter ?? MDX_PACKAGE,
-        {
-          trigger: process.argv.includes("start")
-            ? "docusaurus-dev"
-            : "docusaurus-build",
-        },
+        { trigger: "docusaurus" },
       );
       assertCommanderCompatibleCommand(command);
       cli.addCommand(
