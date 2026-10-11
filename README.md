@@ -10,22 +10,22 @@
 
 # GraphQL-Markdown
 
-Generate **Markdown and MDX documentation** from **GraphQL schemas** for Docusaurus and other supported documentation ecosystems.
+Generate **Markdown and MDX documentation** from **GraphQL schemas** for Nuxt, Docusaurus and other supported documentation ecosystems.
 
 ## Installation
 
-To start a new documentation site, scaffold one with Nuxt (default) or Docusaurus:
+Run the scaffolder in an empty folder to create a new project, or inside an existing documentation site to add GraphQL-Markdown to it:
 
 ```shell
 npm create graphql-markdown-docs@latest
 ```
 
-See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
+New projects can be a Nuxt site (default), a Docusaurus site, or plain Markdown or MDX output with no site (`--framework markdown` or `--framework mdx`). In an existing site, the scaffolder detects the framework and writes a `.graphqlrc` and a `docs:api` script. See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
 
-To add GraphQL-Markdown to an existing site, there are two main setup paths:
+To set it up by hand instead, there are two main setup paths:
 
 - use the official Docusaurus integration for Docusaurus sites
-- use the CLI with formatter presets for other supported ecosystems such as Hugo, MkDocs, DocFX, and mdBook
+- use the CLI with formatter presets for other supported ecosystems such as Starlight, Fumadocs, Vocs, Hugo, MkDocs, DocFX, mdBook and HonKit, or the generic `mdx` preset for any MDX-based site
 
 Choose your preferred package based on your documentation stack:
 
