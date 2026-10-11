@@ -568,13 +568,13 @@ describe("process helpers", () => {
     await installDependencies("yarn", work);
     expect(mocks.spawn).toHaveBeenCalledWith(
       "yarn",
-      [],
+      ["install"],
       expect.objectContaining({ cwd: work }),
     );
     await installDependencies("unknown-pm", work);
     expect(mocks.spawn).toHaveBeenLastCalledWith(
       "npm",
-      ["install"],
+      ["i"],
       expect.anything(),
     );
     expect(mocks.prompts.log.success).toHaveBeenCalledTimes(2);

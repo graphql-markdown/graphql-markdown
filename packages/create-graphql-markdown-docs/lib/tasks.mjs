@@ -1,36 +1,27 @@
 import { spawn } from "node:child_process";
 
 import * as prompts from "@clack/prompts";
+import { resolveCommand } from "package-manager-detector/commands";
 
 /**
- * Maps each package manager to its install command and arguments.
- * Each entry is [command, args] to be passed to spawn().
+ * Package managers supported by the scaffolder.
  */
-export const INSTALL_COMMANDS = {
-  npm: ["npm", ["install"]],
-  pnpm: ["pnpm", ["install"]],
-  yarn: ["yarn", []],
-  bun: ["bun", ["install"]],
-};
+export const SUPPORTED_PACKAGE_MANAGERS = ["npm", "pnpm", "yarn", "bun"];
 
-/**
- * Maps each package manager to the command that adds dev dependencies.
- * Each entry is [command, args]; the packages are appended to args.
- */
-const ADD_DEV_COMMANDS = {
-  npm: ["npm", ["install", "--save-dev"]],
-  pnpm: ["pnpm", ["add", "--save-dev"]],
-  yarn: ["yarn", ["add", "--dev"]],
-  bun: ["bun", ["add", "--dev"]],
-};
+function resolveOrNpm(packageManager, intent, args) {
+  const agent = SUPPORTED_PACKAGE_MANAGERS.includes(packageManager)
+    ? packageManager
+    : "npm";
+  const resolved =
+    resolveCommand(agent, intent, args) ?? resolveCommand("npm", intent, args);
+  return [resolved.command, resolved.args];
+}
 
 function addDevArgs(packageManager, packages, { workspaceRoot = false } = {}) {
-  const [command, args] =
-    ADD_DEV_COMMANDS[packageManager] ?? ADD_DEV_COMMANDS.npm;
   const rootFlag = workspaceRoot
     ? ({ pnpm: ["-w"], yarn: ["-W"] }[packageManager] ?? [])
     : [];
-  return [command, [...args, ...rootFlag, ...packages]];
+  return resolveOrNpm(packageManager, "add", ["-D", ...rootFlag, ...packages]);
 }
 
 /**
@@ -73,8 +64,7 @@ export async function isGitAvailable() {
  */
 export async function installDependencies(packageManager, projectDir) {
   prompts.log.info(`Installing dependencies with ${packageManager}...`);
-  const [command, args] =
-    INSTALL_COMMANDS[packageManager] ?? INSTALL_COMMANDS.npm;
+  const [command, args] = resolveOrNpm(packageManager, "install", []);
   await runCommand(command, args, { cwd: projectDir });
   prompts.log.success("Dependencies installed!");
 }

@@ -7,7 +7,7 @@ import {
 } from "package-manager-detector";
 
 import { isRemoteSchemaSource } from "./schema.mjs";
-import { INSTALL_COMMANDS } from "./tasks.mjs";
+import { SUPPORTED_PACKAGE_MANAGERS } from "./tasks.mjs";
 
 export const DOCS_URL = "https://graphql-markdown.dev";
 
@@ -63,9 +63,9 @@ export async function resolvePackageManager(args, cwd = process.cwd()) {
   if (args.pm) return args.pm;
   // Set when launched via `<pm> create`, so it reflects what the user ran.
   const agent = getUserAgent()?.split("/")[0];
-  if (agent && Object.hasOwn(INSTALL_COMMANDS, agent)) return agent;
+  if (agent && SUPPORTED_PACKAGE_MANAGERS.includes(agent)) return agent;
   const detected = await detectPackageManager({ cwd });
-  if (detected?.name && Object.hasOwn(INSTALL_COMMANDS, detected.name)) {
+  if (detected?.name && SUPPORTED_PACKAGE_MANAGERS.includes(detected.name)) {
     return detected.name;
   }
   if (args.yes) return "npm";
