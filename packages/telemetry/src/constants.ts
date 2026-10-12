@@ -2,10 +2,12 @@
 export const NOTICE_VERSION = 1;
 
 /**
- * Telemetry endpoint. Empty until the Worker is live: an empty endpoint keeps
- * telemetry disabled unless `GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT` is set.
+ * Telemetry endpoint: the Cloudflare Worker ingest (workers.dev, see
+ * github.com/graphql-markdown/telemetry). Overridable with
+ * `GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT`.
  */
-export const DEFAULT_ENDPOINT = "";
+export const DEFAULT_ENDPOINT =
+  "https://gqlmd-telemetry.graphql-markdown.workers.dev/v1/event";
 
 /** Number of config fingerprints kept in `telemetry.json`. */
 export const MAX_SENT_CONFIGS = 20;

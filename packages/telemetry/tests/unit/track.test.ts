@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
 
+import { DEFAULT_ENDPOINT } from "../../src/constants";
 import { readState, writeState } from "../../src/state";
 import { encodeBody, track } from "../../src/track";
 
@@ -85,8 +86,18 @@ describe("track", () => {
     expect(readState(statePath)?.lastSentConfigs).toEqual([]);
   });
 
-  test("sends nothing without endpoint", async () => {
+  test("uses the default endpoint when no override is set", async () => {
+    fetchMock.mockResolvedValue({ ok: true });
     await track({ ...input(), env: {} });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock.mock.calls[0][0]).toBe(DEFAULT_ENDPOINT);
+  });
+
+  test("sends nothing with an empty endpoint override", async () => {
+    await track({
+      ...input(),
+      env: { GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT: "" },
+    });
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

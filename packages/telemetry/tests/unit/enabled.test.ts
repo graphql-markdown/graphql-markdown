@@ -84,15 +84,23 @@ describe("isEnabled", () => {
     ).toBe(true);
   });
 
-  test("empty endpoint kill-gate disables", () => {
-    expect(isEnabled({ trigger: "cli", env: {} })).toEqual({ enabled: false });
+  test("empty endpoint override disables", () => {
+    expect(
+      isEnabled({
+        trigger: "cli",
+        env: { GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT: "" },
+      }),
+    ).toEqual({ enabled: false });
   });
 
   test("DEBUG bypasses the kill-gate", () => {
     expect(
       isEnabled({
         trigger: "cli",
-        env: { GRAPHQL_MARKDOWN_TELEMETRY_DEBUG: "1" },
+        env: {
+          GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT: "",
+          GRAPHQL_MARKDOWN_TELEMETRY_DEBUG: "1",
+        },
       }).enabled,
     ).toBe(true);
   });

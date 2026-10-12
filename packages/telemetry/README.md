@@ -7,7 +7,7 @@ Anonymous, opt-out usage telemetry for GraphQL-Markdown. Internal package: it is
 - No identifier of any kind is stored or sent.
 - Opt out with `DO_NOT_TRACK=1`, `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED=1`, `telemetry: false` or `--no-telemetry`.
 - Disabled automatically in test runners (`VITEST`, `JEST_WORKER_ID`, `NODE_TEST_CONTEXT`, `NODE_ENV=test`).
-- The endpoint is empty until the collector is live, so nothing is sent unless `GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT` is set.
+- Events are sent to the Cloudflare Worker ingest (`gqlmd-telemetry.graphql-markdown.workers.dev`, see github.com/graphql-markdown/telemetry); set `GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT` to override it.
 - `GRAPHQL_MARKDOWN_TELEMETRY_DEBUG=1` prints the exact payload to stderr instead of sending it.
 
 ## Usage
