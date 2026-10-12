@@ -33,18 +33,20 @@ export const resetDisclaimer = (): void => {
  *
  * When `onFullNotice` is given, the full notice is passed to it instead.
  *
- * @returns `true` when the full notice was shown (it must then be recorded).
+ * @returns `true` when the full notice is due, shown now or earlier in this
+ * process (it must then be recorded before anything is sent).
  */
 export const printDisclaimer = (
   state: TelemetryState | null | undefined,
   ci: CiInfo,
   onFullNotice?: (notice: string) => void,
 ): boolean => {
-  if (printed) {
-    return false;
-  }
   // In CI the full notice is never recorded: print the reminder every run.
   const full = isNoticeDue(state, ci);
+  if (printed) {
+    // still due when an earlier event could not record it
+    return full;
+  }
   if (onFullNotice && full) {
     onFullNotice(FULL_NOTICE);
   } else {

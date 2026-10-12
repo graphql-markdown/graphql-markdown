@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
@@ -63,6 +63,22 @@ describe("track", () => {
     await track(generate);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(readState(statePath)?.lastSentConfigs).toHaveLength(0);
+  });
+
+  test("nothing is sent by later events when the notice cannot be recorded", async () => {
+    fetchMock.mockResolvedValue({ status: 202 });
+    // a file in place of the directory makes every state write fail
+    writeFileSync(join(dir, "blocked"), "");
+    const unwritable = join(dir, "blocked", "telemetry.json");
+    await track({ ...input(), statePath: unwritable });
+    await track({
+      ...input(),
+      statePath: unwritable,
+      event: "generate" as const,
+      pages: 3,
+    });
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(stderr).toHaveBeenCalledTimes(1);
   });
 
   test("onFullNotice receives the full notice and the version is recorded", async () => {

@@ -49,13 +49,15 @@ describe("printDisclaimer", () => {
 });
 
 describe("printDisclaimer once per process", () => {
-  test("second call prints nothing", () => {
+  test("second call prints nothing but still reports an unrecorded notice", () => {
     resetDisclaimer();
     const write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
       return true;
     });
+    const recorded = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
     expect(printDisclaimer(undefined, { ci: false })).toBe(true);
-    expect(printDisclaimer(undefined, { ci: false })).toBe(false);
+    expect(printDisclaimer(undefined, { ci: false })).toBe(true);
+    expect(printDisclaimer(recorded, { ci: false })).toBe(false);
     expect(write).toHaveBeenCalledTimes(1);
     write.mockRestore();
   });
