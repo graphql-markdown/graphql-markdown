@@ -24,3 +24,6 @@ export type * from "./graphql";
 
 // @graphql-markdown/helpers
 export type * from "./helpers";
+
+// @graphql-markdown/telemetry
+export type * from "./telemetry";
