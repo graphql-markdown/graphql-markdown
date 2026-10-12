@@ -91,7 +91,9 @@ export const createGenerateDocs = (userOptions: {
 
   return async () => {
     try {
-      await runGraphQLMarkdown(options, {}, import.meta.resolve("consola"));
+      await runGraphQLMarkdown(options, {}, import.meta.resolve("consola"), {
+        trigger: "nuxt",
+      });
 
       // The theme finds the landing doc by name, so a custom template keeps
       // working whatever it's called: GraphQL-Markdown copies it under its own

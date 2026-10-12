@@ -11,6 +11,7 @@ import type {
 import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString, OutputAdapter } from "./utils";
+import type { TelemetryTrigger } from "./telemetry";
 import type {
   AdmonitionType,
   Badge,
@@ -440,6 +441,8 @@ export interface ConfigOptions {
   schema?: Maybe<Pointer>;
   /** Skip documenting types with these directives */
   skipDocDirective?: Maybe<DirectiveName | DirectiveName[]>;
+  /** Anonymous usage telemetry; `false` opts out */
+  telemetry?: boolean;
   /** Temporary directory for processing */
   tmpDir?: Maybe<string>;
 }
@@ -509,6 +512,8 @@ export interface CliOptions {
   skip?: string[] | string;
   /** Directives to only include */
   only?: string[] | string;
+  /** Anonymous usage telemetry (`--no-telemetry` sets false) */
+  telemetry?: boolean;
   /** Temporary directory */
   tmp?: string;
 }
@@ -550,7 +555,10 @@ export type Options = Omit<
       /** Directives to skip */
       skipDocDirective: DirectiveName[];
     }
-  >;
+  > & {
+    /** @internal Telemetry decision made by buildConfig */
+    telemetryContext?: { trigger?: TelemetryTrigger; option?: boolean };
+  };
 
 /**
  * Function type for checking schema changes.

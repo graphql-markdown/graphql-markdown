@@ -9,6 +9,7 @@
     { "path": "packages/graphql" },
     { "path": "packages/helpers" },
     { "path": "packages/logger" },
+    { "path": "packages/telemetry" },
     { "path": "packages/printer-legacy" },
     { "path": "packages/utils" },
     { "path": "packages/types" }

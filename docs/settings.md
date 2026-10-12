@@ -556,6 +556,14 @@ Types with `@deprecated` directive can also be skipped using the setting **[`pri
 
 :::
 
+## `telemetry`
+
+Enables or disables [anonymous usage telemetry](/docs/telemetry). Set it to `false` to opt out; `true` only enables telemetry for programmatic use of `@graphql-markdown/core`, and never overrides `DO_NOT_TRACK`, `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED` or `gqlmd telemetry disable`.
+
+| Setting     | CLI flag         | Default |
+| ----------- | ---------------- | ------- |
+| `telemetry` | `--no-telemetry` | _on_    |
+
 ## `tmpDir`
 
 The folder used for storing schema copy and signature is used by [`diffMethod`](#diffmethod) setting.

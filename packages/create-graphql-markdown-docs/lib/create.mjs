@@ -32,6 +32,7 @@ import {
   isRemoteSchemaSource,
   validateGraphQLSchema,
 } from "./schema.mjs";
+import { reportTelemetry } from "./telemetry.mjs";
 import { WIRE_STEPS, printWireOutro } from "./wire/steps.mjs";
 import { flagModeError, isEffectivelyEmpty, modeFor } from "./target.mjs";
 import {
@@ -69,6 +70,7 @@ Shared:
   --schema <source>        Schema source: <path|url|git:|github:>
   --pm <name>              Package manager: npm | pnpm | yarn | bun
   --install / --no-install Install dependencies (or skip it)
+  --no-telemetry           Do not send anonymous usage telemetry
   -y, --yes                Accept defaults and skip all prompts
   -h, --help               Show this help
   -v, --version            Show the version
@@ -119,6 +121,7 @@ export function parseCliArgs(argv) {
       script: { type: "string" },
       "dry-run": { type: "boolean" },
       "no-git": { type: "boolean" },
+      "no-telemetry": { type: "boolean" },
       yes: { type: "boolean", short: "y" },
       help: { type: "boolean", short: "h" },
       version: { type: "boolean", short: "v" },
@@ -494,7 +497,8 @@ const SCAFFOLD_STEPS = [
   {
     id: "createProject",
     title: "Create project",
-    run(ctx) {
+    async run(ctx) {
+      await reportTelemetry(ctx);
       applyTemplate(ctx.tempDir, ctx);
       moveIntoPlace(ctx.tempDir, ctx.projectDir);
       prompts.log.success("Project created successfully!");

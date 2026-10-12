@@ -389,6 +389,7 @@ describe("config", () => {
         },
         schemaLocation: configFileOpts.schema,
         skipDocDirective: ["noDoc"],
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: configFileOpts.tmpDir,
       });
     });
@@ -459,6 +460,7 @@ describe("config", () => {
         outputDir: join(cliOpts.root!, cliOpts.base!),
         prettify: cliOpts.pretty,
         schemaLocation: cliOpts.schema,
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: cliOpts.tmp,
         docOptions: {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
@@ -538,6 +540,7 @@ describe("config", () => {
         outputDir: join(configFileOpts.rootPath!, configFileOpts.baseURL!),
         prettify: DEFAULT_OPTIONS.pretty,
         schemaLocation: configFileOpts.schema,
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: configFileOpts.tmpDir,
         docOptions: {
           categorySort: DEFAULT_OPTIONS.docOptions!.categorySort,
@@ -602,6 +605,7 @@ describe("config", () => {
         },
         schemaLocation: cliOpts.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });
@@ -641,6 +645,7 @@ describe("config", () => {
         },
         schemaLocation: DEFAULT_OPTIONS.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });
@@ -684,6 +689,7 @@ describe("config", () => {
         },
         schemaLocation: DEFAULT_OPTIONS.schema,
         skipDocDirective: DEFAULT_OPTIONS.skipDocDirective,
+        telemetryContext: { option: undefined, trigger: undefined },
         tmpDir: DEFAULT_OPTIONS.tmpDir,
       });
     });

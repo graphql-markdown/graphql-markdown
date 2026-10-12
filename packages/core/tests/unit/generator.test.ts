@@ -53,6 +53,9 @@ vi.mock("../../src/renderer");
 import * as CorePrinter from "../../src/printer";
 
 vi.mock("../../src/printer");
+import * as CoreTelemetry from "../../src/telemetry";
+
+vi.mock("../../src/telemetry");
 
 import { getEvents, resetEvents } from "../../src/event-emitter";
 
@@ -435,6 +438,32 @@ describe("generator", () => {
       );
     });
 
+    test("reports a missing schema to telemetry", async () => {
+      vi.mocked(GraphQL.getDocumentLoaders).mockResolvedValueOnce(undefined);
+      const telemetry = { trigger: "cli" as const };
+
+      await generateDocFromSchema({
+        telemetryContext: telemetry,
+      } as unknown as GeneratorOptions);
+
+      expect(CoreTelemetry.reportGeneration).toHaveBeenCalledWith(
+        expect.objectContaining({ telemetry, noSchema: true, pages: 0 }),
+      );
+    });
+
+    test("reports a thrown error to telemetry and rethrows it", async () => {
+      const failure = new Error("boom");
+      vi.mocked(GraphQL.getDocumentLoaders).mockRejectedValueOnce(failure);
+
+      await expect(
+        generateDocFromSchema({} as unknown as GeneratorOptions),
+      ).rejects.toThrow("boom");
+
+      expect(CoreTelemetry.reportGeneration).toHaveBeenCalledWith(
+        expect.objectContaining({ error: failure }),
+      );
+    });
+
     test("calls checkSchemaDifferences and respects result", async () => {
       expect.assertions(2);
 
@@ -489,6 +518,30 @@ describe("generator", () => {
       expect(hasChangesSpy).not.toHaveBeenCalled();
     });
 
+    test("reports the pages count to telemetry on success", async () => {
+      const mockSchema = { getDirective } as unknown as GraphQLSchema;
+      mockSchemaLoad(mockSchema);
+      vi.spyOn(GraphQL, "getSchemaMap").mockReturnValueOnce({
+        objects: {},
+      } as SchemaMap);
+      vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
+        {} as unknown as typeof IPrinter,
+      );
+      vi.spyOn(CoreRenderer, "getRenderer").mockResolvedValueOnce(mockRenderer);
+      const telemetry = { trigger: "cli" as const };
+
+      await generateDocFromSchema({ ...options, telemetryContext: telemetry });
+
+      expect(CoreTelemetry.reportGeneration).toHaveBeenCalledWith(
+        expect.objectContaining({
+          telemetry,
+          pages: 1,
+          noSchema: false,
+          error: undefined,
+        }),
+      );
+    });
+
     test("correctly calculates execution time", async () => {
       expect.assertions(2);
 
@@ -499,7 +552,8 @@ describe("generator", () => {
       const mockHrtime = vi
         .fn()
         .mockReturnValueOnce(1000000000n) // start time
-        .mockReturnValueOnce(2000000000n); // end time
+        .mockReturnValueOnce(2000000000n) // end time
+        .mockReturnValue(2000000000n); // telemetry duration
 
       process.hrtime.bigint = mockHrtime;
 
@@ -517,7 +571,7 @@ describe("generator", () => {
 
       await generateDocFromSchema(options);
 
-      expect(mockHrtime).toHaveBeenCalledTimes(2);
+      expect(mockHrtime).toHaveBeenCalledTimes(3);
       expect(loggerSpy).toHaveBeenCalledWith(
         '1 pages generated in 1.000s from schema "schema location".',
       );

@@ -59,6 +59,7 @@ import {
   RenderFilesEvents,
 } from "./events";
 import { registerMDXEventHandlers } from "./event-handlers";
+import { reportGeneration } from "./telemetry";
 
 /**
  * Supported file extensions for generated documentation files.
@@ -331,24 +332,19 @@ export const resolveSkipAndOnlyDirectives = (
   );
 };
 
-/**
- * Main entry point for generating Markdown documentation from a GraphQL schema.
- *
- * This function coordinates the entire documentation generation process:
- * - Loads and validates the schema
- * - Checks for schema changes if diffing is enabled
- * - Processes directives and groups
- * - Initializes printers and renderers
- * - Generates markdown files
- *
- * @param options - Complete configuration for the documentation generation
- * @returns Promise that resolves when documentation is fully generated
- */
-export const generateDocFromSchema = async (
-  options: GeneratorOptions,
-): Promise<void> => {
-  const start = process.hrtime.bigint();
+/** Facts about a generation run, collected for telemetry. */
+interface GenerationOutcome {
+  pages: number;
+  noSchema: boolean;
+  postError?: unknown;
+}
 
+// fallow-ignore-next-line complexity
+const runGeneration = async (
+  options: GeneratorOptions,
+  start: bigint,
+  outcome: GenerationOutcome,
+): Promise<void> => {
   await Logger(options.loggerModule);
 
   const mdxModule = await loadMDXModule(options.formatter);
@@ -409,6 +405,7 @@ export const generateDocFromSchema = async (
       )}".`,
       "error",
     );
+    outcome.noSchema = true;
     return;
   }
 
@@ -540,6 +537,8 @@ export const generateDocFromSchema = async (
     }),
   );
 
+  outcome.pages = pages.flat().length;
+
   const afterRenderRootTypesEvent = new RenderRootTypesEvent({
     rootTypes,
   });
@@ -580,6 +579,7 @@ export const generateDocFromSchema = async (
   // without this a failure to write mdBook's SUMMARY.md is dropped, and the
   // success line below claims the documentation is complete
   logHandlerErrors(RenderFilesEvents.AFTER_RENDER, renderFilesErrors);
+  outcome.postError = renderFilesErrors[0];
 
   const duration = (
     Number(process.hrtime.bigint() - start) / NS_PER_SEC
@@ -603,4 +603,43 @@ export const generateDocFromSchema = async (
       pages.flat().length
     } pages generated in ${duration}s from schema "${toString(schemaLocation)}".`,
   );
+};
+
+/**
+ * Main entry point for generating Markdown documentation from a GraphQL schema.
+ *
+ * This function coordinates the entire documentation generation process:
+ * - Loads and validates the schema
+ * - Checks for schema changes if diffing is enabled
+ * - Processes directives and groups
+ * - Initializes printers and renderers
+ * - Generates markdown files
+ *
+ * @param options - Complete configuration for the documentation generation
+ * @returns Promise that resolves when documentation is fully generated
+ */
+export const generateDocFromSchema = async (
+  options: GeneratorOptions,
+): Promise<void> => {
+  const start = process.hrtime.bigint();
+  const outcome: GenerationOutcome = { pages: 0, noSchema: false };
+  let failed = false;
+  let thrown: unknown;
+
+  try {
+    await runGeneration(options, start, outcome);
+  } catch (error) {
+    failed = true;
+    thrown = error;
+    throw error;
+  } finally {
+    void reportGeneration({
+      telemetry: options.telemetryContext,
+      pages: outcome.pages,
+      durationMs: Number(process.hrtime.bigint() - start) / 1e6,
+      error: failed ? (thrown ?? new Error("unknown")) : undefined,
+      noSchema: outcome.noSchema,
+      postError: outcome.postError,
+    });
+  }
 };

@@ -46,6 +46,8 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
 import { loadConfiguration } from "./graphql-config";
+import { reportTelemetry, resolveTelemetryContext } from "./telemetry";
+import type { BuildConfigContext } from "./telemetry";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
 import { OptionBuilder } from "./options/builder";
@@ -163,6 +165,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "mdxParser"
         | "outputAdapter"
         | "printTypeOptions"
+        | "telemetry"
       >
     >
 > & {
@@ -837,16 +840,23 @@ export const getDecoratorsOption = (
   return decorators;
 };
 
+const resolveDeprecatedOption = (
+  cliOpts: Maybe<CliOptions>,
+  configOptions: Maybe<ConfigPrintTypeOptions>,
+): TypeDeprecatedOption => {
+  return (
+    (cliOpts?.deprecated ??
+      configOptions?.deprecated ??
+      DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
+  ).toLocaleLowerCase() as TypeDeprecatedOption;
+};
+
 const getPrintTypeOptions = (
   cliOpts: Maybe<CliOptions>,
   configOptions: Maybe<ConfigPrintTypeOptions>,
 ): Required<ConfigPrintTypeOptions> => {
   return {
-    deprecated: (
-      (cliOpts?.deprecated ??
-        configOptions?.deprecated ??
-        DEFAULT_OPTIONS.printTypeOptions.deprecated) as string
-    ).toLocaleLowerCase() as TypeDeprecatedOption,
+    deprecated: resolveDeprecatedOption(cliOpts, configOptions),
     exampleSection:
       configOptions?.exampleSection ??
       DEFAULT_OPTIONS.printTypeOptions.exampleSection,
@@ -946,6 +956,7 @@ export const parseHomepageOption = (
  * @param configFileOpts - Options from the configuration file
  * @param cliOpts - Options from the command line interface
  * @param id - The configuration ID used when referencing multiple schemas
+ * @param context - Internal context set by GraphQL-Markdown entry points (telemetry trigger)
  * @returns A promise resolving to the final merged configuration object
  * @example
  * ```typescript
@@ -988,6 +999,7 @@ export const buildConfig = async (
   configFileOpts: Maybe<ConfigOptions>,
   cliOpts?: Maybe<CliOptions>,
   id: Maybe<string> = "default",
+  context?: BuildConfigContext,
 ): Promise<Options> => {
   cliOpts ??= {};
 
@@ -1059,6 +1071,16 @@ export const buildConfig = async (
     config.printTypeOptions,
   );
 
+  const telemetryReport = {
+    configFileOpts,
+    extension: graphqlConfig as Maybe<ConfigOptions>,
+    cliOpts,
+    id,
+    trigger: context?.trigger,
+  };
+  // fire and forget: async, never throws nor rejects (see reportTelemetry)
+  void reportTelemetry(telemetryReport);
+
   return {
     baseURL,
     customDirective: getCustomDirectives(
@@ -1086,6 +1108,7 @@ export const buildConfig = async (
     printTypeOptions,
     schemaLocation,
     skipDocDirective,
+    telemetryContext: resolveTelemetryContext(telemetryReport),
     tmpDir,
   };
 };

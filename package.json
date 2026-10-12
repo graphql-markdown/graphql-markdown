@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/graphql-markdown/graphql-markdown.git"
   },
-  "packageManager": "bun@1.4.2",
+  "packageManager": "bun@1.4.3",
   "private": true,
   "version": "1.0.0",
   "workspaces": {
@@ -186,7 +186,7 @@
     "@stryker-mutator/core": "10.0.0",
     "@stryker-mutator/typescript-checker": "10.0.0",
     "@stryker-mutator/vitest-runner": "10.0.0",
-    "@types/node": "26.6.4",
+    "@types/node": "26.6.5",
     "@typescript-eslint/eslint-plugin": "8.71.1",
     "@typescript-eslint/parser": "8.71.1",
     "@typescript/native-preview": "7.0.0-dev.20260707.2",
@@ -201,7 +201,7 @@
     "eslint-plugin-mdx": "3.8.1",
     "eslint-plugin-prettier": "5.5.6",
     "eslint-plugin-tsdoc": "0.5.4",
-    "fallow": "3.32.0",
+    "fallow": "3.33.1",
     "globals": "17.13.0",
     "graphql": "catalog:",
     "graphql-config": "catalog:",

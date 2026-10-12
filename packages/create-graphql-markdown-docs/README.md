@@ -127,7 +127,7 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 | `--output <folder>`   | Folder for the generated docs, relative to the project.                   |
 | `--link-root <route>` | Route prefix used in generated links.                                     |
 | `--site-base <route>` | Base path the site is served from.                                        |
-| `--script <name>`     | `package.json` script to add (default: `gqlmd`).                       |
+| `--script <name>`     | `package.json` script to add (default: `gqlmd`).                          |
 | `--dry-run`           | Show what would be written without writing it.                            |
 
 ## What's included
@@ -150,6 +150,12 @@ With `--framework docusaurus`, the scaffold replaces the standalone `graphql-mar
 - `static/index.md`, `src/css/custom.css`, `babel.config.js` — landing page, styling and build config.
 
 Then run `npm run doc` to generate the docs and `npm start` to serve them.
+
+## Telemetry
+
+The scaffolder reports one anonymous event per run (scaffold or wire): the framework, mode and schema loader type, with custom strings, URLs and paths masked. No schema content is sent. Nothing is sent on `--dry-run`. The first run shows a notice.
+
+Opt out with the `--no-telemetry` flag, `DO_NOT_TRACK=1`, or `gqlmd telemetry disable`. See [what is collected](https://graphql-markdown.dev/telemetry).
 
 ## Documentation
 
