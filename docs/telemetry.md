@@ -92,7 +92,7 @@ Settings are sent with their values, but every custom string, URL and path is re
 | string in a known enum (`diffMethod`, `printTypeOptions.deprecated`, `hierarchy`, `docOptions.*` enums, `formatter` presets and `@graphql-markdown/*` packages, `homepage: false`) | as-is                                                                                                                               |
 | URL-like string (`baseURL`, schema URL, any `scheme://`)                                                                                                                           | `"<url>"`                                                                                                                           |
 | schema pointer (`schema`): a URL, git ref, GitHub repo, file, glob, code file or inline SDL. Local paths, git refs, URLs and request headers are never sent                        | `"<url>"`, `"<git>"`, `"<github>"`, `"<file:sdl>"`, `"<file:json>"`, `"<file:code>"`, `"<glob>"`, `"<inline-sdl>"` or `"<unknown>"` |
-| path-like string (`rootPath`, `linkRoot`, `tmpDir`, `homepage`, a custom formatter path, anything containing `/`, `\` or a leading `.`)                                            | `"<path>"`                                                                                                                          |
+| path-like string (`rootPath`, `linkRoot`, `tmpDir`, `homepage`, anything containing `/`, `\` or a leading `.`)                                                                     | `"<path>"`                                                                                                                          |
 | `formatter` or `mdxParser` outside the `@graphql-markdown` ecosystem (a third-party package, a local path or a URL)                                                                | `"<custom-formatter>"`                                                                                                              |
 | schema loaders outside `@graphql-tools` (`loaders`)                                                                                                                                | `"<custom-loader>"`                                                                                                                 |
 | any other string (directive names, `id`, `metatags`, `fallback`, front matter values)                                                                                              | `"<string>"`                                                                                                                        |
@@ -152,7 +152,7 @@ env:
 Telemetry is enabled in CI by default, and reported separately so CI and local usage can be told apart (including docs builds on Vercel, Netlify and Cloudflare Pages).
 
 - `ci: true` is sent together with `ciProvider` (`github-actions`, `gitlab`, `circleci`, `azure-pipelines`, `jenkins`, `bitbucket`, `buildkite`, `travis`, `vercel`, `netlify`, `cloudflare-pages`, `aws-codebuild`, `teamcity`, `appveyor`, `drone`, `render` or `other` for a generic `CI`). Only the presence of each vendor's variable is checked, never its value. `CI=false` or `CI=0` means not CI.
-- Home directories are ephemeral in CI, so the notice is printed on every run, and at most one event per provider and configuration is sent per process.
+- Home directories are ephemeral in CI, so the full notice is not shown or recorded in CI. A one-line reminder with the opt-out is printed on every CI run instead, and at most one event per provider and configuration is sent per process.
 - The opt-outs above work the same way.
 
 ## Notice
@@ -167,7 +167,7 @@ The first time telemetry runs (and when the notice version changes), this is pri
   Opt out: `gqlmd telemetry disable` or DO_NOT_TRACK=1
 ```
 
-Later runs print one line, `ℹ Anonymous telemetry enabled. Opt out: gqlmd telemetry disable`. Nothing is printed when telemetry is disabled. All telemetry output goes to stderr, never stdout.
+In CI the full notice is never shown or recorded; only the one-line reminder below is printed. Later runs print one line, `ℹ Anonymous telemetry enabled. Opt out: gqlmd telemetry disable`. Nothing is printed when telemetry is disabled. All telemetry output goes to stderr, never stdout.
 
 ## Debug
 
