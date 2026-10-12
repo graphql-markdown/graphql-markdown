@@ -99,7 +99,7 @@ export const MASK_TOKENS = [
   "<unknown>",
 ] as const;
 /** Pattern of masked object keys, e.g. `<key:0>`. */
-export const KEY_TOKEN_PATTERN = "^<key:\\d+>$";
+export const KEY_TOKEN_PATTERN = String.raw`^<key:\d+>$`;
 
 export const ALLOWLIST = {
   events: EVENTS,
