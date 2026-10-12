@@ -6,7 +6,9 @@ const VENDORS: readonly (readonly [CiProvider, readonly string[]])[] = [
   ["gitlab", ["GITLAB_CI"]],
   ["circleci", ["CIRCLECI"]],
   ["azure-pipelines", ["TF_BUILD"]],
-  ["jenkins", ["JENKINS_URL", "BUILD_ID"]],
+  // BUILD_ID alone is too generic (set by unrelated tooling); ci-info also
+  // requires JENKINS_URL, which Jenkins always sets.
+  ["jenkins", ["JENKINS_URL"]],
   ["bitbucket", ["BITBUCKET_COMMIT"]],
   ["buildkite", ["BUILDKITE"]],
   ["travis", ["TRAVIS"]],
