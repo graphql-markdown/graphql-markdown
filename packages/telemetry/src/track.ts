@@ -69,8 +69,10 @@ export const track = async (input: TrackInput): Promise<void> => {
       return;
     }
 
+    // Generate events carry a duration, so their fingerprint never repeats.
+    const dedupe = payload.event !== "generate";
     const fp = fingerprint(payload);
-    if (state?.lastSentConfigs.includes(fp)) {
+    if (dedupe && state?.lastSentConfigs.includes(fp)) {
       return;
     }
 
@@ -82,7 +84,9 @@ export const track = async (input: TrackInput): Promise<void> => {
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     if (response.status === 202) {
-      writeState({ lastSentConfigs: [fp] }, statePath);
+      if (dedupe) {
+        writeState({ lastSentConfigs: [fp] }, statePath);
+      }
     } else if (response.status === 410) {
       writeState({ enabled: false, reason: "sunset" }, statePath);
     }

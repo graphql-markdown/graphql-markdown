@@ -51,8 +51,10 @@
   // its CSS-module exports and @docusaurus/* imports produce noise.
   // dist/ is build output. __data__/ holds test fixtures. The scaffolder templates
   // declare their dependencies in each template's own package.json (mirrors knip).
+  // The CLI unit tests contain large inline snapshots that inflate function-size findings.
   "ignorePatterns": [
     "website/**",
+    "packages/cli/tests/unit/index.test.ts",
     "**/dist/**",
     "**/__data__/**",
     "packages/create-graphql-markdown-docs/templates/**",

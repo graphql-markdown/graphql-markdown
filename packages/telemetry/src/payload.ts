@@ -25,6 +25,10 @@ export interface PayloadInput {
   /** Create events only. */
   target?: string;
   mode?: "scaffold" | "wire";
+  /** Generate events only. */
+  pages?: number;
+  durationMs?: number;
+  errorType?: string;
   /** True only when no state file existed before this run. */
   noStateBefore?: boolean;
   env?: NodeJS.ProcessEnv;
@@ -72,6 +76,26 @@ const applySanitizedSection = (
     payload.loader = classifyPointer(source.schema);
   }
   return result.unknownKeys;
+};
+
+const applyGenerateFields = (
+  payload: TelemetryPayload,
+  input: PayloadInput,
+): void => {
+  const { pages, durationMs, errorType } = input;
+  if (typeof pages === "number" && Number.isInteger(pages) && pages >= 0) {
+    payload.pages = pages;
+  }
+  if (
+    typeof durationMs === "number" &&
+    Number.isFinite(durationMs) &&
+    durationMs >= 0
+  ) {
+    payload.durationMs = Math.round(durationMs / 100) * 100;
+  }
+  if (typeof errorType === "string" && errorType !== "") {
+    payload.errorType = errorType;
+  }
 };
 
 export const buildPayload = (input: PayloadInput): TelemetryPayload => {
@@ -123,6 +147,7 @@ export const buildPayload = (input: PayloadInput): TelemetryPayload => {
   if (input.mode !== undefined) {
     payload.mode = input.mode;
   }
+  applyGenerateFields(payload, input);
   return payload;
 };
 

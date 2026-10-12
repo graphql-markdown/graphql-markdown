@@ -2,6 +2,7 @@ import {
   FULL_NOTICE,
   isNoticeDue,
   printDisclaimer,
+  resetDisclaimer,
 } from "../../src/disclaimer";
 
 describe("printDisclaimer", () => {
@@ -9,6 +10,7 @@ describe("printDisclaimer", () => {
   const state = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
 
   beforeEach(() => {
+    resetDisclaimer();
     write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
       return true;
     });
@@ -46,6 +48,36 @@ describe("printDisclaimer", () => {
   });
 });
 
+describe("printDisclaimer once per process", () => {
+  test("second call prints nothing but still reports an unrecorded notice", () => {
+    resetDisclaimer();
+    const write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
+      return true;
+    });
+    const recorded = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
+    expect(printDisclaimer(undefined, { ci: false })).toBe(true);
+    expect(printDisclaimer(undefined, { ci: false })).toBe(true);
+    expect(printDisclaimer(recorded, { ci: false })).toBe(false);
+    expect(write).toHaveBeenCalledTimes(1);
+    write.mockRestore();
+  });
+
+  test("a failed output is retried by the next call", () => {
+    resetDisclaimer();
+    const onFullNotice = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        throw new Error("closed");
+      })
+      .mockImplementationOnce(() => {});
+    expect(() => {
+      return printDisclaimer(undefined, { ci: false }, onFullNotice);
+    }).toThrow("closed");
+    expect(printDisclaimer(undefined, { ci: false }, onFullNotice)).toBe(true);
+    expect(onFullNotice).toHaveBeenCalledTimes(2);
+  });
+});
+
 describe("isNoticeDue", () => {
   const state = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
 
@@ -63,6 +95,7 @@ describe("isNoticeDue", () => {
 describe("printDisclaimer with onFullNotice", () => {
   let write: ReturnType<typeof vi.spyOn>;
   beforeEach(() => {
+    resetDisclaimer();
     write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
       return true;
     });

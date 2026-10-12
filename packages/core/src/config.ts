@@ -46,7 +46,7 @@ import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
 import { loadConfiguration } from "./graphql-config";
-import { reportTelemetry } from "./telemetry";
+import { reportTelemetry, resolveTelemetryContext } from "./telemetry";
 import type { BuildConfigContext } from "./telemetry";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
 import { isInvalidFunctionProperty } from "./directives/validation";
@@ -1071,14 +1071,15 @@ export const buildConfig = async (
     config.printTypeOptions,
   );
 
-  // fire and forget: async, never throws nor rejects (see reportTelemetry)
-  void reportTelemetry({
+  const telemetryReport = {
     configFileOpts,
     extension: graphqlConfig as Maybe<ConfigOptions>,
     cliOpts,
     id,
     trigger: context?.trigger,
-  });
+  };
+  // fire and forget: async, never throws nor rejects (see reportTelemetry)
+  void reportTelemetry(telemetryReport);
 
   return {
     baseURL,
@@ -1107,6 +1108,7 @@ export const buildConfig = async (
     printTypeOptions,
     schemaLocation,
     skipDocDirective,
+    telemetryContext: resolveTelemetryContext(telemetryReport),
     tmpDir,
   };
 };

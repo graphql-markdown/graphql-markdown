@@ -13,7 +13,7 @@ keywords:
 
 GraphQL-Markdown collects **anonymous** usage data to learn which loaders, formatters and settings are used, so the project can focus on what matters. It is opt-out and easy to disable.
 
-One event describes **which configuration is used to generate**, nothing more. There are no timings, no error reports and no data from your schema.
+One event describes **which configuration is used to generate**, and a second one **how the generation went**: the number of pages, the duration and, on failure, the error type. There are no error messages and no data from your schema.
 
 ## What is collected
 
@@ -71,7 +71,7 @@ One event is sent for each distinct configuration, at most once per process. The
 | Field                       | Meaning                                                                                                                                                                       |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v`                         | Payload schema version.                                                                                                                                                       |
-| `event`                     | `config`, `create_scaffold` or `create_wire`.                                                                                                                                 |
+| `event`                     | `config`, `generate`, `create_scaffold` or `create_wire`.                                                                                                                     |
 | `pkg`, `pkgVersion`         | Package that reported the event and its version.                                                                                                                              |
 | `nodeMajor`, `graphqlMajor` | Major versions only.                                                                                                                                                          |
 | `os`, `pm`                  | Platform (`darwin`, `linux`, `win32`) and package manager (`npm`, `pnpm`, `yarn`, `bun`).                                                                                     |
@@ -81,6 +81,28 @@ One event is sent for each distinct configuration, at most once per process. The
 | `container`, `wsl`          | Running in a container or in WSL.                                                                                                                                             |
 | `loader`                    | Kind of schema pointer: `url`, `git`, `github`, `file-sdl`, `file-json`, `code-file` (`.ts`, `.tsx`, `.js`, `.vue`, `.svelte`, `.astro`…), `glob`, `inline-sdl` or `unknown`. |
 | `config`, `cli`             | The settings used, from the config sources and from CLI flags, with custom values masked.                                                                                     |
+
+### Generate event
+
+When generation ends, one `generate` event is sent per run, with the same header fields (no `config`, `cli` or `loader`):
+
+```json
+{
+  "v": 1,
+  "event": "generate",
+  "pkg": "@graphql-markdown/core",
+  "pkgVersion": "1.40.0",
+  "trigger": "cli",
+  "pages": 182,
+  "durationMs": 2300
+}
+```
+
+| Field        | Meaning                                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pages`      | Number of pages generated (`0` when the run failed before rendering).                                                                                                                                                                                                                                                                                                                     |
+| `durationMs` | Generation time, rounded to 100 ms.                                                                                                                                                                                                                                                                                                                                                       |
+| `errorType`  | Only when the run failed: a built-in error class (`Error`, `TypeError`, `RangeError`, `SyntaxError`, `ReferenceError`, `GraphQLError`, `AggregateError`, `AbortError`, `SystemError`), optionally with its system code (`Error:ENOENT`); `<custom-error>` for any other class; `<no-schema>` when the schema could not be loaded; prefixed with `post:` when only post-processing failed. |
 
 ## Masking
 
@@ -106,7 +128,7 @@ Settings are sent with their values, but every custom string, URL and path is re
 - schema content: type, field or directive names, descriptions, counts
 - raw paths, URLs or host names
 - git remotes, project names or package names of your project
-- error messages or stack traces
+- error messages, stack traces or custom error class names
 - environment variable values (only the presence of a CI vendor variable is checked)
 - any identifier: no install ID, session ID, machine ID, user ID or hash of any of them
 
@@ -161,7 +183,8 @@ The first time telemetry runs (and when the notice version changes), this is pri
 
 ```text
 ℹ GraphQL-Markdown collects anonymous usage data to help improve the tool.
-  Sent: package/Node versions, OS, schema loader type, and the settings you use.
+  Sent: package/Node versions, OS, schema loader type, the settings you use,
+  and the page count, duration and error type of each run.
   Custom strings, URLs and paths are masked; schema content is never sent.
   Details: https://graphql-markdown.dev/telemetry
   Opt out: `gqlmd telemetry disable` or DO_NOT_TRACK=1
@@ -179,12 +202,12 @@ GRAPHQL_MARKDOWN_TELEMETRY_DEBUG=1 gqlmd graphql-to-doc
 
 `GRAPHQL_MARKDOWN_TELEMETRY_ENDPOINT` overrides the endpoint URL. It is meant for maintainers (staging, local testing).
 
-Telemetry never slows down or breaks a run: it runs in parallel with generation, with a 1 second timeout, and every error is swallowed.
+Telemetry never breaks a run: every error is swallowed. The config event is sent in parallel with generation; the generate event is sent when it ends and can delay the exit by at most its 1 second timeout.
 
 ## Telemetry changelog
 
-| Payload `v` | Notice version | Changes                                                                                                                                                                                                   |
-| ----------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind (including `git` and `github`), masked configuration. |
+| Payload `v` | Notice version | Changes                                                                                                                                                                                                                                                              |
+| ----------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind (including `git` and `github`), masked configuration; `generate` event with page count, duration and error type. |
 
 The notice version is bumped, and the notice shown again, whenever a new category of data is added to the payload. Nothing carrying the new fields is sent before the new notice has been shown.
