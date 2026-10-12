@@ -11,6 +11,7 @@ import type {
 import type { CustomDirective } from "./helpers";
 
 import type { Maybe, MDXString, OutputAdapter } from "./utils";
+import type { TelemetryTrigger } from "./telemetry";
 import type {
   AdmonitionType,
   Badge,
@@ -554,7 +555,10 @@ export type Options = Omit<
       /** Directives to skip */
       skipDocDirective: DirectiveName[];
     }
-  >;
+  > & {
+    /** @internal Telemetry decision made by buildConfig */
+    telemetryContext?: { trigger?: TelemetryTrigger; option?: boolean };
+  };
 
 /**
  * Function type for checking schema changes.

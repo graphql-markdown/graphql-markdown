@@ -27,6 +27,30 @@ export interface TelemetryReport {
   trigger?: TelemetryTrigger;
 }
 
+/** Telemetry decision made once by `buildConfig`, reused at generation time. */
+export interface TelemetryContext {
+  trigger?: TelemetryTrigger;
+  option?: boolean;
+}
+
+/** Outcome of a documentation generation run. */
+export interface GenerationReport {
+  telemetry?: TelemetryContext;
+  pages: number;
+  durationMs: number;
+  /** Error thrown by the run, if any. */
+  error?: unknown;
+  /** Explicit error type, takes precedence over `error`. */
+  errorType?: string;
+  /** The run failed without throwing because the schema could not be loaded. */
+  noSchema?: boolean;
+  /** First post-processing error, when the run completed incompletely. */
+  postError?: unknown;
+}
+
+/** In-flight config event, awaited before the generate event is sent. */
+let pending: Promise<void> = Promise.resolve();
+
 /** Fingerprints already reported by this process. */
 const reported = new Set<string>();
 
@@ -68,6 +92,25 @@ const resolveOption = (
     return false;
   }
   return values.includes(true) ? true : undefined;
+};
+
+/**
+ * Resolves the telemetry opt-in and trigger from the configuration sources.
+ */
+export const resolveTelemetryContext = (
+  report: Pick<
+    TelemetryReport,
+    "cliOpts" | "configFileOpts" | "extension" | "trigger"
+  >,
+): TelemetryContext => {
+  return {
+    trigger: report.trigger,
+    option: resolveOption(
+      report.cliOpts?.telemetry,
+      report.configFileOpts?.telemetry,
+      report.extension?.telemetry,
+    ),
+  };
 };
 
 const fingerprintOf = (report: TelemetryReport): string => {
@@ -128,14 +171,66 @@ export const reportTelemetry = async (
     reported.add(fingerprint);
 
     const { track } = await import("@graphql-markdown/telemetry");
+    pending = (async (): Promise<void> => {
+      try {
+        await track({
+          trigger: report.trigger ?? "programmatic",
+          option,
+          pkg: "@graphql-markdown/core",
+          pkgVersion: readVersion(),
+          graphqlMajor: await readGraphqlMajor(),
+          config: { ...report.extension, ...report.configFileOpts },
+          cli: report.cliOpts ?? undefined,
+        });
+      } catch {
+        // telemetry must never affect a run
+      }
+    })();
+    await pending;
+  } catch {
+    // telemetry must never affect a run
+  }
+};
+
+/**
+ * Reports the outcome of a generation run.
+ * Never throws and never rejects.
+ */
+export const reportGeneration = async (
+  report: GenerationReport,
+): Promise<void> => {
+  try {
+    const { trigger, option } = report.telemetry ?? {};
+    if (!isEnabled(option, trigger, process.env)) {
+      return;
+    }
+    // avoids racing the config event on the state file
+    await pending;
+
+    const { track, errorTypeOf, NO_SCHEMA_ERROR, POST_ERROR_PREFIX } =
+      await import("@graphql-markdown/telemetry");
+
+    let errorType = report.errorType;
+    if (errorType === undefined) {
+      if (report.error !== undefined) {
+        errorType = errorTypeOf(report.error);
+      } else if (report.noSchema) {
+        errorType = NO_SCHEMA_ERROR;
+      } else if (report.postError !== undefined) {
+        errorType = `${POST_ERROR_PREFIX}${errorTypeOf(report.postError)}`;
+      }
+    }
+
     await track({
-      trigger: report.trigger ?? "programmatic",
+      event: "generate",
+      trigger: trigger ?? "programmatic",
       option,
       pkg: "@graphql-markdown/core",
       pkgVersion: readVersion(),
       graphqlMajor: await readGraphqlMajor(),
-      config: { ...report.extension, ...report.configFileOpts },
-      cli: report.cliOpts ?? undefined,
+      pages: report.pages,
+      durationMs: report.durationMs,
+      errorType,
     });
   } catch {
     // telemetry must never affect a run
