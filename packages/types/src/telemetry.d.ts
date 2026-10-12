@@ -1,5 +1,10 @@
 /** Entry point that triggered the telemetry event. */
-export type TelemetryTrigger = "cli" | "docusaurus" | "nuxt" | "programmatic";
+export type TelemetryTrigger =
+  | "cli"
+  | "create"
+  | "docusaurus"
+  | "nuxt"
+  | "programmatic";
 
 /** Kind of telemetry event. */
 export type TelemetryEvent = "config" | "create_scaffold" | "create_wire";

@@ -14,6 +14,7 @@ import {
   unlessCancelled,
   validateSchemaSource,
 } from "../helpers.mjs";
+import { reportTelemetry } from "../telemetry.mjs";
 import { detectLoader } from "../schema.mjs";
 import { addDevCommand, addDevDependencies } from "../tasks.mjs";
 import { detectFrameworks, toSchemaRef } from "../target.mjs";
@@ -208,7 +209,8 @@ function planDependencies(ctx) {
   }
 }
 
-function writePlan(ctx) {
+async function writePlan(ctx) {
+  await reportTelemetry(ctx);
   const { args, projectDir, project, descriptor } = ctx;
   const plan = planWire(
     {

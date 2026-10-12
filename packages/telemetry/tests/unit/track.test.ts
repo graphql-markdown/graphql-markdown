@@ -54,6 +54,28 @@ describe("track", () => {
     expect(state?.lastSentConfigs).toHaveLength(1);
   });
 
+  test("onFullNotice receives the full notice and the version is recorded", async () => {
+    fetchMock.mockResolvedValue({ status: 202 });
+    const onFullNotice = vi.fn();
+    await track({ ...input(), onFullNotice });
+    expect(onFullNotice).toHaveBeenCalledTimes(1);
+    expect(onFullNotice.mock.calls[0][0]).toContain(
+      "collects anonymous usage data",
+    );
+    expect(stderr).not.toHaveBeenCalled();
+    expect(readState(statePath)?.noticeVersion).toBe(1);
+  });
+
+  test("onFullNotice is skipped and the reminder written once recorded", async () => {
+    fetchMock.mockResolvedValue({ status: 202 });
+    await track(input());
+    stderr.mockClear();
+    const onFullNotice = vi.fn();
+    await track({ ...input(), config: { force: false }, onFullNotice });
+    expect(onFullNotice).not.toHaveBeenCalled();
+    expect(String(stderr.mock.calls[0][0])).toContain("Anonymous telemetry");
+  });
+
   test("the same config is not sent twice", async () => {
     fetchMock.mockResolvedValue({ status: 202 });
     await track(input());
