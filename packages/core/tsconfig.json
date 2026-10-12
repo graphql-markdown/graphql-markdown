@@ -13,6 +13,7 @@
   "references": [
     { "path": "../utils" },
     { "path": "../logger" },
-    { "path": "../graphql" }
+    { "path": "../graphql" },
+    { "path": "../telemetry" }
   ]
 }

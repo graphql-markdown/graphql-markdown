@@ -68,6 +68,7 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus" },
       );
     });
 
@@ -94,6 +95,7 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus" },
       );
     });
 
@@ -120,6 +122,7 @@ describe("pluginGraphQLDocGenerator", () => {
         }),
         "@docusaurus/logger",
         "@graphql-markdown/docusaurus/mdx",
+        { trigger: "docusaurus" },
       );
     });
 

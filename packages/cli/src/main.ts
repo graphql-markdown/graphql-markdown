@@ -16,6 +16,7 @@ import { Command } from "commander";
 import { loadConfig } from "graphql-config";
 
 import { getGraphQLMarkdownCli } from ".";
+import { getTelemetryCommand } from "./telemetry-command";
 
 /**
  * Name of the GraphQL Markdown extension for graphql-config
@@ -44,9 +45,12 @@ void (async (): Promise<void> => /* NOSONAR */ {
     : ["default"];
   // build commands for each project declared in graphql-config file
   for (const project of projects) {
-    const cmd = getGraphQLMarkdownCli({ id: project });
+    const cmd = getGraphQLMarkdownCli({ id: project }, undefined, undefined, {
+      trigger: "cli",
+    });
     program.addCommand(cmd);
   }
+  program.addCommand(getTelemetryCommand());
 
   await program.parseAsync(process.argv);
 })();

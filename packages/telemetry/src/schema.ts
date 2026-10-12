@@ -3,13 +3,7 @@
  * mask tokens. Shared with the Worker, which rejects anything else.
  */
 export const EVENTS = ["config", "create_scaffold", "create_wire"] as const;
-export const TRIGGERS = [
-  "cli",
-  "docusaurus-build",
-  "docusaurus-dev",
-  "nuxt",
-  "programmatic",
-] as const;
+export const TRIGGERS = ["cli", "docusaurus", "nuxt", "programmatic"] as const;
 export const CI_PROVIDERS = [
   "github-actions",
   "gitlab",

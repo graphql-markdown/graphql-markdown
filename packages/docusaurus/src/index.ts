@@ -49,9 +49,8 @@ const assertCommanderCompatibleCommand: (
 };
 
 /**
- * Docusaurus plugin wrapper that wires GraphQL-Markdown into the build,
- * optionally running the CLI during `docusaurus build` and registering
- * the `graphql-to-doc` command on the local CLI.
+ * Docusaurus plugin wrapper that registers the GraphQL-Markdown
+ * `graphql-to-doc` command on the local CLI.
  *
  * @param _ - Load context (unused).
  * @param options - GraphQL-Markdown CLI options plus Docusaurus plugin options.
@@ -86,6 +85,7 @@ export default async function pluginGraphQLDocGenerator(
         },
         LOGGER_MODULE,
         options.formatter ?? MDX_PACKAGE,
+        { trigger: "docusaurus" },
       );
       assertCommanderCompatibleCommand(command);
       cli.addCommand(

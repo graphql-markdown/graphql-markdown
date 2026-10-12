@@ -2,6 +2,7 @@ name: Smoke Tests
 
 env:
   HUSKY: 0
+  GRAPHQL_MARKDOWN_TELEMETRY_DISABLED: "1"
   REPO_ROOT: ${{ github.workspace }}
 
 on:

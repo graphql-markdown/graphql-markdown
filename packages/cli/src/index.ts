@@ -9,6 +9,7 @@
 import type {
   CliOptions,
   GraphQLMarkdownCliOptions,
+  TelemetryTrigger,
 } from "@graphql-markdown/types";
 
 // Commander v15 is ESM-only; this package requires Node.js >=22.12.0 which
@@ -32,11 +33,20 @@ const DEFAULT_ID = "default" as const;
 export type GraphQLMarkdownCliType = Command;
 
 /**
+ * Internal context set by GraphQL-Markdown entry points.
+ */
+export interface RunContext {
+  /** Entry point reported by anonymous telemetry. */
+  trigger?: TelemetryTrigger;
+}
+
+/**
  * Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
  *
  * @param options - Options for configuring the GraphQL Markdown CLI.
  * @param cliOptions - Optional command-line options passed to the CLI.
  * @param loggerModule - Optional logger module to use.
+ * @param context - Optional internal context (telemetry trigger).
  *
  * @example
  * ```typescript
@@ -51,9 +61,10 @@ export const runGraphQLMarkdown = async (
   options: GraphQLMarkdownCliOptions,
   cliOptions?: CliOptions,
   loggerModule?: string,
+  context?: RunContext,
 ): Promise<void> => {
   await Logger(loggerModule);
-  const config = await buildConfig(options, cliOptions, options.id);
+  const config = await buildConfig(options, cliOptions, options.id, context);
 
   if (cliOptions?.config) {
     console.dir(config, { depth: null });
@@ -73,6 +84,7 @@ export const runGraphQLMarkdown = async (
  * @param loggerModule - Optional logger module to use.
  * @param customFormatter - Optional default formatter package name. When provided, registers
  *   `--formatter` and `--mdxParser` (deprecated) flags with this value as the default.
+ * @param context - Optional internal context (telemetry trigger).
  *
  * @returns The configured CLI instance.
  *
@@ -90,6 +102,7 @@ export const getGraphQLMarkdownCli = (
   options: GraphQLMarkdownCliOptions,
   loggerModule?: string,
   customFormatter?: string,
+  context?: RunContext,
 ): GraphQLMarkdownCliType => {
   // Initialize logger asynchronously without blocking - non-critical operation
   Logger(loggerModule).catch((error: Error) => {
@@ -138,7 +151,8 @@ export const getGraphQLMarkdownCli = (
       "Option for printing deprecated entities: `default`, `group` or `skip`",
     )
     .option("--pretty", "Prettify generated files")
-    .option("--config", "Print configuration (for debugging)");
+    .option("--config", "Print configuration (for debugging)")
+    .option("--no-telemetry", "Disable anonymous usage telemetry");
 
   if (typeof customFormatter === "string") {
     command
@@ -154,7 +168,11 @@ export const getGraphQLMarkdownCli = (
   }
 
   command.action(async (cliOptions: CliOptions) => {
-    await runGraphQLMarkdown(options, cliOptions, loggerModule);
+    // commander defaults a negatable option to true; only `false` is meaningful
+    if (cliOptions.telemetry !== false) {
+      delete cliOptions.telemetry;
+    }
+    await runGraphQLMarkdown(options, cliOptions, loggerModule, context);
   });
 
   // When used as a subcommand of an older commander version (e.g. Docusaurus
