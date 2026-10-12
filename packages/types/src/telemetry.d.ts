@@ -7,7 +7,11 @@ export type TelemetryTrigger =
   | "programmatic";
 
 /** Kind of telemetry event. */
-export type TelemetryEvent = "config" | "create_scaffold" | "create_wire";
+export type TelemetryEvent =
+  | "config"
+  | "create_scaffold"
+  | "create_wire"
+  | "generate";
 
 /** Detected CI provider (`other` for a generic `CI` variable). */
 export type CiProvider =
@@ -58,4 +62,10 @@ export interface TelemetryPayload {
   target?: string;
   /** Create mode (create events). */
   mode?: "scaffold" | "wire";
+  /** Pages generated (generate events). */
+  pages?: number;
+  /** Generation time, rounded to 100 ms (generate events). */
+  durationMs?: number;
+  /** Failure type, only on failure (generate events). */
+  errorType?: string;
 }

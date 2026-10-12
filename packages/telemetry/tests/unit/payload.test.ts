@@ -290,3 +290,35 @@ describe("fingerprint", () => {
     expect(fingerprint(p({ pkgVersion: "2.0.0" }))).not.toBe(fingerprint(p()));
   });
 });
+
+describe("buildPayload generate fields", () => {
+  test("rounds duration to 100 ms and keeps pages and errorType", () => {
+    const payload = buildPayload({
+      ...base,
+      event: "generate",
+      pages: 12,
+      durationMs: 1234,
+      errorType: "Error:ENOENT",
+    });
+    expect(payload).toMatchObject({
+      event: "generate",
+      pages: 12,
+      durationMs: 1200,
+      errorType: "Error:ENOENT",
+    });
+  });
+
+  test("drops invalid values", () => {
+    const payload = buildPayload({
+      ...base,
+      event: "generate",
+      pages: 1.5,
+      durationMs: Number.NaN,
+      errorType: "",
+    });
+    expect(payload).not.toHaveProperty("pages");
+    expect(payload).not.toHaveProperty("durationMs");
+    expect(payload).not.toHaveProperty("errorType");
+    expect(buildPayload({ ...base, pages: -1 })).not.toHaveProperty("pages");
+  });
+});

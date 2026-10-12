@@ -12,6 +12,17 @@ export { sanitizeConfig, CONFIG_RULES, CLI_RULES } from "./sanitize";
 export type { Rule, SanitizeResult } from "./sanitize";
 export { buildPayload, fingerprint } from "./payload";
 export type { PayloadInput } from "./payload";
-export { printDisclaimer, isNoticeDue, FULL_NOTICE } from "./disclaimer";
+export {
+  errorTypeOf,
+  ERROR_TYPES,
+  NO_SCHEMA_ERROR,
+  POST_ERROR_PREFIX,
+} from "./error-type";
+export {
+  printDisclaimer,
+  isNoticeDue,
+  resetDisclaimer,
+  FULL_NOTICE,
+} from "./disclaimer";
 export { track, encodeBody } from "./track";
 export type { TrackInput } from "./track";

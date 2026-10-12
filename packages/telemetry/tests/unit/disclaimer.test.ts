@@ -2,6 +2,7 @@ import {
   FULL_NOTICE,
   isNoticeDue,
   printDisclaimer,
+  resetDisclaimer,
 } from "../../src/disclaimer";
 
 describe("printDisclaimer", () => {
@@ -9,6 +10,7 @@ describe("printDisclaimer", () => {
   const state = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
 
   beforeEach(() => {
+    resetDisclaimer();
     write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
       return true;
     });
@@ -46,6 +48,19 @@ describe("printDisclaimer", () => {
   });
 });
 
+describe("printDisclaimer once per process", () => {
+  test("second call prints nothing", () => {
+    resetDisclaimer();
+    const write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
+      return true;
+    });
+    expect(printDisclaimer(undefined, { ci: false })).toBe(true);
+    expect(printDisclaimer(undefined, { ci: false })).toBe(false);
+    expect(write).toHaveBeenCalledTimes(1);
+    write.mockRestore();
+  });
+});
+
 describe("isNoticeDue", () => {
   const state = { enabled: true, noticeVersion: 1, lastSentConfigs: [] };
 
@@ -63,6 +78,7 @@ describe("isNoticeDue", () => {
 describe("printDisclaimer with onFullNotice", () => {
   let write: ReturnType<typeof vi.spyOn>;
   beforeEach(() => {
+    resetDisclaimer();
     write = vi.spyOn(process.stderr, "write").mockImplementation(() => {
       return true;
     });

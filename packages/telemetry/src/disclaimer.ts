@@ -20,8 +20,15 @@ export const isNoticeDue = (
   return !ci.ci && (!state || state.noticeVersion < NOTICE_VERSION);
 };
 
+let printed = false;
+
+/** Resets the once-per-process guard. @internal */
+export const resetDisclaimer = (): void => {
+  printed = false;
+};
+
 /**
- * Writes the notice straight to stderr, bypassing the logger.
+ * Writes the notice straight to stderr, bypassing the logger, at most once per process.
  *
  * When `onFullNotice` is given, the full notice is passed to it instead.
  *
@@ -32,6 +39,10 @@ export const printDisclaimer = (
   ci: CiInfo,
   onFullNotice?: (notice: string) => void,
 ): boolean => {
+  if (printed) {
+    return false;
+  }
+  printed = true;
   // In CI the full notice is never recorded: print the reminder every run.
   const full = isNoticeDue(state, ci);
   if (onFullNotice && full) {

@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { gunzipSync } from "node:zlib";
 
 import { DEFAULT_ENDPOINT } from "../../src/constants";
+import { resetDisclaimer } from "../../src/disclaimer";
 import { readState, writeState } from "../../src/state";
 import { encodeBody, track } from "../../src/track";
 
@@ -26,6 +27,7 @@ describe("track", () => {
   };
 
   beforeEach(() => {
+    resetDisclaimer();
     dir = mkdtempSync(join(tmpdir(), "gqlmd-track-"));
     statePath = join(dir, "telemetry.json");
     fetchMock = vi.fn();
@@ -54,6 +56,15 @@ describe("track", () => {
     expect(state?.lastSentConfigs).toHaveLength(1);
   });
 
+  test("generate events are never deduplicated", async () => {
+    fetchMock.mockResolvedValue({ status: 202 });
+    const generate = { ...input(), event: "generate" as const, pages: 3 };
+    await track(generate);
+    await track(generate);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(readState(statePath)?.lastSentConfigs).toHaveLength(0);
+  });
+
   test("onFullNotice receives the full notice and the version is recorded", async () => {
     fetchMock.mockResolvedValue({ status: 202 });
     const onFullNotice = vi.fn();
@@ -70,6 +81,7 @@ describe("track", () => {
     fetchMock.mockResolvedValue({ status: 202 });
     await track(input());
     stderr.mockClear();
+    resetDisclaimer();
     const onFullNotice = vi.fn();
     await track({ ...input(), config: { force: false }, onFullNotice });
     expect(onFullNotice).not.toHaveBeenCalled();
@@ -154,6 +166,7 @@ describe("track", () => {
   test("prints the full notice once, then the reminder", async () => {
     fetchMock.mockResolvedValue({ status: 202 });
     await track(input());
+    resetDisclaimer();
     await track({ ...input(), config: { force: false } });
     const lines = stderr.mock.calls.map((c: unknown[]) => {
       return String(c[0]);
