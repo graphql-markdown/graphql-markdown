@@ -9,9 +9,12 @@ set -euo pipefail
 PROJECT_DIR="${1:?usage: smoke-nuxt.sh <project-dir> <package-tgz-dir>}"
 PKG_DIR="${2:?usage: smoke-nuxt.sh <project-dir> <package-tgz-dir>}"
 
+# The scaffolder's workspace dependencies (telemetry, and the types it
+# requires) come from this build too: unreleased versions aren't on npm yet.
 npm exec --yes \
   --package "$PKG_DIR/graphql-markdown-create-graphql-markdown-docs.tgz" \
   --package "$PKG_DIR/graphql-markdown-telemetry.tgz" \
+  --package "$PKG_DIR/graphql-markdown-types.tgz" \
   -- create-graphql-markdown-docs \
   --yes --framework nuxt --example --pm npm --no-install --no-git \
   --dir "$PROJECT_DIR"
