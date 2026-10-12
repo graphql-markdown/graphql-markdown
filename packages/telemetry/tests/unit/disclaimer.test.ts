@@ -59,6 +59,21 @@ describe("printDisclaimer once per process", () => {
     expect(write).toHaveBeenCalledTimes(1);
     write.mockRestore();
   });
+
+  test("a failed output is retried by the next call", () => {
+    resetDisclaimer();
+    const onFullNotice = vi
+      .fn()
+      .mockImplementationOnce(() => {
+        throw new Error("closed");
+      })
+      .mockImplementationOnce(() => {});
+    expect(() => {
+      return printDisclaimer(undefined, { ci: false }, onFullNotice);
+    }).toThrow("closed");
+    expect(printDisclaimer(undefined, { ci: false }, onFullNotice)).toBe(true);
+    expect(onFullNotice).toHaveBeenCalledTimes(2);
+  });
 });
 
 describe("isNoticeDue", () => {

@@ -42,7 +42,6 @@ export const printDisclaimer = (
   if (printed) {
     return false;
   }
-  printed = true;
   // In CI the full notice is never recorded: print the reminder every run.
   const full = isNoticeDue(state, ci);
   if (onFullNotice && full) {
@@ -50,5 +49,7 @@ export const printDisclaimer = (
   } else {
     process.stderr.write(full ? FULL_NOTICE : SHORT_NOTICE);
   }
+  // Only once shown: a failed output must not let a later event skip it.
+  printed = true;
   return full;
 };
