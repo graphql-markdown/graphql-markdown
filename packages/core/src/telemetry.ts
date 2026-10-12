@@ -170,9 +170,9 @@ export const reportTelemetry = async (
     }
     reported.add(fingerprint);
 
-    const { track } = await import("@graphql-markdown/telemetry");
     pending = (async (): Promise<void> => {
       try {
+        const { track } = await import("@graphql-markdown/telemetry");
         await track({
           trigger: report.trigger ?? "programmatic",
           option,
