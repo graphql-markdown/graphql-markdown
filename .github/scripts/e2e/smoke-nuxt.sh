@@ -11,6 +11,7 @@ PKG_DIR="${2:?usage: smoke-nuxt.sh <project-dir> <package-tgz-dir>}"
 
 npm exec --yes \
   --package "$PKG_DIR/graphql-markdown-create-graphql-markdown-docs.tgz" \
+  --package "$PKG_DIR/graphql-markdown-telemetry.tgz" \
   -- create-graphql-markdown-docs \
   --yes --framework nuxt --example --pm npm --no-install --no-git \
   --dir "$PROJECT_DIR"
