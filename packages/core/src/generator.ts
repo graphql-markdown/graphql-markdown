@@ -339,6 +339,7 @@ interface GenerationOutcome {
   postError?: unknown;
 }
 
+// fallow-ignore-next-line complexity
 const runGeneration = async (
   options: GeneratorOptions,
   start: bigint,
