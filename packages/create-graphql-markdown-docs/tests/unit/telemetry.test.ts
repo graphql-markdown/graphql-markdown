@@ -131,7 +131,26 @@ describe("create telemetry", () => {
     expect(input.target).toBeTruthy();
     expect(input.option).toBeUndefined();
     input.onFullNotice("notice");
-    expect(mocks.prompts.note).toHaveBeenCalledWith("notice", "Telemetry");
+    expect(mocks.prompts.note).toHaveBeenCalledWith("notice", "Telemetry", {
+      output: process.stderr,
+    });
+  });
+
+  it("writes nothing telemetry-related to stdout", async () => {
+    const write = vi.spyOn(process.stdout, "write");
+    const dir = path.join(work, "stdout");
+    expect(await main(["--dir", dir, "--yes", "--example", ...quiet])).toBe(0);
+    mocks.track.mock.calls[0][0].onFullNotice("notice");
+    const out = write.mock.calls
+      .map((c) => {
+        return String(c[0]);
+      })
+      .join("");
+    write.mockRestore();
+    expect(out).not.toMatch(/telemetry/i);
+    expect(mocks.prompts.note.mock.calls.at(-1)?.[2]).toEqual({
+      output: process.stderr,
+    });
   });
 
   it("wire reports create_wire before the configuration is written", async () => {

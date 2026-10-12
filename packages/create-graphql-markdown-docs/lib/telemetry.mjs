@@ -20,7 +20,7 @@ function configFor(ctx) {
 /**
  * Reports one anonymous create event (`create_scaffold` or `create_wire`).
  * Never throws: telemetry must not affect a run. The full notice is shown
- * as a clack note instead of raw stderr output. Nothing is sent on `--dry-run`.
+ * as a clack note written to stderr, so stdout stays clean. Nothing is sent on `--dry-run`.
  */
 export async function reportTelemetry(ctx) {
   if (ctx.args?.["dry-run"]) return;
@@ -37,7 +37,8 @@ export async function reportTelemetry(ctx) {
       mode: ctx.mode,
       config: configFor(ctx),
       option: ctx.args["no-telemetry"] ? false : undefined,
-      onFullNotice: (notice) => note(notice, "Telemetry"),
+      onFullNotice: (notice) =>
+        note(notice, "Telemetry", { output: process.stderr }),
     });
   } catch {
     // telemetry must never affect a run
