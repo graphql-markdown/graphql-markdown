@@ -3,7 +3,8 @@ import { NOTICE_VERSION } from "./constants";
 import type { TelemetryState } from "./state";
 
 export const FULL_NOTICE = `ℹ GraphQL-Markdown collects anonymous usage data to help improve the tool.
-  Sent: package/Node versions, OS, schema loader type, and the settings you use.
+  Sent: package/Node versions, OS, schema loader type, the settings you use,
+  and the page count, duration and error type of each run.
   Custom strings, URLs and paths are masked; schema content is never sent.
   Details: https://graphql-markdown.dev/telemetry
   Opt out: \`gqlmd telemetry disable\` or DO_NOT_TRACK=1
