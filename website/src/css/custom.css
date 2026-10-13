@@ -284,6 +284,7 @@ a.menu__link[href$="/docs/configuration"]::before,
 a.menu__link[href$="/docs/configuration-cheatsheet"]::before,
 a.menu__link[href$="/docs/settings"]::before,
 a.menu__link[href$="/docs/troubleshooting"]::before,
+a.menu__link[href$="/docs/telemetry"]::before,
 .sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
   content: "";
   display: inline-block;
@@ -340,6 +341,11 @@ a.menu__link[href$="/docs/settings"]::before {
 a.menu__link[href$="/docs/troubleshooting"]::before {
   mask-image: url("/img/docs/icons/troubleshooting.svg");
   -webkit-mask-image: url("/img/docs/icons/troubleshooting.svg");
+}
+
+a.menu__link[href$="/docs/telemetry"]::before {
+  mask-image: url("/img/docs/icons/telemetry.svg");
+  -webkit-mask-image: url("/img/docs/icons/telemetry.svg");
 }
 
 .sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
