@@ -31,6 +31,20 @@ export interface SanitizeResult {
 const MAX_DEPTH = 8;
 const FORMATTER_PACKAGE = /^@graphql-markdown\/[a-z0-9-]+(\/[a-z0-9-]+)*$/;
 
+/**
+ * `graphql-config`'s `project.extension()` decorates the returned extension
+ * object with these project-level fields (schema, documents, include,
+ * exclude) regardless of whether the user's config sets them. `schema` is a
+ * real graphql-markdown option and has its own rule; the other three are
+ * graphql-config plumbing, not graphql-markdown options, so they are dropped
+ * silently here rather than inflating `unknownKeys` on every run.
+ */
+const GRAPHQL_CONFIG_PROJECT_KEYS = new Set([
+  "documents",
+  "include",
+  "exclude",
+]);
+
 const scalar: Rule = { kind: "scalar" };
 const string: Rule = { kind: "string" };
 const path: Rule = { kind: "path" };
@@ -306,6 +320,9 @@ export const sanitizeConfig = (
     return result;
   }
   for (const [key, item] of Object.entries(value)) {
+    if (GRAPHQL_CONFIG_PROJECT_KEYS.has(key)) {
+      continue;
+    }
     if (!Object.hasOwn(rules, key)) {
       result.unknownKeys += 1;
       continue;

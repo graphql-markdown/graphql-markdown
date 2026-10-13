@@ -144,6 +144,17 @@ describe("sanitizeConfig masking table", () => {
     expect(r.unknownKeys).toBe(2);
   });
 
+  test("graphql-config project fields (documents/include/exclude) are dropped, not counted as unknown", () => {
+    const r = run({
+      force: true,
+      documents: "src/**/*.graphql",
+      include: ["a"],
+      exclude: undefined,
+    });
+    expect(r.value).toEqual({ force: true });
+    expect(r.unknownKeys).toBe(0);
+  });
+
   test("schema is classified, never sent", () => {
     expect(run({ schema: "https://x.test/graphql" }).value).toEqual({
       schema: "<url>",
