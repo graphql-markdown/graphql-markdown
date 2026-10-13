@@ -186,7 +186,7 @@ The first time telemetry runs (and when the notice version changes), this is pri
   Sent: package/Node versions, OS, schema loader type, the settings you use,
   and the page count, duration and error type of each run.
   Custom strings, URLs and paths are masked; schema content is never sent.
-  Details: https://graphql-markdown.dev/telemetry
+  Details: https://graphql-markdown.dev/docs/telemetry
   Opt out: `gqlmd telemetry disable` or DO_NOT_TRACK=1
 ```
 

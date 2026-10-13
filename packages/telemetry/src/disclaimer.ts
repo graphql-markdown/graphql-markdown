@@ -6,7 +6,7 @@ export const FULL_NOTICE = `ℹ GraphQL-Markdown collects anonymous usage data t
   Sent: package/Node versions, OS, schema loader type, the settings you use,
   and the page count, duration and error type of each run.
   Custom strings, URLs and paths are masked; schema content is never sent.
-  Details: https://graphql-markdown.dev/telemetry
+  Details: https://graphql-markdown.dev/docs/telemetry
   Opt out: \`gqlmd telemetry disable\` or DO_NOT_TRACK=1
 `;
 

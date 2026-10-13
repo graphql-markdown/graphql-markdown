@@ -1,6 +1,6 @@
 # create-graphql-markdown-docs
 
-Interactive CLI that either creates a ready-to-run [GraphQL Markdown](https://graphql-markdown.dev) API reference site (Nuxt or Docusaurus) or adds GraphQL-Markdown to an existing documentation site. The Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) layer.
+Interactive CLI that either creates a new [GraphQL Markdown](https://graphql-markdown.dev) project (a ready-to-run Nuxt or Docusaurus API reference site, or plain Markdown or MDX output) or adds GraphQL-Markdown to an existing documentation site. The Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) layer.
 
 Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).
 
@@ -155,7 +155,7 @@ Then run `npm run doc` to generate the docs and `npm start` to serve them.
 
 The scaffolder reports one anonymous event per run (scaffold or wire): the framework, mode and schema loader type, with custom strings, URLs and paths masked. No schema content is sent. Nothing is sent on `--dry-run`. The first run shows a notice.
 
-Opt out with the `--no-telemetry` flag, `DO_NOT_TRACK=1`, or `gqlmd telemetry disable`. See [what is collected](https://graphql-markdown.dev/telemetry).
+Opt out with the `--no-telemetry` flag, `DO_NOT_TRACK=1`, or `gqlmd telemetry disable`. See [what is collected](https://graphql-markdown.dev/docs/telemetry).
 
 ## Documentation
 
