@@ -1,3 +1,68 @@
+<a id="1.40.0"></a>
+# [1.40.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.40.0) - 2026-10-13
+
+1.40.0 introduces **anonymous usage telemetry** (opt-out), polishes the reference pages of the Nuxt theme (`@graphql-markdown/nuxt-theme` 0.2.0), adds a generic MDX preset, and lets `create-graphql-markdown-docs` scaffold plain Markdown and MDX projects.
+
+### What's New
+
+**Anonymous usage telemetry.** GraphQL-Markdown now reports which loaders, formatters and settings are used, plus the page count, duration and error type of each generation. Nothing from your schema is sent, and neither are your error messages or any identifier. Custom strings, paths and URLs are masked before sending, and the IP address is never read. A notice explains this on the first run, and a one-line reminder prints on later runs. To opt out, use any of these:
+
+- `DO_NOT_TRACK=1` or `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED=1`
+- `gqlmd telemetry disable` (`gqlmd telemetry status` shows the current state)
+- `telemetry: false` in your config, or `--no-telemetry`
+
+CI runs are reported and print the notice. Telemetry turns itself off in test runners ([#3450](https://github.com/graphql-markdown/graphql-markdown/pull/3450), [#3451](https://github.com/graphql-markdown/graphql-markdown/pull/3451), [#3452](https://github.com/graphql-markdown/graphql-markdown/pull/3452), [#3456](https://github.com/graphql-markdown/graphql-markdown/pull/3456)).
+
+> Docs: https://graphql-markdown.dev/docs/telemetry
+
+**Nuxt theme 0.2.0: a more readable API reference.**
+
+- **Schema homepage as the intro.** The homepage (`generated.md`) now renders its title and body as the intro above the single-page reference, and on the `api`/`entity` landing page. A new `homepage` option in `createGenerateDocs({ homepage })` takes a custom template path, or `false` to disable the homepage. The sidebar's "GraphQL API" link scrolls back to the intro ([#3432](https://github.com/graphql-markdown/graphql-markdown/pull/3432)).
+- **Sidebar follows your scroll.** On the single-page reference (`flat` hierarchy), the sidebar highlights the entry at the top of the screen, keeps it in view, and updates the URL hash, so reloading returns to the same entry ([#3428](https://github.com/graphql-markdown/graphql-markdown/pull/3428)).
+- **Same code box for every type.** Every type now shows the same tabbed code box with its kind badge, including types that only have SDL ([#3427](https://github.com/graphql-markdown/graphql-markdown/pull/3427)).
+- **Example variables.** An `Example Variables` section is shown under the example query, with its own copy button ([#3429](https://github.com/graphql-markdown/graphql-markdown/pull/3429)).
+- **Pinned code boxes.** On the single-page reference, each entry's code box starts level with the entry title and stays pinned while you scroll through that entry ([#3430](https://github.com/graphql-markdown/graphql-markdown/pull/3430)).
+- **Sticky footer.** On reference pages the footer stays at the bottom of the screen and spans the full width. The new `--gqlmd-footer-height` CSS variable sets its height ([#3433](https://github.com/graphql-markdown/graphql-markdown/pull/3433)).
+
+> Docs: https://graphql-markdown.dev/docs/advanced/nuxt-theme
+
+**Generic MDX preset.** `@graphql-markdown/formatters/mdx` writes framework-neutral `.mdx` pages: plain HTML, no components, and internal links relative to each page ([#3443](https://github.com/graphql-markdown/graphql-markdown/pull/3443)).
+
+**Markdown and MDX scaffolds.** `create-graphql-markdown-docs --framework markdown` or `--framework mdx` creates a project that only generates the docs, with no site. `--framework mdx` also works when adding GraphQL-Markdown to an existing project. `generic` and `markdown` are accepted as aliases of each other ([#3444](https://github.com/graphql-markdown/graphql-markdown/pull/3444)). When the scaffolder adds GraphQL-Markdown to an existing project, the script it creates is now named `gqlmd` instead of `docs:api` ([#3446](https://github.com/graphql-markdown/graphql-markdown/pull/3446)).
+
+### Fixed
+
+- **Links with a root `baseURL`**: with `baseURL` set to `.` or `/`, presets that rewrite links to relative file paths (mkdocs, mdbook, mdx) no longer rewrite links that don't point at generated pages, such as `/guides/auth`, `/img/logo.png` or `//cdn…`. A configured `linkRoot` is now taken into account ([#3443](https://github.com/graphql-markdown/graphql-markdown/pull/3443)).
+- **Scaffolder**: when adding GraphQL-Markdown at the root of a pnpm or Yarn 1 monorepo, dev dependencies are added with the workspace-root flag, so the install no longer fails ([#3442](https://github.com/graphql-markdown/graphql-markdown/pull/3442)).
+- **Scaffolder**: the command printed as the next step after wiring an existing site is now `npx -p @graphql-markdown/cli@latest gqlmd graphql-to-doc`. Before, `npx` could reuse an old cached CLI that had no `graphql-config`, so `.graphqlrc` was ignored ([#3426](https://github.com/graphql-markdown/graphql-markdown/pull/3426)).
+- **Core**: when `graphql-config` fails to load, the log now shows the actual error instead of always reporting a missing module ([#3426](https://github.com/graphql-markdown/graphql-markdown/pull/3426)).
+
+### Package Versions 📦
+
+| Package | Version |
+|---|---|
+| @graphql-markdown/telemetry | 0.1.0 |
+| @graphql-markdown/nuxt-theme | 0.2.0 |
+| @graphql-markdown/core | 1.25.0 |
+| @graphql-markdown/utils | 1.14.0 |
+| @graphql-markdown/formatters | 1.2.0 |
+| @graphql-markdown/cli | 1.2.0 |
+| @graphql-markdown/docusaurus | 1.39.0 |
+| @graphql-markdown/printer-legacy | 1.19.2 |
+| @graphql-markdown/graphql | 1.3.3 |
+| @graphql-markdown/helpers | 1.2.3 |
+| @graphql-markdown/diff | 1.1.22 |
+| create-graphql-markdown-docs | 1.1.0 |
+| @graphql-markdown/types | 1.17.0 |
+| @graphql-markdown/logger | 1.1.3 |
+
+**Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.39.0...1.40.0
+
+
+
+[Changes][1.40.0]
+
+
 <a id="1.39.0"></a>
 # [1.39.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.39.0) - 2026-10-10
 
@@ -25,8 +90,6 @@ For CI or scripts:
 ```shell
 npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
 ```
-
-([#3415](https://github.com/graphql-markdown/graphql-markdown/pull/3415), [#3416](https://github.com/graphql-markdown/graphql-markdown/pull/3416), [#3418](https://github.com/graphql-markdown/graphql-markdown/pull/3418), [#3420](https://github.com/graphql-markdown/graphql-markdown/pull/3420), [#3421](https://github.com/graphql-markdown/graphql-markdown/pull/3421))
 
 > Docs: https://graphql-markdown.dev/docs/get-started#with-the-scaffolder-recommended
 
@@ -2684,6 +2747,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.40.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.39.0...1.40.0
 [1.39.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.1...1.39.0
 [1.38.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.0...1.38.1
 [1.38.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.37.0...1.38.0
