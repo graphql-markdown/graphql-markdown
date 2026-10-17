@@ -89,12 +89,11 @@ type CustomExampleDirective {
 }
 ```
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
+```js title=".graphqlrc.js"
+module.exports = {
+  schema: "./schema.graphql",
+  extensions: {
+    "graphql-markdown": {
       // ... other options
       printTypeOptions: {
         exampleSection: {
@@ -123,6 +122,6 @@ plugins: [
         },
       },
     },
-  ],
-];
+  },
+};
 ```

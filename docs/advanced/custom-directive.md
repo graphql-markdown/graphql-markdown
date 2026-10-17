@@ -40,7 +40,7 @@ type Query {
 
 ## Usage
 
-Add the option [`customDirective`](/docs/settings#customdirective) to the `@graphql-markdown/docusaurus` configuration.
+Add the option [`customDirective`](/docs/settings#customdirective) to the GraphQL-Markdown configuration.
 
 The `descriptor` and `tag` functions receive 2 arguments:
 
@@ -67,12 +67,11 @@ type Badge = {
 
 The `descriptor` allows rendering the custom directive's description applicable to entities.
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
+```js title=".graphqlrc.js"
+module.exports = {
+  schema: "./schema.graphql",
+  extensions: {
+    "graphql-markdown": {
       // ... other options
       customDirective: {
         auth: {
@@ -84,51 +83,55 @@ plugins: [
               "This requires the current user to be in `${requires}` role.",
             ),
           // highlight-end
-        }
+        },
         // ... other custom directive options
       },
     },
-  ],
-],
+  },
+};
 ```
 
 ### `tag`
 
 The `tag` allows rendering custom badges (tags) based on the custom directive applicable to entities.
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
+```js title=".graphqlrc.js"
+module.exports = {
+  schema: "./schema.graphql",
+  extensions: {
+    "graphql-markdown": {
       // ... other options
       customDirective: {
         beta: {
           // highlight-next-line
-          tag: (directive, node) => ({ text: directive.name, classname: "badge--info" }),
-        }
+          tag: (directive, node) => ({
+            text: directive.name,
+            classname: "badge--info",
+          }),
+        },
         // ... other custom directive options
       },
     },
-  ],
-],
+  },
+};
 ```
 
 ### Wildcard
 
 You can use **`"*"` as a wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
-```js title="docusaurus.config.js"
-const { directiveDescriptor, directiveTag } = require("@graphql-markdown/helpers");
+```js title=".graphqlrc.js"
+const {
+  directiveDescriptor,
+  directiveTag,
+} = require("@graphql-markdown/helpers");
 
 //...//
 
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
+module.exports = {
+  schema: "./schema.graphql",
+  extensions: {
+    "graphql-markdown": {
       // ... other options
       customDirective: {
         // highlight-start
@@ -140,8 +143,8 @@ plugins: [
         // ... optionally specific custom directive options
       },
     },
-  ],
-],
+  },
+};
 ```
 
 ## Helpers

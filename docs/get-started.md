@@ -225,18 +225,6 @@ For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integrati
 
 ## Regenerate the documentation
 
-In a Docusaurus site, build your website:
-
-```shell title="shell"
-npm run docusaurus build
-```
-
-Or run the documentation generator directly:
-
-```shell title="shell"
-npm run docusaurus graphql-to-doc
-```
-
-The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command flags are documented in [settings](/docs/settings).
+In a Docusaurus site, see [Docusaurus recipes](/docs/advanced/docusaurus-recipes#regenerate-the-documentation) for the build/regenerate commands.
 
 In a Nuxt site, generation runs automatically on `npm run dev`, `npm run generate` and `npm run build` through the layer's own module, so there is no separate command.

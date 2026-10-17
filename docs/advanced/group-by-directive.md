@@ -39,26 +39,19 @@ We can add a fallback option called `Common` which is for types that we don't ex
 It can be set either with the command line flag `--groupByDirective`:
 
 ```shell
-npx docusaurus graphql-to-doc --groupByDirective "@doc(category|=Common)"
+npx gqlmd graphql-to-doc --groupByDirective "@doc(category|=Common)"
 ```
 
-or the plugin configuration `groupByDirective`:
+or the configuration option `groupByDirective`:
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // ... other options
-      // highlight-start
-      groupByDirective: {
-        directive: "doc",
-        field: "category",
-        fallback: "Common", // default is Miscellaneous
-      }
-      // highlight-end
-    },
-  ],
-],
+```yaml title=".graphqlrc"
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    # highlight-start
+    groupByDirective:
+      directive: "doc"
+      field: "category"
+      fallback: "Common" # default is Miscellaneous
+    # highlight-end
 ```

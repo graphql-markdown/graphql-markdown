@@ -45,21 +45,14 @@ Use `@graphql-tools/graphql-file-loader` if you want to load a local schema:
 npm install @graphql-tools/graphql-file-loader
 ```
 
-Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
+Once done, you can declare the loader in the GraphQL-Markdown configuration:
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // ... other options
-      loaders: {
-        GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
-      }
-    },
-  ],
-],
+```yaml title=".graphqlrc"
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    loaders:
+      GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
 ```
 
 ## Remote schema (url)
@@ -70,28 +63,18 @@ Use `@graphql-tools/url-loader`, if you want to load a schema from a URL:
 npm install @graphql-tools/url-loader
 ```
 
-Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
+Once done, you can declare the loader in the GraphQL-Markdown configuration:
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // ... other options
-      loaders: {
-        UrlLoader: {
-          module: "@graphql-tools/url-loader",
-          options: {
-            headers: {
-              Authorization: "<API_KEY>" // replace with your key if the gateway needs an auth key
-             }
-          }
-        }
-      }
-    },
-  ],
-],
+```yaml title=".graphqlrc"
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    loaders:
+      UrlLoader:
+        module: "@graphql-tools/url-loader"
+        options:
+          headers:
+            Authorization: "<API_KEY>" # replace with your key if the gateway needs an auth key
 ```
 
 :::tip
@@ -108,22 +91,14 @@ For teams using a code-first approach, use `@graphql-tools/code-file-loader` to 
 npm install @graphql-tools/code-file-loader
 ```
 
-Once done, you can declare the loader in `@graphql-markdown/docusaurus` configuration:
+Once done, you can declare the loader in the GraphQL-Markdown configuration:
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // ... other options
-      schema: "./src/**/graphql/*.ts",
-      loaders: {
-        CodeFileLoader: "@graphql-tools/code-file-loader"
-      }
-    },
-  ],
-],
+```yaml title=".graphqlrc"
+schema: ./src/**/graphql/*.ts
+extensions:
+  graphql-markdown:
+    loaders:
+      CodeFileLoader: "@graphql-tools/code-file-loader"
 ```
 
 The schema file must export a `GraphQLSchema` instance as its default or named export. This works with any code-first library that produces a `GraphQLSchema` — including `makeExecutableSchema` (graphql-tools), [Pothos](https://pothos-graphql.dev/), [TypeGraphQL](https://typegraphql.com/), and [NestJS](https://docs.nestjs.com/graphql/quick-start).

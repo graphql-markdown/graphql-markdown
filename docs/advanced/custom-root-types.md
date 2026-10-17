@@ -22,29 +22,19 @@ type RootTypes = { query?: string; mutation?: string; subscription?: string };
 - use an empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
 
-Add the option `rootTypes` to the loader options under `@graphql-markdown/docusaurus` configuration (see also [schema loading](/docs/advanced/schema-loading)):
+Add the option `rootTypes` to the loader options under the GraphQL-Markdown configuration (see also [schema loading](/docs/advanced/schema-loading)):
 
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // ... other options
-      loaders: {
-        GraphQLFileLoader: {
-          module: "@graphql-tools/graphql-file-loader",
-          options: {
-            // highlight-start
-            rootTypes: {
-              query: "Root", // use custom root type Root for queries, instead of Query
-              subscription: "" // disable Subscription type
-            },
-            // highlight-end
-          },
-        },
-      },
-    },
-  ],
-],
+```yaml title=".graphqlrc"
+schema: ./schema.graphql
+extensions:
+  graphql-markdown:
+    loaders:
+      GraphQLFileLoader:
+        module: "@graphql-tools/graphql-file-loader"
+        options:
+          # highlight-start
+          rootTypes:
+            query: "Root" # use custom root type Root for queries, instead of Query
+            subscription: "" # disable Subscription type
+          # highlight-end
 ```

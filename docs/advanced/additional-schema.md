@@ -12,68 +12,11 @@ keywords:
 
 # Additional schemas
 
-If you need to support multiple schemas, then you can set multiple instances of the plugin
-
-Assign a unique `id` attribute to each plugin instance (if not set, then `id` value is `default`).
-
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // highlight-next-line
-      // id: 'default', // omitted => default instance
-      schema: "./schema/swapi.graphql",
-      rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
-      baseURL: "swapi",
-      homepage: "./docs/swapi.md",
-      loaders: {
-        GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
-      }
-    },
-  ],
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // highlight-next-line
-      id: "admin",
-      schema: "./schema/admin.graphql",
-      rootPath: "./docs", // docs will be generated under './docs/admin' (rootPath/baseURL)
-      baseURL: "admin",
-      homepage: "./docs/admin.md",
-      loaders: {
-        GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
-      }
-    },
-  ],
-],
-```
-
-Instance with an `id` will have their command line:
-
-```shell
-npm run docusaurus graphql-to-doc:admin
-```
+If you need to support multiple schemas, then you can set multiple projects, each with a different schema.
 
 ## GraphQL Config
 
-If you use [GraphQL config](/docs/configuration#graphql-config), then you need to define `projects` with the same `id` (including `default`).
-
-```js title="docusaurus.config.js"
-plugins: [
-  "@graphql-markdown/docusaurus", // default instance
-  [
-    "@graphql-markdown/docusaurus",
-    /** @type {import('@graphql-markdown/types').ConfigOptions} */
-    {
-      // highlight-next-line
-      id: "admin",
-    },
-  ],
-],
-```
+Define `projects` with the same `id` (including `default`) using [GraphQL Config](/docs/configuration#graphql-config):
 
 ```yaml title=".graphqlrc"
 projects:
@@ -98,3 +41,7 @@ projects:
         loaders:
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
 ```
+
+Each additional project gets its own generator command, e.g. `npx gqlmd graphql-to-doc:admin`.
+
+For a Docusaurus site using plugin instances instead of GraphQL Config, see [Docusaurus recipes](./docusaurus-recipes#multiple-schemas-docusaurus-plugin-instances).
