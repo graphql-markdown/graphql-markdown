@@ -12,7 +12,11 @@ keywords:
 
 # Additional schemas
 
-If you need to support multiple schemas, then you need to define `projects` with the same `id` (including `default`) using [GraphQL Config](/docs/configuration#graphql-config):
+If you need to support multiple schemas, then you can set multiple projects, each with a different schema.
+
+## GraphQL Config
+
+Define `projects` with the same `id` (including `default`) using [GraphQL Config](/docs/configuration#graphql-config):
 
 ```yaml title=".graphqlrc"
 projects:
