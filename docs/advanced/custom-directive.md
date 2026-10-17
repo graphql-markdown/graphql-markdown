@@ -83,7 +83,7 @@ module.exports = {
               "This requires the current user to be in `${requires}` role.",
             ),
           // highlight-end
-        }
+        },
         // ... other custom directive options
       },
     },
@@ -104,8 +104,11 @@ module.exports = {
       customDirective: {
         beta: {
           // highlight-next-line
-          tag: (directive, node) => ({ text: directive.name, classname: "badge--info" }),
-        }
+          tag: (directive, node) => ({
+            text: directive.name,
+            classname: "badge--info",
+          }),
+        },
         // ... other custom directive options
       },
     },
@@ -118,7 +121,10 @@ module.exports = {
 You can use **`"*"` as a wildcard** for the directive name. This will allow all directives not declared with their name under `customDirective` to be handled by the wildcard `descriptor` and/or `tag`.
 
 ```js title=".graphqlrc.js"
-const { directiveDescriptor, directiveTag } = require("@graphql-markdown/helpers");
+const {
+  directiveDescriptor,
+  directiveTag,
+} = require("@graphql-markdown/helpers");
 
 //...//
 
