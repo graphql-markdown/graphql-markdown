@@ -176,7 +176,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 ## `homepage`
 
-The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/homepage)). The file will be copied to the root folder of the generated documentation.
+The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/docusaurus-recipes#custom-homepage)). The file will be copied to the root folder of the generated documentation.
 
 The plugin provides a default page in `assets/generated`.
 
@@ -493,7 +493,7 @@ plugins: [
 
 :::info
 
-See **[customize deprecated sections](/docs/advanced/custom-deprecated-section)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
+See **[customize deprecated sections](/docs/advanced/docusaurus-recipes#customize-deprecated-sections)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
 
 :::
 

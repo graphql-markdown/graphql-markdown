@@ -40,7 +40,7 @@ type Query {
 
 **2. Declare the decorator in the configuration**
 
-```js title="docusaurus.config.js"
+```js title=".graphqlrc.js"
 const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
 
 decorators: {
@@ -105,7 +105,7 @@ A decorator is skipped, and nothing is printed, when its predicate does not matc
 - `and(...predicates)`, `or(...predicates)`, `not(predicate)` — compose predicates.
 - `always()` — matches every node; the default.
 
-```js title="docusaurus.config.js"
+```js title=".graphqlrc.js"
 const { hasDirectiveNamed, isEntity, and } = require("@graphql-markdown/graphql");
 
 decorators: {

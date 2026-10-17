@@ -63,37 +63,7 @@ For `beforeComposePageTypeHook`, `event.output` is the ordered list of section k
 
 ## Using Hooks with Docusaurus
 
-When using Docusaurus, you can extend the default MDX module to add custom hooks while keeping all the built-in formatters:
-
-```js title="custom-mdx.cjs"
-const DocusaurusMDX = require("@graphql-markdown/docusaurus/mdx");
-
-const afterPrintCodeHook = async (event) => {
-  // Your custom logic here
-  event.output = `${event.output}\n\n<!-- Custom content -->`;
-};
-
-module.exports = {
-  ...DocusaurusMDX, // Keep all default formatters
-  afterPrintCodeHook, // Add your custom hook
-};
-```
-
-Then configure your Docusaurus plugin to use the custom module:
-
-```js title="docusaurus.config.js"
-plugins: [
-  [
-    "@graphql-markdown/docusaurus",
-    {
-      schema: "./schema.graphql",
-      // highlight-next-line
-      formatter: require.resolve("./custom-mdx.cjs"),
-      // ... other options
-    },
-  ],
-],
-```
+See [Docusaurus recipes](./docusaurus-recipes#using-hooks-with-docusaurus) for extending the default Docusaurus MDX module with custom hooks.
 
 ## Generate index.md files
 
