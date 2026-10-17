@@ -81,6 +81,7 @@ describe("computeAffected() global fail-open", () => {
     // tests would report `docs_only` and never run them.
     ["tests/ci/affected-packages.test.mts"],
     ["tests/ci/vitest.config.mjs"],
+    [".github/workflows/test.yml"],
   ])("runs the whole test matrix but no extra mutation job for %s", (file) => {
     const outputs = computeAffected([file], packagesMap);
 
@@ -222,7 +223,7 @@ describe("computeAffected() documentation and tooling", () => {
 
   test("flags workflow changes so actionlint and shellcheck still run", () => {
     expect(
-      computeAffected([".github/workflows/test.yml"], packagesMap),
+      computeAffected([".github/workflows/linter.yml"], packagesMap),
     ).toMatchObject({ code: false, workflows: true, docs_only: false });
   });
 

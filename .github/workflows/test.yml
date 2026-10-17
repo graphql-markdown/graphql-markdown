@@ -110,11 +110,13 @@ jobs:
           # out of coverage: unit tests can't load them, so the lcov report has
           # no data for them and their new code would always count as
           # uncovered (see packages/nuxt-theme/vitest.config.mjs).
+          # Test exclusions keep nuxt-theme's fixture build output (.nuxt/.output/.data) out of the scan.
           args: >
             -Dsonar.organization=graphql-markdown
             -Dsonar.projectKey=graphql-markdown_${{ matrix.package }}
             -Dsonar.sources=${{ steps.sonar-sources.outputs.sources }}
             -Dsonar.tests=./packages/${{ matrix.package }}/tests
+            -Dsonar.test.exclusions=**/.nuxt/**,**/.output/**,**/.data/**,**/node_modules/**
             -Dsonar.javascript.lcov.reportPaths=./packages/${{ matrix.package }}/coverage/lcov.info
             -Dsonar.coverage.exclusions=**/*.vue
         env:

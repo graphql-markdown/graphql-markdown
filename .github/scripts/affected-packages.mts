@@ -83,6 +83,7 @@ const GLOBAL_STATIC_PATTERNS = [
   /^packages\/types\//u,
   /^\.github\/scripts\//u,
   /^tests\/ci\//u,
+  /^\.github\/workflows\/test\.yml$/u,
 ];
 
 // Scoped deliberately rather than a blanket `\.md$`: `tests/e2e/__data__` holds
