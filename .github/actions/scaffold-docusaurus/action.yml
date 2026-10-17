@@ -16,7 +16,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: ./.github/actions/prepare-scaffold
+    - uses: $/.github/actions/prepare-scaffold
       with:
         project-name: docusaurus-gqlmd
 

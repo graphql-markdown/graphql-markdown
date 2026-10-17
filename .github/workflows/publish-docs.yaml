@@ -34,20 +34,20 @@ jobs:
           git config --global user.email "graphql-markdown-bot@edno.io"
 
       - name: Checkout project repo
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           path: ${{ env.SOURCE_DIR }}
           token: ${{ secrets.BOT_PAT }}
 
       - name: Checkout website repo
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           repository: graphql-markdown/graphql-markdown.github.io
           path: ${{ env.TARGET_DIR }}
           token: ${{ secrets.BOT_PAT }}
 
       - name: Setup environment
-        uses: ./project/.github/actions/setup
+        uses: $/.github/actions/setup
         with:
           working-directory: ${{ env.SOURCE_DIR }}
 

@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -72,7 +72,7 @@ jobs:
         if: >-
           env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
           || env.RUN_WEBSITE_CHECKS == 'true' || env.RUN_DOCS_CHECKS == 'true'
-        uses: ./.github/actions/setup
+        uses: $/.github/actions/setup
 
       # The CI gate script decides which jobs the rest of the matrix skips, so
       # it is tested here, where the toolchain is already installed.
@@ -136,7 +136,7 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
