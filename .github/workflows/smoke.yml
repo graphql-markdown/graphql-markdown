@@ -34,15 +34,15 @@ jobs:
       && (needs.changes.result != 'success' || needs.changes.outputs.smoke == 'true')
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup environment
-        uses: ./.github/actions/setup
+        uses: $/.github/actions/setup
 
       - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        uses: actions/cache@v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'packages/*/src/**', 'packages/*/tsconfig*.json', 'tsconfig.base.json') }}
@@ -56,7 +56,7 @@ jobs:
         run: node .github/scripts/pack-packages.mjs "$RUNNER_TEMP/pkgs"
 
       - name: Upload package tarballs
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: workspace-packages
           path: ${{ runner.temp }}/pkgs/*.tgz
@@ -81,12 +81,12 @@ jobs:
         graphql: [16, 17]
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Scaffold Docusaurus project
-        uses: ./.github/actions/scaffold-docusaurus
+        uses: $/.github/actions/scaffold-docusaurus
         with:
           docusaurus-version: ${{ matrix.docusaurus }}
           graphql-version: ${{ matrix.graphql }}
@@ -124,12 +124,12 @@ jobs:
             options: "--homepage data/groups.md --schema data/schema_with_grouping.graphql --groupByDirective @doc(category|=Common) --base group-by --skip @noDoc"
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Scaffold Docusaurus project
-        uses: ./.github/actions/scaffold-docusaurus
+        uses: $/.github/actions/scaffold-docusaurus
         with:
           docusaurus-version: ${{ matrix.docusaurus }}
           graphql-version: ${{ matrix.graphql }}
@@ -156,12 +156,12 @@ jobs:
         graphql: [16, 17]
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Scaffold CLI project
-        uses: ./.github/actions/scaffold-cli
+        uses: $/.github/actions/scaffold-cli
         with:
           graphql-version: ${{ matrix.graphql }}
 
@@ -184,11 +184,11 @@ jobs:
         || needs.changes.outputs.smoke_nuxt == 'true')
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
-      - uses: ./.github/actions/prepare-scaffold
+      - uses: $/.github/actions/prepare-scaffold
         with:
           project-name: nuxt-gqlmd
 
@@ -240,7 +240,7 @@ jobs:
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
         continue-on-error: true
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github
@@ -251,7 +251,7 @@ jobs:
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
         continue-on-error: true
-        uses: ./.github/actions/gate-comment
+        uses: $/.github/actions/gate-comment
         with:
           gate-name: Smoke Gate
           gate-marker: smoke

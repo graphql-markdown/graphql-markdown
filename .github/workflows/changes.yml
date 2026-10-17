@@ -63,7 +63,7 @@ jobs:
       docs_only: ${{ steps.affected.outputs.docs_only }}
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           # Deep enough for the merge base of a normal PR; the diff step falls
           # back to the full matrix if the base commit is still unreachable.
@@ -73,7 +73,7 @@ jobs:
       # No `bun ci` here on purpose: the script only reads package.json files,
       # so the gate stays a few seconds rather than a full toolchain install.
       - name: Setup NodeJS LTS
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: "lts/*"
 

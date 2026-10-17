@@ -19,12 +19,12 @@ inputs:
     required: true
 
 # Callers must check out the repo (at least `.github/`) before this step, so
-# the local `uses: ./.github/actions/gate-comment` reference itself resolves.
+# the same-repo `uses: $/.github/actions/gate-comment` reference itself resolves.
 runs:
   using: composite
   steps:
     - name: Setup NodeJS LTS
-      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+      uses: actions/setup-node@v7.1.0
       with:
         node-version: "lts/*"
 

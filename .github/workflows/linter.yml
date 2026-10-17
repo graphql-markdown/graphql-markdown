@@ -47,7 +47,7 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -72,7 +72,7 @@ jobs:
         if: >-
           env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
           || env.RUN_WEBSITE_CHECKS == 'true' || env.RUN_DOCS_CHECKS == 'true'
-        uses: ./.github/actions/setup
+        uses: $/.github/actions/setup
 
       # The CI gate script decides which jobs the rest of the matrix skips, so
       # it is tested here, where the toolchain is already installed.
@@ -120,3 +120,29 @@ jobs:
       - name: Run fallow
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run fallow -- audit --base "origin/${GITHUB_BASE_REF}"
+
+  actions-lock:
+    name: Actions lock
+    runs-on: ubuntu-latest
+    needs: changes
+    # Same fall-open gate as the lint steps: the lockfile only moves when a
+    # workflow or action under `.github/` changes, and a broken gate must run
+    # the check rather than skip it.
+    if: >-
+      ${{ !cancelled() && (needs.changes.result != 'success'
+        || needs.changes.outputs.workflows == 'true') }}
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Verify actions lock
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh extension install github/gh-actions-lock --pin v0.2.0
+          gh actions-lock --verify

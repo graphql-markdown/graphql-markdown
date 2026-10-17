@@ -110,15 +110,15 @@ jobs:
 
     steps:
       - name: Checkout Code Base
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Setup environment
-        uses: ./.github/actions/setup
+        uses: $/.github/actions/setup
 
       - name: Cache turbo build setup
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+        uses: actions/cache@v6.1.0
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ hashFiles('bun.lock', 'packages/*/src/**', 'packages/*/tsconfig*.json', 'tsconfig.base.json') }}
@@ -180,7 +180,7 @@ jobs:
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
         continue-on-error: true
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
           sparse-checkout: .github
@@ -191,7 +191,7 @@ jobs:
           && github.event_name == 'pull_request'
           && github.event.pull_request.head.repo.full_name == github.repository
         continue-on-error: true
-        uses: ./.github/actions/gate-comment
+        uses: $/.github/actions/gate-comment
         with:
           gate-name: Mutation Gate
           gate-marker: mutation

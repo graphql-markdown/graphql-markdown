@@ -1,0 +1,6 @@
+# actionlint does not know the same-repo `$/…` action syntax introduced by
+# workflow dependency lockfiles (gh actions-lock); drop the error until it does.
+paths:
+  .github/workflows/**/*.{yml,yaml}:
+    ignore:
+      - 'specifying action "\$/[^"]+" in invalid format because ref is missing'
