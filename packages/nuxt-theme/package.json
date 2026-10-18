@@ -47,7 +47,7 @@
   "dependencies": {
     "@clack/prompts": "^1.0.0",
     "@graphql-markdown/cli": "workspace:^",
-    "@nuxt/content": "^3.16.0",
+    "@nuxt/content": "^3.16.2",
     "@nuxt/kit": "^4.6.1",
     "@nuxt/ui": "^4.11.0",
     "consola": "^3.4.2",
