@@ -26,7 +26,7 @@
         "@graphql-tools/load": "8.1.21",
         "@graphql-tools/graphql-file-loader": "8.1.14",
         "@graphql-tools/json-file-loader": "8.0.28",
-        "@graphql-tools/utils": "11.2.0"
+        "@graphql-tools/utils": "12.1.0"
       },
       "docusaurus": {
         "@docusaurus/utils": "3.10.1",
