@@ -147,8 +147,9 @@ The data is designed to be anonymous: nothing can be linked to a person, a devic
 The aggregated, anonymous usage statistics are published at [telemetry.graphql-markdown.dev](https://telemetry.graphql-markdown.dev/).
 
 - Refreshed once a day (around 03:00 UTC). It shows the last 90 days of aggregated daily counts; that is only the display window, as the aggregate counts are kept longer than the raw events (see [Privacy and GDPR](#privacy-and-gdpr)).
-- Shows usage patterns: events and distinct configs, runs per day by package version, CI vs local runs, CI provider share, formatter, GraphQL major version, loader kinds, scaffold vs wire and create targets, and the most-used settings.
-- Values with fewer than 5 events in the period are hidden (`n<5` suppression).
+- Shows the All view (local and CI runs together); the CI vs local and CI provider panels split them.
+- Shows usage patterns: events, distinct configs and debounced activity, runs per day by package version, CI vs local runs, CI provider share, formatter share, GraphQL major version, loader kinds and the most-used settings. Generation statistics (pages, duration, errors) are not published on the page.
+- Values with fewer than 5 events over the 90 days are hidden and counted as suppressed (`n<5` suppression). The rule applies to the total of each value, so daily figures of a shown value are not suppressed individually.
 - Only aggregated counts are published, never individual events.
 - The page is meant for people: it asks crawlers and AI agents not to index it (`robots.txt` and `noindex`, which are advisory).
 
