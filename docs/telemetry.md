@@ -11,7 +11,7 @@ keywords:
 
 # Telemetry
 
-GraphQL-Markdown collects **anonymous** usage data to learn which loaders, formatters and settings are used, so the project can focus on what matters. It is opt-out and easy to disable.
+GraphQL-Markdown collects **anonymous** usage data to learn which loaders, formatters and settings are used, so the project can focus on what matters. It is opt-out and easy to disable. The aggregated results are public: see the [public statistics](#public-statistics).
 
 One event describes **which configuration is used to generate**, and a second one **how the generation went**: the number of pages, the duration and, on failure, the error type. There are no error messages and no data from your schema.
 
@@ -141,6 +141,16 @@ The data is designed to be anonymous: nothing can be linked to a person, a devic
 - Raw events are kept for about 3 months and then deleted automatically. After that, only aggregate daily counts remain.
 - The only thing stored on your machine is `telemetry.json` in the OS config directory, with your preference, the version of the notice you saw and fingerprints of already-masked configurations used for de-duplication. It is never sent.
 - As nothing is linkable to a person, there is nothing to access or erase. For questions, [open an issue](https://github.com/graphql-markdown/graphql-markdown/issues).
+
+## Public statistics
+
+The aggregated, anonymous usage statistics are published at [telemetry.graphql-markdown.dev](https://telemetry.graphql-markdown.dev/).
+
+- Refreshed once a day (around 03:00 UTC). It shows the last 90 days of aggregated daily counts; that is only the display window, as the aggregate counts are kept longer than the raw events (see [Privacy and GDPR](#privacy-and-gdpr)).
+- Shows usage patterns: events and distinct configs, runs per day by package version, CI vs local runs, CI provider share, formatter, GraphQL major version, loader kinds, scaffold vs wire and create targets, and the most-used settings.
+- Values with fewer than 5 events in the period are hidden (n<5 suppression).
+- Only aggregated counts are published, never individual events.
+- The page is meant for people: it asks crawlers and AI agents not to index it (`robots.txt` and `noindex`, which are advisory).
 
 ## Opting out
 
