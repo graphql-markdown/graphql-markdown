@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/formatters",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
@@ -17,9 +17,9 @@
     "./defaults": "./src/defaults.ts"
   },
   "imports": {
-    "@graphql-markdown/helpers": "jsr:@graphql-markdown/helpers@^1.2.3",
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
-    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0"
+    "@graphql-markdown/helpers": "jsr:@graphql-markdown/helpers@^1.2.4",
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.1",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.1"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],
