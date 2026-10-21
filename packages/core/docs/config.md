@@ -144,10 +144,10 @@ Defined in: [core/src/config.ts:65](https://github.com/graphql-markdown/graphql-
 ### ASSET_HOMEPAGE_LOCATION
 
 ```ts
-const ASSET_HOMEPAGE_LOCATION: string;
+const ASSET_HOMEPAGE_LOCATION: unique symbol;
 ```
 
-Defined in: [core/src/config.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L119)
+Defined in: [core/src/config.ts:126](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/config.ts#L126)
 
 Location of the default homepage template.
 
