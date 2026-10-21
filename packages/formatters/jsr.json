@@ -1,0 +1,28 @@
+{
+  "name": "@graphql-markdown/formatters",
+  "version": "1.2.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./docfx": "./src/docfx/index.ts",
+    "./docusaurus": "./src/docusaurus/index.ts",
+    "./fumadocs": "./src/fumadocs/index.ts",
+    "./honkit": "./src/honkit/index.ts",
+    "./hugo": "./src/hugo/index.ts",
+    "./mdbook": "./src/mdbook/index.ts",
+    "./mdx": "./src/mdx/index.ts",
+    "./mkdocs": "./src/mkdocs/index.ts",
+    "./starlight": "./src/starlight/index.ts",
+    "./vocs": "./src/vocs/index.ts",
+    "./defaults": "./src/defaults.ts"
+  },
+  "imports": {
+    "@graphql-markdown/helpers": "jsr:@graphql-markdown/helpers@^1.2.3",
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0"
+  },
+  "publish": {
+    "include": ["src", "README.md", "LICENSE*"],
+    "exclude": ["**/*.test.ts", "**/__tests__"]
+  }
+}

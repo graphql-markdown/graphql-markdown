@@ -80,6 +80,10 @@ jobs:
         if: env.RUN_WORKFLOW_CHECKS == 'true'
         run: bun run test:scripts
 
+      - name: Check jsr.json manifests
+        if: env.RUN_CODE_CHECKS == 'true'
+        run: bun run jsr:check
+
       - name: Run TS Check
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run ts:check

@@ -1,0 +1,16 @@
+{
+  "name": "@graphql-markdown/telemetry",
+  "version": "0.1.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "imports": {
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0"
+  },
+  "publish": {
+    "include": ["src", "README.md", "LICENSE*"],
+    "exclude": ["**/*.test.ts", "**/__tests__"]
+  }
+}

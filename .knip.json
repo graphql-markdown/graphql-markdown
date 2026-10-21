@@ -69,6 +69,7 @@
         "scripts/shared/dependencies-utils.mts",
         "scripts/publish-release.mts",
         "scripts/tarball-check.mts",
+        "scripts/jsr-check.mts",
         "scripts/docs-api.mjs",
         "husky/prepare-husky.js",
         "stryker/stryker.conf.mjs",
@@ -95,12 +96,7 @@
       ]
     }
   },
-  "ignoreDependencies": [
-    "@docusaurus/logger",
-    "commitizen",
-    "danger",
-    "husky"
-  ],
+  "ignoreDependencies": ["@docusaurus/logger", "commitizen", "danger", "husky"],
   "vitest": {
     "config": ["packages/*/vitest.config.mjs"],
     "entry": ["**/tests/**/*.ts"]
