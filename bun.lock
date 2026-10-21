@@ -173,7 +173,11 @@
       },
       "peerDependencies": {
         "graphql": "catalog:",
+        "graphql-config": "catalog:",
       },
+      "optionalPeers": [
+        "graphql-config",
+      ],
     },
     "packages/helpers": {
       "name": "@graphql-markdown/helpers",
