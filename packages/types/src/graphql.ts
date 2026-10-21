@@ -138,8 +138,6 @@ export interface SchemaMap {
 /**
  * Opaque type for directive names.
  * Used for type safety when working with directive identifiers.
- *
- * @internal
  */
 export type DirectiveName = string & { _opaque: typeof DIRECTIVE_NAME };
 
