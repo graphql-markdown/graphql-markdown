@@ -6,6 +6,8 @@ export type Registry = "npm" | "jsr" | "all";
 
 const REGISTRIES = new Set<string>(["npm", "jsr", "all"]);
 
+const argAt = (args: string[], index: number): string => args[index] ?? "";
+
 // Extracts `--registry <value>` / `--registry=<value>` from argv. Returns the
 // remaining args (without the flag and its value) so positional parsing is not
 // confused by the value. An invalid value yields `error`.
@@ -17,21 +19,28 @@ export const parseRegistryArg = (
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === "--registry") {
-      registry = args[++i] ?? "";
+      registry = argAt(args, ++i);
     } else if (arg.startsWith("--registry=")) {
       registry = arg.slice("--registry=".length);
     } else {
       rest.push(arg);
     }
   }
-  if (!REGISTRIES.has(registry)) {
-    return {
-      registry: "all",
-      rest,
-      error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
-    };
+  return validateRegistry(registry, rest);
+};
+
+const validateRegistry = (
+  registry: string,
+  rest: string[],
+): { registry: Registry; rest: string[]; error?: string } => {
+  if (REGISTRIES.has(registry)) {
+    return { registry: registry as Registry, rest };
   }
-  return { registry: registry as Registry, rest };
+  return {
+    registry: "all",
+    rest,
+    error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
+  };
 };
 
 export const jsrMetaUrl = (name: string): string => {
