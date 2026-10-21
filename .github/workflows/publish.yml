@@ -56,9 +56,8 @@ jobs:
       # Publishes to npm first, then to JSR (pinned local `jsr publish`, tokenless via
       # OIDC; each package must be linked to this repo on jsr.io).
       - name: Dry-run publish (rehearsal)
-        run: node packages/tooling-config/scripts/publish-release.mts --dry-run --registry "$REGISTRY"
-        env:
-          REGISTRY: ${{ inputs.registry || 'all' }}
+        run: node packages/tooling-config/scripts/publish-release.mts --dry-run --registry npm
+        if: ${{ (inputs.registry || 'all') != 'jsr' }}
 
       - name: Publish to npm and JSR
         run: node packages/tooling-config/scripts/publish-release.mts --yes --registry "$REGISTRY"

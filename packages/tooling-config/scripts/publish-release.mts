@@ -407,6 +407,15 @@ if (runJsr) {
     return !entry.alreadyPublished;
   });
 
+  if (
+    jsrToPublish.length > 0 &&
+    shouldPrompt &&
+    !(await confirm("Proceed with publishing to JSR? (y/N) "))
+  ) {
+    console.log("Aborted.");
+    process.exit(0);
+  }
+
   for (const { pkg, name, version } of jsrToPublish) {
     console.log(
       `\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version} to JSR`,
