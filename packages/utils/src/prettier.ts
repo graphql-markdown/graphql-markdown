@@ -39,7 +39,7 @@ export const prettify = async (
 ): Promise<string | undefined> => {
   try {
     const { resolveConfigFile, resolveConfig, format } = (await import(
-      runtimeModuleSpecifier(PRETTIER_MODULE)
+      runtimeModuleSpecifier(PRETTIER_MODULE, "^3.8.3")
     )) as PrettierModule;
     const file = await resolveConfigFile();
 

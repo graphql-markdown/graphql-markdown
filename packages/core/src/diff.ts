@@ -80,7 +80,10 @@ export const hasChanges = async (
     const {
       checkSchemaChanges,
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
-      runtimeModuleSpecifier(diffModule)
+      runtimeModuleSpecifier(
+        diffModule,
+        diffModule === "@graphql-markdown/diff" ? "^1.1.22" : undefined,
+      )
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch {
