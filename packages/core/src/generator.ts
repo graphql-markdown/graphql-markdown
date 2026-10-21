@@ -35,7 +35,7 @@ import {
 
 import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
 
-import { toString } from "@graphql-markdown/utils";
+import { runtimeModuleSpecifier, toString } from "@graphql-markdown/utils";
 
 import { dirname } from "node:path";
 
@@ -102,7 +102,7 @@ export const loadMDXModule = async (
 ): Promise<unknown> => {
   // Specifier is only known at runtime (user-configured formatter package).
   return mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser).catch((error: unknown) => {
+    ? import(runtimeModuleSpecifier(mdxParser)).catch((error: unknown) => {
         const errorMessage =
           error instanceof Error ? error.message : String(error);
         log(

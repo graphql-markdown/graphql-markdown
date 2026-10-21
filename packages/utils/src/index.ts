@@ -4,6 +4,7 @@ export * from "./frontmatter.ts";
 export * from "./fs.ts";
 export * from "./guards.ts";
 export * from "./markdown.ts";
+export * from "./module.ts";
 export * from "./object.ts";
 export * from "./prettier.ts";
 export * from "./string.ts";

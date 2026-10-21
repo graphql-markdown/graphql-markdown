@@ -5,7 +5,6 @@
  * @packageDocumentation
  */
 
-import type { GraphQLProjectConfig } from "graphql-config";
 import type { ObjectTypeDefinitionNode } from "graphql/language";
 import type {
   GraphQLDirective,
@@ -44,12 +43,41 @@ export type {
 
 export type { LoadSchemaOptions } from "@graphql-tools/load";
 
+export type { Loader } from "@graphql-tools/utils";
+
 export type LoadSchemaOptionsOverride = Record<string, unknown> & {
   [key: string]: unknown;
   loaders?: unknown[];
 };
 
-export type { GraphQLExtensionDeclaration } from "graphql-config";
+/**
+ * Minimal structural equivalent of `graphql-config` `GraphQLConfigExtension`,
+ * declared locally so `graphql-config` stays an optional runtime peer.
+ */
+export interface GraphQLConfigExtension {
+  name: string;
+}
+
+/**
+ * Minimal structural equivalent of `graphql-config` `GraphQLExtensionDeclaration`.
+ * The `api` argument is loosely typed to stay assignable to `graphql-config`'s.
+ */
+export type GraphQLExtensionDeclaration = (api: any) => GraphQLConfigExtension;
+
+/**
+ * Minimal structural equivalent of `graphql-config` `GraphQLProjectConfig`.
+ */
+export interface GraphQLProjectConfig {
+  readonly schema: unknown;
+  readonly documents?: unknown;
+  readonly include?: string[] | string;
+  readonly exclude?: string[] | string;
+  readonly extensions?: Record<string, unknown>;
+  readonly filepath?: string;
+  readonly dirpath?: string;
+  readonly name?: string;
+  readonly isLegacy?: boolean;
+}
 
 export type { ASTNode, DirectiveNode } from "graphql/language";
 

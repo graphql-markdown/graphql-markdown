@@ -11,6 +11,7 @@ import type {
 } from "@graphql-markdown/types";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 
 /**
  * Module for detecting changes in GraphQL schemas.
@@ -79,7 +80,7 @@ export const hasChanges = async (
     const {
       checkSchemaChanges,
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
-      diffModule
+      runtimeModuleSpecifier(diffModule)
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch {

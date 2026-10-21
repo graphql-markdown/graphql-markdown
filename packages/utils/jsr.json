@@ -10,14 +10,14 @@
     "./fs": "./src/fs.ts",
     "./guards": "./src/guards.ts",
     "./markdown": "./src/markdown.ts",
+    "./module": "./src/module.ts",
     "./object": "./src/object.ts",
     "./prettier": "./src/prettier.ts",
     "./string": "./src/string.ts",
     "./url": "./src/url.ts"
   },
   "imports": {
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
-    "prettier": "npm:prettier@3.8.3"
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],

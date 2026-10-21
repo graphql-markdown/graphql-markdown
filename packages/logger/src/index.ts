@@ -8,6 +8,15 @@
 
 import type { LoggerType } from "@graphql-markdown/types";
 
+// Inlined from `runtimeModuleSpecifier` in @graphql-markdown/utils (logger must not depend on utils).
+// On Deno, bare specifiers are not resolved from inside a JSR package and need a prefix.
+const runtimeModuleSpecifier = (name: string): string => {
+  return !("Deno" in globalThis) ||
+    /^(?:\.{1,2}\/|\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
+    ? name
+    : `${name.startsWith("@graphql-markdown/") ? "jsr:" : "npm:"}${name}`;
+};
+
 type GlobalWithLogger = typeof globalThis & { logger?: LoggerType | null };
 const globalScope = globalThis as GlobalWithLogger;
 
@@ -119,7 +128,7 @@ export const Logger = async (
 
   let moduleExports: Record<string, unknown> | undefined;
   if (typeof moduleName === "string" && moduleName !== "") {
-    moduleExports = await import(moduleName);
+    moduleExports = await import(runtimeModuleSpecifier(moduleName));
   } else if (typeof moduleName === "object") {
     moduleExports = moduleName;
   }

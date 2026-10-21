@@ -7,10 +7,10 @@
 import type { GraphQLObjectType } from "graphql";
 import { GraphQLSchema, OperationTypeNode } from "graphql";
 import { loadSchema as asyncLoadSchema } from "@graphql-tools/load";
-import type { Loader } from "graphql-config";
-
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 import type {
   GraphQLSchemaConfig,
+  Loader,
   LoaderOption,
   LoadSchemaOptions,
   Maybe,
@@ -122,7 +122,9 @@ export const getDocumentLoaders = async (
     loadersList,
   )) {
     if (typeof graphqlDocumentLoader === "string") {
-      const { [className]: Loader } = await import(graphqlDocumentLoader);
+      const { [className]: Loader } = await import(
+        runtimeModuleSpecifier(graphqlDocumentLoader)
+      );
       loaders.push(new Loader());
     } else {
       if (
@@ -136,7 +138,7 @@ export const getDocumentLoaders = async (
         );
       }
       const { [className]: Loader } = await import(
-        graphqlDocumentLoader.module
+        runtimeModuleSpecifier(graphqlDocumentLoader.module)
       );
       loaders.push(new Loader());
       Object.assign(loaderOptions, graphqlDocumentLoader.options);
