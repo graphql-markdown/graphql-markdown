@@ -1,12 +1,12 @@
 import { gzipSync } from "node:zlib";
 
-import { detectCi } from "./ci";
-import { GZIP_THRESHOLD, NOTICE_VERSION, TIMEOUT_MS } from "./constants";
-import { printDisclaimer } from "./disclaimer";
-import { getEndpoint, isEnabled } from "./enabled";
-import { buildPayload, fingerprint } from "./payload";
-import type { PayloadInput } from "./payload";
-import { getStatePath, readState, writeState } from "./state";
+import { detectCi } from "./ci.js";
+import { GZIP_THRESHOLD, NOTICE_VERSION, TIMEOUT_MS } from "./constants.js";
+import { printDisclaimer } from "./disclaimer.js";
+import { getEndpoint, isEnabled } from "./enabled.js";
+import { buildPayload, fingerprint } from "./payload.js";
+import type { PayloadInput } from "./payload.js";
+import { getStatePath, readState, writeState } from "./state.js";
 
 export interface TrackInput extends Omit<PayloadInput, "noStateBefore"> {
   /** Value of the `telemetry` option. */

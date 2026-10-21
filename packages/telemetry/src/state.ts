@@ -8,8 +8,8 @@ import {
 } from "node:fs";
 import { dirname, join } from "node:path";
 
-import { resolveConfigDir } from "./config-dir";
-import { MAX_SENT_CONFIGS } from "./constants";
+import { resolveConfigDir } from "./config-dir.js";
+import { MAX_SENT_CONFIGS } from "./constants.js";
 
 export interface TelemetryState {
   enabled: boolean;

@@ -5,7 +5,7 @@
  */
 
 import type { Maybe } from "@graphql-markdown/types";
-import { toString } from "./string";
+import { toString } from "./string.js";
 
 /**
  * Returns an array of values from a k/v object.

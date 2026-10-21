@@ -18,7 +18,7 @@ import type {
 
 import { isEmpty } from "@graphql-markdown/utils";
 
-import { getDirective } from "./introspection";
+import { getDirective } from "./introspection.js";
 
 /**
  * Wildcard `*` character for matching any directive name.

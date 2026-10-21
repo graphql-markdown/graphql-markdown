@@ -15,8 +15,8 @@ import type {
 
 import { getTypeName } from "@graphql-markdown/graphql";
 
-import { printMetadataSection } from "../section";
-import { printCodeArguments } from "../code";
+import { printMetadataSection } from "../section.js";
+import { printCodeArguments } from "../code.js";
 
 /**
  * Generates a string representation of directive locations.

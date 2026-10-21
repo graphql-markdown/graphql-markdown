@@ -11,9 +11,9 @@ import type {
 
 import { getTypeName, getFields } from "@graphql-markdown/graphql";
 
-import { printSection, printMetadataSection } from "../section";
-import { printCodeField } from "../code";
-import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings";
+import { printSection, printMetadataSection } from "../section.js";
+import { printCodeField } from "../code.js";
+import { MARKDOWN_EOL, MARKDOWN_CODE_INDENTATION } from "../const/strings.js";
 
 /**
  * Prints the metadata section for interfaces implemented by a GraphQL type

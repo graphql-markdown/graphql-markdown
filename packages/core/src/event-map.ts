@@ -6,15 +6,15 @@
  *
  * @packageDocumentation
  */
-import { ConfigBuildEvents } from "./events/config-build-events";
-import { SchemaEvents } from "./events/schema-events";
-import { DiffEvents } from "./events/diff-events";
-import { RenderRootTypesEvents } from "./events/render-root-types-events";
-import { RenderHomepageEvents } from "./events/render-homepage-events";
-import { RenderTypeEntitiesEvents } from "./events/render-type-entities-events";
-import { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events";
-import { RenderFilesEvents } from "./events/render-files-events";
-import { PrintTypeEvents } from "./events/print-type-events";
+import { ConfigBuildEvents } from "./events/config-build-events.js";
+import { SchemaEvents } from "./events/schema-events.js";
+import { DiffEvents } from "./events/diff-events.js";
+import { RenderRootTypesEvents } from "./events/render-root-types-events.js";
+import { RenderHomepageEvents } from "./events/render-homepage-events.js";
+import { RenderTypeEntitiesEvents } from "./events/render-type-entities-events.js";
+import { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events.js";
+import { RenderFilesEvents } from "./events/render-files-events.js";
+import { PrintTypeEvents } from "./events/print-type-events.js";
 
 /**
  * Event callback mapping configuration.

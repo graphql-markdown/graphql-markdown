@@ -9,9 +9,9 @@ import type {
   TelemetryTrigger,
 } from "@graphql-markdown/types";
 
-import { detectCi } from "./ci";
-import { classifyPointer } from "./loader";
-import { CLI_RULES, CONFIG_RULES, sanitizeConfig } from "./sanitize";
+import { detectCi } from "./ci.js";
+import { classifyPointer } from "./loader.js";
+import { CLI_RULES, CONFIG_RULES, sanitizeConfig } from "./sanitize.js";
 
 export interface PayloadInput {
   event?: TelemetryEvent;

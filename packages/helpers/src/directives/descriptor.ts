@@ -10,7 +10,7 @@ import type { GraphQLDirective } from "@graphql-markdown/types";
 
 import { getTypeDirectiveValues } from "@graphql-markdown/graphql";
 
-import { interpolate } from "../utils/interpolate";
+import { interpolate } from "../utils/interpolate.js";
 
 /**
  * Helper for rendering custom description from schema directive on type.

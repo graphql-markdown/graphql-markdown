@@ -32,7 +32,7 @@ import { log, LogLevel } from "@graphql-markdown/logger";
  *
  * @example
  * ```typescript
- * import { hasChanges } from "./diff";
+ * import { hasChanges } from "./diff.js";
  * import { buildSchema } from "graphql";
  *
  * const schema = buildSchema(`
@@ -47,7 +47,7 @@ import { log, LogLevel } from "@graphql-markdown/logger";
  *
  * @example Using with a custom diff module
  * ```typescript
- * import { hasChanges } from "./diff";
+ * import { hasChanges } from "./diff.js";
  *
  * const schema = getMySchema();
  * const result = await hasChanges(

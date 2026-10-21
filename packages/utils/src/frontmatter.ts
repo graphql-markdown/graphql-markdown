@@ -3,7 +3,7 @@
  *
  * @packageDocumentation
  */
-import { toString } from "./string";
+import { toString } from "./string.js";
 
 /**
  * Generates a string of repeated tab characters based on the given indentation level.

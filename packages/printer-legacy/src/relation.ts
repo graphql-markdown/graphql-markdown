@@ -23,10 +23,10 @@ import {
   isOperation,
 } from "@graphql-markdown/graphql";
 
-import { getRelationLink } from "./link";
-import { CSS_BADGE_CLASSNAME, printBadge } from "./badge";
-import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings";
-import { SectionLevels } from "./const/options";
+import { getRelationLink } from "./link.js";
+import { CSS_BADGE_CLASSNAME, printBadge } from "./badge.js";
+import { MARKDOWN_EOP, ROOT_TYPE_LOCALE } from "./const/strings.js";
+import { SectionLevels } from "./const/options.js";
 
 /**
  * Converts a string representation of a root type to its corresponding `TypeLocale`

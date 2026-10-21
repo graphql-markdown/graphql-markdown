@@ -25,9 +25,9 @@ import {
   mergeFrontmatterLines,
 } from "@graphql-markdown/helpers";
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
-import { formatMDXBullet, formatMDXPermalink } from "../defaults";
+import { formatMDXBullet, formatMDXPermalink } from "../defaults.js";
 
-export { formatMDXPermalink } from "../defaults";
+export { formatMDXPermalink } from "../defaults.js";
 
 export const __default = { formatMDXBullet, formatMDXPermalink };
 

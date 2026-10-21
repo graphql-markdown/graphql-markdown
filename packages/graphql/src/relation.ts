@@ -30,8 +30,8 @@ import type {
 
 import { hasProperty, isTypeObject } from "@graphql-markdown/utils";
 
-import { _getFields } from "./introspection";
-import { isGraphQLFieldType } from "./guard";
+import { _getFields } from "./introspection.js";
+import { isGraphQLFieldType } from "./guard.js";
 
 /**
  * Callback type used by {@link mapRelationOf}.

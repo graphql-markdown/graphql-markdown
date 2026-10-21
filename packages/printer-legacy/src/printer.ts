@@ -70,17 +70,17 @@ import {
 } from "@graphql-markdown/graphql";
 import { pathUrl } from "@graphql-markdown/utils";
 
-import { printRelations } from "./relation";
-import { printBadge } from "./badge";
-import { printDescription } from "./common";
+import { printRelations } from "./relation.js";
+import { printBadge } from "./badge.js";
+import { printDescription } from "./common.js";
 import {
   getDecoratorsOrder,
   getExampleSectionDefinition,
   printDecorator,
   printDecorators,
   printSlotDecorators,
-} from "./decorator";
-import { printFrontMatter } from "./frontmatter";
+} from "./decorator.js";
+import { printFrontMatter } from "./frontmatter.js";
 import {
   printCodeDirective,
   printCodeEnum,
@@ -98,26 +98,26 @@ import {
   printOperationMetadata,
   printScalarMetadata,
   printUnionMetadata,
-} from "./graphql";
-import { hasPrintableDirective } from "./link";
+} from "./graphql/index.js";
+import { hasPrintableDirective } from "./link.js";
 
 import {
   MARKDOWN_EOC,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   MARKDOWN_SOC,
-} from "./const/strings";
-import { createDefaultFormatter } from "./formatter";
+} from "./const/strings.js";
+import { createDefaultFormatter } from "./formatter.js";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
   SectionLevels,
-} from "./const/options";
+} from "./const/options.js";
 import {
   PrintCodeEvent,
   PrintTypeEvent,
   BeforeComposePageTypeEvent,
-} from "./events";
+} from "./events.js";
 
 /**
  * Default initialization options for the Printer class.

@@ -24,10 +24,10 @@ import {
   isNonNullType,
 } from "@graphql-markdown/graphql";
 
-import { getCategoryLocale } from "./link";
-import { getGroup } from "./group";
-import { createDefaultFormatter } from "./formatter";
-import { DEPRECATED, NON_NULL } from "./const/strings";
+import { getCategoryLocale } from "./link.js";
+import { getGroup } from "./group.js";
+import { createDefaultFormatter } from "./formatter.js";
+import { DEPRECATED, NON_NULL } from "./const/strings.js";
 
 export const CSS_BADGE_CLASSNAME = {
   DEPRECATED: "DEPRECATED",

@@ -20,8 +20,8 @@ import {
   MARKDOWN_EOL,
   DEPRECATED,
   MARKDOWN_CODE_INDENTATION,
-} from "./const/strings";
-import { hasPrintableDirective } from "./link";
+} from "./const/strings.js";
+import { hasPrintableDirective } from "./link.js";
 
 /**
  * Generates a string representation of GraphQL arguments with proper formatting and indentation.

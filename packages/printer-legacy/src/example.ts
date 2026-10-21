@@ -33,7 +33,7 @@ import {
 
 import { hasStringProperty, toString } from "@graphql-markdown/utils";
 
-import { hasPrintableDirective } from "./link";
+import { hasPrintableDirective } from "./link.js";
 
 /**
  * Retrieves directive example options from the provided print type options.

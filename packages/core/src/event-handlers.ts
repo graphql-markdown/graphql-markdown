@@ -9,8 +9,8 @@
  */
 import { log, LogLevel } from "@graphql-markdown/logger";
 
-import { getEvents, resetEvents } from "./event-emitter";
-import { EVENT_CALLBACK_MAP } from "./event-map";
+import { getEvents, resetEvents } from "./event-emitter.js";
+import { EVENT_CALLBACK_MAP } from "./event-map.js";
 
 /**
  * Registers MDX module lifecycle event handlers with the event emitter.

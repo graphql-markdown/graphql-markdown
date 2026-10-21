@@ -31,8 +31,8 @@ import {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
-import { createInternalLinksRewriter, rewriteRenderedPage } from "../output";
+} from "../defaults.js";
+import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.js";
 
 /** Generic MDX pages use the `.mdx` extension. */
 export const mdxExtension = ".mdx";

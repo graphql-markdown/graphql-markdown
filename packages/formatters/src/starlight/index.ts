@@ -25,7 +25,7 @@ import {
   formatMDXEscapedPermalink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.js";
 
 /**
  * Formats a permalink for a section header, using the classic `{#id}` syntax
@@ -90,7 +90,7 @@ export {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.js";
 
 /**
  * Creates an Astro Starlight formatter.

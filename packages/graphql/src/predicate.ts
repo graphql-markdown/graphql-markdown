@@ -24,7 +24,7 @@ import {
   getTypeDirectiveValues,
   getTypeDirectiveValuesList,
   GraphQLSchema,
-} from "./introspection";
+} from "./introspection.js";
 import {
   instanceOf,
   isDirectiveType,
@@ -34,7 +34,7 @@ import {
   isObjectType,
   isScalarType,
   isUnionType,
-} from "./guard";
+} from "./guard.js";
 
 /**
  * Resolves the schema entity kind of the type being printed.

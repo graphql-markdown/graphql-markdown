@@ -5,13 +5,13 @@
 
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
-import { printCodeType } from "./object";
+import { printCodeType } from "./object.js";
 
 /**
  * Prints metadata for a GraphQL interface type.
  * This is an alias for {@link printObjectMetadata}.
  */
-export { printObjectMetadata as printInterfaceMetadata } from "./object";
+export { printObjectMetadata as printInterfaceMetadata } from "./object.js";
 
 /**
  * Generates a code block representation of a GraphQL interface type.

@@ -44,9 +44,9 @@ import {
   toString,
 } from "@graphql-markdown/utils";
 
-import { getGroup } from "./group";
-import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings";
-import { TypeHierarchy } from "./const/options";
+import { getGroup } from "./group.js";
+import { DEPRECATED, ROOT_TYPE_LOCALE } from "./const/strings.js";
+import { TypeHierarchy } from "./const/options.js";
 
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const API_GROUPS: Required<ApiGroupOverrideType> = {

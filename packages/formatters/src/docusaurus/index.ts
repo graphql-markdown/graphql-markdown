@@ -28,8 +28,8 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
-import { formatMDXEscapedPermalink } from "../defaults";
-import { isFrameworkVersion, isFrameworkVersionAtLeast } from "../version";
+import { formatMDXEscapedPermalink } from "../defaults.js";
+import { isFrameworkVersion, isFrameworkVersionAtLeast } from "../version.js";
 
 const LINK_MDX_EXTENSION = ".mdx" as const;
 const DOCUSAURUS_FRAMEWORK = "docusaurus" as const;

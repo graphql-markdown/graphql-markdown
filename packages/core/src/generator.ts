@@ -39,11 +39,11 @@ import { toString } from "@graphql-markdown/utils";
 
 import { dirname } from "node:path";
 
-import { DiffMethod } from "./config";
-import { hasChanges } from "./diff";
-import { getPrinter } from "./printer";
-import { getRenderer, logHandlerErrors } from "./renderer";
-import { getEvents } from "./event-emitter";
+import { DiffMethod } from "./config.js";
+import { hasChanges } from "./diff.js";
+import { getPrinter } from "./printer.js";
+import { getRenderer, logHandlerErrors } from "./renderer.js";
+import { getEvents } from "./event-emitter.js";
 import {
   ConfigBuildEvent,
   ConfigBuildEvents,
@@ -57,9 +57,9 @@ import {
   RenderHomepageEvents,
   RenderFilesEvent,
   RenderFilesEvents,
-} from "./events";
-import { registerMDXEventHandlers } from "./event-handlers";
-import { reportGeneration } from "./telemetry";
+} from "./events/index.js";
+import { registerMDXEventHandlers } from "./event-handlers.js";
+import { reportGeneration } from "./telemetry.js";
 
 /**
  * Supported file extensions for generated documentation files.

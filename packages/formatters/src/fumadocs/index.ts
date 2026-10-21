@@ -23,7 +23,7 @@ import {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.js";
 
 /**
  * Formats a permalink for a section header using the Fumadocs `[#id]` syntax.
@@ -88,7 +88,7 @@ export {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.js";
 
 /**
  * Creates a Fumadocs formatter.

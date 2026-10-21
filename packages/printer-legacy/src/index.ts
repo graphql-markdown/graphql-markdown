@@ -1,17 +1,17 @@
-export { Printer } from "./printer";
+export { Printer } from "./printer.js";
 export {
   buildCustomDirectiveDecorators,
   RESERVED_SECTION_NAMES,
-} from "./decorator";
+} from "./decorator.js";
 export {
   PrintCodeEvent,
   PrintTypeEvent,
   BeforeComposePageTypeEvent,
-} from "./events";
+} from "./events.js";
 export type {
   PageSection,
   PageSections,
   PrintCodeEventData,
   PrintTypeEventData,
   ComposePageTypeEventData,
-} from "./events";
+} from "./events.js";

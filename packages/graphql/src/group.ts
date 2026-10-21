@@ -21,7 +21,7 @@ import type {
   Maybe,
 } from "@graphql-markdown/types";
 
-import { hasAstNode } from "./introspection";
+import { hasAstNode } from "./introspection.js";
 
 /**
  * Gets the group name for a schema type based on the directive information.

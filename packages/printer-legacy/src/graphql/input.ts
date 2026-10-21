@@ -5,9 +5,9 @@
  */
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
-import { printCodeType } from "./object";
+import { printCodeType } from "./object.js";
 
-export { printObjectMetadata as printInputMetadata } from "./object";
+export { printObjectMetadata as printInputMetadata } from "./object.js";
 
 /**
  * Renders the Markdown code snippet for a GraphQL `input` type by delegating
