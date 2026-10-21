@@ -223,14 +223,29 @@ Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `co
 
 For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
-### Install from JSR
+## Install from JSR
 
-The core libraries are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. The CLI, the Docusaurus plugin, the scaffolder and the Nuxt theme are published on npm only.
+The GraphQL-Markdown libraries (`core`, `graphql`, `utils`, `formatters`, `printer-legacy`, `helpers`, `diff`, `logger`, `telemetry` and `types`) are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. Use them to call GraphQL-Markdown from your own code.
 
-```shell title="shell"
+```shell title="Deno"
 deno add jsr:@graphql-markdown/core
+```
+
+```shell title="Node.js"
 npx jsr add @graphql-markdown/core
 ```
+
+```shell title="Bun"
+bunx jsr add @graphql-markdown/core
+```
+
+:::info
+
+- The JSR packages target [GraphQL.js](https://graphql.org/graphql-js/) 17. The npm packages support versions 16 and 17.
+- To load the configuration from a [GraphQL Config](/docs/configuration#graphql-config) file, also install `graphql-config`. It is an optional peer dependency of `@graphql-markdown/graphql`.
+- The CLI (`gqlmd`), the Docusaurus plugin, the scaffolder and the Nuxt theme are published on npm only. JSR has no executables, so use npm to get the `gqlmd` command.
+
+:::
 
 ## Regenerate the documentation
 
