@@ -1,7 +1,8 @@
 // Checks that each published package's jsr.json stays in sync with its
 // package.json: same name, version and license, and every
 // `jsr:@graphql-markdown/<pkg>@^<version>` import must match the version of the
-// workspace package it points to.
+// workspace package it points to. Packages that mirror their version in a
+// source constant (core's `src/version.ts`) are checked against package.json too.
 //
 // Run directly by Node (>= 22.18) through type stripping, so it must stay
 // within erasable syntax: no enums, no parameter properties, no namespaces.
@@ -22,6 +23,13 @@ const JSR_PACKAGES = [
   "telemetry",
   "core",
 ] as const;
+
+// Source files exporting `VERSION` as a literal, kept in sync by hand.
+const VERSION_CONSTANTS: Partial<
+  Record<(typeof JSR_PACKAGES)[number], string>
+> = { core: "src/version.ts" };
+const VERSION_CONSTANT =
+  /export const VERSION\s*(?::\s*string\s*)?=\s*"([^"]*)"/;
 
 const SCOPE = "@graphql-markdown/";
 const JSR_IMPORT = /^jsr:(@graphql-markdown\/[^@]+)@(.+)$/;
@@ -57,6 +65,21 @@ export const checkPackage = (dir: string): string[] => {
     if (jsr[field] !== pkg[field]) {
       problems.push(
         `${dir}: ${field} "${String(jsr[field])}" differs from package.json "${String(pkg[field])}"`,
+      );
+    }
+  }
+  const constantFile = VERSION_CONSTANTS[dir as keyof typeof VERSION_CONSTANTS];
+  if (constantFile !== undefined) {
+    let source = "";
+    try {
+      source = readFileSync(join(packagesDir, dir, constantFile), "utf8");
+    } catch {
+      // reported below as an unreadable constant
+    }
+    const found = VERSION_CONSTANT.exec(source)?.[1];
+    if (found !== pkg.version) {
+      problems.push(
+        `${dir}: ${constantFile} VERSION "${String(found)}" differs from package.json "${String(pkg.version)}"`,
       );
     }
   }
