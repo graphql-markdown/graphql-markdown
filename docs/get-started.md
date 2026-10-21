@@ -223,6 +223,15 @@ Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `co
 
 For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
+### Install from JSR
+
+The core libraries are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. The CLI, the Docusaurus plugin, the scaffolder and the Nuxt theme are published on npm only.
+
+```shell title="shell"
+deno add jsr:@graphql-markdown/core
+npx jsr add @graphql-markdown/core
+```
+
 ## Regenerate the documentation
 
 In a Docusaurus site, see [Docusaurus recipes](/docs/advanced/docusaurus-recipes#regenerate-the-documentation) for the build/regenerate commands.
