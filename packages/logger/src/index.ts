@@ -6,9 +6,9 @@
  * @packageDocumentation
  */
 
-import type { LoggerType, Maybe } from "@graphql-markdown/types";
+import type { LoggerType } from "@graphql-markdown/types";
 
-type GlobalWithLogger = typeof globalThis & { logger?: Maybe<LoggerType> };
+type GlobalWithLogger = typeof globalThis & { logger?: LoggerType | null };
 const globalScope = globalThis as GlobalWithLogger;
 
 /**
