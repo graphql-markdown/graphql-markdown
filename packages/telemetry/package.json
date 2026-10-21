@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/telemetry",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown anonymous usage telemetry.",
+  "description": "Anonymous, opt-out usage telemetry for the GraphQL-Markdown CLI.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },

@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/graphql",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown GraphQL utilities.",
+  "description": "GraphQL schema loading, introspection and type utilities for GraphQL-Markdown.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
