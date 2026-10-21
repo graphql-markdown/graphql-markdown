@@ -253,27 +253,7 @@ Run it with any TypeScript-aware runtime, for example `node generate-docs.ts` (N
 
 ## Install from JSR
 
-The GraphQL-Markdown libraries (`core`, `graphql`, `utils`, `formatters`, `printer-legacy`, `helpers`, `diff`, `logger`, `telemetry` and `types`) are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. Use them to call GraphQL-Markdown from your own code, as shown in [Use the API](#use-the-api).
-
-```shell title="Deno"
-deno add jsr:@graphql-markdown/core
-```
-
-```shell title="Node.js"
-npx jsr add @graphql-markdown/core
-```
-
-```shell title="Bun"
-bunx jsr add @graphql-markdown/core
-```
-
-:::info
-
-- The JSR packages target [GraphQL.js](https://graphql.org/graphql-js/) 17. The npm packages support versions 16 and 17.
-- To load the configuration from a [GraphQL Config](/docs/configuration#graphql-config) file, also install `graphql-config`. It is an optional peer dependency of `@graphql-markdown/graphql`.
-- The CLI (`gqlmd`), the Docusaurus plugin, the scaffolder and the Nuxt theme are published on npm only. JSR has no executables, so use npm to get the `gqlmd` command.
-
-:::
+The GraphQL-Markdown libraries are also published on [JSR](https://jsr.io/@graphql-markdown) for Deno, Node.js and Bun. See [JSR](/docs/advanced/jsr) for installation, the supported GraphQL.js version and optional features.
 
 ## Regenerate the documentation
 
