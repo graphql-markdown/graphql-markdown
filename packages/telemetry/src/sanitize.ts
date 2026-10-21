@@ -56,7 +56,7 @@ const enumOf = (values: readonly string[]): Rule => {
   return { kind: "enum", values };
 };
 const deprecated = enumOf(DEPRECATED_OPTIONS);
-export const CONFIG_RULES = {
+export const CONFIG_RULES: Readonly<Record<keyof ConfigOptions, Rule>> = {
   baseURL: url,
   customDirective: { kind: "map", value: any },
   decorators: { kind: "map", value: any },
@@ -102,9 +102,9 @@ export const CONFIG_RULES = {
   skipDocDirective: string,
   telemetry: scalar,
   tmpDir: path,
-} as const satisfies Record<keyof ConfigOptions, Rule>;
+};
 
-export const CLI_RULES = {
+export const CLI_RULES: Readonly<Record<keyof CliOptions, Rule>> = {
   base: url,
   config: scalar,
   deprecated,
@@ -127,7 +127,7 @@ export const CLI_RULES = {
   only: string,
   tmp: path,
   telemetry: scalar,
-} as const satisfies Record<keyof CliOptions, Rule>;
+};
 
 /** Masks a string by its shape: url, path or generic string. */
 const maskString = (value: string): string => {

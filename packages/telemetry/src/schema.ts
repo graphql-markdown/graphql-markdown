@@ -99,9 +99,25 @@ export const MASK_TOKENS = [
   "<unknown>",
 ] as const;
 /** Pattern of masked object keys, e.g. `<key:0>`. */
-export const KEY_TOKEN_PATTERN = String.raw`^<key:\d+>$`;
+export const KEY_TOKEN_PATTERN: string = String.raw`^<key:\d+>$`;
 
-export const ALLOWLIST = {
+export const ALLOWLIST: {
+  readonly events: typeof EVENTS;
+  readonly triggers: typeof TRIGGERS;
+  readonly ciProviders: typeof CI_PROVIDERS;
+  readonly packageManagers: typeof PACKAGE_MANAGERS;
+  readonly loaderKinds: typeof LOADER_KINDS;
+  readonly modes: typeof MODES;
+  readonly diffMethods: typeof DIFF_METHODS;
+  readonly deprecatedOptions: typeof DEPRECATED_OPTIONS;
+  readonly hierarchies: typeof HIERARCHIES;
+  readonly formatterPresets: typeof FORMATTER_PRESETS;
+  readonly formatterPackagePattern: "^@graphql-markdown/[a-z0-9-]+(/[a-z0-9-]+)*$";
+  readonly knownLoaders: typeof KNOWN_LOADERS;
+  readonly maskTokens: typeof MASK_TOKENS;
+  readonly keyTokenPattern: typeof KEY_TOKEN_PATTERN;
+  readonly graphqlMajorUnknown: "unknown";
+} = {
   events: EVENTS,
   triggers: TRIGGERS,
   ciProviders: CI_PROVIDERS,
