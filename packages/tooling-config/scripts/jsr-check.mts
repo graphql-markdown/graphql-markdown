@@ -52,24 +52,28 @@ const versions = new Map<string, string>(
   }),
 );
 
-const checkFields = (
+const checkPackageFields = (
   dir: string,
   pkg: Record<string, unknown>,
   jsr: Record<string, unknown>,
-): string[] => {
-  return ["name", "version", "license"]
-    .filter((field) => jsr[field] !== pkg[field])
-    .map(
-      (field) =>
+  problems: string[],
+): void => {
+  for (const field of ["name", "version", "license"]) {
+    if (jsr[field] !== pkg[field]) {
+      problems.push(
         `${dir}: ${field} "${String(jsr[field])}" differs from package.json "${String(pkg[field])}"`,
-    );
+      );
+    }
+  }
 };
 
-const readSource = (path: string): string => {
+const readVersionConstantSource = (
+  dir: string,
+  constantFile: string,
+): string => {
   try {
-    return readFileSync(path, "utf8");
+    return readFileSync(join(packagesDir, dir, constantFile), "utf8");
   } catch {
-    // reported by the caller as an unreadable constant
     return "";
   }
 };
@@ -77,53 +81,64 @@ const readSource = (path: string): string => {
 const checkVersionConstant = (
   dir: string,
   pkg: Record<string, unknown>,
-): string[] => {
+  problems: string[],
+): void => {
   const constantFile = VERSION_CONSTANTS[dir as keyof typeof VERSION_CONSTANTS];
   if (constantFile === undefined) {
-    return [];
+    return;
   }
-  const source = readSource(join(packagesDir, dir, constantFile));
+  const source = readVersionConstantSource(dir, constantFile);
   const found = VERSION_CONSTANT.exec(source)?.[1];
-  if (found === pkg.version) {
-    return [];
+  if (found !== pkg.version) {
+    problems.push(
+      `${dir}: ${constantFile} VERSION "${String(found)}" differs from package.json "${String(pkg.version)}"`,
+    );
   }
-  return [
-    `${dir}: ${constantFile} VERSION "${String(found)}" differs from package.json "${String(pkg.version)}"`,
-  ];
 };
 
-const checkImportMatch = (
+const checkImportVersion = (
   dir: string,
   alias: string,
   match: RegExpExecArray,
-): string[] => {
+  problems: string[],
+): void => {
   const expected = versions.get(match[1]);
   if (expected === undefined || match[1] !== alias) {
-    return [`${dir}: imports.${alias} targets unknown "${match[1]}"`];
+    problems.push(`${dir}: imports.${alias} targets unknown "${match[1]}"`);
+    return;
   }
   if (match[2] !== `^${expected}`) {
-    return [
+    problems.push(
       `${dir}: imports.${alias} range "${match[2]}" does not match workspace version ^${expected}`,
-    ];
+    );
   }
-  return [];
 };
 
-const checkImport = (dir: string, alias: string, target: string): string[] => {
+const checkImport = (
+  dir: string,
+  alias: string,
+  target: unknown,
+  problems: string[],
+): void => {
+  if (!alias.startsWith(SCOPE) || typeof target !== "string") {
+    return;
+  }
   const match = JSR_IMPORT.exec(target);
   if (match === null) {
-    return [`${dir}: imports.${alias} "${target}" is not a jsr: range`];
+    problems.push(`${dir}: imports.${alias} "${target}" is not a jsr: range`);
+    return;
   }
-  return checkImportMatch(dir, alias, match);
+  checkImportVersion(dir, alias, match, problems);
 };
 
-const isScopedImport = (alias: string, target: unknown): boolean =>
-  alias.startsWith(SCOPE) && typeof target === "string";
-
-const checkImports = (dir: string, jsr: Record<string, unknown>): string[] => {
-  return Object.entries(asRecord(jsr.imports))
-    .filter(([alias, target]) => isScopedImport(alias, target))
-    .flatMap(([alias, target]) => checkImport(dir, alias, String(target)));
+const checkImports = (
+  dir: string,
+  imports: unknown,
+  problems: string[],
+): void => {
+  for (const [alias, target] of Object.entries(asRecord(imports))) {
+    checkImport(dir, alias, target, problems);
+  }
 };
 
 export const checkPackage = (dir: string): string[] => {
@@ -134,11 +149,11 @@ export const checkPackage = (dir: string): string[] => {
   } catch {
     return [`${dir}: missing or invalid jsr.json`];
   }
-  return [
-    ...checkFields(dir, pkg, jsr),
-    ...checkVersionConstant(dir, pkg),
-    ...checkImports(dir, jsr),
-  ];
+  const problems: string[] = [];
+  checkPackageFields(dir, pkg, jsr, problems);
+  checkVersionConstant(dir, pkg, problems);
+  checkImports(dir, jsr.imports, problems);
+  return problems;
 };
 
 const problems = JSR_PACKAGES.flatMap(checkPackage);

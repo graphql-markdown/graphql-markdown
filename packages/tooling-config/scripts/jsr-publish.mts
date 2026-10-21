@@ -8,25 +8,20 @@ const REGISTRIES = new Set<string>(["npm", "jsr", "all"]);
 
 const argAt = (args: string[], index: number): string => args[index] ?? "";
 
-// Extracts `--registry <value>` / `--registry=<value>` from argv. Returns the
-// remaining args (without the flag and its value) so positional parsing is not
-// confused by the value. An invalid value yields `error`.
-export const parseRegistryArg = (
+type RegistryOption = { value: string; consumed: number };
+
+const parseRegistryOption = (
   args: string[],
-): { registry: Registry; rest: string[]; error?: string } => {
-  const rest: string[] = [];
-  let registry: string = "all";
-  for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg === "--registry") {
-      registry = argAt(args, ++i);
-    } else if (arg.startsWith("--registry=")) {
-      registry = arg.slice("--registry=".length);
-    } else {
-      rest.push(arg);
-    }
+  index: number,
+): RegistryOption | undefined => {
+  const arg = argAt(args, index);
+  if (arg === "--registry") {
+    return { value: argAt(args, index + 1), consumed: 2 };
   }
-  return validateRegistry(registry, rest);
+  if (arg.startsWith("--registry=")) {
+    return { value: arg.slice("--registry=".length), consumed: 1 };
+  }
+  return undefined;
 };
 
 const validateRegistry = (
@@ -41,6 +36,26 @@ const validateRegistry = (
     rest,
     error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
   };
+};
+
+// Extracts `--registry <value>` / `--registry=<value>` from argv. Returns the
+// remaining args (without the flag and its value) so positional parsing is not
+// confused by the value. An invalid value yields `error`.
+export const parseRegistryArg = (
+  args: string[],
+): { registry: Registry; rest: string[]; error?: string } => {
+  const rest: string[] = [];
+  let registry: string = "all";
+  for (let i = 0; i < args.length; i++) {
+    const option = parseRegistryOption(args, i);
+    if (option === undefined) {
+      rest.push(argAt(args, i));
+      continue;
+    }
+    registry = option.value;
+    i += option.consumed - 1;
+  }
+  return validateRegistry(registry, rest);
 };
 
 export const jsrMetaUrl = (name: string): string => {
