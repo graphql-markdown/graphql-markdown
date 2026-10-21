@@ -6,6 +6,35 @@ export type Registry = "npm" | "jsr" | "all";
 
 const REGISTRIES = new Set<string>(["npm", "jsr", "all"]);
 
+type RegistryOption = { value: string; consumed: number };
+
+const parseRegistryOption = (
+  arg: string,
+  next: string | undefined,
+): RegistryOption | undefined => {
+  if (arg === "--registry") {
+    return { value: next ?? "", consumed: 2 };
+  }
+  if (arg.startsWith("--registry=")) {
+    return { value: arg.slice("--registry=".length), consumed: 1 };
+  }
+  return undefined;
+};
+
+const registryResult = (
+  registry: string,
+  rest: string[],
+): { registry: Registry; rest: string[]; error?: string } => {
+  if (!REGISTRIES.has(registry)) {
+    return {
+      registry: "all",
+      rest,
+      error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
+    };
+  }
+  return { registry: registry as Registry, rest };
+};
+
 // Extracts `--registry <value>` / `--registry=<value>` from argv. Returns the
 // remaining args (without the flag and its value) so positional parsing is not
 // confused by the value. An invalid value yields `error`.
@@ -15,23 +44,15 @@ export const parseRegistryArg = (
   const rest: string[] = [];
   let registry: string = "all";
   for (let i = 0; i < args.length; i++) {
-    const arg = args[i];
-    if (arg === "--registry") {
-      registry = args[++i] ?? "";
-    } else if (arg.startsWith("--registry=")) {
-      registry = arg.slice("--registry=".length);
-    } else {
-      rest.push(arg);
+    const option = parseRegistryOption(args[i], args[i + 1]);
+    if (option === undefined) {
+      rest.push(args[i]);
+      continue;
     }
+    registry = option.value;
+    i += option.consumed - 1;
   }
-  if (!REGISTRIES.has(registry)) {
-    return {
-      registry: "all",
-      rest,
-      error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
-    };
-  }
-  return { registry: registry as Registry, rest };
+  return registryResult(registry, rest);
 };
 
 export const jsrMetaUrl = (name: string): string => {

@@ -52,6 +52,95 @@ const versions = new Map<string, string>(
   }),
 );
 
+const checkPackageFields = (
+  dir: string,
+  pkg: Record<string, unknown>,
+  jsr: Record<string, unknown>,
+  problems: string[],
+): void => {
+  for (const field of ["name", "version", "license"]) {
+    if (jsr[field] !== pkg[field]) {
+      problems.push(
+        `${dir}: ${field} "${String(jsr[field])}" differs from package.json "${String(pkg[field])}"`,
+      );
+    }
+  }
+};
+
+const readVersionConstantSource = (
+  dir: string,
+  constantFile: string,
+): string => {
+  try {
+    return readFileSync(join(packagesDir, dir, constantFile), "utf8");
+  } catch {
+    return "";
+  }
+};
+
+const checkVersionConstant = (
+  dir: string,
+  pkg: Record<string, unknown>,
+  problems: string[],
+): void => {
+  const constantFile = VERSION_CONSTANTS[dir as keyof typeof VERSION_CONSTANTS];
+  if (constantFile === undefined) {
+    return;
+  }
+  const source = readVersionConstantSource(dir, constantFile);
+  const found = VERSION_CONSTANT.exec(source)?.[1];
+  if (found !== pkg.version) {
+    problems.push(
+      `${dir}: ${constantFile} VERSION "${String(found)}" differs from package.json "${String(pkg.version)}"`,
+    );
+  }
+};
+
+const checkImportVersion = (
+  dir: string,
+  alias: string,
+  match: RegExpExecArray,
+  problems: string[],
+): void => {
+  const expected = versions.get(match[1]);
+  if (expected === undefined || match[1] !== alias) {
+    problems.push(`${dir}: imports.${alias} targets unknown "${match[1]}"`);
+    return;
+  }
+  if (match[2] !== `^${expected}`) {
+    problems.push(
+      `${dir}: imports.${alias} range "${match[2]}" does not match workspace version ^${expected}`,
+    );
+  }
+};
+
+const checkImport = (
+  dir: string,
+  alias: string,
+  target: unknown,
+  problems: string[],
+): void => {
+  if (!alias.startsWith(SCOPE) || typeof target !== "string") {
+    return;
+  }
+  const match = JSR_IMPORT.exec(target);
+  if (match === null) {
+    problems.push(`${dir}: imports.${alias} "${target}" is not a jsr: range`);
+    return;
+  }
+  checkImportVersion(dir, alias, match, problems);
+};
+
+const checkImports = (
+  dir: string,
+  imports: unknown,
+  problems: string[],
+): void => {
+  for (const [alias, target] of Object.entries(asRecord(imports))) {
+    checkImport(dir, alias, target, problems);
+  }
+};
+
 export const checkPackage = (dir: string): string[] => {
   const pkg = readJson(join(packagesDir, dir, "package.json"));
   let jsr: Record<string, unknown>;
@@ -61,46 +150,9 @@ export const checkPackage = (dir: string): string[] => {
     return [`${dir}: missing or invalid jsr.json`];
   }
   const problems: string[] = [];
-  for (const field of ["name", "version", "license"]) {
-    if (jsr[field] !== pkg[field]) {
-      problems.push(
-        `${dir}: ${field} "${String(jsr[field])}" differs from package.json "${String(pkg[field])}"`,
-      );
-    }
-  }
-  const constantFile = VERSION_CONSTANTS[dir as keyof typeof VERSION_CONSTANTS];
-  if (constantFile !== undefined) {
-    let source = "";
-    try {
-      source = readFileSync(join(packagesDir, dir, constantFile), "utf8");
-    } catch {
-      // reported below as an unreadable constant
-    }
-    const found = VERSION_CONSTANT.exec(source)?.[1];
-    if (found !== pkg.version) {
-      problems.push(
-        `${dir}: ${constantFile} VERSION "${String(found)}" differs from package.json "${String(pkg.version)}"`,
-      );
-    }
-  }
-  for (const [alias, target] of Object.entries(asRecord(jsr.imports))) {
-    if (!alias.startsWith(SCOPE) || typeof target !== "string") {
-      continue;
-    }
-    const match = JSR_IMPORT.exec(target);
-    if (match === null) {
-      problems.push(`${dir}: imports.${alias} "${target}" is not a jsr: range`);
-      continue;
-    }
-    const expected = versions.get(match[1]);
-    if (expected === undefined || match[1] !== alias) {
-      problems.push(`${dir}: imports.${alias} targets unknown "${match[1]}"`);
-    } else if (match[2] !== `^${expected}`) {
-      problems.push(
-        `${dir}: imports.${alias} range "${match[2]}" does not match workspace version ^${expected}`,
-      );
-    }
-  }
+  checkPackageFields(dir, pkg, jsr, problems);
+  checkVersionConstant(dir, pkg, problems);
+  checkImports(dir, jsr.imports, problems);
   return problems;
 };
 
