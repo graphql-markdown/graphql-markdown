@@ -119,14 +119,12 @@ export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
  */
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
 /**
- * Location of the default homepage template.
+ * Sentinel selecting the built-in (inlined) homepage template.
+ * It is never a filesystem path and is never read from disk.
  * @public
  */
-export const ASSET_HOMEPAGE_LOCATION: string = join(
-  __dirname,
-  "..",
-  "assets",
-  "generated.md",
+export const ASSET_HOMEPAGE_LOCATION: unique symbol = Symbol(
+  "graphql-markdown.homepage.builtin",
 );
 
 /**
@@ -163,6 +161,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "decorators"
         | "formatter"
         | "groupByDirective"
+        | "homepage"
         | "loaders"
         | "mdxParser"
         | "outputAdapter"
@@ -171,6 +170,7 @@ export const DEFAULT_OPTIONS: Readonly<
       >
     >
 > & {
+  homepage: typeof ASSET_HOMEPAGE_LOCATION;
   printTypeOptions: Required<
     Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
   > & {
@@ -931,7 +931,7 @@ export const parseGroupByOption = (
 export const parseHomepageOption = (
   cliHomepage: Maybe<string | false>,
   configHomepage: Maybe<string | false>,
-): Maybe<string> => {
+): Maybe<string | typeof ASSET_HOMEPAGE_LOCATION> => {
   if (typeof cliHomepage === "string") {
     return cliHomepage;
   }
@@ -944,7 +944,7 @@ export const parseHomepageOption = (
     return configHomepage;
   }
 
-  return DEFAULT_OPTIONS.homepage as string;
+  return ASSET_HOMEPAGE_LOCATION;
 };
 
 /**

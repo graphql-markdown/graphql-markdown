@@ -28,7 +28,10 @@ import {
 
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { ASSET_HOMEPAGE_LOCATION, TypeHierarchy } from "./config.ts";
-import { DEFAULT_HOMEPAGE_TEMPLATE } from "./const/homepage.ts";
+import {
+  DEFAULT_HOMEPAGE_FILENAME,
+  DEFAULT_HOMEPAGE_TEMPLATE,
+} from "./const/homepage.ts";
 import { isGroupsObject, isPath } from "./directives/validation.ts";
 import { getEvents } from "./event-emitter.ts";
 import {
@@ -882,8 +885,13 @@ export class Renderer {
    * @returns Promise that resolves when the homepage is rendered
    * @example
    */
-  async renderHomepage(homepageLocation: Maybe<string>): Promise<void> {
-    if (typeof homepageLocation !== "string") {
+  async renderHomepage(
+    homepageLocation: Maybe<string | symbol>,
+  ): Promise<void> {
+    if (
+      typeof homepageLocation !== "string" &&
+      homepageLocation !== ASSET_HOMEPAGE_LOCATION
+    ) {
       return;
     }
 
@@ -891,7 +899,10 @@ export class Renderer {
       throw new Error("Output directory is empty or not specified");
     }
 
-    const homePage = basename(homepageLocation);
+    const homePage =
+      homepageLocation === ASSET_HOMEPAGE_LOCATION
+        ? DEFAULT_HOMEPAGE_FILENAME
+        : basename(homepageLocation as string);
     const destLocation = join(this.outputDir, homePage);
     const slug = pathUrl.resolve("/", this.baseURL);
 
@@ -906,7 +917,7 @@ export class Renderer {
       const template =
         homepageLocation === ASSET_HOMEPAGE_LOCATION
           ? DEFAULT_HOMEPAGE_TEMPLATE
-          : await readFile(homepageLocation);
+          : await readFile(homepageLocation as string);
 
       const data = template
         .toString()
@@ -916,7 +927,7 @@ export class Renderer {
       await this.writeOutput(destLocation, data);
     } catch (error) {
       log(
-        `An error occurred while processing the homepage ${homepageLocation}: ${error}`,
+        `An error occurred while processing the homepage ${String(homepageLocation)}: ${error}`,
         LogLevel.warn,
       );
     }

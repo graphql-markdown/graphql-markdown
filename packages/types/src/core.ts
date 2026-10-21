@@ -539,7 +539,7 @@ export type Options = Omit<
       /** Base URL for documentation */
       baseURL: string;
       /** Homepage file location */
-      homepageLocation: Maybe<string>;
+      homepageLocation: Maybe<string | symbol>;
       /** Root for documentation links */
       linkRoot: string;
       /** Directives to only document */
