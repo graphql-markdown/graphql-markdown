@@ -280,7 +280,7 @@ export const kebabCase = (str: Maybe<string>): string => {
  * @see kebabCase
  */
 /** @alias */
-export const slugify = kebabCase;
+export const slugify: typeof kebabCase = kebabCase;
 
 /**
  * Returns a stringified version of the variable.
@@ -290,4 +290,4 @@ export const slugify = kebabCase;
  *
  * @returns a string
  */
-export const toString = String;
+export const toString: StringConstructor = String;

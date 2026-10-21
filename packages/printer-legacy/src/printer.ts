@@ -187,12 +187,12 @@ export class Printer implements IPrinter {
   /**
    * Prints type descriptions
    */
-  static readonly printDescription = printDescription;
+  static readonly printDescription: typeof printDescription = printDescription;
 
   /**
    * Prints predicate-driven decorators
    */
-  static readonly printDecorators = printDecorators;
+  static readonly printDecorators: typeof printDecorators = printDecorators;
 
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 

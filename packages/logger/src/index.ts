@@ -185,7 +185,10 @@ export const log = (
  *
  * @internal
  */
-export const __internal = { hasLogMethod, resolveLoggerInstance };
+export const __internal: {
+  hasLogMethod: typeof hasLogMethod;
+  resolveLoggerInstance: typeof resolveLoggerInstance;
+} = { hasLogMethod, resolveLoggerInstance };
 
 /**
  * @see log

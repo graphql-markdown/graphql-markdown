@@ -38,7 +38,8 @@ import {
  * @param id - The ID of the section header
  * @returns Formatted permalink string
  */
-export const formatMDXPermalink = formatMDXEscapedPermalink;
+export const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
 
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;

@@ -28,7 +28,11 @@ import {
 } from "../defaults.js";
 import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.js";
 
-export const __default = {
+export const __default: {
+  formatMDXBullet: typeof formatMDXBullet;
+  formatMDXLink: typeof formatMDXLink;
+  formatMDXPermalink: typeof formatMDXPermalink;
+} = {
   formatMDXBullet,
   formatMDXLink,
   formatMDXPermalink,

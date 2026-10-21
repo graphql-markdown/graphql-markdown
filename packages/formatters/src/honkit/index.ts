@@ -29,7 +29,10 @@ import { formatMDXBullet, formatMDXPermalink } from "../defaults.js";
 
 export { formatMDXPermalink } from "../defaults.js";
 
-export const __default = { formatMDXBullet, formatMDXPermalink };
+export const __default: {
+  formatMDXBullet: typeof formatMDXBullet;
+  formatMDXPermalink: typeof formatMDXPermalink;
+} = { formatMDXBullet, formatMDXPermalink };
 
 /** File extension used for generated pages — HonKit renders plain Markdown to HTML. */
 export const mdxExtension = ".md" as const;

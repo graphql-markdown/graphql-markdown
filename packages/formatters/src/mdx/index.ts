@@ -94,7 +94,8 @@ export {
  * @param id - The ID of the section header
  * @returns Escaped permalink string
  */
-export const formatMDXPermalink = formatMDXEscapedPermalink;
+export const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
 
 const rewriteInternalLinks = createInternalLinksRewriter(mdxExtension);
 

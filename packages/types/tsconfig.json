@@ -3,6 +3,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "noEmit": true,
+    "isolatedDeclarations": true,
     "allowImportingTsExtensions": true
   }
 }
