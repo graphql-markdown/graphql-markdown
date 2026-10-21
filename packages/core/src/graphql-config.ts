@@ -169,7 +169,7 @@ export const loadConfiguration = async (
 
   try {
     graphQLConfig = (await import(
-      runtimeModuleSpecifier(GRAPHQL_CONFIG_MODULE)
+      runtimeModuleSpecifier(GRAPHQL_CONFIG_MODULE, "^5.1.8")
     )) as GraphQLConfigModule;
   } catch (error) {
     log(`Cannot load module 'graphql-config': ${(error as Error).message}`);
