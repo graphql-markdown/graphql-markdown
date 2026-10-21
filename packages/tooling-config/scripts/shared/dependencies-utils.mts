@@ -1,7 +1,7 @@
 // Run directly by Node (>= 22.18) through type stripping, so it must stay
 // within erasable syntax: no enums, no parameter properties, no namespaces.
 
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { chdir } from "node:process";
 import { fileURLToPath } from "node:url";
@@ -32,8 +32,12 @@ const getWorkspacePackagesMap = (): PackagesMap => {
   const packagesPath = `${rootDir}/${packages.slice(0, -2)}`;
   const map: PackagesMap = {};
   const folders = readdirSync(packagesPath, { withFileTypes: true })
+    // Skip folders that are not packages (e.g. tool-created dot folders).
     .filter((dirent) => {
-      return dirent.isDirectory();
+      return (
+        dirent.isDirectory() &&
+        existsSync(`${packagesPath}/${dirent.name}/package.json`)
+      );
     })
     .map((dirent) => {
       return dirent.name;
