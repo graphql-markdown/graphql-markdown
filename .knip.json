@@ -92,6 +92,7 @@
         "eslint-plugin-mdx",
         "eslint-plugin-prettier",
         "eslint-plugin-tsdoc",
+        "jsr",
         "globals",
         "jsonc-eslint-parser"
       ]

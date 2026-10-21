@@ -50,11 +50,25 @@ export const metaHasVersion = (meta: unknown, version: string): boolean => {
 };
 
 export const jsrPublishArgs = (dryRun: boolean): string[] => {
-  const publishArgs = ["jsr", "publish"];
+  const publishArgs = ["publish"];
   if (dryRun) {
     publishArgs.push("--dry-run");
   }
   return publishArgs;
+};
+
+// Locates the pinned, locally installed `jsr` binary (never fetched from the
+// network). Checks the package-level then the root node_modules/.bin; returns
+// undefined when absent.
+export const resolveJsrBin = (
+  repoRoot: string,
+  exists: (path: string) => boolean,
+): string | undefined => {
+  const candidates = [
+    `${repoRoot}/packages/tooling-config/node_modules/.bin/jsr`,
+    `${repoRoot}/node_modules/.bin/jsr`,
+  ];
+  return candidates.find((candidate) => exists(candidate));
 };
 
 // Fetches meta.json directly (not via npm/safe-chain). 404 means unpublished.

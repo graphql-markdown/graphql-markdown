@@ -30,6 +30,9 @@
     "prettier:fix": "prettier \"**/*.{ts,mjs,js,json}\" --write",
     "ts:check": "tsgo --noEmit"
   },
+  "devDependencies": {
+    "jsr": "0.14.3"
+  },
   "files": [
     "eslint",
     "prettier",

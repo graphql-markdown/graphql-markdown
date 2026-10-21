@@ -21,7 +21,7 @@
 // one that just failed.
 //
 // After every npm publish succeeds, packages with a packages/<pkg>/jsr.json
-// are published to JSR (`npx jsr publish`, tokenless via GitHub OIDC), in the
+// are published to JSR (pinned local `jsr publish`, tokenless via GitHub OIDC), in the
 // same order and skipping versions already on JSR. `--registry jsr` re-runs
 // only that phase; `--registry npm` skips it.
 //
@@ -44,6 +44,7 @@ import { fileURLToPath } from "node:url";
 import {
   isPublishedOnJsr,
   jsrPublishArgs,
+  resolveJsrBin,
   parseRegistryArg,
 } from "./jsr-publish.mts";
 import { checkPackedManifest } from "./tarball-check.mts";
@@ -410,7 +411,13 @@ if (runJsr) {
     console.log(
       `\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version} to JSR`,
     );
-    const jsrPublish = spawnSync("npx", ["--yes", ...jsrPublishArgs(dryRun)], {
+    const jsrBin = resolveJsrBin(repoRoot, existsSync);
+    if (jsrBin === undefined) {
+      console.error("Local jsr binary not found; run `bun ci` first.");
+      jsrFailed++;
+      break;
+    }
+    const jsrPublish = spawnSync(jsrBin, jsrPublishArgs(dryRun), {
       cwd: resolve(repoRoot, "packages", pkg),
       stdio: "inherit",
     });

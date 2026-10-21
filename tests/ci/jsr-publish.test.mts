@@ -6,6 +6,7 @@ import {
   jsrPublishArgs,
   metaHasVersion,
   parseRegistryArg,
+  resolveJsrBin,
 } from "../../packages/tooling-config/scripts/jsr-publish.mts";
 
 describe("parseRegistryArg()", () => {
@@ -48,8 +49,17 @@ describe("jsr helpers", () => {
   });
 
   test("jsrPublishArgs()", () => {
-    expect(jsrPublishArgs(false)).toEqual(["jsr", "publish"]);
-    expect(jsrPublishArgs(true)).toEqual(["jsr", "publish", "--dry-run"]);
+    expect(jsrPublishArgs(false)).toEqual(["publish"]);
+    expect(jsrPublishArgs(true)).toEqual(["publish", "--dry-run"]);
+  });
+
+  test("resolveJsrBin()", () => {
+    const pkgBin = "/r/packages/tooling-config/node_modules/.bin/jsr";
+    const rootBin = "/r/node_modules/.bin/jsr";
+    expect(resolveJsrBin("/r", (p) => p === pkgBin)).toBe(pkgBin);
+    expect(resolveJsrBin("/r", (p) => p === rootBin)).toBe(rootBin);
+    expect(resolveJsrBin("/r", () => true)).toBe(pkgBin);
+    expect(resolveJsrBin("/r", () => false)).toBeUndefined();
   });
 });
 

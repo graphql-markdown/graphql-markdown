@@ -352,7 +352,7 @@ This snapshot is for orientation only; treat `getBuildSequence()` as authoritati
 
 The ten packages with a `packages/<pkg>/jsr.json` (`types`, `utils`, `logger`, `graphql`, `helpers`, `diff`, `formatters`, `printer-legacy`, `core`, `telemetry`) are also published to [JSR](https://jsr.io) as `@graphql-markdown/<pkg>`. `cli`, `docusaurus`, `scaffolder` and `nuxt-theme` stay npm-only.
 
-The JSR phase of `publish-release.mts` runs only after all npm publishes succeed, in the same dependency order, and skips versions already on JSR (checked directly against `https://jsr.io/@graphql-markdown/<pkg>/meta.json`). It runs `npx jsr publish` from each package directory, honours `--dry-run`, and stops at the first failure. Use `--registry npm|jsr|all` (default `all`) to publish to one registry only, e.g. to re-run JSR alone:
+The JSR phase of `publish-release.mts` runs only after all npm publishes succeed, in the same dependency order, and skips versions already on JSR (checked directly against `https://jsr.io/@graphql-markdown/<pkg>/meta.json`). It runs the pinned, locally installed `jsr publish` (a `devDependency` of `tooling-config`, no network install) from each package directory, honours `--dry-run`, and stops at the first failure. Use `--registry npm|jsr|all` (default `all`) to publish to one registry only, e.g. to re-run JSR alone:
 
 ```shell
 node packages/tooling-config/scripts/publish-release.mts --registry jsr --dry-run
