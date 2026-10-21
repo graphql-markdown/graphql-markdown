@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/utils",
-  "version": "1.14.0",
+  "version": "1.14.1",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
@@ -17,7 +17,7 @@
     "./url": "./src/url.ts"
   },
   "imports": {
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0"
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.1"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],
