@@ -6,6 +6,7 @@ import {
   jsrPublishArgs,
   metaHasVersion,
   parseRegistryArg,
+  resolveDenoBin,
   resolveJsrBin,
 } from "../../packages/tooling-config/scripts/jsr-publish.mts";
 
@@ -60,6 +61,14 @@ describe("jsr helpers", () => {
     expect(resolveJsrBin("/r", (p) => p === rootBin)).toBe(rootBin);
     expect(resolveJsrBin("/r", () => true)).toBe(pkgBin);
     expect(resolveJsrBin("/r", () => false)).toBeUndefined();
+  });
+
+  test("resolveDenoBin()", () => {
+    const pkgBin = "/r/packages/tooling-config/node_modules/.bin/deno";
+    const rootBin = "/r/node_modules/.bin/deno";
+    expect(resolveDenoBin("/r", (p) => p === pkgBin)).toBe(pkgBin);
+    expect(resolveDenoBin("/r", (p) => p === rootBin)).toBe(rootBin);
+    expect(resolveDenoBin("/r", () => false)).toBeUndefined();
   });
 });
 

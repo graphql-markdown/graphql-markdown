@@ -44,6 +44,7 @@ import { fileURLToPath } from "node:url";
 import {
   isPublishedOnJsr,
   jsrPublishArgs,
+  resolveDenoBin,
   resolveJsrBin,
   parseRegistryArg,
 } from "./jsr-publish.mts";
@@ -426,8 +427,19 @@ if (runJsr) {
       jsrFailed++;
       break;
     }
+    // Pin the Deno runtime too: without DENO_BIN_PATH, jsr downloads one from
+    // dl.deno.land, which is unpinned code in the privileged publish job.
+    const denoBin = resolveDenoBin(repoRoot, existsSync);
+    if (denoBin === undefined) {
+      console.error(
+        "Local deno binary not found; run `bun ci` first (jsr would otherwise download an unpinned runtime).",
+      );
+      jsrFailed++;
+      break;
+    }
     const jsrPublish = spawnSync(jsrBin, jsrPublishArgs(dryRun), {
       cwd: resolve(repoRoot, "packages", pkg),
+      env: { ...process.env, DENO_BIN_PATH: denoBin },
       stdio: "inherit",
     });
     if (!jsrPublish.error && jsrPublish.status === 0) {

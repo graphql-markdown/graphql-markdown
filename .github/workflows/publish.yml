@@ -53,7 +53,7 @@ jobs:
       - name: Ensure OIDC-capable npm CLI
         run: npm install -g npm@latest
 
-      # Publishes to npm first, then to JSR (pinned local `jsr publish`, tokenless via
+      # Publishes to npm first, then to JSR (pinned local `jsr publish` + pinned `deno` runtime, tokenless via
       # OIDC; each package must be linked to this repo on jsr.io).
       - name: Dry-run publish (rehearsal)
         run: node packages/tooling-config/scripts/publish-release.mts --dry-run --registry npm

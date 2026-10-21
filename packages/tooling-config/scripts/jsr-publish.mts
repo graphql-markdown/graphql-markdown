@@ -71,6 +71,20 @@ export const resolveJsrBin = (
   return candidates.find((candidate) => exists(candidate));
 };
 
+// Locates the pinned, locally installed `deno` binary (the lockfile-pinned
+// `deno` npm package), so the jsr CLI never downloads a runtime from
+// dl.deno.land. Returns undefined when absent.
+export const resolveDenoBin = (
+  repoRoot: string,
+  exists: (path: string) => boolean,
+): string | undefined => {
+  const candidates = [
+    `${repoRoot}/packages/tooling-config/node_modules/.bin/deno`,
+    `${repoRoot}/node_modules/.bin/deno`,
+  ];
+  return candidates.find((candidate) => exists(candidate));
+};
+
 // Fetches meta.json directly (not via npm/safe-chain). 404 means unpublished.
 export const isPublishedOnJsr = async (
   name: string,

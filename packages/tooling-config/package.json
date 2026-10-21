@@ -31,6 +31,7 @@
     "ts:check": "tsgo --noEmit"
   },
   "devDependencies": {
+    "deno": "2.9.6",
     "jsr": "0.14.3"
   },
   "files": [
