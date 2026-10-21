@@ -223,9 +223,37 @@ Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `co
 
 For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
+## Use the API
+
+To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages.
+
+```shell title="shell"
+npm install @graphql-markdown/core graphql
+```
+
+```ts title="generate-docs.ts"
+import { buildConfig, generateDocFromSchema } from "@graphql-markdown/core";
+
+const config = await buildConfig({
+  schema: "./schema.graphql",
+  rootPath: "./docs",
+  baseURL: "api",
+});
+
+await generateDocFromSchema(config);
+```
+
+Run it with any TypeScript-aware runtime, for example `node generate-docs.ts` (Node.js 22.18 or above), `bun generate-docs.ts` or `deno run -A generate-docs.ts`.
+
+:::tip
+
+`buildConfig` also reads a [GraphQL Config](/docs/configuration#graphql-config) file when `graphql-config` is installed, and merges it with the options passed in code. Without it, the options in code are all that is needed.
+
+:::
+
 ## Install from JSR
 
-The GraphQL-Markdown libraries (`core`, `graphql`, `utils`, `formatters`, `printer-legacy`, `helpers`, `diff`, `logger`, `telemetry` and `types`) are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. Use them to call GraphQL-Markdown from your own code.
+The GraphQL-Markdown libraries (`core`, `graphql`, `utils`, `formatters`, `printer-legacy`, `helpers`, `diff`, `logger`, `telemetry` and `types`) are also published on [JSR](https://jsr.io/@graphql-markdown), for Deno and other JSR-aware tooling. Use them to call GraphQL-Markdown from your own code, as shown in [Use the API](#use-the-api).
 
 ```shell title="Deno"
 deno add jsr:@graphql-markdown/core
