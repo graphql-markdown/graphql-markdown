@@ -22,10 +22,14 @@ import type { LoggerType } from "@graphql-markdown/types";
  * @internal
  */
 export const runtimeModuleSpecifier = (name: string): string => {
-  return !("Deno" in globalThis) ||
+  if (
+    !("Deno" in globalThis) ||
     /^(?:\.{1,2}\/|\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
-    ? name
-    : `${name.startsWith("@graphql-markdown/") ? "jsr:" : "npm:"}${name}`;
+  ) {
+    return name;
+  }
+  const prefix = name.startsWith("@graphql-markdown/") ? "jsr:" : "npm:";
+  return `${prefix}${name}`;
 };
 
 type GlobalWithLogger = typeof globalThis & { logger?: LoggerType | null };

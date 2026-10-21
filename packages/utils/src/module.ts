@@ -39,6 +39,8 @@ export const runtimeModuleSpecifier = (
   const segments = name.split("/");
   const count = name.startsWith("@") ? 2 : 1;
   const pkg = segments.slice(0, count).join("/");
-  const rest = segments.slice(count).join("/");
-  return `${prefix}${pkg}@${range}${rest === "" ? "" : `/${rest}`}`;
+  const subpath = segments.slice(count).map((segment) => {
+    return `/${segment}`;
+  });
+  return `${prefix}${pkg}@${range}${subpath.join("")}`;
 };
