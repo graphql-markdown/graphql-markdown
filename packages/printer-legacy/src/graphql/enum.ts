@@ -15,9 +15,9 @@ import {
   isDeprecated,
 } from "@graphql-markdown/graphql";
 
-import { MARKDOWN_EOL, DEPRECATED } from "../const/strings";
-import { printMetadataSection } from "../section";
-import { hasPrintableDirective } from "../link";
+import { MARKDOWN_EOL, DEPRECATED } from "../const/strings.ts";
+import { printMetadataSection } from "../section.ts";
+import { hasPrintableDirective } from "../link.ts";
 
 /**
  * Prints the metadata section for a GraphQL enum type.

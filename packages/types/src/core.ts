@@ -6,18 +6,18 @@ import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntity,
-} from "./graphql";
+} from "./graphql.ts";
 
-import type { CustomDirective } from "./helpers";
+import type { CustomDirective } from "./helpers.ts";
 
-import type { Maybe, MDXString, OutputAdapter } from "./utils";
-import type { TelemetryTrigger } from "./telemetry";
+import type { Maybe, MDXString, OutputAdapter } from "./utils.ts";
+import type { TelemetryTrigger } from "./telemetry.ts";
 import type {
   AdmonitionType,
   Badge,
   PrintTypeOptions,
   TypeLink,
-} from "./printer";
+} from "./printer.ts";
 import type {
   BeforeComposePageTypeHook,
   DiffCheckHook,
@@ -29,7 +29,7 @@ import type {
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
   SchemaLoadHook,
-} from "./event";
+} from "./event.ts";
 
 /**
  * Core type definitions for configuration and document generation.
@@ -539,7 +539,7 @@ export type Options = Omit<
       /** Base URL for documentation */
       baseURL: string;
       /** Homepage file location */
-      homepageLocation: Maybe<string>;
+      homepageLocation: Maybe<string | symbol>;
       /** Root for documentation links */
       linkRoot: string;
       /** Directives to only document */
@@ -654,7 +654,7 @@ export type {
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
   SchemaLoadHook,
-} from "./event";
+} from "./event.ts";
 
 /**
  * Metadata information about the documentation generator framework.

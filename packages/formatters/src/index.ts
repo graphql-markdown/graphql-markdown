@@ -15,13 +15,13 @@
  * @packageDocumentation
  */
 
-export * as docusaurus from "./docusaurus/index";
-export * as docfx from "./docfx/index";
-export * as fumadocs from "./fumadocs/index";
-export * as honkit from "./honkit/index";
-export * as hugo from "./hugo/index";
-export * as mdbook from "./mdbook/index";
-export * as mdx from "./mdx/index";
-export * as mkdocs from "./mkdocs/index";
-export * as starlight from "./starlight/index";
-export * as vocs from "./vocs/index";
+export * as docusaurus from "./docusaurus/index.ts";
+export * as docfx from "./docfx/index.ts";
+export * as fumadocs from "./fumadocs/index.ts";
+export * as honkit from "./honkit/index.ts";
+export * as hugo from "./hugo/index.ts";
+export * as mdbook from "./mdbook/index.ts";
+export * as mdx from "./mdx/index.ts";
+export * as mkdocs from "./mkdocs/index.ts";
+export * as starlight from "./starlight/index.ts";
+export * as vocs from "./vocs/index.ts";

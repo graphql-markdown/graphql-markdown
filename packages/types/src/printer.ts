@@ -7,9 +7,9 @@ import type {
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
-} from "./core";
-import type { ICancellableEvent } from "./event";
-import type { MDXString, Maybe } from "./utils";
+} from "./core.ts";
+import type { ICancellableEvent } from "./event.ts";
+import type { MDXString, Maybe } from "./utils.ts";
 
 /**
  * Represents a single header section of a page with only content.
@@ -117,13 +117,13 @@ export interface ComposePageTypeEventData {
   readonly sections: PageSections;
 }
 
-import type { Formatter } from "./formatter";
+import type { Formatter } from "./formatter.ts";
 import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntitiesGroupMap,
   SchemaEntity,
-} from "./graphql";
+} from "./graphql.ts";
 
 /**
  * Minimal event emitter interface for printer event emission.
@@ -253,6 +253,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
 export type SectionLevelValue = {
   _opaque: typeof SECTION_LEVEL_VALUE;
 } & (0 | 3 | 4 | 5);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- only referenced via typeof
 declare const SECTION_LEVEL_VALUE: unique symbol;
 
 /**
@@ -299,7 +300,7 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
 /**
  * Options accepted by printer initialization.
  */
-export type PrinterInitOptions = {
+export interface PrinterInitOptions {
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
@@ -309,7 +310,7 @@ export type PrinterInitOptions = {
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirectives?: Maybe<GraphQLDirective[]>;
   sectionHeaderId?: Maybe<boolean>;
-};
+}
 
 /**
  * Abstract printer class that handles the generation of markdown documentation
@@ -317,7 +318,7 @@ export type PrinterInitOptions = {
  * @public
  * @abstract
  */
-export abstract class IPrinter {
+export declare abstract class IPrinter {
   /**
    * Initializes the printer with schema and configuration
    * @param schema - The GraphQL schema to process

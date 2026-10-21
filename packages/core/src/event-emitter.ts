@@ -81,7 +81,9 @@ export class CancellableEventEmitter extends EventEmitter {
     const errors: Error[] = [];
 
     // Get all registered listeners for this event
-    const listeners = this.listeners(eventName);
+    const listeners = this.listeners(eventName) as ((
+      event: ICancellableEvent,
+    ) => unknown)[];
 
     // Check if event is a full cancellable event (has propagationStopped property)
     const isCancellable = "propagationStopped" in event;

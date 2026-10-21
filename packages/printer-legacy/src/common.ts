@@ -17,8 +17,12 @@ import {
 
 import { isDeprecated } from "@graphql-markdown/graphql";
 
-import { DEPRECATED, MARKDOWN_EOP, NO_DESCRIPTION_TEXT } from "./const/strings";
-import { printSlotDecorators } from "./decorator";
+import {
+  DEPRECATED,
+  MARKDOWN_EOP,
+  NO_DESCRIPTION_TEXT,
+} from "./const/strings.ts";
+import { printSlotDecorators } from "./decorator.ts";
 
 /**
  * Formats a GraphQL type description or falls back to a default message.

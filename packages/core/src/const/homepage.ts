@@ -1,4 +1,11 @@
 /**
+ * Output file name of the generated homepage when using the built-in template.
+ *
+ * @internal
+ */
+export const DEFAULT_HOMEPAGE_FILENAME = "generated.md";
+
+/**
  * The built-in homepage template, inlined.
  *
  * The same content ships as `assets/generated.md` so anyone can point

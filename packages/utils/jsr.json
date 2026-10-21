@@ -1,0 +1,26 @@
+{
+  "name": "@graphql-markdown/utils",
+  "version": "1.14.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./array": "./src/array.ts",
+    "./events": "./src/events.ts",
+    "./frontmatter": "./src/frontmatter.ts",
+    "./fs": "./src/fs.ts",
+    "./guards": "./src/guards.ts",
+    "./markdown": "./src/markdown.ts",
+    "./module": "./src/module.ts",
+    "./object": "./src/object.ts",
+    "./prettier": "./src/prettier.ts",
+    "./string": "./src/string.ts",
+    "./url": "./src/url.ts"
+  },
+  "imports": {
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0"
+  },
+  "publish": {
+    "include": ["src", "README.md", "LICENSE*"],
+    "exclude": ["**/*.test.ts", "**/__tests__"]
+  }
+}

@@ -45,12 +45,12 @@ import type {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
-import { loadConfiguration } from "./graphql-config";
-import { reportTelemetry, resolveTelemetryContext } from "./telemetry";
-import type { BuildConfigContext } from "./telemetry";
-import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns";
-import { isInvalidFunctionProperty } from "./directives/validation";
-import { OptionBuilder } from "./options/builder";
+import { loadConfiguration } from "./graphql-config.ts";
+import { reportTelemetry, resolveTelemetryContext } from "./telemetry.ts";
+import type { BuildConfigContext } from "./telemetry.ts";
+import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns.ts";
+import { isInvalidFunctionProperty } from "./directives/validation.ts";
+import { OptionBuilder } from "./options/builder.ts";
 
 /**
  * Type hierarchy options for organizing schema documentation.
@@ -119,21 +119,21 @@ export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
  */
 export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
 /**
- * Location of the default homepage template.
+ * Sentinel selecting the built-in (inlined) homepage template.
+ * It is never a filesystem path and is never read from disk.
  * @public
  */
-export const ASSET_HOMEPAGE_LOCATION = join(
-  __dirname,
-  "..",
-  "assets",
-  "generated.md",
+export const ASSET_HOMEPAGE_LOCATION: unique symbol = Symbol(
+  "graphql-markdown.homepage.builtin",
 );
 
 /**
  * Default hierarchy configuration using the API hierarchy type.
  * @public
  */
-export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
+export const DEFAULT_HIERARCHY: { api: Record<string, never> } = {
+  [TypeHierarchy.API]: {},
+};
 
 /** Memoised OS temp path, resolved on the first read of `DEFAULT_OPTIONS.tmpDir`. */
 let defaultTmpDir: string | undefined;
@@ -161,6 +161,7 @@ export const DEFAULT_OPTIONS: Readonly<
         | "decorators"
         | "formatter"
         | "groupByDirective"
+        | "homepage"
         | "loaders"
         | "mdxParser"
         | "outputAdapter"
@@ -169,6 +170,7 @@ export const DEFAULT_OPTIONS: Readonly<
       >
     >
 > & {
+  homepage: typeof ASSET_HOMEPAGE_LOCATION;
   printTypeOptions: Required<
     Omit<ConfigPrintTypeOptions, "exampleSection" | "hierarchy">
   > & {
@@ -929,7 +931,7 @@ export const parseGroupByOption = (
 export const parseHomepageOption = (
   cliHomepage: Maybe<string | false>,
   configHomepage: Maybe<string | false>,
-): Maybe<string> => {
+): Maybe<string | typeof ASSET_HOMEPAGE_LOCATION> => {
   if (typeof cliHomepage === "string") {
     return cliHomepage;
   }
@@ -942,7 +944,7 @@ export const parseHomepageOption = (
     return configHomepage;
   }
 
-  return DEFAULT_OPTIONS.homepage as string;
+  return ASSET_HOMEPAGE_LOCATION;
 };
 
 /**

@@ -43,9 +43,9 @@ const GRAPHQL = "graphql" as const;
 export const NO_DESCRIPTION_TEXT = "No description" as const;
 
 /** Helper for inserting the code-block end delimiter in generated Markdown. */
-export const MARKDOWN_EOC =
+export const MARKDOWN_EOC: string =
   `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${MARKDOWN_EOL}` as const;
 
 /** Helper for inserting the code-block start delimiter targeting GraphQL syntax. */
-export const MARKDOWN_SOC =
+export const MARKDOWN_SOC: string =
   `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${GRAPHQL}${MARKDOWN_EOL}` as const;

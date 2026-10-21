@@ -6,15 +6,6 @@
  *
  * @packageDocumentation
  */
-import { ConfigBuildEvents } from "./events/config-build-events";
-import { SchemaEvents } from "./events/schema-events";
-import { DiffEvents } from "./events/diff-events";
-import { RenderRootTypesEvents } from "./events/render-root-types-events";
-import { RenderHomepageEvents } from "./events/render-homepage-events";
-import { RenderTypeEntitiesEvents } from "./events/render-type-entities-events";
-import { GenerateIndexMetafileEvents } from "./events/generate-index-metafile-events";
-import { RenderFilesEvents } from "./events/render-files-events";
-import { PrintTypeEvents } from "./events/print-type-events";
 
 /**
  * Event callback mapping configuration.
@@ -24,25 +15,23 @@ import { PrintTypeEvents } from "./events/print-type-events";
  * They are pure transformations handled via the Formatter interface, not events.
  */
 export const EVENT_CALLBACK_MAP = {
-  [ConfigBuildEvents.AFTER_BUILD]: "afterConfigBuildHook",
-  [SchemaEvents.BEFORE_LOAD]: "beforeLoadSchemaHook",
-  [SchemaEvents.AFTER_LOAD]: "afterLoadSchemaHook",
-  [DiffEvents.BEFORE_CHECK]: "beforeCheckDiffHook",
-  [DiffEvents.AFTER_CHECK]: "afterCheckDiffHook",
-  [RenderRootTypesEvents.BEFORE_RENDER]: "beforeRenderRootTypesHook",
-  [RenderRootTypesEvents.AFTER_RENDER]: "afterRenderRootTypesHook",
-  [RenderHomepageEvents.BEFORE_RENDER]: "beforeRenderHomepageHook",
-  [RenderHomepageEvents.AFTER_RENDER]: "afterRenderHomepageHook",
-  [RenderTypeEntitiesEvents.BEFORE_RENDER]: "beforeRenderTypeEntitiesHook",
-  [RenderTypeEntitiesEvents.AFTER_RENDER]: "afterRenderTypeEntitiesHook",
-  [GenerateIndexMetafileEvents.BEFORE_GENERATE]:
-    "beforeGenerateIndexMetafileHook",
-  [GenerateIndexMetafileEvents.AFTER_GENERATE]:
-    "afterGenerateIndexMetafileHook",
-  [RenderFilesEvents.AFTER_RENDER]: "afterRenderFilesHook",
-  [PrintTypeEvents.BEFORE_PRINT_CODE]: "beforePrintCodeHook",
-  [PrintTypeEvents.AFTER_PRINT_CODE]: "afterPrintCodeHook",
-  [PrintTypeEvents.BEFORE_PRINT_TYPE]: "beforePrintTypeHook",
-  [PrintTypeEvents.AFTER_PRINT_TYPE]: "afterPrintTypeHook",
-  [PrintTypeEvents.BEFORE_COMPOSE_PAGE_TYPE]: "beforeComposePageTypeHook",
+  "config:afterBuild": "afterConfigBuildHook",
+  "schema:beforeLoad": "beforeLoadSchemaHook",
+  "schema:afterLoad": "afterLoadSchemaHook",
+  "diff:beforeCheck": "beforeCheckDiffHook",
+  "diff:afterCheck": "afterCheckDiffHook",
+  "render:beforeRenderRootTypes": "beforeRenderRootTypesHook",
+  "render:afterRenderRootTypes": "afterRenderRootTypesHook",
+  "render:beforeRenderHomepage": "beforeRenderHomepageHook",
+  "render:afterRenderHomepage": "afterRenderHomepageHook",
+  "render:beforeRenderTypeEntities": "beforeRenderTypeEntitiesHook",
+  "render:afterRenderTypeEntities": "afterRenderTypeEntitiesHook",
+  "render:beforeGenerateIndexMetafile": "beforeGenerateIndexMetafileHook",
+  "render:afterGenerateIndexMetafile": "afterGenerateIndexMetafileHook",
+  "render:afterRenderFiles": "afterRenderFilesHook",
+  "print:beforePrintCode": "beforePrintCodeHook",
+  "print:afterPrintCode": "afterPrintCodeHook",
+  "print:beforePrintType": "beforePrintTypeHook",
+  "print:afterPrintType": "afterPrintTypeHook",
+  "print:beforeComposePageType": "beforeComposePageTypeHook",
 } as const;

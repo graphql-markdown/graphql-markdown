@@ -11,9 +11,9 @@ import type {
   PageSection,
 } from "@graphql-markdown/types";
 import { getTypeName, isOperation } from "@graphql-markdown/graphql";
-import { MARKDOWN_CODE_INDENTATION, MARKDOWN_EOL } from "../const/strings";
-import { printCodeField } from "../code";
-import { printSection, printMetadataSection } from "../section";
+import { MARKDOWN_CODE_INDENTATION, MARKDOWN_EOL } from "../const/strings.ts";
+import { printCodeField } from "../code.ts";
+import { printSection, printMetadataSection } from "../section.ts";
 
 /**
  * Prints the operation type information.

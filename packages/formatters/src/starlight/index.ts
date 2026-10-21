@@ -25,7 +25,7 @@ import {
   formatMDXEscapedPermalink,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.ts";
 
 /**
  * Formats a permalink for a section header, using the classic `{#id}` syntax
@@ -38,7 +38,8 @@ import {
  * @param id - The ID of the section header
  * @returns Formatted permalink string
  */
-export const formatMDXPermalink = formatMDXEscapedPermalink;
+export const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
 
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;
@@ -90,7 +91,7 @@ export {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.ts";
 
 /**
  * Creates an Astro Starlight formatter.

@@ -223,6 +223,38 @@ Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `co
 
 For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
 
+## Use the API
+
+To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages.
+
+```shell title="shell"
+npm install @graphql-markdown/core graphql
+```
+
+```ts title="generate-docs.ts"
+import { buildConfig, generateDocFromSchema } from "@graphql-markdown/core";
+
+const config = await buildConfig({
+  schema: "./schema.graphql",
+  rootPath: "./docs",
+  baseURL: "api",
+});
+
+await generateDocFromSchema(config);
+```
+
+Run it with any TypeScript-aware runtime, for example `node generate-docs.ts` (Node.js 22.18 or above), `bun generate-docs.ts` or `deno run -A generate-docs.ts`.
+
+:::tip
+
+`buildConfig` also reads a [GraphQL Config](/docs/configuration#graphql-config) file when `graphql-config` is installed, and merges it with the options passed in code. Without it, the options in code are all that is needed.
+
+:::
+
+## Install from JSR
+
+The GraphQL-Markdown libraries are also published on [JSR](https://jsr.io/@graphql-markdown) for Deno, Node.js and Bun. See [JSR](/docs/advanced/jsr) for installation, the supported GraphQL.js version and optional features.
+
 ## Regenerate the documentation
 
 In a Docusaurus site, see [Docusaurus recipes](/docs/advanced/docusaurus-recipes#regenerate-the-documentation) for the build/regenerate commands.

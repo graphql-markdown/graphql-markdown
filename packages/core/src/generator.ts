@@ -35,15 +35,15 @@ import {
 
 import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
 
-import { toString } from "@graphql-markdown/utils";
+import { runtimeModuleSpecifier, toString } from "@graphql-markdown/utils";
 
 import { dirname } from "node:path";
 
-import { DiffMethod } from "./config";
-import { hasChanges } from "./diff";
-import { getPrinter } from "./printer";
-import { getRenderer, logHandlerErrors } from "./renderer";
-import { getEvents } from "./event-emitter";
+import { DiffMethod } from "./config.ts";
+import { hasChanges } from "./diff.ts";
+import { getPrinter } from "./printer.ts";
+import { getRenderer, logHandlerErrors } from "./renderer.ts";
+import { getEvents } from "./event-emitter.ts";
 import {
   ConfigBuildEvent,
   ConfigBuildEvents,
@@ -57,9 +57,9 @@ import {
   RenderHomepageEvents,
   RenderFilesEvent,
   RenderFilesEvents,
-} from "./events";
-import { registerMDXEventHandlers } from "./event-handlers";
-import { reportGeneration } from "./telemetry";
+} from "./events/index.ts";
+import { registerMDXEventHandlers } from "./event-handlers.ts";
+import { reportGeneration } from "./telemetry.ts";
 
 /**
  * Supported file extensions for generated documentation files.
@@ -100,17 +100,21 @@ const SEC_DECIMALS = 3 as const;
 export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
-  return mdxParser !== undefined && mdxParser !== null
-    ? import(mdxParser).catch((error: unknown) => {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
-        log(
-          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
-          LogLevel.warn,
-        );
-        return undefined;
-      })
-    : undefined;
+  if (mdxParser === undefined || mdxParser === null) {
+    return undefined;
+  }
+  // Specifier is only known at runtime (user-configured formatter package).
+  // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+  // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+  const specifier = runtimeModuleSpecifier(mdxParser);
+  return import(specifier).catch((error: unknown) => {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    log(
+      `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
+      LogLevel.warn,
+    );
+    return undefined;
+  });
 };
 
 /**

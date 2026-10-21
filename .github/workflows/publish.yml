@@ -1,5 +1,5 @@
 name: Publish
-run-name: ${{ format('Publish release {0} to npm', github.event.release.name || github.ref_name) }}
+run-name: ${{ format('Publish release {0} to npm and JSR', github.event.release.name || github.ref_name) }}
 
 env:
   HUSKY: 0
@@ -9,9 +9,15 @@ on:
     types: [published]
   # Retries a release whose publish failed partway: re-running the failed job
   # would replay the release's own commit, including any bug in the publish
-  # script itself. Still gated by the npm-publish environment, and the script
-  # skips every version already on npm.
+  # script itself. Still gated by the npm-publish and jsr-publish environments,
+  # and the script skips every version already on the target registry.
   workflow_dispatch:
+    inputs:
+      registry:
+        description: Registry to publish to (use jsr to re-run only the JSR job)
+        type: choice
+        options: [all, npm, jsr]
+        default: all
 
 concurrency:
   group: publish
@@ -21,15 +27,15 @@ permissions:
   contents: read
 
 jobs:
-  publish:
+  publish-npm:
     name: Publish to npm
     # npm trusted publishing does not check the branch, so a manual dispatch
     # must come from main or it could publish unreleased versions.
-    if: github.event_name == 'release' || github.ref == 'refs/heads/main'
+    if: ${{ (github.event_name == 'release' || github.ref == 'refs/heads/main') && (inputs.registry || 'all') != 'jsr' }}
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
-      id-token: write # OIDC trusted publishing to npm, no NPM_TOKEN needed
+      id-token: write # OIDC trusted publishing to npm, no tokens needed
       contents: read
     steps:
       - name: Checkout Code Base
@@ -47,8 +53,36 @@ jobs:
       - name: Ensure OIDC-capable npm CLI
         run: npm install -g npm@latest
 
-      - name: Dry-run publish (rehearsal)
+      # Rehearses npm and JSR (one Deno workspace dry-run) so a broken JSR
+      # package blocks the release before anything is published to npm.
+      - name: Dry-run publish to npm and JSR (rehearsal)
         run: node packages/tooling-config/scripts/publish-release.mts --dry-run
 
       - name: Publish to npm
-        run: node packages/tooling-config/scripts/publish-release.mts --yes
+        run: node packages/tooling-config/scripts/publish-release.mts --yes --registry npm
+
+  # Runs only after the npm job succeeded (or was skipped, for a manual
+  # registry=jsr re-run). Publishes TypeScript source, so no build is needed;
+  # `bun ci` in the setup action provides the pinned jsr and deno binaries.
+  # Each package must be linked to this repo on jsr.io (tokenless OIDC).
+  publish-jsr:
+    name: Publish to JSR
+    needs: publish-npm
+    if: ${{ !cancelled() && (github.event_name == 'release' || github.ref == 'refs/heads/main') && (inputs.registry || 'all') != 'npm' && (needs.publish-npm.result == 'success' || needs.publish-npm.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    environment: jsr-publish
+    permissions:
+      id-token: write # OIDC trusted publishing to JSR, no tokens needed
+      contents: read
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: $/.github/actions/setup
+
+      - name: Publish to JSR
+        run: node packages/tooling-config/scripts/publish-release.mts --yes --registry jsr

@@ -1,6 +1,7 @@
 # @graphql-markdown/helpers
 
 [![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/helpers?style=flat)](https://www.npmjs.com/package/@graphql-markdown/helpers)
+[![JSR](https://jsr.io/badges/@graphql-markdown/helpers)](https://jsr.io/@graphql-markdown/helpers)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_helpers&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_helpers)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_helpers&metric=coverage)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_helpers)

@@ -6,6 +6,18 @@
 
 import type { LoggerType } from "@graphql-markdown/types";
 
+import { runtimeModuleSpecifier } from "./module.ts";
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
+
+// Kept out of static analysis so JSR does not turn the optional peer into a hard dependency.
+const PRETTIER_MODULE: string = "prettier";
+
+interface PrettierModule {
+  resolveConfigFile: () => Promise<string | null | undefined>;
+  resolveConfig: (file: string) => Promise<Record<string, unknown> | null>;
+  format: (source: string, options: Record<string, unknown>) => Promise<string>;
+}
+
 /**
  * Prettify a string using @see [prettier.format](https://prettier.io/docs/en/api#prettierformatsource-options)
  *
@@ -27,8 +39,15 @@ export const prettify = async (
   parser: string,
 ): Promise<string | undefined> => {
   try {
-    const { resolveConfigFile, resolveConfig, format } =
-      await import("prettier");
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      PRETTIER_MODULE,
+      OPTIONAL_DEPENDENCY_RANGES[PRETTIER_MODULE],
+    );
+    const { resolveConfigFile, resolveConfig, format } = (await import(
+      specifier
+    )) as PrettierModule;
     const file = await resolveConfigFile();
 
     let options: Record<string, unknown> = {};

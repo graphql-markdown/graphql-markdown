@@ -1,0 +1,19 @@
+{
+  "name": "@graphql-markdown/graphql",
+  "version": "1.3.3",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "imports": {
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0",
+    "@graphql-tools/load": "npm:@graphql-tools/load@8.1.21",
+    "graphql": "npm:graphql@^17.0.0",
+    "graphql/": "npm:/graphql@^17.0.0/"
+  },
+  "publish": {
+    "include": ["src", "README.md", "LICENSE*"],
+    "exclude": ["**/*.test.ts", "**/__tests__"]
+  }
+}

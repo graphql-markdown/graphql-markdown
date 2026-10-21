@@ -69,6 +69,8 @@
         "scripts/shared/dependencies-utils.mts",
         "scripts/publish-release.mts",
         "scripts/tarball-check.mts",
+        "scripts/jsr-sync.mts",
+        "scripts/jsr-publish.mts",
         "scripts/docs-api.mjs",
         "husky/prepare-husky.js",
         "stryker/stryker.conf.mjs",
@@ -90,17 +92,13 @@
         "eslint-plugin-mdx",
         "eslint-plugin-prettier",
         "eslint-plugin-tsdoc",
+        "jsr",
         "globals",
         "jsonc-eslint-parser"
       ]
     }
   },
-  "ignoreDependencies": [
-    "@docusaurus/logger",
-    "commitizen",
-    "danger",
-    "husky"
-  ],
+  "ignoreDependencies": ["@docusaurus/logger", "commitizen", "danger", "husky"],
   "vitest": {
     "config": ["packages/*/vitest.config.mjs"],
     "entry": ["**/tests/**/*.ts"]

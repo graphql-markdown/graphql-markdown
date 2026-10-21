@@ -7,10 +7,10 @@
 import type { GraphQLObjectType } from "graphql";
 import { GraphQLSchema, OperationTypeNode } from "graphql";
 import { loadSchema as asyncLoadSchema } from "@graphql-tools/load";
-import type { Loader } from "graphql-config";
-
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 import type {
   GraphQLSchemaConfig,
+  Loader,
   LoaderOption,
   LoadSchemaOptions,
   Maybe,
@@ -122,7 +122,10 @@ export const getDocumentLoaders = async (
     loadersList,
   )) {
     if (typeof graphqlDocumentLoader === "string") {
-      const { [className]: Loader } = await import(graphqlDocumentLoader);
+      // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+      // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+      const specifier = runtimeModuleSpecifier(graphqlDocumentLoader);
+      const { [className]: Loader } = await import(specifier);
       loaders.push(new Loader());
     } else {
       if (
@@ -135,9 +138,8 @@ export const getDocumentLoaders = async (
           `Wrong format for plugin loader "${className}", it should be {module: String, options?: Object}`,
         );
       }
-      const { [className]: Loader } = await import(
-        graphqlDocumentLoader.module
-      );
+      const specifier = runtimeModuleSpecifier(graphqlDocumentLoader.module);
+      const { [className]: Loader } = await import(specifier);
       loaders.push(new Loader());
       Object.assign(loaderOptions, graphqlDocumentLoader.options);
     }

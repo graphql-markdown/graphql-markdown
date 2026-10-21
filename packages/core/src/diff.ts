@@ -11,6 +11,9 @@ import type {
 } from "@graphql-markdown/types";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
+
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
 
 /**
  * Module for detecting changes in GraphQL schemas.
@@ -32,7 +35,7 @@ import { log, LogLevel } from "@graphql-markdown/logger";
  *
  * @example
  * ```typescript
- * import { hasChanges } from "./diff";
+ * import { hasChanges } from "./diff.ts";
  * import { buildSchema } from "graphql";
  *
  * const schema = buildSchema(`
@@ -47,7 +50,7 @@ import { log, LogLevel } from "@graphql-markdown/logger";
  *
  * @example Using with a custom diff module
  * ```typescript
- * import { hasChanges } from "./diff";
+ * import { hasChanges } from "./diff.ts";
  *
  * const schema = getMySchema();
  * const result = await hasChanges(
@@ -75,10 +78,19 @@ export const hasChanges = async (
   }
 
   try {
+    // Specifier is only known at runtime (optional, user-configurable diff module).
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      diffModule,
+      diffModule === "@graphql-markdown/diff"
+        ? OPTIONAL_DEPENDENCY_RANGES[diffModule]
+        : undefined,
+    );
     const {
       checkSchemaChanges,
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
-      diffModule
+      specifier
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch {

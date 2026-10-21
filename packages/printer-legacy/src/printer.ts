@@ -70,17 +70,17 @@ import {
 } from "@graphql-markdown/graphql";
 import { pathUrl } from "@graphql-markdown/utils";
 
-import { printRelations } from "./relation";
-import { printBadge } from "./badge";
-import { printDescription } from "./common";
+import { printRelations } from "./relation.ts";
+import { printBadge } from "./badge.ts";
+import { printDescription } from "./common.ts";
 import {
   getDecoratorsOrder,
   getExampleSectionDefinition,
   printDecorator,
   printDecorators,
   printSlotDecorators,
-} from "./decorator";
-import { printFrontMatter } from "./frontmatter";
+} from "./decorator.ts";
+import { printFrontMatter } from "./frontmatter.ts";
 import {
   printCodeDirective,
   printCodeEnum,
@@ -98,26 +98,26 @@ import {
   printOperationMetadata,
   printScalarMetadata,
   printUnionMetadata,
-} from "./graphql";
-import { hasPrintableDirective } from "./link";
+} from "./graphql/index.ts";
+import { hasPrintableDirective } from "./link.ts";
 
 import {
   MARKDOWN_EOC,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   MARKDOWN_SOC,
-} from "./const/strings";
-import { createDefaultFormatter } from "./formatter";
+} from "./const/strings.ts";
+import { createDefaultFormatter } from "./formatter.ts";
 import {
   DEFAULT_OPTIONS,
   PRINT_TYPE_DEFAULT_OPTIONS,
   SectionLevels,
-} from "./const/options";
+} from "./const/options.ts";
 import {
   PrintCodeEvent,
   PrintTypeEvent,
   BeforeComposePageTypeEvent,
-} from "./events";
+} from "./events.ts";
 
 /**
  * Default initialization options for the Printer class.
@@ -187,12 +187,12 @@ export class Printer implements IPrinter {
   /**
    * Prints type descriptions
    */
-  static readonly printDescription = printDescription;
+  static readonly printDescription: typeof printDescription = printDescription;
 
   /**
    * Prints predicate-driven decorators
    */
-  static readonly printDecorators = printDecorators;
+  static readonly printDecorators: typeof printDecorators = printDecorators;
 
   private static _eventEmitter: Maybe<PrinterEventEmitter>;
 

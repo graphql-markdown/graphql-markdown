@@ -1,0 +1,24 @@
+{
+  "name": "@graphql-markdown/core",
+  "version": "1.25.0",
+  "license": "MIT",
+  "exports": {
+    ".": "./src/index.ts",
+    "./const/patterns": "./src/const/patterns.ts"
+  },
+  "imports": {
+    "@graphql-markdown/graphql": "jsr:@graphql-markdown/graphql@^1.3.3",
+    "@graphql-markdown/logger": "jsr:@graphql-markdown/logger@^1.1.3",
+    "@graphql-markdown/printer-legacy": "jsr:@graphql-markdown/printer-legacy@^1.19.2",
+    "@graphql-markdown/telemetry": "jsr:@graphql-markdown/telemetry@^0.1.0",
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0",
+    "@fastify/deepmerge": "npm:@fastify/deepmerge@^3.2.2",
+    "graphql": "npm:graphql@^17.0.0",
+    "graphql/": "npm:/graphql@^17.0.0/"
+  },
+  "publish": {
+    "include": ["src", "README.md", "LICENSE*", "assets"],
+    "exclude": ["**/*.test.ts", "**/__tests__"]
+  }
+}

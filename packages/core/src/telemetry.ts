@@ -5,8 +5,8 @@
  *
  * @module telemetry
  */
-import { createRequire } from "node:module";
 
+import { VERSION } from "./version.ts";
 import type {
   CliOptions,
   ConfigOptions,
@@ -128,17 +128,6 @@ const fingerprintOf = (report: TelemetryReport): string => {
   );
 };
 
-const readVersion = (): string => {
-  try {
-    const pkg = createRequire(__filename)("../package.json") as {
-      version?: string;
-    };
-    return pkg.version ?? "unknown";
-  } catch {
-    return "unknown";
-  }
-};
-
 const readGraphqlMajor = async (): Promise<unknown> => {
   try {
     const { versionInfo } = await import("graphql");
@@ -177,7 +166,7 @@ export const reportTelemetry = async (
           trigger: report.trigger ?? "programmatic",
           option,
           pkg: "@graphql-markdown/core",
-          pkgVersion: readVersion(),
+          pkgVersion: VERSION,
           graphqlMajor: await readGraphqlMajor(),
           config: { ...report.extension, ...report.configFileOpts },
           cli: report.cliOpts ?? undefined,
@@ -226,7 +215,7 @@ export const reportGeneration = async (
       trigger: trigger ?? "programmatic",
       option,
       pkg: "@graphql-markdown/core",
-      pkgVersion: readVersion(),
+      pkgVersion: VERSION,
       graphqlMajor: await readGraphqlMajor(),
       pages: report.pages,
       durationMs: report.durationMs,

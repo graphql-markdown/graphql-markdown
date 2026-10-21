@@ -15,7 +15,7 @@
     "types": ["node", "vitest/globals"],
 
     "paths": {
-      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/types": ["../types/dist/index.d.ts"],
       "@graphql-markdown/*": ["../*/src/index.ts"]
     }
   },

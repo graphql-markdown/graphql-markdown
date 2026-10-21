@@ -37,8 +37,8 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults";
-import { readOptionalOutput, readOutput, writeOutput } from "../output";
+} from "../defaults.ts";
+import { readOptionalOutput, readOutput, writeOutput } from "../output.ts";
 
 /** Maps graphql-markdown admonition types to DocFX alert types. */
 const ALERT_TYPE_MAP: Record<string, string> = {
@@ -128,7 +128,7 @@ export {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.ts";
 
 /**
  * Creates a DocFX formatter.

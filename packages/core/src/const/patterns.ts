@@ -29,7 +29,7 @@ export const PATTERNS = {
    * - "\@" does not match
    * - "tag" does not match
    */
-  DIRECTIVE_NAME: /^@(?<directive>\w+)$/, // NOSONAR: S5843
+  DIRECTIVE_NAME: /^@(?<directive>\w+)$/ as RegExp, // NOSONAR: S5843
 
   /**
    * Matches group-by directive format with directive name, field, and optional fallback.
@@ -42,7 +42,7 @@ export const PATTERNS = {
    * - "\@tag()" does not match
    * - "tag(name)" does not match
    */
-  GROUP_BY_DIRECTIVE: /^@(\w+)\((\w+)(?:\|=(\w+))?\)$/, // NOSONAR: S5843
+  GROUP_BY_DIRECTIVE: /^@(\w+)\((\w+)(?:\|=(\w+))?\)$/ as RegExp, // NOSONAR: S5843
 
   /**
    * Matches word boundaries (non-alphanumeric characters) for string splitting.
@@ -54,7 +54,7 @@ export const PATTERNS = {
    * - "hello_world" split → ["hello", "world"]
    * - "hello world" split → ["hello", "world"]
    */
-  WORD_BOUNDARY: /[^0-9A-Za-z]+/g, // NOSONAR: S5843
+  WORD_BOUNDARY: /[^0-9A-Za-z]+/g as RegExp, // NOSONAR: S5843
 
   /**
    * Matches transitions between lowercase/digits and uppercase letters.
@@ -66,7 +66,7 @@ export const PATTERNS = {
    * - "HTTPServer" does not match (no lowercase/digit before uppercase)
    * - "get2Users" matches → insert space between "2" and "U" → "get 2 Users"
    */
-  CASE_TRANSITION: /([a-z]+|\d+)([A-Z])/g, // NOSONAR: S5843
+  CASE_TRANSITION: /([a-z]+|\d+)([A-Z])/g as RegExp, // NOSONAR: S5843
 
   /**
    * Matches transitions from letters to digits.
@@ -78,7 +78,7 @@ export const PATTERNS = {
    * - "abc123" matches → "abc 123"
    * - "U1" does not match (U is uppercase)
    */
-  LETTER_DIGIT_TRANSITION: /([a-z]+)(\d)/g, // NOSONAR: S5843
+  LETTER_DIGIT_TRANSITION: /([a-z]+)(\d)/g as RegExp, // NOSONAR: S5843
 
   /**
    * Matches transitions from digits to letters.
@@ -90,7 +90,7 @@ export const PATTERNS = {
    * - "123abc" matches → "123 abc"
    * - "2K" does not match (K is uppercase)
    */
-  DIGIT_LETTER_TRANSITION: /(\d+)([a-z])/g, // NOSONAR: S5843
+  DIGIT_LETTER_TRANSITION: /(\d+)([a-z])/g as RegExp, // NOSONAR: S5843
 
   /**
    * Matches numeric prefix for sorted categories (e.g., "01-query" → "query").
@@ -106,7 +106,7 @@ export const PATTERNS = {
    * - "1-query" does not match (only 1 digit)
    * ```
    */
-  NUMERIC_PREFIX: /^\d{2}-/, // NOSONAR: S5843
+  NUMERIC_PREFIX: /^\d{2}-/ as RegExp, // NOSONAR: S5843
 } as const;
 
 /**

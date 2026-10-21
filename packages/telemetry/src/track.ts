@@ -1,12 +1,12 @@
 import { gzipSync } from "node:zlib";
 
-import { detectCi } from "./ci";
-import { GZIP_THRESHOLD, NOTICE_VERSION, TIMEOUT_MS } from "./constants";
-import { printDisclaimer } from "./disclaimer";
-import { getEndpoint, isEnabled } from "./enabled";
-import { buildPayload, fingerprint } from "./payload";
-import type { PayloadInput } from "./payload";
-import { getStatePath, readState, writeState } from "./state";
+import { detectCi } from "./ci.ts";
+import { GZIP_THRESHOLD, NOTICE_VERSION, TIMEOUT_MS } from "./constants.ts";
+import { printDisclaimer } from "./disclaimer.ts";
+import { getEndpoint, isEnabled } from "./enabled.ts";
+import { buildPayload, fingerprint } from "./payload.ts";
+import type { PayloadInput } from "./payload.ts";
+import { getStatePath, readState, writeState } from "./state.ts";
 
 export interface TrackInput extends Omit<PayloadInput, "noStateBefore"> {
   /** Value of the `telemetry` option. */

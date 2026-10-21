@@ -119,6 +119,10 @@
     "mutation-testing-metrics",
     "better-sqlite3",
     "shiki",
+    // Pinned JSR CLI and Deno runtime: publish-release.mts runs their binaries
+    // from node_modules (Deno via DENO_BIN_PATH) and never imports them.
+    "deno",
+    "jsr",
   ],
 
   // Class member false-positive suppressions.
@@ -131,6 +135,9 @@
   // OptionBuilder methods (addDefault, addFromConfig, addFromCli, get, build,
   //   transformIf) are all called via fluent method chaining in config.ts;
   //   fallow can't trace instance-level chain calls.
+  // CancellableEventEmitter.emitAsync is called in generator.ts and renderer.ts
+  //   on the instance returned by getEvents(); fallow can't trace the call
+  //   through the factory's return value.
   "usedClassMembers": [
     "init",
     "printHeader",
@@ -145,6 +152,7 @@
     "propagationStopped",
     "defaultAction",
     "runDefaultAction",
+    "emitAsync",
     "preCollectCategories",
     "transformIf",
     "addDefault",

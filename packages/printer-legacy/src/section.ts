@@ -21,18 +21,18 @@ import {
   getTypeName,
 } from "@graphql-markdown/graphql";
 
-import { printDescription } from "./common";
-import { printBadges } from "./badge";
-import { printSlotDecorators } from "./decorator";
+import { printDescription } from "./common.ts";
+import { printBadges } from "./badge.ts";
+import { printSlotDecorators } from "./decorator.ts";
 import {
   hasPrintableDirective,
   printLink,
   printParentLink,
   toLink,
-} from "./link";
+} from "./link.ts";
 
-import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings";
-import { DEFAULT_OPTIONS, SectionLevels } from "./const/options";
+import { DEPRECATED, MARKDOWN_EOL, MARKDOWN_EOP } from "./const/strings.ts";
+import { DEFAULT_OPTIONS, SectionLevels } from "./const/options.ts";
 
 /**
  * Prints a permalink for the section header if enabled in the options.

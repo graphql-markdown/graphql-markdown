@@ -4,7 +4,7 @@
 
   "compilerOptions": {
     "paths": {
-      "@graphql-markdown/types": ["./packages/types/src/index.d.ts"],
+      "@graphql-markdown/types": ["./packages/types/dist/index.d.ts"],
       "@graphql-markdown/*": ["./packages/*/src/index.ts"]
     }
   },

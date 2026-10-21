@@ -9,7 +9,7 @@
     "outDir": "dist",
 
     "paths": {
-      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/types": ["../types/dist/index.d.ts"],
       "@graphql-markdown/formatters/docusaurus": ["../formatters/src/docusaurus/index.ts"],
       "@graphql-markdown/*": ["../*/dist/index.d.ts"]
     }

@@ -17,12 +17,28 @@ import type {
 } from "@graphql-markdown/types";
 
 import { log } from "@graphql-markdown/logger";
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
 import {
   isLoaderString,
   isSchemaString,
   isSchemaObject,
-} from "./directives/validation";
+} from "./directives/validation.ts";
+
+// Kept out of static analysis so JSR does not turn the optional peer into a hard dependency.
+const GRAPHQL_CONFIG_MODULE: string = "graphql-config";
+
+interface GraphQLConfigModule {
+  loadConfig: (options: Record<string, unknown>) => Promise<
+    | {
+        getProject: (id: string) => {
+          extension: (name: string) => ExtensionProjectConfig;
+        };
+      }
+    | undefined
+  >;
+}
 
 /**
  * The name of the GraphQL Markdown extension.
@@ -146,14 +162,20 @@ export const loadConfiguration = async (
   options?: Maybe<PackageOptionsConfig>,
   { throwOnMissing, throwOnEmpty }: ThrowOptions = DEFAULT_THROW_OPTIONS,
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>> => {
-  let graphQLConfig;
+  let graphQLConfig: GraphQLConfigModule;
 
   if (typeof id !== "string") {
     return undefined;
   }
 
   try {
-    graphQLConfig = await import("graphql-config");
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      GRAPHQL_CONFIG_MODULE,
+      OPTIONAL_DEPENDENCY_RANGES[GRAPHQL_CONFIG_MODULE],
+    );
+    graphQLConfig = (await import(specifier)) as GraphQLConfigModule;
   } catch (error) {
     log(`Cannot load module 'graphql-config': ${(error as Error).message}`);
     return undefined;

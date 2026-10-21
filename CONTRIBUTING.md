@@ -299,29 +299,29 @@ The monorepo uses `workspace:^` protocol for inter-package dependencies. These m
 
 1. **Build all packages first**:
 
-  ```shell
-  bun run build
-  ```
+```shell
+bun run build
+```
 
 1. **Use the publish script** (recommended):
 
-  ```shell
-  # Single package
-  node packages/tooling-config/scripts/publish-release.mts <package-name>
-  node packages/tooling-config/scripts/publish-release.mts --dry-run <package-name>
+```shell
+# Single package
+node packages/tooling-config/scripts/publish-release.mts <package-name>
+node packages/tooling-config/scripts/publish-release.mts --dry-run <package-name>
 
-  # All packages for a release, in dependency order
-  node packages/tooling-config/scripts/publish-release.mts
-  node packages/tooling-config/scripts/publish-release.mts --dry-run
-  ```
+# All packages for a release, in dependency order
+node packages/tooling-config/scripts/publish-release.mts
+node packages/tooling-config/scripts/publish-release.mts --dry-run
+```
 
 1. **Or manually with bun pack + npm publish tarball**:
 
-  ```shell
-  cd packages/<package-name>
-  bun pm pack                    # Creates tarball with resolved deps
-  npm publish <tarball.tgz> --access public
-  ```
+```shell
+cd packages/<package-name>
+bun pm pack                    # Creates tarball with resolved deps
+npm publish <tarball.tgz> --access public
+```
 
 The publish script will:
 
@@ -348,9 +348,26 @@ Packages are published in dependency order, computed by [`getBuildSequence()`](p
 
 This snapshot is for orientation only; treat `getBuildSequence()` as authoritative if the two ever disagree.
 
+#### Publishing to JSR
+
+The ten packages with a `packages/<pkg>/jsr.json` (`types`, `utils`, `logger`, `graphql`, `helpers`, `diff`, `formatters`, `printer-legacy`, `core`, `telemetry`) are also published to [JSR](https://jsr.io) as `@graphql-markdown/<pkg>`. `cli`, `docusaurus`, `scaffolder` and `nuxt-theme` stay npm-only.
+
+The JSR phase of `publish-release.mts` runs only after all npm publishes succeed (in CI it is a separate `publish-jsr` job that `needs` the npm job), in the same dependency order, and skips versions already on JSR (checked directly against `https://jsr.io/@graphql-markdown/<pkg>/meta.json`). It runs the pinned, locally installed `jsr publish` (a `devDependency` of `tooling-config`, no network install) with the Deno runtime it needs pinned the same way (the exact-version `deno` npm package, passed to jsr via `DENO_BIN_PATH`, so nothing is downloaded from dl.deno.land) from each package directory, and stops at the first failure. With `--dry-run`, the JSR part is a single `deno publish --dry-run --allow-dirty` over a temporary root `deno.json` workspace listing the JSR packages, so sibling versions that are not on JSR yet resolve locally; it refuses to run if a root `deno.json` or `deno.jsonc` already exists. A real publish with JSR in scope (`--registry jsr` or `all`) aborts before the npm phase if the working tree has uncommitted changes, because `jsr publish` refuses a dirty tree. Use `--registry npm|jsr|all` (default `all`) to publish to one registry only, e.g. to re-run JSR alone:
+
+```shell
+node packages/tooling-config/scripts/publish-release.mts --registry jsr --dry-run
+```
+
+One-time setup per package on jsr.io (required for tokenless OIDC publishing):
+
+1. Create the package under the `@graphql-markdown` scope.
+2. In the package **Settings**, link the GitHub repository `graphql-markdown/graphql-markdown`.
+
+The derived fields of each `jsr.json` (`name`, `version`, `license` and the import version ranges) and core's `src/version.ts` are generated from the `package.json` files by `bun run jsr:sync`, which also writes the Deno version ranges of optional dependencies in `src/optional-dependencies.ts` (core, utils); run it after bumping versions. `bun run jsr:check` fails CI when they are out of date. `exports`, `publish` and the list of `imports` keys stay hand-written. JSR import maps cannot express `||` ranges, so `graphql` is overridden to `^17.0.0`.
+
 #### Automated publishing on release
 
-Pushing a GitHub Release (`release: published`) runs [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which publishes every publishable package to npm via [npm's OIDC trusted publishing](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) — no `NPM_TOKEN` secret involved. The workflow always runs `publish-release.mts --dry-run` first as a rehearsal, then the real publish, and is gated behind the `npm-publish` GitHub Environment (required reviewer approval).
+Pushing a GitHub Release (`release: published`) runs [`.github/workflows/publish.yml`](.github/workflows/publish.yml), which publishes every publishable package to npm via [npm's OIDC trusted publishing](https://github.blog/changelog/2025-07-31-npm-trusted-publishing-with-oidc-is-generally-available/) — no `NPM_TOKEN` secret involved. The workflow always runs `publish-release.mts --dry-run` first as a rehearsal of both npm and JSR, then the real npm publish in the `publish-npm` job, gated behind the `npm-publish` GitHub Environment (required reviewer approval). JSR publishing runs in a separate `publish-jsr` job that starts only after `publish-npm` succeeds, gated behind a `jsr-publish` GitHub Environment. Create `jsr-publish` in the repository settings (Settings > Environments) with the same required reviewers as `npm-publish`. `workflow_dispatch` has a `registry` input: `registry=jsr` skips the npm job and re-runs the JSR job alone, `registry=npm` skips JSR.
 
 ### Troubleshooting
 

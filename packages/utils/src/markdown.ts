@@ -12,7 +12,7 @@ export const MARKDOWN_EOL = "\n" as const;
 /**
  * End of paragraph (double newline) for Markdown.
  */
-export const MARKDOWN_EOP = `${MARKDOWN_EOL.repeat(2)}` as const;
+export const MARKDOWN_EOP: string = `${MARKDOWN_EOL.repeat(2)}` as const;
 
 /**
  * Frontmatter delimiter for YAML frontmatter blocks.

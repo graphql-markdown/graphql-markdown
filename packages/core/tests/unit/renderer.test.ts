@@ -563,6 +563,35 @@ describe("renderer", () => {
         expect(spy).toHaveBeenCalledTimes(1);
       });
 
+      test("writes the default homepage as generated.md", async () => {
+        expect.assertions(1);
+
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage(ASSET_HOMEPAGE_LOCATION);
+
+        expect(spy.mock.calls[0]![0]).toBe("/output/generated.md");
+      });
+
+      test("reads a string path equal to assets/generated.md from disk", async () => {
+        expect.assertions(2);
+
+        const readFileSpy = vi.mocked(Utils.readFile);
+        readFileSpy.mockClear();
+        readFileSpy.mockResolvedValueOnce("user: ##baseURL##");
+        const spy = vi.mocked(Utils.fsOutputAdapter.writeFile);
+        spy.mockClear();
+
+        await rendererInstance.renderHomepage("assets/generated.md");
+
+        expect(readFileSpy).toHaveBeenCalledWith("assets/generated.md");
+        expect(spy).toHaveBeenCalledWith(
+          "/output/generated.md",
+          "user: /graphql",
+        );
+      });
+
       test("still reads a caller-supplied homepage from disk", async () => {
         expect.assertions(2);
 

@@ -20,6 +20,7 @@ import { join } from "node:path";
 import {
   buildConfig,
   DEFAULT_HIERARCHY,
+  ASSET_HOMEPAGE_LOCATION,
   DEFAULT_OPTIONS,
   DiffMethod,
   getDiffMethod,
@@ -71,7 +72,7 @@ describe("config", () => {
   });
 
   afterAll(() => {
-    delete globalThis.logger;
+    delete (globalThis as { logger?: unknown }).logger;
   });
 
   describe("getSkipDocDirectives", () => {
@@ -289,7 +290,7 @@ describe("config", () => {
           },
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
           force: DEFAULT_OPTIONS.force,
-          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/), //NOSONAR
+          homepageLocation: DEFAULT_OPTIONS.homepage,
           id: DEFAULT_OPTIONS.id,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
@@ -710,8 +711,8 @@ describe("config", () => {
         loaders: {},
       });
 
-      expect(configWithoutHomepage.homepageLocation).toEqual(
-        expect.stringMatching(/assets\/generated.md$/),
+      expect(configWithoutHomepage.homepageLocation).toBe(
+        ASSET_HOMEPAGE_LOCATION,
       );
     });
 

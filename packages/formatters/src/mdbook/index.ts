@@ -40,12 +40,12 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.ts";
 import {
   createInternalLinksRewriter,
   rewriteRenderedPage,
   writeOutput,
-} from "../output";
+} from "../output.ts";
 
 /**
  * Formats a badge as Markdown bold text — mdBook has no badge component.
@@ -128,7 +128,7 @@ export {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults";
+} from "../defaults.ts";
 
 const rewriteInternalLinks = createInternalLinksRewriter(mdxExtension);
 

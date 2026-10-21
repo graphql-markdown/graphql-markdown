@@ -73,7 +73,13 @@
     "@graphql-markdown/tooling-config": "workspace:^"
   },
   "peerDependencies": {
-    "graphql": "catalog:"
+    "graphql": "catalog:",
+    "graphql-config": "catalog:"
+  },
+  "peerDependenciesMeta": {
+    "graphql-config": {
+      "optional": true
+    }
   },
   "directories": {
     "test": "tests"

@@ -48,17 +48,17 @@ import {
 
 import { escapeMDX } from "@graphql-markdown/utils";
 
-import { formatBadges } from "./badge";
-import { printExample } from "./example";
-import { printLink } from "./link";
+import { formatBadges } from "./badge.ts";
+import { printExample } from "./example.ts";
+import { printLink } from "./link.ts";
 
 import {
   MARKDOWN_EOC,
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   MARKDOWN_SOC,
-} from "./const/strings";
-import { SectionLevels } from "./const/options";
+} from "./const/strings.ts";
+import { SectionLevels } from "./const/options.ts";
 
 export { getSchemaEntity };
 

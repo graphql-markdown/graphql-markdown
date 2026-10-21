@@ -173,7 +173,7 @@ describe("generator", () => {
     });
 
     afterAll(() => {
-      delete globalThis.logger;
+      delete (globalThis as { logger?: unknown }).logger;
     });
 
     const getDirective = (name: string): GraphQLDirective => {

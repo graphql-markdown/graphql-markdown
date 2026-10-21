@@ -340,7 +340,7 @@ describe("config", () => {
           diffMethod: DEFAULT_OPTIONS.diffMethod,
           docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,
-          homepageLocation: expect.stringMatching(/.+\/assets\/generated.md$/),
+          homepageLocation: DEFAULT_OPTIONS.homepage,
           linkRoot: DEFAULT_OPTIONS.linkRoot,
           loaders: DEFAULT_OPTIONS.loaders,
           outputDir: join(

@@ -1,6 +1,7 @@
 # @graphql-markdown/utils
 
 [![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/utils?style=flat)](https://www.npmjs.com/package/@graphql-markdown/utils)
+[![JSR](https://jsr.io/badges/@graphql-markdown/utils)](https://jsr.io/@graphql-markdown/utils)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_utils&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_utils)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_utils&metric=coverage)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_utils)

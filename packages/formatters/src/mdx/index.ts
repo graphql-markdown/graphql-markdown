@@ -31,8 +31,8 @@ import {
   formatMDXFrontmatter,
   formatMDXNameEntity,
   formatMDXSpecifiedByLink,
-} from "../defaults";
-import { createInternalLinksRewriter, rewriteRenderedPage } from "../output";
+} from "../defaults.ts";
+import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.ts";
 
 /** Generic MDX pages use the `.mdx` extension. */
 export const mdxExtension = ".mdx";
@@ -94,7 +94,8 @@ export {
  * @param id - The ID of the section header
  * @returns Escaped permalink string
  */
-export const formatMDXPermalink = formatMDXEscapedPermalink;
+export const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
 
 const rewriteInternalLinks = createInternalLinksRewriter(mdxExtension);
 

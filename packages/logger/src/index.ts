@@ -6,11 +6,34 @@
  * @packageDocumentation
  */
 
-import type { LoggerType, Maybe } from "@graphql-markdown/types";
+import type { LoggerType } from "@graphql-markdown/types";
 
-declare global {
-  var logger: Maybe<LoggerType>;
-}
+/**
+ * Resolves a module specifier for dynamic `import()` at runtime.
+ *
+ * @remarks
+ * Inlined from `runtimeModuleSpecifier` in `@graphql-markdown/utils` (logger must not depend on utils).
+ * On Deno, bare specifiers are not resolved from inside a JSR package and need a prefix:
+ * `@graphql-markdown/*` names get `jsr:`, other bare names get `npm:`.
+ *
+ * @param name - the module specifier.
+ * @returns the specifier to pass to `import()`.
+ *
+ * @internal
+ */
+export const runtimeModuleSpecifier = (name: string): string => {
+  if (
+    !("Deno" in globalThis) ||
+    /^(?:\.{1,2}\/|\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
+  ) {
+    return name;
+  }
+  const prefix = name.startsWith("@graphql-markdown/") ? "jsr:" : "npm:";
+  return `${prefix}${name}`;
+};
+
+type GlobalWithLogger = typeof globalThis & { logger?: LoggerType | null };
+const globalScope = globalThis as GlobalWithLogger;
 
 /**
  * Log levels supported by the logger.
@@ -114,13 +137,14 @@ const resolveLoggerInstance = (
 export const Logger = async (
   moduleName?: Record<string, unknown> | string,
 ): Promise<void> => {
-  if (globalThis.logger?.instance && moduleName === undefined) {
+  if (globalScope.logger?.instance && moduleName === undefined) {
     return;
   }
 
   let moduleExports: Record<string, unknown> | undefined;
   if (typeof moduleName === "string" && moduleName !== "") {
-    moduleExports = await import(moduleName);
+    const specifier = runtimeModuleSpecifier(moduleName);
+    moduleExports = await import(specifier);
   } else if (typeof moduleName === "object") {
     moduleExports = moduleName;
   }
@@ -151,7 +175,7 @@ export const Logger = async (
     callback?.apply(this, [message]);
   };
 
-  globalThis.logger = { instance, _log };
+  globalScope.logger = { instance, _log };
 };
 
 /**
@@ -176,7 +200,7 @@ export const log = (
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
   Promise.resolve(Logger()).catch(() => {});
-  globalThis.logger?._log(message, level);
+  globalScope.logger?._log(message, level);
 };
 
 /**
@@ -185,7 +209,10 @@ export const log = (
  *
  * @internal
  */
-export const __internal = { hasLogMethod, resolveLoggerInstance };
+export const __internal: {
+  hasLogMethod: typeof hasLogMethod;
+  resolveLoggerInstance: typeof resolveLoggerInstance;
+} = { hasLogMethod, resolveLoggerInstance };
 
 /**
  * @see log

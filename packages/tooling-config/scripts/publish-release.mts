@@ -11,13 +11,23 @@
 // release, and drops the interactive confirmation when run non-interactively
 // (CI, or with --yes) so it can run unattended in GitHub Actions.
 //
-// Usage: node publish-release.mts [--dry-run|-n] [--yes|-y] [<package-name>]
+// Usage: node publish-release.mts [--dry-run|-n] [--yes|-y]
+//          [--registry npm|jsr|all] [<package-name>]
 //
 // With no package name, publishes every publishable package in dependency
 // order (types -> utils/logger/graphql -> ... -> docusaurus), skipping any
 // package whose current version is already live on npm. Publishing stops at
 // the first failure, since later packages in that order may depend on the
 // one that just failed.
+//
+// After every npm publish succeeds, packages with a packages/<pkg>/jsr.json
+// are published to JSR (pinned local `jsr publish`, tokenless via GitHub OIDC), in the
+// same order and skipping versions already on JSR. `--registry jsr` re-runs
+// only that phase; `--registry npm` skips it. With --dry-run the JSR phase is
+// one Deno workspace rehearsal (temporary root deno.json) instead of per-package
+// `jsr publish --dry-run`, which cannot resolve sibling versions that are not
+// published yet. A dirty tree is fatal before the npm phase when a real JSR
+// publish will follow, since `jsr publish` aborts on uncommitted changes.
 //
 // Run directly by Node (>= 22.18) through type stripping, so it must stay
 // within erasable syntax: no enums, no parameter properties, no namespaces.
@@ -29,12 +39,22 @@ import {
   readdirSync,
   readFileSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
+import {
+  denoRehearsalArgs,
+  dirtyTreeIsFatal,
+  isPublishedOnJsr,
+  jsrPublishArgs,
+  jsrWorkspaceJson,
+  parseRegistryArg,
+  resolveLocalBin,
+} from "./jsr-publish.mts";
 import { checkPackedManifest } from "./tarball-check.mts";
 
 type PublishPlanEntry = {
@@ -45,10 +65,16 @@ type PublishPlanEntry = {
 };
 
 const USAGE =
-  "Usage: node publish-release.mts [--dry-run|-n] [--yes|-y] [<package-name>]";
+  "Usage: node publish-release.mts [--dry-run|-n] [--yes|-y] [--registry npm|jsr|all] [<package-name>]";
 const KNOWN_FLAGS = new Set(["--dry-run", "-n", "--yes", "-y", "--help", "-h"]);
 
-const args = process.argv.slice(2);
+const parsedArgs = parseRegistryArg(process.argv.slice(2));
+if (parsedArgs.error) {
+  console.error(`Error: ${parsedArgs.error}\n${USAGE}`);
+  process.exit(1);
+}
+const registry = parsedArgs.registry;
+const args = parsedArgs.rest;
 const unknownFlag = args.find((arg) => {
   return arg.startsWith("-") && !KNOWN_FLAGS.has(arg);
 });
@@ -161,6 +187,8 @@ if (packageArg && !buildSequence.includes(packageArg)) {
 }
 
 const packages = packageArg ? [packageArg] : buildSequence;
+const runNpm = registry !== "jsr";
+const runJsr = registry !== "npm";
 
 const confirm = async (message: string): Promise<boolean> => {
   const rl = createInterface({ input: process.stdin, output: process.stdout });
@@ -276,7 +304,29 @@ const packAndPublish = (
   }
 };
 
-if (hasUncommittedChanges()) {
+const dirty = hasUncommittedChanges();
+if (dirtyTreeIsFatal({ dirty, runJsr, dryRun })) {
+  console.error(
+    "Error: the working tree has uncommitted changes, and `jsr publish` refuses to publish a dirty tree. Commit or stash them before publishing.",
+  );
+  process.exit(1);
+}
+
+// Resolve the pinned binaries once, before anything is published. Pin the Deno
+// runtime too: without DENO_BIN_PATH, jsr downloads one from dl.deno.land,
+// which is unpinned code in the privileged publish job.
+const requireLocalBin = (name: string): string => {
+  const bin = resolveLocalBin(repoRoot, name, existsSync);
+  if (bin === undefined) {
+    console.error(`Local ${name} binary not found; run \`bun ci\` first.`);
+    process.exit(1);
+  }
+  return bin;
+};
+const jsrBin = runJsr ? requireLocalBin("jsr") : "";
+const denoBin = runJsr ? requireLocalBin("deno") : "";
+
+if (dirty) {
   console.warn(
     "Warning: the working tree has uncommitted changes. `bun pm pack` packs the tree as-is, not HEAD.",
   );
@@ -287,7 +337,7 @@ if (hasUncommittedChanges()) {
 }
 
 const plan: PublishPlanEntry[] = await Promise.all(
-  packages.map(async (pkg) => {
+  (runNpm ? packages : []).map(async (pkg) => {
     const { name, version } = JSON.parse(
       readFileSync(resolve(repoRoot, "packages", pkg, "package.json"), "utf-8"),
     );
@@ -300,7 +350,9 @@ const plan: PublishPlanEntry[] = await Promise.all(
   }),
 );
 
-console.log(`Publish plan${dryRun ? " (dry run)" : ""}:`);
+if (runNpm) {
+  console.log(`Publish plan${dryRun ? " (dry run)" : ""}:`);
+}
 for (const { name, version, alreadyPublished } of plan) {
   console.log(
     `  ${alreadyPublished ? "skip (already published)" : "publish"} ${name}@${version}`,
@@ -311,12 +363,15 @@ const toPublish = plan.filter((entry) => {
   return !entry.alreadyPublished;
 });
 
-if (toPublish.length === 0) {
-  console.log("Nothing to publish.");
-  process.exit(0);
+if (runNpm && toPublish.length === 0) {
+  console.log("Nothing to publish to npm.");
 }
 
-if (shouldPrompt && !(await confirm("Proceed with publishing? (y/N) "))) {
+if (
+  toPublish.length > 0 &&
+  shouldPrompt &&
+  !(await confirm("Proceed with publishing? (y/N) "))
+) {
   console.log("Aborted.");
   process.exit(0);
 }
@@ -339,10 +394,121 @@ for (const { pkg, name, version } of toPublish) {
   break;
 }
 
-console.log(
-  `\nSummary: ${published} published, ${plan.length - toPublish.length} skipped, ${failed > 0 ? failed : 0} failed`,
-);
+if (runNpm) {
+  console.log(
+    `\nSummary (npm): ${published} published, ${plan.length - toPublish.length} skipped, ${failed > 0 ? failed : 0} failed`,
+  );
+}
 
 if (failed > 0) {
   process.exit(1);
+}
+
+const jsrPackageDirs = (): string[] => {
+  return buildSequence.filter((pkg) => {
+    return existsSync(resolve(repoRoot, "packages", pkg, "jsr.json"));
+  });
+};
+
+// One workspace-wide `deno publish --dry-run` so sibling `jsr:` imports
+// resolve locally. Returns the process exit code; always removes the
+// temporary root deno.json.
+const rehearseJsr = (deno: string, pkgs: string[]): number => {
+  const configs = ["deno.json", "deno.jsonc"].map((file) => {
+    return resolve(repoRoot, file);
+  });
+  const existing = configs.find((file) => {
+    return existsSync(file);
+  });
+  if (existing !== undefined) {
+    console.error(
+      `Error: ${existing} already exists; refusing to overwrite it.`,
+    );
+    return 1;
+  }
+  console.log("\nJSR rehearsal: deno workspace dry-run");
+  try {
+    writeFileSync(configs[0]!, jsrWorkspaceJson(pkgs));
+    const result = spawnSync(deno, denoRehearsalArgs(), {
+      cwd: repoRoot,
+      stdio: "inherit",
+    });
+    return !result.error && result.status === 0 ? 0 : 1;
+  } finally {
+    rmSync(configs[0]!, { force: true });
+  }
+};
+
+// JSR phase: only after every npm publish succeeded.
+if (runJsr) {
+  const jsrPlan = await Promise.all(
+    packages
+      .filter((pkg) => {
+        return existsSync(resolve(repoRoot, "packages", pkg, "jsr.json"));
+      })
+      .map(async (pkg) => {
+        const { name, version } = readJson(
+          resolve(repoRoot, "packages", pkg, "jsr.json"),
+        );
+        return {
+          pkg,
+          name,
+          version,
+          alreadyPublished: await isPublishedOnJsr(name, version),
+        };
+      }),
+  );
+
+  console.log(`\nJSR publish plan${dryRun ? " (dry run)" : ""}:`);
+  for (const { name, version, alreadyPublished } of jsrPlan) {
+    console.log(
+      `  ${alreadyPublished ? "skip (already published)" : "publish"} ${name}@${version}`,
+    );
+  }
+
+  let jsrPublished = 0;
+  let jsrFailed = 0;
+  const jsrToPublish = jsrPlan.filter((entry) => {
+    return !entry.alreadyPublished;
+  });
+
+  if (
+    jsrToPublish.length > 0 &&
+    shouldPrompt &&
+    !(await confirm("Proceed with publishing to JSR? (y/N) "))
+  ) {
+    console.log("Aborted.");
+    process.exit(0);
+  }
+
+  if (dryRun) {
+    process.exit(rehearseJsr(denoBin, jsrPackageDirs()));
+  }
+
+  for (const { pkg, name, version } of jsrToPublish) {
+    console.log(
+      `\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version} to JSR`,
+    );
+    const jsrPublish = spawnSync(jsrBin, jsrPublishArgs(dryRun), {
+      cwd: resolve(repoRoot, "packages", pkg),
+      env: { ...process.env, DENO_BIN_PATH: denoBin },
+      stdio: "inherit",
+    });
+    if (!jsrPublish.error && jsrPublish.status === 0) {
+      jsrPublished++;
+      continue;
+    }
+    jsrFailed++;
+    console.error(
+      `\nStopping: ${name}@${version} failed on JSR, and later packages in dependency order may depend on it.`,
+    );
+    break;
+  }
+
+  console.log(
+    `\nSummary (JSR): ${jsrPublished} published, ${jsrPlan.length - jsrToPublish.length} skipped, ${jsrFailed} failed`,
+  );
+  if (jsrFailed > 0) {
+    process.exit(1);
+  }
 }
