@@ -35,6 +35,12 @@ export const VERSION_CONSTANTS: Partial<
 const VERSION_CONSTANT =
   /(export const VERSION\s*(?::\s*string\s*)?=\s*")([^"]*)(")/;
 
+// Source files holding the Deno version ranges of optional dependencies.
+export const OPTIONAL_DEPENDENCY_FILES: Record<string, string> = {
+  core: "src/optional-dependencies.ts",
+  utils: "src/optional-dependencies.ts",
+};
+
 // JSR import maps cannot express `||` ranges; JSR targets graphql 17.
 export const JSR_RANGE_OVERRIDES: Record<string, string> = {
   graphql: "^17.0.0",
@@ -245,6 +251,127 @@ const syncConstant = (dir: string, version: string): Change[] => {
     : [{ file, text, diffs: [`VERSION -> "${version}"`] }];
 };
 
+// Resolves a declared spec to the caret range used when loading on Deno.
+const optionalSpec = (
+  name: string,
+  declared: string,
+  root: Json,
+  versions: Map<string, string>,
+): string | undefined => {
+  if (declared.startsWith("catalog:")) {
+    return resolveCatalog(declared, name, root);
+  }
+  if (/^workspace:[*^~]$/.test(declared)) {
+    const version = versions.get(name);
+    return version === undefined ? undefined : `^${version}`;
+  }
+  return declared;
+};
+
+const caretExact = (range: string): string =>
+  /^\d+\.\d+\.\d+$/.test(range) ? `^${range}` : range;
+
+// Range of an optional dependency as passed to `runtimeModuleSpecifier`.
+export const resolveOptionalRange = (
+  name: string,
+  pkg: Json,
+  root: Json,
+  versions: Map<string, string>,
+): Resolved => {
+  const declared = declaredRange(name, pkg);
+  if (declared === undefined) {
+    return { problem: `"${name}" not in dependencies or peerDependencies` };
+  }
+  const range = optionalSpec(name, declared, root, versions);
+  if (range === undefined) {
+    return { problem: `"${name}" ${declared} cannot be resolved` };
+  }
+  return range.includes("||")
+    ? { problem: `"${name}" range "${range}" is not supported on Deno` }
+    : { value: caretExact(range) };
+};
+
+const escapeRegExp = (text: string): string =>
+  text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// Rewrites only the string values of `"<key>": "<value>"` entries.
+export const rewriteOptionalRanges = (
+  source: string,
+  ranges: Record<string, string>,
+): string => {
+  let text = source;
+  for (const [key, range] of Object.entries(ranges)) {
+    const entry = new RegExp(
+      `(^\\s*"?${escapeRegExp(key)}"?:\\s*")[^"]*(")`,
+      "m",
+    );
+    text = text.replace(
+      entry,
+      (_m, pre: string, post: string) => `${pre}${range}${post}`,
+    );
+  }
+  return text;
+};
+
+const currentKeys = (source: string): string[] =>
+  [...source.matchAll(/^\s*"?([^"\s:]+)"?:\s*"[^"]*",?$/gm)].map((m) => m[1]);
+
+export const diffOptionalRanges = (
+  before: string,
+  after: string,
+  keys: string[],
+): string[] => {
+  const read = (source: string, key: string): string | undefined =>
+    new RegExp(`^\\s*"?${escapeRegExp(key)}"?:\\s*"([^"]*)"`, "m").exec(
+      source,
+    )?.[1];
+  return keys
+    .filter((key) => read(before, key) !== read(after, key))
+    .map((key) => `${key}: ${read(before, key)} -> ${read(after, key)}`);
+};
+
+const resolveOptionalRanges = (
+  keys: string[],
+  pkg: Json,
+  root: Json,
+  versions: Map<string, string>,
+): { ranges: Record<string, string>; problems: string[] } => {
+  const ranges: Record<string, string> = {};
+  const problems: string[] = [];
+  for (const key of keys) {
+    const { value, problem } = resolveOptionalRange(key, pkg, root, versions);
+    if (value !== undefined) {
+      ranges[key] = value;
+    }
+    if (problem !== undefined) {
+      problems.push(problem);
+    }
+  }
+  return { ranges, problems };
+};
+
+const syncOptional = (
+  dir: string,
+  root: Json,
+  versions: Map<string, string>,
+  problems: string[],
+): Change[] => {
+  const relative = OPTIONAL_DEPENDENCY_FILES[dir];
+  if (relative === undefined) {
+    return [];
+  }
+  const pkg = readJson(join(packagesDir, dir, "package.json"));
+  const file = join(packagesDir, dir, relative);
+  const source = readFileSync(file, "utf8");
+  const keys = currentKeys(source);
+  const resolved = resolveOptionalRanges(keys, pkg, root, versions);
+  problems.push(...resolved.problems.map((p) => `${dir}: ${relative}: ${p}`));
+  const text = rewriteOptionalRanges(source, resolved.ranges);
+  return text === source
+    ? []
+    : [{ file, text, diffs: diffOptionalRanges(source, text, keys) }];
+};
+
 const collectChanges = async (problems: string[]): Promise<Change[]> => {
   const root = readJson(join(rootDir, "package.json"));
   const versions = new Map<string, string>(
@@ -260,6 +387,7 @@ const collectChanges = async (problems: string[]): Promise<Change[]> => {
     ) as string;
     changes.push(...(await syncJsr(dir, root, versions, problems)));
     changes.push(...syncConstant(dir, version));
+    changes.push(...syncOptional(dir, root, versions, problems));
   }
   return changes;
 };

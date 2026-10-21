@@ -2,7 +2,9 @@ import { describe, expect, test } from "vitest";
 
 import {
   expectedImports,
+  resolveOptionalRange,
   resolveRange,
+  rewriteOptionalRanges,
   syncVersionConstant,
 } from "../../packages/tooling-config/scripts/jsr-sync.mts";
 
@@ -104,6 +106,52 @@ describe("syncVersionConstant()", () => {
     const source = `/** doc */\nexport const VERSION: string = "1.0.0";\n`;
     expect(syncVersionConstant(source, "2.0.0")).toBe(
       `/** doc */\nexport const VERSION: string = "2.0.0";\n`,
+    );
+  });
+});
+
+describe("resolveOptionalRange()", () => {
+  const versions = new Map([["@graphql-markdown/diff", "1.2.3"]]);
+  const resolve = (name: string, spec: string) =>
+    resolveOptionalRange(
+      name,
+      { dependencies: { [name]: spec } },
+      root,
+      versions,
+    );
+
+  test("resolves workspace specs to the workspace version", () => {
+    for (const spec of ["workspace:*", "workspace:^", "workspace:~"]) {
+      expect(resolve("@graphql-markdown/diff", spec)).toEqual({
+        value: "^1.2.3",
+      });
+    }
+  });
+
+  test("resolves catalog specs and carets exact versions", () => {
+    expect(resolve("graphql-config", "catalog:")).toEqual({ value: "^5.1.8" });
+    expect(resolve("foo", "3.8.3")).toEqual({ value: "^3.8.3" });
+  });
+
+  test("keeps other ranges as is", () => {
+    expect(resolve("foo", "~3.1.0")).toEqual({ value: "~3.1.0" });
+  });
+
+  test("reports || and missing keys", () => {
+    expect(resolve("foo", "^1 || ^2").problem).toMatch(/not supported/);
+    expect(resolveOptionalRange("bar", {}, root, versions).problem).toMatch(
+      /not in/,
+    );
+  });
+});
+
+describe("rewriteOptionalRanges()", () => {
+  test("rewrites only the values", () => {
+    const source = `// header\nexport const R = {\n  "a/b": "^1.0.0",\n  prettier: "^3.0.0",\n};\n`;
+    expect(
+      rewriteOptionalRanges(source, { "a/b": "^1.1.0", prettier: "^3.8.3" }),
+    ).toBe(
+      `// header\nexport const R = {\n  "a/b": "^1.1.0",\n  prettier: "^3.8.3",\n};\n`,
     );
   });
 });

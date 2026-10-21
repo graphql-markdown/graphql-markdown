@@ -13,6 +13,8 @@ import type {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
+
 /**
  * Module for detecting changes in GraphQL schemas.
  * This module provides functionality to compare GraphQL schemas and detect changes.
@@ -82,7 +84,9 @@ export const hasChanges = async (
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
       runtimeModuleSpecifier(
         diffModule,
-        diffModule === "@graphql-markdown/diff" ? "^1.1.22" : undefined,
+        diffModule === "@graphql-markdown/diff"
+          ? OPTIONAL_DEPENDENCY_RANGES[diffModule]
+          : undefined,
       )
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);

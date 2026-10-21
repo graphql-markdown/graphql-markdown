@@ -7,6 +7,7 @@
 import type { LoggerType } from "@graphql-markdown/types";
 
 import { runtimeModuleSpecifier } from "./module.ts";
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
 
 // Kept out of static analysis so JSR does not turn the optional peer into a hard dependency.
 const PRETTIER_MODULE: string = "prettier";
@@ -39,7 +40,10 @@ export const prettify = async (
 ): Promise<string | undefined> => {
   try {
     const { resolveConfigFile, resolveConfig, format } = (await import(
-      runtimeModuleSpecifier(PRETTIER_MODULE, "^3.8.3")
+      runtimeModuleSpecifier(
+        PRETTIER_MODULE,
+        OPTIONAL_DEPENDENCY_RANGES[PRETTIER_MODULE],
+      )
     )) as PrettierModule;
     const file = await resolveConfigFile();
 

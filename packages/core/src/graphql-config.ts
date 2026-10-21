@@ -19,6 +19,7 @@ import type {
 import { log } from "@graphql-markdown/logger";
 import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 
+import { OPTIONAL_DEPENDENCY_RANGES } from "./optional-dependencies.ts";
 import {
   isLoaderString,
   isSchemaString,
@@ -169,7 +170,10 @@ export const loadConfiguration = async (
 
   try {
     graphQLConfig = (await import(
-      runtimeModuleSpecifier(GRAPHQL_CONFIG_MODULE, "^5.1.8")
+      runtimeModuleSpecifier(
+        GRAPHQL_CONFIG_MODULE,
+        OPTIONAL_DEPENDENCY_RANGES[GRAPHQL_CONFIG_MODULE],
+      )
     )) as GraphQLConfigModule;
   } catch (error) {
     log(`Cannot load module 'graphql-config': ${(error as Error).message}`);
