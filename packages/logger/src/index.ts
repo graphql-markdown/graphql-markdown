@@ -8,9 +8,8 @@
 
 import type { LoggerType, Maybe } from "@graphql-markdown/types";
 
-declare global {
-  var logger: Maybe<LoggerType>;
-}
+type GlobalWithLogger = typeof globalThis & { logger?: Maybe<LoggerType> };
+const globalScope = globalThis as GlobalWithLogger;
 
 /**
  * Log levels supported by the logger.
@@ -114,7 +113,7 @@ const resolveLoggerInstance = (
 export const Logger = async (
   moduleName?: Record<string, unknown> | string,
 ): Promise<void> => {
-  if (globalThis.logger?.instance && moduleName === undefined) {
+  if (globalScope.logger?.instance && moduleName === undefined) {
     return;
   }
 
@@ -151,7 +150,7 @@ export const Logger = async (
     callback?.apply(this, [message]);
   };
 
-  globalThis.logger = { instance, _log };
+  globalScope.logger = { instance, _log };
 };
 
 /**
@@ -176,7 +175,7 @@ export const log = (
   level: LogLevel | keyof typeof LogLevel = LogLevel.info,
 ): void => {
   Promise.resolve(Logger()).catch(() => {});
-  globalThis.logger?._log(message, level);
+  globalScope.logger?._log(message, level);
 };
 
 /**
