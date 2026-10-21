@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/diff",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown diff package.",
+  "description": "Detects GraphQL schema changes so GraphQL-Markdown only regenerates documentation that changed.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },

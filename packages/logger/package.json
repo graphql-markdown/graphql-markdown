@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/logger",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown logger.",
+  "description": "Logger used by the GraphQL-Markdown packages.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },

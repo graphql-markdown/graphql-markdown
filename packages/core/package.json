@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/core",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown core package for generating Markdown documentation from a GraphQL schema.",
+  "description": "Core of GraphQL-Markdown: generates Markdown documentation from a GraphQL schema.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },

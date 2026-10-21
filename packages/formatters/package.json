@@ -1,7 +1,7 @@
 {
   "name": "@graphql-markdown/formatters",
   "homepage": "https://graphql-markdown.dev",
-  "description": "Formatter presets for Docusaurus, Starlight, Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, mdBook, and generic MDX.",
+  "description": "Formatter presets for GraphQL-Markdown: Docusaurus, Starlight, Fumadocs, Vocs, HonKit, Hugo, MkDocs, DocFX, mdBook and generic MDX.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
