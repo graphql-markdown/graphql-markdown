@@ -23,7 +23,11 @@
 // After every npm publish succeeds, packages with a packages/<pkg>/jsr.json
 // are published to JSR (pinned local `jsr publish`, tokenless via GitHub OIDC), in the
 // same order and skipping versions already on JSR. `--registry jsr` re-runs
-// only that phase; `--registry npm` skips it.
+// only that phase; `--registry npm` skips it. With --dry-run the JSR phase is
+// one Deno workspace rehearsal (temporary root deno.json) instead of per-package
+// `jsr publish --dry-run`, which cannot resolve sibling versions that are not
+// published yet. A dirty tree is fatal before the npm phase when a real JSR
+// publish will follow, since `jsr publish` aborts on uncommitted changes.
 //
 // Run directly by Node (>= 22.18) through type stripping, so it must stay
 // within erasable syntax: no enums, no parameter properties, no namespaces.
@@ -35,6 +39,7 @@ import {
   readdirSync,
   readFileSync,
   rmSync,
+  writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
@@ -42,11 +47,13 @@ import { createInterface } from "node:readline/promises";
 import { fileURLToPath } from "node:url";
 
 import {
+  denoRehearsalArgs,
+  dirtyTreeIsFatal,
   isPublishedOnJsr,
   jsrPublishArgs,
-  resolveDenoBin,
-  resolveJsrBin,
+  jsrWorkspaceJson,
   parseRegistryArg,
+  resolveLocalBin,
 } from "./jsr-publish.mts";
 import { checkPackedManifest } from "./tarball-check.mts";
 
@@ -297,7 +304,29 @@ const packAndPublish = (
   }
 };
 
-if (hasUncommittedChanges()) {
+const dirty = hasUncommittedChanges();
+if (dirtyTreeIsFatal({ dirty, runJsr, dryRun })) {
+  console.error(
+    "Error: the working tree has uncommitted changes, and `jsr publish` refuses to publish a dirty tree. Commit or stash them before publishing.",
+  );
+  process.exit(1);
+}
+
+// Resolve the pinned binaries once, before anything is published. Pin the Deno
+// runtime too: without DENO_BIN_PATH, jsr downloads one from dl.deno.land,
+// which is unpinned code in the privileged publish job.
+const requireLocalBin = (name: string): string => {
+  const bin = resolveLocalBin(repoRoot, name, existsSync);
+  if (bin === undefined) {
+    console.error(`Local ${name} binary not found; run \`bun ci\` first.`);
+    process.exit(1);
+  }
+  return bin;
+};
+const jsrBin = runJsr ? requireLocalBin("jsr") : "";
+const denoBin = runJsr ? requireLocalBin("deno") : "";
+
+if (dirty) {
   console.warn(
     "Warning: the working tree has uncommitted changes. `bun pm pack` packs the tree as-is, not HEAD.",
   );
@@ -375,6 +404,41 @@ if (failed > 0) {
   process.exit(1);
 }
 
+const jsrPackageDirs = (): string[] => {
+  return buildSequence.filter((pkg) => {
+    return existsSync(resolve(repoRoot, "packages", pkg, "jsr.json"));
+  });
+};
+
+// One workspace-wide `deno publish --dry-run` so sibling `jsr:` imports
+// resolve locally. Returns the process exit code; always removes the
+// temporary root deno.json.
+const rehearseJsr = (deno: string, pkgs: string[]): number => {
+  const configs = ["deno.json", "deno.jsonc"].map((file) => {
+    return resolve(repoRoot, file);
+  });
+  const existing = configs.find((file) => {
+    return existsSync(file);
+  });
+  if (existing !== undefined) {
+    console.error(
+      `Error: ${existing} already exists; refusing to overwrite it.`,
+    );
+    return 1;
+  }
+  console.log("\nJSR rehearsal: deno workspace dry-run");
+  try {
+    writeFileSync(configs[0]!, jsrWorkspaceJson(pkgs));
+    const result = spawnSync(deno, denoRehearsalArgs(), {
+      cwd: repoRoot,
+      stdio: "inherit",
+    });
+    return !result.error && result.status === 0 ? 0 : 1;
+  } finally {
+    rmSync(configs[0]!, { force: true });
+  }
+};
+
 // JSR phase: only after every npm publish succeeded.
 if (runJsr) {
   const jsrPlan = await Promise.all(
@@ -417,26 +481,14 @@ if (runJsr) {
     process.exit(0);
   }
 
+  if (dryRun) {
+    process.exit(rehearseJsr(denoBin, jsrPackageDirs()));
+  }
+
   for (const { pkg, name, version } of jsrToPublish) {
     console.log(
       `\n${dryRun ? "Dry-run publishing" : "Publishing"} ${name}@${version} to JSR`,
     );
-    const jsrBin = resolveJsrBin(repoRoot, existsSync);
-    if (jsrBin === undefined) {
-      console.error("Local jsr binary not found; run `bun ci` first.");
-      jsrFailed++;
-      break;
-    }
-    // Pin the Deno runtime too: without DENO_BIN_PATH, jsr downloads one from
-    // dl.deno.land, which is unpinned code in the privileged publish job.
-    const denoBin = resolveDenoBin(repoRoot, existsSync);
-    if (denoBin === undefined) {
-      console.error(
-        "Local deno binary not found; run `bun ci` first (jsr would otherwise download an unpinned runtime).",
-      );
-      jsrFailed++;
-      break;
-    }
     const jsrPublish = spawnSync(jsrBin, jsrPublishArgs(dryRun), {
       cwd: resolve(repoRoot, "packages", pkg),
       env: { ...process.env, DENO_BIN_PATH: denoBin },

@@ -81,32 +81,51 @@ export const jsrPublishArgs = (dryRun: boolean): string[] => {
   return publishArgs;
 };
 
-// Locates the pinned, locally installed `jsr` binary (never fetched from the
-// network). Checks the package-level then the root node_modules/.bin; returns
-// undefined when absent.
-export const resolveJsrBin = (
+// Locates a pinned, locally installed binary (`jsr`, or the lockfile-pinned
+// `deno` npm package so the jsr CLI never downloads a runtime from
+// dl.deno.land). Never fetched from the network. Checks the package-level then
+// the root node_modules/.bin; returns undefined when absent.
+export const resolveLocalBin = (
   repoRoot: string,
+  name: string,
   exists: (path: string) => boolean,
 ): string | undefined => {
   const candidates = [
-    `${repoRoot}/packages/tooling-config/node_modules/.bin/jsr`,
-    `${repoRoot}/node_modules/.bin/jsr`,
+    `${repoRoot}/packages/tooling-config/node_modules/.bin/${name}`,
+    `${repoRoot}/node_modules/.bin/${name}`,
   ];
   return candidates.find((candidate) => exists(candidate));
 };
 
-// Locates the pinned, locally installed `deno` binary (the lockfile-pinned
-// `deno` npm package), so the jsr CLI never downloads a runtime from
-// dl.deno.land. Returns undefined when absent.
-export const resolveDenoBin = (
-  repoRoot: string,
-  exists: (path: string) => boolean,
-): string | undefined => {
-  const candidates = [
-    `${repoRoot}/packages/tooling-config/node_modules/.bin/deno`,
-    `${repoRoot}/node_modules/.bin/deno`,
-  ];
-  return candidates.find((candidate) => exists(candidate));
+// `jsr publish` (without --allow-dirty) aborts on uncommitted changes, so a
+// dirty tree must stop the run before npm publishes when a real JSR publish
+// will follow.
+export const dirtyTreeIsFatal = (options: {
+  dirty: boolean;
+  runJsr: boolean;
+  dryRun: boolean;
+}): boolean => {
+  return options.dirty && options.runJsr && !options.dryRun;
+};
+
+// Contents of the temporary root deno.json used for the dry-run rehearsal: a
+// workspace of all JSR packages, so sibling `jsr:` imports resolve locally
+// instead of against the live registry.
+export const jsrWorkspaceJson = (pkgs: string[]): string => {
+  return JSON.stringify(
+    {
+      workspace: pkgs.map((pkg) => `./packages/${pkg}`),
+      nodeModulesDir: "none",
+    },
+    null,
+    2,
+  );
+};
+
+// Arguments for the workspace rehearsal. --allow-dirty is safe: nothing is
+// published, and the temporary deno.json itself dirties the tree.
+export const denoRehearsalArgs = (): string[] => {
+  return ["publish", "--dry-run", "--allow-dirty"];
 };
 
 // Fetches meta.json directly (not via npm/safe-chain). 404 means unpublished.

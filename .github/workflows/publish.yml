@@ -53,8 +53,10 @@ jobs:
       - name: Ensure OIDC-capable npm CLI
         run: npm install -g npm@latest
 
-      - name: Dry-run publish (rehearsal)
-        run: node packages/tooling-config/scripts/publish-release.mts --dry-run --registry npm
+      # Rehearses npm and JSR (one Deno workspace dry-run) so a broken JSR
+      # package blocks the release before anything is published to npm.
+      - name: Dry-run publish to npm and JSR (rehearsal)
+        run: node packages/tooling-config/scripts/publish-release.mts --dry-run
 
       - name: Publish to npm
         run: node packages/tooling-config/scripts/publish-release.mts --yes --registry npm

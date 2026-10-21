@@ -1,13 +1,15 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  denoRehearsalArgs,
+  dirtyTreeIsFatal,
   isPublishedOnJsr,
   jsrMetaUrl,
   jsrPublishArgs,
+  jsrWorkspaceJson,
   metaHasVersion,
   parseRegistryArg,
-  resolveDenoBin,
-  resolveJsrBin,
+  resolveLocalBin,
 } from "../../packages/tooling-config/scripts/jsr-publish.mts";
 
 describe("parseRegistryArg()", () => {
@@ -54,21 +56,36 @@ describe("jsr helpers", () => {
     expect(jsrPublishArgs(true)).toEqual(["publish", "--dry-run"]);
   });
 
-  test("resolveJsrBin()", () => {
-    const pkgBin = "/r/packages/tooling-config/node_modules/.bin/jsr";
-    const rootBin = "/r/node_modules/.bin/jsr";
-    expect(resolveJsrBin("/r", (p) => p === pkgBin)).toBe(pkgBin);
-    expect(resolveJsrBin("/r", (p) => p === rootBin)).toBe(rootBin);
-    expect(resolveJsrBin("/r", () => true)).toBe(pkgBin);
-    expect(resolveJsrBin("/r", () => false)).toBeUndefined();
+  test.each(["jsr", "deno"])("resolveLocalBin() for %s", (name) => {
+    const pkgBin = `/r/packages/tooling-config/node_modules/.bin/${name}`;
+    const rootBin = `/r/node_modules/.bin/${name}`;
+    expect(resolveLocalBin("/r", name, (p) => p === pkgBin)).toBe(pkgBin);
+    expect(resolveLocalBin("/r", name, (p) => p === rootBin)).toBe(rootBin);
+    expect(resolveLocalBin("/r", name, () => true)).toBe(pkgBin);
+    expect(resolveLocalBin("/r", name, () => false)).toBeUndefined();
   });
 
-  test("resolveDenoBin()", () => {
-    const pkgBin = "/r/packages/tooling-config/node_modules/.bin/deno";
-    const rootBin = "/r/node_modules/.bin/deno";
-    expect(resolveDenoBin("/r", (p) => p === pkgBin)).toBe(pkgBin);
-    expect(resolveDenoBin("/r", (p) => p === rootBin)).toBe(rootBin);
-    expect(resolveDenoBin("/r", () => false)).toBeUndefined();
+  test("dirtyTreeIsFatal()", () => {
+    const base = { dirty: true, runJsr: true, dryRun: false };
+    expect(dirtyTreeIsFatal(base)).toBe(true);
+    expect(dirtyTreeIsFatal({ ...base, dirty: false })).toBe(false);
+    expect(dirtyTreeIsFatal({ ...base, runJsr: false })).toBe(false);
+    expect(dirtyTreeIsFatal({ ...base, dryRun: true })).toBe(false);
+  });
+
+  test("jsrWorkspaceJson()", () => {
+    expect(JSON.parse(jsrWorkspaceJson(["types", "core"]))).toEqual({
+      workspace: ["./packages/types", "./packages/core"],
+      nodeModulesDir: "none",
+    });
+  });
+
+  test("denoRehearsalArgs()", () => {
+    expect(denoRehearsalArgs()).toEqual([
+      "publish",
+      "--dry-run",
+      "--allow-dirty",
+    ]);
   });
 });
 
