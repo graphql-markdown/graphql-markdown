@@ -253,6 +253,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
 export type SectionLevelValue = {
   _opaque: typeof SECTION_LEVEL_VALUE;
 } & (0 | 3 | 4 | 5);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- only referenced via typeof
 declare const SECTION_LEVEL_VALUE: unique symbol;
 
 /**
@@ -299,7 +300,7 @@ export type PrintDirectiveOptions = Partial<PrintTypeOptions> &
 /**
  * Options accepted by printer initialization.
  */
-export type PrinterInitOptions = {
+export interface PrinterInitOptions {
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;
   groups?: Maybe<SchemaEntitiesGroupMap>;
@@ -309,7 +310,7 @@ export type PrinterInitOptions = {
   printTypeOptions?: Maybe<ConfigPrintTypeOptions>;
   skipDocDirectives?: Maybe<GraphQLDirective[]>;
   sectionHeaderId?: Maybe<boolean>;
-};
+}
 
 /**
  * Abstract printer class that handles the generation of markdown documentation

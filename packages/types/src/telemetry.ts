@@ -15,23 +15,23 @@ export type TelemetryEvent =
 
 /** Detected CI provider (`other` for a generic `CI` variable). */
 export type CiProvider =
-  | "github-actions"
-  | "gitlab"
-  | "circleci"
+  | "appveyor"
+  | "aws-codebuild"
   | "azure-pipelines"
-  | "jenkins"
   | "bitbucket"
   | "buildkite"
-  | "travis"
-  | "vercel"
-  | "netlify"
+  | "circleci"
   | "cloudflare-pages"
-  | "aws-codebuild"
-  | "teamcity"
-  | "appveyor"
   | "drone"
+  | "github-actions"
+  | "gitlab"
+  | "jenkins"
+  | "netlify"
+  | "other"
   | "render"
-  | "other";
+  | "teamcity"
+  | "travis"
+  | "vercel";
 
 /** Anonymous telemetry payload, version 1. Contains no identifier. */
 export interface TelemetryPayload {
@@ -46,13 +46,13 @@ export interface TelemetryPayload {
   os: string;
   ci: boolean;
   ciProvider?: CiProvider;
-  pm: "npm" | "pnpm" | "yarn" | "bun" | "unknown";
+  pm: "bun" | "npm" | "pnpm" | "unknown" | "yarn";
   firstRun: boolean;
   trigger: TelemetryTrigger;
   container: boolean;
   wsl: boolean;
   /** Loader kinds of the schema pointer(s). */
-  loader?: string | string[];
+  loader?: string[] | string;
   /** Sanitized config sources. */
   config?: Record<string, unknown>;
   cli?: Record<string, unknown>;

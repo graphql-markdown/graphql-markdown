@@ -10,7 +10,11 @@
 
 import type { Maybe, MDXString } from "./utils.ts";
 import type { AdmonitionType, Badge, TypeLink } from "./printer.ts";
-import type { CollapsibleOption, FrontMatterOptions, MetaInfo } from "./core.ts";
+import type {
+  CollapsibleOption,
+  FrontMatterOptions,
+  MetaInfo,
+} from "./core.ts";
 import type { SchemaEntity } from "./graphql.ts";
 
 /**

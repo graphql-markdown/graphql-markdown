@@ -7,6 +7,7 @@ export interface Category {
 }
 
 export type MDXString = string & { _opaque: typeof MDX_STRING };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars -- only referenced via typeof
 declare const MDX_STRING: unique symbol;
 
 export type PrettifyCallbackFunction = (
@@ -42,10 +43,7 @@ export interface OutputAdapter {
    * directory concept can omit it. `forceEmpty` asks for existing content to be
    * discarded first, which backs the `force` option.
    */
-  ensureDir?: (
-    dirPath: string,
-    options?: EnsureDirOptions,
-  ) => Promise<void>;
+  ensureDir?: (dirPath: string, options?: EnsureDirOptions) => Promise<void>;
   /**
    * Reads back a page this adapter wrote, or resolves `undefined` when there is
    * nothing at that path.

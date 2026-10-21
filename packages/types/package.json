@@ -20,7 +20,9 @@
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsgo --build"
+    "build": "tsgo --build",
+    "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"src/**/*.ts\"",
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"src/**/*.ts\" --fix"
   },
   "dependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",
