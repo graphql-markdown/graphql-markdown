@@ -69,7 +69,7 @@
         "scripts/shared/dependencies-utils.mts",
         "scripts/publish-release.mts",
         "scripts/tarball-check.mts",
-        "scripts/jsr-check.mts",
+        "scripts/jsr-sync.mts",
         "scripts/jsr-publish.mts",
         "scripts/docs-api.mjs",
         "husky/prepare-husky.js",

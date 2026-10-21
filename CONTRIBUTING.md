@@ -363,7 +363,7 @@ One-time setup per package on jsr.io (required for tokenless OIDC publishing):
 1. Create the package under the `@graphql-markdown` scope.
 2. In the package **Settings**, link the GitHub repository `graphql-markdown/graphql-markdown`.
 
-Run `bun run jsr:check` to verify the `jsr.json` manifests have not drifted from the `package.json` files.
+The derived fields of each `jsr.json` (`name`, `version`, `license` and the import version ranges) and core's `src/version.ts` are generated from the `package.json` files by `bun run jsr:sync`; run it after bumping versions. `bun run jsr:check` fails CI when they are out of date. `exports`, `publish` and the list of `imports` keys stay hand-written. JSR import maps cannot express `||` ranges, so `graphql` is overridden to `^17.0.0`.
 
 #### Automated publishing on release
 
