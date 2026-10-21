@@ -22,7 +22,7 @@ import {
   isLoaderString,
   isSchemaString,
   isSchemaObject,
-} from "./directives/validation.js";
+} from "./directives/validation.ts";
 
 /**
  * The name of the GraphQL Markdown extension.

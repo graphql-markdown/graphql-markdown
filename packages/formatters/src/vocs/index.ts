@@ -22,7 +22,7 @@ import {
   formatMDXEscapedPermalink,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
-} from "../defaults.js";
+} from "../defaults.ts";
 
 /**
  * Formats a permalink for a section header, using the classic `{#id}` syntax
@@ -115,7 +115,7 @@ export {
   formatMDXDetails,
   formatMDXFrontmatter,
   formatMDXSpecifiedByLink,
-} from "../defaults.js";
+} from "../defaults.ts";
 
 /**
  * Creates a Vocs formatter.

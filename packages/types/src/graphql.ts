@@ -21,8 +21,8 @@ import type {
   GraphQLUnionType,
 } from "graphql/type";
 
-import type { Maybe } from "./utils.js";
-import type { ConfigOptions } from "./core.js";
+import type { Maybe } from "./utils.ts";
+import type { ConfigOptions } from "./core.ts";
 
 export type {
   GraphQLArgument,

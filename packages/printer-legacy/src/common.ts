@@ -21,8 +21,8 @@ import {
   DEPRECATED,
   MARKDOWN_EOP,
   NO_DESCRIPTION_TEXT,
-} from "./const/strings.js";
-import { printSlotDecorators } from "./decorator.js";
+} from "./const/strings.ts";
+import { printSlotDecorators } from "./decorator.ts";
 
 /**
  * Formats a GraphQL type description or falls back to a default message.

@@ -38,7 +38,7 @@ import type {
 
 import { convertArrayToMapObject, toString } from "@graphql-markdown/utils";
 
-import { instanceOf } from "./guard.js";
+import { instanceOf } from "./guard.ts";
 
 export { printSchema } from "graphql/utilities";
 export { getNamedType, getNullableType, GraphQLSchema } from "graphql/type";

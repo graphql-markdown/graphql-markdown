@@ -6,7 +6,7 @@
  * @module telemetry
  */
 
-import { VERSION } from "./version.js";
+import { VERSION } from "./version.ts";
 import type {
   CliOptions,
   ConfigOptions,

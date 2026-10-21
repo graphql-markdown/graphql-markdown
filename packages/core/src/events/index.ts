@@ -5,23 +5,23 @@
  */
 
 // Event constants
-export { ConfigBuildEvents } from "./config-build-events.js";
-export { SchemaEvents } from "./schema-events.js";
-export { DiffEvents } from "./diff-events.js";
-export { RenderRootTypesEvents } from "./render-root-types-events.js";
-export { RenderHomepageEvents } from "./render-homepage-events.js";
-export { RenderFilesEvents } from "./render-files-events.js";
-export { RenderTypeEntitiesEvents } from "./render-type-entities-events.js";
-export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events.js";
+export { ConfigBuildEvents } from "./config-build-events.ts";
+export { SchemaEvents } from "./schema-events.ts";
+export { DiffEvents } from "./diff-events.ts";
+export { RenderRootTypesEvents } from "./render-root-types-events.ts";
+export { RenderHomepageEvents } from "./render-homepage-events.ts";
+export { RenderFilesEvents } from "./render-files-events.ts";
+export { RenderTypeEntitiesEvents } from "./render-type-entities-events.ts";
+export { GenerateIndexMetafileEvents } from "./generate-index-metafile-events.ts";
 // Re-export used only by unit tests via the events barrel.
-export { PrintTypeEvents } from "./print-type-events.js";
+export { PrintTypeEvents } from "./print-type-events.ts";
 
 // Event classes
-export { ConfigBuildEvent } from "./config-build.js";
-export { SchemaEvent } from "./schema-load.js";
-export { DiffCheckEvent } from "./diff-check.js";
-export { RenderRootTypesEvent } from "./render-root-types.js";
-export { RenderHomepageEvent } from "./render-homepage.js";
-export { RenderFilesEvent } from "./render-files.js";
-export { RenderTypeEntitiesEvent } from "./render-type-entities.js";
-export { GenerateIndexMetafileEvent } from "./generate-index-metafile.js";
+export { ConfigBuildEvent } from "./config-build.ts";
+export { SchemaEvent } from "./schema-load.ts";
+export { DiffCheckEvent } from "./diff-check.ts";
+export { RenderRootTypesEvent } from "./render-root-types.ts";
+export { RenderHomepageEvent } from "./render-homepage.ts";
+export { RenderFilesEvent } from "./render-files.ts";
+export { RenderTypeEntitiesEvent } from "./render-type-entities.ts";
+export { GenerateIndexMetafileEvent } from "./generate-index-metafile.ts";

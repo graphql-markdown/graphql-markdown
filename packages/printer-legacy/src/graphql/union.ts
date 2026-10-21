@@ -12,7 +12,7 @@ import type {
 
 import { isUnionType, getTypeName } from "@graphql-markdown/graphql";
 
-import { printSection } from "../section.js";
+import { printSection } from "../section.ts";
 
 /**
  * Generates metadata documentation for a GraphQL Union type.

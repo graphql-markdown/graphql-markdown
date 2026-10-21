@@ -1,7 +1,7 @@
 import type { TelemetryTrigger } from "@graphql-markdown/types";
 
-import { DEFAULT_ENDPOINT } from "./constants.js";
-import type { TelemetryState } from "./state.js";
+import { DEFAULT_ENDPOINT } from "./constants.ts";
+import type { TelemetryState } from "./state.ts";
 
 export interface EnabledContext {
   /** Entry point; without it only `telemetry: true` enables (programmatic). */

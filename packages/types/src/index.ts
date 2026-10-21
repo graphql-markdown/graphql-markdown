@@ -1,29 +1,29 @@
 // @graphql-markdown/cli
-export type * from "./cli.js";
+export type * from "./cli.ts";
 
 // @graphql-markdown/core
-export type * from "./core.js";
+export type * from "./core.ts";
 
 // @graphql-markdown/core - Events
-export type * from "./event.js";
+export type * from "./event.ts";
 
 // @graphql-markdown/core - Formatter
-export type * from "./formatter.js";
+export type * from "./formatter.ts";
 
 // @graphql-markdown/utils
-export type * from "./utils.js";
+export type * from "./utils.ts";
 
 // @graphql-markdown/printer-legacy
-export type * from "./printer.js";
+export type * from "./printer.ts";
 
 // @graphql-markdown/logger
-export type * from "./logger.js";
+export type * from "./logger.ts";
 
 // @graphql-markdown/graphql
-export type * from "./graphql.js";
+export type * from "./graphql.ts";
 
 // @graphql-markdown/helpers
-export type * from "./helpers.js";
+export type * from "./helpers.ts";
 
 // @graphql-markdown/telemetry
-export type * from "./telemetry.js";
+export type * from "./telemetry.ts";

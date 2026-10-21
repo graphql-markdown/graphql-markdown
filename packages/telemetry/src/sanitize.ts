@@ -1,13 +1,13 @@
 import type { CliOptions, ConfigOptions } from "@graphql-markdown/types";
 
-import { maskPointer } from "./loader.js";
+import { maskPointer } from "./loader.ts";
 import {
   DEPRECATED_OPTIONS,
   DIFF_METHODS,
   FORMATTER_PRESETS,
   HIERARCHIES,
   KNOWN_LOADERS,
-} from "./schema.js";
+} from "./schema.ts";
 
 export type Rule =
   | { kind: "any" } // shape-based masking

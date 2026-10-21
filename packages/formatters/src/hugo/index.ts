@@ -39,8 +39,8 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults.js";
-import { writeOutput } from "../output.js";
+} from "../defaults.ts";
+import { writeOutput } from "../output.ts";
 
 /**
  * Maps graphql-markdown admonition types to Hugo GitHub-style alert types (Hugo 0.132+).
@@ -143,7 +143,7 @@ export {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
-} from "../defaults.js";
+} from "../defaults.ts";
 
 /**
  * Creates a Hugo formatter.

@@ -7,9 +7,9 @@ import type {
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
-} from "./core.js";
-import type { ICancellableEvent } from "./event.js";
-import type { MDXString, Maybe } from "./utils.js";
+} from "./core.ts";
+import type { ICancellableEvent } from "./event.ts";
+import type { MDXString, Maybe } from "./utils.ts";
 
 /**
  * Represents a single header section of a page with only content.
@@ -117,13 +117,13 @@ export interface ComposePageTypeEventData {
   readonly sections: PageSections;
 }
 
-import type { Formatter } from "./formatter.js";
+import type { Formatter } from "./formatter.ts";
 import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntitiesGroupMap,
   SchemaEntity,
-} from "./graphql.js";
+} from "./graphql.ts";
 
 /**
  * Minimal event emitter interface for printer event emission.

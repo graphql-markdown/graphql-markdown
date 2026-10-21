@@ -45,12 +45,12 @@ import type {
 import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
-import { loadConfiguration } from "./graphql-config.js";
-import { reportTelemetry, resolveTelemetryContext } from "./telemetry.js";
-import type { BuildConfigContext } from "./telemetry.js";
-import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns.js";
-import { isInvalidFunctionProperty } from "./directives/validation.js";
-import { OptionBuilder } from "./options/builder.js";
+import { loadConfiguration } from "./graphql-config.ts";
+import { reportTelemetry, resolveTelemetryContext } from "./telemetry.ts";
+import type { BuildConfigContext } from "./telemetry.ts";
+import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns.ts";
+import { isInvalidFunctionProperty } from "./directives/validation.ts";
+import { OptionBuilder } from "./options/builder.ts";
 
 /**
  * Type hierarchy options for organizing schema documentation.

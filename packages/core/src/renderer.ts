@@ -27,16 +27,16 @@ import {
 } from "@graphql-markdown/utils";
 
 import { log, LogLevel } from "@graphql-markdown/logger";
-import { ASSET_HOMEPAGE_LOCATION, TypeHierarchy } from "./config.js";
-import { DEFAULT_HOMEPAGE_TEMPLATE } from "./const/homepage.js";
-import { isGroupsObject, isPath } from "./directives/validation.js";
-import { getEvents } from "./event-emitter.js";
+import { ASSET_HOMEPAGE_LOCATION, TypeHierarchy } from "./config.ts";
+import { DEFAULT_HOMEPAGE_TEMPLATE } from "./const/homepage.ts";
+import { isGroupsObject, isPath } from "./directives/validation.ts";
+import { getEvents } from "./event-emitter.ts";
 import {
   GenerateIndexMetafileEvent,
   GenerateIndexMetafileEvents,
   RenderTypeEntitiesEvent,
   RenderTypeEntitiesEvents,
-} from "./events/index.js";
+} from "./events/index.ts";
 
 /**
  * Constant representing the string literal for deprecated entities.

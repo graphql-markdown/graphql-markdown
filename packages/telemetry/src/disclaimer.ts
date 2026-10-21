@@ -1,6 +1,6 @@
-import type { CiInfo } from "./ci.js";
-import { NOTICE_VERSION } from "./constants.js";
-import type { TelemetryState } from "./state.js";
+import type { CiInfo } from "./ci.ts";
+import { NOTICE_VERSION } from "./constants.ts";
+import type { TelemetryState } from "./state.ts";
 
 export const FULL_NOTICE = `ℹ GraphQL-Markdown collects anonymous usage data to help improve the tool.
   Sent: package/Node versions, OS, schema loader type, the settings you use,

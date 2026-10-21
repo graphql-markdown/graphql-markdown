@@ -25,8 +25,8 @@ import {
   formatMDXFrontmatterTitleOnly,
   formatMDXLink,
   formatMDXPermalink,
-} from "../defaults.js";
-import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.js";
+} from "../defaults.ts";
+import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.ts";
 
 export const __default: {
   formatMDXBullet: typeof formatMDXBullet;
@@ -138,7 +138,7 @@ export const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook = async (
   await rewriteRenderedPage(event, rewriteInternalLinks);
 };
 
-export { formatMDXBullet, formatMDXPermalink } from "../defaults.js";
+export { formatMDXBullet, formatMDXPermalink } from "../defaults.ts";
 
 /**
  * Creates an MkDocs Material formatter.

@@ -1,28 +1,28 @@
-export { NOTICE_VERSION, DEFAULT_ENDPOINT } from "./constants.js";
-export { resolveConfigDir } from "./config-dir.js";
-export { readState, writeState, getStatePath } from "./state.js";
-export type { TelemetryState } from "./state.js";
-export { detectCi } from "./ci.js";
-export type { CiInfo } from "./ci.js";
-export { isEnabled, getEndpoint } from "./enabled.js";
-export type { EnabledContext } from "./enabled.js";
-export { classifyPointer } from "./loader.js";
-export type { LoaderKind } from "./loader.js";
-export { sanitizeConfig, CONFIG_RULES, CLI_RULES } from "./sanitize.js";
-export type { Rule, SanitizeResult } from "./sanitize.js";
-export { buildPayload, fingerprint } from "./payload.js";
-export type { PayloadInput } from "./payload.js";
+export { NOTICE_VERSION, DEFAULT_ENDPOINT } from "./constants.ts";
+export { resolveConfigDir } from "./config-dir.ts";
+export { readState, writeState, getStatePath } from "./state.ts";
+export type { TelemetryState } from "./state.ts";
+export { detectCi } from "./ci.ts";
+export type { CiInfo } from "./ci.ts";
+export { isEnabled, getEndpoint } from "./enabled.ts";
+export type { EnabledContext } from "./enabled.ts";
+export { classifyPointer } from "./loader.ts";
+export type { LoaderKind } from "./loader.ts";
+export { sanitizeConfig, CONFIG_RULES, CLI_RULES } from "./sanitize.ts";
+export type { Rule, SanitizeResult } from "./sanitize.ts";
+export { buildPayload, fingerprint } from "./payload.ts";
+export type { PayloadInput } from "./payload.ts";
 export {
   errorTypeOf,
   ERROR_TYPES,
   NO_SCHEMA_ERROR,
   POST_ERROR_PREFIX,
-} from "./error-type.js";
+} from "./error-type.ts";
 export {
   printDisclaimer,
   isNoticeDue,
   resetDisclaimer,
   FULL_NOTICE,
-} from "./disclaimer.js";
-export { track, encodeBody } from "./track.js";
-export type { TrackInput } from "./track.js";
+} from "./disclaimer.ts";
+export { track, encodeBody } from "./track.ts";
+export type { TrackInput } from "./track.ts";
