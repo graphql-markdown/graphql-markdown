@@ -1,6 +1,11 @@
 /* eslint "no-control-regex": "off" */
 
 import * as Logger from "../../src";
+import type { LoggerType } from "@graphql-markdown/types";
+
+const globalScope = globalThis as typeof globalThis & {
+  logger?: LoggerType | null;
+};
 
 describe("logger", () => {
   beforeEach(() => {
@@ -10,18 +15,18 @@ describe("logger", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.resetAllMocks();
-    globalThis.logger = undefined;
+    globalScope.logger = undefined;
   });
 
   describe("log()", () => {
     test("instantiates Logger", async () => {
       expect.hasAssertions();
 
-      expect(globalThis.logger).toBeUndefined();
+      expect(globalScope.logger).toBeUndefined();
 
       Logger.log("test");
 
-      expect(globalThis.logger).toBeDefined();
+      expect(globalScope.logger).toBeDefined();
     });
 
     test("uses fallback log method if level not supported", async () => {
@@ -48,7 +53,7 @@ describe("logger", () => {
       Logger.log("test");
 
       expect(spy).toHaveLastReturnedWith("Mocked Console");
-      expect(globalThis.logger).toBeDefined();
+      expect(globalScope.logger).toBeDefined();
     });
 
     test.each([[undefined], [""]])(
@@ -67,7 +72,7 @@ describe("logger", () => {
 
         expect(spy).toHaveBeenCalledWith("test");
         expect(spy).toHaveLastReturnedWith("Mocked Console");
-        expect(globalThis.logger).toBeDefined();
+        expect(globalScope.logger).toBeDefined();
       },
     );
 
@@ -76,7 +81,7 @@ describe("logger", () => {
 
       await Logger.Logger();
 
-      expect(globalThis.logger?.instance).toEqual(
+      expect(globalScope.logger?.instance).toEqual(
         expect.objectContaining({
           debug: expect.any(Function),
           error: expect.any(Function),
@@ -92,8 +97,8 @@ describe("logger", () => {
 
       await Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
-      expect(globalThis.logger).toBeDefined();
-      expect(globalThis.logger?.instance).toEqual(
+      expect(globalScope.logger).toBeDefined();
+      expect(globalScope.logger?.instance).toEqual(
         expect.objectContaining({
           info: expect.any(Function),
         }),
@@ -110,11 +115,11 @@ describe("logger", () => {
         });
 
       await Logger.Logger();
-      expect(globalThis.logger).toBeDefined();
+      expect(globalScope.logger).toBeDefined();
 
       await Logger.Logger(require.resolve("../__data__/dummy_logger"));
 
-      const spyLogger = vi.spyOn(globalThis.logger!, "_log");
+      const spyLogger = vi.spyOn(globalScope.logger!, "_log");
 
       Logger.log("test");
 
@@ -130,7 +135,7 @@ describe("logger", () => {
       await Logger.Logger({ info });
       Logger.log("test");
 
-      expect(globalThis.logger?.instance).toEqual(
+      expect(globalScope.logger?.instance).toEqual(
         expect.objectContaining({ info }),
       );
       expect(info).toHaveBeenCalledWith("test");
@@ -160,7 +165,7 @@ describe("logger", () => {
       Logger.log("test");
 
       expect(spy).toHaveBeenCalledWith("test");
-      expect(globalThis.logger?.instance).toBe(globalThis.console);
+      expect(globalScope.logger?.instance).toBe(globalThis.console);
     });
 
     test("overrides current logger with an instance passed as an object", async () => {
@@ -174,7 +179,7 @@ describe("logger", () => {
       const info = vi.fn();
 
       await Logger.Logger();
-      expect(globalThis.logger).toBeDefined();
+      expect(globalScope.logger).toBeDefined();
 
       await Logger.Logger({ info });
       Logger.log("test");

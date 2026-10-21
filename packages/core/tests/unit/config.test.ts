@@ -72,7 +72,7 @@ describe("config", () => {
   });
 
   afterAll(() => {
-    delete globalThis.logger;
+    delete (globalThis as { logger?: unknown }).logger;
   });
 
   describe("getSkipDocDirectives", () => {
