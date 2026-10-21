@@ -119,6 +119,10 @@
     "mutation-testing-metrics",
     "better-sqlite3",
     "shiki",
+    // Pinned JSR CLI and Deno runtime: publish-release.mts runs their binaries
+    // from node_modules (Deno via DENO_BIN_PATH) and never imports them.
+    "deno",
+    "jsr",
   ],
 
   // Class member false-positive suppressions.
