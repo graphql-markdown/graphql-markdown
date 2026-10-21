@@ -6,14 +6,17 @@ export type Registry = "npm" | "jsr" | "all";
 
 const REGISTRIES = new Set<string>(["npm", "jsr", "all"]);
 
+const argAt = (args: string[], index: number): string => args[index] ?? "";
+
 type RegistryOption = { value: string; consumed: number };
 
 const parseRegistryOption = (
-  arg: string,
-  next: string | undefined,
+  args: string[],
+  index: number,
 ): RegistryOption | undefined => {
+  const arg = argAt(args, index);
   if (arg === "--registry") {
-    return { value: next ?? "", consumed: 2 };
+    return { value: argAt(args, index + 1), consumed: 2 };
   }
   if (arg.startsWith("--registry=")) {
     return { value: arg.slice("--registry=".length), consumed: 1 };
@@ -21,18 +24,18 @@ const parseRegistryOption = (
   return undefined;
 };
 
-const registryResult = (
+const validateRegistry = (
   registry: string,
   rest: string[],
 ): { registry: Registry; rest: string[]; error?: string } => {
-  if (!REGISTRIES.has(registry)) {
-    return {
-      registry: "all",
-      rest,
-      error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
-    };
+  if (REGISTRIES.has(registry)) {
+    return { registry: registry as Registry, rest };
   }
-  return { registry: registry as Registry, rest };
+  return {
+    registry: "all",
+    rest,
+    error: `invalid --registry "${registry}" (expected npm, jsr or all)`,
+  };
 };
 
 // Extracts `--registry <value>` / `--registry=<value>` from argv. Returns the
@@ -44,15 +47,15 @@ export const parseRegistryArg = (
   const rest: string[] = [];
   let registry: string = "all";
   for (let i = 0; i < args.length; i++) {
-    const option = parseRegistryOption(args[i], args[i + 1]);
+    const option = parseRegistryOption(args, i);
     if (option === undefined) {
-      rest.push(args[i]);
+      rest.push(argAt(args, i));
       continue;
     }
     registry = option.value;
     i += option.consumed - 1;
   }
-  return registryResult(registry, rest);
+  return validateRegistry(registry, rest);
 };
 
 export const jsrMetaUrl = (name: string): string => {
