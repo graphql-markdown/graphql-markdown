@@ -70,6 +70,7 @@
         "scripts/publish-release.mts",
         "scripts/tarball-check.mts",
         "scripts/jsr-check.mts",
+        "scripts/jsr-publish.mts",
         "scripts/docs-api.mjs",
         "husky/prepare-husky.js",
         "stryker/stryker.conf.mjs",

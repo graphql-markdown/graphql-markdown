@@ -12,6 +12,12 @@ on:
   # script itself. Still gated by the npm-publish environment, and the script
   # skips every version already on npm.
   workflow_dispatch:
+    inputs:
+      registry:
+        description: Registry to publish to (use jsr to re-run only the JSR phase)
+        type: choice
+        options: [all, npm, jsr]
+        default: all
 
 concurrency:
   group: publish
@@ -29,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: npm-publish
     permissions:
-      id-token: write # OIDC trusted publishing to npm, no NPM_TOKEN needed
+      id-token: write # OIDC trusted publishing to npm and JSR, no tokens needed
       contents: read
     steps:
       - name: Checkout Code Base
@@ -47,8 +53,14 @@ jobs:
       - name: Ensure OIDC-capable npm CLI
         run: npm install -g npm@latest
 
+      # Publishes to npm first, then to JSR (`npx jsr publish`, tokenless via
+      # OIDC; each package must be linked to this repo on jsr.io).
       - name: Dry-run publish (rehearsal)
-        run: node packages/tooling-config/scripts/publish-release.mts --dry-run
+        run: node packages/tooling-config/scripts/publish-release.mts --dry-run --registry "$REGISTRY"
+        env:
+          REGISTRY: ${{ inputs.registry || 'all' }}
 
-      - name: Publish to npm
-        run: node packages/tooling-config/scripts/publish-release.mts --yes
+      - name: Publish to npm and JSR
+        run: node packages/tooling-config/scripts/publish-release.mts --yes --registry "$REGISTRY"
+        env:
+          REGISTRY: ${{ inputs.registry || 'all' }}
