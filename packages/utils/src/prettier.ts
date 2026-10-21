@@ -39,11 +39,14 @@ export const prettify = async (
   parser: string,
 ): Promise<string | undefined> => {
   try {
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      PRETTIER_MODULE,
+      OPTIONAL_DEPENDENCY_RANGES[PRETTIER_MODULE],
+    );
     const { resolveConfigFile, resolveConfig, format } = (await import(
-      runtimeModuleSpecifier(
-        PRETTIER_MODULE,
-        OPTIONAL_DEPENDENCY_RANGES[PRETTIER_MODULE],
-      )
+      specifier
     )) as PrettierModule;
     const file = await resolveConfigFile();
 

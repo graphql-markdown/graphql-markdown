@@ -143,7 +143,8 @@ export const Logger = async (
 
   let moduleExports: Record<string, unknown> | undefined;
   if (typeof moduleName === "string" && moduleName !== "") {
-    moduleExports = await import(runtimeModuleSpecifier(moduleName));
+    const specifier = runtimeModuleSpecifier(moduleName);
+    moduleExports = await import(specifier);
   } else if (typeof moduleName === "object") {
     moduleExports = moduleName;
   }

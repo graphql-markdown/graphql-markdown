@@ -169,12 +169,13 @@ export const loadConfiguration = async (
   }
 
   try {
-    graphQLConfig = (await import(
-      runtimeModuleSpecifier(
-        GRAPHQL_CONFIG_MODULE,
-        OPTIONAL_DEPENDENCY_RANGES[GRAPHQL_CONFIG_MODULE],
-      )
-    )) as GraphQLConfigModule;
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      GRAPHQL_CONFIG_MODULE,
+      OPTIONAL_DEPENDENCY_RANGES[GRAPHQL_CONFIG_MODULE],
+    );
+    graphQLConfig = (await import(specifier)) as GraphQLConfigModule;
   } catch (error) {
     log(`Cannot load module 'graphql-config': ${(error as Error).message}`);
     return undefined;

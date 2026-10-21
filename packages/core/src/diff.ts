@@ -79,15 +79,18 @@ export const hasChanges = async (
 
   try {
     // Specifier is only known at runtime (optional, user-configurable diff module).
+    // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+    // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+    const specifier = runtimeModuleSpecifier(
+      diffModule,
+      diffModule === "@graphql-markdown/diff"
+        ? OPTIONAL_DEPENDENCY_RANGES[diffModule]
+        : undefined,
+    );
     const {
       checkSchemaChanges,
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(
-      runtimeModuleSpecifier(
-        diffModule,
-        diffModule === "@graphql-markdown/diff"
-          ? OPTIONAL_DEPENDENCY_RANGES[diffModule]
-          : undefined,
-      )
+      specifier
     );
     return await checkSchemaChanges(schema, tmpDir, diffMethod);
   } catch {

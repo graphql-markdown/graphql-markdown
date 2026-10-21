@@ -100,18 +100,21 @@ const SEC_DECIMALS = 3 as const;
 export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
+  if (mdxParser === undefined || mdxParser === null) {
+    return undefined;
+  }
   // Specifier is only known at runtime (user-configured formatter package).
-  return mdxParser !== undefined && mdxParser !== null
-    ? import(runtimeModuleSpecifier(mdxParser)).catch((error: unknown) => {
-        const errorMessage =
-          error instanceof Error ? error.message : String(error);
-        log(
-          `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
-          LogLevel.warn,
-        );
-        return undefined;
-      })
-    : undefined;
+  // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
+  // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
+  const specifier = runtimeModuleSpecifier(mdxParser);
+  return import(specifier).catch((error: unknown) => {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    log(
+      `An error occurred while loading MDX formatter "${mdxParser}": ${errorMessage}`,
+      LogLevel.warn,
+    );
+    return undefined;
+  });
 };
 
 /**
