@@ -75,7 +75,7 @@ describe("computeAffected() global fail-open", () => {
   // Static tier: type definitions are erased before a mutant runs and CI
   // tooling is not part of any package, so neither can move a Stryker score.
   test.each([
-    ["packages/types/src/core.d.ts"],
+    ["packages/types/src/core.ts"],
     [".github/scripts/affected-packages.mts"],
     // This very file: the gate must invalidate itself, or a change to its own
     // tests would report `docs_only` and never run them.
@@ -94,7 +94,7 @@ describe("computeAffected() global fail-open", () => {
     // packages implementing it. The closure still covers everything, but
     // Stryker only runs where the sources actually changed.
     const outputs = computeAffected(
-      ["packages/types/src/core.d.ts", "packages/core/src/config.ts"],
+      ["packages/types/src/core.ts", "packages/core/src/config.ts"],
       packagesMap,
     );
 

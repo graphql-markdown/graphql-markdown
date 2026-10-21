@@ -3,7 +3,7 @@
   "version": "1.17.0",
   "license": "MIT",
   "exports": {
-    ".": "./src/index.d.ts"
+    ".": "./src/index.ts"
   },
   "imports": {
     "@graphql-tools/load": "npm:@graphql-tools/load@8.1.21",

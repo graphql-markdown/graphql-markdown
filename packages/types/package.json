@@ -18,7 +18,7 @@
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
   "homepage": "https://github.com/graphql-markdown/graphql-markdown#readme",
-  "types": "src/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsgo --build"
   },
@@ -35,6 +35,6 @@
     "access": "public"
   },
   "files": [
-    "src"
+    "dist"
   ]
 }

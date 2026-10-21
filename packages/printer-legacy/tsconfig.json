@@ -11,7 +11,7 @@
     "isolatedDeclarations": true,
 
     "paths": {
-      "@graphql-markdown/types": ["../types/src/index.d.ts"],
+      "@graphql-markdown/types": ["../types/dist/index.d.ts"],
       "@graphql-markdown/*": ["../*/dist/index.d.ts"]
     }
   },

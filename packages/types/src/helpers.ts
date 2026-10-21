@@ -1,4 +1,4 @@
-import type { GraphQLDirective, DirectiveName } from "./graphql";
+import type { GraphQLDirective, DirectiveName } from "./graphql.js";
 
 /** Function to process custom GraphQL directives */
 export type CustomDirectiveFunction = (

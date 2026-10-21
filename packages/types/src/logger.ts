@@ -14,5 +14,5 @@ export interface LoggerType {
    * Logger instance with methods for each log level
    * Each method accepts variable arguments of unknown type
    */
-  instance: Partial<Record<LogLevel, (...unknown) => void>>;
+  instance: Partial<Record<LogLevel, (...args: unknown[]) => void>>;
 }

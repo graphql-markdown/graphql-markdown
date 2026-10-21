@@ -6,18 +6,18 @@ import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntity,
-} from "./graphql";
+} from "./graphql.js";
 
-import type { CustomDirective } from "./helpers";
+import type { CustomDirective } from "./helpers.js";
 
-import type { Maybe, MDXString, OutputAdapter } from "./utils";
-import type { TelemetryTrigger } from "./telemetry";
+import type { Maybe, MDXString, OutputAdapter } from "./utils.js";
+import type { TelemetryTrigger } from "./telemetry.js";
 import type {
   AdmonitionType,
   Badge,
   PrintTypeOptions,
   TypeLink,
-} from "./printer";
+} from "./printer.js";
 import type {
   BeforeComposePageTypeHook,
   DiffCheckHook,
@@ -29,7 +29,7 @@ import type {
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
   SchemaLoadHook,
-} from "./event";
+} from "./event.js";
 
 /**
  * Core type definitions for configuration and document generation.
@@ -654,7 +654,7 @@ export type {
   RenderRootTypesHook,
   RenderTypeEntitiesHook,
   SchemaLoadHook,
-} from "./event";
+} from "./event.js";
 
 /**
  * Metadata information about the documentation generator framework.

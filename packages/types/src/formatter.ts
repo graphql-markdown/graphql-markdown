@@ -8,10 +8,10 @@
  * @packageDocumentation
  */
 
-import type { Maybe, MDXString } from "./utils";
-import type { AdmonitionType, Badge, MetaInfo, TypeLink } from "./printer";
-import type { CollapsibleOption, FrontMatterOptions } from "./core";
-import type { SchemaEntity } from "./graphql";
+import type { Maybe, MDXString } from "./utils.js";
+import type { AdmonitionType, Badge, TypeLink } from "./printer.js";
+import type { CollapsibleOption, FrontMatterOptions, MetaInfo } from "./core.js";
+import type { SchemaEntity } from "./graphql.js";
 
 /**
  * Formatter interface defining all formatting methods for documentation output.

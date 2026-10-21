@@ -7,9 +7,9 @@ import type {
   TypeDeprecatedOption,
   TypeExampleSectionOption,
   TypeHierarchyObjectType,
-} from "./core";
-import type { ICancellableEvent } from "./event";
-import type { MDXString, Maybe } from "./utils";
+} from "./core.js";
+import type { ICancellableEvent } from "./event.js";
+import type { MDXString, Maybe } from "./utils.js";
 
 /**
  * Represents a single header section of a page with only content.
@@ -117,13 +117,13 @@ export interface ComposePageTypeEventData {
   readonly sections: PageSections;
 }
 
-import type { Formatter } from "./formatter";
+import type { Formatter } from "./formatter.js";
 import type {
   GraphQLDirective,
   GraphQLSchema,
   SchemaEntitiesGroupMap,
   SchemaEntity,
-} from "./graphql";
+} from "./graphql.js";
 
 /**
  * Minimal event emitter interface for printer event emission.
@@ -317,7 +317,7 @@ export type PrinterInitOptions = {
  * @public
  * @abstract
  */
-export abstract class IPrinter {
+export declare abstract class IPrinter {
   /**
    * Initializes the printer with schema and configuration
    * @param schema - The GraphQL schema to process
