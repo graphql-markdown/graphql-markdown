@@ -122,7 +122,7 @@ export const PACKAGE_NAME = "@graphql-markdown/docusaurus" as const;
  * Location of the default homepage template.
  * @public
  */
-export const ASSET_HOMEPAGE_LOCATION = join(
+export const ASSET_HOMEPAGE_LOCATION: string = join(
   __dirname,
   "..",
   "assets",
@@ -133,7 +133,9 @@ export const ASSET_HOMEPAGE_LOCATION = join(
  * Default hierarchy configuration using the API hierarchy type.
  * @public
  */
-export const DEFAULT_HIERARCHY = { [TypeHierarchy.API]: {} };
+export const DEFAULT_HIERARCHY: { api: Record<string, never> } = {
+  [TypeHierarchy.API]: {},
+};
 
 /** Memoised OS temp path, resolved on the first read of `DEFAULT_OPTIONS.tmpDir`. */
 let defaultTmpDir: string | undefined;

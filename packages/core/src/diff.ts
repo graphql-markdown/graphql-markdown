@@ -75,6 +75,7 @@ export const hasChanges = async (
   }
 
   try {
+    // Specifier is only known at runtime (optional, user-configurable diff module).
     const {
       checkSchemaChanges,
     }: { checkSchemaChanges: FunctionCheckSchemaChanges } = await import(

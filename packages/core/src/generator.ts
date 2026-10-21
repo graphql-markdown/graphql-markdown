@@ -100,6 +100,7 @@ const SEC_DECIMALS = 3 as const;
 export const loadMDXModule = async (
   mdxParser: Maybe<PackageName | string>,
 ): Promise<unknown> => {
+  // Specifier is only known at runtime (user-configured formatter package).
   return mdxParser !== undefined && mdxParser !== null
     ? import(mdxParser).catch((error: unknown) => {
         const errorMessage =

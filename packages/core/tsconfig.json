@@ -5,6 +5,7 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "isolatedDeclarations": true,
     "paths": {
       "@graphql-markdown/types": ["../types/src/index.d.ts"],
       "@graphql-markdown/*": ["../*/dist/index.d.ts"]
