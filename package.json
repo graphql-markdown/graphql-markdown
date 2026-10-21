@@ -18,7 +18,7 @@
     ],
     "catalog": {
       "graphql": "^16.0.0 || ^17.0.0",
-      "graphql-config": "5.1.6",
+      "graphql-config": "5.1.8",
       "prettier": "3.8.3"
     },
     "catalogs": {
