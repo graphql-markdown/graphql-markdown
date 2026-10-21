@@ -3,10 +3,13 @@ import { join } from "node:path";
 
 import { VERSION } from "../../src/version";
 
-const readManifest = (file: string): { version: string } =>
-  JSON.parse(readFileSync(join(__dirname, "..", "..", file), "utf8")) as {
+const readManifest = (file: string): { version: string } => {
+  return JSON.parse(
+    readFileSync(join(__dirname, "..", "..", file), "utf8"),
+  ) as {
     version: string;
   };
+};
 
 describe("VERSION", () => {
   test("matches package.json version", () => {
