@@ -1,11 +1,11 @@
 {
   "name": "@graphql-markdown/helpers",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown customization helpers.",
+  "description": "Helpers for customizing GraphQL-Markdown output, such as directives and custom rendering.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.2.3",
+  "version": "1.2.4",
   "license": "MIT",
   "repository": {
     "type": "git",

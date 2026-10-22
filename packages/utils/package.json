@@ -1,11 +1,11 @@
 {
   "name": "@graphql-markdown/utils",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown common libraries.",
+  "description": "Shared utilities for GraphQL-Markdown: file system, string, URL and configuration helpers.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.14.0",
+  "version": "1.14.1",
   "license": "MIT",
   "repository": {
     "type": "git",

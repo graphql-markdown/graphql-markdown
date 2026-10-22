@@ -1,11 +1,11 @@
 {
   "name": "@graphql-markdown/printer-legacy",
   "homepage": "https://graphql-markdown.dev",
-  "description": "GraphQL-Markdown legacy Docusaurus printer.",
+  "description": "Default Markdown/MDX printer for GraphQL-Markdown, rendering GraphQL schema types for any supported framework.",
   "bugs": {
     "url": "https://github.com/graphql-markdown/graphql-markdown/issues"
   },
-  "version": "1.19.2",
+  "version": "1.19.3",
   "license": "MIT",
   "repository": {
     "type": "git",

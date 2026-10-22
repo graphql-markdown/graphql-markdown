@@ -6,7 +6,7 @@ import { findIndentedLine } from "../rewrites/lines.mjs";
 
 const MDX_FORMATTER = "@graphql-markdown/formatters/mdx";
 // Must match the @graphql-markdown/formatters release that ships `./mdx`.
-const FORMATTERS_RANGE = "^1.2.0";
+const FORMATTERS_RANGE = "^1.2.1";
 
 /** Adds the mdx formatter to .graphqlrc, right before the `loaders:` line. */
 export function writeMdxFormatter(tempDir) {

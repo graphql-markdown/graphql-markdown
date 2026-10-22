@@ -1,15 +1,15 @@
 {
   "name": "@graphql-markdown/printer-legacy",
-  "version": "1.19.2",
+  "version": "1.19.3",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts"
   },
   "imports": {
-    "@graphql-markdown/formatters": "jsr:@graphql-markdown/formatters@^1.2.0",
-    "@graphql-markdown/graphql": "jsr:@graphql-markdown/graphql@^1.3.3",
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
-    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0"
+    "@graphql-markdown/formatters": "jsr:@graphql-markdown/formatters@^1.2.1",
+    "@graphql-markdown/graphql": "jsr:@graphql-markdown/graphql@^1.3.4",
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.1",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.1"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],
