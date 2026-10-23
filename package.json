@@ -211,7 +211,7 @@
     "jsonc-eslint-parser": "3.3.0",
     "knip": "6.42.1",
     "lodash.filter": "4.6.0",
-    "markdownlint-cli2": "^0.23.3",
+    "markdownlint-cli2": "^0.24.0",
     "memfs": "4.80.0",
     "mutation-testing-metrics": "3.9.0",
     "prettier": "catalog:",
