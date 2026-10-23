@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "@graphql-markdown/cli": "^1.2.0",
-    "@graphql-tools/graphql-file-loader": "^9.0.0",
+    "@graphql-tools/graphql-file-loader": "^8.0.0 || ^9.0.0",
     "graphql": "^16.13.2 || ^17.0.0",
     "graphql-config": "^5.1.8"
   }
