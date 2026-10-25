@@ -186,9 +186,7 @@ export type GraphQLOperationType =
  * Used for linking related fields across the schema.
  */
 export type RelationOfField =
-  | GraphQLDirective
-  | GraphQLNamedType
-  | GraphQLOperationType;
+  GraphQLDirective | GraphQLNamedType | GraphQLOperationType;
 
 /** Interface types that can implement relations */
 export type RelationOfInterface = GraphQLInterfaceType | GraphQLObjectType;

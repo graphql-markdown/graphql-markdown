@@ -1,17 +1,10 @@
 /** Entry point that triggered the telemetry event. */
 export type TelemetryTrigger =
-  | "cli"
-  | "create"
-  | "docusaurus"
-  | "nuxt"
-  | "programmatic";
+  "cli" | "create" | "docusaurus" | "nuxt" | "programmatic";
 
 /** Kind of telemetry event. */
 export type TelemetryEvent =
-  | "config"
-  | "create_scaffold"
-  | "create_wire"
-  | "generate";
+  "config" | "create_scaffold" | "create_wire" | "generate";
 
 /** Detected CI provider (`other` for a generic `CI` variable). */
 export type CiProvider =
