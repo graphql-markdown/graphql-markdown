@@ -13,7 +13,7 @@
     "@graphql-markdown/telemetry": "jsr:@graphql-markdown/telemetry@^0.1.0",
     "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
     "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0",
-    "@fastify/deepmerge": "npm:@fastify/deepmerge@^3.2.2",
+    "@fastify/deepmerge": "npm:@fastify/deepmerge@^3.2.4",
     "graphql": "npm:graphql@^17.0.0",
     "graphql/": "npm:/graphql@^17.0.0/"
   },
