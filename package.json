@@ -24,7 +24,7 @@
     "catalogs": {
       "graphql-tools": {
         "@graphql-tools/load": "8.1.21",
-        "@graphql-tools/graphql-file-loader": "9.0.6",
+        "@graphql-tools/graphql-file-loader": "^8.0.0 || ^9.0.0",
         "@graphql-tools/json-file-loader": "9.0.6",
         "@graphql-tools/utils": "12.1.0"
       },
