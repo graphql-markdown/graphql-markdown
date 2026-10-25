@@ -2,5 +2,5 @@
 // by `bun run jsr:sync` (verified by `bun run jsr:check`). Do not edit by hand.
 
 export const OPTIONAL_DEPENDENCY_RANGES: Readonly<Record<string, string>> = {
-  prettier: "^3.8.3",
+  prettier: "^3.9.10",
 };
