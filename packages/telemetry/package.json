@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@graphql-markdown/tooling-config": "workspace:^",
-    "@stryker-mutator/api": "10.0.0"
+    "@stryker-mutator/api": "10.1.0"
   },
   "directories": {
     "test": "tests"
