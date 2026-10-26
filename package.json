@@ -209,7 +209,7 @@
     "graphql-config": "catalog:",
     "husky": "9.1.7",
     "jsonc-eslint-parser": "3.3.0",
-    "knip": "6.42.1",
+    "knip": "6.43.0",
     "lodash.filter": "4.6.0",
     "markdownlint-cli2": "^0.24.0",
     "memfs": "4.80.0",
