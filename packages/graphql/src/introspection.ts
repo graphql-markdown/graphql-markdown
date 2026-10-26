@@ -427,14 +427,12 @@ export const _getFields = <T, V>(
   processor?: (fieldMap: Record<string, unknown>) => V,
   fallback?: V,
 ): Record<string, unknown> | V => {
-  if (
-    !(
-      typeof type === "object" &&
-      type !== null &&
-      "getFields" in type &&
-      isNamedType(type)
-    )
-  ) {
+  if (!(
+    typeof type === "object" &&
+    type !== null &&
+    "getFields" in type &&
+    isNamedType(type)
+  )) {
     return fallback as V;
   }
 
@@ -552,13 +550,11 @@ const collectOperationFields = (
   Object.entries(fieldMap).forEach(([name, operation]) => {
     const key = prefix ? `${prefix}.${name}` : name;
 
-    if (
-      !(
-        typeof operation === "object" &&
-        operation !== null &&
-        "type" in operation
-      )
-    ) {
+    if (!(
+      typeof operation === "object" &&
+      operation !== null &&
+      "type" in operation
+    )) {
       list[key] = operation as GraphQLOperationType;
       return;
     }

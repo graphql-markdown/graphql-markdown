@@ -177,8 +177,7 @@ export type TypeHierarchyObjectType = Partial<
 >;
 
 export type TypeHierarchyType =
-  | TypeHierarchyObjectType
-  | TypeHierarchyValueType;
+  TypeHierarchyObjectType | TypeHierarchyValueType;
 
 export type RendererDocOptions = ConfigDocOptions & {
   /** How to handle deprecated items */
