@@ -74,7 +74,7 @@
       "name": "@graphql-markdown/core",
       "version": "1.25.0",
       "dependencies": {
-        "@fastify/deepmerge": "^3.2.2",
+        "@fastify/deepmerge": "^3.2.4",
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/logger": "workspace:^",
         "@graphql-markdown/printer-legacy": "workspace:^",
@@ -583,7 +583,7 @@
 
     "@fastify/busboy": ["@fastify/busboy@3.2.3", "", {}, "sha512-fmo/IKgkenPzz3qTKG+sIUXdF/Kv83AkvvOXJHPTHJeKJbat8SsL1ihUaFaDotqoEl4UZ1Lf8Eb/3vK6eaWX2A=="],
 
-    "@fastify/deepmerge": ["@fastify/deepmerge@3.2.2", "", {}, "sha512-155eqA/WMQdN6gUD4RrhS2K0Pcz2Ou9pQ86L0sipOpP9ONbTA6oYw/hW4VdBjR4egcDHqmWUK9x80oUX7S1mDQ=="],
+    "@fastify/deepmerge": ["@fastify/deepmerge@3.2.4", "", {}, "sha512-kc8GQq5gX9RRhw0rov3DMrN8wS8yRlxJRdDzsYwwdBV/wazuVgc/1K7CKL90tlvu3RlHan6Y0R0aE3nJtBz2eQ=="],
 
     "@floating-ui/core": ["@floating-ui/core@1.8.0", "", { "dependencies": { "@floating-ui/utils": "^0.2.12" } }, "sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ=="],
 

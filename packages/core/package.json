@@ -72,7 +72,7 @@
     "test:watch": "vitest --watch"
   },
   "dependencies": {
-    "@fastify/deepmerge": "^3.2.2",
+    "@fastify/deepmerge": "^3.2.4",
     "@graphql-markdown/graphql": "workspace:^",
     "@graphql-markdown/logger": "workspace:^",
     "@graphql-markdown/printer-legacy": "workspace:^",
