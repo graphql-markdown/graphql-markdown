@@ -8,7 +8,7 @@
   "imports": {
     "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.17.0",
     "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0",
-    "@graphql-tools/load": "npm:@graphql-tools/load@8.1.21",
+    "@graphql-tools/load": "npm:@graphql-tools/load@^9.0.6",
     "graphql": "npm:graphql@^17.0.0",
     "graphql/": "npm:/graphql@^17.0.0/"
   },

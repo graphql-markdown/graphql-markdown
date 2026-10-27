@@ -6,8 +6,8 @@
     ".": "./src/index.ts"
   },
   "imports": {
-    "@graphql-tools/load": "npm:@graphql-tools/load@8.1.21",
-    "@graphql-tools/utils": "npm:@graphql-tools/utils@12.1.0",
+    "@graphql-tools/load": "npm:@graphql-tools/load@^9.0.6",
+    "@graphql-tools/utils": "npm:@graphql-tools/utils@^13.1.3",
     "graphql": "npm:graphql@^17.0.0",
     "graphql/": "npm:/graphql@^17.0.0/"
   },
