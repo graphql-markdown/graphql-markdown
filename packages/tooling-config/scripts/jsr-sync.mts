@@ -44,7 +44,7 @@ export const OPTIONAL_DEPENDENCY_FILES: Record<string, string> = {
 // JSR import maps cannot express `||` ranges; use supported target ranges.
 export const JSR_RANGE_OVERRIDES: Record<string, string> = {
   graphql: "^17.0.0",
-  "@graphql-tools/graphql-file-loader": "9.0.6",
+  "@graphql-tools/graphql-file-loader": "^9.0.6",
 };
 
 const SCOPE = "@graphql-markdown/";
