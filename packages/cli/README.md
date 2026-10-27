@@ -25,7 +25,7 @@ npx gqlmd graphql-to-doc
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/settings)
-- [CLI Usage Guide](https://graphql-markdown.dev/docs/cli)
+- [CLI Flags](https://graphql-markdown.dev/docs/configuration-cheatsheet#cli-flags)
 - [Troubleshooting](https://graphql-markdown.dev/docs/troubleshooting)
 
 ## License

@@ -36,17 +36,17 @@ await generateDocFromSchema(config);
 ```ts
 import { getEvents, SchemaEvents } from "@graphql-markdown/core";
 
-getEvents().on(SchemaEvents.SCHEMA_LOAD, (event) => {
+getEvents().on(SchemaEvents.AFTER_LOAD, (event) => {
   console.log("Schema loaded", event);
 });
 ```
 
-See the [event handlers documentation](https://graphql-markdown.dev/docs/advanced/lifecycle-events) for the full list of lifecycle events and their payloads.
+See the [hooks recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes) for the full list of lifecycle events and their payloads.
 
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/settings)
-- [Lifecycle Events](https://graphql-markdown.dev/docs/advanced/lifecycle-events)
+- [Hooks Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes)
 
 ## License
 
