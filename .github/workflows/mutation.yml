@@ -58,7 +58,10 @@ jobs:
           # `direct_packages` also lists workspace packages without one (e.g.
           # `create-graphql-markdown-docs`, `nuxt-theme`), and a hardcoded list
           # goes stale as packages are added.
-          mutable=$(ls packages/*/stryker.conf.mjs | cut -d/ -f2 | jq -Rnc '[inputs]')
+          mutable=$(for conf in packages/*/stryker.conf.mjs; do
+            dir=${conf#packages/}
+            echo "${dir%%/*}"
+          done | jq -Rnc '[inputs]')
           if [ "$CHANGES_RESULT" != "success" ] || [ "$EVENT_NAME" != "pull_request" ]; then
             # Fail-open (gate errored) or a non-PR trigger (schedule/workflow_dispatch):
             # run the full matrix. PRs only run the packages they directly change (see
