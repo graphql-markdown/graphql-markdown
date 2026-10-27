@@ -1,5 +1,8 @@
 # create-graphql-markdown-docs
 
+[![Latest Version](https://img.shields.io/npm/v/create-graphql-markdown-docs?style=flat)](https://www.npmjs.com/package/create-graphql-markdown-docs)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+
 Interactive CLI that either creates a new [GraphQL Markdown](https://graphql-markdown.dev) project (a ready-to-run Nuxt or Docusaurus API reference site, or plain Markdown or MDX output) or adds GraphQL-Markdown to an existing documentation site. The Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) layer.
 
 Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).

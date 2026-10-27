@@ -1,5 +1,8 @@
 # @graphql-markdown/nuxt-theme
 
+[![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/nuxt-theme?style=flat)](https://www.npmjs.com/package/@graphql-markdown/nuxt-theme)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+
 A Nuxt layer that turns a GraphQL schema into a browsable API reference site — built on [GraphQL-Markdown](https://graphql-markdown.dev/), [Nuxt Content](https://content.nuxt.com/), and [Nuxt UI](https://ui.nuxt.com/). Extend it from your own Nuxt project and you get the two-column reference layout (prose on the left, schema definitions and examples on the right), navigation, search, and generation wired up — no theme code of your own required to start.
 
 For the CLI that scaffolds a project around this layer in one command, see [`create-graphql-markdown-docs`](../create-graphql-markdown-docs).

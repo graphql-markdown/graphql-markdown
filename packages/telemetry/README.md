@@ -1,5 +1,10 @@
 # @graphql-markdown/telemetry
 
+[![Latest Version](https://img.shields.io/npm/v/@graphql-markdown/telemetry?style=flat)](https://www.npmjs.com/package/@graphql-markdown/telemetry)
+[![JSR](https://jsr.io/badges/@graphql-markdown/telemetry)](https://jsr.io/@graphql-markdown/telemetry)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+[![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgraphql-markdown%2Fgraphql-markdown%2Fmain%3Fmodule%3Dtelemetry)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main?module=telemetry)
+
 Anonymous, opt-out usage telemetry for GraphQL-Markdown. Internal package: it is used by the CLI, the Docusaurus plugin, the Nuxt theme and the `create-graphql-markdown-docs` scaffolder, not meant to be called directly.
 
 - No runtime dependencies.
