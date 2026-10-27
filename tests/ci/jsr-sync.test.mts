@@ -10,7 +10,10 @@ import {
 
 const root = {
   workspaces: {
-    catalog: { "graphql-config": "5.1.8", graphql: "^16.0.0 || ^17.0.0" },
+    catalog: {
+      "graphql-config": "^5.1.8 || ^6.0.0",
+      graphql: "^16.0.0 || ^17.0.0",
+    },
     catalogs: { tools: { "@tools/utils": "12.1.0" } },
   },
 };
@@ -24,7 +27,7 @@ describe("resolveRange()", () => {
       },
     };
     expect(resolveRange("graphql-config", pkg, root)).toEqual({
-      value: "5.1.8",
+      value: "^6.0.0",
     });
     expect(resolveRange("@tools/utils", pkg, root)).toEqual({
       value: "12.1.0",
@@ -129,7 +132,7 @@ describe("resolveOptionalRange()", () => {
   });
 
   test("resolves catalog specs and carets exact versions", () => {
-    expect(resolve("graphql-config", "catalog:")).toEqual({ value: "^5.1.8" });
+    expect(resolve("graphql-config", "catalog:")).toEqual({ value: "^6.0.0" });
     expect(resolve("foo", "3.8.3")).toEqual({ value: "^3.8.3" });
   });
 
