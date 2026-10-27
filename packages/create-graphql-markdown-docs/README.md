@@ -1,6 +1,9 @@
 # create-graphql-markdown-docs
 
-Interactive CLI that either creates a new [GraphQL Markdown](https://graphql-markdown.dev) project (a ready-to-run Nuxt or Docusaurus API reference site, or plain Markdown or MDX output) or adds GraphQL-Markdown to an existing documentation site. The Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) layer.
+[![Latest Version](https://img.shields.io/npm/v/create-graphql-markdown-docs?style=flat)](https://www.npmjs.com/package/create-graphql-markdown-docs)
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
+
+Interactive CLI that either creates a new [GraphQL-Markdown](https://graphql-markdown.dev) project (a ready-to-run Nuxt or Docusaurus API reference site, or plain Markdown or MDX output) or adds GraphQL-Markdown to an existing documentation site. The Nuxt preset is built on the [`@graphql-markdown/nuxt-theme`](https://www.npmjs.com/package/@graphql-markdown/nuxt-theme) layer.
 
 Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev/docs/get-started).
 
@@ -8,7 +11,7 @@ Full guide: [graphql-markdown.dev/docs/get-started](https://graphql-markdown.dev
 
 Run it in an empty or new folder to create a new site, or inside an existing project to add GraphQL-Markdown to it (see [Add to an existing site](#add-to-an-existing-site)):
 
-```bash
+```shell
 npm create graphql-markdown-docs@latest
 # or pass the project directory directly
 npm create graphql-markdown-docs@latest my-docs
@@ -27,7 +30,7 @@ To create a new site, follow the interactive prompts to:
 
 Run the same command inside a folder that already contains a project. The CLI detects it and adds GraphQL-Markdown to it (wire mode):
 
-```bash
+```shell
 cd my-starlight-site
 npm create graphql-markdown-docs@latest
 ```
@@ -46,7 +49,7 @@ It never edits your framework configuration files and never overwrites existing 
 
 For CI or scripting, pass the required options and skip the prompts:
 
-```bash
+```shell
 npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
 ```
 
@@ -90,7 +93,7 @@ A local SDL/JSON file is copied into the scaffolded project's `schema/` director
 
 For CI/CD or scripting, use `--yes`:
 
-```bash
+```shell
 npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
 ```
 
@@ -132,7 +135,9 @@ npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./sche
 
 ## What's included
 
-The scaffolded project is a real, complete Nuxt 4 project:
+### Nuxt
+
+The default scaffold is a complete Nuxt 4 project:
 
 - `nuxt.config.ts` — extends `@graphql-markdown/nuxt-theme`, nothing else required.
 - `content.config.ts` — required in every consuming project (not inherited from the layer — see the theme's own README for why).
@@ -140,7 +145,7 @@ The scaffolded project is a real, complete Nuxt 4 project:
 - `schema/` — your schema, or the bundled example.
 - `app/app.config.ts` / `app/pages/index.vue` — a minimal landing page and theme override point, yours to edit.
 
-## Docusaurus
+### Docusaurus
 
 With `--framework docusaurus`, the scaffold replaces the standalone `graphql-markdown/template` repo:
 
@@ -159,10 +164,12 @@ Opt out with the `--no-telemetry` flag, `DO_NOT_TRACK=1`, or `gqlmd telemetry di
 
 ## Documentation
 
-- [`@graphql-markdown/nuxt-theme`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/nuxt-theme) — the layer this scaffolds, including the full customization/swizzling reference.
+- [`@graphql-markdown/nuxt-theme`](https://www.npmjs.com/package/@graphql-markdown/nuxt-theme) — the layer this scaffolds, including the full customization/swizzling reference.
 - [GraphQL-Markdown documentation](https://graphql-markdown.dev)
 - [Nuxt documentation](https://nuxt.com)
 
 ## License
 
-MIT
+GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
+
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/graphql-markdown/graphql-markdown) to thank us for our work. By contributing to the Treeware forest, you'll be creating employment for local families and restoring wildlife habitats.

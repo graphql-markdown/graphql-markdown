@@ -22,7 +22,9 @@
   "scripts": {
     "build": "tsgo --build",
     "lint": "eslint --config ../../packages/tooling-config/eslint/config.ts \"src/**/*.ts\"",
-    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"src/**/*.ts\" --fix"
+    "lint:fix": "eslint --config ../../packages/tooling-config/eslint/config.ts \"src/**/*.ts\" --fix",
+    "prettier": "prettier README.md --check",
+    "prettier:fix": "prettier README.md --write"
   },
   "dependencies": {
     "@graphql-tools/load": "catalog:graphql-tools",
