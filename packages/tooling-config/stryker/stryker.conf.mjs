@@ -4,7 +4,12 @@
  * @type {import('@stryker-mutator/api/core').PartialStrykerOptions}
  */
 const config = {
-  buildCommand: "tsgo --build",
+  // No `buildCommand`: `tsgo --build` ran on instrumented sources (mutant
+  // switches) and failed with TS9010/TS9013 under `isolatedDeclarations`.
+  // Vitest transpiles `src` on the fly and the shared Vitest config aliases
+  // sibling `@graphql-markdown/*` imports to their `src`, so the sandbox build
+  // is not needed; type errors in mutants are still caught by the typescript
+  // checker below.
   checkers: ["typescript"],
   plugins: [
     "@stryker-mutator/vitest-runner",
