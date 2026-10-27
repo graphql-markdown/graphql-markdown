@@ -225,10 +225,10 @@ For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integrati
 
 ## Use the API
 
-To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages.
+To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages. The `loaders` option is required: it names the [schema loader](/docs/advanced/schema-loading) used to read the schema.
 
 ```shell title="shell"
-npm install @graphql-markdown/core graphql
+npm install @graphql-markdown/core graphql @graphql-tools/graphql-file-loader
 ```
 
 ```ts title="generate-docs.ts"
@@ -238,6 +238,9 @@ const config = await buildConfig({
   schema: "./schema.graphql",
   rootPath: "./docs",
   baseURL: "api",
+  loaders: {
+    GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
+  },
 });
 
 await generateDocFromSchema(config);
