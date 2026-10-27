@@ -5,13 +5,15 @@
 
 A Nuxt layer that turns a GraphQL schema into a browsable API reference site — built on [GraphQL-Markdown](https://graphql-markdown.dev/), [Nuxt Content](https://content.nuxt.com/), and [Nuxt UI](https://ui.nuxt.com/). Extend it from your own Nuxt project and you get the two-column reference layout (prose on the left, schema definitions and examples on the right), navigation, search, and generation wired up — no theme code of your own required to start.
 
-For the CLI that scaffolds a project around this layer in one command, see [`create-graphql-markdown-docs`](../create-graphql-markdown-docs).
+For the CLI that scaffolds a project around this layer in one command, see [`create-graphql-markdown-docs`](https://www.npmjs.com/package/create-graphql-markdown-docs).
 
-## Quick start
+## Installation
 
-```bash
+```shell
 npm install @graphql-markdown/nuxt-theme
 ```
+
+## Quick start
 
 ```ts
 // nuxt.config.ts
@@ -114,7 +116,7 @@ This view isn't meant to scale indefinitely: every entry's definition and exampl
 
 For changes config and CSS can't reach — different markup, different components entirely — eject a file into your own project with:
 
-```bash
+```shell
 npx gqlmd-swizzle                              # interactive picker
 npx gqlmd-swizzle --list                       # list swizzlable components as JSON
 npx gqlmd-swizzle --component SiteHeader       # non-interactive
@@ -144,9 +146,7 @@ A swizzled file is copied into your project at the same relative path (Nuxt's ow
 
 ## Multi-schema setups
 
-Two or more schemas can share one site as distinct, fully isolated sections —
-call `createGenerateDocs` once per schema, each with its own `baseURL`
-nested under the same shared prefix:
+Two or more schemas can share one site as distinct, fully isolated sections — call `createGenerateDocs` once per schema, each with its own `baseURL` nested under the same shared prefix:
 
 ```ts
 // generate-docs.ts
@@ -167,21 +167,11 @@ export const generate = async () => {
 };
 ```
 
-`content.config.ts` needs no changes — its glob (`api-reference/**/*.md`)
-already matches any nesting depth, so one collection covers every schema.
-Navigation, search, and the landing page all derive their structure from
-however deep each generated page's path actually is under `gqlmd.baseURL`,
-so `billing` and `inventory` render as separate top-level sections with their
-own section/group levels underneath, not merged or collapsed.
+`content.config.ts` needs no changes — its glob (`api-reference/**/*.md`) already matches any nesting depth, so one collection covers every schema. Navigation, search, and the landing page all derive their structure from however deep each generated page's path actually is under `gqlmd.baseURL`, so `billing` and `inventory` render as separate top-level sections with their own section/group levels underneath, not merged or collapsed.
 
-Each schema gets its own landing page automatically (at `/api-reference/billing`,
-`/api-reference/inventory`) — there's no extra config for this, every
-`createGenerateDocs` call already produces one. The bare shared prefix
-(`/api-reference` itself, when nothing is generated directly there) falls
-back to a "choose a namespace" page listing every top-level section.
+Each schema gets its own landing page automatically (at `/api-reference/billing`, `/api-reference/inventory`) — there's no extra config for this, every `createGenerateDocs` call already produces one. The bare shared prefix (`/api-reference` itself, when nothing is generated directly there) falls back to a "choose a namespace" page listing every top-level section.
 
-**These three settings are independent by design, not auto-synced — keep
-them in agreement yourself:**
+**These three settings are independent by design, not auto-synced — keep them in agreement yourself:**
 
 | Setting                           | Where                               | Purpose                                                              |
 | --------------------------------- | ----------------------------------- | -------------------------------------------------------------------- |
@@ -189,12 +179,7 @@ them in agreement yourself:**
 | `gqlmd.baseURL`                   | `app.config.ts`                     | The shared prefix the UI resolves navigation/search/landing against. |
 | `source` glob prefix              | `content.config.ts`                 | What Nuxt Content actually indexes.                                  |
 
-They can't be synced automatically: `content.config.ts`'s glob is evaluated
-statically by Nuxt Content, in a context neither the build-time generator nor
-the runtime Vue UI can reach. In practice this only matters if you change
-`gqlmd.baseURL` away from the default `"api-reference"` — every
-`createGenerateDocs` call's `baseURL` still needs to start with whatever you
-set it to, and `content.config.ts`'s glob prefix needs to match.
+They can't be synced automatically: `content.config.ts`'s glob is evaluated statically by Nuxt Content, in a context neither the build-time generator nor the runtime Vue UI can reach. In practice this only matters if you change `gqlmd.baseURL` away from the default `"api-reference"` — every `createGenerateDocs` call's `baseURL` still needs to start with whatever you set it to, and `content.config.ts`'s glob prefix needs to match.
 
 ## Fixed contract (not configurable in this version)
 
@@ -209,4 +194,6 @@ Two things remain load-bearing assumptions rather than options, by design for no
 
 ## License
 
-MIT.
+GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
+
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/graphql-markdown/graphql-markdown) to thank us for our work. By contributing to the Treeware forest, you'll be creating employment for local families and restoring wildlife habitats.

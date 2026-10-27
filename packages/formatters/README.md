@@ -7,17 +7,17 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_formatters&metric=coverage)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_formatters)
 [![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgraphql-markdown%2Fgraphql-markdown%2Fmain%3Fmodule%3Dformatters)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main?module=formatters)
 
-Framework formatter presets for GraphQL-Markdown.
+Framework formatter presets for [GraphQL-Markdown](https://graphql-markdown.dev).
 
 This package provides ready-to-use formatter presets for popular documentation frameworks, with each formatter in its own package subpath.
 
 ## Installation
 
-```bash
+```shell
 npm install @graphql-markdown/formatters
 ```
 
-## Quick Start
+## Usage
 
 Use any formatter in your GraphQL-Markdown configuration:
 
@@ -45,7 +45,7 @@ await runGraphQLMarkdown({
 
 The legacy `mdxParser` setting still works as a deprecated alias, but new configurations should use `formatter`.
 
-## Supported Formatters
+## Supported formatters
 
 Each formatter has its own setup guide:
 
@@ -62,13 +62,18 @@ Each formatter has its own setup guide:
 | Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs` | [Guide](src/fumadocs/README.md) |
 | Vocs | `@graphql-markdown/formatters/vocs` | [Guide](src/vocs/README.md) |
 
-## Custom Formatter
+## Custom formatter
 
 For frameworks not listed above, create a custom MDX module. See the [Integration Guide](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#custom-mdx-formatter) for the full formatter contract, the `formatMDXDetails` `\r` delimiter invariant, and examples of extending a preset.
 
+## Documentation
+
+- [Integration with Frameworks](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks)
+- [Configuration Options](https://graphql-markdown.dev/docs/settings)
+
 ## Contributing
 
-### Add a New Formatter
+### Add a new formatter
 
 1. Create the formatter module at `src/<name>/index.ts`.
 2. Create documentation at `src/<name>/README.md`.
@@ -76,13 +81,13 @@ For frameworks not listed above, create a custom MDX module. See the [Integratio
 4. Add a package subpath export for `./<name>` in `package.json` under `exports`.
 5. Add unit tests in `tests/unit/<name>/index.test.ts`.
 
-### Formatter Contract
+### Formatter contract
 
 A formatter module exports `createMDXFormatter` and any subset of the standard formatter functions (`formatMDXBadge`, `formatMDXAdmonition`, `formatMDXBullet`, `formatMDXDetails`, `formatMDXFrontmatter`, `formatMDXLink`, `formatMDXNameEntity`, `formatMDXSpecifiedByLink`). Optional exports include `mdxDeclaration`, `mdxExtension`, and lifecycle hooks.
 
 See the [Integration Guide](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks#custom-mdx-formatter) for the full contract, type signatures, and the `formatMDXDetails` `\r` delimiter invariant.
 
-### Testing Checklist
+### Testing checklist
 
 Add tests that verify:
 
@@ -92,14 +97,14 @@ Add tests that verify:
 
 Run targeted tests while developing:
 
-```bash
+```shell
 cd packages/formatters
 bun run test:unit -- tests/unit/<name>/index.test.ts
 ```
 
 Run package checks before opening a PR:
 
-```bash
+```shell
 cd packages/formatters
 bun run lint
 bun run prettier
@@ -108,7 +113,13 @@ bun run test:unit
 
 For repository-wide validation:
 
-```bash
+```shell
 cd /path/to/graphql-markdown
 bun run test
 ```
+
+## License
+
+GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
+
+This package is [Treeware](https://treeware.earth). If you use it in production, then we ask that you [**buy the world a tree**](https://plant.treeware.earth/graphql-markdown/graphql-markdown) to thank us for our work. By contributing to the Treeware forest, you'll be creating employment for local families and restoring wildlife habitats.
