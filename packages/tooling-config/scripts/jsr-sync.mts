@@ -290,6 +290,10 @@ export const resolveOptionalRange = (
   if (range === undefined) {
     return { problem: `"${name}" ${declared} cannot be resolved` };
   }
+  const override = JSR_RANGE_OVERRIDES[name];
+  if (override !== undefined) {
+    return { value: override };
+  }
   return range.includes("||")
     ? { problem: `"${name}" range "${range}" is not supported on Deno` }
     : { value: caretExact(range) };
