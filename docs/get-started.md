@@ -20,7 +20,7 @@ The fastest way to start is the [`create-graphql-markdown-docs`](https://github.
 
 ### Requirements
 
-Node.js version [22.12](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
+Node.js version [22.18](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
 :::info[Package managers]
 
@@ -195,7 +195,7 @@ These requirements are specific to Docusaurus integration. See our [Framework In
 
 Your project needs to meet the following requirements:
 
-- Node.js version [22.12](https://nodejs.org/en/download/) or above
+- Node.js version [22.18](https://nodejs.org/en/download/) or above
 - [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
 - [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above
 
