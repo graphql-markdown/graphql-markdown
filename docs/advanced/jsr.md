@@ -44,6 +44,7 @@ Some features load their package only when they are used, so a JSR install does 
 
 | Feature                                                   | Package                        |
 | --------------------------------------------------------- | ------------------------------ |
+| [Schema loaders](/docs/advanced/schema-loading)           | `@graphql-tools/*-loader`      |
 | [GraphQL Config](/docs/configuration#graphql-config) file | `graphql-config`               |
 | [`pretty`](/docs/settings#pretty)                         | `prettier`                     |
 | [`diffMethod`](/docs/settings#diffmethod)                 | `@graphql-markdown/diff`       |
@@ -51,5 +52,6 @@ Some features load their package only when they are used, so a JSR install does 
 
 - **Node.js and Bun**: install the packages for the features you use, for example `npm install graphql-config`.
 - **Deno**: the packages are fetched from JSR or npm the first time the feature runs. Allow it with `--allow-import` (or `-A`), see [Deno permissions for dynamic imports](https://docs.deno.com/runtime/fundamentals/modules/#dynamic-imports).
+- On Deno, a loader or other package named without a version is fetched at its latest version. Pin one with an `npm:` specifier, for example `GraphQLFileLoader: "npm:@graphql-tools/graphql-file-loader@^9.0.0"`.
 
 If a package cannot be loaded, the feature is skipped with a warning and the generation continues.
