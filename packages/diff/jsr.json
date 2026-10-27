@@ -11,7 +11,7 @@
     "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.0",
     "@graphql-inspector/core": "npm:@graphql-inspector/core@^8.0.0",
     "@graphql-tools/graphql-file-loader": "npm:@graphql-tools/graphql-file-loader@^9.0.6",
-    "@graphql-tools/load": "npm:@graphql-tools/load@9.0.6"
+    "@graphql-tools/load": "npm:@graphql-tools/load@^9.0.6"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],
