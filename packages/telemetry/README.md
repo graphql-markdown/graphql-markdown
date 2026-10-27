@@ -50,7 +50,11 @@ Your config:
   "homepage": "./intro.md",
   "formatter": "@graphql-markdown/docusaurus",
   "skipDocDirective": ["@internal"],
-  "groupByDirective": { "directive": "doc", "field": "category", "fallback": "Common" },
+  "groupByDirective": {
+    "directive": "doc",
+    "field": "category",
+    "fallback": "Common"
+  },
   "printTypeOptions": { "deprecated": "group", "typeBadges": true },
   "metatags": [{ "name": "robots", "content": "noindex" }],
   "loaders": { "UrlLoader": "@graphql-tools/url-loader" }
@@ -81,9 +85,7 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
     "linkRoot": "<path>",
     "homepage": "<path>",
     "formatter": "@graphql-markdown/docusaurus",
-    "skipDocDirective": [
-      "<string>"
-    ],
+    "skipDocDirective": ["<string>"],
     "groupByDirective": {
       "directive": "<string>",
       "field": "<string>",

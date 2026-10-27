@@ -49,18 +49,18 @@ The legacy `mdxParser` setting still works as a deprecated alias, but new config
 
 Each formatter has its own setup guide:
 
-| Framework | Package Path | Documentation |
-| --------- | ------------ | ------------- |
-| Astro Starlight | `@graphql-markdown/formatters/starlight` | [Guide](src/starlight/README.md) |
-| DocFX | `@graphql-markdown/formatters/docfx` | [Guide](src/docfx/README.md) |
-| Docusaurus | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |
-| HonKit | `@graphql-markdown/formatters/honkit` | [Guide](src/honkit/README.md) |
-| Hugo | `@graphql-markdown/formatters/hugo` | [Guide](src/hugo/README.md) |
-| mdBook | `@graphql-markdown/formatters/mdbook` | [Guide](src/mdbook/README.md) |
-| Generic MDX | `@graphql-markdown/formatters/mdx` | [Guide](src/mdx/README.md) |
-| MkDocs | `@graphql-markdown/formatters/mkdocs` | [Guide](src/mkdocs/README.md) |
-| Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs` | [Guide](src/fumadocs/README.md) |
-| Vocs | `@graphql-markdown/formatters/vocs` | [Guide](src/vocs/README.md) |
+| Framework          | Package Path                              | Documentation                     |
+| ------------------ | ----------------------------------------- | --------------------------------- |
+| Astro Starlight    | `@graphql-markdown/formatters/starlight`  | [Guide](src/starlight/README.md)  |
+| DocFX              | `@graphql-markdown/formatters/docfx`      | [Guide](src/docfx/README.md)      |
+| Docusaurus         | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |
+| HonKit             | `@graphql-markdown/formatters/honkit`     | [Guide](src/honkit/README.md)     |
+| Hugo               | `@graphql-markdown/formatters/hugo`       | [Guide](src/hugo/README.md)       |
+| mdBook             | `@graphql-markdown/formatters/mdbook`     | [Guide](src/mdbook/README.md)     |
+| Generic MDX        | `@graphql-markdown/formatters/mdx`        | [Guide](src/mdx/README.md)        |
+| MkDocs             | `@graphql-markdown/formatters/mkdocs`     | [Guide](src/mkdocs/README.md)     |
+| Next.js + Fumadocs | `@graphql-markdown/formatters/fumadocs`   | [Guide](src/fumadocs/README.md)   |
+| Vocs               | `@graphql-markdown/formatters/vocs`       | [Guide](src/vocs/README.md)       |
 
 ## Custom formatter
 
