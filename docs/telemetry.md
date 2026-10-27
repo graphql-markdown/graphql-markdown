@@ -138,6 +138,7 @@ The data is designed to be anonymous: nothing can be linked to a person, a devic
 
 - No identifiers are collected, and no IP address is read, logged, hashed or stored by the collection endpoint. Cloudflare, as network provider, sees the IP address in transit only, which is transient transport processing and not collection.
 - Values are coarse (enums, booleans, major versions or mask tokens). Timestamps are stored to the hour.
+- The masked configuration is stored with its keys sorted alphabetically at every level, so the order in which you wrote your settings is not kept.
 - Raw events are kept for about 3 months and then deleted automatically. After that, only aggregate daily counts remain.
 - The only thing stored on your machine is `telemetry.json` in the OS config directory, with your preference, the version of the notice you saw and fingerprints of already-masked configurations used for de-duplication. It is never sent.
 - As nothing is linkable to a person, there is nothing to access or erase. For questions, [open an issue](https://github.com/graphql-markdown/graphql-markdown/issues).
