@@ -15,6 +15,7 @@
   "references": [
     { "path": "../utils" },
     { "path": "../core" },
+    { "path": "../formatters" },
     { "path": "../logger" },
     { "path": "../telemetry" }
   ]

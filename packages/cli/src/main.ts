@@ -16,6 +16,7 @@ import { Command } from "commander";
 import { loadConfig } from "graphql-config";
 
 import { getGraphQLMarkdownCli } from ".";
+import { getSwizzleCommand } from "./swizzle-command";
 import { getTelemetryCommand } from "./telemetry-command";
 
 /**
@@ -31,25 +32,37 @@ export const graphQLConfigExtension: GraphQLExtensionDeclaration = () => {
   return { name: EXTENSION_NAME } as GraphQLExtensionDeclaration;
 };
 
-void (async (): Promise<void> => /* NOSONAR */ {
-  const config = await loadConfig({
-    extensions: [graphQLConfigExtension],
-    throwOnMissing: true,
-    throwOnEmpty: true,
-  });
+/**
+ * Commands that do not need a graphql-config file.
+ */
+const STANDALONE_COMMANDS = ["swizzle", "telemetry"] as const;
 
+void (async (): Promise<void> => /* NOSONAR */ {
   const program = new Command();
 
-  const projects = config?.projects
-    ? Object.keys(config.projects)
-    : ["default"];
-  // build commands for each project declared in graphql-config file
-  for (const project of projects) {
-    const cmd = getGraphQLMarkdownCli({ id: project }, undefined, undefined, {
-      trigger: "cli",
+  const isStandalone = (STANDALONE_COMMANDS as readonly string[]).includes(
+    process.argv[2],
+  );
+
+  if (!isStandalone) {
+    const config = await loadConfig({
+      extensions: [graphQLConfigExtension],
+      throwOnMissing: true,
+      throwOnEmpty: true,
     });
-    program.addCommand(cmd);
+
+    const projects = config?.projects
+      ? Object.keys(config.projects)
+      : ["default"];
+    // build commands for each project declared in graphql-config file
+    for (const project of projects) {
+      const cmd = getGraphQLMarkdownCli({ id: project }, undefined, undefined, {
+        trigger: "cli",
+      });
+      program.addCommand(cmd);
+    }
   }
+  program.addCommand(getSwizzleCommand());
   program.addCommand(getTelemetryCommand());
 
   await program.parseAsync(process.argv);

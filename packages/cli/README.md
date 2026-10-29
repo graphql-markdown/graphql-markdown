@@ -22,6 +22,26 @@ Create a [GraphQL-Config file](https://graphql-markdown.dev/docs/configuration#g
 npx gqlmd graphql-to-doc
 ```
 
+## Swizzle a formatter
+
+Generate a custom formatter module seeded from a `@graphql-markdown/formatters` preset, then edit it freely:
+
+```bash
+gqlmd swizzle <preset> [--output <file>] [--force]
+```
+
+- `<preset>`: one of `docusaurus`, `docfx`, `fumadocs`, `honkit`, `hugo`, `mdbook`, `mdx`, `mkdocs`, `starlight`, `vocs`.
+- `-o, --output <file>`: output file (default `./graphql-markdown.formatter.mjs`).
+- `-f, --force`: overwrite the output file if it exists.
+
+Example:
+
+```bash
+gqlmd swizzle hugo
+```
+
+Then set `formatter: "./graphql-markdown.formatter.mjs"` in the `extensions.graphql-markdown` section of your `.graphqlrc`.
+
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/settings)

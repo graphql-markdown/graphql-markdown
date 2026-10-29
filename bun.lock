@@ -60,6 +60,7 @@
       },
       "dependencies": {
         "@graphql-markdown/core": "workspace:^",
+        "@graphql-markdown/formatters": "workspace:^",
         "@graphql-markdown/logger": "workspace:^",
         "@graphql-markdown/telemetry": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
