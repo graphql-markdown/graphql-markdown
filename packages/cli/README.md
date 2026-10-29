@@ -40,7 +40,7 @@ Example:
 gqlmd swizzle hugo
 ```
 
-Then set `formatter: "./graphql-markdown.formatter.mjs"` in the `extensions.graphql-markdown` section of your `.graphqlrc`.
+Then set `formatter: "./graphql-markdown.formatter.mjs"` in the graphql-markdown config file.
 
 ## Documentation
 
