@@ -19,10 +19,6 @@ on:
         options: [all, npm, jsr]
         default: all
 
-concurrency:
-  group: publish
-  cancel-in-progress: false
-
 permissions:
   contents: read
 
