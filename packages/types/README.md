@@ -4,7 +4,7 @@
 [![JSR](https://jsr.io/badges/@graphql-markdown/types)](https://jsr.io/@graphql-markdown/types)
 [![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
 
-Shared TypeScript type definitions used across the `@graphql-markdown` packages (`cli`, `core`, `graphql`, `helpers`, `logger`, `printer-legacy`, `utils`, and the events and formatter contracts). This is a types-only package with no runtime code, useful when building custom formatters, decorators, or event handlers that need to type-check against the internal contracts.
+Shared TypeScript type definitions used across the `@graphql-markdown` packages (`cli`, `core`, `graphql`, `helpers`, `logger`, `printer-legacy`, `telemetry`, `utils`, and the events and formatter contracts). This is a types-only package with no runtime code, useful when building custom formatters, decorators, or event handlers that need to type-check against the internal contracts.
 
 ## Installation
 

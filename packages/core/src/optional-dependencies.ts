@@ -3,5 +3,5 @@
 
 export const OPTIONAL_DEPENDENCY_RANGES: Readonly<Record<string, string>> = {
   "@graphql-markdown/diff": "^1.1.23",
-  "graphql-config": "^5.1.8",
+  "graphql-config": "^6.0.0",
 };

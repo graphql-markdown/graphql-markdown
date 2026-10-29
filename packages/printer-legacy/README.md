@@ -22,7 +22,7 @@ npm install @graphql-markdown/printer-legacy
 ```ts
 import { Printer } from "@graphql-markdown/printer-legacy";
 
-await Printer.init(schema, baseURL, options);
+await Printer.init(schema, baseURL, linkRoot, options);
 const page = await Printer.printType("query", queryType, options);
 ```
 
