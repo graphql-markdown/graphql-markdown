@@ -9,6 +9,9 @@
     "main"
   ],
   "minimumReleaseAge": "2 days",
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": "2 days"
+  },
   "internalChecksFilter": "strict",
   "customManagers": [
     {
