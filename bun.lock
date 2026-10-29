@@ -28,7 +28,7 @@
         "eslint-plugin-mdx": "3.8.2",
         "eslint-plugin-prettier": "5.5.7",
         "eslint-plugin-tsdoc": "0.5.4",
-        "fallow": "3.36.0",
+        "fallow": "3.37.0",
         "globals": "17.13.0",
         "graphql": "catalog:",
         "graphql-config": "catalog:",
@@ -54,7 +54,7 @@
     },
     "packages/cli": {
       "name": "@graphql-markdown/cli",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "bin": {
         "gqlmd": "./dist/main.js",
       },
@@ -73,7 +73,7 @@
     },
     "packages/core": {
       "name": "@graphql-markdown/core",
-      "version": "1.25.0",
+      "version": "1.26.0",
       "dependencies": {
         "@fastify/deepmerge": "^3.2.4",
         "@graphql-markdown/graphql": "workspace:^",
@@ -100,7 +100,7 @@
     },
     "packages/create-graphql-markdown-docs": {
       "name": "create-graphql-markdown-docs",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "bin": {
         "create-graphql-markdown-docs": "./bin/create.mjs",
       },
@@ -116,7 +116,7 @@
     },
     "packages/diff": {
       "name": "@graphql-markdown/diff",
-      "version": "1.1.22",
+      "version": "1.1.23",
       "dependencies": {
         "@graphql-inspector/core": "^8.0.0",
         "@graphql-markdown/graphql": "workspace:^",
@@ -131,7 +131,7 @@
     },
     "packages/docusaurus": {
       "name": "@graphql-markdown/docusaurus",
-      "version": "1.39.0",
+      "version": "1.39.1",
       "dependencies": {
         "@docusaurus/utils": "catalog:docusaurus",
         "@graphql-markdown/cli": "workspace:^",
@@ -150,7 +150,7 @@
     },
     "packages/formatters": {
       "name": "@graphql-markdown/formatters",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "dependencies": {
         "@graphql-markdown/helpers": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
@@ -162,7 +162,7 @@
     },
     "packages/graphql": {
       "name": "@graphql-markdown/graphql",
-      "version": "1.3.3",
+      "version": "1.3.4",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
         "@graphql-markdown/utils": "workspace:^",
@@ -181,7 +181,7 @@
     },
     "packages/helpers": {
       "name": "@graphql-markdown/helpers",
-      "version": "1.2.3",
+      "version": "1.2.4",
       "dependencies": {
         "@graphql-markdown/graphql": "workspace:^",
         "@graphql-markdown/types": "workspace:^",
@@ -196,7 +196,7 @@
     },
     "packages/logger": {
       "name": "@graphql-markdown/logger",
-      "version": "1.1.3",
+      "version": "1.1.4",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
       },
@@ -207,7 +207,7 @@
     },
     "packages/nuxt-theme": {
       "name": "@graphql-markdown/nuxt-theme",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "bin": {
         "gqlmd-swizzle": "./bin/swizzle.mjs",
       },
@@ -276,7 +276,7 @@
     },
     "packages/printer-legacy": {
       "name": "@graphql-markdown/printer-legacy",
-      "version": "1.19.2",
+      "version": "1.19.3",
       "dependencies": {
         "@graphql-markdown/formatters": "workspace:^",
         "@graphql-markdown/graphql": "workspace:^",
@@ -289,7 +289,7 @@
     },
     "packages/telemetry": {
       "name": "@graphql-markdown/telemetry",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
       },
@@ -308,7 +308,7 @@
     },
     "packages/types": {
       "name": "@graphql-markdown/types",
-      "version": "1.17.0",
+      "version": "1.17.1",
       "dependencies": {
         "@graphql-tools/load": "catalog:graphql-tools",
         "@graphql-tools/utils": "catalog:graphql-tools",
@@ -317,7 +317,7 @@
     },
     "packages/utils": {
       "name": "@graphql-markdown/utils",
-      "version": "1.14.0",
+      "version": "1.14.1",
       "dependencies": {
         "@graphql-markdown/types": "workspace:^",
       },
@@ -566,21 +566,21 @@
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.7.3", "", { "dependencies": { "@eslint/core": "^1.2.1", "levn": "^0.4.1" } }, "sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q=="],
 
-    "@fallow-cli/darwin-arm64": ["@fallow-cli/darwin-arm64@3.36.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-ekkNR+XUhYa6/Lbkzqf0p8TUFjR2ybLk7E5bnNUD1X2hGB/sFXnGxFUhkVbFBwV5IOqpekynEvabxSs7w7w04w=="],
+    "@fallow-cli/darwin-arm64": ["@fallow-cli/darwin-arm64@3.37.0", "", { "os": "darwin", "cpu": "arm64" }, "sha512-J9JPc8lMF1ngLKx/MjPuVnBswQmdTdVoVYQaAJnTVvSsIyetTVUPEXy5TU6U+X5yAKJWQBDAUBjLOZOI141GZQ=="],
 
-    "@fallow-cli/darwin-x64": ["@fallow-cli/darwin-x64@3.36.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-V5TFOxV9A4RsuDqQMFmu0v3HcGIltc7asEJCzV9a0adN3y4gVH0ow9rShEr7PyMURq2hFSQOjrHRJ5n6uh0BOQ=="],
+    "@fallow-cli/darwin-x64": ["@fallow-cli/darwin-x64@3.37.0", "", { "os": "darwin", "cpu": "x64" }, "sha512-nLAoyqrPQeIjvuJHXw4CV1QJEmSoPA0R6p6kNI7LcXupoFrffxbf0jXGLH5SsyXOR8fNn01EyRIJjuzp+D5DZQ=="],
 
-    "@fallow-cli/linux-arm64-gnu": ["@fallow-cli/linux-arm64-gnu@3.36.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-u/0vHzw0Sv36/S4fjPZ/ODXc5JntMLcn7OyU89W5B3G8hY6B04D1HO32IW4PCxsN/DtURGoag1dj617ch0mtnQ=="],
+    "@fallow-cli/linux-arm64-gnu": ["@fallow-cli/linux-arm64-gnu@3.37.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-WVhhIQZGYLHTCVdVdTFc8vtuUZyBkZOE0n5Rft5YuJv9JNyjE1QP2GPMLWamx/zRueNYd9q4P+vdqzAfKnDUWA=="],
 
-    "@fallow-cli/linux-arm64-musl": ["@fallow-cli/linux-arm64-musl@3.36.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-mQpo8wUoc0wk/3TDOmoRbtPPlaLD0I9vcSgeDx3zbTMwO5XDLTEoekR+iPGAUU6nC6wiV6RHBoWAXSuMmTiyKA=="],
+    "@fallow-cli/linux-arm64-musl": ["@fallow-cli/linux-arm64-musl@3.37.0", "", { "os": "linux", "cpu": "arm64" }, "sha512-0VggUolqDwfezWPnN5BdWvYt4ZDvRTcVFQOQg0vTxTuE0pl9lGZzVQoVdaf+UqWzxnlgObQEIaYrTPELut7tBw=="],
 
-    "@fallow-cli/linux-x64-gnu": ["@fallow-cli/linux-x64-gnu@3.36.0", "", { "os": "linux", "cpu": "x64" }, "sha512-wT47AXN4lYx0JYzHT3ItgGh0tOIECj/Yz6U0Ce0AyPRaVmVHAxDp/FYbozCNS3g7ZxUd9DLl5WjIp1BC2Mb6+Q=="],
+    "@fallow-cli/linux-x64-gnu": ["@fallow-cli/linux-x64-gnu@3.37.0", "", { "os": "linux", "cpu": "x64" }, "sha512-yLjGY47UW00c8h7374yZhX10BTH/qAbs07SLI3B09bEfJ61PlWyYpY/qA0AtUEpLr5YEvZKYHw4InkUUnIKmgA=="],
 
-    "@fallow-cli/linux-x64-musl": ["@fallow-cli/linux-x64-musl@3.36.0", "", { "os": "linux", "cpu": "x64" }, "sha512-SXwNiJ7zabpyJ2dCMHLcNukpNlSPBhxvZbS9HoIEhGJLp1wdHHZjSTEjKAoW2pJEniDheZ6TTUwDPb2AnnJYeA=="],
+    "@fallow-cli/linux-x64-musl": ["@fallow-cli/linux-x64-musl@3.37.0", "", { "os": "linux", "cpu": "x64" }, "sha512-SopK7lk7Fm1CUkKwOQGVEdyFRmziO0bdJ5bWRA/zyn37ETx3vPbuuuc5rFw8bEpvlNLXUQCT9D9Iu+QNALkItg=="],
 
-    "@fallow-cli/win32-arm64-msvc": ["@fallow-cli/win32-arm64-msvc@3.36.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-IY+yqek3X7y3j+pS0Vp3s3MOJqDi6DRpmNaHYKeiUQUYVLijAnjAeSA0J+mVhHH8Rf6hP54qr2Z5hNDF1ohzkA=="],
+    "@fallow-cli/win32-arm64-msvc": ["@fallow-cli/win32-arm64-msvc@3.37.0", "", { "os": "win32", "cpu": "arm64" }, "sha512-S7sfUtHKF9203L2nMtBMdo69HMtzJGUhw+aqDTNtacRbjnVLUGkhwAyaxRA4r16WeFgKhwTsytb/DKTDAYff5Q=="],
 
-    "@fallow-cli/win32-x64-msvc": ["@fallow-cli/win32-x64-msvc@3.36.0", "", { "os": "win32", "cpu": "x64" }, "sha512-jT1ikT8+rOhmZcrq+yMIo/ngeAhEuKEtZhFs2/xkHQgchh5/M5HDvD3rHXI01pSkqLtZovSfjU0BLmtsYrXcsg=="],
+    "@fallow-cli/win32-x64-msvc": ["@fallow-cli/win32-x64-msvc@3.37.0", "", { "os": "win32", "cpu": "x64" }, "sha512-nNneEE31mlAGsgcgJvHfqAy921Tn/bWSRXb6yd5xK3A0TUdyQKcANAyKH8a/4g3G6rLwqkkWe+ZBSCdhYHTIPg=="],
 
     "@fastify/busboy": ["@fastify/busboy@3.2.4", "", {}, "sha512-lQS8xcXT54rdJb+wlG/Q7SMSdtkZEpLPHooSDUZyyZm9LJD7X1kONPhVoPaHq+dsPtWUGGLIz9gBNhs9qKbylw=="],
 
@@ -1940,9 +1940,9 @@
 
     "external-editor": ["external-editor@2.2.0", "", { "dependencies": { "chardet": "^0.4.0", "iconv-lite": "^0.4.17", "tmp": "^0.0.33" } }, "sha512-bSn6gvGxKt+b7+6TKEv1ZycHleA7aHhRHyAqJyp5pbUFuYYNIzpZnQDk7AsYckyWdEnTeAnay0aCy2aV6iTk9A=="],
 
-    "fallow": ["fallow@3.36.0", "", { "dependencies": { "detect-libc": "2.1.2" }, "optionalDependencies": { "@fallow-cli/darwin-arm64": "3.36.0", "@fallow-cli/darwin-x64": "3.36.0", "@fallow-cli/linux-arm64-gnu": "3.36.0", "@fallow-cli/linux-arm64-musl": "3.36.0", "@fallow-cli/linux-x64-gnu": "3.36.0", "@fallow-cli/linux-x64-musl": "3.36.0", "@fallow-cli/win32-arm64-msvc": "3.36.0", "@fallow-cli/win32-x64-msvc": "3.36.0", "fallow-type-aware": "3.36.0" }, "bin": { "fallow": "bin/fallow", "fallow-lsp": "bin/fallow-lsp", "fallow-mcp": "bin/fallow-mcp" } }, "sha512-oqMmHAoZlbgVAdOHFgw771TTG5xs1r+TO+Fy/Qx4Rez11ShzgUbzhtOMm8T1HCMKs2W00kV2+IKi8UzQ028Mvw=="],
+    "fallow": ["fallow@3.37.0", "", { "dependencies": { "detect-libc": "2.1.2" }, "optionalDependencies": { "@fallow-cli/darwin-arm64": "3.37.0", "@fallow-cli/darwin-x64": "3.37.0", "@fallow-cli/linux-arm64-gnu": "3.37.0", "@fallow-cli/linux-arm64-musl": "3.37.0", "@fallow-cli/linux-x64-gnu": "3.37.0", "@fallow-cli/linux-x64-musl": "3.37.0", "@fallow-cli/win32-arm64-msvc": "3.37.0", "@fallow-cli/win32-x64-msvc": "3.37.0", "fallow-type-aware": "3.37.0" }, "bin": { "fallow": "bin/fallow", "fallow-lsp": "bin/fallow-lsp", "fallow-mcp": "bin/fallow-mcp" } }, "sha512-j2SvFK77i1obTpN6I5S5I8WfJG4t9L/MpvFdt+9Pm65Uu99ABhU2JDGkPAQYD5jzjRRErMqQzImzWn7yvXHrtA=="],
 
-    "fallow-type-aware": ["fallow-type-aware@3.36.0", "", { "dependencies": { "typescript": "7.0.2" }, "peerDependencies": { "tsrs": "0.18.0-ts7.1.0-dev.20260929" }, "optionalPeers": ["tsrs"], "bin": { "fallow-type-aware": "fallow-type-aware.mjs" } }, "sha512-SYLCZM6r6o2EeE3UJ0ShQKs2M+PUemVRIJA6Geq/rchXlHpWaCwymHk9tHEDjRsdaK/EI3FauyhYhmcGUnY7Zg=="],
+    "fallow-type-aware": ["fallow-type-aware@3.37.0", "", { "dependencies": { "typescript": "7.0.2" }, "peerDependencies": { "tsrs": "0.18.0-ts7.1.0-dev.20260929" }, "optionalPeers": ["tsrs"], "bin": { "fallow-type-aware": "fallow-type-aware.mjs" } }, "sha512-g+lefbZEEtUxBPj4S9NkosD3rP//Gyi3HFR+sedhYOcHM4IsHAxhV1QcZ1B/ndad3j2YOMcGflTXnanpQdQGpg=="],
 
     "fast-deep-equal": ["fast-deep-equal@3.1.3", "", {}, "sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q=="],
 
