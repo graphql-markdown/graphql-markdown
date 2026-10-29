@@ -9,7 +9,7 @@ import useNpmDownloads from "@site/src/hooks/useNpmDownloads";
 import showcaseData from "@site/src/data/showcase.json";
 
 const SHOWCASE_NAMES = [
-  "Mozilla",
+  "Saleor",
   "IOTA",
   "Bitquery",
   "Browserless.io",
