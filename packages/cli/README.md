@@ -31,7 +31,7 @@ gqlmd swizzle <preset> [--output <file>] [--force]
 ```
 
 - `<preset>`: one of `docusaurus`, `docfx`, `fumadocs`, `honkit`, `hugo`, `mdbook`, `mdx`, `mkdocs`, `starlight`, `vocs`.
-- `-o, --output <file>`: output file (default `./graphql-markdown.formatter.mjs`).
+- `-o, --output <file>`: output file, inside the current directory (default `./graphql-markdown.formatter.mjs`).
 - `-f, --force`: overwrite the output file if it exists.
 
 Example:

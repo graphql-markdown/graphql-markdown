@@ -23,6 +23,10 @@
       "entry": ["vitest.config.mjs"],
       "ignoreDependencies": ["@docusaurus/types"]
     },
+    "packages/cli": {
+      "entry": ["vitest.config.mjs"],
+      "ignoreDependencies": ["@graphql-markdown/formatters"]
+    },
     "packages/core": {
       "entry": ["vitest.config.mjs"],
       "ignoreDependencies": ["graphql-config"]

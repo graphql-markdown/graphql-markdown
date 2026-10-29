@@ -55,8 +55,29 @@ describe("generateFormatterSource", () => {
   test("emits createMDXFormatter with all methods", () => {
     expect(source).toContain("export const createMDXFormatter = (meta) => ({");
     for (const name of METHODS) {
-      expect(source).toContain(`  ${name},\n`);
+      expect(source).toMatch(new RegExp(`^  ${name}[,:]`, "m"));
     }
+  });
+
+  test("forwards meta to meta-aware methods", () => {
+    expect(source).toContain(
+      "  formatMDXAdmonition: (admonition, _meta) => formatMDXAdmonition(admonition, meta ?? _meta),",
+    );
+    expect(source).toContain(
+      "  formatMDXPermalink: (id) => formatMDXPermalink(id, meta),",
+    );
+  });
+
+  test("header names the default output path", () => {
+    expect(source).toContain(
+      'set `formatter: "./graphql-markdown.formatter.mjs"`',
+    );
+  });
+
+  test("header names a custom output path", () => {
+    expect(generateFormatterSource("hugo", {}, "docs/my.mjs")).toContain(
+      'set `formatter: "docs/my.mjs"`',
+    );
   });
 
   test("re-exports extra exports sorted, skipping default", () => {
@@ -145,6 +166,21 @@ describe("swizzle command", () => {
     expect(output).toContain("formatter:");
   });
 
+  test("output outside the current directory is rejected", async () => {
+    const deps = makeDeps();
+    await run(["hugo", "-o", "../outside.mjs"], deps);
+    expect(process.exitCode).toBe(1);
+    expect(output).toContain("must be inside the current directory");
+    expect(deps.writeOutput).not.toHaveBeenCalled();
+  });
+
+  test("absolute output outside the current directory is rejected", async () => {
+    const deps = makeDeps();
+    await run(["hugo", "-o", join(tmpdir(), "outside.mjs")], deps);
+    expect(process.exitCode).toBe(1);
+    expect(deps.writeOutput).not.toHaveBeenCalled();
+  });
+
   test("import failure sets exit code", async () => {
     const deps = makeDeps();
     deps.importPreset.mockRejectedValue(new Error("boom"));
@@ -154,7 +190,7 @@ describe("swizzle command", () => {
   });
 
   test("default deps write a real file", async () => {
-    const dir = await mkdtemp(join(tmpdir(), "swizzle-"));
+    const dir = await mkdtemp(join(process.cwd(), ".swizzle-test-"));
     try {
       const file = join(dir, "nested", "f.mjs");
       await run(["hugo", "-o", file], {
@@ -183,6 +219,40 @@ describe("swizzle command", () => {
         createMDXFormatter: () => Record<string, unknown>;
       };
       expect(Object.keys(mod.createMDXFormatter())).toHaveLength(9);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  test("generated docusaurus module keeps the preset meta behaviour", async () => {
+    const docusaurus =
+      (await import("@graphql-markdown/formatters/docusaurus")) as Record<
+        string,
+        unknown
+      > & {
+        createMDXFormatter: (meta: unknown) => Record<string, unknown>;
+      };
+    const meta = {
+      generatorFrameworkName: "docusaurus",
+      generatorFrameworkVersion: "3.10.0",
+    };
+    const dir = await mkdtemp(join(process.cwd(), ".swizzle-test-"));
+    try {
+      const file = join(dir, "f.mjs");
+      await writeFile(file, generateFormatterSource("docusaurus", docusaurus));
+      const mod = (await import(pathToFileURL(file).href)) as {
+        createMDXFormatter: (meta: unknown) => Record<string, unknown>;
+      };
+      const swizzled = mod.createMDXFormatter(meta) as {
+        formatMDXPermalink: (id: string) => string;
+      };
+      const original = docusaurus.createMDXFormatter(meta) as {
+        formatMDXPermalink: (id: string) => string;
+      };
+      expect(swizzled.formatMDXPermalink("x")).toBe(
+        original.formatMDXPermalink("x"),
+      );
+      expect(swizzled.formatMDXPermalink("x")).toBe("{/* #x */}");
     } finally {
       await rm(dir, { recursive: true, force: true });
     }
