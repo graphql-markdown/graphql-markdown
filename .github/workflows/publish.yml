@@ -20,7 +20,7 @@ on:
         default: all
 
 concurrency:
-  group: publish
+  group: publish-npm-jsr
   cancel-in-progress: false
 
 permissions:
