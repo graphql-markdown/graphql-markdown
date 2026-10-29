@@ -1,3 +1,65 @@
+<a id="1.41.0"></a>
+# [1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0) - 2026-10-29
+
+1.41.0 publishes the GraphQL-Markdown libraries on [JSR](https://jsr.io/@graphql-markdown), so you can generate documentation from Deno, Bun or Node.js with the API, without the CLI.
+
+> [!IMPORTANT]
+> **`@graphql-markdown/core` 1.26.0: `ASSET_HOMEPAGE_LOCATION` is now a symbol.** It used to be the path of the default homepage template. It is now a `unique symbol` that means "use the built-in homepage template", and `Options.homepageLocation` is typed `string | symbol`. If your code reads `ASSET_HOMEPAGE_LOCATION` or `homepageLocation` as a file path (for example with `fs.readFile`), check for the symbol first. A string path still loads your own template, and the generated file name is unchanged. The CLI, the Docusaurus plugin and the Nuxt theme need no change ([#3486](https://github.com/graphql-markdown/graphql-markdown/pull/3486)).
+
+> [!IMPORTANT]
+> **Node.js 22.18 or above is required.** Every package (libraries, CLI, Docusaurus plugin, Nuxt theme and scaffolder) now declares `node >=22.18.0`, up from 22.12, because `@graphql-tools/load` 9 and `@graphql-tools/utils` 13 require it ([#3514](https://github.com/graphql-markdown/graphql-markdown/pull/3514)).
+
+### What's New ✨
+
+🦕 **GraphQL-Markdown on JSR.** `types`, `utils`, `logger`, `graphql`, `helpers`, `formatters`, `printer-legacy`, `diff`, `telemetry` and `core` are now published on [jsr.io](https://jsr.io/@graphql-markdown) as TypeScript source, alongside npm.
+
+```shell
+deno add jsr:@graphql-markdown/core   # Deno
+npx jsr add @graphql-markdown/core    # Node.js
+bunx jsr add @graphql-markdown/core   # Bun
+```
+
+The JSR packages target GraphQL.js 17. Optional features keep loading their package on first use: `graphql-config`, `prettier` and `@graphql-markdown/diff` are not installed with `core`. On Deno they are fetched from npm or JSR at runtime, which needs `--allow-import`. The CLI, the Docusaurus plugin, the Nuxt theme and the scaffolder stay on npm ([#3486](https://github.com/graphql-markdown/graphql-markdown/pull/3486)).
+
+> 📖 Docs: https://graphql-markdown.dev/docs/advanced/jsr
+
+🧰 **Use the API.** Get started now shows how to generate docs from a script with `buildConfig` and `generateDocFromSchema`, without the CLI or a framework plugin ([#3486](https://github.com/graphql-markdown/graphql-markdown/pull/3486)).
+
+> 📖 Docs: https://graphql-markdown.dev/docs/get-started#use-the-api
+
+### Changed 🔧
+
+- 📦 **`@graphql-markdown/types`**: type declarations are shipped from `dist` and the `src` folder is no longer in the npm package. The package no longer depends on `graphql-config` ([#3486](https://github.com/graphql-markdown/graphql-markdown/pull/3486)).
+- 🧩 **`@graphql-markdown/graphql`**: `graphql-config` is declared as an optional peer dependency. It was used without being declared ([#3486](https://github.com/graphql-markdown/graphql-markdown/pull/3486)).
+- 🏗️ **Scaffolder**: the markdown and Docusaurus templates accept `graphql` 17 and `@graphql-tools/graphql-file-loader` 9, and require `graphql-config` `^5.1.8` ([#3487](https://github.com/graphql-markdown/graphql-markdown/pull/3487), [#3492](https://github.com/graphql-markdown/graphql-markdown/pull/3492)).
+- 🔌 **`@graphql-tools` 8 or 9**: `graphql`, `types` and `diff` accept `@graphql-tools/load` 8 or 9, `@graphql-tools/utils` 12 or 13 and `@graphql-tools/graphql-file-loader` 8 or 9, so projects still on the 8.x loaders keep a single copy. New installs get 9. The JSR packages use the 9.x line ([#3506](https://github.com/graphql-markdown/graphql-markdown/pull/3506), [#3514](https://github.com/graphql-markdown/graphql-markdown/pull/3514)).
+
+
+### Package Versions 📦
+
+| Package | Version | Registry |
+|---|---|---|
+| @graphql-markdown/core | 1.26.0 | npm, JSR |
+| @graphql-markdown/types | 1.17.1 | npm, JSR |
+| @graphql-markdown/utils | 1.14.1 | npm, JSR |
+| @graphql-markdown/graphql | 1.3.4 | npm, JSR |
+| @graphql-markdown/logger | 1.1.4 | npm, JSR |
+| @graphql-markdown/helpers | 1.2.4 | npm, JSR |
+| @graphql-markdown/formatters | 1.2.1 | npm, JSR |
+| @graphql-markdown/printer-legacy | 1.19.3 | npm, JSR |
+| @graphql-markdown/diff | 1.1.23 | npm, JSR |
+| @graphql-markdown/telemetry | 0.1.1 | npm, JSR |
+| @graphql-markdown/cli | 1.2.1 | npm |
+| @graphql-markdown/docusaurus | 1.39.1 | npm |
+| @graphql-markdown/nuxt-theme | 0.2.1 | npm |
+| create-graphql-markdown-docs | 1.1.1 | npm |
+
+🔍 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.40.0...1.41.0
+
+
+[Changes][1.41.0]
+
+
 <a id="1.40.0"></a>
 # [1.40.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.40.0) - 2026-10-13
 
@@ -10,8 +72,6 @@
 - `DO_NOT_TRACK=1` or `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED=1`
 - `gqlmd telemetry disable` (`gqlmd telemetry status` shows the current state)
 - `telemetry: false` in your config, or `--no-telemetry`
-
-CI runs are reported and print the notice. Telemetry turns itself off in test runners ([#3450](https://github.com/graphql-markdown/graphql-markdown/pull/3450), [#3451](https://github.com/graphql-markdown/graphql-markdown/pull/3451), [#3452](https://github.com/graphql-markdown/graphql-markdown/pull/3452), [#3456](https://github.com/graphql-markdown/graphql-markdown/pull/3456)).
 
 > Docs: https://graphql-markdown.dev/docs/telemetry
 
@@ -2747,6 +2807,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.41.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.40.0...1.41.0
 [1.40.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.39.0...1.40.0
 [1.39.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.1...1.39.0
 [1.38.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.0...1.38.1
