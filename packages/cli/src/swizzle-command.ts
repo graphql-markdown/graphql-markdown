@@ -7,7 +7,7 @@
  */
 
 import { mkdir, stat, writeFile } from "node:fs/promises";
-import { dirname, isAbsolute, relative, resolve } from "node:path";
+import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 
 // @ts-expect-error TS1378
 import { Command } from "commander";
@@ -273,6 +273,7 @@ export const getSwizzleCommand = (deps: Partial<SwizzleDeps> = {}): Command => {
           process.exitCode = 1;
           return;
         }
+        const specifier = `./${fromCwd.split(sep).join("/")}`;
 
         if (!options.force && (await exists(output))) {
           write(`File ${output} already exists. Use --force to overwrite.`);
@@ -284,7 +285,7 @@ export const getSwizzleCommand = (deps: Partial<SwizzleDeps> = {}): Command => {
           const module = await importPreset(preset);
           await writeOutput(
             output,
-            generateFormatterSource(preset, module, options.output),
+            generateFormatterSource(preset, module, specifier),
           );
         } catch (error) {
           write(
@@ -296,7 +297,7 @@ export const getSwizzleCommand = (deps: Partial<SwizzleDeps> = {}): Command => {
 
         write(`Formatter "${preset}" swizzled to ${output}`);
         write(
-          `Set \`formatter: "${options.output}"\` in extensions.graphql-markdown of your .graphqlrc to use it.`,
+          `Set \`formatter: "${specifier}"\` in extensions.graphql-markdown of your .graphqlrc to use it.`,
         );
       },
     );

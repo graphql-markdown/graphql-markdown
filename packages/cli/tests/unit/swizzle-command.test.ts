@@ -75,8 +75,8 @@ describe("generateFormatterSource", () => {
   });
 
   test("header names a custom output path", () => {
-    expect(generateFormatterSource("hugo", {}, "docs/my.mjs")).toContain(
-      'set `formatter: "docs/my.mjs"`',
+    expect(generateFormatterSource("hugo", {}, "./docs/my.mjs")).toContain(
+      'set `formatter: "./docs/my.mjs"`',
     );
   });
 
@@ -151,9 +151,10 @@ describe("swizzle command", () => {
     expect(process.exitCode).toBeUndefined();
     expect(deps.writeOutput).toHaveBeenCalledWith(
       expect.stringContaining("f.mjs"),
-      expect.stringContaining("preset.mdxExtension"),
+      expect.stringContaining('formatter: "./out/f.mjs"'),
     );
     expect(output).toContain('Formatter "hugo" swizzled to');
+    expect(output).toContain('formatter: "./out/f.mjs"');
   });
 
   test("writes to the default path", async () => {
