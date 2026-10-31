@@ -260,6 +260,24 @@ describe("buildPayload", () => {
   });
 });
 
+describe("pkgVersion truncation", () => {
+  test.each([
+    ["1.2.3", "1.2"],
+    ["1.41.0", "1.41"],
+    ["1.2", "1.2"],
+    ["1.2.3-rc.1", "1.2"],
+    ["1.2.3-beta.4-my-branch", "1.2"],
+    ["1.2.3-secret.1", "unknown"],
+    ["1.2.3+build", "unknown"],
+    ["latest", "unknown"],
+    ["1", "unknown"],
+  ])("%s -> %s", (input, expected) => {
+    expect(buildPayload({ ...base, pkgVersion: input }).pkgVersion).toBe(
+      expected,
+    );
+  });
+});
+
 describe("fingerprint", () => {
   const p = (extra: Partial<TelemetryPayload> = {}) => {
     return {
@@ -288,6 +306,12 @@ describe("fingerprint", () => {
 
   test("changes with content", () => {
     expect(fingerprint(p({ pkgVersion: "2.0.0" }))).not.toBe(fingerprint(p()));
+  });
+
+  test("is stable across patch versions", () => {
+    const a = buildPayload({ ...base, pkgVersion: "1.0.1" });
+    const b = buildPayload({ ...base, pkgVersion: "1.0.0" });
+    expect(fingerprint(a)).toBe(fingerprint(b));
   });
 });
 

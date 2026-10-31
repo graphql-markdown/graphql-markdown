@@ -98,6 +98,17 @@ const applyGenerateFields = (
   }
 };
 
+const VERSION_RE =
+  /^(\d{1,4}\.\d{1,4})(?:\.\d{1,4})?(?:-(alpha|beta|rc|canary|next)(?:\.\d{1,3})?(?![0-9A-Za-z]))?/;
+
+/** Reduces a package version to `major.minor` (patch and prerelease dropped), else "unknown". */
+const truncateVersion = (value: string): string => {
+  const m = VERSION_RE.exec(value);
+  if (m === null) return "unknown";
+  if (m[2]) return m[1];
+  return /^\d{1,4}\.\d{1,4}(\.\d{1,4})?$/.test(value) ? m[1] : "unknown";
+};
+
 export const buildPayload = (input: PayloadInput): TelemetryPayload => {
   const env = input.env ?? process.env;
   const { ci, ciProvider } = detectCi(env);
@@ -106,7 +117,7 @@ export const buildPayload = (input: PayloadInput): TelemetryPayload => {
     v: 1,
     event: input.event ?? "config",
     pkg: input.pkg,
-    pkgVersion: input.pkgVersion,
+    pkgVersion: truncateVersion(input.pkgVersion),
     nodeMajor: Number.parseInt(process.versions.node, 10),
     graphqlMajor:
       typeof major === "number" &&
