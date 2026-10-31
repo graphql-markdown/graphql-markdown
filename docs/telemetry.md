@@ -24,7 +24,7 @@ One event is sent for each distinct configuration, at most once per process. The
   "v": 1,
   "event": "config",
   "pkg": "@graphql-markdown/core",
-  "pkgVersion": "0.1.0",
+  "pkgVersion": "0.1",
   "nodeMajor": 24,
   "graphqlMajor": 16,
   "os": "darwin",
@@ -72,7 +72,7 @@ One event is sent for each distinct configuration, at most once per process. The
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v`                         | Payload schema version.                                                                                                                                                       |
 | `event`                     | `config`, `generate`, `create_scaffold` or `create_wire`.                                                                                                                     |
-| `pkg`, `pkgVersion`         | Package that reported the event and its version.                                                                                                                              |
+| `pkg`, `pkgVersion`         | Package that reported the event and its version, sent as major.minor only (no patch or prerelease).                                                                           |
 | `nodeMajor`, `graphqlMajor` | Major versions only.                                                                                                                                                          |
 | `os`, `pm`                  | Platform (`darwin`, `linux`, `win32`) and package manager (`npm`, `pnpm`, `yarn`, `bun`).                                                                                     |
 | `ci`, `ciProvider`          | Whether a CI environment was detected, and which one (see [CI behaviour](#ci-behaviour)).                                                                                     |
@@ -91,7 +91,7 @@ When generation ends, one `generate` event is sent per run, with the same header
   "v": 1,
   "event": "generate",
   "pkg": "@graphql-markdown/core",
-  "pkgVersion": "1.40.0",
+  "pkgVersion": "1.40",
   "trigger": "cli",
   "pages": 182,
   "durationMs": 2300

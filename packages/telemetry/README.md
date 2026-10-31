@@ -68,7 +68,7 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
   "v": 1,
   "event": "config",
   "pkg": "@graphql-markdown/cli",
-  "pkgVersion": "0.1.0",
+  "pkgVersion": "0.1",
   "nodeMajor": 24,
   "graphqlMajor": 16,
   "os": "darwin",
