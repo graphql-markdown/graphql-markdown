@@ -200,7 +200,7 @@
     "eslint": "10.13.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-jsonc": "3.4.2",
-    "eslint-plugin-mdx": "3.8.2",
+    "eslint-plugin-mdx": "3.8.3",
     "eslint-plugin-prettier": "5.5.7",
     "eslint-plugin-tsdoc": "0.5.4",
     "fallow": "3.37.0",
