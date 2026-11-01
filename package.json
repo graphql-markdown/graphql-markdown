@@ -30,7 +30,7 @@
       },
       "docusaurus": {
         "@docusaurus/utils": "3.10.2",
-        "@docusaurus/types": "3.10.1",
+        "@docusaurus/types": "3.10.2",
         "@docusaurus/logger": "*"
       }
     }
