@@ -83,7 +83,7 @@ export const CONFIG_RULES: Readonly<Record<keyof ConfigOptions, Rule>> = {
   loaders: { kind: "loaders" },
   formatter,
   mdxParser: formatter,
-  metatags: { kind: "map", value: string },
+  metatags: { kind: "opaque" }, // the number and shape of tags are not sent
   onlyDocDirective: string,
   outputAdapter: { kind: "opaque" },
   pretty: scalar,

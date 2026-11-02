@@ -66,15 +66,20 @@ const classifyEntry = (pointer: unknown): LoaderKind[] => {
   return [classifyOne(pointer)];
 };
 
-/** Classifies a schema pointer; the pointer itself is never returned. */
+/**
+ * Classifies a schema pointer; the pointer itself is never returned. Kinds are
+ * distinct, and a single kind is not wrapped in a list: the number of pointers
+ * could single out a user.
+ */
 export const classifyPointer = (
   pointer: unknown,
 ): LoaderKind | LoaderKind[] => {
-  if (Array.isArray(pointer)) {
-    return pointer.flatMap(classifyEntry);
-  }
-  const kinds = classifyEntry(pointer);
-  return kinds.length === 1 ? kinds[0] : kinds;
+  const kinds = new Set(
+    Array.isArray(pointer)
+      ? pointer.flatMap(classifyEntry)
+      : classifyEntry(pointer),
+  );
+  return kinds.size === 1 ? [...kinds][0] : [...kinds];
 };
 
 const MASKS: Record<LoaderKind, string> = {
