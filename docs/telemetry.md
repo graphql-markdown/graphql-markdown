@@ -137,7 +137,7 @@ The data is designed to be anonymous: nothing can be linked to a person, a devic
 - No identifiers are collected, and no IP address is read, logged, hashed or stored by the collection endpoint. Cloudflare, as network provider, sees the IP address in transit only, which is transient transport processing and not collection.
 - Values are coarse (enums, booleans, major versions or mask tokens). Timestamps are stored to the hour.
 - The masked configuration is stored with its keys sorted alphabetically at every level, so the order in which you wrote your settings is not kept.
-- The collection endpoint applies the same `schema`, `loader` and `metatags` rules to events from older versions, so these counts are not stored for new events whichever version sent them.
+- The collection endpoint applies the same `schema`, `loader` and `metatags` rules to every event it receives.
 - Raw events are kept for about 3 months and then deleted automatically. After that, only aggregate daily counts remain.
 - The only thing stored on your machine is `telemetry.json` in the OS config directory, with your preference, the version of the notice you saw and fingerprints of already-masked configurations used for de-duplication. It is never sent.
 - As nothing is linkable to a person, there is nothing to access or erase. For questions, [open an issue](https://github.com/graphql-markdown/graphql-markdown/issues).
@@ -222,5 +222,3 @@ Telemetry never breaks a run: every error is swallowed. The config event is sent
 | `1`         | `1`            | Initial payload: package, Node and GraphQL major versions, OS, package manager, CI flag and provider, trigger, container and WSL flags, loader kind (including `git` and `github`), masked configuration; `generate` event with page count, duration and error type. |
 
 The notice version is bumped, and the notice shown again, whenever a new category of data is added to the payload. Nothing carrying the new fields is sent before the new notice has been shown.
-
-Changes that only send less data keep both versions. Payload `v` `1` no longer carries the number of schema pointers or the number and shape of metatags.
