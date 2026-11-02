@@ -31,6 +31,25 @@ describe("classifyPointer", () => {
     ]);
   });
 
+  test.each([
+    [["a/*.graphql", "b/*.graphql", "c/*.graphql"], "glob"],
+    [["https://x.test/g"], "url"],
+    [{ "a.graphql": {}, "b.graphql": {} }, "file-sdl"],
+    [[{ "a.graphql": {} }, "b.graphql"], "file-sdl"],
+  ])("does not reveal the number of pointers of %j", (pointer, kind) => {
+    expect(classifyPointer(pointer)).toBe(kind);
+  });
+
+  test("keeps the first occurrence of each kind", () => {
+    expect(
+      classifyPointer(["a.graphql", "https://x.test", "b.graphql"]),
+    ).toEqual(["file-sdl", "url"]);
+  });
+
+  test("empty list stays empty", () => {
+    expect(classifyPointer([])).toEqual([]);
+  });
+
   test("object form classifies keys and ignores options", () => {
     const secret = "Bearer s3cr3t";
     const one = {
@@ -60,5 +79,6 @@ describe("classifyPointer", () => {
       "<file:sdl>",
       "<url>",
     ]);
+    expect(maskPointer(["a/*.graphql", "b/*.graphql"])).toBe("<glob>");
   });
 });

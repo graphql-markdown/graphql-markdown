@@ -95,12 +95,7 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
       "deprecated": "group",
       "typeBadges": true
     },
-    "metatags": [
-      {
-        "<key:0>": "<string>",
-        "<key:1>": "<string>"
-      }
-    ],
+    "metatags": "<object>",
     "loaders": {
       "UrlLoader": "@graphql-tools/url-loader"
     }
@@ -115,11 +110,12 @@ What is sent (CLI options `{ "force": true }`, trigger `cli`, GraphQL 16):
 Masking rules:
 
 - `<url>`, `<git>`, `<github>`: the kind of a schema pointer, or a URL value (for example `baseURL`). The host, path and any headers are never sent.
-- `<file:sdl>`, `<file:json>`, `<file:code>`, `<glob>`, `<inline-sdl>`, `<unknown>`: the kind of a schema pointer (for example `schema`). The pointer itself is never sent.
+- `<file:sdl>`, `<file:json>`, `<file:code>`, `<glob>`, `<inline-sdl>`, `<unknown>`: the kind of a schema pointer (for example `schema`). The pointer itself is never sent. Several pointers of one kind are sent as a single token (`"<glob>"`), and mixed kinds as a list of distinct tokens, so the number of pointers is not sent either; `loader` follows the same rule.
 - `<custom-formatter>`: a third-party or local `formatter` or `mdxParser`. Only presets and `@graphql-markdown/*` packages are kept as-is.
 - `<path>`: a filesystem path (for example `rootPath`, `linkRoot`, `homepage`).
-- `<string>`: a custom string (for example directive names, field names, fallback labels, metatag values).
-- `<key:n>`: a custom object key, replaced by its position (for example metatag names). Only present when a custom key is used.
+- `<string>`: a custom string (for example directive names, field names, fallback labels).
+- `<key:n>`: a custom object key, replaced by its position. Only present when a custom key is used.
+- `<object>`: a value reduced to the fact that it is set (for example `metatags`, whatever the number of tags).
 
 No identifier, IP address, schema content or path is ever included. Names from the allowlist (such as the formatter and loader names, or boolean and enum options) are kept as-is.
 

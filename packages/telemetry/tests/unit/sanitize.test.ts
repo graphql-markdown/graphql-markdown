@@ -91,6 +91,15 @@ describe("sanitizeConfig masking table", () => {
     });
   });
 
+  test.each([
+    [[{ name: "robots", content: "noindex" }, { charset: "utf-8" }]],
+    [[{ name: "robots" }]],
+    [{ robots: "noindex" }],
+    [[]],
+  ])("metatags %j give no count or shape", (metatags) => {
+    expect(run({ metatags }).value).toEqual({ metatags: "<object>" });
+  });
+
   test("groupByDirective keeps keys and masks values", () => {
     expect(
       run({ groupByDirective: { directive: "d", field: "f", fallback: "x" } })
