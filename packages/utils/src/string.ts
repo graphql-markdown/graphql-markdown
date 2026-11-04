@@ -112,9 +112,10 @@ export const stringCaseBuilder = (
   }
 
   const stringCase = replaceDiacritics(str)
-    .replaceAll(/([a-z]+|\d+)([A-Z])/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
-    .replaceAll(/([a-z]+)(\d)/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
-    .replaceAll(/(\d+)([a-z])/g, "$1 $2") // NOSONAR - Safe pattern, no overlapping alternatives
+    // single-char lookarounds keep matching linear (no polynomial ReDoS on long runs)
+    .replaceAll(/(?<=[a-z\d])(?=[A-Z])/g, " ")
+    .replaceAll(/(?<=[a-z])(?=\d)/g, " ")
+    .replaceAll(/(?<=\d)(?=[a-z])/g, " ")
     .split(splitter)
     .filter((word) => {
       return word.length > 0;

@@ -48,6 +48,33 @@ describe("string", () => {
 
       expect(value).toBe(expected);
     });
+
+    test("splits words on case and letter/digit boundaries", () => {
+      const value = stringCaseBuilder(
+        "fooBar2baz9Qux",
+        (word) => {
+          return word;
+        },
+        "-",
+      );
+
+      expect(value).toBe("foo-Bar-2-baz-9-Qux");
+    });
+
+    test("handles long uniform runs in linear time (ReDoS regression)", () => {
+      const text = `${"a".repeat(100_000)}!${"0".repeat(100_000)}!`;
+      const start = performance.now();
+
+      stringCaseBuilder(
+        text,
+        (word) => {
+          return word;
+        },
+        " ",
+      );
+
+      expect(performance.now() - start).toBeLessThan(1000);
+    });
   });
 
   describe("replaceDiacritics()", () => {
