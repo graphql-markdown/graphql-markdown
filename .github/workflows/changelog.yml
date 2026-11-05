@@ -25,5 +25,37 @@ jobs:
         with:
           file: CHANGELOG.md
           github_token: ${{ secrets.BOT_PAT }}
-          commit_summary_template: "update changelog for %s changes"
-          pull_request: true
+          commit: false
+
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: "lts/*"
+
+      - name: Generate package changelogs
+        run: node .github/scripts/package-changelogs.mts
+
+      - name: Open changelog pull request
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          if [ -z "$TAG" ]; then
+            TAG="$(gh release view --json tagName --jq .tagName)"
+          fi
+          if [ -z "$(git status --porcelain)" ]; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
+          git switch -c "changelog-$TAG"
+          git add CHANGELOG.md packages/*/CHANGELOG.md
+          git commit -m "update changelog for $TAG changes"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "changelog-$TAG"
+          # A re-run force-pushes onto the PR that is already open.
+          if gh pr view "changelog-$TAG" --json state --jq .state 2>/dev/null | grep -q OPEN; then
+            exit 0
+          fi
+          gh pr create --base main --head "changelog-$TAG" \
+            --title "update changelog for $TAG changes" \
+            --body "Automated changelog update for $TAG."

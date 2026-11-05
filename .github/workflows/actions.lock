@@ -6,6 +6,7 @@ workflows:
     '.github/workflows/bot-approve-merge.yml': []
     '.github/workflows/changelog.yml':
         - 'actions/checkout@v7.0.1'
+        - 'actions/setup-node@v7.1.0'
         - 'rhysd/changelog-from-release@v3.9.1'
     '.github/workflows/changes.yml':
         - 'actions/checkout@v7.0.1'
