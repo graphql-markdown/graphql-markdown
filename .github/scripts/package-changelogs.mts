@@ -55,7 +55,8 @@ const parseVersions = (body: string): Map<string, string> => {
       .replace(/\|$/, "")
       .split("|")
       .map((cell) => cell.replaceAll("`", "").trim());
-    const [name, version] = cells;
+    const [name, rawVersion] = cells;
+    const version = rawVersion?.match(/\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?/)?.[0];
     if (
       !name ||
       !version ||

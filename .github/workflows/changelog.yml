@@ -41,8 +41,7 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "$TAG" ]; then
-            git fetch --tags
-            TAG="$(git describe --tags --abbrev=0)"
+            TAG="$(gh release view --json tagName --jq .tagName)"
           fi
           if [ -z "$(git status --porcelain)" ]; then
             exit 0

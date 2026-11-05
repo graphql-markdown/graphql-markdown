@@ -23,7 +23,7 @@ const fixture = `# Changelog
 |---|---|---|
 | @graphql-markdown/core | 1.26.0 | npm, JSR |
 | @graphql-markdown/cli | \`1.2.1\` | npm |
-| create-graphql-markdown-docs | 1.1.1 | npm |
+| create-graphql-markdown-docs | 1.1.1 🆕 | npm |
 
 <a id="1.40.0"></a>
 # [1.40.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.40.0) - 2026-10-20
@@ -57,8 +57,11 @@ describe("parseReleases", () => {
     expect(releases[2].versions.size).toBe(0);
   });
 
-  test("strips backticks from cells", () => {
+  test("strips backticks and extra markers from version cells", () => {
     expect(releases[0].versions.get("@graphql-markdown/cli")).toBe("1.2.1");
+    expect(
+      releases[0].versions.get("create-graphql-markdown-docs"),
+    ).toBe("1.1.1");
   });
 });
 

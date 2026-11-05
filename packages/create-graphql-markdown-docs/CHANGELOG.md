@@ -24,7 +24,7 @@ Released in [GraphQL-Markdown 1.39.0](https://github.com/graphql-markdown/graphq
 
 **`create-graphql-markdown-docs` 1.0.0: add GraphQL-Markdown to an existing site.** Run it inside your project:
 
-## 0.1.1 🆕 - 2026-10-08
+## 0.1.1 - 2026-10-08
 
 Released in [GraphQL-Markdown 1.38.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.0).
 

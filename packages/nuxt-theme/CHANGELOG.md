@@ -24,7 +24,7 @@ Released in [GraphQL-Markdown 1.38.1](https://github.com/graphql-markdown/graphq
 
 1.38.1 fixes `@graphql-markdown/nuxt-theme`, which did not work when installed from npm. If you use the Nuxt theme, upgrade to `0.1.2`. No other package changes.
 
-## 0.1.1 🆕 - 2026-10-08
+## 0.1.1 - 2026-10-08
 
 Released in [GraphQL-Markdown 1.38.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.38.0).
 
