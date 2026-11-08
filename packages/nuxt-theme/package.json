@@ -52,7 +52,7 @@
     "@nuxt/ui": "^4.11.0",
     "consola": "^3.4.2",
     "shiki": "^4.6.0",
-    "tailwindcss": "^4.3.4"
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
     "@graphql-markdown/tooling-config": "workspace:^",
