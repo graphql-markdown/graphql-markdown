@@ -13,6 +13,11 @@ updates:
     commit-message:
       prefix: "📦 bun"
       include: "scope"
+    groups:
+      tailwind:
+        patterns:
+          - "tailwindcss"
+          - "@tailwindcss/*"
     ignore:
       - dependency-name: "@graphql-markdown/*"
   - package-ecosystem: "github-actions"
