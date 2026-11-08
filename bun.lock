@@ -218,7 +218,7 @@
         "@nuxt/ui": "^4.11.0",
         "consola": "^3.4.2",
         "shiki": "^4.6.0",
-        "tailwindcss": "^4.3.4",
+        "tailwindcss": "^4.3.5",
       },
       "devDependencies": {
         "@graphql-markdown/tooling-config": "workspace:^",
@@ -236,7 +236,7 @@
         "@nuxt/ui": "^4.11.0",
         "better-sqlite3": "^13.0.3",
         "shiki": "^4.6.0",
-        "tailwindcss": "^4.3.4",
+        "tailwindcss": "^4.3.5",
       },
       "devDependencies": {
         "@graphql-markdown/nuxt-theme": "workspace:",
@@ -251,7 +251,7 @@
         "@nuxt/ui": "^4.11.0",
         "better-sqlite3": "^13.0.3",
         "shiki": "^4.6.0",
-        "tailwindcss": "^4.3.4",
+        "tailwindcss": "^4.3.5",
       },
       "devDependencies": {
         "@graphql-markdown/nuxt-theme": "workspace:",
@@ -266,7 +266,7 @@
         "@nuxt/ui": "^4.11.0",
         "better-sqlite3": "^13.0.3",
         "shiki": "^4.6.0",
-        "tailwindcss": "^4.3.4",
+        "tailwindcss": "^4.3.5",
       },
       "devDependencies": {
         "@graphql-markdown/nuxt-theme": "workspace:",
@@ -3167,7 +3167,7 @@
 
     "tailwind-variants": ["tailwind-variants@3.3.1", "", { "peerDependencies": { "tailwind-merge": ">=3.0.0", "tailwindcss": "*" }, "optionalPeers": ["tailwind-merge", "tailwindcss"] }, "sha512-4pAvwUtM4HKBiRZftncAbpn6V9Hhwoa5Fl7O2u5zbp7Z5Cvu+/o/6+176WY3WCEES209543quG8zFIcXCsc5Jw=="],
 
-    "tailwindcss": ["tailwindcss@4.3.4", "", {}, "sha512-PCJZTFFdG+sL3gvnP1Do9o6GbkvH2q0p04xSs3f7cSvmAeK+sttG+/7ncK1fdRwKFfC7n+wDDJaOMBSefkI9ow=="],
+    "tailwindcss": ["tailwindcss@4.3.5", "", {}, "sha512-FcQk9BuffmEHJP2G0XmB2SplU1aLTI7j07Kunk+U74Ny+XiWOtzXz9aujFZ/avntw1e2cOv/3PkgzflQ7gX2vQ=="],
 
     "tapable": ["tapable@2.3.3", "", {}, "sha512-uxc/zpqFg6x7C8vOE7lh6Lbda8eEL9zmVm/PLeTPBRhh1xCgdWaQ+J1CUieGpIfm2HdtsUpRv+HshiasBMcc6A=="],
 
