@@ -17,7 +17,7 @@
       "packages/*/tests/fixture-flat"
     ],
     "catalog": {
-      "graphql": "^17.1.0",
+      "graphql": "^16.0.0 || ^17.0.0",
       "graphql-config": "^5.1.8 || ^6.0.0",
       "prettier": "3.9.10"
     },
