@@ -1,6 +1,7 @@
 // Adds a site to the website showcase: copies (or downloads) a PNG screenshot
 // to `website/static/img/showcase/<uuid>.png` and inserts an entry into
-// `website/src/data/showcase.json`, keeping the list sorted by name.
+// `website/src/data/showcase.json`, inserting in name order without
+// reordering existing entries.
 //
 //   bun run showcase:add -- --name Kaizen \
 //     --url https://docs.ktckts.com/api/management/ \
@@ -11,12 +12,14 @@
 // (>= 22.18) through type stripping, so it must stay within erasable syntax.
 
 import { randomUUID } from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { realpathSync } from "node:fs";
+import { readFile, stat, unlink, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join, relative, resolve } from "node:path";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
-import { fileURLToPath, pathToFileURL } from "node:url";
+import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 export type ShowcaseEntry = {
@@ -39,8 +42,31 @@ const IMAGE_DIR = join(rootDir, "website/static/img/showcase");
 
 const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 
+const MAX_WIDTH = 1800;
+const MAX_BYTES = 10 * 1024 * 1024;
+
 export const isPng = (bytes: Uint8Array): boolean =>
   PNG_SIGNATURE.every((byte, i) => bytes[i] === byte);
+
+export const pngWidth = (bytes: Uint8Array): number =>
+  new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(
+    16,
+    false,
+  );
+
+// Cleans a path pasted or dragged into the terminal (quotes, shell escapes).
+export const cleanPath = (input: string): string => {
+  let value = input.trim();
+  if (
+    value.length >= 2 &&
+    (value[0] === '"' || value[0] === "'") &&
+    value.at(-1) === value[0]
+  ) {
+    value = value.slice(1, -1);
+  }
+  // Backslashes are path separators on Windows, shell escapes elsewhere.
+  return process.platform === "win32" ? value : value.replace(/\\(.)/g, "$1");
+};
 
 export const parseOptions = (argv: string[]): Options => {
   const { values } = parseArgs({
@@ -66,8 +92,15 @@ export const validateUrl = (value: string): string => {
   return value;
 };
 
-const sameUrl = (a: string, b: string): boolean =>
-  a.replace(/\/+$/, "").toLowerCase() === b.replace(/\/+$/, "").toLowerCase();
+export const urlKey = (href: string): string => {
+  try {
+    const url = new URL(href);
+    const host = url.host.toLowerCase().replace(/^www\./, "");
+    return `${host}${url.pathname.replace(/\/+$/, "")}`;
+  } catch {
+    return href.trim().toLowerCase();
+  }
+};
 
 const compareNames = (a: ShowcaseEntry, b: ShowcaseEntry): number =>
   a.name.localeCompare(b.name, "en", { sensitivity: "base" });
@@ -79,32 +112,49 @@ export const insertEntry = (
   const duplicate = entries.find(
     (s) =>
       s.name.toLowerCase() === entry.name.toLowerCase() ||
-      sameUrl(s.href, entry.href),
+      urlKey(s.href) === urlKey(entry.href),
   );
   if (duplicate) {
     throw new Error(
       `Already in showcase: ${duplicate.name} (${duplicate.href})`,
     );
   }
-  return [...entries, entry].sort(compareNames);
+  const index = entries.findIndex((s) => compareNames(s, entry) > 0);
+  return index === -1
+    ? [...entries, entry]
+    : [...entries.slice(0, index), entry, ...entries.slice(index)];
 };
 
 const expandHome = (path: string): string =>
   path.startsWith("~/") ? join(homedir(), path.slice(2)) : path;
 
+export const resolveImagePath = (
+  source: string,
+  cwd: string = process.env.INIT_CWD ?? process.cwd(),
+): string => resolve(cwd, expandHome(source));
+
 export const isRemote = (source: string): boolean =>
   /^https?:\/\//i.test(source);
 
 export const loadImage = async (source: string): Promise<Uint8Array> => {
+  const tooLarge = (): Error => new Error(`Image larger than 10 MB: ${source}`);
   let bytes: Uint8Array;
   if (isRemote(source)) {
-    const response = await fetch(source);
+    const response = await fetch(source, {
+      signal: AbortSignal.timeout(30_000),
+    });
     if (!response.ok) {
       throw new Error(`Download failed (${response.status}): ${source}`);
     }
+    if (Number(response.headers.get("content-length")) > MAX_BYTES) {
+      throw tooLarge();
+    }
     bytes = new Uint8Array(await response.arrayBuffer());
   } else {
-    bytes = await readFile(resolve(expandHome(source)));
+    bytes = await readFile(resolveImagePath(source));
+  }
+  if (bytes.length > MAX_BYTES) {
+    throw tooLarge();
   }
   if (!isPng(bytes)) {
     throw new Error(`Not a PNG image: ${source}`);
@@ -112,7 +162,9 @@ export const loadImage = async (source: string): Promise<Uint8Array> => {
   return bytes;
 };
 
-const promptMissing = async (options: Options): Promise<Required<Options>> => {
+export const promptMissing = async (
+  options: Options,
+): Promise<Required<Options>> => {
   const missing = (["name", "url", "image"] as const).filter(
     (key) => !options[key],
   );
@@ -150,6 +202,10 @@ const main = async (argv: string[]): Promise<void> => {
     throw new Error("Site name is required");
   }
   const href = validateUrl(options.url.trim());
+  const imageSource = cleanPath(options.image);
+  if (!imageSource) {
+    throw new Error("Screenshot is required");
+  }
 
   const entries = JSON.parse(
     await readFile(DATA_FILE, "utf8"),
@@ -162,18 +218,55 @@ const main = async (argv: string[]): Promise<void> => {
     featured: options.featured,
   });
 
-  const bytes = await loadImage(options.image.trim());
+  const bytes = await loadImage(imageSource);
   const imageFile = join(IMAGE_DIR, `${image}.png`);
   await writeFile(imageFile, bytes);
-  await writeFile(DATA_FILE, `${JSON.stringify(next, null, 2)}\n`);
+  try {
+    await writeFile(DATA_FILE, `${JSON.stringify(next, null, 2)}\n`);
+  } catch (error) {
+    await unlink(imageFile).catch(() => undefined);
+    throw error;
+  }
 
-  const rel = (file: string): string => file.slice(rootDir.length + 1);
+  const width = pngWidth(bytes);
+  if (width > MAX_WIDTH) {
+    let resized = false;
+    if (process.platform === "darwin") {
+      try {
+        execFileSync("sips", ["-Z", String(MAX_WIDTH), imageFile], {
+          stdio: "ignore",
+        });
+        resized = true;
+      } catch {
+        // fall through to the warning
+      }
+    }
+    if (!resized) {
+      console.warn(
+        `Image is ${width}px wide and should be downscaled to <=${MAX_WIDTH}px.`,
+      );
+    }
+  }
+  const { size } = await stat(imageFile);
+
+  const rel = (file: string): string => relative(rootDir, file);
   console.log(`Added ${name} → ${href}`);
   console.log(`  ${rel(DATA_FILE)}`);
-  console.log(`  ${rel(imageFile)} (${Math.round(bytes.length / 1024)} KB)`);
+  console.log(`  ${rel(imageFile)} (${Math.round(size / 1024)} KB)`);
 };
 
-if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
+const isMain = (): boolean => {
+  try {
+    return (
+      realpathSync(process.argv[1] ?? "") ===
+      realpathSync(fileURLToPath(import.meta.url))
+    );
+  } catch {
+    return false;
+  }
+};
+
+if (isMain()) {
   try {
     await main(process.argv.slice(2));
   } catch (error) {
