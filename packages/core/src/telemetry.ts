@@ -23,7 +23,7 @@ export interface TelemetryReport {
   configFileOpts: Maybe<ConfigOptions>;
   extension: Maybe<ConfigOptions>;
   cliOpts: Maybe<CliOptions>;
-  id?: Maybe<string>;
+  id: Maybe<string>;
   trigger?: TelemetryTrigger;
 }
 
