@@ -79,12 +79,13 @@ const { copy: copyVariables, copyButtonProps: variablesCopyButtonProps } =
 </script>
 
 <style>
-/* Shiki emits its own background and spacing; the card supplies both. The
-   selectors reach into `v-html` output, so they cannot be scoped. */
-/* fallow-ignore-next-line css-selector-complexity -- overrides Shiki inline styles */
+/* The card supplies background and spacing; Shiki's inline `<pre>` style is
+   removed by a transformer, so no `!important` is needed. The selectors reach
+   into `v-html` output, so they cannot be scoped. */
+/* fallow-ignore-next-line css-selector-complexity -- targets Shiki v-html output */
 .blueprint-code pre {
-  background: transparent !important;
-  color: var(--gqlmd-code-text) !important;
+  background: transparent;
+  color: var(--gqlmd-code-text);
   line-height: normal;
   margin: 0;
   padding: 0;

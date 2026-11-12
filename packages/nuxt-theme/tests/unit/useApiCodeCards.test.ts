@@ -2,9 +2,28 @@ import { describe, it, expect, vi } from "vitest";
 
 vi.mock("shiki", () => {
   return {
-    codeToHtml: vi.fn(async (code: string, options: { lang: string }) => {
-      return `<pre data-lang="${options.lang}">${code}</pre>`;
-    }),
+    codeToHtml: vi.fn(
+      async (
+        code: string,
+        options: {
+          lang: string;
+          transformers?: {
+            pre?: (node: never) => void;
+          }[];
+        },
+      ) => {
+        const node: { properties: { style?: string } } = {
+          properties: { style: "background-color:#000" },
+        };
+        options.transformers?.forEach((t) => {
+          t.pre?.(node as never);
+        });
+        const style = node.properties.style
+          ? ` style="${node.properties.style}"`
+          : "";
+        return `<pre data-lang="${options.lang}"${style}>${code}</pre>`;
+      },
+    ),
   };
 });
 
@@ -27,6 +46,18 @@ describe("detectLanguage", () => {
 });
 
 describe("useApiCodeCards", () => {
+  it("strips the inline style from the highlighted <pre>", async () => {
+    const result = await useApiCodeCards(
+      { value: nodes } as never,
+      { value: "Query" },
+      { value: true },
+      "github-dark",
+    );
+
+    expect(result.definitionCard?.html).toContain("<pre");
+    expect(result.definitionCard?.html).not.toContain("style=");
+  });
+
   it("builds the definition card and example cards for operations", async () => {
     const result = await useApiCodeCards(
       { value: nodes } as never,

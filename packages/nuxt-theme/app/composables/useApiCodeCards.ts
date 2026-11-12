@@ -1,4 +1,4 @@
-import { codeToHtml } from "shiki";
+import { codeToHtml, type ShikiTransformer } from "shiki";
 import type { Ref } from "vue";
 import {
   CODE_COLUMN_SECTIONS,
@@ -33,8 +33,22 @@ export const detectLanguage = (code: string): "graphql" | "json" => {
   }
 };
 
+/**
+ * Drops the inline `style` Shiki puts on `<pre>` (theme background and text
+ * colour); the card supplies both, so no `!important` override is needed.
+ */
+const stripPreStyle: ShikiTransformer = {
+  pre(node) {
+    delete node.properties.style;
+  },
+};
+
 const highlight = async (code: string, shikiTheme: string): Promise<string> => {
-  return codeToHtml(code, { lang: detectLanguage(code), theme: shikiTheme });
+  return codeToHtml(code, {
+    lang: detectLanguage(code),
+    theme: shikiTheme,
+    transformers: [stripPreStyle],
+  });
 };
 
 /**
