@@ -161,9 +161,10 @@ describe("pngWidth()", () => {
 });
 
 describe("urlKey()", () => {
-  test("ignores protocol, www, query, hash and trailing slash", () => {
+  test("ignores protocol, www, case, query, hash and trailing slash", () => {
     const key = urlKey("https://docs.dev/api");
     expect(urlKey("http://www.Docs.dev/api/?a=1#x")).toBe(key);
+    expect(urlKey("https://docs.dev/API/")).toBe(key);
   });
 
   test("differs for different paths", () => {

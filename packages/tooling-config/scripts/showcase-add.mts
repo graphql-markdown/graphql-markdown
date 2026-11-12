@@ -99,8 +99,9 @@ export const validateUrl = (value: string): string => {
 export const urlKey = (href: string): string => {
   try {
     const url = new URL(href);
-    const host = url.host.toLowerCase().replace(/^www\./, "");
-    return `${host}${url.pathname.replace(/\/+$/, "")}`;
+    const host = url.host.replace(/^www\./, "");
+    // Lowercased as a whole: docs paths differing only by case are the same site.
+    return `${host}${url.pathname.replace(/\/+$/, "")}`.toLowerCase();
   } catch {
     return href.trim().toLowerCase();
   }
