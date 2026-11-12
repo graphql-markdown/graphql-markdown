@@ -94,6 +94,7 @@
     "prepare": "node ./packages/tooling-config/husky/prepare-husky.js",
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
+    "showcase:add": "node packages/tooling-config/scripts/showcase-add.mts",
     "smoke": ".github/scripts/e2e/run-smoke.sh",
     "test": "turbo run test",
     "test:all": "vitest run --passWithNoTests",
