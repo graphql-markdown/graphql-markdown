@@ -1,8 +1,8 @@
 [
   {
     "name": "Altium",
-    "href": "https://altiumdeveloper.github.io/platform-api-docs/",
-    "image": "d54ee03c-86ba-4f1b-8422-295a3ae87b1f",
+    "href": "https://docs.developer.altium.com/octopart-api-docs/",
+    "image": "4706ebdf-0e88-4553-9c02-585e99b2014f",
     "featured": false
   },
   {
@@ -159,6 +159,12 @@
     "name": "Kili",
     "href": "https://api-docs.kili-technology.com/",
     "image": "90431066-3ade-48e9-86e3-599144e380cd",
+    "featured": false
+  },
+  {
+    "name": "Machine Identity Management",
+    "href": "https://mim.pan.dev/api-endpoints",
+    "image": "6402dc47-05fa-4e37-8bc4-0378f56a1468",
     "featured": false
   },
   {
