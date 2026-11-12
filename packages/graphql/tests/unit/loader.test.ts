@@ -44,6 +44,49 @@ describe("loader", () => {
   });
 
   describe("getDocumentLoaders()", () => {
+    test("keeps configuration order when module imports resolve out of order", async () => {
+      expect.hasAssertions();
+
+      class SlowLoader {}
+      class FastLoader {}
+      vi.doMock("@graphql-tools/graphql-file-loader", async () => {
+        await new Promise((resolve) => {
+          return setTimeout(resolve, 50);
+        });
+        return { SlowLoader };
+      });
+      vi.doMock("@graphql-tools/json-file-loader", () => {
+        return { FastLoader };
+      });
+
+      try {
+        const documentLoaders = await getDocumentLoaders({
+          SlowLoader: {
+            module: "@graphql-tools/graphql-file-loader",
+            options: { shared: "first", onlyFirst: 1 },
+          },
+          FastLoader: {
+            module: "@graphql-tools/json-file-loader",
+            options: { shared: "second", onlySecond: 2 },
+          },
+        } as unknown as LoaderOption);
+
+        const { loaders, ...loaderOptions } = documentLoaders!;
+
+        expect(loaders).toHaveLength(2);
+        expect(loaders![0]).toBeInstanceOf(SlowLoader);
+        expect(loaders![1]).toBeInstanceOf(FastLoader);
+        expect(loaderOptions).toStrictEqual({
+          shared: "second",
+          onlyFirst: 1,
+          onlySecond: 2,
+        });
+      } finally {
+        vi.doUnmock("@graphql-tools/graphql-file-loader");
+        vi.doUnmock("@graphql-tools/json-file-loader");
+      }
+    });
+
     test("returns loaders when plugin config loaders format is a string", async () => {
       expect.hasAssertions();
 
