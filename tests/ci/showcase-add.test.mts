@@ -201,6 +201,15 @@ describe("loadImage()", () => {
     await expect(loadImage(file)).rejects.toThrow("Not a PNG");
   });
 
+  test("rejects a truncated PNG before reading its width", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "showcase-"));
+    const file = join(dir, "a.png");
+    const bytes = new Uint8Array(23);
+    bytes.set(PNG_HEAD);
+    writeFileSync(file, bytes);
+    await expect(loadImage(file)).rejects.toThrow("Not a PNG");
+  });
+
   test("rejects an HTTP error", async () => {
     vi.stubGlobal("fetch", async () => new Response("x", { status: 404 }));
     await expect(loadImage("https://x.dev/a.png")).rejects.toThrow(
