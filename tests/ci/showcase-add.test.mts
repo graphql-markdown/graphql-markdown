@@ -65,11 +65,19 @@ describe("insertEntry()", () => {
 });
 
 describe("isPng()", () => {
+  const signature = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+
   test("detects the PNG signature", () => {
-    expect(
-      isPng(Uint8Array.of(0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0)),
-    ).toBe(true);
+    const header = new Uint8Array(24);
+    header.set(signature);
+    expect(isPng(header)).toBe(true);
     expect(isPng(Uint8Array.of(0xff, 0xd8, 0xff))).toBe(false);
+  });
+
+  test("rejects a truncated PNG without a full IHDR header", () => {
+    const truncated = new Uint8Array(19);
+    truncated.set(signature);
+    expect(isPng(truncated)).toBe(false);
   });
 });
 
@@ -153,9 +161,10 @@ describe("pngWidth()", () => {
 });
 
 describe("urlKey()", () => {
-  test("ignores protocol, www, query, hash and trailing slash", () => {
+  test("ignores protocol, www, case, query, hash and trailing slash", () => {
     const key = urlKey("https://docs.dev/api");
     expect(urlKey("http://www.Docs.dev/api/?a=1#x")).toBe(key);
+    expect(urlKey("https://docs.dev/API/")).toBe(key);
   });
 
   test("differs for different paths", () => {
