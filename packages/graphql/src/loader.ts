@@ -118,6 +118,12 @@ export const getDocumentLoaders = async (
     return undefined;
   }
 
+  const entries: {
+    className: string;
+    specifier: string;
+    options: unknown;
+  }[] = [];
+
   for (const [className, graphqlDocumentLoader] of Object.entries(
     loadersList,
   )) {
@@ -125,8 +131,7 @@ export const getDocumentLoaders = async (
       // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
       // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
       const specifier = runtimeModuleSpecifier(graphqlDocumentLoader);
-      const { [className]: Loader } = await import(specifier);
-      loaders.push(new Loader());
+      entries.push({ className, specifier, options: undefined });
     } else {
       if (
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -139,9 +144,24 @@ export const getDocumentLoaders = async (
         );
       }
       const specifier = runtimeModuleSpecifier(graphqlDocumentLoader.module);
-      const { [className]: Loader } = await import(specifier);
-      loaders.push(new Loader());
-      Object.assign(loaderOptions, graphqlDocumentLoader.options);
+      entries.push({
+        className,
+        specifier,
+        options: graphqlDocumentLoader.options,
+      });
+    }
+  }
+
+  const modules = await Promise.all(
+    entries.map(async ({ specifier }) => {
+      return import(specifier);
+    }),
+  );
+
+  for (const [i, { className, options }] of entries.entries()) {
+    loaders.push(new modules[i][className]());
+    if (options !== undefined) {
+      Object.assign(loaderOptions, options);
     }
   }
 
