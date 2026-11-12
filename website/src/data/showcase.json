@@ -162,6 +162,12 @@
     "featured": false
   },
   {
+    "name": "Machine Identity Management",
+    "href": "https://mim.pan.dev/api-endpoints",
+    "image": "6402dc47-05fa-4e37-8bc4-0378f56a1468",
+    "featured": false
+  },
+  {
     "name": "Massdriver",
     "href": "https://docs.massdriver.cloud/swapi",
     "image": "483239320-1b738875-de0b-46b6-8e73-435bca6744c7",
