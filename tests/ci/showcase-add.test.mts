@@ -1,4 +1,10 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, describe, expect, test, vi } from "vitest";
@@ -16,6 +22,7 @@ import {
   resolveImagePath,
   urlKey,
   validateUrl,
+  writeAtomic,
 } from "../../packages/tooling-config/scripts/showcase-add.mts";
 
 const entry = (name: string, href = `https://${name}.dev`): ShowcaseEntry => ({
@@ -226,6 +233,53 @@ describe("loadImage()", () => {
     await expect(loadImage("https://x.dev/a.png")).rejects.toThrow(
       "Image larger than 10 MB",
     );
+  });
+
+  test("stops an oversized download without content-length", async () => {
+    let pulled = 0;
+    const chunk = new Uint8Array(1024 * 1024);
+    const body = new ReadableStream<Uint8Array>({
+      pull(controller) {
+        pulled += 1;
+        controller.enqueue(chunk);
+      },
+    });
+    vi.stubGlobal("fetch", async () => new Response(body));
+    await expect(loadImage("https://x.dev/a.png")).rejects.toThrow(
+      "Image larger than 10 MB",
+    );
+    expect(pulled).toBeLessThan(15);
+  });
+
+  test("rejects an oversized local file before reading it", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "showcase-"));
+    const file = join(dir, "big.png");
+    writeFileSync(file, new Uint8Array(10 * 1024 * 1024 + 1));
+    await expect(loadImage(file)).rejects.toThrow("Image larger than 10 MB");
+  });
+});
+
+describe("writeAtomic()", () => {
+  test("replaces the file and leaves no temp file", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "showcase-"));
+    const file = join(dir, "data.json");
+    writeFileSync(file, "old");
+    await writeAtomic(file, "new");
+    expect(readFileSync(file, "utf8")).toBe("new");
+    expect(readdirSync(dir)).toEqual(["data.json"]);
+  });
+
+  test("keeps the original file when the write fails", async () => {
+    const dir = mkdtempSync(join(tmpdir(), "showcase-"));
+    const file = join(dir, "data.json");
+    writeFileSync(file, "old");
+    // Renaming a file onto a non-empty directory fails.
+    const target = join(dir, "nested");
+    mkdirSync(target);
+    writeFileSync(join(target, "x"), "");
+    await expect(writeAtomic(target, "new")).rejects.toThrow();
+    expect(readFileSync(file, "utf8")).toBe("old");
+    expect(readdirSync(dir).sort()).toEqual(["data.json", "nested"]);
   });
 });
 

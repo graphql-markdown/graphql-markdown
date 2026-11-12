@@ -14,7 +14,7 @@
 import { randomUUID } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { realpathSync } from "node:fs";
-import { readFile, stat, unlink, writeFile } from "node:fs/promises";
+import { readFile, rename, stat, unlink, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { stdin, stdout } from "node:process";
@@ -141,6 +141,41 @@ export const resolveImagePath = (
 export const isRemote = (source: string): boolean =>
   /^https?:\/\//i.test(source);
 
+// Streams a response body, aborting once it exceeds MAX_BYTES, so a download
+// without (or lying about) content-length cannot exhaust memory.
+const readLimited = async (
+  response: Response,
+  tooLarge: () => Error,
+): Promise<Uint8Array> => {
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for await (const chunk of response.body ?? []) {
+    total += chunk.length;
+    if (total > MAX_BYTES) {
+      await response.body?.cancel().catch(() => undefined);
+      throw tooLarge();
+    }
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+};
+
+// Writes to a temp file then renames it, so a failed write never leaves a
+// truncated showcase.json behind.
+export const writeAtomic = async (
+  file: string,
+  text: string,
+): Promise<void> => {
+  const temp = `${file}.${process.pid}.tmp`;
+  try {
+    await writeFile(temp, text);
+    await rename(temp, file);
+  } catch (error) {
+    await unlink(temp).catch(() => undefined);
+    throw error;
+  }
+};
+
 export const loadImage = async (source: string): Promise<Uint8Array> => {
   const tooLarge = (): Error => new Error(`Image larger than 10 MB: ${source}`);
   let bytes: Uint8Array;
@@ -154,12 +189,14 @@ export const loadImage = async (source: string): Promise<Uint8Array> => {
     if (Number(response.headers.get("content-length")) > MAX_BYTES) {
       throw tooLarge();
     }
-    bytes = new Uint8Array(await response.arrayBuffer());
+    bytes = await readLimited(response, tooLarge);
   } else {
-    bytes = await readFile(resolveImagePath(source));
-  }
-  if (bytes.length > MAX_BYTES) {
-    throw tooLarge();
+    const file = resolveImagePath(source);
+    // Check the size before reading so a huge file is never loaded.
+    if ((await stat(file)).size > MAX_BYTES) {
+      throw tooLarge();
+    }
+    bytes = await readFile(file);
   }
   if (!isPng(bytes)) {
     throw new Error(`Not a PNG image: ${source}`);
@@ -227,7 +264,7 @@ const main = async (argv: string[]): Promise<void> => {
   const imageFile = join(IMAGE_DIR, `${image}.png`);
   await writeFile(imageFile, bytes);
   try {
-    await writeFile(DATA_FILE, `${JSON.stringify(next, null, 2)}\n`);
+    await writeAtomic(DATA_FILE, `${JSON.stringify(next, null, 2)}\n`);
   } catch (error) {
     await unlink(imageFile).catch(() => undefined);
     throw error;
