@@ -150,6 +150,12 @@
     "featured": true
   },
   {
+    "name": "Kaizen",
+    "href": "https://docs.ktckts.com/api/management/",
+    "image": "376e2104-2c7a-426a-ba2e-bc3fe06d2701",
+    "featured": false
+  },
+  {
     "name": "Kili",
     "href": "https://api-docs.kili-technology.com/",
     "image": "90431066-3ade-48e9-86e3-599144e380cd",
