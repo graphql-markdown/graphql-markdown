@@ -161,7 +161,7 @@ export const loadImage = async (source: string): Promise<Uint8Array> => {
   if (bytes.length > MAX_BYTES) {
     throw tooLarge();
   }
-  if (bytes.length < 24 || !isPng(bytes)) {
+  if (!isPng(bytes)) {
     throw new Error(`Not a PNG image: ${source}`);
   }
   return bytes;
