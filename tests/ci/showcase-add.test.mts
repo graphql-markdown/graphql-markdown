@@ -75,7 +75,8 @@ describe("validateUrl()", () => {
   });
 
   test("rejects other protocols and invalid URLs", () => {
-    expect(() => validateUrl("ftp://example.com")).toThrow("http(s)");
+    expect(() => validateUrl("ftp://example.com")).toThrow("https://");
+    expect(() => validateUrl("https:docs.example.com/api")).toThrow("https://");
     expect(() => validateUrl("not a url")).toThrow();
   });
 });

@@ -58,9 +58,10 @@ export const parseOptions = (argv: string[]): Options => {
 };
 
 export const validateUrl = (value: string): string => {
-  const url = new URL(value);
-  if (!["http:", "https:"].includes(url.protocol)) {
-    throw new Error(`URL must be http(s): ${value}`);
+  // Require an explicit `http(s)://` prefix: `new URL` also accepts
+  // `https:docs.example.com`, which renders as a relative link.
+  if (!isRemote(value) || !URL.canParse(value)) {
+    throw new Error(`URL must start with http:// or https://: ${value}`);
   }
   return value;
 };
