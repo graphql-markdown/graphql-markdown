@@ -44,7 +44,8 @@ export const isPng = (bytes: Uint8Array): boolean =>
 
 export const parseOptions = (argv: string[]): Options => {
   const { values } = parseArgs({
-    args: argv,
+    // `bun run showcase:add -- --name …` forwards the `--` separator.
+    args: argv[0] === "--" ? argv.slice(1) : argv,
     options: {
       name: { type: "string" },
       url: { type: "string" },
@@ -84,18 +85,18 @@ export const insertEntry = (
       `Already in showcase: ${duplicate.name} (${duplicate.href})`,
     );
   }
-  const index = entries.findIndex((s) => compareNames(s, entry) > 0);
-  const next = [...entries];
-  next.splice(index === -1 ? next.length : index, 0, entry);
-  return next;
+  return [...entries, entry].sort(compareNames);
 };
 
 const expandHome = (path: string): string =>
   path.startsWith("~/") ? join(homedir(), path.slice(2)) : path;
 
+export const isRemote = (source: string): boolean =>
+  /^https?:\/\//i.test(source);
+
 export const loadImage = async (source: string): Promise<Uint8Array> => {
   let bytes: Uint8Array;
-  if (/^https?:\/\//.test(source)) {
+  if (isRemote(source)) {
     const response = await fetch(source);
     if (!response.ok) {
       throw new Error(`Download failed (${response.status}): ${source}`);

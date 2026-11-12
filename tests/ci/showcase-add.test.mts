@@ -4,6 +4,7 @@ import type { ShowcaseEntry } from "../../packages/tooling-config/scripts/showca
 import {
   insertEntry,
   isPng,
+  isRemote,
   parseOptions,
   validateUrl,
 } from "../../packages/tooling-config/scripts/showcase-add.mts";
@@ -21,6 +22,12 @@ describe("insertEntry()", () => {
   test("inserts in case-insensitive name order", () => {
     const names = insertEntry(entries, entry("Kaizen")).map((s) => s.name);
     expect(names).toEqual(["Altium", "cartesi", "Kaizen", "Kili"]);
+  });
+
+  test("sorts entries that were out of order", () => {
+    const unsorted = [entry("FWU BMI Docs"), entry("FUSSY")];
+    const names = insertEntry(unsorted, entry("FuzDocs")).map((s) => s.name);
+    expect(names).toEqual(["FUSSY", "FuzDocs", "FWU BMI Docs"]);
   });
 
   test("appends after the last entry", () => {
@@ -51,6 +58,15 @@ describe("isPng()", () => {
   });
 });
 
+describe("isRemote()", () => {
+  test("matches http(s) URLs case-insensitively", () => {
+    expect(isRemote("https://x.dev/a.png")).toBe(true);
+    expect(isRemote("HTTPS://x.dev/a.png")).toBe(true);
+    expect(isRemote("Http://x.dev/a.png")).toBe(true);
+    expect(isRemote("./https/a.png")).toBe(false);
+  });
+});
+
 describe("validateUrl()", () => {
   test("accepts http(s) URLs unchanged", () => {
     expect(validateUrl("https://docs.example.com")).toBe(
@@ -75,6 +91,10 @@ describe("parseOptions()", () => {
         "--featured",
       ]),
     ).toMatchObject({ name: "Kaizen", url: "https://k.dev", featured: true });
+  });
+
+  test("ignores a leading -- forwarded by bun run", () => {
+    expect(parseOptions(["--", "--name", "Kaizen"]).name).toBe("Kaizen");
   });
 
   test("defaults featured to false and rejects unknown flags", () => {
