@@ -45,7 +45,11 @@ const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
 const MAX_WIDTH = 1800;
 const MAX_BYTES = 10 * 1024 * 1024;
 
+// Signature (8) + IHDR length/type (8) + width (4) + height (4).
+const PNG_HEADER_BYTES = 24;
+
 export const isPng = (bytes: Uint8Array): boolean =>
+  bytes.length >= PNG_HEADER_BYTES &&
   PNG_SIGNATURE.every((byte, i) => bytes[i] === byte);
 
 export const pngWidth = (bytes: Uint8Array): number =>
