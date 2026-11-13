@@ -25,7 +25,7 @@
         "eslint": "10.14.0",
         "eslint-config-prettier": "10.1.8",
         "eslint-plugin-jsonc": "3.4.2",
-        "eslint-plugin-mdx": "3.9.4",
+        "eslint-plugin-mdx": "3.9.5",
         "eslint-plugin-prettier": "5.5.7",
         "eslint-plugin-tsdoc": "0.5.4",
         "fallow": "3.42.0",
@@ -1873,11 +1873,11 @@
 
     "eslint-json-compat-utils": ["eslint-json-compat-utils@0.2.3", "", { "dependencies": { "esquery": "^1.6.0" }, "peerDependencies": { "@eslint/json": "*", "eslint": "*", "jsonc-eslint-parser": "^2.4.0 || ^3.0.0" }, "optionalPeers": ["@eslint/json"] }, "sha512-RbBmDFyu7FqnjE8F0ZxPNzx5UaptdeS9Uu50r7A+D7s/+FCX+ybiyViYEgFUaFIFqSWJgZRTpL5d8Kanxxl2lQ=="],
 
-    "eslint-mdx": ["eslint-mdx@3.9.4", "", { "dependencies": { "acorn": "^8.19.0", "acorn-jsx": "^5.3.2", "devlop": "^1.1.0", "eslint-scope": "^8.4.0 || ^9.1.2", "eslint-visitor-keys": "^4.2.0 || ^5.0.1", "espree": "^9.6.1 || ^10.4.0 || ^11.2.0", "estree-util-visit": "^2.0.0", "mdast-util-from-markdown": "^2.1.0", "remark-mdx": "^3.1.1", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.12.3", "unified": "^11.0.5", "unified-engine": "^11.2.2", "unist-util-visit": "^5.1.0", "unist-util-visit-parents": "^6.0.0", "vfile": "^6.0.3" }, "peerDependencies": { "@types/estree": "^1.0.10", "eslint": ">=8.0.0", "remark-lint-file-extension": "*" }, "optionalPeers": ["@types/estree", "remark-lint-file-extension"] }, "sha512-Ey3u0uMB8LDi/BlHgK3kShC9DIJngkW9oOGxQcV5MA7nVzirzyeXlAY0A79cSTaL+Wb19UOhc3//bEP9WnNS7w=="],
+    "eslint-mdx": ["eslint-mdx@3.9.5", "", { "dependencies": { "acorn": "^8.19.0", "acorn-jsx": "^5.3.2", "devlop": "^1.1.0", "eslint-scope": "^8.4.0 || ^9.1.2", "eslint-visitor-keys": "^4.2.0 || ^5.0.1", "espree": "^9.6.1 || ^10.4.0 || ^11.2.0", "estree-util-visit": "^2.0.0", "mdast-util-from-markdown": "^2.1.0", "remark-mdx": "^3.1.1", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "synckit": "^0.12.3", "unified": "^11.0.5", "unified-engine": "^11.2.2", "unist-util-visit": "^5.1.0", "unist-util-visit-parents": "^6.0.0", "vfile": "^6.0.3" }, "peerDependencies": { "@types/estree": "^1.0.10", "eslint": ">=8.0.0", "remark-lint-file-extension": "*" }, "optionalPeers": ["@types/estree", "remark-lint-file-extension"] }, "sha512-pxkzWADqcf/5F4XkQx+5YmhGxlQ9Q3BmOT0CYnuMPm9G3y4DJ3lPc8gHicUowA8fKJDpfrmSJ3TsxMUmXt0GpA=="],
 
     "eslint-plugin-jsonc": ["eslint-plugin-jsonc@3.4.2", "", { "dependencies": { "@eslint-community/eslint-utils": "^4.5.1", "@eslint/core": "^1.0.1", "@eslint/plugin-kit": "^0.7.0", "@ota-meshi/ast-token-store": "^0.3.0", "diff-sequences": "^29.6.3", "eslint-json-compat-utils": "^0.2.3", "jsonc-eslint-parser": "^3.1.0", "natural-compare": "^1.4.0", "synckit": "^0.11.12" }, "peerDependencies": { "eslint": ">=9.38.0" } }, "sha512-q5xzjCYFQuhFomTbctXzd3STfDJ8XduvaigjQmMEbP2gzSKrc58y3Fv6D775/cIK1/sRUn+4kpljiU2iW8k0zw=="],
 
-    "eslint-plugin-mdx": ["eslint-plugin-mdx@3.9.4", "", { "dependencies": { "eslint-mdx": "^3.9.4", "mdast-util-mdx": "^3.0.0", "prettier-linter-helpers": "^1.0.1", "remark-mdx": "^3.1.1", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "unified": "^11.0.5", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0" } }, "sha512-WDAS0Fy+VB81SBFCPBaIxeU89/fvxSxyV54QllEqh391p5YpBk/RtchBBs1XxT6C1I4N5y+CA5/5FDeySKiNJw=="],
+    "eslint-plugin-mdx": ["eslint-plugin-mdx@3.9.5", "", { "dependencies": { "eslint-mdx": "^3.9.5", "mdast-util-mdx": "^3.0.0", "prettier-linter-helpers": "^1.0.1", "remark-mdx": "^3.1.1", "remark-parse": "^11.0.0", "remark-stringify": "^11.0.0", "unified": "^11.0.5", "vfile": "^6.0.3" }, "peerDependencies": { "eslint": ">=8.0.0" } }, "sha512-EuIymT7/NL3+XuDtOp202l8FRIhCEOYgakNegd/NaMPsZpSxSXpQ8rAvs2DnZEvEKmvo6J6UUP58KQEFQvBHsA=="],
 
     "eslint-plugin-prettier": ["eslint-plugin-prettier@5.5.7", "", { "dependencies": { "prettier-linter-helpers": "^1.0.1", "synckit": "^0.12.3" }, "peerDependencies": { "@types/eslint": ">=8.0.0", "eslint": ">=8.0.0", "eslint-config-prettier": ">= 7.0.0 <10.0.0 || >=10.1.0", "prettier": ">=3.0.0" }, "optionalPeers": ["@types/eslint", "eslint-config-prettier"] }, "sha512-WjHyn3GrFd+ZR0rzsLiM4zJZ35PZMOE0SUIxzGmnWNG0126yNfJKJzObmmkYDwHJfGlkz3PSlzyG9ez/LJntwg=="],
 
