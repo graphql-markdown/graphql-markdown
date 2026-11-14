@@ -52,7 +52,7 @@ workflows:
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
         - 'oven-sh/setup-bun@v2.2.0'
-        - 'sonarsource/sonarqube-scan-action@v8.4.1'
+        - 'sonarsource/sonarqube-scan-action@v8.5.0'
 dependencies:
     'actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7':
         ref: 'v5.0.4'
@@ -112,8 +112,8 @@ dependencies:
         commit: 'sha1-78b335bb7d059f35ad04c5428d50711726feee50'
         owner_id: 823277
         repo_id: 156955467
-    'sonarsource/sonarqube-scan-action@v8.4.1':
-        ref: 'v8.4.1'
-        commit: 'sha1-e805d875275f728fac1885b413934be6d7c63f65'
+    'sonarsource/sonarqube-scan-action@v8.5.0':
+        ref: 'v8.5.0'
+        commit: 'sha1-59202af334b4ba7b5db01b701b8e79f8b3bef0f4'
         owner_id: 545988
         repo_id: 366408409
