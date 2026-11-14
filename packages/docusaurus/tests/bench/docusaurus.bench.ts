@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import type { OutputAdapter } from "@graphql-markdown/types";
 
@@ -38,6 +38,17 @@ const entities = Array.from({ length: CATEGORY_COUNT }, (_, index) => {
 
 describe("@graphql-markdown/docusaurus", () => {
   test("beforeGenerateIndexMetafileHook", async ({ bench }) => {
+    files.clear();
+    await beforeGenerateIndexMetafileHook({
+      data: {
+        dirPath: `/output/types/${categories[0]}`,
+        category: categories[0],
+        outputAdapter: memoryOutputAdapter,
+        options: { index: true, collapsible: true, collapsed: false },
+      },
+    });
+    expect(files.size).toBeGreaterThan(0);
+
     await bench("write _category_.yml for 50 categories", async () => {
       files.clear();
       for (const category of categories) {
@@ -54,6 +65,8 @@ describe("@graphql-markdown/docusaurus", () => {
   });
 
   test("MDX formatter", async ({ bench }) => {
+    expect(formatter.formatMDXBullet("field0")).toBeTruthy();
+
     await bench("format type page entities (50 fields)", () => {
       formatter.formatMDXFrontmatter({ id: "entity", title: "Entity" }, [
         "slug: /types/objects/entity",

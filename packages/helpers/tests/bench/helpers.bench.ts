@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import { buildSchema } from "graphql/utilities";
 
@@ -67,6 +67,8 @@ const formattedFrontMatter = [
 
 describe("@graphql-markdown/helpers", () => {
   test("directives", async ({ bench }) => {
+    expect(directiveDescriptor(directive, types[0], TEMPLATE)).toBeTruthy();
+
     await bench.compare(
       bench("directiveDescriptor for 100 types", () => {
         for (const type of types) {
@@ -90,6 +92,8 @@ describe("@graphql-markdown/helpers", () => {
   });
 
   test("markdown", async ({ bench }) => {
+    expect(quoteMarkdownLines(MARKDOWN)).toBeTruthy();
+
     await bench.compare(
       bench("quoteMarkdownLines (200 lines)", () => {
         quoteMarkdownLines(MARKDOWN);

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import { buildSchema } from "graphql/utilities";
 
@@ -31,6 +31,10 @@ const queryType = schema.getQueryType();
 
 describe("@graphql-markdown/printer-legacy", () => {
   test("Printer.printType", async ({ bench }) => {
+    expect(objectType).toBeDefined();
+    expect(queryType).toBeDefined();
+    expect(await Printer.printType("Film", objectType)).toContain("Film");
+
     await bench.compare(
       bench("print every type page (swapi)", async () => {
         for (const [name, type] of entries) {

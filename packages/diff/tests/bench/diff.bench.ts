@@ -2,7 +2,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
-import { afterAll, describe, test } from "vitest";
+import { afterAll, describe, expect, test } from "vitest";
 
 import { buildSchema } from "graphql/utilities";
 
@@ -29,12 +29,16 @@ describe("@graphql-markdown/diff", () => {
   });
 
   test("getSchemaHash", async ({ bench }) => {
+    expect(getSchemaHash(schema)).toBeTruthy();
+
     await bench("getSchemaHash (swapi)", () => {
       getSchemaHash(schema);
     }).run();
   });
 
   test("getDiff", async ({ bench }) => {
+    expect((await getDiff(changedSchema, schemaRef)).length).toBeGreaterThan(0);
+
     await bench.compare(
       bench("getDiff unchanged schema (swapi)", async () => {
         await getDiff(schema, schemaRef);

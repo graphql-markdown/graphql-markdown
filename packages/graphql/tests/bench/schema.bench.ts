@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import { buildSchema } from "graphql/utilities";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
@@ -32,6 +32,12 @@ const allTypes: unknown[] = Object.values(schemaMap).flatMap((entities) => {
 
 describe("@graphql-markdown/graphql", () => {
   test("schema loading", async ({ bench }) => {
+    expect(buildSchema(SCHEMA_SDL).getQueryType()).toBeDefined();
+    const loadedSchema = await loadSchema(SCHEMA_LOCATION, {
+      loaders: [new GraphQLFileLoader()],
+    });
+    expect(loadedSchema.getQueryType()).toBeDefined();
+
     await bench.compare(
       bench("buildSchema (swapi)", () => {
         buildSchema(SCHEMA_SDL);
@@ -45,6 +51,15 @@ describe("@graphql-markdown/graphql", () => {
   });
 
   test("schema introspection", async ({ bench }) => {
+    expect(allTypes.length).toBeGreaterThan(0);
+    expect(
+      getGroups(schemaMap, {
+        directive: "doc" as DirectiveName,
+        field: "category",
+        fallback: "misc",
+      }),
+    ).toBeDefined();
+
     await bench.compare(
       bench("getSchemaMap (swapi)", () => {
         getSchemaMap(schema);
@@ -60,6 +75,11 @@ describe("@graphql-markdown/graphql", () => {
   });
 
   test("relations", async ({ bench }) => {
+    const relations = allTypes.map((type) => {
+      return getRelationOfReturn(type, schemaMap);
+    });
+    expect(relations).toHaveLength(allTypes.length);
+
     await bench.compare(
       bench("getRelationOfReturn for every type (swapi)", () => {
         for (const type of allTypes) {

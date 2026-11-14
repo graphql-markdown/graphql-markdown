@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import type { Formatter, MetaInfo } from "@graphql-markdown/types";
 
@@ -58,6 +58,8 @@ const rewriteInternalLinks = createInternalLinksRewriter(".md");
 
 describe("@graphql-markdown/formatters", () => {
   test("format a type page with every preset", async ({ bench }) => {
+    expect(formatters.length).toBeGreaterThan(0);
+
     await bench.compare(
       ...formatters.map(([name, formatter]) => {
         return bench(`format page (${name})`, () => {
@@ -68,6 +70,15 @@ describe("@graphql-markdown/formatters", () => {
   });
 
   test("output", async ({ bench }) => {
+    expect(
+      rewriteInternalLinks(
+        PAGE,
+        "/output/types/objects/film.md",
+        "/output",
+        "graphql",
+      ),
+    ).toContain("https://example.com/");
+
     await bench("rewrite internal links (200 links)", () => {
       rewriteInternalLinks(
         PAGE,

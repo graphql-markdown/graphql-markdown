@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import {
   convertArrayToMapObject,
@@ -57,6 +57,8 @@ const docLinks: string[] = identifiers.slice(0, 200).map((name, index) => {
 
 describe("@graphql-markdown/utils", () => {
   test("string case", async ({ bench }) => {
+    expect(kebabCase("StarWarsFilm")).toBe("star-wars-film");
+
     await bench.compare(
       bench("kebabCase for every identifier (swapi)", () => {
         for (const name of identifiers) {
@@ -77,6 +79,8 @@ describe("@graphql-markdown/utils", () => {
   });
 
   test("markdown", async ({ bench }) => {
+    expect(formatFrontMatterObject(frontMatter)).toBeTruthy();
+
     await bench.compare(
       bench("escapeMDX for every schema line (swapi)", () => {
         for (const line of lines) {
@@ -93,6 +97,15 @@ describe("@graphql-markdown/utils", () => {
   });
 
   test("links", async ({ bench }) => {
+    expect(
+      toRelativeGeneratedDocLink({
+        baseURL: "graphql",
+        currentFilePath: "/output/types/objects/film.md",
+        outputDir: "/output",
+        targetUrlPath: docLinks[0],
+      }),
+    ).toBeTruthy();
+
     await bench("toRelativeGeneratedDocLink for 200 links", () => {
       for (const targetUrlPath of docLinks) {
         toRelativeGeneratedDocLink({

@@ -1,4 +1,4 @@
-import { describe, test } from "vitest";
+import { describe, expect, test } from "vitest";
 
 import type {
   CliOptions,
@@ -89,6 +89,8 @@ const payload = buildPayload({
 
 describe("@graphql-markdown/telemetry", () => {
   test("sanitize", async ({ bench }) => {
+    expect(sanitizeConfig(config, CONFIG_RULES)).toBeDefined();
+
     await bench.compare(
       bench("sanitizeConfig (config options)", () => {
         sanitizeConfig(config, CONFIG_RULES);
@@ -105,6 +107,8 @@ describe("@graphql-markdown/telemetry", () => {
   });
 
   test("payload", async ({ bench }) => {
+    expect(fingerprint(payload)).toBeTruthy();
+
     await bench.compare(
       bench("buildPayload (config and CLI options)", () => {
         buildPayload({

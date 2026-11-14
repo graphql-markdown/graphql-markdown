@@ -1,6 +1,6 @@
 import { join } from "node:path";
 
-import { beforeAll, describe, test, vi } from "vitest";
+import { beforeAll, describe, expect, test, vi } from "vitest";
 
 import type {
   ClassName,
@@ -60,6 +60,10 @@ describe("@graphql-markdown/core", () => {
   });
 
   test("generateDocFromSchema", async ({ bench }) => {
+    pages.clear();
+    await generateDocFromSchema(swapiOptions);
+    expect(pages.size).toBeGreaterThan(0);
+
     await bench.compare(
       bench("generate docs (swapi)", async () => {
         pages.clear();

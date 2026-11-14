@@ -1,4 +1,4 @@
-import { beforeAll, describe, test } from "vitest";
+import { beforeAll, describe, expect, test } from "vitest";
 
 import Logger, { log } from "../../src";
 
@@ -16,6 +16,10 @@ describe("@graphql-markdown/logger", () => {
   });
 
   test("log", async ({ bench }) => {
+    expect(() => {
+      log("Generating documentation page", "info");
+    }).not.toThrow();
+
     await bench.compare(
       bench("log 100 info messages", () => {
         for (let index = 0; index < MESSAGE_COUNT; index++) {
@@ -32,6 +36,8 @@ describe("@graphql-markdown/logger", () => {
   });
 
   test("Logger", async ({ bench }) => {
+    await expect(Logger(memoryLogger)).resolves.toBeUndefined();
+
     await bench("Logger from module object", async () => {
       await Logger(memoryLogger);
     }).run();
