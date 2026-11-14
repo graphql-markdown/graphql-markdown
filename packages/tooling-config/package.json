@@ -15,6 +15,10 @@
       "types": "./vitest/base.d.mts",
       "default": "./vitest/base.mjs"
     },
+    "./vitest/bench": {
+      "types": "./vitest/bench.d.mts",
+      "default": "./vitest/bench.mjs"
+    },
     "./prettier": "./prettier/index.mjs",
     "./stryker": "./stryker/stryker.conf.mjs",
     "./tsconfig/base": "./tsconfig/base.json",
@@ -31,6 +35,7 @@
     "ts:check": "tsgo --noEmit"
   },
   "devDependencies": {
+    "@codspeed/vitest-plugin": "6.1.1",
     "deno": "2.9.6",
     "jsr": "0.14.3"
   },

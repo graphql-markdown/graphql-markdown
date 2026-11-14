@@ -5,7 +5,6 @@
     "": {
       "name": "graphql-markdown",
       "devDependencies": {
-        "@codspeed/vitest-plugin": "6.1.1",
         "@eslint/js": "10.0.1",
         "@graphql-eslint/eslint-plugin": "4.4.2",
         "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",
@@ -302,6 +301,7 @@
       "name": "@graphql-markdown/tooling-config",
       "version": "1.0.0",
       "devDependencies": {
+        "@codspeed/vitest-plugin": "6.1.1",
         "deno": "2.9.6",
         "jsr": "0.14.3",
       },
