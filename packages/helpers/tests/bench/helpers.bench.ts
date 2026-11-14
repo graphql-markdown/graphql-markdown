@@ -41,6 +41,8 @@ const types = Array.from({ length: TYPE_COUNT }, (_, index) => {
 
 const TEMPLATE =
   "Requires the `${role}` role (since ${version.major}.${version.minor}, ${missing.value})";
+const DIRECTIVE_TEMPLATE =
+  "Requires the `${role}` role (since ${major}.${minor})";
 const variables = {
   description: "auth",
   role: "admin",
@@ -67,7 +69,9 @@ const formattedFrontMatter = [
 
 describe("@graphql-markdown/helpers", () => {
   test("directives", async ({ bench }) => {
-    expect(directiveDescriptor(directive, types[0], TEMPLATE)).toBeTruthy();
+    expect(
+      directiveDescriptor(directive, types[0], DIRECTIVE_TEMPLATE),
+    ).toContain("admin0");
 
     await bench.compare(
       bench("directiveDescriptor for 100 types", () => {
@@ -77,7 +81,7 @@ describe("@graphql-markdown/helpers", () => {
       }),
       bench("directiveDescriptor with template for 100 types", () => {
         for (const type of types) {
-          directiveDescriptor(directive, type, TEMPLATE);
+          directiveDescriptor(directive, type, DIRECTIVE_TEMPLATE);
         }
       }),
       bench("directiveTag for 100 types", () => {
