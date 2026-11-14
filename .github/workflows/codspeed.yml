@@ -1,0 +1,67 @@
+name: CodSpeed
+
+env:
+  HUSKY: 0
+  GRAPHQL_MARKDOWN_TELEMETRY_DISABLED: "1"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - main
+  # `workflow_dispatch` lets CodSpeed trigger backtest runs on past commits.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  # Only superseded PR runs are cancelled: every push to main uploads the
+  # baseline that later PRs are compared against, so none may be dropped.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  changes:
+    name: Changes
+    uses: ./.github/workflows/changes.yml
+
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    needs: changes
+    # Pushes to main (the CodSpeed baseline) and backtest dispatches always
+    # run. Pull requests run only when code or CI config changed; the gate
+    # falls open if it did not succeed. Fork and Dependabot PRs are skipped:
+    # GitHub runs them like forks, without the `id-token: write` the CodSpeed
+    # OIDC upload needs, so the job could only fail.
+    if: >-
+      !cancelled()
+      && (github.event_name != 'pull_request'
+        || (github.event.pull_request.head.repo.full_name == github.repository
+          && github.event.pull_request.user.login != 'dependabot[bot]'
+          && (needs.changes.result != 'success'
+            || needs.changes.outputs.code == 'true'
+            || needs.changes.outputs.workflows == 'true')))
+    permissions:
+      contents: read
+      # OIDC token used to authenticate the upload to CodSpeed.
+      id-token: write
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: $/.github/actions/setup
+
+      # Benchmarks import the workspace packages from `src` through the Vitest
+      # aliases (see packages/tooling-config/vitest/base.mjs), so no build step
+      # is needed.
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v5.6.3
+        with:
+          mode: simulation
+          run: bun run bench

@@ -80,6 +80,7 @@
     }
   ],
   "scripts": {
+    "bench": "vitest bench --run",
     "build": "turbo build",
     "clean": "turbo clean",
     "docs": "turbo run docs",

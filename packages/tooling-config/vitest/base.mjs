@@ -5,6 +5,15 @@ import { fileURLToPath } from "node:url";
 
 import { defineConfig } from "vitest/config";
 
+// The CodSpeed runner sets `CODSPEED_ENV`; it is the only case where the
+// plugin does anything under Vitest 5 (which has no benchmark mode the plugin
+// could detect), so it is only imported then — unit-test, `test:all` and
+// Stryker runs never load `@codspeed/core`. Local `bun run bench` uses Vitest's
+// own benchmark provider.
+const codspeedPlugins = process.env.CODSPEED_ENV
+  ? [(await import("@codspeed/vitest-plugin")).default()]
+  : [];
+
 /**
  * Resolves a workspace package `src` folder as an absolute path.
  *
@@ -18,8 +27,8 @@ const packagePath = (packagesDir, subPath) => `${packagesDir}/${subPath}`;
  * Aliases replacing Jest's `moduleNameMapper`, resolving `@graphql-markdown/*`
  * specifiers to sibling package sources instead of built `dist` output.
  *
- * Order matters: the two `formatters` entries must be matched before the
- * generic catch-all.
+ * Order matters: the two `formatters` entries and the `tooling-config` entry
+ * (which has no `src` folder) must be matched before the generic catch-all.
  *
  * @param {string} packagesDir absolute path to the `packages` folder
  * @returns {{ find: RegExp, replacement: string }[]}
@@ -32,6 +41,10 @@ const createAlias = (packagesDir) => [
   {
     find: /^@graphql-markdown\/formatters\/(.*)$/,
     replacement: packagePath(packagesDir, "formatters/src/$1/index"),
+  },
+  {
+    find: /^@graphql-markdown\/tooling-config\/(.*)$/,
+    replacement: packagePath(packagesDir, "tooling-config/$1"),
   },
   {
     find: /^@graphql-markdown\/(.*)$/,
@@ -85,6 +98,7 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
   const packagesDir = findPackagesDir(root);
 
   return defineConfig({
+    plugins: codspeedPlugins,
     resolve: {
       alias: createAlias(packagesDir),
       // Each workspace package resolves its own copy of `graphql`, and the
@@ -102,6 +116,11 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
         "tests/{unit,integration}/**/*.{spec,test}.ts",
       ],
       exclude: ["**/node_modules/**", "**/dist/**", "**/__data__/**"],
+      // Performance benchmarks, run with `bun run bench` (see the CodSpeed
+      // workflow). Kept out of `include` above so `vitest run` never picks them.
+      benchmark: {
+        include: ["tests/bench/**/*.bench.ts"],
+      },
       testTimeout: options.testTimeout ?? 5000,
       // Every package tests plain Node code with no native addon and no
       // `process.chdir`, so worker threads are safe and avoid a child process
@@ -126,7 +145,15 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
       // registry, so it never hit this.
       server: {
         deps: {
-          inline: [/^graphql$/, /^graphql\//, /@graphql-tools\//],
+          // `@graphql-inspector/*` runs real code against the inlined
+          // `graphql`; left external it loads its own copy and hits the same
+          // realm error.
+          inline: [
+            /^graphql$/,
+            /^graphql\//,
+            /@graphql-tools\//,
+            /@graphql-inspector\//,
+          ],
         },
       },
       // Replaces Jest's `testEnvironmentOptions.globalsCleanup`: each test file

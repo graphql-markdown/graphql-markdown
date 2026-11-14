@@ -88,6 +88,7 @@
         "@typescript-eslint/parser",
         "eslint-config-prettier",
         "@vitest/eslint-plugin",
+        "@codspeed/vitest-plugin",
         "vitest",
         "eslint-plugin-jsonc",
         "eslint-plugin-mdx",
