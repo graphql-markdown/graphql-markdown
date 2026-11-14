@@ -80,6 +80,7 @@
     }
   ],
   "scripts": {
+    "bench": "vitest bench --run",
     "build": "turbo build",
     "clean": "turbo clean",
     "docs": "turbo run docs",
@@ -181,6 +182,7 @@
     }
   },
   "devDependencies": {
+    "@codspeed/vitest-plugin": "6.1.1",
     "@eslint/js": "10.0.1",
     "@graphql-eslint/eslint-plugin": "4.4.2",
     "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",

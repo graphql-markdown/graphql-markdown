@@ -3,6 +3,7 @@
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import codspeedPlugin from "@codspeed/vitest-plugin";
 import { defineConfig } from "vitest/config";
 
 /**
@@ -85,6 +86,9 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
   const packagesDir = findPackagesDir(root);
 
   return defineConfig({
+    // Only active under `vitest bench`; it instruments benchmarks when they run
+    // through the CodSpeed runner and is a no-op otherwise.
+    plugins: [codspeedPlugin()],
     resolve: {
       alias: createAlias(packagesDir),
       // Each workspace package resolves its own copy of `graphql`, and the
@@ -102,6 +106,11 @@ export const createPackageConfig = (name, configUrl, options = {}) => {
         "tests/{unit,integration}/**/*.{spec,test}.ts",
       ],
       exclude: ["**/node_modules/**", "**/dist/**", "**/__data__/**"],
+      // Performance benchmarks, run with `bun run bench` (see the CodSpeed
+      // workflow). Kept out of `include` above so `vitest run` never picks them.
+      benchmark: {
+        include: ["tests/bench/**/*.bench.ts"],
+      },
       testTimeout: options.testTimeout ?? 5000,
       // Every package tests plain Node code with no native addon and no
       // `process.chdir`, so worker threads are safe and avoid a child process

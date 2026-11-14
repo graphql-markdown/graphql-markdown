@@ -260,6 +260,16 @@ bun run stryker
 
 You can read more about [mutation testing here](https://stryker-mutator.io/docs/).
 
+#### Performance benchmarks
+
+Benchmarks live next to the tests, in `packages/<name>/tests/bench/*.bench.ts`, and use the Vitest 5 `bench` fixture. They are run on every pull request by [CodSpeed](https://codspeed.io/graphql-markdown/graphql-markdown) (see [`.github/workflows/codspeed.yml`](.github/workflows/codspeed.yml)), which reports any performance change as a PR comment.
+
+Benchmarks can be run locally with the command:
+
+```shell
+bun run bench
+```
+
 ### Build documentation
 
 > The documentation is automatically generated and published when a new release is created.

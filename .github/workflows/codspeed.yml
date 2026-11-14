@@ -1,0 +1,47 @@
+name: CodSpeed
+
+env:
+  HUSKY: 0
+  GRAPHQL_MARKDOWN_TELEMETRY_DISABLED: "1"
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  push:
+    branches:
+      - main
+  # `workflow_dispatch` lets CodSpeed trigger backtest runs on past commits.
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      # OIDC token used to authenticate the upload to CodSpeed.
+      id-token: write
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: $/.github/actions/setup
+
+      # Benchmarks import the workspace packages from `src` through the Vitest
+      # aliases (see packages/tooling-config/vitest/base.mjs), so no build step
+      # is needed.
+      - name: Run benchmarks
+        uses: CodSpeedHQ/action@v5.6.3
+        with:
+          mode: simulation
+          run: bun run bench
