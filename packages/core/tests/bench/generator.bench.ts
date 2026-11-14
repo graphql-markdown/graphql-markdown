@@ -5,25 +5,20 @@ import { beforeAll, describe, expect, test, vi } from "vitest";
 import type {
   ClassName,
   GeneratorOptions,
-  OutputAdapter,
   PackageName,
 } from "@graphql-markdown/types";
+
+import { Printer } from "@graphql-markdown/printer-legacy";
+import { createMemoryOutputAdapter } from "@graphql-markdown/tooling-config/vitest/bench";
 
 import { DEFAULT_OPTIONS, DiffMethod } from "../../src/config";
 import { generateDocFromSchema } from "../../src/generator";
 
-// Keeps generated pages in memory so the benchmark measures documentation
-// generation rather than disk I/O.
-const pages = new Map<string, string>();
-const memoryOutputAdapter: OutputAdapter = {
-  writeFile: async (filePath: string, content: string): Promise<void> => {
-    pages.set(filePath, content);
-  },
-  ensureDir: async (): Promise<void> => {},
-  readFile: async (filePath: string): Promise<string | undefined> => {
-    return pages.get(filePath);
-  },
-};
+// Keeps generated pages in memory so page writes are excluded from the
+// measurement. Each iteration still loads the schema file, so the benchmark
+// covers end-to-end generation.
+const { files: pages, outputAdapter: memoryOutputAdapter } =
+  createMemoryOutputAdapter();
 
 const createOptions = (schemaFile: string): GeneratorOptions => {
   return {
@@ -49,6 +44,15 @@ const createOptions = (schemaFile: string): GeneratorOptions => {
   } as GeneratorOptions;
 };
 
+// `Printer.init` only sets its static options when they are `undefined`, so
+// without a reset every schema after the first would reuse the first schema's
+// options. Resetting mirrors a fresh CLI process per schema.
+const generate = async (options: GeneratorOptions): Promise<void> => {
+  Printer.options = undefined;
+  pages.clear();
+  await generateDocFromSchema(options);
+};
+
 const swapiOptions = createOptions("swapi.graphql");
 const tweetOptions = createOptions("tweet.graphql");
 
@@ -60,18 +64,25 @@ describe("@graphql-markdown/core", () => {
   });
 
   test("generateDocFromSchema", async ({ bench }) => {
-    pages.clear();
-    await generateDocFromSchema(swapiOptions);
+    await generate(swapiOptions);
     expect(pages.size).toBeGreaterThan(0);
+    const swapiPaths = [...pages.keys()];
+
+    await generate(tweetOptions);
+    const tweetPaths = [...pages.keys()];
+    expect(
+      tweetPaths.some((path) => {
+        return /tweet/i.test(path);
+      }),
+    ).toBe(true);
+    expect(tweetPaths).not.toEqual(swapiPaths);
 
     await bench.compare(
       bench("generate docs (swapi)", async () => {
-        pages.clear();
-        await generateDocFromSchema(swapiOptions);
+        await generate(swapiOptions);
       }),
       bench("generate docs (tweet)", async () => {
-        pages.clear();
-        await generateDocFromSchema(tweetOptions);
+        await generate(tweetOptions);
       }),
     );
   });
