@@ -1,3 +1,46 @@
+<a id="1.42.0"></a>
+# [1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0) - 2026-11-15
+
+1.42.0 sends less telemetry, fixes a slow-regex issue in `@graphql-markdown/utils`, and fixes generated pages for DocFX and Vocs.
+
+> [!NOTE]
+> **`@graphql-markdown/telemetry` 0.2.0.** Telemetry now reports the package version as `major.minor` only (for example `1.42`), and no longer sends how many schema pointers or metatags a configuration has ([#3533](https://github.com/graphql-markdown/graphql-markdown/pull/3533), [#3543](https://github.com/graphql-markdown/graphql-markdown/pull/3543)). See [Telemetry](https://graphql-markdown.dev/docs/telemetry) for what is collected and how to opt out.
+
+### Fixed 🐛
+
+- 🔒 **`@graphql-markdown/utils`**: `stringCaseBuilder` (behind `kebabCase` and `startCase`, used for page slugs and titles) could take polynomial time on long runs of letters and digits (ReDoS). Word splitting now runs in linear time with the same output ([#3547](https://github.com/graphql-markdown/graphql-markdown/pull/3547)).
+- 📘 **DocFX formatter**: the injected `uid` was indented, which made the front matter invalid YAML. DocFX reported `invalid-yaml-header` and dropped the page's `uid` and `title`. `uid` is now a top-level key ([#3589](https://github.com/graphql-markdown/graphql-markdown/pull/3589)).
+- ⚡ **Vocs formatter**: generated pages had no visible title, because Vocs only uses the front matter `title` for the browser tab. Pages now start with a `# Title` heading ([#3590](https://github.com/graphql-markdown/graphql-markdown/pull/3590)).
+
+### Changed 🔧
+
+- 🧩 **`@graphql-markdown/graphql`**: document loaders are all imported before any is registered, so a loader that fails to import no longer leaves the others half-configured ([#3575](https://github.com/graphql-markdown/graphql-markdown/pull/3575)).
+- 🎨 **Nuxt theme**: code cards no longer rely on `!important` to override Shiki's colours, so your own styles can override them. It now requires `@nuxt/kit` `^4.6.4`, `shiki` `^4.6.0` and `tailwindcss` `^4.3.5` ([#3576](https://github.com/graphql-markdown/graphql-markdown/pull/3576)).
+
+### Package Versions 📦
+
+| Package | Version | Registry |
+|---|---|---|
+| @graphql-markdown/core | 1.26.1 | npm, JSR |
+| @graphql-markdown/utils | 1.14.2 | npm, JSR |
+| @graphql-markdown/graphql | 1.3.5 | npm, JSR |
+| @graphql-markdown/helpers | 1.2.5 | npm, JSR |
+| @graphql-markdown/formatters | 1.2.2 | npm, JSR |
+| @graphql-markdown/printer-legacy | 1.19.4 | npm, JSR |
+| @graphql-markdown/diff | 1.1.24 | npm, JSR |
+| @graphql-markdown/telemetry | 0.2.0 | npm, JSR |
+| @graphql-markdown/cli | 1.2.2 | npm |
+| @graphql-markdown/docusaurus | 1.39.2 | npm |
+| @graphql-markdown/nuxt-theme | 0.2.2 | npm |
+| create-graphql-markdown-docs | 1.1.2 | npm |
+
+`@graphql-markdown/types` (1.17.1) and `@graphql-markdown/logger` (1.1.4) are unchanged.
+
+🔍 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.41.0...1.42.0
+
+[Changes][1.42.0]
+
+
 <a id="1.41.0"></a>
 # [1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0) - 2026-10-29
 
@@ -2807,6 +2850,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.42.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.40.0...1.41.0
 [1.40.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.39.0...1.40.0
 [1.39.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.38.1...1.39.0

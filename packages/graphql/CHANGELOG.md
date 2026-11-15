@@ -4,6 +4,12 @@ Versions of `@graphql-markdown/graphql`. Each version links to the GraphQL-Markd
 
 This file is generated from the root `CHANGELOG.md` by `.github/scripts/package-changelogs.mts`. Do not edit it by hand.
 
+## 1.3.5 - 2026-11-15
+
+Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).
+
+- 🧩 **`@graphql-markdown/graphql`**: document loaders are all imported before any is registered, so a loader that fails to import no longer leaves the others half-configured ([#3575](https://github.com/graphql-markdown/graphql-markdown/pull/3575)).
+
 ## 1.3.4 - 2026-10-29
 
 Released in [GraphQL-Markdown 1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0).

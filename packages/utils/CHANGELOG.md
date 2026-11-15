@@ -4,6 +4,14 @@ Versions of `@graphql-markdown/utils`. Each version links to the GraphQL-Markdow
 
 This file is generated from the root `CHANGELOG.md` by `.github/scripts/package-changelogs.mts`. Do not edit it by hand.
 
+## 1.14.2 - 2026-11-15
+
+Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).
+
+1.42.0 sends less telemetry, fixes a slow-regex issue in `@graphql-markdown/utils`, and fixes generated pages for DocFX and Vocs.
+
+- 🔒 **`@graphql-markdown/utils`**: `stringCaseBuilder` (behind `kebabCase` and `startCase`, used for page slugs and titles) could take polynomial time on long runs of letters and digits (ReDoS). Word splitting now runs in linear time with the same output ([#3547](https://github.com/graphql-markdown/graphql-markdown/pull/3547)).
+
 ## 1.14.1 - 2026-10-29
 
 Released in [GraphQL-Markdown 1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0).
