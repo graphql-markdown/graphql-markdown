@@ -80,6 +80,19 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toContain("---");
     expect(result).toContain("title: Test");
   });
+
+  test("adds a visible title heading after the front matter", () => {
+    const result = formatMDXFrontmatter(undefined, [
+      "id: media",
+      "title: Media",
+    ]);
+    expect(result).toBe("---\nid: media\ntitle: Media\n---\n\n# Media");
+  });
+
+  test("omits the heading when there is no title", () => {
+    const result = formatMDXFrontmatter(undefined, ["id: media"]);
+    expect(result).toBe("---\nid: media\n---");
+  });
 });
 
 describe("formatMDXLink", () => {
