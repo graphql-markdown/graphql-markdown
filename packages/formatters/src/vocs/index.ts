@@ -10,6 +10,7 @@ import type {
   AdmonitionType,
   Badge,
   Formatter,
+  FrontMatterOptions,
   Maybe,
   MDXString,
   MetaInfo,
@@ -20,7 +21,8 @@ import { MARKDOWN_EOP } from "@graphql-markdown/utils";
 import {
   formatMDXDetails,
   formatMDXEscapedPermalink,
-  formatMDXFrontmatter,
+  formatMDXFrontmatter as formatDefaultFrontmatter,
+  formatMDXFrontmatterTitleOnly,
   formatMDXSpecifiedByLink,
 } from "../defaults.ts";
 
@@ -47,6 +49,31 @@ export const Bullet = () => <><span style={{ fontWeight: 'normal', fontSize: '.5
 
 /** File extension used for generated pages. */
 export const mdxExtension = ".mdx" as const;
+
+/**
+ * Formats YAML front matter followed by a visible `# Title` heading.
+ *
+ * Vocs only uses the front matter `title` for the document `<title>`; the
+ * page heading must be written in Markdown, so without it generated pages
+ * have no visible title.
+ *
+ * @see https://vocs.dev/docs/markdown
+ *
+ * @param props - Front matter options
+ * @param formatted - Pre-formatted front matter lines
+ * @returns Front matter block and title heading, or empty string if no lines provided
+ */
+export const formatMDXFrontmatter = (
+  props: Maybe<FrontMatterOptions>,
+  formatted: Maybe<string[]>,
+): MDXString => {
+  const frontMatter = formatDefaultFrontmatter(props, formatted);
+  const heading = formatMDXFrontmatterTitleOnly(formatted);
+  if (!frontMatter || !heading) {
+    return frontMatter;
+  }
+  return `${frontMatter}${MARKDOWN_EOP}${heading}` as MDXString;
+};
 
 /**
  * Formats a badge using Vocs native text directive (`:badge[...]`).
@@ -111,11 +138,7 @@ export const formatMDXNameEntity = (
   return `<span className="gqlmd-mdx-entity"><code className="gqlmd-mdx-entity-name">${name}</code></span>` as MDXString;
 };
 
-export {
-  formatMDXDetails,
-  formatMDXFrontmatter,
-  formatMDXSpecifiedByLink,
-} from "../defaults.ts";
+export { formatMDXDetails, formatMDXSpecifiedByLink } from "../defaults.ts";
 
 /**
  * Creates a Vocs formatter.
