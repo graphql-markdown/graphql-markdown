@@ -4,6 +4,10 @@ Versions of `@graphql-markdown/docusaurus`. Each version links to the GraphQL-Ma
 
 This file is generated from the root `CHANGELOG.md` by `.github/scripts/package-changelogs.mts`. Do not edit it by hand.
 
+## 1.39.2 - 2026-11-15
+
+Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).
+
 ## 1.39.1 - 2026-10-29
 
 Released in [GraphQL-Markdown 1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0).
