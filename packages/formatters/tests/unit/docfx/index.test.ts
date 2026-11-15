@@ -147,9 +147,9 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toContain("---");
   });
 
-  test("uid line has two space indentation", () => {
+  test("uid line is a top-level YAML key", () => {
     const result = formatMDXFrontmatter({ id: "test-id" }, ["title: Test"]);
-    expect(result).toContain("  uid:");
+    expect(result).toBe("---\nuid: test-id\ntitle: Test\n---");
   });
 });
 
@@ -209,7 +209,7 @@ describe("afterRenderTypeEntitiesHook", () => {
     // a key based destination files an absolute `toc.yml` apart from a
     // relative page key, so both must keep the shape the renderer used
     const store = new Map<string, string>([
-      ["docs/api/types/objects/book.md", "---\n  uid: book\n---\n\n# Book\n"],
+      ["docs/api/types/objects/book.md", "---\nuid: book\n---\n\n# Book\n"],
       ["docs/api/types/objects/index.md", "# Objects"],
     ]);
     const outputAdapter = {
@@ -260,7 +260,7 @@ describe("afterRenderTypeEntitiesHook", () => {
 
     // Link uses /docs/graphql/... (linkRoot="/docs", baseURL="graphql")
     const content =
-      "---\n  uid: types-scalars-string\n---\n\n[Continent](/docs/graphql/types/objects/continent)\n";
+      "---\nuid: types-scalars-string\n---\n\n[Continent](/docs/graphql/types/objects/continent)\n";
     writeFileSync(filePath, content, "utf-8");
 
     await afterRenderTypeEntitiesHook({
@@ -285,7 +285,7 @@ describe("afterRenderTypeEntitiesHook", () => {
     mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
 
     const content =
-      "---\n  uid: types-scalars-string\n---\n\n[field](/docs/graphql/types/objects/continent#field)\n";
+      "---\nuid: types-scalars-string\n---\n\n[field](/docs/graphql/types/objects/continent#field)\n";
     writeFileSync(filePath, content, "utf-8");
 
     await afterRenderTypeEntitiesHook({
@@ -309,7 +309,7 @@ describe("afterRenderTypeEntitiesHook", () => {
     mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
 
     const content =
-      "---\n  uid: types-scalars-string\n---\n\n[Spec](https://spec.example.com/string)\n";
+      "---\nuid: types-scalars-string\n---\n\n[Spec](https://spec.example.com/string)\n";
     writeFileSync(filePath, content, "utf-8");
 
     await afterRenderTypeEntitiesHook({
@@ -333,7 +333,7 @@ describe("afterRenderTypeEntitiesHook", () => {
     mkdirSync(pathJoin(outputDir, "types", "scalars"), { recursive: true });
 
     const content =
-      "---\n  uid: types-scalars-string\n---\n\n[Continent](/graphql/types/objects/continent)\n";
+      "---\nuid: types-scalars-string\n---\n\n[Continent](/graphql/types/objects/continent)\n";
     writeFileSync(filePath, content, "utf-8");
 
     await afterRenderTypeEntitiesHook({
@@ -364,7 +364,7 @@ describe("afterRenderTypeEntitiesHook", () => {
       recursive: true,
     });
 
-    const content = "---\n  uid: old-uid\n---\n\n# Continent\n";
+    const content = "---\nuid: old-uid\n---\n\n# Continent\n";
     writeFileSync(filePath, content, "utf-8");
 
     await afterRenderTypeEntitiesHook({

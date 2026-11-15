@@ -103,7 +103,7 @@ export const formatMDXFrontmatter = (
     props && typeof props === "object" && "id" in props
       ? (props.id as string)
       : undefined;
-  const uidLine = id ? [`  uid: ${id}`] : [];
+  const uidLine = id ? [`uid: ${id}`] : [];
 
   return [
     FRONT_MATTER_DELIMITER,
