@@ -1,19 +1,28 @@
-[![GraphQL-Markdown](https://user-images.githubusercontent.com/324670/188957463-dae99daa-763d-466e-91f4-0629f455df74.svg)](https://graphql-markdown.dev)
+<p align="center">
+  <a href="https://graphql-markdown.dev"><img src="https://user-images.githubusercontent.com/324670/188957463-dae99daa-763d-466e-91f4-0629f455df74.svg" alt="GraphQL-Markdown" /></a>
+</p>
 
-<h1 align="center">Flexible documentation for GraphQL schemas</h1>
+<h1 align="center">API docs from your GraphQL schema, in the docs site you already use</h1>
 
-[![npm downloads](https://img.shields.io/npm/dw/@graphql-markdown/core?label=weekly%20downloads&color=36c46f&style=flat)](https://www.npmjs.com/package/@graphql-markdown/core)
-[![NPM Last Update](https://img.shields.io/npm/last-update/%40graphql-markdown%2Fcli)](https://www.npmjs.com/package/@graphql-markdown/cli)
-[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://raw.githubusercontent.com/graphql-markdown/graphql-markdown/main/LICENSE)
-[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/graphql-markdown/graphql-markdown)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
-[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/graphql-markdown/graphql-markdown?utm_source=badge)
+<p align="center">
+  GraphQL-Markdown generates <b>Markdown and MDX documentation</b> from <b>GraphQL schemas</b> for Docusaurus, Nuxt, Starlight, Fumadocs, Vocs, Hugo, MkDocs, mdBook, DocFX and more.
+</p>
 
-# GraphQL-Markdown
+<p align="center">
+  <a href="https://www.npmjs.com/package/@graphql-markdown/core"><img src="https://img.shields.io/npm/dw/@graphql-markdown/core?label=weekly%20downloads&color=36c46f&style=flat" alt="npm weekly downloads" /></a>
+  <a href="https://www.npmjs.com/package/@graphql-markdown/cli"><img src="https://img.shields.io/npm/v/@graphql-markdown/cli?label=version&style=flat" alt="npm version" /></a>
+  <a href="https://github.com/graphql-markdown/graphql-markdown/stargazers"><img src="https://img.shields.io/github/stars/graphql-markdown/graphql-markdown?style=flat" alt="GitHub stars" /></a>
+  <a href="https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE"><img src="https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat" alt="MIT license" /></a>
+</p>
 
-Generate **Markdown and MDX documentation** from **GraphQL schemas** for Nuxt, Docusaurus and other supported documentation ecosystems.
+<p align="center">
+  <a href="https://graphql-markdown.dev/docs/get-started"><b>Documentation</b></a> ·
+  <a href="#live-demos"><b>Live demos</b></a> ·
+  <a href="https://graphql-markdown.dev/docs/try-it"><b>Try it</b></a> ·
+  <a href="https://graphql-markdown.dev/showcase"><b>Showcase</b></a>
+</p>
 
-## Installation
+## Quick start
 
 Run the scaffolder in an empty folder to create a new project, or inside an existing documentation site to add GraphQL-Markdown to it:
 
@@ -23,7 +32,74 @@ npm create graphql-markdown-docs@latest
 
 New projects can be a Nuxt site (default), a Docusaurus site, or plain Markdown or MDX output with no site (`--framework markdown` or `--framework mdx`). In an existing site, the scaffolder detects the framework and writes a `.graphqlrc` and a `gqlmd` script. See the [Getting started guide](https://graphql-markdown.dev/docs/get-started) for options.
 
-To set it up by hand instead, there are two main setup paths:
+## Live demos
+
+Same generator, your framework. Click any screenshot to explore the live site.
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-docusaurus/types/objects/character"><img src=".github/assets/demos/demo-docusaurus.jpg" alt="Docusaurus demo: generated GraphQL object type page" /></a>
+      <br /><b>Docusaurus</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-nuxt/api-reference/objects-project"><img src=".github/assets/demos/demo-nuxt.jpg" alt="Nuxt demo: generated GraphQL object type page" /></a>
+      <br /><b>Nuxt</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-astro-starlight/types/objects/media/"><img src=".github/assets/demos/demo-astro-starlight.jpg" alt="Astro / Starlight demo: generated GraphQL object type page" /></a>
+      <br /><b>Astro / Starlight</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-nextjs-fumadocs/docs/types/objects/media"><img src=".github/assets/demos/demo-nextjs-fumadocs.jpg" alt="Next.js / Fumadocs demo: generated GraphQL object type page" /></a>
+      <br /><b>Next.js / Fumadocs</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-docus/docs/types/objects/media"><img src=".github/assets/demos/demo-docus.jpg" alt="Nuxt / Docus demo: generated GraphQL object type page" /></a>
+      <br /><b>Nuxt / Docus</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-vite-vocs/types/objects/media"><img src=".github/assets/demos/demo-vite-vocs.jpg" alt="Vite / Vocs demo: generated GraphQL object type page" /></a>
+      <br /><b>Vite / Vocs</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-hugo/graphql/types/objects/country/"><img src=".github/assets/demos/demo-hugo.jpg" alt="Hugo demo: generated GraphQL object type page" /></a>
+      <br /><b>Hugo</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-mkdocs/graphql/types/objects/country/"><img src=".github/assets/demos/demo-mkdocs.jpg" alt="MkDocs demo: generated GraphQL object type page" /></a>
+      <br /><b>MkDocs</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-mdbook/graphql/types/objects/country.html"><img src=".github/assets/demos/demo-mdbook.jpg" alt="mdBook demo: generated GraphQL object type page" /></a>
+      <br /><b>mdBook</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-docfx/docs/graphql/types/objects/country.html"><img src=".github/assets/demos/demo-docfx.jpg" alt="DocFX demo: generated GraphQL object type page" /></a>
+      <br /><b>DocFX</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-honkit/graphql/objects-repository.html"><img src=".github/assets/demos/demo-honkit.jpg" alt="HonKit demo: generated GraphQL object type page" /></a>
+      <br /><b>HonKit</b>
+    </td>
+    <td align="center" width="33%">
+      <b>Your stack?</b>
+      <br />Use the generic <code>mdx</code> preset, or <a href="https://graphql-markdown.dev/docs/try-it">fork a demo</a> and try it with your own schema.
+    </td>
+  </tr>
+</table>
+
+Used in production by [30+ teams](https://graphql-markdown.dev/showcase) including Saleor, Sui, IOTA, Swan, Sablier, and Browserless. [Add your site](https://github.com/graphql-markdown/graphql-markdown/issues/1601).
+
+## Manual installation
+
+To set it up by hand instead of using the scaffolder, there are two main setup paths:
 
 - use the official Docusaurus integration for Docusaurus sites
 - use the CLI with formatter presets for other supported ecosystems such as Starlight, Fumadocs, Vocs, Hugo, MkDocs, DocFX, mdBook and HonKit, or the generic `mdx` preset for any MDX-based site
@@ -100,13 +176,10 @@ See [documentation configuration](https://graphql-markdown.dev/docs/configuratio
 
 See [documentation troubleshooting](https://graphql-markdown.dev/docs/troubleshooting) page.
 
-## Showcase
-
-Used in production by [30+ teams](https://graphql-markdown.dev/showcase) including Saleor, Sui, IOTA, Swan, Sablier, and Browserless.
-
-[View the full showcase](https://graphql-markdown.dev/showcase) · [Add your site](https://github.com/graphql-markdown/graphql-markdown/issues/1601)
-
 ## License
+
+[![GitHub License](https://img.shields.io/github/license/graphql-markdown/graphql-markdown?style=flat)](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE)
+[![Buy us a tree](https://img.shields.io/badge/Treeware-%F0%9F%8C%B3-lightgreen)](https://plant.treeware.earth/graphql-markdown/graphql-markdown)
 
 GraphQL-Markdown packages are 100% free and open-source, under the [MIT license](https://github.com/graphql-markdown/graphql-markdown/blob/main/LICENSE).
 
@@ -114,10 +187,18 @@ This package is [Treeware](https://treeware.earth). If you use it in production,
 
 ## Contributions
 
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![CodSpeed](https://img.shields.io/endpoint?url=https://codspeed.io/badge.json)](https://app.codspeed.io/graphql-markdown/graphql-markdown?utm_source=badge)
+[![NPM Last Update](https://img.shields.io/npm/last-update/%40graphql-markdown%2Fcli)](https://www.npmjs.com/package/@graphql-markdown/cli)
+
 [Contributions](https://github.com/graphql-markdown/graphql-markdown/blob/main/CONTRIBUTING.md), issues and feature requests are very welcome. If you are using this package and fixed a bug for yourself, please consider submitting a PR!
 
 <p align="center">
   <a href="https://github.com/graphql-markdown/graphql-markdown/graphs/contributors">
     <img src="https://contrib.rocks/image?repo=graphql-markdown/graphql-markdown&columns=8" alt="Contributors" />
   </a>
+</p>
+
+<p align="center">
+  If GraphQL-Markdown saves you time, a <a href="https://github.com/graphql-markdown/graphql-markdown">⭐ on GitHub</a> helps other people find it.
 </p>
