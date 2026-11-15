@@ -344,6 +344,66 @@ const config = {
             ],
           },
           {
+            type: "dropdown",
+            position: "right",
+            label: "Demos",
+            items: [
+              {
+                href: "https://graphql-markdown.dev/demo-docusaurus/",
+                label: "Docusaurus",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-astro-starlight/",
+                label: "Astro / Starlight",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-astro-r2/",
+                label: "Astro / Starlight on Cloudflare R2",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-nextjs-fumadocs/",
+                label: "Next.js / Fumadocs",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-nuxt/",
+                label: "Nuxt",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-docus/",
+                label: "Nuxt / Docus",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-vite-vocs/",
+                label: "Vite / Vocs",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-hugo/",
+                label: "Hugo",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-mkdocs/",
+                label: "MkDocs",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-mdbook/",
+                label: "mdBook",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-honkit/",
+                label: "HonKit",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-docfx/",
+                label: "DocFX",
+              },
+              {
+                type: "doc",
+                docId: "try-it",
+                label: "Try it yourself →",
+              },
+            ],
+          },
+          {
             to: "https://github.com/graphql-markdown/graphql-markdown/releases",
             position: "right",
             label: "Release notes",
