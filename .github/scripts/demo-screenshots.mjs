@@ -59,7 +59,10 @@ for (const { id, page: path } of demos) {
   const url = `${BASE_URL}/${id}/${path}`;
   const page = await context.newPage();
   try {
-    await page.goto(url, { waitUntil: "networkidle", timeout: 60_000 });
+    const response = await page.goto(url, { waitUntil: "networkidle", timeout: 60_000 });
+    if (!response?.ok()) {
+      throw new Error(`HTTP ${response?.status() ?? "no response"}`);
+    }
     await page.waitForTimeout(1_000); // let fonts and client-side rendering settle
     const file = join(OUTPUT_DIR, `${id}.jpg`);
     await page.screenshot({ path: file, type: "jpeg", quality: 80 });
