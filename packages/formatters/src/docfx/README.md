@@ -41,6 +41,7 @@ extensions:
 - **Page Title**: Prints the page title as a visible `# Title` heading after the front matter (`formatMDXTitle`), since DocFX only uses the front matter `title` for the document `<title>`
 - **UID Frontmatter**: Injects a `uid` field derived from the page path for DocFX cross-reference resolution between pages
 - **TOC Generation**: Builds `toc.yml` navigation files as pages are generated
+- **Section Anchors**: Field and argument headings get an HTML anchor (`<a id="name"></a>`) named after the entity, since DocFX does not support the `{#id}` heading id syntax by default
 - **Bootstrap Badges**: Badge variants map to Bootstrap 5 contextual classes (available in DocFX's modern template)
 
 ## Custom Overrides
