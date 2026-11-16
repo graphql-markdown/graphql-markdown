@@ -35,7 +35,6 @@ import {
   formatMDXBullet,
   formatMDXDetails,
   formatMDXNameEntity,
-  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults.ts";
 import { readOptionalOutput, readOutput, writeOutput } from "../output.ts";
@@ -138,11 +137,25 @@ export const formatMDXLink = (link: TypeLink): TypeLink => {
   return link;
 };
 
+/**
+ * Formats a permalink for a section header as an empty HTML anchor.
+ *
+ * DocFX does not support the `{#id}` heading id syntax unless the Markdig
+ * `attributes` extension is enabled: the braces are printed as text, and the
+ * heading id is generated from the whole heading, badges included. An inline
+ * anchor gives every field and argument a stable id derived from its name only.
+ *
+ * @param id - The ID of the section header
+ * @returns Formatted permalink string
+ */
+export const formatMDXPermalink = (id: string): MDXString => {
+  return `<a id="${id}"></a>` as MDXString;
+};
+
 export {
   formatMDXBullet,
   formatMDXDetails,
   formatMDXNameEntity,
-  formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults.ts";
 
