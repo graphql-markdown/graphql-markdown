@@ -70,6 +70,7 @@
         "scripts/publish-release.mts",
         "scripts/tarball-check.mts",
         "scripts/jsr-sync.mts",
+        "scripts/template-ranges.mts",
         "scripts/jsr-publish.mts",
         "scripts/showcase-add.mts",
         "scripts/docs-api.mjs",

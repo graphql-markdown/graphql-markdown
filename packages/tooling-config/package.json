@@ -30,8 +30,8 @@
   "scripts": {
     "lint": "eslint --config ./eslint/config.ts \"**/*.{ts,mjs,js,json}\"",
     "lint:fix": "eslint --config ./eslint/config.ts \"**/*.{ts,mjs,js,json}\" --fix",
-    "prettier": "prettier \"**/*.{ts,mjs,js,json}\" --check",
-    "prettier:fix": "prettier \"**/*.{ts,mjs,js,json}\" --write",
+    "prettier": "prettier \"**/*.{ts,mts,mjs,js,json}\" --check",
+    "prettier:fix": "prettier \"**/*.{ts,mts,mjs,js,json}\" --write",
     "ts:check": "tsgo --noEmit"
   },
   "devDependencies": {
