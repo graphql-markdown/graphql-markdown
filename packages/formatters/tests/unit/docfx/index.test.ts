@@ -175,8 +175,10 @@ describe("formatMDXNameEntity", () => {
 });
 
 describe("formatMDXPermalink", () => {
-  test("renders permalink with proper formatting", () => {
-    expect(formatMDXPermalink("foo")).toBe("{#foo}");
+  test("renders an HTML anchor named after the entity", () => {
+    // DocFX has no `{#id}` heading id syntax by default: the braces would be
+    // printed and the heading id derived from the whole heading, badges included
+    expect(formatMDXPermalink("foo")).toBe('<a id="foo"></a>');
   });
 });
 
