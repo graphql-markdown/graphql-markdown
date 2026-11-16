@@ -7,6 +7,13 @@ import { writeMdxFormatter } from "../../lib/frameworks/markdown.mjs";
 import { applyTemplate } from "../../lib/project.mjs";
 import { detectLoader } from "../../lib/schema.mjs";
 
+const formattersVersion: string = JSON.parse(
+  fs.readFileSync(
+    new URL("../../../formatters/package.json", import.meta.url),
+    "utf-8",
+  ),
+).version;
+
 let work: string;
 
 beforeEach(() => {
@@ -73,7 +80,9 @@ describe("mdx scaffold", () => {
       "    formatter: '@graphql-markdown/formatters/mdx'\n    loaders:\n",
     );
     const pkg = JSON.parse(read(dir, "package.json"));
-    expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe("^1.2.2");
+    expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe(
+      `^${formattersVersion}`,
+    );
   });
 
   it("throws when the loaders line is missing", () => {
