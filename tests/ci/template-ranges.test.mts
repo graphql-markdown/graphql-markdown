@@ -1,5 +1,11 @@
 import { execFileSync } from "node:child_process";
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,10 +29,18 @@ const writeJson = (path: string, value: unknown): void => {
 };
 
 const template = (name: string): string =>
-  join(root, "packages/create-graphql-markdown-docs/templates", name, "package.json");
+  join(
+    root,
+    "packages/create-graphql-markdown-docs/templates",
+    name,
+    "package.json",
+  );
 
 const markdown = (): string =>
-  join(root, "packages/create-graphql-markdown-docs/lib/frameworks/markdown.mjs");
+  join(
+    root,
+    "packages/create-graphql-markdown-docs/lib/frameworks/markdown.mjs",
+  );
 
 beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), "template-ranges-"));
@@ -100,8 +114,12 @@ describe("readVersions()", () => {
 
 describe("rewriteRanges()", () => {
   test("rewrites stale workspace ranges only", () => {
-    const source = '{\n  "dependencies": {\n    "@graphql-markdown/cli": "^1.0.0",\n    "cli": "^1.0.0"\n  }\n}\n';
-    const { text, diffs } = rewriteRanges(source, new Map([["@graphql-markdown/cli", "1.2.2"]]));
+    const source =
+      '{\n  "dependencies": {\n    "@graphql-markdown/cli": "^1.0.0",\n    "cli": "^1.0.0"\n  }\n}\n';
+    const { text, diffs } = rewriteRanges(
+      source,
+      new Map([["@graphql-markdown/cli", "1.2.2"]]),
+    );
     expect(text).toContain('"@graphql-markdown/cli": "^1.2.2"');
     expect(text).toContain('"cli": "^1.0.0"');
     expect(diffs).toEqual(["@graphql-markdown/cli: ^1.0.0 -> ^1.2.2"]);
@@ -120,22 +138,34 @@ describe("rewriteRanges() specifiers", () => {
     expect(diffs).toHaveLength(2);
   });
 
-  test.each(["~1.0.0", "1.0.0", "latest", "workspace:^", "workspace:*", ">=1.0.0"])(
-    "leaves %s untouched",
-    (range) => {
-      const source = entry(range);
-      expect(rewriteRanges(source, versions)).toEqual({ text: source, diffs: [] });
-    },
-  );
+  test.each([
+    "~1.0.0",
+    "1.0.0",
+    "latest",
+    "workspace:^",
+    "workspace:*",
+    ">=1.0.0",
+  ])("leaves %s untouched", (range) => {
+    const source = entry(range);
+    expect(rewriteRanges(source, versions)).toEqual({
+      text: source,
+      diffs: [],
+    });
+  });
 
   test("rewrites a caret range with a prerelease tag", () => {
-    expect(rewriteRanges(entry("^1.0.0-beta.1"), versions).text).toBe(entry("^1.2.2"));
+    expect(rewriteRanges(entry("^1.0.0-beta.1"), versions).text).toBe(
+      entry("^1.2.2"),
+    );
   });
 });
 
 describe("rewriteExportedRange()", () => {
   test("rewrites a stale FORMATTERS_RANGE only", () => {
-    const { text, diffs } = rewriteExportedRange('export const FORMATTERS_RANGE = "^1.2.0";\n', "1.3.0");
+    const { text, diffs } = rewriteExportedRange(
+      'export const FORMATTERS_RANGE = "^1.2.0";\n',
+      "1.3.0",
+    );
     expect(text).toBe('export const FORMATTERS_RANGE = "^1.3.0";\n');
     expect(diffs).toEqual(["FORMATTERS_RANGE: ^1.2.0 -> ^1.3.0"]);
     expect(rewriteExportedRange(text, "1.3.0").diffs).toEqual([]);
@@ -178,7 +208,9 @@ describe("run() --plan", () => {
     expect(readFileSync(template("a"), "utf8")).toBe(before);
     const text = readFileSync(syncChangeset(), "utf8");
     expect(text).toContain('"create-graphql-markdown-docs": patch');
-    expect(text).toContain("- templates/a/package.json: @graphql-markdown/formatters: ^1.2.0 -> ^1.3.1");
+    expect(text).toContain(
+      "- templates/a/package.json: @graphql-markdown/formatters: ^1.2.0 -> ^1.3.1",
+    );
     expect(text).toContain("FORMATTERS_RANGE: ^1.2.0 -> ^1.3.1");
     expect(text).toContain("- lib/frameworks/markdown.mjs: FORMATTERS_RANGE");
     expect(text).not.toContain(root);
@@ -214,7 +246,14 @@ describe("run() --plan", () => {
 
 describe("single-pass versioning", () => {
   const releaseVersion = (): void => {
-    writeFileSync(join(root, "package.json"), JSON.stringify({ name: "root", private: true, workspaces: ["packages/*"] }));
+    writeFileSync(
+      join(root, "package.json"),
+      JSON.stringify({
+        name: "root",
+        private: true,
+        workspaces: ["packages/*"],
+      }),
+    );
     writeFileSync(join(root, "bun.lock"), "");
     expect(run(root, "plan")).toBe(0);
     execFileSync(changesetBin, ["version"], { cwd: root, stdio: "pipe" });
@@ -222,11 +261,14 @@ describe("single-pass versioning", () => {
   };
 
   beforeEach(() => {
-    writeJson(join(root, "packages/create-graphql-markdown-docs/package.json"), {
-      name: "create-graphql-markdown-docs",
-      version: "1.1.2",
-      dependencies: { "@graphql-markdown/cli": "workspace:^" },
-    });
+    writeJson(
+      join(root, "packages/create-graphql-markdown-docs/package.json"),
+      {
+        name: "create-graphql-markdown-docs",
+        version: "1.1.2",
+        dependencies: { "@graphql-markdown/cli": "workspace:^" },
+      },
+    );
     writeJson(join(root, "packages/cli/package.json"), {
       name: "@graphql-markdown/cli",
       version: "1.2.2",

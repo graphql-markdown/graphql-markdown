@@ -78,14 +78,20 @@ export const rewriteRanges = (
   const diffs: string[] = [];
   let text = source;
   for (const [name, version] of versions) {
-    const entry = new RegExp(`(\\n\\s*"${escapeRegExp(name)}"\\s*:\\s*")([^"]*)(")`, "g");
-    text = text.replace(entry, (match, pre: string, old: string, post: string) => {
-      if (!/^\^\d/.test(old) || old === `^${version}`) {
-        return match;
-      }
-      diffs.push(`${name}: ${old} -> ^${version}`);
-      return `${pre}^${version}${post}`;
-    });
+    const entry = new RegExp(
+      `(\\n\\s*"${escapeRegExp(name)}"\\s*:\\s*")([^"]*)(")`,
+      "g",
+    );
+    text = text.replace(
+      entry,
+      (match, pre: string, old: string, post: string) => {
+        if (!/^\^\d/.test(old) || old === `^${version}`) {
+          return match;
+        }
+        diffs.push(`${name}: ${old} -> ^${version}`);
+        return `${pre}^${version}${post}`;
+      },
+    );
   }
   return { text, diffs };
 };
@@ -151,7 +157,9 @@ export const collectChanges = (
 export const changesetText = (changes: Change[], rootDir: string): string => {
   const base = join(rootDir, "packages", SCAFFOLDER);
   const lines = changes.flatMap(({ file, diffs }) =>
-    diffs.map((diff) => `- ${relative(base, file).split(sep).join("/")}: ${diff}`),
+    diffs.map(
+      (diff) => `- ${relative(base, file).split(sep).join("/")}: ${diff}`,
+    ),
   );
   return [
     "---",
@@ -188,14 +196,23 @@ export const planVersions = (
   try {
     writeFileSync(
       join(scratch, "package.json"),
-      JSON.stringify({ name: "scratch", private: true, workspaces: ["packages/*"] }),
+      JSON.stringify({
+        name: "scratch",
+        private: true,
+        workspaces: ["packages/*"],
+      }),
     );
     // Workspace detection for bun requires a lockfile next to the root manifest.
     writeFileSync(join(scratch, "bun.lock"), "");
     mkdirSync(join(scratch, ".changeset"));
-    const config = JSON.parse(readFileSync(join(source, "config.json"), "utf8"));
+    const config = JSON.parse(
+      readFileSync(join(source, "config.json"), "utf8"),
+    );
     config.changelog = false;
-    writeFileSync(join(scratch, ".changeset", "config.json"), JSON.stringify(config));
+    writeFileSync(
+      join(scratch, ".changeset", "config.json"),
+      JSON.stringify(config),
+    );
     for (const name of pending) {
       copyFileSync(join(source, name), join(scratch, ".changeset", name));
     }
@@ -237,7 +254,11 @@ export const run = (rootDir: string, mode: Mode): number => {
     if (mode === "apply") {
       writeFileSync(file, text);
     }
-    const label = { plan: "will update", apply: "updated", check: "out of sync" }[mode];
+    const label = {
+      plan: "will update",
+      apply: "updated",
+      check: "out of sync",
+    }[mode];
     console.log(`${label} ${file.slice(rootDir.length + 1)}`);
     console.log(`  ${diffs.join("\n  ")}`);
   }
