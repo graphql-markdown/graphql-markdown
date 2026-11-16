@@ -72,17 +72,33 @@ export const formatMDXBadge = ({ text, classname }: Badge): MDXString => {
 
 /**
  * Formats an admonition using DocFX alert syntax (`> [!TYPE]`).
- * @param admonition - Admonition data with text, title, and type
+ *
+ * DocFX renders its own heading for each alert type (Note, Warning, ...), and
+ * the syntax has no slot for a custom title, so the admonition title is not
+ * printed. Blank lines around the text are dropped and blank lines within it
+ * collapse to a single `>` paragraph separator.
+ *
+ * @see https://dotnet.github.io/docfx/docs/markdown.html#alerts
+ *
+ * @param admonition - Admonition data with text and type
  * @param _meta - Unused metadata parameter
  * @returns Formatted admonition string
  */
 export const formatMDXAdmonition = (
-  { text, title, type }: AdmonitionType,
+  { text, type }: AdmonitionType,
   _meta: Maybe<MetaInfo>,
 ): MDXString => {
   const alertType = ALERT_TYPE_MAP[type.toLowerCase()] ?? "NOTE";
-  const titleLine = title ? `${MARKDOWN_EOL}> **${title}**` : "";
-  return `${MARKDOWN_EOP}> [!${alertType}]${titleLine}${MARKDOWN_EOL}${quoteMarkdownLines(text, MARKDOWN_EOL)}${MARKDOWN_EOL}` as MDXString;
+  const paragraphs = text
+    .split(/(?:\r?\n[ \t]*){2,}/)
+    .map((paragraph) => {
+      return paragraph.trim();
+    })
+    .filter(Boolean);
+  const body = paragraphs.length
+    ? `${MARKDOWN_EOL}${quoteMarkdownLines(paragraphs.join(MARKDOWN_EOP), MARKDOWN_EOL).replaceAll(/^> $/gm, ">")}`
+    : "";
+  return `${MARKDOWN_EOP}> [!${alertType}]${body}${MARKDOWN_EOP}` as MDXString;
 };
 
 /**
