@@ -82,6 +82,7 @@
   "scripts": {
     "bench": "vitest bench --run",
     "build": "turbo build",
+    "changeset": "changeset",
     "clean": "turbo clean",
     "docs": "turbo run docs",
     "docs:api": "turbo run docs:api:root",
@@ -90,11 +91,14 @@
     "knip": "knip --strict",
     "jsr:check": "node packages/tooling-config/scripts/jsr-sync.mts --check",
     "jsr:sync": "node packages/tooling-config/scripts/jsr-sync.mts",
+    "template-ranges:check": "node packages/tooling-config/scripts/template-ranges.mts --check",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "prepare": "node ./packages/tooling-config/husky/prepare-husky.js",
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
+    "release:tag": "changeset tag",
+    "release:version": "node packages/tooling-config/scripts/template-ranges.mts --plan && changeset version && node packages/tooling-config/scripts/template-ranges.mts --apply && bun run jsr:sync && bun install",
     "showcase:add": "node packages/tooling-config/scripts/showcase-add.mts",
     "smoke": ".github/scripts/e2e/run-smoke.sh",
     "test": "turbo run test",
@@ -182,6 +186,8 @@
     }
   },
   "devDependencies": {
+    "@changesets/changelog-github": "1.0.1",
+    "@changesets/cli": "3.0.3",
     "@eslint/js": "10.0.1",
     "@graphql-eslint/eslint-plugin": "4.4.2",
     "@graphql-tools/graphql-file-loader": "catalog:graphql-tools",

@@ -33,14 +33,43 @@ describe("formatMDXBadge", () => {
 });
 
 describe("formatMDXAdmonition", () => {
-  test("renders DocFX alert with title", () => {
+  test("renders DocFX alert without a title line, DocFX renders its own heading", () => {
     const result = formatMDXAdmonition(
       { text: "body", title: "My Title", type: "note" },
       null,
     );
-    expect(result).toContain("> [!NOTE]");
-    expect(result).toContain("> **My Title**");
-    expect(result).toContain("> body");
+    expect(result).toBe("\n\n> [!NOTE]\n> body\n\n");
+  });
+
+  test("drops the empty quote lines around the text", () => {
+    // the printer wraps the deprecation reason in blank lines
+    const result = formatMDXAdmonition(
+      {
+        text: "\n\nUse 'countries' with filters instead\n\n",
+        title: "DEPRECATED",
+        type: "warning",
+      },
+      null,
+    );
+    expect(result).toBe(
+      "\n\n> [!WARNING]\n> Use 'countries' with filters instead\n\n",
+    );
+  });
+
+  test("keeps a single quote line between paragraphs", () => {
+    const result = formatMDXAdmonition(
+      { text: "first\n \n\nsecond\nthird", type: "tip" },
+      null,
+    );
+    expect(result).toBe("\n\n> [!TIP]\n> first\n>\n> second\n> third\n\n");
+  });
+
+  test("renders the alert marker alone when there is no text", () => {
+    const result = formatMDXAdmonition(
+      { text: "\n\n", title: "DEPRECATED", type: "warning" },
+      null,
+    );
+    expect(result).toBe("\n\n> [!WARNING]\n\n");
   });
 
   test("maps warning to WARNING", () => {
