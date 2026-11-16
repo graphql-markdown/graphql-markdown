@@ -98,14 +98,14 @@ export const rewriteRanges = (
 
 const FORMATTERS = `${SCOPE}formatters`;
 
-// Rewrites the `FORMATTERS_RANGE` export of the markdown framework module.
+// Rewrites the `FORMATTERS_RANGE` constant of the markdown framework module.
 export const rewriteExportedRange = (
   source: string,
   version: string,
 ): { text: string; diffs: string[] } => {
   const diffs: string[] = [];
   const text = source.replace(
-    /(export const FORMATTERS_RANGE = ")([^"]*)(")/,
+    /((?:export )?const FORMATTERS_RANGE = ")([^"]*)(")/,
     (match, pre: string, old: string, post: string) => {
       if (old === `^${version}`) {
         return match;

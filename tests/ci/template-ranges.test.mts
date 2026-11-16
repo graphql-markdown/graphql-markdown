@@ -180,7 +180,7 @@ describe("run()", () => {
 
   test("--check reports a stale FORMATTERS_RANGE", () => {
     run(root, "apply");
-    writeFileSync(markdown(), 'export const FORMATTERS_RANGE = "^1.2.0";\n');
+    writeFileSync(markdown(), 'const FORMATTERS_RANGE = "^1.2.0";\n');
     expect(run(root, "check")).toBe(1);
   });
 
