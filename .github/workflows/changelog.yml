@@ -27,13 +27,6 @@ jobs:
           github_token: ${{ secrets.BOT_PAT }}
           commit: false
 
-      - uses: actions/setup-node@v7.1.0
-        with:
-          node-version: "lts/*"
-
-      - name: Generate package changelogs
-        run: node .github/scripts/package-changelogs.mts
-
       - name: Open changelog pull request
         env:
           GH_TOKEN: ${{ secrets.BOT_PAT }}
@@ -49,7 +42,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
           git switch -c "changelog-$TAG"
-          git add CHANGELOG.md packages/*/CHANGELOG.md
+          git add CHANGELOG.md
           git commit -m "update changelog for $TAG changes"
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "changelog-$TAG"
           # A re-run force-pushes onto the PR that is already open.
