@@ -123,7 +123,7 @@ Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every p
 
 This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages, with an emoji prefix provided by [cz-emoji](https://github.com/ngryman/cz-emoji). When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
 
-The available types are configured in the root `package.json` (`config.cz-emoji`), and result in messages such as `✨ feat: add support for X` or `🐛 fix: resolve Y`. The same convention applies to pull request titles.
+The available types are configured in the root `package.json` (`config.cz-emoji`), and result in messages such as `✨ feat: add support for X` or `🐛 fix: resolve Y`. The same convention applies to pull request titles, and Danger checks them on every pull request.
 
 ## Coding style
 
