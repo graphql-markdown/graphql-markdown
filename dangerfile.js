@@ -28,6 +28,32 @@ const getDiffDependencies = (dependencies) => {
   return stringDiff;
 };
 
+const CZ_EMOJI_TYPES = require("./package.json").config["cz-emoji"].types;
+// The type whose emoji marks release titles (`🔖 release 1.42.0`).
+const RELEASE_TYPE = "tag";
+const SEMVER = "\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?(?:\\+[0-9A-Za-z.-]+)?";
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+// Matches an emoji with or without its optional U+FE0F variation selector.
+const emojiPattern = (emoji) =>
+  `${escapeRegExp(emoji.replace(/️/g, ""))}\\uFE0F?`;
+
+// Checks `<emoji> <name>: <subject>` and `<emoji> <name>(<scope>): <subject>`
+// against the cz-emoji types, plus `<release emoji> release <semver>`.
+const isValidPrTitle = (title, types) => {
+  const alternatives = types.map(
+    (type) =>
+      `${emojiPattern(type.emoji)} ${escapeRegExp(type.name)}` +
+      `(?:\\([^()\\s]+\\))?: \\S.*`,
+  );
+  const releaseType = types.find((type) => type.name === RELEASE_TYPE);
+  if (releaseType) {
+    alternatives.push(`${emojiPattern(releaseType.emoji)} release ${SEMVER}`);
+  }
+  return new RegExp(`^(?:${alternatives.join("|")})$`).test(title.trim());
+};
+
 // rule-yarn-lock-detected
 if (yarnLock.modified || yarnLock.created) {
   fail(`\`${YARN_LOCK}\` detected, you must used 'bun' for dependencies.`);
@@ -101,4 +127,16 @@ if (jestSnapshots.deleted.length > 0) {
 // rule-danger-file-modified
 if (dangerFile.modified) {
   warn(`This PR modified the \`${DANGER_FILE}\` file.`);
+}
+
+// rule-pr-title-format
+const pr = danger.github.pr;
+const isBot = pr.user.type === "Bot" || pr.user.login.endsWith("[bot]");
+if (!isBot && !isValidPrTitle(pr.title, CZ_EMOJI_TYPES)) {
+  const types = CZ_EMOJI_TYPES.map((type) => `${type.emoji} ${type.name}`);
+  fail(
+    `PR title \`${pr.title}\` does not follow the commit convention. PR titles become squash-merge commit subjects, so use \`<emoji> <type>: <subject>\` or \`<emoji> <type>(<scope>): <subject>\`.\n` +
+      `Examples: \`📝 docs: refresh the README demo screenshots\`, \`👷 ci(changelog): generate per-package changelogs\`, \`🔖 release 1.42.0\`.\n` +
+      `Allowed types: ${types.join(", ")}.`,
+  );
 }
