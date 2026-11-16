@@ -289,9 +289,54 @@ const queueFileUpdate = async (
   return next;
 };
 
+/** A `toc.yml` entry, as written by {@link updateToc}. */
+interface TocEntry {
+  name: string;
+  href: string;
+}
+
+/** Href of a section index page, always listed first as its "Overview". */
+const TOC_OVERVIEW_HREF = "index.md";
+
+/**
+ * Parses the entries of a `toc.yml` written by {@link updateToc}.
+ */
+const parseTocEntries = (content: string): TocEntry[] => {
+  const entries: TocEntry[] = [];
+  for (const line of content.split(/\r?\n/)) {
+    if (line.startsWith("- name: ")) {
+      entries.push({ name: line.slice("- name: ".length), href: "" });
+    } else if (line.startsWith("  href: ") && entries.length > 0) {
+      entries[entries.length - 1].href = line.slice("  href: ".length);
+    }
+  }
+  return entries;
+};
+
+/**
+ * Orders `toc.yml` entries deterministically: the section "Overview" first,
+ * then by name (case-insensitive), then by href.
+ *
+ * Pages are rendered concurrently, so the order in which entries are added
+ * changes from one build to the next.
+ */
+const compareTocEntries = (a: TocEntry, b: TocEntry): number => {
+  const aOverview = a.href === TOC_OVERVIEW_HREF;
+  const bOverview = b.href === TOC_OVERVIEW_HREF;
+  if (aOverview !== bOverview) {
+    return aOverview ? -1 : 1;
+  }
+  const byName = a.name.toLowerCase().localeCompare(b.name.toLowerCase(), "en");
+  if (byName !== 0) {
+    return byName;
+  }
+  return a.href.localeCompare(b.href, "en");
+};
+
 /**
  * Updates the `toc.yml` file for a given directory with a new entry.
- * Ensures that multiple concurrent updates to the same file are queued.
+ * Ensures that multiple concurrent updates to the same file are queued, and
+ * keeps the entries sorted so the file does not depend on completion order.
  */
 const updateToc = async (
   tocFilePath: string,
@@ -300,24 +345,26 @@ const updateToc = async (
   outputAdapter: Maybe<OutputAdapter>,
 ): Promise<void> => {
   await queueFileUpdate(tocFilePath, async () => {
-    const entry = `- name: ${name}${MARKDOWN_EOL}  href: ${href}`;
-
     const existing = await readOptionalOutput(tocFilePath, outputAdapter);
+    const entries =
+      typeof existing === "string" ? parseTocEntries(existing) : [];
 
-    if (typeof existing !== "string") {
-      await writeOutput(tocFilePath, entry + MARKDOWN_EOL, outputAdapter);
+    if (
+      entries.some((entry) => {
+        return entry.href === href;
+      })
+    ) {
       return;
     }
 
-    if (existing.includes(`href: ${href}`)) {
-      return;
-    }
+    const content = [...entries, { name, href }]
+      .sort(compareTocEntries)
+      .map((entry) => {
+        return `- name: ${entry.name}${MARKDOWN_EOL}  href: ${entry.href}${MARKDOWN_EOL}`;
+      })
+      .join("");
 
-    await writeOutput(
-      tocFilePath,
-      existing.trimEnd() + MARKDOWN_EOL + entry + MARKDOWN_EOL,
-      outputAdapter,
-    );
+    await writeOutput(tocFilePath, content, outputAdapter);
   });
 };
 
