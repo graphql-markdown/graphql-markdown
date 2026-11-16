@@ -39,53 +39,53 @@ Same generator, your framework. Click any screenshot to explore the live site.
 <table>
   <tr>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-docusaurus/types/objects/character"><img src=".github/assets/demos/demo-docusaurus.jpg" alt="Docusaurus demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-docusaurus/"><img src=".github/assets/demos/demo-docusaurus.jpg" alt="Docusaurus demo" /></a>
       <br /><b>Docusaurus</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-nuxt/api-reference/objects-project"><img src=".github/assets/demos/demo-nuxt.jpg" alt="Nuxt demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-nuxt/api-reference"><img src=".github/assets/demos/demo-nuxt.jpg" alt="Nuxt demo" /></a>
       <br /><b>Nuxt</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-astro-starlight/types/objects/media/"><img src=".github/assets/demos/demo-astro-starlight.jpg" alt="Astro / Starlight demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-astro-starlight/"><img src=".github/assets/demos/demo-astro-starlight.jpg" alt="Astro / Starlight demo" /></a>
       <br /><b>Astro / Starlight</b>
     </td>
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-nextjs-fumadocs/docs/types/objects/media"><img src=".github/assets/demos/demo-nextjs-fumadocs.jpg" alt="Next.js / Fumadocs demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-nextjs-fumadocs/docs"><img src=".github/assets/demos/demo-nextjs-fumadocs.jpg" alt="Next.js / Fumadocs demo" /></a>
       <br /><b>Next.js / Fumadocs</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-docus/docs/types/objects/media"><img src=".github/assets/demos/demo-docus.jpg" alt="Nuxt / Docus demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-docus/docs"><img src=".github/assets/demos/demo-docus.jpg" alt="Nuxt / Docus demo" /></a>
       <br /><b>Nuxt / Docus</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-vite-vocs/types/objects/media"><img src=".github/assets/demos/demo-vite-vocs.jpg" alt="Vite / Vocs demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-vite-vocs"><img src=".github/assets/demos/demo-vite-vocs.jpg" alt="Vite / Vocs demo" /></a>
       <br /><b>Vite / Vocs</b>
     </td>
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-hugo/graphql/types/objects/country/"><img src=".github/assets/demos/demo-hugo.jpg" alt="Hugo demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-hugo/"><img src=".github/assets/demos/demo-hugo.jpg" alt="Hugo demo" /></a>
       <br /><b>Hugo</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-mkdocs/graphql/types/objects/country/"><img src=".github/assets/demos/demo-mkdocs.jpg" alt="MkDocs demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-mkdocs/"><img src=".github/assets/demos/demo-mkdocs.jpg" alt="MkDocs demo" /></a>
       <br /><b>MkDocs</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-mdbook/graphql/types/objects/country.html"><img src=".github/assets/demos/demo-mdbook.jpg" alt="mdBook demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-mdbook/graphql/index.html"><img src=".github/assets/demos/demo-mdbook.jpg" alt="mdBook demo" /></a>
       <br /><b>mdBook</b>
     </td>
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-docfx/docs/graphql/types/objects/country.html"><img src=".github/assets/demos/demo-docfx.jpg" alt="DocFX demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-docfx"><img src=".github/assets/demos/demo-docfx.jpg" alt="DocFX demo" /></a>
       <br /><b>DocFX</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-honkit/graphql/objects-repository.html"><img src=".github/assets/demos/demo-honkit.jpg" alt="HonKit demo: generated GraphQL object type page" /></a>
+      <a href="https://graphql-markdown.dev/demo-honkit"><img src=".github/assets/demos/demo-honkit.jpg" alt="HonKit demo" /></a>
       <br /><b>HonKit</b>
     </td>
     <td align="center" width="33%">
