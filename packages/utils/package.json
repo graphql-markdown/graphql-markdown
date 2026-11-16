@@ -68,7 +68,8 @@
     "@graphql-markdown/types": "workspace:^"
   },
   "devDependencies": {
-    "@graphql-markdown/tooling-config": "workspace:^"
+    "@graphql-markdown/tooling-config": "workspace:^",
+    "fast-check": "4.10.2"
   },
   "peerDependencies": {
     "prettier": "catalog:"
