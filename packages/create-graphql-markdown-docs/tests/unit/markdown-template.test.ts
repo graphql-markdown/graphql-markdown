@@ -3,16 +3,12 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import { writeMdxFormatter } from "../../lib/frameworks/markdown.mjs";
+import {
+  FORMATTERS_RANGE,
+  writeMdxFormatter,
+} from "../../lib/frameworks/markdown.mjs";
 import { applyTemplate } from "../../lib/project.mjs";
 import { detectLoader } from "../../lib/schema.mjs";
-
-const formattersVersion: string = JSON.parse(
-  fs.readFileSync(
-    new URL("../../../formatters/package.json", import.meta.url),
-    "utf-8",
-  ),
-).version;
 
 let work: string;
 
@@ -81,7 +77,7 @@ describe("mdx scaffold", () => {
     );
     const pkg = JSON.parse(read(dir, "package.json"));
     expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe(
-      `^${formattersVersion}`,
+      FORMATTERS_RANGE,
     );
   });
 
