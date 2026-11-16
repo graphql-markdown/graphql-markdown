@@ -311,7 +311,8 @@ export class Printer implements IPrinter {
    * @param id - Unique identifier for the type
    * @param title - Display title for the type
    * @param options - Printer configuration options
-   * @returns Formatted header string with optional frontmatter
+   * @returns Formatted header string with optional frontmatter, followed by
+   * the page title when the formatter provides `formatMDXTitle`
    */
   static readonly printHeader = (
     id: string,
@@ -319,12 +320,18 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     if (options.frontMatter === false) {
-      return `# ${title}${MARKDOWN_EOP}`;
+      const heading = options.formatMDXTitle?.(title) ?? `# ${title}`;
+      return `${heading}${MARKDOWN_EOP}`;
     }
 
     const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
-    return printFrontMatter(title, { ...fmOptions, id }, options);
+    return [
+      printFrontMatter(title, { ...fmOptions, id }, options),
+      options.formatMDXTitle?.(title),
+    ]
+      .filter(Boolean)
+      .join(MARKDOWN_EOP);
   };
 
   /**

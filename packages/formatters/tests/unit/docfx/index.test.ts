@@ -10,6 +10,7 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle,
 } from "../../../src/docfx";
 
 describe("formatMDXBadge", () => {
@@ -149,27 +150,18 @@ describe("formatMDXFrontmatter", () => {
 
   test("uid line is a top-level YAML key", () => {
     const result = formatMDXFrontmatter({ id: "test-id" }, ["title: Test"]);
-    expect(result).toBe("---\nuid: test-id\ntitle: Test\n---\n\n# Test");
+    expect(result).toBe("---\nuid: test-id\ntitle: Test\n---");
+  });
+});
+
+describe("formatMDXTitle", () => {
+  test("renders the page title as a visible H1 heading", () => {
+    // DocFX only uses the front matter title for the document <title>
+    expect(formatMDXTitle("Country")).toBe("# Country");
   });
 
-  test("adds a visible title heading after the front matter", () => {
-    const result = formatMDXFrontmatter({ id: "country" }, [
-      "id: country",
-      "title: Country",
-    ]);
-    expect(result).toBe(
-      "---\nuid: country\nid: country\ntitle: Country\n---\n\n# Country",
-    );
-  });
-
-  test("unquotes the title in the heading", () => {
-    const result = formatMDXFrontmatter(undefined, ['title: "Query: books"']);
-    expect(result).toBe('---\ntitle: "Query: books"\n---\n\n# Query: books');
-  });
-
-  test("omits the heading when there is no title", () => {
-    const result = formatMDXFrontmatter({ id: "country" }, ["id: country"]);
-    expect(result).toBe("---\nuid: country\nid: country\n---");
+  test("is part of the DocFX formatter", () => {
+    expect(createMDXFormatter().formatMDXTitle).toBe(formatMDXTitle);
   });
 });
 

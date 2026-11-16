@@ -118,4 +118,16 @@ export interface Formatter {
    * @returns Formatted permalink string
    */
   formatMDXPermalink: (id: string) => MDXString;
+
+  /**
+   * Formats the visible page title, printed after the frontmatter.
+   *
+   * Optional: most frameworks render the frontmatter `title` themselves, so no
+   * title is printed unless the formatter provides this function. When
+   * frontmatter is disabled, it replaces the default `# title` heading.
+   *
+   * @param title - The page title
+   * @returns Formatted page title, e.g. a `# title` heading
+   */
+  formatMDXTitle?: (title: string) => MDXString;
 }

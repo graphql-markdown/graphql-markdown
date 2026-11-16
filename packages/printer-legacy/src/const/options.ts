@@ -61,6 +61,7 @@ export const DEFAULT_OPTIONS: Required<
     | "entity"
     | "exampleSection"
     | "formatCategoryFolderName"
+    | "formatMDXTitle"
     | "groups"
     | "level"
     | "meta"
@@ -74,6 +75,7 @@ export const DEFAULT_OPTIONS: Required<
   decorators: PrintTypeOptions["decorators"];
   entity: PrintTypeOptions["entity"];
   exampleSection: PrintTypeOptions["exampleSection"];
+  formatMDXTitle: PrintTypeOptions["formatMDXTitle"];
   groups: Maybe<SchemaEntitiesGroupMap>;
   level: Maybe<SectionLevelValue>;
   onlyDocDirectives: GraphQLDirective[];
@@ -110,4 +112,5 @@ export const DEFAULT_OPTIONS: Required<
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle: undefined,
 };

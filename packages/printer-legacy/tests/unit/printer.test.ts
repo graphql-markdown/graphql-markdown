@@ -230,6 +230,7 @@ describe("Printer", () => {
           "formatMDXNameEntity": [Function],
           "formatMDXPermalink": [Function],
           "formatMDXSpecifiedByLink": [Function],
+          "formatMDXTitle": undefined,
           "frontMatter": {},
           "groups": undefined,
           "hierarchy": {
@@ -303,6 +304,7 @@ describe("Printer", () => {
           "formatMDXNameEntity": [Function],
           "formatMDXPermalink": [Function],
           "formatMDXSpecifiedByLink": [Function],
+          "formatMDXTitle": undefined,
           "frontMatter": {},
           "groups": {},
           "hierarchy": {
@@ -455,6 +457,52 @@ describe("Printer", () => {
             title: An Object Type Name
             ---"
           `);
+    });
+
+    test("adds the formatter page title after the frontmatter", () => {
+      expect.hasAssertions();
+
+      const formatMDXFrontmatter = vi.fn().mockReturnValue("---\nid: foo\n---");
+      const formatMDXTitle = vi.fn((title: string) => {
+        return `# ${title}`;
+      });
+
+      const header = Printer.printHeader("foo", "Foo", {
+        ...DEFAULT_OPTIONS,
+        formatMDXFrontmatter,
+        formatMDXTitle,
+      });
+
+      expect(header).toBe("---\nid: foo\n---\n\n# Foo");
+      expect(formatMDXTitle).toHaveBeenCalledExactlyOnceWith("Foo");
+    });
+
+    test("prints only the formatter page title when the frontmatter is empty", () => {
+      expect.hasAssertions();
+
+      const header = Printer.printHeader("foo", "Foo", {
+        ...DEFAULT_OPTIONS,
+        formatMDXFrontmatter: vi.fn().mockReturnValue(""),
+        formatMDXTitle: (title: string) => {
+          return `# ${title}`;
+        },
+      });
+
+      expect(header).toBe("# Foo");
+    });
+
+    test("uses the formatter page title when frontmatter is disabled", () => {
+      expect.hasAssertions();
+
+      const header = Printer.printHeader("foo", "Foo", {
+        ...DEFAULT_OPTIONS,
+        frontMatter: false,
+        formatMDXTitle: (title: string) => {
+          return `<h1>${title}</h1>`;
+        },
+      });
+
+      expect(header).toBe("<h1>Foo</h1>\n\n");
     });
 
     test("forwards options.entity to formatMDXFrontmatter as page context", () => {

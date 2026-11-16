@@ -22,10 +22,7 @@ import type {
   RenderTypeEntitiesHook,
   TypeLink,
 } from "@graphql-markdown/types";
-import {
-  extractFrontmatterTitle,
-  quoteMarkdownLines,
-} from "@graphql-markdown/helpers";
+import { quoteMarkdownLines } from "@graphql-markdown/helpers";
 import {
   capitalize,
   fsOutputAdapter,
@@ -90,18 +87,10 @@ export const formatMDXAdmonition = (
 
 /**
  * Formats YAML front matter, injecting a `uid` field required by DocFX
- * for cross-reference resolution between pages, followed by a visible
- * `# Title` heading.
- *
- * DocFX only uses the front matter `title` for the document `<title>`; the
- * page heading comes from the Markdown H1, so without it generated pages
- * have no visible title.
- *
- * @see https://dotnet.github.io/docfx/docs/markdown.html
- *
+ * for cross-reference resolution between pages.
  * @param props - Front matter options; `id` is used as the DocFX `uid` value
  * @param formatted - Pre-formatted front matter lines
- * @returns Formatted front matter block and title heading, or empty string if no lines provided
+ * @returns Formatted front matter block, or empty string if no lines provided
  */
 export const formatMDXFrontmatter = (
   props: Maybe<FrontMatterOptions>,
@@ -116,19 +105,28 @@ export const formatMDXFrontmatter = (
       : undefined;
   const uidLine = id ? [`uid: ${id}`] : [];
 
-  const frontMatter = [
+  return [
     FRONT_MATTER_DELIMITER,
     ...uidLine,
     ...formatted,
     FRONT_MATTER_DELIMITER,
-  ].join(MARKDOWN_EOL);
+  ].join(MARKDOWN_EOL) as MDXString;
+};
 
-  const title = extractFrontmatterTitle(formatted)
-    .replaceAll(/\r?\n/g, " ")
-    .trim();
-  const heading = title ? `${MARKDOWN_EOP}# ${title}` : "";
-
-  return `${frontMatter}${heading}` as MDXString;
+/**
+ * Formats the page title as a visible `# Title` heading.
+ *
+ * DocFX only uses the front matter `title` for the document `<title>`; the
+ * page heading comes from the Markdown H1, so without it generated pages
+ * have no visible title.
+ *
+ * @see https://dotnet.github.io/docfx/docs/markdown.html
+ *
+ * @param title - The page title
+ * @returns `# Title` heading
+ */
+export const formatMDXTitle = (title: string): MDXString => {
+  return `# ${title}` as MDXString;
 };
 
 /**
@@ -164,6 +162,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXNameEntity,
     formatMDXPermalink,
     formatMDXSpecifiedByLink,
+    formatMDXTitle,
   };
 };
 

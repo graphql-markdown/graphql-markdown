@@ -38,7 +38,7 @@ extensions:
 
 - **DocFX Alerts**: Uses `> [!NOTE]`, `> [!WARNING]` alert syntax rendered by DocFX's Markdown pipeline (not GitHub's; the two share syntax but use separate renderers)
 - **Markdown Extension**: Generates `.md` files
-- **Page Title**: Adds the front matter `title` as a visible `# Title` heading, since DocFX only uses it for the document `<title>`
+- **Page Title**: Prints the page title as a visible `# Title` heading after the front matter (`formatMDXTitle`), since DocFX only uses the front matter `title` for the document `<title>`
 - **UID Frontmatter**: Injects a `uid` field derived from the page path for DocFX cross-reference resolution between pages
 - **TOC Generation**: Builds `toc.yml` navigation files as pages are generated
 - **Bootstrap Badges**: Badge variants map to Bootstrap 5 contextual classes (available in DocFX's modern template)
