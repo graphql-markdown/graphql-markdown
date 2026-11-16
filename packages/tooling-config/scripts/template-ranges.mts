@@ -88,6 +88,27 @@ export const rewriteRanges = (
   return { text, diffs };
 };
 
+const FORMATTERS = `${SCOPE}formatters`;
+
+// Rewrites the `FORMATTERS_RANGE` export of the markdown framework module.
+export const rewriteExportedRange = (
+  source: string,
+  version: string,
+): { text: string; diffs: string[] } => {
+  const diffs: string[] = [];
+  const text = source.replace(
+    /(export const FORMATTERS_RANGE = ")([^"]*)(")/,
+    (match, pre: string, old: string, post: string) => {
+      if (old === `^${version}`) {
+        return match;
+      }
+      diffs.push(`FORMATTERS_RANGE: ${old} -> ^${version}`);
+      return `${pre}^${version}${post}`;
+    },
+  );
+  return { text, diffs };
+};
+
 export const collectChanges = (
   rootDir: string,
   versions: Map<string, string>,
@@ -104,6 +125,24 @@ export const collectChanges = (
       changes.push({ file, diffs, text });
     }
   }
+  const formatters = versions.get(FORMATTERS);
+  const markdown = join(
+    rootDir,
+    "packages",
+    SCAFFOLDER,
+    "lib",
+    "frameworks",
+    "markdown.mjs",
+  );
+  if (formatters !== undefined && existsSync(markdown)) {
+    const { text, diffs } = rewriteExportedRange(
+      readFileSync(markdown, "utf8"),
+      formatters,
+    );
+    if (diffs.length > 0) {
+      changes.push({ file: markdown, diffs, text });
+    }
+  }
   return changes;
 };
 
@@ -116,7 +155,7 @@ export const changesetText = (changes: Change[], rootDir: string): string => {
     `"${SCAFFOLDER}": patch`,
     "---",
     "",
-    "Update the `@graphql-markdown/*` dependency ranges of the project templates.",
+    "Update the `@graphql-markdown/*` dependency ranges of the project templates and of the markdown scaffold.",
     "",
     ...lines.map((line) => line.replace(/^- .*\/templates\//, "- ")),
     "",

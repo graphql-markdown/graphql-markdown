@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import {
   readVersions,
+  rewriteExportedRange,
   rewriteRanges,
   run,
 } from "../../packages/tooling-config/scripts/template-ranges.mts";
@@ -23,6 +24,9 @@ const writeJson = (path: string, value: unknown): void => {
 
 const template = (name: string): string =>
   join(root, "packages/create-graphql-markdown-docs/templates", name, "package.json");
+
+const markdown = (): string =>
+  join(root, "packages/create-graphql-markdown-docs/lib/frameworks/markdown.mjs");
 
 beforeEach(() => {
   root = mkdtempSync(join(tmpdir(), "template-ranges-"));
@@ -44,6 +48,8 @@ beforeEach(() => {
   writeJson(template("b"), {
     dependencies: { "@graphql-markdown/cli": "^1.2.2" },
   });
+  mkdirSync(dirname(markdown()), { recursive: true });
+  writeFileSync(markdown(), 'export const FORMATTERS_RANGE = "^1.2.0";\n');
   writeJson(join(root, ".changeset/config.json"), {
     changelog: false,
     commit: false,
@@ -102,7 +108,27 @@ describe("rewriteRanges()", () => {
   });
 });
 
+describe("rewriteExportedRange()", () => {
+  test("rewrites a stale FORMATTERS_RANGE only", () => {
+    const { text, diffs } = rewriteExportedRange('export const FORMATTERS_RANGE = "^1.2.0";\n', "1.3.0");
+    expect(text).toBe('export const FORMATTERS_RANGE = "^1.3.0";\n');
+    expect(diffs).toEqual(["FORMATTERS_RANGE: ^1.2.0 -> ^1.3.0"]);
+    expect(rewriteExportedRange(text, "1.3.0").diffs).toEqual([]);
+  });
+});
+
 describe("run()", () => {
+  test("--apply syncs FORMATTERS_RANGE", () => {
+    run(root, "apply");
+    expect(readFileSync(markdown(), "utf8")).toContain('"^1.3.0"');
+  });
+
+  test("--check reports a stale FORMATTERS_RANGE", () => {
+    run(root, "apply");
+    writeFileSync(markdown(), 'export const FORMATTERS_RANGE = "^1.2.0";\n');
+    expect(run(root, "check")).toBe(1);
+  });
+
   test("--check reports drift and writes nothing", () => {
     const before = readFileSync(template("a"), "utf8");
     expect(run(root, "check")).toBe(1);
@@ -128,6 +154,7 @@ describe("run() --plan", () => {
     const text = readFileSync(syncChangeset(), "utf8");
     expect(text).toContain('"create-graphql-markdown-docs": patch');
     expect(text).toContain("a/package.json: @graphql-markdown/formatters: ^1.2.0 -> ^1.3.1");
+    expect(text).toContain("FORMATTERS_RANGE: ^1.2.0 -> ^1.3.1");
   });
 
   test("overwrites the changeset on a second run", () => {
@@ -147,6 +174,7 @@ describe("run() --plan", () => {
     writeJson(template("a"), {
       dependencies: { "@graphql-markdown/formatters": "^1.3.0" },
     });
+    writeFileSync(markdown(), 'export const FORMATTERS_RANGE = "^1.3.0";\n');
     expect(run(root, "plan")).toBe(0);
     expect(() => readFileSync(syncChangeset())).toThrow();
   });

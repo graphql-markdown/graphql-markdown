@@ -3,14 +3,19 @@ import os from "node:os";
 import path from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
-import {
-  FORMATTERS_RANGE,
-  writeMdxFormatter,
-} from "../../lib/frameworks/markdown.mjs";
+import { writeMdxFormatter } from "../../lib/frameworks/markdown.mjs";
 import { applyTemplate } from "../../lib/project.mjs";
 import { detectLoader } from "../../lib/schema.mjs";
 
 let work: string;
+
+const formattersVersion = (): string => {
+  const manifest = path.join(
+    import.meta.dirname,
+    "../../../formatters/package.json",
+  );
+  return JSON.parse(fs.readFileSync(manifest, "utf-8")).version;
+};
 
 beforeEach(() => {
   work = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-md-"));
@@ -77,7 +82,7 @@ describe("mdx scaffold", () => {
     );
     const pkg = JSON.parse(read(dir, "package.json"));
     expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe(
-      FORMATTERS_RANGE,
+      `^${formattersVersion()}`,
     );
   });
 
