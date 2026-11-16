@@ -27,7 +27,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const SCOPE = "@graphql-markdown/";
@@ -68,7 +68,9 @@ export const readVersions = (rootDir: string): Map<string, string> => {
   return versions;
 };
 
-// Rewrites only the string values of the workspace `"<name>": "<range>"` entries.
+// Rewrites the string values of the workspace `"<name>": "<range>"` entries, at
+// every occurrence, when they are caret ranges (`^1.2.3`). Other specifiers
+// (`~`, exact pins, tags, `workspace:`...) are deliberately left alone.
 export const rewriteRanges = (
   source: string,
   versions: Map<string, string>,
@@ -76,9 +78,9 @@ export const rewriteRanges = (
   const diffs: string[] = [];
   let text = source;
   for (const [name, version] of versions) {
-    const entry = new RegExp(`(\\n\\s*"${escapeRegExp(name)}"\\s*:\\s*")([^"]*)(")`);
+    const entry = new RegExp(`(\\n\\s*"${escapeRegExp(name)}"\\s*:\\s*")([^"]*)(")`, "g");
     text = text.replace(entry, (match, pre: string, old: string, post: string) => {
-      if (old === `^${version}`) {
+      if (!/^\^\d/.test(old) || old === `^${version}`) {
         return match;
       }
       diffs.push(`${name}: ${old} -> ^${version}`);
@@ -147,8 +149,9 @@ export const collectChanges = (
 };
 
 export const changesetText = (changes: Change[], rootDir: string): string => {
+  const base = join(rootDir, "packages", SCAFFOLDER);
   const lines = changes.flatMap(({ file, diffs }) =>
-    diffs.map((diff) => `- ${file.slice(rootDir.length + 1)}: ${diff}`),
+    diffs.map((diff) => `- ${relative(base, file).split(sep).join("/")}: ${diff}`),
   );
   return [
     "---",
@@ -157,7 +160,7 @@ export const changesetText = (changes: Change[], rootDir: string): string => {
     "",
     "Update the `@graphql-markdown/*` dependency ranges of the project templates and of the markdown scaffold.",
     "",
-    ...lines.map((line) => line.replace(/^- .*\/templates\//, "- ")),
+    ...lines,
     "",
   ].join("\n");
 };
