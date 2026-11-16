@@ -97,7 +97,7 @@
     "prettier": "turbo run prettier",
     "prettier:fix": "turbo run prettier:fix",
     "release:tag": "changeset tag",
-    "release:version": "changeset version && node packages/tooling-config/scripts/template-ranges.mts && changeset version && bun run jsr:sync && bun install",
+    "release:version": "node packages/tooling-config/scripts/template-ranges.mts --plan && changeset version && node packages/tooling-config/scripts/template-ranges.mts --apply && bun run jsr:sync && bun install",
     "showcase:add": "node packages/tooling-config/scripts/showcase-add.mts",
     "smoke": ".github/scripts/e2e/run-smoke.sh",
     "test": "turbo run test",

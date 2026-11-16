@@ -1,6 +1,8 @@
+import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import {
@@ -8,6 +10,9 @@ import {
   rewriteRanges,
   run,
 } from "../../packages/tooling-config/scripts/template-ranges.mts";
+
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
+const changesetBin = join(repoRoot, "node_modules", ".bin", "changeset");
 
 let root: string;
 
@@ -39,8 +44,37 @@ beforeEach(() => {
   writeJson(template("b"), {
     dependencies: { "@graphql-markdown/cli": "^1.2.2" },
   });
+  writeJson(join(root, ".changeset/config.json"), {
+    changelog: false,
+    commit: false,
+    access: "public",
+    baseBranch: "main",
+    updateInternalDependencies: "patch",
+    ___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH: {
+      updateInternalDependents: "always",
+    },
+  });
   vi.spyOn(console, "log").mockImplementation(() => undefined);
+  vi.spyOn(console, "error").mockImplementation(() => undefined);
 });
+
+const changeset = (name: string, pkg: string, type = "patch"): void => {
+  writeFileSync(
+    join(root, ".changeset", `${name}.md`),
+    `---\n"${pkg}": ${type}\n---\n\nChange.\n`,
+  );
+};
+
+const syncChangeset = (): string =>
+  join(root, ".changeset/sync-template-ranges.md");
+
+const scaffolderVersion = (): string =>
+  JSON.parse(
+    readFileSync(
+      join(root, "packages/create-graphql-markdown-docs/package.json"),
+      "utf8",
+    ),
+  ).version;
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -71,25 +105,92 @@ describe("rewriteRanges()", () => {
 describe("run()", () => {
   test("--check reports drift and writes nothing", () => {
     const before = readFileSync(template("a"), "utf8");
-    expect(run(root, true)).toBe(1);
+    expect(run(root, "check")).toBe(1);
     expect(readFileSync(template("a"), "utf8")).toBe(before);
-    expect(() => readFileSync(join(root, ".changeset/sync-template-ranges.md"))).toThrow();
+    expect(() => readFileSync(syncChangeset())).toThrow();
   });
 
-  test("rewrites ranges and writes a patch changeset", () => {
-    expect(run(root, false)).toBe(0);
+  test("--apply rewrites ranges without writing a changeset", () => {
+    expect(run(root, "apply")).toBe(0);
     const pkg = JSON.parse(readFileSync(template("a"), "utf8"));
     expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe("^1.3.0");
-    const changeset = readFileSync(join(root, ".changeset/sync-template-ranges.md"), "utf8");
-    expect(changeset).toContain('"create-graphql-markdown-docs": patch');
-    expect(changeset).toContain("a/package.json: @graphql-markdown/formatters: ^1.2.0 -> ^1.3.0");
+    expect(() => readFileSync(syncChangeset())).toThrow();
+    expect(run(root, "check")).toBe(0);
+  });
+});
+
+describe("run() --plan", () => {
+  test("writes the changeset for the ranges of the planned versions, and rewrites nothing", () => {
+    changeset("fix", "@graphql-markdown/formatters");
+    const before = readFileSync(template("a"), "utf8");
+    expect(run(root, "plan")).toBe(0);
+    expect(readFileSync(template("a"), "utf8")).toBe(before);
+    const text = readFileSync(syncChangeset(), "utf8");
+    expect(text).toContain('"create-graphql-markdown-docs": patch');
+    expect(text).toContain("a/package.json: @graphql-markdown/formatters: ^1.2.0 -> ^1.3.1");
   });
 
-  test("is a no-op once in sync", () => {
-    run(root, false);
-    rmSync(join(root, ".changeset"), { recursive: true });
-    expect(run(root, true)).toBe(0);
-    expect(run(root, false)).toBe(0);
-    expect(() => readFileSync(join(root, ".changeset/sync-template-ranges.md"))).toThrow();
+  test("overwrites the changeset on a second run", () => {
+    changeset("fix", "@graphql-markdown/formatters");
+    run(root, "plan");
+    const first = readFileSync(syncChangeset(), "utf8");
+    expect(run(root, "plan")).toBe(0);
+    expect(readFileSync(syncChangeset(), "utf8")).toBe(first);
+  });
+
+  test("writes nothing when the ranges will already be in sync", () => {
+    run(root, "apply");
+    changeset("other", "@graphql-markdown/cli", "patch");
+    writeJson(template("b"), {
+      dependencies: { "@graphql-markdown/cli": "^1.2.3" },
+    });
+    writeJson(template("a"), {
+      dependencies: { "@graphql-markdown/formatters": "^1.3.0" },
+    });
+    expect(run(root, "plan")).toBe(0);
+    expect(() => readFileSync(syncChangeset())).toThrow();
+  });
+
+  test("fails when no changeset is pending", () => {
+    expect(run(root, "plan")).toBe(1);
+    expect(() => readFileSync(syncChangeset())).toThrow();
+  });
+});
+
+describe("single-pass versioning", () => {
+  const releaseVersion = (): void => {
+    writeFileSync(join(root, "package.json"), JSON.stringify({ name: "root", private: true, workspaces: ["packages/*"] }));
+    writeFileSync(join(root, "bun.lock"), "");
+    expect(run(root, "plan")).toBe(0);
+    execFileSync(changesetBin, ["version"], { cwd: root, stdio: "pipe" });
+    expect(run(root, "apply")).toBe(0);
+  };
+
+  beforeEach(() => {
+    writeJson(join(root, "packages/create-graphql-markdown-docs/package.json"), {
+      name: "create-graphql-markdown-docs",
+      version: "1.1.2",
+      dependencies: { "@graphql-markdown/cli": "workspace:^" },
+    });
+    writeJson(join(root, "packages/cli/package.json"), {
+      name: "@graphql-markdown/cli",
+      version: "1.2.2",
+    });
+  });
+
+  test("bumps the scaffolder once when a dependency cascade and the ranges both move it", () => {
+    changeset("fix", "@graphql-markdown/cli");
+    releaseVersion();
+    expect(scaffolderVersion()).toBe("1.1.3");
+    const pkg = JSON.parse(readFileSync(template("b"), "utf8"));
+    expect(pkg.dependencies["@graphql-markdown/cli"]).toBe("^1.2.3");
+    expect(run(root, "check")).toBe(0);
+  });
+
+  test("bumps the scaffolder once when it is also bumped by its own changeset", () => {
+    changeset("fix", "@graphql-markdown/cli");
+    changeset("own", "create-graphql-markdown-docs");
+    releaseVersion();
+    expect(scaffolderVersion()).toBe("1.1.3");
   });
 });
