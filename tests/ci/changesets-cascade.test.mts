@@ -2,7 +2,8 @@
 // @changesets/cli. All internal ranges are `workspace:^`, which only cascade
 // version bumps to dependents through that option; if a changesets upgrade
 // drops or changes it, a patch of a leaf package would stop releasing its
-// dependents and this test fails.
+// dependents and this test fails. It runs against the repository's own
+// `.changeset/config.json`.
 
 import { execFileSync } from "node:child_process";
 import {
@@ -19,6 +20,9 @@ import { afterEach, beforeEach, expect, test } from "vitest";
 
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const bin = join(repoRoot, "node_modules", ".bin", "changeset");
+const repoConfig = JSON.parse(
+  readFileSync(join(repoRoot, ".changeset", "config.json"), "utf8"),
+);
 
 let work: string;
 
@@ -55,15 +59,11 @@ beforeEach(() => {
     version: "3.0.0",
     dependencies: { "@fixture/core": "workspace:^" },
   });
+  // The repository config, with only the changelog generator (it needs the
+  // network and a GitHub token) turned off.
   writeJson(join(work, ".changeset/config.json"), {
+    ...repoConfig,
     changelog: false,
-    commit: false,
-    access: "public",
-    baseBranch: "main",
-    updateInternalDependencies: "patch",
-    ___experimentalUnsafeOptions_WILL_CHANGE_IN_PATCH: {
-      updateInternalDependents: "always",
-    },
   });
   writeFileSync(
     join(work, ".changeset/leaf.md"),
