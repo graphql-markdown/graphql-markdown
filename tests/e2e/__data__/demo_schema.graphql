@@ -1,0 +1,756 @@
+# tests/e2e/__data__/demo_schema.graphql (shared GraphQL-Markdown demo schema)
+
+"""
+Provides a GraphQL example that is rendered in the generated API reference.
+"""
+directive @example(value: String!) on FIELD_DEFINITION | OBJECT
+
+"""
+Provides the JSON response returned by the `@example` operation, rendered
+alongside it in the generated API reference.
+"""
+directive @exampleResponse(value: String!) on FIELD_DEFINITION
+
+"""
+Provides the JSON variables sent with the `@example` operation, rendered
+under it in the generated API reference.
+"""
+directive @exampleVariables(value: String!) on FIELD_DEFINITION
+
+"""
+Marks an object type as superseded when standard @deprecated cannot be applied.
+"""
+directive @deprecatedType(reason: String!) on OBJECT
+
+"""
+An ISO 8601 timestamp in UTC.
+"""
+scalar DateTime
+
+"""
+A globally unique entity identifier.
+"""
+interface Node {
+  """
+  The globally unique identifier for this resource.
+  """
+  id: ID!
+}
+
+"""
+The lifecycle stage of a project.
+"""
+enum ProjectStatus {
+  """
+  The project is being planned and is not yet active.
+  """
+  DRAFT
+  """
+  The project is active and available to collaborators.
+  """
+  ACTIVE
+  """
+  The project is retained for history and no longer active.
+  """
+  ARCHIVED
+}
+
+"""
+A virtual folder used to organize workspace resources.
+"""
+type Folder implements Node
+  @example(
+    value: """
+    {
+      "id": "folder_01",
+      "name": "Product Planning",
+      "parent": "folder_root",
+      "createdAt": "2026-09-05T09:30:00Z"
+    }
+    """
+  ) {
+  """
+  The unique identifier of the folder.
+  """
+  id: ID!
+  """
+  The human-readable folder name.
+  """
+  name: String!
+  """
+  The identifier of the parent folder, when nested.
+  """
+  parent: String
+  """
+  When the folder was created.
+  """
+  createdAt: DateTime!
+}
+
+"""
+A workspace member who owns and collaborates on projects.
+"""
+type User implements Node
+  @example(
+    value: """
+    {
+      "id": "user_01",
+      "name": "Avery Chen",
+      "email": "avery@example.com",
+      "role": "Product Lead"
+    }
+    """
+  ) {
+  """
+  The unique identifier of the user.
+  """
+  id: ID!
+  """
+  The user's display name.
+  """
+  name: String!
+  """
+  The user's primary email address.
+  """
+  email: String!
+  """
+  The user's role in the workspace.
+  """
+  role: String!
+}
+
+"""
+A unit of work tracked in the workspace.
+"""
+type Project implements Node
+  @example(
+    value: """
+    {
+      "id": "project_01",
+      "name": "Mobile Refresh",
+      "status": "ACTIVE",
+      "owner": {
+        "id": "user_01",
+        "name": "Avery Chen"
+      },
+      "updatedAt": "2026-09-05T10:15:00Z"
+    }
+    """
+  ) {
+  """
+  The unique identifier of the project.
+  """
+  id: ID!
+  """
+  The project name shown to collaborators.
+  """
+  name: String!
+  """
+  The current lifecycle stage of the project.
+  """
+  status: ProjectStatus!
+  """
+  The user responsible for the project.
+  """
+  owner: User!
+  """
+  The folder containing this project, when assigned.
+  """
+  folder: Folder
+  """
+  When the project was last updated.
+  """
+  updatedAt: DateTime!
+  """
+  The project's lifecycle stage.
+  """
+  state: String
+    @deprecated(reason: "Replaced by the `ProjectStatus` enum on status.")
+}
+
+"""
+Use Project instead for active workspace work.
+"""
+type LegacyProject
+  @deprecatedType(
+    reason: "Replaced by `Project` to support ownership and lifecycle status."
+  ) {
+  """
+  The unique identifier of the legacy project.
+  """
+  id: ID!
+  """
+  The legacy project name.
+  """
+  name: String!
+}
+
+"""
+A paginated project result set.
+"""
+type ProjectConnection {
+  """
+  Projects in the current result page.
+  """
+  nodes: [Project!]!
+  """
+  The total number of projects matching the query.
+  """
+  totalCount: Int!
+}
+
+"""
+Input used to create a project.
+"""
+input CreateProjectInput {
+  """
+  The name for the new project.
+  """
+  name: String!
+  """
+  The identifier of the user who will own the project.
+  """
+  ownerId: ID!
+  """
+  The optional folder that will contain the project.
+  """
+  folderId: ID
+  """
+  The initial lifecycle stage for the project.
+  """
+  status: ProjectStatus = DRAFT
+}
+
+"""
+A result returned from global workspace search.
+"""
+union SearchResult = Folder | Project | User
+
+type Query {
+  """
+  List folders available in the current workspace.
+  """
+  folders(
+    """
+    Maximum number of folders to return.
+    """
+    limit: Int
+    """
+    Number of folders to skip before returning results.
+    """
+    offset: Int
+  ): [Folder!]!
+    @example(
+      value: """
+      query ListFolders {
+        folders {
+          id
+          name
+          parent
+          createdAt
+        }
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "folders": [
+            {
+              "id": "folder_root",
+              "name": "Workspace",
+              "parent": null,
+              "createdAt": "2026-09-05T08:00:00Z"
+            },
+            {
+              "id": "folder_01",
+              "name": "Product Planning",
+              "parent": "folder_root",
+              "createdAt": "2026-09-05T09:30:00Z"
+            },
+            {
+              "id": "folder_02",
+              "name": "Design Reviews",
+              "parent": "folder_01",
+              "createdAt": "2026-09-05T11:45:00Z"
+            },
+            {
+              "id": "folder_03",
+              "name": "Mobile Assets",
+              "parent": "folder_root",
+              "createdAt": "2026-09-05T12:30:00Z"
+            }
+          ]
+        }
+      }
+      """
+    )
+
+  """
+  Fetch a single folder by its unique identifier.
+  """
+  folder(
+    """
+    The unique identifier of the folder to retrieve.
+    """
+    id: ID!
+  ): Folder
+    @example(
+      value: """
+      query GetFolder($id: ID!) {
+        folder(id: $id) {
+          id
+          name
+          parent
+          createdAt
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "id": "folder_01"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "folder": {
+            "id": "folder_01",
+            "name": "Product Planning",
+            "parent": "folder_root",
+            "createdAt": "2026-09-05T09:30:00Z"
+          }
+        }
+      }
+      """
+    )
+
+  """
+  List projects, optionally filtered by lifecycle status.
+  """
+  projects(
+    """
+    Limit results to projects in this lifecycle stage.
+    """
+    status: ProjectStatus
+    """
+    Maximum number of projects to return. Defaults to 20.
+    """
+    limit: Int = 20
+  ): ProjectConnection!
+    @example(
+      value: """
+      query ListActiveProjects($status: ProjectStatus) {
+        projects(status: $status) {
+          totalCount
+          nodes {
+            id
+            name
+            status
+            owner {
+              name
+            }
+          }
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "status": "ACTIVE"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "projects": {
+            "totalCount": 2,
+            "nodes": [
+              {
+                "id": "project_01",
+                "name": "Mobile Refresh",
+                "status": "ACTIVE",
+                "owner": { "name": "Avery Chen" }
+              },
+              {
+                "id": "project_02",
+                "name": "Billing Migration",
+                "status": "ACTIVE",
+                "owner": { "name": "Sam Okafor" }
+              }
+            ]
+          }
+        }
+      }
+      """
+    )
+
+  """
+  Search folders, projects, and users from a single endpoint.
+  """
+  search(
+    """
+    Text matched against folder, project, and user names.
+    """
+    query: String!
+  ): [SearchResult!]!
+    @example(
+      value: """
+      query SearchWorkspace($query: String!) {
+        search(query: $query) {
+          __typename
+          ... on Folder {
+            id
+            name
+          }
+          ... on Project {
+            id
+            name
+            status
+          }
+          ... on User {
+            id
+            name
+            email
+          }
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "query": "mobile"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "search": [
+            {
+              "__typename": "Project",
+              "id": "project_01",
+              "name": "Mobile Refresh",
+              "status": "ACTIVE"
+            },
+            {
+              "__typename": "Folder",
+              "id": "folder_03",
+              "name": "Mobile Assets"
+            }
+          ]
+        }
+      }
+      """
+    )
+}
+
+type Mutation {
+  """
+  Create a virtual folder in the workspace.
+  """
+  createFolder(
+    """
+    The name of the new folder.
+    """
+    name: String!
+    """
+    The optional parent folder identifier.
+    """
+    parentId: ID
+  ): Folder!
+    @example(
+      value: """
+      mutation CreateFolder($name: String!, $parentId: ID) {
+        createFolder(name: $name, parentId: $parentId) {
+          id
+          name
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "name": "Roadmap",
+        "parentId": "folder_root"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "createFolder": {
+            "id": "folder_04",
+            "name": "Roadmap"
+          }
+        }
+      }
+      """
+    )
+
+  """
+  Create a project and assign its initial owner.
+  """
+  createProject(
+    """
+    The project attributes to create.
+    """
+    input: CreateProjectInput!
+  ): Project!
+    @example(
+      value: """
+      mutation CreateProject($input: CreateProjectInput!) {
+        createProject(input: $input) {
+          id
+          name
+          status
+          folder {
+            id
+            name
+          }
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "input": {
+          "name": "Design System",
+          "ownerId": "user_01",
+          "folderId": "folder_01"
+        }
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "createProject": {
+            "id": "project_03",
+            "name": "Design System",
+            "status": "DRAFT",
+            "folder": {
+              "id": "folder_01",
+              "name": "Product Planning"
+            }
+          }
+        }
+      }
+      """
+    )
+
+  """
+  Archive a project that is no longer active.
+  """
+  archiveProject(
+    """
+    The unique identifier of the project to archive.
+    """
+    id: ID!
+  ): Project!
+    @example(
+      value: """
+      mutation ArchiveProject($id: ID!) {
+        archiveProject(id: $id) {
+          id
+          name
+          status
+          updatedAt
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "id": "project_01"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "archiveProject": {
+            "id": "project_01",
+            "name": "Mobile Refresh",
+            "status": "ARCHIVED",
+            "updatedAt": "2026-09-05T12:00:00Z"
+          }
+        }
+      }
+      """
+    )
+}
+
+"""
+The kind of change that occurred on a project.
+"""
+enum ProjectEventType {
+  """
+  The project was created.
+  """
+  CREATED
+  """
+  One or more project fields were updated.
+  """
+  UPDATED
+  """
+  The project was archived.
+  """
+  ARCHIVED
+}
+
+"""
+A change delivered to subscribers watching a project.
+"""
+type ProjectEvent
+  @example(
+    value: """
+    {
+      "type": "UPDATED",
+      "project": {
+        "id": "project_01",
+        "name": "Mobile Refresh",
+        "status": "ACTIVE"
+      },
+      "occurredAt": "2026-09-05T10:15:00Z"
+    }
+    """
+  ) {
+  """
+  The kind of change that occurred.
+  """
+  type: ProjectEventType!
+  """
+  The project in its state after the change.
+  """
+  project: Project!
+  """
+  The user who triggered the change, when known.
+  """
+  actor: User
+  """
+  When the change occurred.
+  """
+  occurredAt: DateTime!
+}
+
+type Subscription {
+  """
+  Receive an event whenever a project changes in the workspace.
+  """
+  projectChanged(
+    """
+    Limit events to a single project.
+    """
+    projectId: ID
+    """
+    Limit events to these change kinds.
+    """
+    types: [ProjectEventType!]
+  ): ProjectEvent!
+    @example(
+      value: """
+      subscription WatchProject($projectId: ID, $types: [ProjectEventType!]) {
+        projectChanged(projectId: $projectId, types: $types) {
+          type
+          occurredAt
+          project {
+            id
+            name
+            status
+          }
+          actor {
+            name
+          }
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "projectId": "project_01",
+        "types": ["UPDATED", "ARCHIVED"]
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "projectChanged": {
+            "type": "UPDATED",
+            "occurredAt": "2026-09-05T10:15:00Z",
+            "project": {
+              "id": "project_01",
+              "name": "Mobile Refresh",
+              "status": "ACTIVE"
+            },
+            "actor": {
+              "name": "Avery Chen"
+            }
+          }
+        }
+      }
+      """
+    )
+
+  """
+  Receive folders as they are created in the workspace.
+  """
+  folderCreated(
+    """
+    Limit events to folders created under this parent.
+    """
+    parentId: ID
+  ): Folder!
+    @example(
+      value: """
+      subscription WatchFolders($parentId: ID) {
+        folderCreated(parentId: $parentId) {
+          id
+          name
+          parent
+          createdAt
+        }
+      }
+      """
+    )
+    @exampleVariables(
+      value: """
+      {
+        "parentId": "folder_root"
+      }
+      """
+    )
+    @exampleResponse(
+      value: """
+      {
+        "data": {
+          "folderCreated": {
+            "id": "folder_05",
+            "name": "Q4 Planning",
+            "parent": "folder_root",
+            "createdAt": "2026-09-05T13:20:00Z"
+          }
+        }
+      }
+      """
+    )
+}
