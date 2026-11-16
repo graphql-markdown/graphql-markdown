@@ -9,6 +9,14 @@ import { detectLoader } from "../../lib/schema.mjs";
 
 let work: string;
 
+const formattersVersion = (): string => {
+  const manifest = path.join(
+    import.meta.dirname,
+    "../../../formatters/package.json",
+  );
+  return JSON.parse(fs.readFileSync(manifest, "utf-8")).version;
+};
+
 beforeEach(() => {
   work = fs.mkdtempSync(path.join(os.tmpdir(), "gqlmd-md-"));
 });
@@ -73,7 +81,9 @@ describe("mdx scaffold", () => {
       "    formatter: '@graphql-markdown/formatters/mdx'\n    loaders:\n",
     );
     const pkg = JSON.parse(read(dir, "package.json"));
-    expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe("^1.2.2");
+    expect(pkg.dependencies["@graphql-markdown/formatters"]).toBe(
+      `^${formattersVersion()}`,
+    );
   });
 
   it("throws when the loaders line is missing", () => {

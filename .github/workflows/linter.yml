@@ -84,6 +84,10 @@ jobs:
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run jsr:check
 
+      - name: Check template ranges
+        if: env.RUN_CODE_CHECKS == 'true'
+        run: bun run template-ranges:check
+
       - name: Run TS Check
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run ts:check
