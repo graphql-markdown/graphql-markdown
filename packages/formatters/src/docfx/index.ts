@@ -22,7 +22,10 @@ import type {
   RenderTypeEntitiesHook,
   TypeLink,
 } from "@graphql-markdown/types";
-import { quoteMarkdownLines } from "@graphql-markdown/helpers";
+import {
+  extractFrontmatterTitle,
+  quoteMarkdownLines,
+} from "@graphql-markdown/helpers";
 import {
   capitalize,
   fsOutputAdapter,
@@ -87,10 +90,18 @@ export const formatMDXAdmonition = (
 
 /**
  * Formats YAML front matter, injecting a `uid` field required by DocFX
- * for cross-reference resolution between pages.
+ * for cross-reference resolution between pages, followed by a visible
+ * `# Title` heading.
+ *
+ * DocFX only uses the front matter `title` for the document `<title>`; the
+ * page heading comes from the Markdown H1, so without it generated pages
+ * have no visible title.
+ *
+ * @see https://dotnet.github.io/docfx/docs/markdown.html
+ *
  * @param props - Front matter options; `id` is used as the DocFX `uid` value
  * @param formatted - Pre-formatted front matter lines
- * @returns Formatted front matter block, or empty string if no lines provided
+ * @returns Formatted front matter block and title heading, or empty string if no lines provided
  */
 export const formatMDXFrontmatter = (
   props: Maybe<FrontMatterOptions>,
@@ -105,12 +116,19 @@ export const formatMDXFrontmatter = (
       : undefined;
   const uidLine = id ? [`uid: ${id}`] : [];
 
-  return [
+  const frontMatter = [
     FRONT_MATTER_DELIMITER,
     ...uidLine,
     ...formatted,
     FRONT_MATTER_DELIMITER,
-  ].join(MARKDOWN_EOL) as MDXString;
+  ].join(MARKDOWN_EOL);
+
+  const title = extractFrontmatterTitle(formatted)
+    .replaceAll(/\r?\n/g, " ")
+    .trim();
+  const heading = title ? `${MARKDOWN_EOP}# ${title}` : "";
+
+  return `${frontMatter}${heading}` as MDXString;
 };
 
 /**
