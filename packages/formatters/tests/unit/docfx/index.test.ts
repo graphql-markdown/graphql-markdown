@@ -375,4 +375,98 @@ describe("afterRenderTypeEntitiesHook", () => {
     expect(result).toContain("uid: operations-queries-continent");
     expect(result).not.toContain("uid: old-uid");
   });
+
+  describe("toc.yml order", () => {
+    // Pages are rendered concurrently, so the hooks of a directory finish in
+    // an order that varies from one build to the next.
+    const buildToc = async (completionOrder: string[]): Promise<string> => {
+      const pages = ["zeta", "alpha", "mid"];
+      const store = new Map<string, string>(
+        pages.map((page) => {
+          return [`docs/api/types/objects/${page}.md`, `# ${page}\n`];
+        }),
+      );
+      const pending = new Map<string, () => void>();
+      const outputAdapter = {
+        writeFile: vi.fn(async (filePath: string, content: string) => {
+          store.set(filePath, content);
+        }),
+        readFile: vi.fn(async (filePath: string) => {
+          const page = /objects\/(\w+)\.md$/.exec(filePath)?.[1];
+          if (page && pages.includes(page)) {
+            await new Promise<void>((resolve) => {
+              pending.set(page, resolve);
+            });
+          }
+          return store.get(filePath);
+        }),
+      };
+
+      const hooks = pages.map(async (page) => {
+        return afterRenderTypeEntitiesHook({
+          data: {
+            baseURL: "api",
+            filePath: `docs/api/types/objects/${page}.md`,
+            name: page.toUpperCase(),
+            outputDir: "docs/api",
+            outputAdapter,
+          },
+        });
+      });
+
+      for (const page of completionOrder) {
+        await vi.waitFor(() => {
+          expect(pending.has(page)).toBe(true);
+        });
+        pending.get(page)!();
+        await new Promise((resolve) => {
+          setTimeout(resolve, 5);
+        });
+      }
+      await Promise.all(hooks);
+
+      return store.get("docs/api/types/objects/toc.yml")!;
+    };
+
+    test("does not depend on the order pages finish rendering", async () => {
+      const first = await buildToc(["zeta", "alpha", "mid"]);
+      const second = await buildToc(["mid", "zeta", "alpha"]);
+
+      expect(second).toBe(first);
+      expect(first).toBe(
+        "- name: ALPHA\n  href: alpha.md\n- name: MID\n  href: mid.md\n- name: ZETA\n  href: zeta.md\n",
+      );
+    });
+
+    test("keeps the Overview entry first", async () => {
+      const { mkdtempSync, mkdirSync, writeFileSync, readFileSync } =
+        await import("node:fs");
+      const { tmpdir } = await import("node:os");
+      const { join: pathJoin } = await import("node:path");
+
+      const outputDir = pathJoin(
+        mkdtempSync(pathJoin(tmpdir(), "docfx-toc-")),
+        "docs",
+        "graphql",
+      );
+      const dir = pathJoin(outputDir, "types", "objects");
+      mkdirSync(dir, { recursive: true });
+      writeFileSync(pathJoin(dir, "index.md"), "# Objects\n", "utf-8");
+
+      for (const page of ["zeta", "alpha"]) {
+        const filePath = pathJoin(dir, `${page}.md`);
+        writeFileSync(filePath, `# ${page}\n`, "utf-8");
+        await afterRenderTypeEntitiesHook({
+          data: { baseURL: "graphql", filePath, name: page, outputDir },
+        });
+      }
+
+      expect(readFileSync(pathJoin(dir, "toc.yml"), "utf-8")).toBe(
+        "- name: Objects Overview\n  href: index.md\n- name: alpha\n  href: alpha.md\n- name: zeta\n  href: zeta.md\n",
+      );
+      expect(readFileSync(pathJoin(outputDir, "toc.yml"), "utf-8")).toBe(
+        "- name: Overview\n  href: index.md\n- name: Types\n  href: types/toc.yml\n",
+      );
+    });
+  });
 });
