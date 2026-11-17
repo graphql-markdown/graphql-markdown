@@ -82,3 +82,40 @@ jobs:
 
       - name: Publish to JSR
         run: node packages/tooling-config/scripts/publish-release.mts --yes --registry jsr
+
+  # Tags are created only when both publish jobs succeeded, so a failed or
+  # partial publish never leaves tags on unpublished versions. A manual
+  # single-registry re-run skips the other job and creates no tags; dispatch
+  # with registry=all to tag. `changeset tag` skips tags that already exist
+  # and pushing a tag already on the remote at the same commit is a no-op, so
+  # re-runs are safe. The BOT_PAT push (as in changelog.yml) keeps the job
+  # token read-only.
+  tag-packages:
+    name: Tag packages
+    needs: [publish-npm, publish-jsr]
+    if: ${{ !cancelled() && needs.publish-npm.result == 'success' && needs.publish-jsr.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout Code Base
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup environment
+        uses: $/.github/actions/setup
+
+      - name: Create package tags
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
+          bun run release:tag
+
+      - name: Push package tags
+        env:
+          GH_TOKEN: ${{ secrets.BOT_PAT }}
+        run: |
+          set -euo pipefail
+          git push --tags "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
