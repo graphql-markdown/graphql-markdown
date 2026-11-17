@@ -1015,11 +1015,14 @@ describe("Printer", () => {
       vi.spyOn(Printer, "printRelations").mockReturnValue("");
       vi.spyOn(Printer, "printExample").mockReturnValue("");
       vi.spyOn(Printer, "printTitle").mockReturnValue("# Test");
+      (Printer as any).mdxDeclaration = "MDX DECLARATION";
 
       const result = await Printer.printType("test", { name: "Test" });
 
       expect(Printer.printTitle).toHaveBeenCalledTimes(1);
-      expect(result).toBe("---\nid: test\n---\n\n# Test\n\nCODE");
+      expect(result).toBe(
+        "---\nid: test\n---\n\nMDX DECLARATION\n\n# Test\n\nCODE",
+      );
     });
 
     test("exposes the page title section to BEFORE_COMPOSE_PAGE_TYPE handlers", async () => {
