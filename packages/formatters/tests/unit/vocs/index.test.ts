@@ -9,6 +9,7 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle,
   mdxDeclaration,
 } from "../../../src/vocs/index";
 
@@ -81,17 +82,24 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toContain("title: Test");
   });
 
-  test("adds a visible title heading after the front matter", () => {
+  test("does not add a title heading to the front matter", () => {
+    // the visible title is printed by formatMDXTitle
     const result = formatMDXFrontmatter(undefined, [
       "id: media",
       "title: Media",
     ]);
-    expect(result).toBe("---\nid: media\ntitle: Media\n---\n\n# Media");
+    expect(result).toBe("---\nid: media\ntitle: Media\n---");
+  });
+});
+
+describe("formatMDXTitle", () => {
+  test("renders the page title as a visible H1 heading", () => {
+    // Vocs only uses the front matter title for the document <title>
+    expect(formatMDXTitle("Media")).toBe("# Media");
   });
 
-  test("omits the heading when there is no title", () => {
-    const result = formatMDXFrontmatter(undefined, ["id: media"]);
-    expect(result).toBe("---\nid: media\n---");
+  test("is part of the Vocs formatter", () => {
+    expect(createMDXFormatter().formatMDXTitle).toBe(formatMDXTitle);
   });
 });
 
