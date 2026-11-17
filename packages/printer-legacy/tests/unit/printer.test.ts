@@ -14,6 +14,7 @@ import {
 } from "graphql/type";
 
 import type {
+  Maybe,
   MDXString,
   PageSections,
   PrintTypeOptions,
@@ -230,6 +231,7 @@ describe("Printer", () => {
           "formatMDXNameEntity": [Function],
           "formatMDXPermalink": [Function],
           "formatMDXSpecifiedByLink": [Function],
+          "formatMDXTitle": undefined,
           "frontMatter": {},
           "groups": undefined,
           "hierarchy": {
@@ -303,6 +305,7 @@ describe("Printer", () => {
           "formatMDXNameEntity": [Function],
           "formatMDXPermalink": [Function],
           "formatMDXSpecifiedByLink": [Function],
+          "formatMDXTitle": undefined,
           "frontMatter": {},
           "groups": {},
           "hierarchy": {
@@ -457,6 +460,33 @@ describe("Printer", () => {
           `);
     });
 
+    test("prints only the frontmatter when the formatter has a page title", () => {
+      expect.hasAssertions();
+
+      const formatMDXTitle = vi.fn();
+
+      const header = Printer.printHeader("foo", "Foo", {
+        ...DEFAULT_OPTIONS,
+        formatMDXFrontmatter: vi.fn().mockReturnValue("---\nid: foo\n---"),
+        formatMDXTitle,
+      });
+
+      expect(header).toBe("---\nid: foo\n---");
+      expect(formatMDXTitle).not.toHaveBeenCalled();
+    });
+
+    test("leaves the title to printTitle when frontmatter is disabled and the formatter has a page title", () => {
+      expect.hasAssertions();
+
+      const header = Printer.printHeader("foo", "Foo", {
+        ...DEFAULT_OPTIONS,
+        frontMatter: false,
+        formatMDXTitle: vi.fn(),
+      });
+
+      expect(header).toBe("");
+    });
+
     test("forwards options.entity to formatMDXFrontmatter as page context", () => {
       expect.hasAssertions();
 
@@ -487,6 +517,35 @@ describe("Printer", () => {
         entity: undefined,
       });
     });
+  });
+
+  describe("printTitle()", () => {
+    test("returns an empty string when the formatter has no page title", () => {
+      expect.hasAssertions();
+
+      expect(Printer.printTitle("Foo", DEFAULT_OPTIONS)).toBe("");
+    });
+
+    test.each([
+      { frontMatter: undefined },
+      { frontMatter: {} },
+      { frontMatter: false as const },
+    ])(
+      "prints the formatter page title whatever the frontmatter option ($frontMatter)",
+      ({ frontMatter }) => {
+        expect.hasAssertions();
+
+        const title = Printer.printTitle("Foo", {
+          ...DEFAULT_OPTIONS,
+          frontMatter,
+          formatMDXTitle: (value: string) => {
+            return `# ${value}`;
+          },
+        });
+
+        expect(title).toBe("# Foo");
+      },
+    );
   });
 
   describe("printCode()", () => {
@@ -942,6 +1001,60 @@ describe("Printer", () => {
       expect(result).toBe("SKIPPED - Custom docs");
       // Should only have called beforePrintType, not afterPrintType
       expect(preventingEmitter.emitAsync).toHaveBeenCalledTimes(1);
+    });
+
+    test("prints the page title section after the header sections", async () => {
+      expect.hasAssertions();
+
+      Printer.eventEmitter = null;
+
+      vi.spyOn(Printer, "printHeader").mockReturnValue("---\nid: test\n---");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("CODE");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printTitle").mockReturnValue("# Test");
+      (Printer as any).mdxDeclaration = "MDX DECLARATION";
+
+      const result = await Printer.printType("test", { name: "Test" });
+
+      expect(Printer.printTitle).toHaveBeenCalledTimes(1);
+      expect(result).toBe(
+        "---\nid: test\n---\n\nMDX DECLARATION\n\n# Test\n\nCODE",
+      );
+    });
+
+    test("exposes the page title section to BEFORE_COMPOSE_PAGE_TYPE handlers", async () => {
+      expect.hasAssertions();
+
+      let capturedSections: Maybe<PageSections>;
+      Printer.eventEmitter = {
+        emitAsync: vi
+          .fn()
+          .mockImplementation(
+            async (eventName: string, event: Record<string, unknown>) => {
+              if (eventName === "print:beforeComposePageType") {
+                capturedSections = (
+                  event as { data: { sections: PageSections } }
+                ).data.sections;
+              }
+              return { errors: [], defaultPrevented: false };
+            },
+          ),
+      };
+
+      vi.spyOn(Printer, "printHeader").mockReturnValue("");
+      vi.spyOn(Printer, "printMetaTags").mockReturnValue("");
+      vi.spyOn(Printer, "printCode").mockReturnValue("");
+      vi.spyOn(Printer, "printTypeMetadata").mockReturnValue("");
+      vi.spyOn(Printer, "printRelations").mockReturnValue("");
+      vi.spyOn(Printer, "printExample").mockReturnValue("");
+      vi.spyOn(Printer, "printTitle").mockReturnValue("# Test");
+
+      await Printer.printType("test", { name: "Test" });
+
+      expect(capturedSections?.title).toEqual({ content: "# Test" });
     });
 
     test("renders content sections when no event emitter is configured", async () => {

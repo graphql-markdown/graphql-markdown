@@ -1297,8 +1297,8 @@ describe("generator", () => {
       expect(result).toBe(factoryFormatter);
     });
 
-    test("detects all 9 formatter function types", () => {
-      expect.assertions(10);
+    test("detects all 10 formatter function types", () => {
+      expect.assertions(11);
 
       const mdxModule = {
         formatMDXBadge: vi.fn(),
@@ -1310,6 +1310,7 @@ describe("generator", () => {
         formatMDXNameEntity: vi.fn(),
         formatMDXPermalink: vi.fn(),
         formatMDXSpecifiedByLink: vi.fn(),
+        formatMDXTitle: vi.fn(),
       };
 
       const result = getFormatterFromMDXModule(mdxModule);
@@ -1326,6 +1327,7 @@ describe("generator", () => {
       expect(result!.formatMDXSpecifiedByLink).toBe(
         mdxModule.formatMDXSpecifiedByLink,
       );
+      expect(result!.formatMDXTitle).toBe(mdxModule.formatMDXTitle);
     });
   });
 

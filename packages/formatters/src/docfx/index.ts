@@ -129,6 +129,22 @@ export const formatMDXFrontmatter = (
 };
 
 /**
+ * Formats the page title as a visible `# Title` heading.
+ *
+ * DocFX only uses the front matter `title` for the document `<title>`; the
+ * page heading comes from the Markdown H1, so without it generated pages
+ * have no visible title.
+ *
+ * @see https://dotnet.github.io/docfx/docs/markdown.html
+ *
+ * @param title - The page title
+ * @returns `# Title` heading
+ */
+export const formatMDXTitle = (title: string): MDXString => {
+  return `# ${title}` as MDXString;
+};
+
+/**
  * Returns the link unchanged — DocFX resolves `.md` links natively.
  * @param link - Link data with URL and text
  * @returns The link unchanged
@@ -175,6 +191,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXNameEntity,
     formatMDXPermalink,
     formatMDXSpecifiedByLink,
+    formatMDXTitle,
   };
 };
 

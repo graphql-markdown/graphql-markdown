@@ -130,6 +130,7 @@ const FORMATTER_FUNCTION_NAMES = [
   "formatMDXNameEntity",
   "formatMDXPermalink",
   "formatMDXSpecifiedByLink",
+  "formatMDXTitle",
 ] as const;
 
 /**

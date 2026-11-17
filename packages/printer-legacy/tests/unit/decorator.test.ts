@@ -531,16 +531,19 @@ describe("decorator", () => {
         expect({ ...sections }["__proto__"]).toBeUndefined();
       });
 
-      test("drops decorators claiming a reserved id", () => {
-        expect.assertions(1);
+      test.each(["code", "title"])(
+        "drops decorators claiming the reserved id %s",
+        (id) => {
+          expect.assertions(1);
 
-        const sections = printDecorators(type, {
-          ...options,
-          decorators: { code: declaration } as Decorators,
-        });
+          const sections = printDecorators(type, {
+            ...options,
+            decorators: { [id]: declaration } as Decorators,
+          });
 
-        expect(Object.keys(sections)).toStrictEqual([]);
-      });
+          expect(Object.keys(sections)).toStrictEqual([]);
+        },
+      );
 
       test("returns an empty map if no decorator is declared", () => {
         expect.assertions(2);

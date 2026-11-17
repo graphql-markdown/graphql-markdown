@@ -182,6 +182,8 @@ A decorator declared without a `title` renders bare content: this is how a badge
 
 `tags`, `description`, `code`, `metadata`, `example`, `relations`
 
+The page header sections, always printed first, are reserved too and cannot be used as a decorator id: `header`, `metatags`, `mdxDeclaration` and `title`.
+
 Another decorator can also be named, by its id, as long as it is declared earlier. A decorator whose `position` names an unknown section is appended last.
 
 **Into a named slot** — `{ into: "<slot>" }` appends the decorator's bare (titleless) content into a slot that is not itself a page section:

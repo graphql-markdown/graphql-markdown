@@ -42,6 +42,7 @@ const TYPE_PAGE_HEADER_ORDER = [
   "header",
   "metatags",
   "mdxDeclaration",
+  "title",
 ] as const;
 
 const TYPE_PAGE_SECTION_ORDER = [
@@ -319,12 +320,30 @@ export class Printer implements IPrinter {
     options: PrintTypeOptions,
   ): string => {
     if (options.frontMatter === false) {
-      return `# ${title}${MARKDOWN_EOP}`;
+      // the formatter page title, if any, is printed by `printTitle`
+      return options.formatMDXTitle ? "" : `# ${title}${MARKDOWN_EOP}`;
     }
 
     const fmOptions = options.frontMatter ?? DEFAULT_OPTIONS.frontMatter;
 
     return printFrontMatter(title, { ...fmOptions, id }, options);
+  };
+
+  /**
+   * Prints the visible page title, using the formatter `formatMDXTitle`.
+   *
+   * Independent of the frontmatter: frameworks that render the frontmatter
+   * `title` themselves provide no `formatMDXTitle`, and nothing is printed.
+   *
+   * @param title - Display title for the type
+   * @param options - Printer configuration options
+   * @returns Formatted page title, or an empty string
+   */
+  static readonly printTitle = (
+    title: string,
+    options: PrintTypeOptions,
+  ): string => {
+    return options.formatMDXTitle?.(title) ?? "";
   };
 
   /**
@@ -634,6 +653,12 @@ export class Printer implements IPrinter {
       example: Printer.normalizePageSection(example),
       relations: Printer.normalizePageSection(relations),
       ...Printer.printDecorators(type, printTypeOptions),
+    };
+
+    // The visible page title follows the header sections (frontmatter,
+    // metatags and MDX imports), whatever the frontmatter option.
+    sections.title = {
+      content: Printer.printTitle(getTypeName(type), printTypeOptions),
     };
 
     let sectionOrder: (keyof PageSections)[] = getDecoratorsOrder(

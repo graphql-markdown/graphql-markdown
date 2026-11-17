@@ -10,6 +10,7 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle,
 } from "../../../src/docfx";
 
 describe("formatMDXBadge", () => {
@@ -179,6 +180,17 @@ describe("formatMDXFrontmatter", () => {
   test("uid line is a top-level YAML key", () => {
     const result = formatMDXFrontmatter({ id: "test-id" }, ["title: Test"]);
     expect(result).toBe("---\nuid: test-id\ntitle: Test\n---");
+  });
+});
+
+describe("formatMDXTitle", () => {
+  test("renders the page title as a visible H1 heading", () => {
+    // DocFX only uses the front matter title for the document <title>
+    expect(formatMDXTitle("Country")).toBe("# Country");
+  });
+
+  test("is part of the DocFX formatter", () => {
+    expect(createMDXFormatter().formatMDXTitle).toBe(formatMDXTitle);
   });
 });
 

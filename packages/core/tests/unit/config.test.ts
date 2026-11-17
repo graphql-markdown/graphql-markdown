@@ -912,6 +912,14 @@ describe("config", () => {
       }).toThrow("Decorator id 'metadata' is reserved, please use another id.");
     });
 
+    test("throws an error if a decorator claims the page title section id", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        getDecoratorsOption({ title: decorator } as Decorators);
+      }).toThrow("Decorator id 'title' is reserved, please use another id.");
+    });
+
     test("ignores a decorator named '__proto__', which is not an own property", () => {
       expect.assertions(1);
 
