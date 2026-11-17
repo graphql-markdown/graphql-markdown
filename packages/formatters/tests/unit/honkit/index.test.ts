@@ -9,6 +9,7 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle,
   mdxExtension,
 } from "../../../src/honkit";
 
@@ -117,10 +118,10 @@ describe("formatMDXFrontmatter", () => {
     expect(formatMDXFrontmatter({}, [])).toBe("");
   });
 
-  test("renders YAML block with H1 heading from title", () => {
+  test("renders YAML block without a title heading", () => {
+    // the visible title is printed by formatMDXTitle
     const result = formatMDXFrontmatter({ title: "My Type" }, []);
-    expect(result).toContain("---\ntitle: My Type\n---");
-    expect(result).toContain("# My Type");
+    expect(result).toBe("---\ntitle: My Type\n---");
   });
 
   test("merges formatted lines into YAML, overriding props", () => {
@@ -145,27 +146,51 @@ describe("formatMDXFrontmatter", () => {
     expect(result).toContain("id: test-1");
   });
 
-  test("extracts and normalizes title with newlines", () => {
-    const result = formatMDXFrontmatter({ title: "Title\nWith\nBreaks" }, []);
-    expect(result).toContain("# Title With Breaks");
-  });
-
-  test("normalizes title with carriage returns and newlines", () => {
-    const result = formatMDXFrontmatter({ title: "Title\r\nWith\nBreaks" }, []);
-    // Should normalize \r\n and \n to spaces in the heading
-    expect(result).toContain("# Title With Breaks");
-    // Verify the heading line doesn't have literal newlines within it
-    const headingMatch = /^# .+$/m.exec(result);
-    expect(headingMatch?.[0]).toBe("# Title With Breaks");
-  });
-
-  test("extracts and trims title whitespace", () => {
-    const result = formatMDXFrontmatter({ title: "  Spaced Title  " }, []);
-    expect(result).toContain("# Spaced Title");
-  });
-
   test("returns empty string when formatted is undefined and props is empty", () => {
     expect(formatMDXFrontmatter({}, undefined)).toBe("");
+  });
+});
+
+describe("formatMDXTitle", () => {
+  test("renders the page title as a visible H1 heading", () => {
+    expect(formatMDXTitle("My Type")).toBe("# My Type");
+  });
+
+  test("returns empty string when the title is blank", () => {
+    expect(formatMDXTitle("")).toBe("");
+    expect(formatMDXTitle("  \n ")).toBe("");
+  });
+
+  test("trims title whitespace", () => {
+    expect(formatMDXTitle("  Spaced Title  ")).toBe("# Spaced Title");
+  });
+
+  test("replaces single newlines with spaces", () => {
+    expect(formatMDXTitle("Line One\nLine Two")).toBe("# Line One Line Two");
+  });
+
+  test("replaces carriage return + newline with space", () => {
+    expect(formatMDXTitle("Line One\r\nLine Two")).toBe("# Line One Line Two");
+  });
+
+  test("replaces multiple consecutive newlines", () => {
+    expect(formatMDXTitle("Line One\n\nLine Two")).toBe("# Line One  Line Two");
+  });
+
+  test("handles Windows-style line endings", () => {
+    expect(formatMDXTitle("A\r\nB\r\nC")).toBe("# A B C");
+  });
+
+  test("trims spaces after newline replacement", () => {
+    expect(formatMDXTitle("Title\n  ")).toBe("# Title");
+  });
+
+  test("does not contain literal newlines in heading", () => {
+    expect(formatMDXTitle("Multi\nLine\nTitle")).not.toMatch(/[\r\n]/);
+  });
+
+  test("is part of the HonKit formatter", () => {
+    expect(createMDXFormatter().formatMDXTitle).toBe(formatMDXTitle);
   });
 });
 
@@ -432,47 +457,6 @@ describe("formatMDXSpecifiedByLink", () => {
     expect(formatMDXSpecifiedByLink("https://spec.example")).toBe(
       "\n\nSpecified by: https://spec.example",
     );
-  });
-
-  test("replaces single newlines with spaces in title", () => {
-    const result = formatMDXFrontmatter({ title: "Line One\nLine Two" }, []);
-    expect(result).toContain("# Line One Line Two");
-  });
-
-  test("replaces carriage return + newline with space in title", () => {
-    const result = formatMDXFrontmatter({ title: "Line One\r\nLine Two" }, []);
-    expect(result).toContain("# Line One Line Two");
-  });
-
-  test("replaces multiple consecutive newlines in title", () => {
-    const result = formatMDXFrontmatter({ title: "Line One\n\nLine Two" }, []);
-    expect(result).toContain("# Line One  Line Two");
-  });
-
-  test("handles Windows-style line endings in title", () => {
-    const result = formatMDXFrontmatter({ title: "A\r\nB\r\nC" }, []);
-    expect(result).toContain("# A B C");
-  });
-
-  test("trims spaces after newline replacement in title", () => {
-    const result = formatMDXFrontmatter({ title: "Title\n  " }, []);
-    expect(result).toContain("# Title");
-  });
-
-  test("preserves text content when replacing newlines", () => {
-    const result = formatMDXFrontmatter({ title: "GraphQL\nSchema" }, []);
-    const heading = /# .*/.exec(result);
-    expect(heading).toBeTruthy();
-    expect(heading![0]).toBe("# GraphQL Schema");
-  });
-
-  test("does not contain literal newlines in heading after replacement", () => {
-    const result = formatMDXFrontmatter({ title: "Multi\nLine\nTitle" }, []);
-    const lines = result.split("\n");
-    const headingLine = lines.find((l) => {
-      return l.startsWith("# ");
-    });
-    expect(headingLine).toBe("# Multi Line Title");
   });
 });
 
