@@ -86,6 +86,7 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
   "header",
   "metatags",
   "mdxDeclaration",
+  "title",
   "tags",
   "description",
   "code",
