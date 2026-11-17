@@ -140,3 +140,36 @@ if (!isBot && !isValidPrTitle(pr.title, CZ_EMOJI_TYPES)) {
       `Allowed types: ${types.join(", ")}.`,
   );
 }
+
+// Flags source changes under `packages/*/src/` that ship without a changeset.
+// `.changeset/README.md` is documentation, not a changeset.
+const SRC_FILE = /^packages\/[^/]+\/src\//;
+const CHANGESET_FILE = /^\.changeset\/(?!README\.md$)[^/]+\.md$/;
+const NO_CHANGESET_LABEL = "no-changeset";
+
+const isMissingChangeset = (files) =>
+  files.some((file) => SRC_FILE.test(file)) &&
+  !files.some((file) => CHANGESET_FILE.test(file));
+
+// rule-missing-changeset
+const isReleasePr = new RegExp(
+  `^${emojiPattern(
+    CZ_EMOJI_TYPES.find((type) => type.name === RELEASE_TYPE).emoji,
+  )} release ${SEMVER}$`,
+).test(pr.title.trim());
+const labels = (danger.github.issue.labels || []).map((label) => label.name);
+const changedFiles = [
+  ...danger.git.modified_files,
+  ...danger.git.created_files,
+  ...danger.git.deleted_files,
+];
+if (
+  !isBot &&
+  !isReleasePr &&
+  !labels.includes(NO_CHANGESET_LABEL) &&
+  isMissingChangeset(changedFiles)
+) {
+  warn(
+    `This PR changes package source files but adds no changeset. Run \`bun changeset\` and commit the generated \`.changeset/*.md\` file, or add the \`${NO_CHANGESET_LABEL}\` label if the change does not need a release note.`,
+  );
+}
