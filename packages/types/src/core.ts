@@ -152,6 +152,8 @@ export interface ConfigDocOptions {
    * Whether to use section header IDs for generating permalinks using format \{#id\}.
    * If true, links will be generated with IDs that can be used as anchors in the documentation.
    * This is useful for enabling direct linking to specific sections of the documentation.
+   * If false, field and argument names are printed without a link, since their
+   * headings have no known anchor.
    */
   sectionHeaderId?: boolean;
 }
