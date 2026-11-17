@@ -120,7 +120,9 @@ export interface Formatter {
   formatMDXPermalink: (id: string) => MDXString;
 
   /**
-   * Formats the visible page title, printed after the frontmatter.
+   * Formats the visible page title, printed as the `title` page section after
+   * the frontmatter, metatags and MDX declarations, whatever the frontmatter
+   * option.
    *
    * Optional: most frameworks render the frontmatter `title` themselves, so no
    * title is printed unless the formatter provides this function. When

@@ -43,6 +43,8 @@ export interface PageSections {
   metatags?: PageHeader;
   /** MDX import declarations */
   mdxDeclaration?: PageHeader;
+  /** Visible page title, see `Formatter.formatMDXTitle` */
+  title?: PageHeader;
   /** Custom tags (e.g., \@deprecated) */
   tags?: PageSection;
   /** Type description from GraphQL comments */
