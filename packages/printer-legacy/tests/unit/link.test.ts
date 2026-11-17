@@ -726,7 +726,24 @@ describe("link", () => {
       );
     });
 
-    test("does not include section header id in hash link when disabled", () => {
+    test("links to the section header id when enabled", () => {
+      expect.hasAssertions();
+
+      const result = Link.printLink(
+        {
+          id: "foo-id",
+          text: "foo",
+          url: "#",
+        },
+        { ...DEFAULT_OPTIONS, sectionHeaderId: true },
+      );
+
+      expect(result).toBe(
+        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](#foo-id)',
+      );
+    });
+
+    test("prints the text without a dead hash link when section header id is disabled", () => {
       expect.hasAssertions();
 
       const result = Link.printLink(
@@ -739,7 +756,7 @@ describe("link", () => {
       );
 
       expect(result).toBe(
-        '[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>](#)',
+        '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">foo</code></span>',
       );
     });
   });
