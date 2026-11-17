@@ -36,7 +36,6 @@ import {
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
-  formatMDXFrontmatterTitleOnly,
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
@@ -91,16 +90,26 @@ export const formatMDXDetails = ({
 };
 
 /**
- * Replaces front matter with an H1 title heading.
+ * Suppresses front matter.
  * mdBook renders `---` YAML blocks as literal content, so front matter is
- * suppressed entirely. The page title is emitted as `# Title` instead.
- * @returns `# Title\n` when a title is available, otherwise an empty string
+ * suppressed entirely. The page title is printed by {@link formatMDXTitle}.
+ * @returns An empty string
  */
 export const formatMDXFrontmatter = (
   _props: Maybe<FrontMatterOptions>,
-  formatted: Maybe<string[]>,
+  _formatted: Maybe<string[]>,
 ): MDXString => {
-  return formatMDXFrontmatterTitleOnly(formatted, true);
+  return "" as MDXString;
+};
+
+/**
+ * Formats the page title as a visible `# Title` heading, since front matter
+ * is suppressed.
+ * @param title - The page title
+ * @returns `# Title` heading
+ */
+export const formatMDXTitle = (title: string): MDXString => {
+  return `# ${title}` as MDXString;
 };
 
 /** mdBook expects `.md` files; override the default `.mdx` extension. */
@@ -164,6 +173,7 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXNameEntity,
     formatMDXPermalink,
     formatMDXSpecifiedByLink,
+    formatMDXTitle,
   };
 };
 
