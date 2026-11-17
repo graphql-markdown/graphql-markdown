@@ -18,6 +18,7 @@ Take this document as a set of guidelines, not rules, for contributing to this p
   - [Documentation](#documentation)
   - [Code](#code)
   - [Committing changes](#committing-changes)
+  - [Changesets](#changesets)
 - [Coding style](#coding-style)
   - [Code structure](#code-structure)
   - [Dependencies](#dependencies)
@@ -124,6 +125,27 @@ Smoke tests for the CLI and Docusaurus plugin run automatically in CI on every p
 This project uses the [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) format for commit messages, with an emoji prefix provided by [cz-emoji](https://github.com/ngryman/cz-emoji). When you run `git commit`, [commitizen](https://commitizen.github.io/cz-cli/) will be automatically triggered, and you should get some prompts on the terminal that help you write a good commit message.
 
 The available types are configured in the root `package.json` (`config.cz-emoji`), and result in messages such as `✨ feat: add support for X` or `🐛 fix: resolve Y`. The same convention applies to pull request titles, and Danger checks them on every pull request.
+
+### Changesets
+
+Versions and per-package `CHANGELOG.md` files are managed with [changesets](https://github.com/changesets/changesets). A changeset is a small markdown file in `.changeset/` that describes a change and the version bump it deserves.
+
+**When you need one**: any user-facing change to a package in `packages/*` (a fix, a feature, a breaking change). Docs, CI and test-only changes do not need one. Danger posts a warning on pull requests that change `packages/*/src/` without adding a changeset.
+
+To add one, run:
+
+```shell
+bun changeset
+```
+
+Then:
+
+1. Select the packages you changed.
+2. Pick the bump type for each: `patch` for fixes, `minor` for new features, `major` for breaking changes. Dependents are patch-bumped automatically.
+3. Write the summary for users of the package, not for maintainers: say what changed and why it matters, not which files you touched.
+4. Commit the generated `.changeset/*.md` file with your change.
+
+If your change touches package sources but does not need a release note (for example an internal refactor), ask a maintainer to add the `no-changeset` label to your pull request to silence the warning.
 
 ## Coding style
 
@@ -304,6 +326,23 @@ The generated documentation will be available in each package's `docs/` director
 The monorepo uses `workspace:^` protocol for inter-package dependencies. These must be resolved to actual version numbers before publishing to npm.
 
 **⚠️ Never use `npm publish` directly from a package directory** - it will publish unresolved `workspace:^` dependencies, breaking the package for users.
+
+#### Preparing a release
+
+> **Important**: This section is for maintainers.
+
+1. From an up-to-date `main`, run:
+
+   ```shell
+   bun run release:version
+   ```
+
+   This plans the scaffolder template ranges, runs `changeset version` (which consumes the changesets, bumps the package versions and writes each package `CHANGELOG.md`), applies the template ranges, syncs `jsr.json` and refreshes the lockfile.
+
+2. Review the diff: versions, changelog entries, template ranges and lockfile.
+3. Open a pull request titled `🔖 release 1.x.y` and merge it.
+4. Publish the project GitHub Release. The notes can be drawn from the new package `CHANGELOG.md` entries.
+5. Publishing the release triggers CI, which publishes to npm and then to JSR (see [Automated publishing on release](#automated-publishing-on-release)).
 
 #### Correct Publishing Process
 
