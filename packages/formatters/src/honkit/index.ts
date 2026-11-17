@@ -20,7 +20,6 @@ import type {
 } from "@graphql-markdown/types";
 import {
   appendExtensionToAbsolutePathWithoutExtension,
-  extractFrontmatterTitle,
   formatMarkdownFrontmatter,
   mergeFrontmatterLines,
 } from "@graphql-markdown/helpers";
@@ -85,13 +84,13 @@ export const formatMDXDetails = ({
 };
 
 /**
- * Formats YAML front matter and appends an H1 heading derived from the `title` prop.
+ * Formats YAML front matter.
  * Merges `props` entries with `formatted` lines (formatted lines take precedence).
  * Returns empty string if `props` is empty or absent — HonKit renders front matter
  * without a title as literal YAML content.
- * @param props - Front matter options; `title` is used to generate the H1 heading
+ * @param props - Front matter options
  * @param formatted - Pre-formatted front matter lines that override props values
- * @returns Formatted front matter block with optional H1, or empty string
+ * @returns Formatted front matter block, or empty string
  */
 export const formatMDXFrontmatter = (
   props: Maybe<FrontMatterOptions>,
@@ -103,16 +102,23 @@ export const formatMDXFrontmatter = (
 
   const lines = mergeFrontmatterLines(props, formatted ?? null);
 
-  const frontmatter = formatMarkdownFrontmatter(
+  return formatMarkdownFrontmatter(
     lines,
     FRONT_MATTER_DELIMITER,
     MARKDOWN_EOL,
-  );
+  ) as MDXString;
+};
 
-  const title = extractFrontmatterTitle(lines).replaceAll(/\r?\n/g, " ").trim();
-  const heading = title ? `\n\n# ${title}` : "";
-
-  return `${frontmatter}${heading}` as MDXString;
+/**
+ * Formats the page title as a visible H1 heading.
+ * Line breaks are collapsed to spaces and surrounding whitespace is trimmed,
+ * so the heading stays on a single line.
+ * @param title - The page title
+ * @returns `# Title` heading, or empty string if the title is blank
+ */
+export const formatMDXTitle = (title: string): MDXString => {
+  const heading = title.replaceAll(/\r?\n/g, " ").trim();
+  return (heading ? `# ${heading}` : "") as MDXString;
 };
 
 /**
@@ -184,5 +190,6 @@ export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
     formatMDXNameEntity,
     formatMDXPermalink,
     formatMDXSpecifiedByLink,
+    formatMDXTitle,
   };
 };
