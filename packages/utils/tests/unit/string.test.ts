@@ -176,6 +176,147 @@ describe("string", () => {
     });
 
     test.each([
+      [
+        "trailing unmatched backtick",
+        "<img src=x onerror=alert(1)> {globalThis.pwned = 1} trailing `",
+        "&#x003C;img src=x onerror=alert(1)&#x003E; &#x007B;globalThis.pwned = 1&#x007D; trailing `",
+      ],
+      [
+        "leading unmatched backtick",
+        "` <b>{x}</b>",
+        "` &#x003C;b&#x003E;&#x007B;x&#x007D;&#x003C;/b&#x003E;",
+      ],
+      [
+        "double-backtick opener closed by a single backtick",
+        "``<b>` text",
+        "``&#x003C;b&#x003E;` text",
+      ],
+      [
+        "backslash-escaped opener",
+        "\\``x` <b> `",
+        "\\``x` &#x003C;b&#x003E; `",
+      ],
+      [
+        "inline span split across lines",
+        "`a\n# <b>`",
+        "`a\n# &#x003C;b&#x003E;`",
+      ],
+      [
+        "fence opened mid-line",
+        "x ```\n\n<b>\n\n```",
+        "x ```\n\n&#x003C;b&#x003E;\n\n```",
+      ],
+      ["unclosed fence", "text\n```\n<b>", "text\n```\n&#x003C;b&#x003E;"],
+      [
+        "inline span split by a GFM table cell",
+        "| a | b |\n| - | - |\n| `x | <b> ` |",
+        "| a | b |\n| - | - |\n| `x | &#x003C;b&#x003E; ` |",
+      ],
+      [
+        "inline span split by a CR line ending",
+        "`a\r# <b>`",
+        "`a\n# &#x003C;b&#x003E;`",
+      ],
+      [
+        "inline span split by a CRLF line ending",
+        "`a\r\n# <b>`",
+        "`a\n# &#x003C;b&#x003E;`",
+      ],
+      [
+        "indented fence shifting the pairing of later fences",
+        "x\n  ```\n```\n<b>\n```",
+        "x\n  ```\n```\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "fence at the string start shifting the pairing of later fences",
+        "```\n```\n<b>\n```",
+        "```\n```\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "tilde fence shifting the pairing of later fences",
+        "x\n~~~\n```\n~~~\n<b>\n```",
+        "x\n~~~\n```\n~~~\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "unpaired run that Markdown pairs with a later line",
+        "a ```\n    ```{x}```{x}",
+        "a ```\n    ```&#x007B;x&#x007D;```&#x007B;x&#x007D;",
+      ],
+      [
+        "span across lines hiding an HTML comment from MDX",
+        " `\n| - |`# <!--`",
+        " `\n| - |`# &#x003C;!--`",
+      ],
+      [
+        "indented closer that ends the fence for MDX only",
+        "x\n```\n    ```\n<b>\n```",
+        "x\n```\n    ```\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "tab-indented closer that ends the fence for MDX only",
+        "x\n```\n\t```\n<b>\n```",
+        "x\n```\n\t```\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "indented tilde fence that MDX opens around a later fence",
+        "    ~~~\n```\n    ~~~\n<b>\n```",
+        "    ~~~\n```\n    ~~~\n&#x003C;b&#x003E;\n```",
+      ],
+      [
+        "backticks hidden in a link destination",
+        "x[](``js)`--><!--``",
+        "x[](``js)`--&#x003E;&#x003C;!--``",
+      ],
+      [
+        "backticks in a link title continuing onto the next line",
+        '[x](/u "a\nx `" <b> `',
+        '[x](/u "a\nx `" &#x003C;b&#x003E; `',
+      ],
+      [
+        "inline span containing a pipe outside a table",
+        "`a|b` <b> `",
+        "`a|b` &#x003C;b&#x003E; `",
+      ],
+      [
+        "indented fence that a list item can close early",
+        "- x\n  ```\n<b>\n```",
+        "- x\n  ```\n&#x003C;b&#x003E;\n```",
+      ],
+    ])(
+      "escapes MDX special characters outside real code (%s)",
+      (_, value, expected) => {
+        expect.hasAssertions();
+
+        expect(escapeMDX(value)).toBe(expected);
+      },
+    );
+
+    test.each([
+      [
+        "double-backtick span",
+        "``a ` <b>`` {x}",
+        "``a ` <b>`` &#x007B;x&#x007D;",
+      ],
+      [
+        "inline code at a line start that looks like a fence",
+        "text\n```a<b``` {x}",
+        "text\n```a<b``` &#x007B;x&#x007D;",
+      ],
+      [
+        "fenced code block",
+        "Example:\n```graphql\ntype A { b: <C> }\n```\n{x}",
+        "Example:\n```graphql\ntype A { b: <C> }\n```\n&#x007B;x&#x007D;",
+      ],
+    ])(
+      "preserves MDX special characters in code (%s)",
+      (_, value, expected) => {
+        expect.hasAssertions();
+
+        expect(escapeMDX(value)).toBe(expected);
+      },
+    );
+
+    test.each([
       [5, "5"],
       [{ five: 5 }, "[object Object]"],
     ])("returns a stringified version if not a string", (value, expected) => {

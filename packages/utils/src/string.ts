@@ -152,10 +152,139 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
   return `&#x${unicodeChar.toUpperCase()};`;
 };
 
+const MDX_SPECIAL_CHARS = /[{<_*>}]/g;
+// MDX disables indented code, so micromark then accepts fences with any
+// indentation (CommonMark: up to 3 spaces). Fence-like and closing-fence lines
+// are therefore matched with any leading whitespace.
+const FENCE_LIKE_LINE = /^[ \t]*(?:`{3,}|~{3,})/;
+const TRUSTED_FENCE_OPENER = /^(`{3,})[^`]*$/;
+const BACKTICK_FENCE_CLOSER = /^[ \t]*(`+)[ \t]*$/;
+// A closer both CommonMark and MDX agree on: at most 3 spaces of indentation.
+const STRICT_FENCE_CLOSER = /^ {0,3}`/;
+// A backtick run followed by another backtick on its line is never a fence
+// (backtick fence info strings cannot hold backticks), only inline code.
+const NON_FENCE_BACKTICK_LINE = /^[ \t]*`{3,}(?!`)[^`]*`/;
+// Link destinations and titles (`](`), and reference definitions (`]:`), are
+// parsed before code spans and may continue onto later lines.
+const LINK_DESTINATION = /\]\(|\]:/;
+
+const escapeMDXText = (text: string): string => {
+  return text.replaceAll(MDX_SPECIAL_CHARS, toHTMLUnicode);
+};
+
+const getBacktickRunLength = (text: string, index: number): number => {
+  let end = index;
+  while (text[end] === "`") {
+    end += 1;
+  }
+  return end - index;
+};
+
+const isBackslashEscaped = (text: string, index: number): boolean => {
+  let count = 0;
+  for (let i = index - 1; i >= 0 && text[i] === "\\"; i -= 1) {
+    count += 1;
+  }
+  return count % 2 === 1;
+};
+
+/**
+ * Returns the end index of the first backtick run of exactly `length`
+ * starting at or after `from` in `line`, or `undefined` if there is none.
+ */
+const findInlineCloserEnd = (
+  line: string,
+  from: number,
+  length: number,
+): number | undefined => {
+  let index = line.indexOf("`", from);
+  while (index !== -1) {
+    const runLength = getBacktickRunLength(line, index);
+    if (runLength === length) {
+      return index + runLength;
+    }
+    index = line.indexOf("`", index + runLength);
+  }
+  return undefined;
+};
+
+/**
+ * Escapes one line outside its inline code spans, pairing backtick runs left
+ * to right within the line as CommonMark does.
+ *
+ * `closed` is `false` when a backtick run stays unpaired: Markdown may pair it
+ * with a run on a later line, so the caller must stop preserving code there.
+ * A line containing `|` may be a GFM table row, whose cells are split before
+ * code spans are parsed, so it is escaped entirely.
+ */
+const escapeMDXLine = (line: string): { text: string; closed: boolean } => {
+  if (line.includes("|")) {
+    return { text: escapeMDXText(line), closed: !line.includes("`") };
+  }
+
+  let text = "";
+  let cursor = 0;
+  let closed = true;
+  let index = line.indexOf("`");
+
+  while (index !== -1) {
+    let runLength = getBacktickRunLength(line, index);
+    // A backslash-escaped backtick is literal text, not part of an opener.
+    if (isBackslashEscaped(line, index)) {
+      index += 1;
+      runLength -= 1;
+    }
+    const closerEnd =
+      runLength > 0
+        ? findInlineCloserEnd(line, index + runLength, runLength)
+        : undefined;
+
+    if (closerEnd === undefined) {
+      closed &&= runLength === 0;
+      index = line.indexOf("`", index + Math.max(runLength, 1));
+      continue;
+    }
+
+    text += escapeMDXText(line.slice(cursor, index));
+    text += line.slice(index, closerEnd);
+    cursor = closerEnd;
+    index = line.indexOf("`", closerEnd);
+  }
+
+  return { text: text + escapeMDXText(line.slice(cursor)), closed };
+};
+
+const hasFenceCloser = (
+  lines: string[],
+  openerIndex: number,
+  length: number,
+): boolean => {
+  for (let index = openerIndex + 1; index < lines.length; index += 1) {
+    const closer = BACKTICK_FENCE_CLOSER.exec(lines[index]);
+    if (closer !== null && closer[1].length >= length) {
+      return true;
+    }
+  }
+  return false;
+};
+
 /**
  * Returns a string with MDX special characters converted to HTML unicode using {@link toHTMLUnicode}.
- * Characters within code notation should not be converted.
- * List of special characters: `{`, `<`, `>`, `}`
+ * List of special characters: `{`, `<`, `>`, `}`, `_`, `*`.
+ *
+ * Characters inside code are not converted, but only where Markdown is
+ * certain to parse the same code boundaries; anything ambiguous is escaped.
+ * Over-escaping only affects readability, while under-escaping would let
+ * schema text inject raw HTML/MDX. Code is preserved in:
+ * - inline code spans paired within a single line, on lines without `|`
+ *   (GFM table cells), `](` or `]:` (link destinations and titles);
+ * - fenced code blocks opened by 3+ backticks at column 0 of a line other than
+ *   the first, with no backtick in the info string, and a closing fence.
+ *
+ * Once a line leaves a backtick run unpaired, holds a link destination, or is
+ * a fence-like line not matching the rule above (indented, tilde, or on the
+ * first line), Markdown may pair later backticks differently, so everything
+ * after it is escaped.
  *
  * @internal
  *
@@ -176,10 +305,61 @@ export const toHTMLUnicode = (char: Maybe<string>): string => {
  *
  */
 export const escapeMDX = (str: unknown): string => {
-  return `${String(str)}`.replaceAll(
-    /(?<!`)([{<_*>}])(?=(?:[^`]*`[^`]*`)*[^`]*$)/g, // NOSONAR - Safe pattern, used to escape MDX special characters outside code blocks
-    toHTMLUnicode,
-  );
+  // CommonMark treats `\r\n` and `\r` as line endings too; normalise them so
+  // the line-based checks see the same lines Markdown does.
+  const lines = String(str).replaceAll(/\r\n?/g, "\n").split("\n");
+  const output: string[] = [];
+  let trusted = true;
+  let fenceLength = 0;
+
+  for (const [lineIndex, line] of lines.entries()) {
+    if (!trusted) {
+      output.push(escapeMDXText(line));
+      continue;
+    }
+
+    if (fenceLength > 0) {
+      const closer = BACKTICK_FENCE_CLOSER.exec(line);
+      if (closer && closer[1].length >= fenceLength) {
+        fenceLength = 0;
+        // An indented closer ends the fence for MDX but not for CommonMark,
+        // so what follows may be outside code for one of them.
+        trusted = STRICT_FENCE_CLOSER.test(line);
+        output.push(trusted ? line : escapeMDXText(line));
+        continue;
+      }
+      output.push(line);
+      continue;
+    }
+
+    if (FENCE_LIKE_LINE.test(line) && !NON_FENCE_BACKTICK_LINE.test(line)) {
+      const opener = TRUSTED_FENCE_OPENER.exec(line);
+      if (
+        lineIndex > 0 &&
+        opener !== null &&
+        hasFenceCloser(lines, lineIndex, opener[1].length)
+      ) {
+        fenceLength = opener[1].length;
+        output.push(line);
+      } else {
+        trusted = false;
+        output.push(escapeMDXText(line));
+      }
+      continue;
+    }
+
+    if (LINK_DESTINATION.test(line)) {
+      trusted = false;
+      output.push(escapeMDXText(line));
+      continue;
+    }
+
+    const { text, closed } = escapeMDXLine(line);
+    output.push(text);
+    trusted = closed;
+  }
+
+  return output.join("\n");
 };
 
 /**
