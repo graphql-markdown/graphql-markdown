@@ -11,6 +11,7 @@ import {
   formatMDXNameEntity,
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
+  formatMDXTitle,
   mdxExtension,
 } from "../../../src/mdbook";
 
@@ -111,20 +112,21 @@ describe("formatMDXDetails", () => {
 });
 
 describe("formatMDXFrontmatter", () => {
-  test("emits H1 title — mdBook renders YAML front matter as literal content", () => {
+  test("suppresses front matter — mdBook renders YAML front matter as literal content", () => {
     expect(formatMDXFrontmatter(undefined, ["id: test", "title: Test"])).toBe(
-      "# Test\n",
+      "",
     );
+    expect(formatMDXFrontmatter({ title: "Test" }, ["title: Test"])).toBe("");
+  });
+});
+
+describe("formatMDXTitle", () => {
+  test("renders the page title as a visible H1 heading", () => {
+    expect(formatMDXTitle("Test")).toBe("# Test");
   });
 
-  test("returns empty string when no title line is present", () => {
-    expect(formatMDXFrontmatter(undefined, ["id: test"])).toBe("");
-  });
-
-  test("ignores props — title is always sourced from the formatted array", () => {
-    expect(
-      formatMDXFrontmatter({ title: "ignored" }, ["title: FromFormatted"]),
-    ).toBe("# FromFormatted\n");
+  test("is part of the mdBook formatter", () => {
+    expect(createMDXFormatter().formatMDXTitle).toBe(formatMDXTitle);
   });
 });
 
