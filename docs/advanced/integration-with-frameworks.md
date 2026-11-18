@@ -129,7 +129,7 @@ A custom MDX module can export individual formatter functions:
 | `formatMDXLink`            | `(link: { text, url }) => { text, url }`                          | Transform type links                                                                                                                            |
 | `formatMDXNameEntity`      | `(name: string, parentType?: string) => string`                   | Format named entity references                                                                                                                  |
 | `formatMDXPermalink`       | `(id: string) => string`                                          | Format section header permalinks                                                                                                                |
-| `formatMDXSpecifiedByLink` | `(url: string) => string`                                         | Format scalar specification links                                                                                                               |
+| `formatMDXSpecifiedByLink` | `(url: string) => string`                                         | Format scalar specification links. Receives an absolute `http(s)` URL; encode it for where you write it (for example as an HTML attribute)      |
 | `formatMDXTitle`           | `(title: string) => string`                                       | Optional: format a visible page title printed after the frontmatter (e.g. `# Title`), for frameworks that do not render the frontmatter `title` |
 
 Optional exports:

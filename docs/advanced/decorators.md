@@ -42,6 +42,7 @@ type Query {
 
 ```js title=".graphqlrc.js"
 const { getDirectiveFromSchema, getTypeDirectiveValuesList, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { escapeMDX } = require("@graphql-markdown/utils");
 
 decorators: {
   responses: {
@@ -56,7 +57,7 @@ decorators: {
       return [
         "| Code | Description |",
         "| ---- | ----------- |",
-        ...values.map((value) => `| \`${value.code}\` | ${value.description ?? ""} |`),
+        ...values.map((value) => `| ${escapeMDX(`\`${value.code}\``)} | ${escapeMDX(value.description ?? "")} |`),
       ].join("\n");
     },
   },
@@ -107,6 +108,7 @@ A decorator is skipped, and nothing is printed, when its predicate does not matc
 
 ```js title=".graphqlrc.js"
 const { hasDirectiveNamed, isEntity, and } = require("@graphql-markdown/graphql");
+const { escapeMDX } = require("@graphql-markdown/utils");
 
 decorators: {
   responses: {
@@ -114,7 +116,7 @@ decorators: {
     predicate: and(hasDirectiveNamed("httpResponse"), isEntity("queries", "mutations")),
     title: "Responses",
     resolve: /* ... */,
-    render: (values) => values.map((v) => `- \`${v.code}\` ${v.description}`).join("\n"),
+    render: (values) => values.map((v) => `- ${escapeMDX(`\`${v.code}\``)} ${escapeMDX(v.description)}`).join("\n"),
   },
 }
 ```
@@ -167,6 +169,12 @@ render: (values, options, context) => {
 - `context.id` — the decorator's id.
 - `context.type` — the GraphQL node being printed.
 - `context.entity` — the node's schema entity kind, when resolvable.
+
+:::warning
+
+`render` returns Markdown/MDX that is printed into the page as-is: it is not escaped. Escape any value that comes from the schema (descriptions, directive arguments) with `escapeMDX` from `@graphql-markdown/utils`, or text in the schema can inject HTML, JSX or MDX expressions into the generated page. Escape a value shown as inline code together with its backticks, ```escapeMDX(`\`${value}\``)```, so it still renders as code, and encode values used in a URL with `encodeURIComponent`.
+
+:::
 
 There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely — or with `@graphql-markdown/helpers`'s `withDirective`, which wraps exactly that lookup (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
 
@@ -225,6 +233,7 @@ directive @httpHeader(
 
 ```js
 const { directiveOccurrences, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { escapeMDX } = require("@graphql-markdown/utils");
 
 {
   httpHeader: {
@@ -234,7 +243,7 @@ const { directiveOccurrences, hasDirectiveNamed } = require("@graphql-markdown/g
     resolve: directiveOccurrences("httpHeader"),
     render: (values) => {
       return values
-        .map((value) => `- \`${value.name}\`${value.required ? " *(required)*" : ""}`)
+        .map((value) => `- ${escapeMDX(`\`${value.name}\``)}${value.required ? " *(required)*" : ""}`)
         .join("\n");
     },
   },
@@ -278,6 +287,7 @@ directive @meta(type: String!) on FIELD_DEFINITION
 
 ```js
 const { directiveOccurrence, hasDirectiveNamed } = require("@graphql-markdown/graphql");
+const { escapeMDX } = require("@graphql-markdown/utils");
 
 {
   meta: {
@@ -286,8 +296,8 @@ const { directiveOccurrence, hasDirectiveNamed } = require("@graphql-markdown/gr
     position: { after: "code" },
     resolve: directiveOccurrence("meta"),
     render: ([value], options) => {
-      const slug = String(value.type).toLowerCase();
-      return `Returned alongside the data: [\`${value.type}\`](${options.basePath}/objects/${slug}).`;
+      const slug = encodeURIComponent(String(value.type).toLowerCase());
+      return `Returned alongside the data: [${escapeMDX(`\`${value.type}\``)}](${options.basePath}/objects/${slug}).`;
     },
   },
 }
@@ -343,7 +353,7 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#disp
 +     predicate: hasDirectiveNamed("auth"),
 +     position: { into: "description" },
 +     render: withDirective("auth", (directive, options, { type }) =>
-+       directiveDescriptor(directive, type, "Requires the `${requires}` role."),
++       escapeMDX(directiveDescriptor(directive, type, "Requires the `${requires}` role.")),
 +     ),
 +   },
 +   authTag: {
@@ -356,7 +366,7 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#disp
 + },
 ```
 
-A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. `directiveTag` still only builds the `Badge` object (`{ text, classname }`); turning it into Markdown is now the decorator's own job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`) — the same badge renderer the printer uses for its own tags, so custom badges stay visually consistent and keep working if the configured formatter changes.
+`customDirective` escaped the `descriptor` output for you; a decorator's `render` output is printed as-is, so wrap `directiveDescriptor` in `escapeMDX` (from `@graphql-markdown/utils`) as shown. A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. `directiveTag` still only builds the `Badge` object (`{ text, classname }`); turning it into Markdown is now the decorator's own job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`) — the same badge renderer the printer uses for its own tags, so custom badges stay visually consistent and keep working if the configured formatter changes.
 
 ## Helpers
 
