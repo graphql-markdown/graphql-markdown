@@ -91,6 +91,8 @@ module.exports = {
 };
 ```
 
+The descriptor output is printed as text: MDX special characters (`{ } < > _ *`) are escaped, so a descriptor cannot inject HTML, JSX or MDX into the page.
+
 ### `tag`
 
 The `tag` allows rendering custom badges (tags) based on the custom directive applicable to entities.

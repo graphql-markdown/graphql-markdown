@@ -1,6 +1,8 @@
 import { buildSchema } from "graphql/utilities";
 import { GraphQLDirective } from "graphql/type";
 
+import { escapeMDX } from "@graphql-markdown/utils";
+
 import type {
   Badge,
   CustomDirectiveMap,
@@ -117,6 +119,75 @@ describe("buildCustomDirectiveDecorators", () => {
         title: "Directives",
         content: expect.stringContaining("Test testA"),
       });
+    });
+
+    test("escapes injected HTML, JSX and MDX in the descriptor output", () => {
+      expect.assertions(3);
+
+      const injected = "A <Injected /> {globalThis.x = 1}";
+      const hostile = buildCustomDirectiveDecorators({
+        ["testA" as DirectiveName]: {
+          type: schema.getDirective("testA")!,
+          descriptor: (): string => {
+            return injected;
+          },
+        },
+      } as CustomDirectiveMap);
+
+      const content = printDecorators(type, {
+        ...DEFAULT_OPTIONS,
+        schema,
+        decorators: hostile,
+      }).customDirectives?.content as string;
+
+      expect(content).not.toContain("<Injected />");
+      expect(content).not.toContain("{globalThis");
+      expect(content).toContain(escapeMDX(injected));
+    });
+
+    test("escapes a closing tag in the descriptor output", () => {
+      expect.assertions(2);
+
+      const closing = "text </p> more";
+      const hostile = buildCustomDirectiveDecorators({
+        ["testA" as DirectiveName]: {
+          type: schema.getDirective("testA")!,
+          descriptor: (): string => {
+            return closing;
+          },
+        },
+      } as CustomDirectiveMap);
+
+      const content = printDecorators(type, {
+        ...DEFAULT_OPTIONS,
+        schema,
+        decorators: hostile,
+      }).customDirectives?.content as string;
+
+      expect(content).not.toContain("</p>");
+      expect(content).toContain(escapeMDX(closing));
+    });
+
+    test("keeps a plain text descriptor unchanged", () => {
+      expect.assertions(1);
+
+      const plain = "Plain descriptor text";
+      const plainDecorators = buildCustomDirectiveDecorators({
+        ["testA" as DirectiveName]: {
+          type: schema.getDirective("testA")!,
+          descriptor: (): string => {
+            return plain;
+          },
+        },
+      } as CustomDirectiveMap);
+
+      const content = printDecorators(type, {
+        ...DEFAULT_OPTIONS,
+        schema,
+        decorators: plainDecorators,
+      }).customDirectives?.content as string;
+
+      expect(content).toContain(` ${plain}`);
     });
 
     test("is positioned right after code, like the pre-decorators built-in order", () => {

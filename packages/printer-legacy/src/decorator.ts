@@ -148,7 +148,9 @@ const getCustomDirectiveResolver = (
 
 /**
  * Prints a single custom directive entry as a Markdown string, for the
- * built-in "Directives" section.
+ * built-in "Directives" section. The descriptor output is treated as text and
+ * escaped with `escapeMDX`, like the `customDirective:description` slot, so it
+ * cannot inject HTML, JSX or MDX into the page.
  *
  * @internal
  */
@@ -171,7 +173,7 @@ const printCustomDirective = (
     return undefined;
   }
 
-  return `${SectionLevels.LEVEL.repeat(4)} ${typeNameLink}${MARKDOWN_EOL} ${description}${MARKDOWN_EOL} `;
+  return `${SectionLevels.LEVEL.repeat(4)} ${typeNameLink}${MARKDOWN_EOL} ${escapeMDX(description)}${MARKDOWN_EOL} `;
 };
 
 /**
