@@ -252,18 +252,18 @@ The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI i
 
 The custom module can export individual formatter functions:
 
-| Export                     | Type                                       | Description                                                |
-| -------------------------- | ------------------------------------------ | ---------------------------------------------------------- |
-| `formatMDXBadge`           | `(badge: { text, classname? }) => string`  | Format type badges                                         |
-| `formatMDXAdmonition`      | `(admonition, meta?) => string`            | Format callout/warning blocks                              |
-| `formatMDXBullet`          | `(text?: string) => string`                | Format bullet point separators                             |
-| `formatMDXDetails`         | `(option) => string`                       | Format collapsible sections                                |
-| `formatMDXFrontmatter`     | `(props?, formatted?, context?) => string` | Format page frontmatter                                    |
-| `formatMDXLink`            | `(link) => { text, url }`                  | Transform type links                                       |
-| `formatMDXNameEntity`      | `(name, parentType?) => string`            | Format named entity references                             |
-| `formatMDXPermalink`       | `(id) => string`                           | Format section header permalinks                           |
-| `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links                          |
-| `formatMDXTitle`           | `(title) => string`                        | Optional visible page title, printed after the frontmatter |
+| Export                     | Type                                       | Description                                                                                                                                |
+| -------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`  | Format type badges                                                                                                                         |
+| `formatMDXAdmonition`      | `(admonition, meta?) => string`            | Format callout/warning blocks                                                                                                              |
+| `formatMDXBullet`          | `(text?: string) => string`                | Format bullet point separators                                                                                                             |
+| `formatMDXDetails`         | `(option) => string`                       | Format collapsible sections                                                                                                                |
+| `formatMDXFrontmatter`     | `(props?, formatted?, context?) => string` | Format page frontmatter                                                                                                                    |
+| `formatMDXLink`            | `(link) => { text, url }`                  | Transform type links                                                                                                                       |
+| `formatMDXNameEntity`      | `(name, parentType?) => string`            | Format named entity references                                                                                                             |
+| `formatMDXPermalink`       | `(id) => string`                           | Format section header permalinks                                                                                                           |
+| `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links. Receives an absolute `http(s)` URL; encode it for where you write it (for example as an HTML attribute) |
+| `formatMDXTitle`           | `(title) => string`                        | Optional visible page title, printed after the frontmatter                                                                                 |
 
 For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
 
