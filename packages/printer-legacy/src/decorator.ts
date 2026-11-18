@@ -52,12 +52,7 @@ import { formatBadges } from "./badge.ts";
 import { printExample } from "./example.ts";
 import { printLink } from "./link.ts";
 
-import {
-  MARKDOWN_EOC,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  MARKDOWN_SOC,
-} from "./const/strings.ts";
+import { MARKDOWN_EOL, MARKDOWN_EOP, printCodeBlock } from "./const/strings.ts";
 import { SectionLevels } from "./const/options.ts";
 
 export { getSchemaEntity };
@@ -336,7 +331,7 @@ export const getExampleSectionDefinition = (): ResolvedDecorator => {
       return example ? [{ example }] : [];
     },
     render: (values: Record<string, unknown>[]): string => {
-      return `${MARKDOWN_SOC}${values[0]!.example as string}${MARKDOWN_EOC}`;
+      return printCodeBlock(values[0]!.example as string);
     },
   };
 };

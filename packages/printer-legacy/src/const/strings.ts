@@ -42,10 +42,26 @@ const GRAPHQL = "graphql" as const;
 /** Default placeholder when no schema description is provided. */
 export const NO_DESCRIPTION_TEXT = "No description" as const;
 
-/** Helper for inserting the code-block end delimiter in generated Markdown. */
-export const MARKDOWN_EOC: string =
-  `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${MARKDOWN_EOL}` as const;
-
-/** Helper for inserting the code-block start delimiter targeting GraphQL syntax. */
-export const MARKDOWN_SOC: string =
-  `${MARKDOWN_EOL}${MARKDOWN_CODE_SNIPPET}${GRAPHQL}${MARKDOWN_EOL}` as const;
+/**
+ * Wraps code in a fenced code block. The fence is longer than any run of
+ * backticks in the code, so schema text inside cannot close it early.
+ *
+ * @param code - the code to wrap.
+ * @param language - the fence language, defaults to `graphql`.
+ *
+ * @returns the fenced code block, surrounded by line breaks.
+ */
+export const printCodeBlock = (
+  code: string,
+  language: string = GRAPHQL,
+): string => {
+  const char = MARKDOWN_CODE_SNIPPET[0]!;
+  const longestRun = Math.max(
+    0,
+    ...(code.match(new RegExp(`${char}+`, "g")) ?? []).map((run) => {
+      return run.length;
+    }),
+  );
+  const fence = char.repeat(Math.max(3, longestRun + 1));
+  return `${MARKDOWN_EOL}${fence}${language}${MARKDOWN_EOL}${code}${MARKDOWN_EOL}${fence}${MARKDOWN_EOL}`;
+};

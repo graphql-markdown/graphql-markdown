@@ -6,8 +6,11 @@ import {
   GraphQLInputObjectType,
   GraphQLInt,
   GraphQLList,
+  GraphQLNonNull,
+  GraphQLScalarType,
   GraphQLString,
 } from "graphql/type";
+import { Kind, print } from "graphql/language";
 
 import { getFormattedDefaultValue } from "../../src/formatter";
 
@@ -171,5 +174,91 @@ describe("formatter", () => {
 
       expect(getFormattedDefaultValue(argument)).toBe("{ foo: RED }");
     });
+  });
+});
+
+describe("getFormattedDefaultValue() string escaping", () => {
+  const malicious = "\n```\n<img src=x onerror=alert(1) />\n```\n";
+  const scalar = new GraphQLScalarType({ name: "Custom" });
+
+  test("prints a String default as an escaped single-line literal", () => {
+    expect.hasAssertions();
+
+    const result = getFormattedDefaultValue({
+      type: GraphQLString,
+      defaultValue: malicious,
+    })!;
+
+    expect(result).not.toContain("\n");
+    expect(result).toBe(print({ kind: Kind.STRING, value: malicious }));
+    expect(result).toBe('"\\n```\\n<img src=x onerror=alert(1) />\\n```\\n"');
+  });
+
+  test("escapes quotes and backslashes", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({ type: GraphQLString, defaultValue: 'a"b\\c' }),
+    ).toBe('"a\\"b\\\\c"');
+  });
+
+  test("quotes and escapes a String! default", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({
+        type: new GraphQLNonNull(GraphQLString),
+        defaultValue: "a\nb",
+      }),
+    ).toBe('"a\\nb"');
+  });
+
+  test("quotes and escapes a [String]! default", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({
+        type: new GraphQLNonNull(new GraphQLList(GraphQLString)),
+        defaultValue: ["a", 'b"'],
+      }),
+    ).toBe('["a", "b\\""]');
+  });
+
+  test("quotes a custom scalar string default", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({ type: scalar, defaultValue: "x\ny" }),
+    ).toBe('"x\\ny"');
+  });
+
+  test("keeps a non-null enum default unquoted", () => {
+    expect.hasAssertions();
+
+    const enumType = new GraphQLEnumType({
+      name: "E",
+      values: { A: { value: "A" } },
+    });
+
+    expect(
+      getFormattedDefaultValue({
+        type: new GraphQLNonNull(enumType),
+        defaultValue: "A",
+      }),
+    ).toBe("A");
+  });
+
+  test("leaves Int and Boolean unchanged", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({
+        type: new GraphQLNonNull(GraphQLInt),
+        defaultValue: 3,
+      }),
+    ).toBe(3);
+    expect(
+      getFormattedDefaultValue({ type: GraphQLBoolean, defaultValue: false }),
+    ).toBe(false);
   });
 });

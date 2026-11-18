@@ -102,12 +102,7 @@ import {
 } from "./graphql/index.ts";
 import { hasPrintableDirective } from "./link.ts";
 
-import {
-  MARKDOWN_EOC,
-  MARKDOWN_EOL,
-  MARKDOWN_EOP,
-  MARKDOWN_SOC,
-} from "./const/strings.ts";
+import { MARKDOWN_EOL, MARKDOWN_EOP, printCodeBlock } from "./const/strings.ts";
 import { createDefaultFormatter } from "./formatter.ts";
 import {
   DEFAULT_OPTIONS,
@@ -388,7 +383,7 @@ export class Printer implements IPrinter {
         code = `"${getTypeName(type)}" not supported`;
     }
 
-    return MARKDOWN_SOC + code.trim() + MARKDOWN_EOC;
+    return printCodeBlock(code.trim());
   };
 
   /**

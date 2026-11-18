@@ -116,6 +116,27 @@ describe("decorator", () => {
       schema: exampleSchema,
     } as PrintTypeOptions;
 
+    test("uses a fence longer than any backtick run in the example", () => {
+      expect.assertions(1);
+
+      const schema = buildSchema(`
+        directive @example(value: String) on OBJECT
+
+        type Sample @example(value: """
+        \`\`\`
+        <img src=x />""") {
+          id: ID!
+        }
+      `);
+      const result = printDecorator(
+        schema.getType("Sample")!,
+        getExampleSectionDefinition(),
+        { ...DEFAULT_OPTIONS, schema } as PrintTypeOptions,
+      ) as { content: string };
+
+      expect(result.content).toMatch(/^\n````graphql\n[\s\S]*\n````\n/);
+    });
+
     test("renders the example as a code block section", () => {
       expect.assertions(1);
 

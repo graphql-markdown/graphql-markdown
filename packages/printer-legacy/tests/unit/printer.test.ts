@@ -573,6 +573,19 @@ describe("Printer", () => {
       expect(code).toMatchSnapshot();
     });
 
+    test("uses a fence longer than any backtick run in the generated code", () => {
+      expect.hasAssertions();
+
+      vi.spyOn(GraphQL, "isOperation").mockReturnValue(true);
+      vi.spyOn(GraphQLPrinter, "printCodeOperation").mockReturnValue(
+        "field: ID\n```\n<img src=x />",
+      );
+
+      const code = Printer.printCode({ name: "x" }, DEFAULT_OPTIONS);
+
+      expect(code).toBe("\n````graphql\nfield: ID\n```\n<img src=x />\n````\n");
+    });
+
     test("passes namespace parts to printCodeOperation", () => {
       expect.hasAssertions();
 

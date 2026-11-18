@@ -4,16 +4,13 @@
  * @packageDocumentation
  */
 
+import { Kind, print } from "graphql/language";
 import {
   getNamedType,
-  GraphQLBoolean,
-  GraphQLFloat,
-  GraphQLID,
-  GraphQLInt,
-  GraphQLString,
   isEnumType,
   isInputObjectType,
   isListType,
+  isNonNullType,
 } from "graphql/type";
 
 import type {
@@ -23,6 +20,8 @@ import type {
 } from "@graphql-markdown/types";
 /**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
+ * Enum values are returned as-is; string values are printed as escaped single-line
+ * GraphQL string literals (same as graphql-js `printSchema`); other values are unchanged.
  *
  * @internal
  *
@@ -40,17 +39,11 @@ const _formatDefaultValue = <T>(
     return defaultValue;
   }
 
-  switch (type) {
-    case GraphQLInt:
-    case GraphQLFloat:
-    case GraphQLBoolean:
-      return defaultValue;
-    case GraphQLID:
-    case GraphQLString:
-      return `"${defaultValue}"`;
-    default:
-      return defaultValue;
+  if (typeof defaultValue === "string") {
+    return print({ kind: Kind.STRING, value: defaultValue });
   }
+
+  return defaultValue;
 };
 
 /**
@@ -140,13 +133,15 @@ export const getFormattedDefaultValue = <T>({
     return undefined;
   }
 
-  if (isListType(type)) {
-    return _formatListDefaultValues(getNamedType(type), defaultValue);
+  const nullableType = isNonNullType(type) ? type.ofType : type;
+
+  if (isListType(nullableType)) {
+    return _formatListDefaultValues(getNamedType(nullableType), defaultValue);
   }
 
-  if (isInputObjectType(type)) {
-    return _formatInputDefaultValues(type, defaultValue);
+  if (isInputObjectType(nullableType)) {
+    return _formatInputDefaultValues(nullableType, defaultValue);
   }
 
-  return _formatDefaultValue(type, defaultValue);
+  return _formatDefaultValue(nullableType, defaultValue);
 };
