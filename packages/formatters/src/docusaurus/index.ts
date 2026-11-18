@@ -29,6 +29,7 @@ import {
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
 import { formatMDXEscapedPermalink } from "../defaults.ts";
+import { escapeHTMLAttribute } from "../escape.ts";
 import { isFrameworkVersion, isFrameworkVersionAtLeast } from "../version.ts";
 
 const LINK_MDX_EXTENSION = ".mdx" as const;
@@ -109,11 +110,12 @@ export const formatMDXDetails = ({
 
 /**
  * Formats a "specified by" link using the inline `<SpecifiedBy>` component.
+ * The URL is encoded as HTML character references for the `url` attribute.
  * @param url - URL to the specification
  * @returns Formatted SpecifiedBy component string
  */
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `<SpecifiedBy url="${url}"/>` as MDXString;
+  return `<SpecifiedBy url="${escapeHTMLAttribute(url)}"/>` as MDXString;
 };
 
 /**

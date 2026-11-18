@@ -25,6 +25,7 @@ import {
 } from "@graphql-markdown/helpers";
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
 import { formatMDXBullet, formatMDXPermalink } from "../defaults.ts";
+import { escapeMarkdownURL } from "../escape.ts";
 
 export { formatMDXPermalink } from "../defaults.ts";
 
@@ -165,13 +166,13 @@ export const formatMDXNameEntity = (
 };
 
 /**
- * Formats a "specified by" link as plain text with the raw URL.
+ * Formats a "specified by" link as plain text with the URL percent-encoded.
  * HonKit does not render custom JSX components.
  * @param url - URL to the specification
  * @returns Formatted specification text string
  */
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `\n\nSpecified by: ${url}` as MDXString;
+  return `\n\nSpecified by: ${escapeMarkdownURL(url)}` as MDXString;
 };
 
 /**

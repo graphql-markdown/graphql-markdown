@@ -26,6 +26,7 @@ import {
   formatMDXLink,
   formatMDXPermalink,
 } from "../defaults.ts";
+import { escapeMarkdownURL } from "../escape.ts";
 import { createInternalLinksRewriter, rewriteRenderedPage } from "../output.ts";
 
 export const __default: {
@@ -117,11 +118,12 @@ export const formatMDXNameEntity = (
 
 /**
  * Formats a "specified by" link as a standard Markdown link.
+ * The URL is percent-encoded so it stays a single Markdown link destination.
  * @param url - URL to the specification
  * @returns Formatted specification link string
  */
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `[Specification ⎘](${url})` as MDXString;
+  return `[Specification ⎘](${escapeMarkdownURL(url)})` as MDXString;
 };
 
 /** File extension used for generated pages — MkDocs uses standard Markdown (.md) files. */

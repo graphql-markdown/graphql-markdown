@@ -224,6 +224,19 @@ describe("formatMDXSpecifiedByLink", () => {
     const result = formatMDXSpecifiedByLink(url);
     expect(result).toBe('<SpecifiedBy url="https://example.com"/>');
   });
+
+  test("encodes an injected URL so it cannot break out of the url attribute", () => {
+    const result = formatMDXSpecifiedByLink(
+      'https://example.com/spec"/>{globalThis.P=1}<img src=x onerror="alert(1)',
+    );
+    expect(result).toBe(
+      '<SpecifiedBy url="https://example.com/spec&quot;/&gt;&#123;globalThis.P=1&#125;&lt;img src=x onerror=&quot;alert(1)"/>',
+    );
+    expect(result.match(/<SpecifiedBy/g)).toHaveLength(1);
+    expect(result).not.toContain('spec"/>');
+    expect(result).not.toContain("{");
+    expect(result).not.toContain("<img");
+  });
 });
 
 describe("formatMDXNameEntity", () => {

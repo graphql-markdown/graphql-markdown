@@ -27,6 +27,8 @@ import {
   MARKDOWN_EOP,
 } from "@graphql-markdown/utils";
 
+import { escapeHTMLAttribute } from "./escape.ts";
+
 /**
  * Formats a badge using an HTML `<mark>` element with a `gqlmd-mdx-badge` CSS class.
  * @param badge - Badge data containing the text to display
@@ -134,11 +136,13 @@ export const formatMDXNameEntity = (
 /**
  * Formats a "specified by" link as an HTML `<span>` with a `gqlmd-mdx-specifiedby` CSS class
  * containing an anchor that opens in a new tab.
+ * The URL is encoded as HTML character references for the `href` and `title` attributes.
  * @param url - URL to the specification
  * @returns Formatted specification link string
  */
 export const formatMDXSpecifiedByLink = (url: string): MDXString => {
-  return `<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="${url}" title="Specified by ${url}">⎘</a></span>` as MDXString;
+  const safeURL = escapeHTMLAttribute(url);
+  return `<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="${safeURL}" title="Specified by ${safeURL}">⎘</a></span>` as MDXString;
 };
 
 /**

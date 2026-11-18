@@ -141,6 +141,18 @@ describe("formatMDXSpecifiedByLink", () => {
       "[Specification ⎘](https://spec.example)",
     );
   });
+
+  test("percent-encodes an injected URL so it stays a single link destination", () => {
+    const result = formatMDXSpecifiedByLink(
+      'https://example.com/spec"/>{globalThis.P=1}<img src=x onerror="alert(1)',
+    );
+    expect(result).toBe(
+      "[Specification ⎘](https://example.com/spec%22/%3E%7BglobalThis.P=1%7D%3Cimg%20src=x%20onerror=%22alert%281%29)",
+    );
+    expect(result).not.toContain('"/>');
+    expect(result).not.toContain("{");
+    expect(result).not.toContain("<img");
+  });
 });
 
 describe("createMDXFormatter", () => {

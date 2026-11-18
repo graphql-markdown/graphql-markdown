@@ -115,6 +115,19 @@ describe("shared helpers", () => {
       'href="https://spec.example"',
     );
   });
+
+  test("encodes an injected URL so it cannot break out of the attributes", () => {
+    const result = formatMDXSpecifiedByLink(
+      'https://example.com/spec"/>{globalThis.P=1}<img src=x onerror="alert(1)',
+    );
+    expect(result).toBe(
+      '<span class="gqlmd-mdx-specifiedby">Specification<a class="gqlmd-mdx-specifiedby-link" target="_blank" href="https://example.com/spec&quot;/&gt;&#123;globalThis.P=1&#125;&lt;img src=x onerror=&quot;alert(1)" title="Specified by https://example.com/spec&quot;/&gt;&#123;globalThis.P=1&#125;&lt;img src=x onerror=&quot;alert(1)">⎘</a></span>',
+    );
+    expect(result.match(/<a /g)).toHaveLength(1);
+    expect(result).not.toContain('"/>');
+    expect(result).not.toContain("{");
+    expect(result).not.toContain("<img");
+  });
 });
 
 describe("createMDXFormatter", () => {

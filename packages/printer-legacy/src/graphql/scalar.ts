@@ -10,13 +10,18 @@ import type {
 
 import { getTypeName } from "@graphql-markdown/graphql";
 
+const SPECIFIED_BY_PROTOCOLS = new Set(["http:", "https:"]);
+
 /**
  * Generates markdown documentation for a scalar type's specification URL.
+ * Only absolute http(s) URLs are printed; the URL is normalized (`URL#href`, which
+ * percent-encodes characters such as `"`, `<`, `>` and spaces). Any other value
+ * prints no specification section.
  * @param type - The GraphQL scalar type object
  * @param options - Options for printing type information
- * @returns A specification PageSection, or undefined when no URL exists
+ * @returns A specification PageSection, or undefined when no valid http(s) URL exists
  */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
+// Exported for direct unit testing; reached in production through printScalarMetadata.
 export const printSpecification = (
   type: unknown,
   options: PrintTypeOptions,
@@ -30,10 +35,19 @@ export const printSpecification = (
     return undefined;
   }
 
-  const url = type.specifiedByURL;
+  let href: string;
+  try {
+    const parsed = new URL(type.specifiedByURL);
+    if (!SPECIFIED_BY_PROTOCOLS.has(parsed.protocol)) {
+      return undefined;
+    }
+    href = parsed.href;
+  } catch {
+    return undefined;
+  }
 
   return {
-    title: options.formatMDXSpecifiedByLink!(url),
+    title: options.formatMDXSpecifiedByLink!(href),
     level: 3,
   };
 };
