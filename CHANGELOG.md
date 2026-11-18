@@ -1,3 +1,60 @@
+<a id="1.43.0"></a>
+# [1.43.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.43.0) - 2026-11-18
+
+1.43.0 is a security release. It fixes four ways a GraphQL schema could inject HTML, JSX or MDX into generated documentation pages. It also gives DocFX, HonKit, mdBook and Vocs pages a visible title, and fixes several DocFX output issues.
+
+> [!IMPORTANT]
+> **Upgrade if you generate docs from a schema you don't fully control**, such as a remote or introspected endpoint, a partner or third-party SDL, or a schema contributors can edit. In earlier versions, text in that schema could become live HTML or MDX in your pages. That meant script in your readers' browsers and, with MDX, code running in your docs build. If you document only your own, trusted schema, you are not exposed, but upgrading is still recommended. Docusaurus users get every fix by updating `@graphql-markdown/docusaurus` to 1.39.3.
+
+### Security 🔒
+
+- **`@graphql-markdown/utils`**: `escapeMDX` decided what counts as code by counting backticks, so a single unmatched backtick turned escaping off for the description text before it. MDX special characters are now always escaped outside real code ([GHSA-x2g8-7ch4-h792](https://github.com/graphql-markdown/graphql-markdown/security/advisories/GHSA-x2g8-7ch4-h792)).
+- **`@graphql-markdown/printer-legacy`, `@graphql-markdown/formatters`**: a scalar's `@specifiedBy` URL went into the page unencoded, and a `"` closed the link attribute. Only absolute `http:`/`https:` URLs are printed now, and every formatter encodes the URL for where it writes it ([GHSA-f7q8-26cc-xx7r](https://github.com/graphql-markdown/graphql-markdown/security/advisories/GHSA-f7q8-26cc-xx7r)).
+- **`@graphql-markdown/printer-legacy`**: the built-in "Directives" section printed `customDirective` descriptor output unescaped, unlike the description slot. It is now escaped, so descriptor output is always text. This only affects sites that configure `customDirective` ([GHSA-6m8m-x9vx-3f84](https://github.com/graphql-markdown/graphql-markdown/security/advisories/GHSA-6m8m-x9vx-3f84)).
+- **`@graphql-markdown/graphql`, `@graphql-markdown/printer-legacy`**: a string argument default containing a newline and backticks could close the generated GraphQL code block. This affected graphql-js 16. Defaults are now printed as escaped, single-line GraphQL values, and code blocks use a fence longer than any backtick run inside them ([GHSA-8r4f-p963-7296](https://github.com/graphql-markdown/graphql-markdown/security/advisories/GHSA-8r4f-p963-7296)).
+
+Thanks to [@oss-security-shopify](https://github.com/oss-security-shopify) for reporting these issues.
+
+> [!NOTE]
+> **Output changes from the security fixes:**
+> - `customDirective` descriptor output, including `_`/`*` emphasis, is now shown as text in the Directives section.
+> - A `@specifiedBy` URL that isn't `http:`/`https:` no longer prints a link. A URL that is only a domain gains a trailing slash.
+> - Defaults on non-null types (`String!`, `[String]!`) and string defaults of custom scalars are now printed quoted. That is valid SDL; before, the quotes were missing.
+
+### Fixed 🐛
+
+- 📘 **DocFX formatter**: pages render a visible title ([#3601](https://github.com/graphql-markdown/graphql-markdown/pull/3601)), admonitions use clean DocFX alert syntax ([#3604](https://github.com/graphql-markdown/graphql-markdown/pull/3604)), `toc.yml` entries are sorted deterministically ([#3605](https://github.com/graphql-markdown/graphql-markdown/pull/3605)), and field headings are anchored on the field name ([#3603](https://github.com/graphql-markdown/graphql-markdown/pull/3603)).
+- 🔗 **`@graphql-markdown/printer-legacy`**: with `docOptions.sectionHeaderId: false`, field and argument names are printed without a link, instead of a dead `#` link that jumped to the top of the page ([#3602](https://github.com/graphql-markdown/graphql-markdown/pull/3602)).
+
+### Changed 🔧
+
+- 🏷️ **Page titles**: the new optional `formatMDXTitle` formatter function prints a visible page title after the front matter, for frameworks that don't render the front matter `title`. DocFX, HonKit, mdBook and Vocs now use it ([#3601](https://github.com/graphql-markdown/graphql-markdown/pull/3601), [#3610](https://github.com/graphql-markdown/graphql-markdown/pull/3610), [#3611](https://github.com/graphql-markdown/graphql-markdown/pull/3611), [#3612](https://github.com/graphql-markdown/graphql-markdown/pull/3612)). The title is printed in a new `title` page section, so `title` is now a reserved section id: a decorator with the id `title` is rejected.
+
+### Package Versions 📦
+
+| Package | Version | Registry |
+|---|---|---|
+| @graphql-markdown/core | 1.27.0 | npm, JSR |
+| @graphql-markdown/utils | 1.14.3 | npm, JSR |
+| @graphql-markdown/graphql | 1.3.6 | npm, JSR |
+| @graphql-markdown/helpers | 1.2.6 | npm, JSR |
+| @graphql-markdown/formatters | 1.2.3 | npm, JSR |
+| @graphql-markdown/printer-legacy | 1.20.0 | npm, JSR |
+| @graphql-markdown/diff | 1.1.25 | npm, JSR |
+| @graphql-markdown/telemetry | 0.2.1 | npm, JSR |
+| @graphql-markdown/types | 1.18.0 | npm, JSR |
+| @graphql-markdown/logger | 1.1.5 | npm, JSR |
+| @graphql-markdown/cli | 1.2.3 | npm |
+| @graphql-markdown/docusaurus | 1.39.3 | npm |
+| @graphql-markdown/nuxt-theme | 0.2.3 | npm |
+| create-graphql-markdown-docs | 1.1.3 | npm |
+
+🔍 **Full Changelog**: https://github.com/graphql-markdown/graphql-markdown/compare/1.42.0...1.43.0
+
+
+[Changes][1.43.0]
+
+
 <a id="1.42.0"></a>
 # [1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0) - 2026-11-15
 
@@ -2850,6 +2907,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.43.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.42.0...1.43.0
 [1.42.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.40.0...1.41.0
 [1.40.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.39.0...1.40.0
