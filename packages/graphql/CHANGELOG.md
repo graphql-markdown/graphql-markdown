@@ -2,6 +2,15 @@
 
 Versions of `@graphql-markdown/graphql`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.3.6
+
+### Patch Changes
+
+- [`d368bb7`](https://github.com/graphql-markdown/graphql-markdown/commit/d368bb793526bf4f0f408d288e3dbfbf62341c20) Thanks [@edno](https://github.com/edno)! - Security fix (GHSA-8r4f-p963-7296): `getFormattedDefaultValue` now prints every string default as an escaped, single-line GraphQL string literal, the same as graphql-js `printSchema`. Before, a newline or a run of backticks in a `String` or `ID` default went into the generated code block unescaped, letting a schema author close the block and inject HTML or MDX. Defaults on non-null types (`String!`, `[String]!`) and string defaults of custom scalars, which were printed raw without quotes, are now quoted and escaped too, and list or object defaults of custom scalars are printed as escaped GraphQL list and object values instead of being joined raw or shown as `[object Object]`.
+- Updated dependencies [[`3fab787`](https://github.com/graphql-markdown/graphql-markdown/commit/3fab787444d25e47fb88b4cbb015d662ca76df2c), [`96c28b8`](https://github.com/graphql-markdown/graphql-markdown/commit/96c28b8add8c3ef38f5e884baec3b7d02134733c)]:
+  - @graphql-markdown/types@1.18.0
+  - @graphql-markdown/utils@1.14.3
+
 ## 1.3.5 - 2026-11-15
 
 Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).

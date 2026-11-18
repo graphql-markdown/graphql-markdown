@@ -2,6 +2,13 @@
 
 Versions of `@graphql-markdown/nuxt-theme`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @graphql-markdown/cli@1.2.3
+
 ## 0.2.2 - 2026-11-15
 
 Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).

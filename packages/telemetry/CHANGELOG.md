@@ -2,6 +2,13 @@
 
 Versions of `@graphql-markdown/telemetry`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [[`3fab787`](https://github.com/graphql-markdown/graphql-markdown/commit/3fab787444d25e47fb88b4cbb015d662ca76df2c)]:
+  - @graphql-markdown/types@1.18.0
+
 ## 0.2.0 - 2026-11-15
 
 Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).
