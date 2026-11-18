@@ -2,6 +2,19 @@
 
 Versions of `create-graphql-markdown-docs`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.1.3
+
+### Patch Changes
+
+- Update the `@graphql-markdown/*` dependency ranges of the project templates and of the markdown scaffold.
+  
+  - templates/docusaurus/package.json: @graphql-markdown/docusaurus: ^1.39.2 -> ^1.39.3
+  - templates/markdown/package.json: @graphql-markdown/cli: ^1.2.2 -> ^1.2.3
+  - templates/nuxt/package.json: @graphql-markdown/nuxt-theme: ^0.2.2 -> ^0.2.3
+  - lib/frameworks/markdown.mjs: FORMATTERS_RANGE: ^1.2.2 -> ^1.2.3
+- Updated dependencies []:
+  - @graphql-markdown/telemetry@0.2.1
+
 ## 1.1.2 - 2026-11-15
 
 Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).

@@ -2,6 +2,6 @@
 // by `bun run jsr:sync` (verified by `bun run jsr:check`). Do not edit by hand.
 
 export const OPTIONAL_DEPENDENCY_RANGES: Readonly<Record<string, string>> = {
-  "@graphql-markdown/diff": "^1.1.24",
+  "@graphql-markdown/diff": "^1.1.25",
   "graphql-config": "^6.0.0",
 };

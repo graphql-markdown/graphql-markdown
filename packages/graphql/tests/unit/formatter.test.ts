@@ -10,7 +10,13 @@ import {
   GraphQLScalarType,
   GraphQLString,
 } from "graphql/type";
-import { Kind, print } from "graphql/language";
+import { Kind, parseValue, print } from "graphql/language";
+
+// graphql-js 16 prints `{k: 1}`, 17 prints `{ k: 1 }`: compare against the
+// installed version's own printing of the expected value.
+const printed = (value: string): string => {
+  return print(parseValue(value));
+};
 
 import { getFormattedDefaultValue } from "../../src/formatter";
 
@@ -299,7 +305,9 @@ describe("getFormattedDefaultValue() custom scalar list and object defaults", ()
 
     expect(result).not.toContain("\n");
     expect(result).not.toContain("[object Object]");
-    expect(result).toBe('{ k: "x\\n```", n: 1, b: true, z: null, l: ["y"] }');
+    expect(result).toBe(
+      printed('{ k: "x\\n```", n: 1, b: true, z: null, l: ["y"] }'),
+    );
   });
 
   test("skips object keys that are not valid GraphQL names", () => {
@@ -316,6 +324,6 @@ describe("getFormattedDefaultValue() custom scalar list and object defaults", ()
           },
         },
       }),
-    ).toBe('{ ok: "y" }');
+    ).toBe(printed('{ ok: "y" }'));
   });
 });

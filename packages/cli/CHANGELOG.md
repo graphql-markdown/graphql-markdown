@@ -2,6 +2,16 @@
 
 Versions of `@graphql-markdown/cli`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.2.3
+
+### Patch Changes
+
+- Updated dependencies [[`3fab787`](https://github.com/graphql-markdown/graphql-markdown/commit/3fab787444d25e47fb88b4cbb015d662ca76df2c)]:
+  - @graphql-markdown/types@1.18.0
+  - @graphql-markdown/core@1.27.0
+  - @graphql-markdown/logger@1.1.5
+  - @graphql-markdown/telemetry@0.2.1
+
 ## 1.2.2 - 2026-11-15
 
 Released in [GraphQL-Markdown 1.42.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.42.0).

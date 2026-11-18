@@ -2,6 +2,13 @@
 
 Versions of `@graphql-markdown/logger`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.1.5
+
+### Patch Changes
+
+- Updated dependencies [[`3fab787`](https://github.com/graphql-markdown/graphql-markdown/commit/3fab787444d25e47fb88b4cbb015d662ca76df2c)]:
+  - @graphql-markdown/types@1.18.0
+
 ## 1.1.4 - 2026-10-29
 
 Released in [GraphQL-Markdown 1.41.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.41.0).
