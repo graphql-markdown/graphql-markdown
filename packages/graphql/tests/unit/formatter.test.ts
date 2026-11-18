@@ -262,3 +262,60 @@ describe("getFormattedDefaultValue() string escaping", () => {
     ).toBe(false);
   });
 });
+
+describe("getFormattedDefaultValue() custom scalar list and object defaults", () => {
+  const json = new GraphQLScalarType({ name: "JSON" });
+
+  test("prints a custom scalar array default as a single-line escaped list", () => {
+    expect.hasAssertions();
+
+    const result = getFormattedDefaultValue({
+      type: json,
+      defaultValue: ["a\n```\n<img src=x onerror=alert(1) />"],
+    })!;
+
+    expect(result).not.toContain("\n");
+    expect(result).toBe(
+      print({
+        kind: Kind.LIST,
+        values: [
+          {
+            kind: Kind.STRING,
+            value: "a\n```\n<img src=x onerror=alert(1) />",
+          },
+        ],
+      }),
+    );
+    expect(result).toBe('["a\\n```\\n<img src=x onerror=alert(1) />"]');
+  });
+
+  test("prints a custom scalar object default as a single-line escaped object", () => {
+    expect.hasAssertions();
+
+    const result = getFormattedDefaultValue({
+      type: json,
+      defaultValue: { k: "x\n```", n: 1, b: true, z: null, l: ["y"] },
+    })!;
+
+    expect(result).not.toContain("\n");
+    expect(result).not.toContain("[object Object]");
+    expect(result).toBe('{ k: "x\\n```", n: 1, b: true, z: null, l: ["y"] }');
+  });
+
+  test("skips object keys that are not valid GraphQL names", () => {
+    expect.hasAssertions();
+
+    expect(
+      getFormattedDefaultValue({
+        type: json,
+        defaultValue: {
+          "bad-key": "x",
+          ok: "y",
+          fn: () => {
+            return 1;
+          },
+        },
+      }),
+    ).toBe('{ ok: "y" }');
+  });
+});

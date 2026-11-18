@@ -5,6 +5,7 @@
  */
 
 import { Kind, print } from "graphql/language";
+import type { ObjectFieldNode, ValueNode } from "graphql/language";
 import {
   getNamedType,
   isEnumType,
@@ -18,10 +19,81 @@ import type {
   GraphQLType,
   Maybe,
 } from "@graphql-markdown/types";
+
+/**
+ * Convert an untyped JavaScript value (e.g. a custom scalar default) into a GraphQL AST value node.
+ * Values that cannot be represented as GraphQL literals are skipped.
+ *
+ * @internal
+ *
+ * @param value - the untyped value to convert.
+ *
+ * @returns a GraphQL value node, or undefined if the value is not representable.
+ *
+ */
+const _valueToAST = (value: unknown): Maybe<ValueNode> => {
+  if (typeof value === "string") {
+    return { kind: Kind.STRING, value };
+  }
+
+  if (typeof value === "number") {
+    if (!Number.isFinite(value)) {
+      return undefined;
+    }
+    if (Number.isInteger(value)) {
+      return { kind: Kind.INT, value: String(value) };
+    }
+    return { kind: Kind.FLOAT, value: String(value) };
+  }
+
+  if (typeof value === "boolean") {
+    return { kind: Kind.BOOLEAN, value };
+  }
+
+  if (value === null) {
+    return { kind: Kind.NULL };
+  }
+
+  if (Array.isArray(value)) {
+    const values = value
+      .map((item) => {
+        return _valueToAST(item);
+      })
+      .filter((item): item is ValueNode => {
+        return Boolean(item);
+      });
+    return { kind: Kind.LIST, values };
+  }
+
+  if (typeof value === "object") {
+    const fields = Object.entries(value as Record<string, unknown>)
+      .filter(([key]) => {
+        return /^[_A-Za-z][_0-9A-Za-z]*$/.test(key);
+      })
+      .map(([key, item]): Maybe<ObjectFieldNode> => {
+        const fieldValue = _valueToAST(item);
+        if (!fieldValue) {
+          return undefined;
+        }
+        return {
+          kind: Kind.OBJECT_FIELD,
+          name: { kind: Kind.NAME, value: key },
+          value: fieldValue,
+        };
+      })
+      .filter((field): field is ObjectFieldNode => {
+        return Boolean(field);
+      });
+    return { kind: Kind.OBJECT, fields };
+  }
+
+  return undefined;
+};
+
 /**
  * Format an enum or scalar GraphQL type value into a printable equivalent based on the type.
- * Enum values are returned as-is; string values are printed as escaped single-line
- * GraphQL string literals (same as graphql-js `printSchema`); other values are unchanged.
+ * Enum values are returned as-is; string, list and object values are printed as escaped
+ * single-line GraphQL literals (same as graphql-js `printSchema`); other values are unchanged.
  *
  * @internal
  *
@@ -39,8 +111,13 @@ const _formatDefaultValue = <T>(
     return defaultValue;
   }
 
-  if (typeof defaultValue === "string") {
-    return print({ kind: Kind.STRING, value: defaultValue });
+  if (
+    typeof defaultValue === "string" ||
+    Array.isArray(defaultValue) ||
+    (defaultValue !== null && typeof defaultValue === "object")
+  ) {
+    const ast = _valueToAST(defaultValue);
+    return ast ? print(ast) : defaultValue;
   }
 
   return defaultValue;
