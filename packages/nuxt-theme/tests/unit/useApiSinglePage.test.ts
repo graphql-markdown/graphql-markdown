@@ -85,6 +85,34 @@ describe("useApiSinglePage", () => {
     mockQueryCollection.mockClear();
   });
 
+  it("groups directives in their own bucket after types", async () => {
+    setUpPages([
+      {
+        path: "/api-reference/directives-deprecated",
+        title: "deprecated",
+        kind: "directives",
+        body: pageBody("directive @deprecated on FIELD", "Deprecated."),
+      },
+      {
+        path: "/api-reference/objects-user",
+        title: "User",
+        kind: "objects",
+        body: pageBody("type User { id: ID! }", "A user."),
+      },
+    ]);
+
+    const { buckets } = await useApiSinglePage();
+
+    expect(
+      buckets.value.map((bucket: ApiSinglePageBucket) => {
+        return [bucket.id, bucket.title];
+      }),
+    ).toEqual([
+      ["types", "Types"],
+      ["directives", "Directives"],
+    ]);
+  });
+
   it("groups entries into Queries, Mutations, Types buckets, in that order, omitting empty buckets", async () => {
     setUpPages([
       {
