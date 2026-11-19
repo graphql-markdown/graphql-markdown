@@ -76,9 +76,11 @@
       <!-- Nuxt UI reads the dialog's accessible name from `contentSearch.title`
            and `contentSearch.description`, which its bundled locales do not
            define — without these props the modal announces the raw keys. -->
+      <!-- Search groups are keyed by `path`; branches have none, so give them one
+           here (the sidebar keeps the raw tree). -->
       <UContentSearch
-        :navigation="navigationSections as unknown as ContentNavigationItem[]"
-        :files="searchFiles ?? []"
+        :navigation="searchNavigation as unknown as ContentNavigationItem[]"
+        :files="singlePageSearchFiles"
         title="Search the API reference"
         description="Find an operation, type, field, or example by name."
       />
@@ -89,6 +91,10 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
 import { useApiSinglePageNavigation } from "~/composables/useApiSinglePage";
+import {
+  toSinglePageSearchSections,
+  withSearchGroupIds,
+} from "~/utils/search-sections";
 import { scrollToIntro } from "~/utils/scroll-to-intro";
 
 const config = useAppConfig();
@@ -121,6 +127,10 @@ const navigationSections = computed(() =>
     : sections.value,
 );
 
+const searchNavigation = computed(() =>
+  withSearchGroupIds(navigationSections.value),
+);
+
 // Keep the highlighted sidebar link visible as the page scrolls.
 watch(
   activeAnchor,
@@ -140,7 +150,13 @@ watch(
 );
 
 const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
-  queryCollectionSearchSections("content"),
+  queryCollectionSearchSections("content", { ignoredTags: ["style"] }),
+);
+
+// Flat hierarchy's sidebar leaves are `#anchor` links, so search results must
+// carry the same `#anchor` ids for Nuxt UI to match them.
+const singlePageSearchFiles = computed(() =>
+  toSinglePageSearchSections(searchFiles.value ?? [], isFlat.value),
 );
 </script>
 

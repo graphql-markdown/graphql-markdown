@@ -20,18 +20,20 @@
 
     <div class="relative overflow-x-auto p-5 font-mono text-sm">
       <!-- Inside a code group the tab bar carries the label, so the card drops
-           its header. The kind badge and copy button float over the snippet
-           instead, so the kind stays visible for every type. -->
+           its header. Only the copy button floats over the snippet; the entry
+           heading already shows the kind badge. -->
       <div
         v-if="hideHeader"
         class="absolute top-3 right-3 z-10 flex items-center gap-2"
       >
-        <UBadge color="primary" variant="subtle" size="sm">{{ kind }}</UBadge>
-
         <UButton v-bind="copyButtonProps" @click="copy(code)" />
       </div>
 
-      <div class="blueprint-code" v-html="html" />
+      <div
+        class="blueprint-code"
+        :class="{ 'pr-12': hideHeader }"
+        v-html="html"
+      />
     </div>
 
     <!-- Example variables stack under the query, with their own copy button. -->

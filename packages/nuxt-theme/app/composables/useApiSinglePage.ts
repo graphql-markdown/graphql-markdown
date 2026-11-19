@@ -16,10 +16,10 @@ import type {
   ApiNavigationNode,
 } from "./useApiNavigation";
 
-/** Anvil's own order: queries, then mutations, then subscriptions, then types. */
+/** Anvil's own order: queries, then mutations, then subscriptions, then types, then directives. */
 const OPERATION_KINDS = ["queries", "mutations", "subscriptions"] as const;
 type OperationKind = (typeof OPERATION_KINDS)[number];
-type BucketId = OperationKind | "types";
+type BucketId = OperationKind | "directives" | "types";
 
 /**
  * One entry of the single-page view. Typed by the swizzlable
@@ -71,6 +71,9 @@ export const anchorIdFor = (page: { path: string; kind?: string }): string => {
 };
 
 const bucketIdFor = (kind: string | undefined): BucketId => {
+  if (kind === "directives") {
+    return "directives";
+  }
   return kind && (OPERATION_KINDS as readonly string[]).includes(kind)
     ? (kind as OperationKind)
     : "types";
@@ -81,6 +84,7 @@ const BUCKET_TITLES: Record<BucketId, string> = {
   mutations: "Mutations",
   subscriptions: "Subscriptions",
   types: "Types",
+  directives: "Directives",
 };
 
 const buildEntry = async (
@@ -129,7 +133,7 @@ const buildEntry = async (
  * Everything the single-page reference view needs: every generated page's
  * full body, fixed up and split into lead/sections the same way
  * `useApiDocument` does for one page at a time, grouped into
- * Queries/Mutations/Subscriptions/Types buckets in Anvil's order, with every
+ * Queries/Mutations/Subscriptions/Types/Directives buckets in Anvil's order, with every
  * definition and example already Shiki-highlighted. Rendered at the base
  * route (`[...slug].vue`'s landing branch) whenever `useHierarchyMode()`
  * detects flat hierarchy, in place of the per-type catalog.
@@ -206,7 +210,15 @@ export const useApiSinglePage = async (
         }),
       );
 
-      return (["queries", "mutations", "subscriptions", "types"] as const)
+      return (
+        [
+          "queries",
+          "mutations",
+          "subscriptions",
+          "types",
+          "directives",
+        ] as const
+      )
         .map((id) => {
           return {
             id,
