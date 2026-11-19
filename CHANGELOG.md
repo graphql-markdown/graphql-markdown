@@ -1,3 +1,23 @@
+<a id="1.43.1"></a>
+# [1.43.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.43.1) - 2026-11-19
+
+1.43.1 is a patch release for the Nuxt theme. It fixes search on the single-page API reference and the rendering of type badges and deprecation callouts in production builds.
+
+### Bug fixes 🐛
+
+- **`@graphql-markdown/nuxt-theme`** 0.2.4:
+  - Search found nothing on the single-page reference. Results are now matched to the sidebar's in-page anchors, so every group shows up. The search index no longer contains `{#id}` heading markers or Shiki CSS ([#3620](https://github.com/graphql-markdown/graphql-markdown/pull/3620)).
+  - Type badges (`enum`, `scalar`, `non-null`, `deprecated`) and deprecation callouts rendered as raw `<UBadge>`/`<UAlert>` tags in production builds (`nuxi generate`). They now render as Nuxt UI components ([#3621](https://github.com/graphql-markdown/graphql-markdown/pull/3621), [#3622](https://github.com/graphql-markdown/graphql-markdown/pull/3622)).
+  - The kind badge no longer covers the first line of a snippet in code tabs ([#3620](https://github.com/graphql-markdown/graphql-markdown/pull/3620)).
+  - Directives have their own "Directives" sidebar section instead of being listed under "Types" ([#3620](https://github.com/graphql-markdown/graphql-markdown/pull/3620)).
+- **`create-graphql-markdown-docs`** 1.1.4: the Nuxt template now requires `@graphql-markdown/nuxt-theme` `^0.2.4`.
+
+To upgrade an existing Nuxt site, update `@graphql-markdown/nuxt-theme` to 0.2.4.
+
+
+[Changes][1.43.1]
+
+
 <a id="1.43.0"></a>
 # [1.43.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.43.0) - 2026-11-18
 
@@ -2907,6 +2927,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.43.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.43.0...1.43.1
 [1.43.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.42.0...1.43.0
 [1.42.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.41.0...1.42.0
 [1.41.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.40.0...1.41.0
