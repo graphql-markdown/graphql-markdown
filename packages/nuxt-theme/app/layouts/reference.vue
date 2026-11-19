@@ -78,7 +78,7 @@
            define — without these props the modal announces the raw keys. -->
       <UContentSearch
         :navigation="navigationSections as unknown as ContentNavigationItem[]"
-        :files="searchFiles ?? []"
+        :files="singlePageSearchFiles"
         title="Search the API reference"
         description="Find an operation, type, field, or example by name."
       />
@@ -89,6 +89,7 @@
 <script setup lang="ts">
 import type { ContentNavigationItem } from "@nuxt/content";
 import { useApiSinglePageNavigation } from "~/composables/useApiSinglePage";
+import { toSinglePageSearchSections } from "~/utils/search-sections";
 import { scrollToIntro } from "~/utils/scroll-to-intro";
 
 const config = useAppConfig();
@@ -140,7 +141,13 @@ watch(
 );
 
 const { data: searchFiles } = await useAsyncData("api-reference-search", () =>
-  queryCollectionSearchSections("content"),
+  queryCollectionSearchSections("content", { ignoredTags: ["style"] }),
+);
+
+// Flat hierarchy's sidebar leaves are `#anchor` links, so search results must
+// carry the same `#anchor` ids for Nuxt UI to match them.
+const singlePageSearchFiles = computed(() =>
+  toSinglePageSearchSections(searchFiles.value ?? [], isFlat.value),
 );
 </script>
 
