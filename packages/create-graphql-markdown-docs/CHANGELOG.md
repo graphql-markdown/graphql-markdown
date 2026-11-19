@@ -2,6 +2,14 @@
 
 Versions of `create-graphql-markdown-docs`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.1.4
+
+### Patch Changes
+
+- Update the `@graphql-markdown/*` dependency ranges of the project templates and of the markdown scaffold.
+  
+  - templates/nuxt/package.json: @graphql-markdown/nuxt-theme: ^0.2.3 -> ^0.2.4
+
 ## 1.1.3
 
 ### Patch Changes
