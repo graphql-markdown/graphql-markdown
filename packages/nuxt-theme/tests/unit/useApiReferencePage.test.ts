@@ -131,7 +131,7 @@ describe("useApiReferencePage", () => {
     ]);
     expect(mocks.useApiCodeCards.mock.calls[0][3]).toBe("github-dark");
     expect(mocks.useSeoMeta).toHaveBeenCalledWith({
-      title: "API Reference | User",
+      title: "User | API Reference",
       description: "desc",
     });
     expect(mocks.navigateTo).not.toHaveBeenCalled();
