@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import {
+  normalizeSearchText,
   stripShikiCss,
   toSinglePageSearchSections,
   withSearchGroupIds,
@@ -90,5 +91,23 @@ describe("withSearchGroupIds", () => {
     expect(input[0]).not.toHaveProperty("path");
     expect(out[0]).not.toBe(input[0]);
     expect(out[0]!.path).toBe("search-group-group");
+  });
+});
+
+describe("normalizeSearchText", () => {
+  it("removes characters Nuxt UI escapes into multi-char entities", () => {
+    expect(normalizeSearchText(`{ "a": 'b' } & <c>`)).toBe(
+      "{ a: \u2019b\u2019 } + \u2039c\u203A",
+    );
+  });
+
+  it("is applied to title, titles and content", () => {
+    const [out] = toSinglePageSearchSections(
+      [section({ title: `"T" {#t}`, titles: [`It's`], content: `a & "b"` })],
+      false,
+    );
+    expect(out!.title).toBe("T");
+    expect(out!.titles).toEqual(["It\u2019s"]);
+    expect(out!.content).toBe("a + b");
   });
 });
