@@ -357,7 +357,7 @@ const config = {
                 label: "Astro / Starlight",
               },
               {
-                href: "https://graphql-markdown.dev/demo-astro-r2/",
+                href: "https://demo-astro-r2.edno.workers.dev/",
                 label: "Astro / Starlight on Cloudflare R2",
               },
               {
