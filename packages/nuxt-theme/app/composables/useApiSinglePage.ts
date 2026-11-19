@@ -278,6 +278,9 @@ export const useApiSinglePageNavigation = (
                 variant: "subtle" as const,
               }
             : undefined,
+          "aria-label": entry.isDeprecated
+            ? `${entry.title} (deprecated)`
+            : undefined,
         };
       }),
     };

@@ -298,6 +298,29 @@ describe("useApiSinglePageNavigation", () => {
     expect(branch.children[0]!.path).toBe("#queries-get-user");
   });
 
+  it("labels only deprecated leaves for screen readers", () => {
+    const entry = (anchorId: string, title: string, isDeprecated: boolean) => {
+      return {
+        anchorId,
+        title,
+        kindLabel: "QUERY",
+        isDeprecated,
+        sections: [],
+      };
+    };
+    const nav = useApiSinglePageNavigation([
+      {
+        id: "queries",
+        title: "Queries",
+        entries: [entry("a", "Legacy", true), entry("b", "Current", false)],
+      },
+    ]);
+    const children = (nav[0] as { children: { "aria-label"?: string }[] })
+      .children;
+    expect(children[0]!["aria-label"]).toBe("Legacy (deprecated)");
+    expect(children[1]!["aria-label"]).toBeUndefined();
+  });
+
   describe("active flag", () => {
     const buckets: ApiSinglePageBucket[] = [
       {

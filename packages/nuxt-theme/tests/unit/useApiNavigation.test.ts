@@ -441,6 +441,8 @@ describe("useApiNavigation", () => {
 
     expect(newType?.isDeprecated).toBe(false);
     expect(newType?.badge).toBeUndefined();
+    expect(oldType?.["aria-label"]).toBe("OldType (deprecated)");
+    expect(newType?.["aria-label"]).toBeUndefined();
   });
 
   it("falls back to grouping by kind (from meta) when a page has no path segments to group by", async () => {
