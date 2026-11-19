@@ -142,7 +142,7 @@ describe("Flat-hierarchy fixture app", () => {
     // Nuxt UI 4 renders Badge as a span with data-slot="base" (no
     // data-slot="badge"); the fixture's `non-null` type badge is one example.
     expect(content).toMatch(
-      /<span data-slot="base"[^>]*>(?:<!--[\s\S]*?-->)*non-null</,
+      /<span data-slot="base"[^>]*>(?:<!--(?:[^-]|-(?!->))*-->)*non-null</,
     );
   });
 
