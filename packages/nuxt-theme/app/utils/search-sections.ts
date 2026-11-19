@@ -64,3 +64,25 @@ export const toSinglePageSearchSections = <T extends SearchSection>(
     return isFlat ? { ...cleaned, id: `#${anchorFromId(file.id)}` } : cleaned;
   });
 };
+
+/**
+ * Gives every top-level navigation branch without a `path` a synthetic one so
+ * Nuxt UI's UContentSearch (which keys each CommandPalette group by
+ * `group.path` and silently drops groups without an `id`) keeps its results.
+ * Returns a shallow copy; the input is not mutated.
+ */
+export const withSearchGroupIds = <
+  T extends { title?: string; path?: string; children?: unknown[] },
+>(
+  navigation: readonly T[],
+): T[] => {
+  return navigation.map((node, index) => {
+    if (!node.children || node.path) {
+      return { ...node };
+    }
+    const slug =
+      (node.title ?? "").toLowerCase().replace(/[^a-z0-9]+/g, "-") ||
+      String(index);
+    return { ...node, path: `search-group-${slug}` };
+  });
+};
