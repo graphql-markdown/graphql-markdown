@@ -127,6 +127,25 @@ describe("Flat-hierarchy fixture app", () => {
     expect(content).toContain("Use active field instead");
   });
 
+  it("renders injected badges and callouts as Nuxt UI components, not raw tags", async () => {
+    // api-document.ts injects UBadge/UAlert at runtime, so they must be
+    // global components to be bundled in production builds. A raw tag in the
+    // HTML means the component was never resolved.
+    const rootPath = join(
+      FIXTURE_DIR,
+      ".output/public/api-reference/index.html",
+    );
+    const content = await readFile(rootPath, "utf-8");
+
+    expect(content).not.toContain("<UBadge");
+    expect(content).not.toContain("<UAlert");
+    // Nuxt UI 4 renders Badge as a span with data-slot="base" (no
+    // data-slot="badge"); the fixture's `non-null` type badge is one example.
+    expect(content).toMatch(
+      /<span data-slot="base"[^>]*>(?:<!--[\s\S]*?-->)*non-null</,
+    );
+  });
+
   it("redirects an old per-type route to its anchor on the single page", async () => {
     // Every generated page still exists on disk (so Nuxt Content can serve
     // it), but under flat hierarchy `[...slug].vue` redirects any direct
