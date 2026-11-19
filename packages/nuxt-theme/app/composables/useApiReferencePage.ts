@@ -1,5 +1,6 @@
 import type { ComputedRef, Ref } from "vue";
 import { anchorIdFor } from "~/composables/useApiSinglePage";
+import { referencePageTitle } from "~/utils/page-title";
 import { LANDING_DOC_NAME, isLandingDocPath } from "../../constants";
 
 type Page = Record<string, any> | null | undefined;
@@ -160,9 +161,11 @@ export const useApiReferencePage = async (): Promise<ApiReferencePage> => {
     const current = page.value;
     await nuxtApp.runWithContext(() => {
       useSeoMeta({
-        title: isLandingPage.value
-          ? current.title
-          : `API Reference | ${current.title}`,
+        title: referencePageTitle({
+          title: current.title,
+          siteTitle: config.gqlmd.siteTitle as string | undefined,
+          isLanding: isLandingPage.value,
+        }),
         description: current.description,
       });
     });

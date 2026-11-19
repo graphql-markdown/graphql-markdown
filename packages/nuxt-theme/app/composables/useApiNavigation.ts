@@ -8,6 +8,8 @@ export interface ApiNavigationLeaf {
   active?: boolean;
   ui?: Record<string, unknown>;
   badge?: { label: string; color: "error"; variant: "subtle" };
+  /** Set on deprecated leaves so the link's accessible name is not "Titledeprecated". */
+  "aria-label"?: string;
 }
 
 export interface ApiNavigationBranch {
@@ -75,6 +77,9 @@ const buildTree = (
             color: "error" as const,
             variant: "subtle" as const,
           }
+        : undefined,
+      "aria-label": item.isDeprecated
+        ? `${item.title} (deprecated)`
         : undefined,
     });
   }

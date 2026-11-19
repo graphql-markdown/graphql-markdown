@@ -45,6 +45,22 @@ const anchorFromId = (id: string): string => {
 };
 
 /**
+ * Replaces characters Nuxt UI's `highlight` HTML-escapes into multi-character
+ * entities (quotes, apostrophes, ampersands, angle brackets). Its
+ * `truncateHTMLFromStart` (Nuxt UI runtime/utils/search.js) trims escaped
+ * text by character count and can cut through an entity, leaving a stray
+ * `quot;` in the snippet. Indexed text without such characters avoids it.
+ */
+export const normalizeSearchText = (value: string): string => {
+  return value
+    .replaceAll('"', "")
+    .replaceAll("'", "\u2019")
+    .replaceAll("&", "+")
+    .replaceAll("<", "\u2039")
+    .replaceAll(">", "\u203A");
+};
+
+/**
  * Cleans search sections and, in flat (single-page) mode, points every
  * section at its entry's `#<anchorId>` so it matches the single-page
  * sidebar's leaf paths (Nuxt UI buckets files by `id.split("#")[0]`, which
@@ -57,9 +73,11 @@ export const toSinglePageSearchSections = <T extends SearchSection>(
   return files.map((file) => {
     const cleaned = {
       ...file,
-      title: stripAnchorMarker(file.title),
-      titles: file.titles.map(stripAnchorMarker),
-      content: stripShikiCss(file.content),
+      title: normalizeSearchText(stripAnchorMarker(file.title)),
+      titles: file.titles.map((t) => {
+        return normalizeSearchText(stripAnchorMarker(t));
+      }),
+      content: normalizeSearchText(stripShikiCss(file.content)),
     };
     return isFlat ? { ...cleaned, id: `#${anchorFromId(file.id)}` } : cleaned;
   });
