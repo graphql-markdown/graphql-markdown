@@ -31,7 +31,7 @@ Edit the configuration in `graphql.config.mjs`.
 
 ## Astro/Starlight on Cloudflare R2
 
-See the generated docs in the [live demo](https://graphql-markdown.dev/demo-astro-r2/).
+See the generated docs in the [live demo](https://demo-astro-r2.edno.workers.dev/).
 
 Fork our [demo repo](https://github.com/graphql-markdown/demo-astro-r2) to see the [`outputAdapter`](/docs/settings#outputadapter) setting write the generated docs straight into a Cloudflare R2 bucket. It runs locally with Wrangler's R2 emulation, no Cloudflare account needed.
 
