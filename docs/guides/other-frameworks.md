@@ -8,11 +8,11 @@ keywords:
   - custom MDX formatters
 ---
 
-# Integration with Frameworks
+# Integration with frameworks
 
 GraphQL-Markdown supports multiple documentation frameworks through formatter presets. Each framework has its own setup guide, or you can create a custom formatter for any framework.
 
-## Choose a Path
+## Choose a path
 
 Use the path that matches your documentation stack:
 
@@ -28,7 +28,7 @@ The quickest way to wire any supported framework is to run `npm create graphql-m
 
 For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
 
-## Common Setup
+## Common setup
 
 Install the CLI and formatter presets:
 
@@ -47,7 +47,7 @@ extensions:
     formatter: "@graphql-markdown/formatters/hugo"
 ```
 
-## Supported Formatters
+## Supported formatters
 
 Install the formatters package:
 
@@ -69,7 +69,7 @@ Then select your framework:
 | **DocFX**              | `@graphql-markdown/formatters/docfx`      | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md)      |
 | **mdBook**             | `@graphql-markdown/formatters/mdbook`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/README.md)     |
 
-### Quick Example
+### Quick example
 
 Declare the settings in your GraphQL Config file, then run the CLI:
 
@@ -104,7 +104,7 @@ await runGraphQLMarkdown(
 );
 ```
 
-## 3rd Party Packages
+## 3rd party packages
 
 Some frameworks have dedicated integration packages beyond the basic formatters:
 
