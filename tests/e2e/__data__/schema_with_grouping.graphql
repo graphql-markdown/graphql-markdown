@@ -1,7 +1,7 @@
 """
 Example of example directive for `exampleSection`.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings#printtypeoptions)
 """
 directive @example(
   value: String
@@ -10,20 +10,20 @@ directive @example(
 """
 Example of custom directive for `skipDocDirective`.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#skipdocdirective)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings#skipdocdirective)
 """
 directive @noDoc on OBJECT | INTERFACE | FIELD_DEFINITION | SCALAR
 
 """
 Example of custom directive for `groupByDirective`.
 
-See [documentation](https://graphql-markdown.dev/docs/settings#groupbydirective)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings#groupbydirective)
 """
 directive @doc(
   """
   Category name for `groupByDirective`.
 
-  See [documentation](https://graphql-markdown.dev/docs/settings#groupbydirective)
+  See [documentation](https://graphql-markdown.dev/docs/reference/settings#groupbydirective)
   """
   category: String
 ) on OBJECT | INPUT_OBJECT | UNION | ENUM | INTERFACE | FIELD_DEFINITION | ARGUMENT_DEFINITION | SCALAR
@@ -31,7 +31,7 @@ directive @doc(
 """
 Example of custom directive rendered via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings)
 """
 directive @complexity(
   """
@@ -51,7 +51,7 @@ directive @complexity(
 """
 Example of custom directive rendered as description text via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings)
 """
 directive @auth(
   """
@@ -63,7 +63,7 @@ directive @auth(
 """
 Example of custom directive rendered as a tag via the `decorators` option.
 
-See [documentation](https://graphql-markdown.dev/docs/settings)
+See [documentation](https://graphql-markdown.dev/docs/reference/settings)
 """
 directive @beta on OBJECT | INTERFACE | FIELD_DEFINITION
 

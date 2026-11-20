@@ -1,7 +1,7 @@
 /**
  * Library supporting `customDirective` for directive based customization.
  *
- * @see [Option `customDirective`](https://graphql-markdown.dev/docs/advanced/custom-directive)
+ * @see [Option `customDirective`](https://graphql-markdown.dev/docs/customize/custom-directive)
  *
  * @packageDocumentation
  */
