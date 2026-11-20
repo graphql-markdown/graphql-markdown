@@ -172,6 +172,21 @@
   color: #fff;
 }
 
+.heroButtonPrimary {
+  --ifm-button-background-color: #e535ab;
+  --ifm-button-border-color: #e535ab;
+
+  color: #fff;
+}
+
+.heroButtonPrimary:hover,
+[data-theme="dark"] .heroButtonPrimary:hover {
+  --ifm-button-background-color: #c42a91;
+  --ifm-button-border-color: #c42a91;
+
+  color: #fff;
+}
+
 /* ── Preview image ── */
 .heroPreview {
   --pane-height: 340px;
