@@ -1,5 +1,8 @@
 {
   "label": "Customize the output",
   "position": 70,
-  "className": "sidebar-customize"
+  "className": "sidebar-customize",
+  "link": {
+    "type": "generated-index"
+  }
 }

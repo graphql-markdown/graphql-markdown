@@ -1,5 +1,8 @@
 {
   "label": "Guides",
   "position": 60,
-  "className": "sidebar-guides"
+  "className": "sidebar-guides",
+  "link": {
+    "type": "generated-index"
+  }
 }

@@ -13,18 +13,6 @@ keywords:
 
 Every setting is a plugin option in your config file, and most have a CLI flag that overrides it. Run the CLI with `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone), and see [configuration](/docs/reference/configuration) for where the config lives.
 
-## CLI flags
-
-| Flag | Setting |
-| :--- | :------ |
-| `-s, --schema <schema>` | [`schema`](#schema) |
-| `-r, --root <rootPath>` | [`rootPath`](#rootpath) |
-| `-b, --base <baseURL>` | [`baseURL`](#baseurl) |
-| `-l, --link <linkRoot>` | [`linkRoot`](#linkroot) |
-| `-f, --force` | [`force`](#force) |
-| `-d, --diff <diffMethod>` | [`diffMethod`](#diffmethod) |
-| `--config` | [`--config`](#--config) |
-
 ## At a glance
 
 | Option                                  | Type                | Default            | Purpose                                                         |
@@ -52,6 +40,36 @@ Every setting is a plugin option in your config file, and most have a CLI flag t
 | [`tmpDir`](#tmpdir)                     | `string`            | _OS temp folder_   | Folder for the schema copy and signature                        |
 | [`telemetry`](#telemetry)               | `boolean`           | _on_               | Anonymous usage telemetry                                       |
 | [`--config`](#--config)                 | flag                | `null`             | Print the resolved configuration                                |
+
+## CLI flags
+
+Every flag below works with `npx docusaurus graphql-to-doc` (Docusaurus plugin) and `npx gqlmd graphql-to-doc` (standalone CLI), and overrides the matching setting.
+
+| Flag                        | Setting                                                  | Description                                  |
+| --------------------------- | -------------------------------------------------------- | -------------------------------------------- |
+| `-s, --schema <path>`       | [`schema`](#schema)                                      | Schema file, URL, or introspection JSON      |
+| `-b, --base <baseURL>`      | [`baseURL`](#baseurl)                                    | Base URL and output folder name              |
+| `-r, --root <rootPath>`     | [`rootPath`](#rootpath)                                  | Root output folder                           |
+| `-l, --link <linkRoot>`     | [`linkRoot`](#linkroot)                                  | Root path for cross-links                    |
+| `-h, --homepage <file>`     | [`homepage`](#homepage)                                  | Custom homepage file                         |
+| `-f, --force`               | [`force`](#force)                                        | Skip diff, always regenerate                 |
+| `-d, --diff <method>`       | [`diffMethod`](#diffmethod)                              | Diff method (`NONE`, `SCHEMA-DIFF`, etc.)    |
+| `-t, --tmp <dir>`           | [`tmpDir`](#tmpdir)                                      | Temp dir for schema diffing                  |
+| `--index`                   | [`docOptions.index`](#docoptions)                        | Generate category index pages                |
+| `--hierarchy <type>`        | [`printTypeOptions.hierarchy`](#printtypeoptions)        | Folder structure: `api`, `entity`, `flat`    |
+| `--deprecated <option>`     | [`printTypeOptions.deprecated`](#printtypeoptions)       | `default`, `group`, or `skip`                |
+| `--noParentType`            | [`printTypeOptions.parentTypePrefix`](#printtypeoptions) | Hide parent type prefix on fields            |
+| `--noTypeBadges`            | [`printTypeOptions.typeBadges`](#printtypeoptions)       | Hide type attribute badges                   |
+| `--noSectionId`             | [`docOptions.sectionHeaderId`](#docoptions)              | Disable section header IDs for permalinks    |
+| `--only <@directive...>`    | [`onlyDocDirective`](#onlydocdirective)                  | Include only types with these directives     |
+| `--skip <@directive...>`    | [`skipDocDirective`](#skipdocdirective)                  | Exclude types with these directives          |
+| `--groupByDirective <expr>` | [`groupByDirective`](#groupbydirective)                  | Group by directive: `@dir(field\|=fallback)` |
+| `--pretty`                  | [`pretty`](#pretty)                                      | Format output with Prettier                  |
+| `--formatter <pkg>`         | [`formatter`](#formatter)                                | Formatter package name or path               |
+| `--mdxParser <pkg>`         | ~~`mdxParser`~~ (deprecated)                             | Deprecated alias for `formatter`             |
+| `--config`                  | [`--config`](#--config)                                  | Print resolved config (debug)                |
+
+`--formatter` and `--mdxParser` are only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
 
 ## Input
 
