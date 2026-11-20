@@ -411,7 +411,7 @@ export const getVisibilityDirectives = (
  * getCustomDirectives({ example: { invalid: true } }, []);
  * // Error: Wrong format for plugin custom directive "example"...
  * ```
- * @see {@link DOCS_URL}/advanced/custom-directive for custom directive format documentation
+ * @see {@link DOCS_URL}/customize/custom-directive for custom directive format documentation
  */
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const getCustomDirectives = (
@@ -442,7 +442,7 @@ export const getCustomDirectives = (
       !("tag" in option || "descriptor" in option)
     ) {
       throw new Error(
-        `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/advanced/custom-directive`,
+        `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/customize/custom-directive`,
       );
     }
   }
