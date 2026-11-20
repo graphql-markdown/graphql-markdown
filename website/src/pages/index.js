@@ -143,13 +143,13 @@ function HomepageHeader() {
         >
           <Link
             className={clsx(
-              "button button--outline button--lg",
+              "button button--lg",
               styles.heroButton,
-              styles.heroButtonSecondary,
+              styles.heroButtonPrimary,
             )}
             to="/docs/guides/nuxt"
           >
-            Nuxt →
+            Start with Nuxt →
           </Link>
           <Link
             className={clsx(
