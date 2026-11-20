@@ -173,11 +173,49 @@
 }
 
 /* ── Preview image ── */
-.heroImage {
+.heroPreview {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) auto minmax(0, 3fr);
+  align-items: start;
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 2.5rem auto 0;
+  text-align: left;
+}
+
+.previewPanel {
+  margin: 0;
+  min-width: 0;
+}
+
+.previewCaption {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 0.5rem;
+}
+
+.previewCode {
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 16px rgb(0 0 0 / 12%);
+}
+
+.previewArrow {
+  align-self: center;
+  font-size: 1.75rem;
+  color: var(--ifm-color-primary);
+}
+
+.previewShot {
   display: block;
-  width: min(860px, 100%);
+  width: 100%;
   height: auto;
-  margin: 1.5rem auto 0;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgb(0 0 0 / 12%);
 }
 
 /* ── Trusted by strip ── */
@@ -259,8 +297,13 @@
     padding: 2rem 1rem 1.5rem;
   }
 
-  .heroImage {
-    width: 100%;
+  .heroPreview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .previewArrow {
+    justify-self: center;
+    transform: rotate(90deg);
   }
 
   .buttons {

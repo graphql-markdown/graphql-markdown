@@ -2,6 +2,9 @@ import { useState } from "react";
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import Layout from "@theme/Layout";
+import CodeBlock from "@theme/CodeBlock";
+import ThemedImage from "@theme/ThemedImage";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 import HomepageFeatures from "@site/src/components/HomepageFeatures";
 
 import styles from "./index.module.css";
@@ -54,6 +57,59 @@ function InstallCommand() {
         </button>
       </div>
     </>
+  );
+}
+
+const HERO_SDL = `"""
+A unit of work tracked in the workspace.
+"""
+type Project implements Node {
+  id: ID!
+  name: String!
+  status: ProjectStatus!
+  owner: User!
+  folder: Folder
+  updatedAt: DateTime!
+  state: String @deprecated(reason: "Use status")
+}`;
+
+function HeroPreview() {
+  return (
+    <div className={styles.heroPreview}>
+      <figure className={styles.previewPanel}>
+        <figcaption className={styles.previewCaption}>Your schema</figcaption>
+        <CodeBlock language="graphql" className={styles.previewCode}>
+          {HERO_SDL}
+        </CodeBlock>
+      </figure>
+      <span className={styles.previewArrow} aria-hidden="true">
+        →
+      </span>
+      <figure className={styles.previewPanel}>
+        <figcaption className={styles.previewCaption}>
+          Generated docs ·{" "}
+          <a
+            href="https://graphql-markdown.dev/demo-nuxt/api-reference/#objects-project"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            live demo
+          </a>
+        </figcaption>
+        <ThemedImage
+          className={styles.previewShot}
+          alt="Generated API reference page for the Project type: description, fields with type badges, and the SDL"
+          sources={{
+            light: useBaseUrl("/img/hero-output.webp"),
+            dark: useBaseUrl("/img/hero-output-dark.webp"),
+          }}
+          width={1200}
+          height={750}
+          fetchPriority="high"
+          decoding="async"
+        />
+      </figure>
+    </div>
   );
 }
 
@@ -119,15 +175,7 @@ function HomepageHeader() {
           </Link>
         </div>
 
-        <img
-          className={styles.heroImage}
-          src="/img/preview.svg"
-          alt="GraphQL-Markdown output: Markdown documentation generated from a GraphQL schema"
-          width="1280"
-          height="640"
-          fetchpriority="high"
-          decoding="async"
-        />
+        <HeroPreview />
       </div>
     </header>
   );
