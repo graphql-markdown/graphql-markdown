@@ -59,9 +59,15 @@ jobs:
 
       - name: Push changes to website repo
         run: |
-          # Copy the build output including dotfiles (e.g. .nojekyll, which keeps
+          # Mirror the build output, dotfiles included (e.g. .nojekyll, which keeps
           # GitHub Pages from running Jekyll and stripping Docusaurus _-prefixed assets).
-          cp -Rf "${{ env.SOURCE_DIR }}/website/build/." "${{ env.TARGET_DIR }}/"
+          # --delete removes pages the build no longer produces: a stale
+          # docs/<page>.html would otherwise shadow the client redirect written to
+          # docs/<page>/index.html. Files owned by the website repo itself are kept.
+          rsync -a --delete \
+            --exclude ".git" --exclude ".github" \
+            --exclude "CNAME" --exclude "LICENSE" --exclude "README.md" \
+            "${{ env.SOURCE_DIR }}/website/build/" "${{ env.TARGET_DIR }}/"
           cd ${{ env.TARGET_DIR }}
           git add --all
           git commit -am ":memo: update documentation ($GITHUB_SHA)"
