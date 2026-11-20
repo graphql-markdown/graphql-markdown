@@ -301,6 +301,26 @@
   background: rgba(135, 222, 170, 0.08);
 }
 
+a.trustedByChip {
+  color: inherit;
+  text-decoration: none;
+  transition:
+    opacity 0.15s,
+    background 0.15s;
+}
+
+a.trustedByChip:hover {
+  opacity: 1;
+  background: rgba(229, 53, 171, 0.12);
+}
+
+.trustedByStats {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
 .trustedByMore {
   font-size: 0.82rem;
   font-weight: 600;

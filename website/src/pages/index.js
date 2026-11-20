@@ -27,6 +27,10 @@ const SHOWCASE_NAMES = [
 const MORE_COUNT =
   Math.floor((showcaseData.length - SHOWCASE_NAMES.length) / 10) * 10;
 
+const SHOWCASE_BY_NAME = new Map(
+  showcaseData.map((entry) => [entry.name.toLowerCase(), entry.href]),
+);
+
 function InstallCommand() {
   const [copied, setCopied] = useState(false);
   const cmd = "npm create graphql-markdown-docs@latest";
@@ -185,23 +189,38 @@ function TrustedBy() {
     <div className={styles.trustedBy}>
       <span className={styles.trustedByLabel}>Trusted by teams at</span>
       <div className={styles.trustedByNames}>
-        {SHOWCASE_NAMES.map((name) => (
-          <span key={name} className={styles.trustedByChip}>
-            {name}
-          </span>
-        ))}
-        <Link to="/showcase" className={styles.trustedByMore}>
-          +{MORE_COUNT} more
-        </Link>
-        <span className={styles.trustedBySep}>·</span>
-        <a
-          href="https://www.npmjs.com/package/@graphql-markdown/core"
-          className={styles.downloadsChip}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {downloads} weekly downloads
-        </a>
+        {SHOWCASE_NAMES.map((name) => {
+          const href = SHOWCASE_BY_NAME.get(name.toLowerCase());
+          return href ? (
+            <a
+              key={name}
+              href={href}
+              className={styles.trustedByChip}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {name}
+            </a>
+          ) : (
+            <span key={name} className={styles.trustedByChip}>
+              {name}
+            </span>
+          );
+        })}
+        <span className={styles.trustedByStats}>
+          <Link to="/showcase" className={styles.trustedByMore}>
+            +{MORE_COUNT} more
+          </Link>
+          <span className={styles.trustedBySep}>·</span>
+          <a
+            href="https://www.npmjs.com/package/@graphql-markdown/core"
+            className={styles.downloadsChip}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {downloads} weekly downloads
+          </a>
+        </span>
       </div>
     </div>
   );
