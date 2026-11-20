@@ -29,17 +29,17 @@ const OUTPUT_DIR = join(
 const VIEWPORT = { width: 1280, height: 800 };
 
 const DEMOS = [
-  { id: "demo-docusaurus", page: "types/objects/character" },
+  { id: "demo-docusaurus", page: "types/objects/project" },
   { id: "demo-nuxt", page: "api-reference/objects-project" },
-  { id: "demo-astro-starlight", page: "types/objects/media/" },
-  { id: "demo-nextjs-fumadocs", page: "docs/types/objects/media" },
-  { id: "demo-docus", page: "docs/types/objects/media" },
-  { id: "demo-vite-vocs", page: "types/objects/media" },
-  { id: "demo-hugo", page: "graphql/types/objects/country/" },
-  { id: "demo-mkdocs", page: "graphql/types/objects/country/" },
-  { id: "demo-mdbook", page: "graphql/types/objects/country.html" },
-  { id: "demo-docfx", page: "docs/graphql/types/objects/country.html" },
-  { id: "demo-honkit", page: "graphql/objects-repository.html" },
+  { id: "demo-astro-starlight", page: "types/objects/project/" },
+  { id: "demo-nextjs-fumadocs", page: "docs/types/objects/project" },
+  { id: "demo-docus", page: "docs/types/objects/project" },
+  { id: "demo-vite-vocs", page: "types/objects/project" },
+  { id: "demo-hugo", page: "graphql/types/objects/project/" },
+  { id: "demo-mkdocs", page: "graphql/types/objects/project/" },
+  { id: "demo-mdbook", page: "graphql/types/objects/project.html" },
+  { id: "demo-docfx", page: "docs/graphql/types/objects/project.html" },
+  { id: "demo-honkit", page: "graphql/objects-project.html" },
 ];
 
 const selected = process.argv.slice(2);
