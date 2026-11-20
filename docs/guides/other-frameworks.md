@@ -8,6 +8,9 @@ keywords:
   - custom MDX formatters
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Integration with frameworks
 
 GraphQL-Markdown supports multiple documentation frameworks through formatter presets. Each framework has its own setup guide, or you can create a custom formatter for any framework.
@@ -32,9 +35,36 @@ For new configurations, use the `formatter` setting. The legacy `mdxParser` sett
 
 Install the CLI and formatter presets:
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/cli @graphql-markdown/formatters graphql
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/cli @graphql-markdown/formatters graphql
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/cli @graphql-markdown/formatters graphql
+```
+
+</TabItem>
+</Tabs>
 
 Then configure the formatter that matches your framework:
 
@@ -51,9 +81,36 @@ extensions:
 
 Install the formatters package:
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/formatters
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/formatters
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/formatters
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/formatters
+```
+
+</TabItem>
+</Tabs>
 
 Then select your framework:
 
@@ -82,9 +139,36 @@ extensions:
     formatter: "@graphql-markdown/formatters/docusaurus" # or your framework
 ```
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npx gqlmd graphql-to-doc
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm exec gqlmd graphql-to-doc
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn gqlmd graphql-to-doc
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bunx gqlmd graphql-to-doc
+```
+
+</TabItem>
+</Tabs>
 
 The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/guides/additional-schema#graphql-config).
 

@@ -11,6 +11,9 @@ keywords:
   - file schema
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Schema loading
 
 GraphQL-Markdown use external loaders for loading GraphQL schemas (see [full list](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders)).
@@ -42,9 +45,36 @@ type PackageOptionsConfig = BaseLoaderOptions & RootTypes;
 
 Use `@graphql-tools/graphql-file-loader` if you want to load a local schema:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-tools/graphql-file-loader
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+</Tabs>
 
 Once done, you can declare the loader in the GraphQL-Markdown configuration:
 
@@ -60,9 +90,36 @@ extensions:
 
 Use `@graphql-tools/url-loader`, if you want to load a schema from a URL:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-tools/url-loader
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-tools/url-loader
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-tools/url-loader
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-tools/url-loader
+```
+
+</TabItem>
+</Tabs>
 
 Once done, you can declare the loader in the GraphQL-Markdown configuration:
 
@@ -88,9 +145,36 @@ See our [Troubleshooting section](/docs/troubleshooting) in case of error ['UrlL
 
 For teams using a code-first approach, use `@graphql-tools/code-file-loader` to load a schema exported directly from a TypeScript or JavaScript file:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-tools/code-file-loader
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-tools/code-file-loader
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-tools/code-file-loader
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-tools/code-file-loader
+```
+
+</TabItem>
+</Tabs>
 
 Once done, you can declare the loader in the GraphQL-Markdown configuration:
 

@@ -9,6 +9,9 @@ keywords:
   - documentation settings
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Settings
 
 Every setting is a plugin option in your config file, and most have a CLI flag that overrides it. Run the CLI with `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone), and see [configuration](/docs/reference/configuration) for where the config lives.
@@ -551,9 +554,36 @@ The possible values are:
 
 The package `@graphql-markdown/diff` is required for using `diffMethod`. If the package is missing, then the change detection is always skipped.
 
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
 ```shell
 npm install @graphql-markdown/diff
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/diff
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/diff
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/diff
+```
+
+</TabItem>
+</Tabs>
 
 ### `tmpDir`
 
@@ -581,6 +611,33 @@ Print the resolved configuration used for generating documentation. This CLI fla
 
 Example:
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npx docusaurus graphql-to-doc --config
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm exec docusaurus graphql-to-doc --config
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn docusaurus graphql-to-doc --config
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bunx docusaurus graphql-to-doc --config
+```
+
+</TabItem>
+</Tabs>

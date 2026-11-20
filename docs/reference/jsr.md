@@ -9,6 +9,9 @@ keywords:
   - GraphQL documentation API
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # JSR
 
 The GraphQL-Markdown libraries are also published on [JSR](https://jsr.io/@graphql-markdown): `core`, `graphql`, `utils`, `formatters`, `printer-legacy`, `helpers`, `diff`, `logger`, `telemetry` and `types`. Use them to generate the documentation from your own code, as shown in [Use the API](/docs/get-started#use-the-api).
@@ -17,17 +20,29 @@ The CLI (`gqlmd`), the Docusaurus plugin, the scaffolder and the Nuxt theme are 
 
 ## Install
 
-```shell title="Deno"
+<Tabs groupId="runtime" queryString>
+<TabItem value="deno" label="Deno" default>
+
+```shell
 deno add jsr:@graphql-markdown/core
 ```
 
-```shell title="Node.js"
+</TabItem>
+<TabItem value="node" label="Node.js">
+
+```shell
 npx jsr add @graphql-markdown/core
 ```
 
-```shell title="Bun"
+</TabItem>
+<TabItem value="bun" label="Bun">
+
+```shell
 bunx jsr add @graphql-markdown/core
 ```
+
+</TabItem>
+</Tabs>
 
 ## GraphQL.js version
 

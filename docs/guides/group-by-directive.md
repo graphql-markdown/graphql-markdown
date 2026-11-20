@@ -11,6 +11,9 @@ keywords:
   - type grouping
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Documentation categories
 
 You can group the documentation to provide an easier user experience to navigate. This is accomplished by adding a directive to all the types you want to have grouped.
@@ -39,9 +42,36 @@ We can add a fallback option called `Common` which is for types that we don't ex
 
 It can be set either with the command line flag `--groupByDirective`:
 
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
 ```shell
 npx gqlmd graphql-to-doc --groupByDirective "@doc(category|=Common)"
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm exec gqlmd graphql-to-doc --groupByDirective "@doc(category|=Common)"
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn gqlmd graphql-to-doc --groupByDirective "@doc(category|=Common)"
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bunx gqlmd graphql-to-doc --groupByDirective "@doc(category|=Common)"
+```
+
+</TabItem>
+</Tabs>
 
 or the configuration option `groupByDirective`:
 

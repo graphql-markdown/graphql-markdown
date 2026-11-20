@@ -12,6 +12,9 @@ keywords:
   - auth directive
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Custom schema directives handling
 
 Use `customDirective` to render a custom description or badge for the directives applied in your schema.
@@ -156,9 +159,36 @@ The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide
 
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm i @graphql-markdown/helpers
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/helpers
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/helpers
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/helpers
+```
+
+</TabItem>
+</Tabs>
 
 ### `@graphql-markdown/helpers`
 

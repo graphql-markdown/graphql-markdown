@@ -11,6 +11,9 @@ keywords:
   - type definitions
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Troubleshooting
 
 Fixes for common errors when generating documentation. Find your error message below, or see the end of the page for how to get help.
@@ -52,9 +55,36 @@ Try these solutions:
 
 1. Ensure required loaders are installed:
 
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
 ```shell
 npm install @graphql-tools/url-loader @graphql-tools/json-file-loader
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-tools/url-loader @graphql-tools/json-file-loader
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-tools/url-loader @graphql-tools/json-file-loader
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-tools/url-loader @graphql-tools/json-file-loader
+```
+
+</TabItem>
+</Tabs>
 
 1. Verify loader configuration:
 

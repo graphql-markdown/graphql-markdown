@@ -12,6 +12,9 @@ keywords:
   - configuration
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Getting started
 
 The fastest way to start is the [`create-graphql-markdown-docs`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs) scaffolder, which creates a ready-to-run Nuxt or Docusaurus site, or [adds GraphQL-Markdown to an existing site](#add-to-an-existing-site). Or try it right away with one of our [demos](/docs/try-it).
@@ -22,39 +25,108 @@ The fastest way to start is the [`create-graphql-markdown-docs`](https://github.
 
 Node.js version [22.18](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
-You can use `npm`, `yarn`, `pnpm` or `bun` as your package manager. The examples use `npm`; substitute your own. To manage several Node.js versions on one machine, use [nvm](https://github.com/nvm-sh/nvm).
+You can use `npm`, `yarn`, `pnpm` or `bun` as your package manager. Command examples have a tab for each package manager; pick yours once and every page follows. To manage several Node.js versions on one machine, use [nvm](https://github.com/nvm-sh/nvm).
 
 ### Run the scaffolder
 
 You can type these commands into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
 
-```shell title="npm"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest
 ```
 
-```shell title="pnpm"
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
 pnpm create graphql-markdown-docs
 ```
 
-```shell title="yarn"
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
 yarn create graphql-markdown-docs
 ```
 
-```shell title="bun"
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
 bun create graphql-markdown-docs
 ```
 
+</TabItem>
+</Tabs>
+
 Pass the project directory as an argument to skip that prompt:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest my-docs
 ```
 
-With npm, flags must follow a `--` separator so that npm forwards them to the CLI:
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
 
-```shell title="shell"
+```shell
+pnpm create graphql-markdown-docs my-docs
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn create graphql-markdown-docs my-docs
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun create graphql-markdown-docs my-docs
+```
+
+</TabItem>
+</Tabs>
+
+With npm, flags follow a `--` separator so that npm forwards them to the CLI; the other package managers pass them directly:
+
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest my-docs -- --framework docusaurus
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm create graphql-markdown-docs my-docs --framework docusaurus
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn create graphql-markdown-docs my-docs --framework docusaurus
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun create graphql-markdown-docs my-docs --framework docusaurus
+```
+
+</TabItem>
+</Tabs>
 
 ### What the prompts ask
 
@@ -96,32 +168,122 @@ See [schema loading](/docs/guides/schema-loading) for other loaders and configur
 
 For a Nuxt site:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 cd my-graphql-docs
 npm run dev
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+cd my-graphql-docs
+pnpm dev
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+cd my-graphql-docs
+yarn dev
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+cd my-graphql-docs
+bun run dev
+```
+
+</TabItem>
+</Tabs>
 
 The development server is available at [http://localhost:3000/](http://localhost:3000/).
 
 For a Docusaurus site:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 cd my-graphql-docs
 npm run doc
 npm run start
 ```
 
-If you skipped the install step, run `npm install` first.
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
 
-The `npm run doc` command is a shortcut in the scaffolded site for `npm run docusaurus graphql-to-doc`. The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
+```shell
+cd my-graphql-docs
+pnpm doc
+pnpm start
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+cd my-graphql-docs
+yarn doc
+yarn start
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+cd my-graphql-docs
+bun run doc
+bun run start
+```
+
+</TabItem>
+</Tabs>
+
+If you skipped the install step, install the dependencies first (`npm install`, `pnpm install`, `yarn` or `bun install`).
+
+The `doc` script is a shortcut in the scaffolded site for `docusaurus graphql-to-doc`. The `start` script builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
 
 ### Non-interactive usage (CI)
 
 Use `--yes` to accept all defaults and skip every prompt:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest -- --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm create graphql-markdown-docs --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn create graphql-markdown-docs --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun create graphql-markdown-docs --yes --dir ./my-docs --schema ./schema.graphql --no-install --no-git
+```
+
+</TabItem>
+</Tabs>
 
 | Flag                             | Description                                                                                                                                                                                                                                                                               |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -146,16 +308,73 @@ Run the scaffolder inside your existing project. When the folder already holds a
 
 It detects your framework from `package.json` (or asks you), then asks for your schema (a path, glob or URL) and the output folder for the generated docs. It writes a `.graphqlrc` file and a `gqlmd` script, and prints the one step left for your framework, such as adding a sidebar or navigation entry.
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 cd my-starlight-site
 npm create graphql-markdown-docs@latest
 ```
 
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+cd my-starlight-site
+pnpm create graphql-markdown-docs
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+cd my-starlight-site
+yarn create graphql-markdown-docs
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+cd my-starlight-site
+bun create graphql-markdown-docs
+```
+
+</TabItem>
+</Tabs>
+
 To skip the prompts, for example in CI, pass the options explicitly:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm create graphql-markdown-docs . --yes --schema ./schema.graphql --output src/content/docs/api --install
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn create graphql-markdown-docs . --yes --schema ./schema.graphql --output src/content/docs/api --install
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun create graphql-markdown-docs . --yes --schema ./schema.graphql --output src/content/docs/api --install
+```
+
+</TabItem>
+</Tabs>
 
 The scaffolder never edits your framework configuration files and never overwrites existing files. It installs nothing unless you pass `--install`. Use `--dry-run` to preview the changes first.
 
@@ -165,17 +384,71 @@ Prefer to set it up by hand? Follow the steps for your framework.
 
 ### Docusaurus
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/docusaurus graphql
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/docusaurus graphql
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/docusaurus graphql
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/docusaurus graphql
+```
+
+</TabItem>
+</Tabs>
 
 Then add a schema loader and configure the plugin. See the [Docusaurus guide](/docs/guides/docusaurus) for requirements and configuration.
 
 ### Nuxt
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/nuxt-theme
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+</Tabs>
 
 Then create `content.config.ts` and `generate-docs.ts`. See the [Nuxt guide](/docs/guides/nuxt#extending-the-layer-directly).
 
@@ -187,9 +460,36 @@ For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Other fra
 
 To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/reference/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages. The `loaders` option is required: it names the [schema loader](/docs/guides/schema-loading) used to read the schema.
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/core graphql @graphql-tools/graphql-file-loader
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/core graphql @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/core graphql @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/core graphql @graphql-tools/graphql-file-loader
+```
+
+</TabItem>
+</Tabs>
 
 ```ts title="generate-docs.ts"
 import { buildConfig, generateDocFromSchema } from "@graphql-markdown/core";
