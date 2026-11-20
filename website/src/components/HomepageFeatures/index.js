@@ -34,12 +34,12 @@ const HowItWorksSteps = [
 
 const FeatureList = [
   {
-    title: "Schema-to-docs in seconds",
+    title: "Schema to docs in one command",
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
         Get a page for every type, query, mutation, and subscription in your
-        schema, generated in one run.
+        schema.
       </>
     ),
     checklist: [
