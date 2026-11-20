@@ -15,31 +15,31 @@ Every setting is a plugin option in your config file, and most have a CLI flag t
 
 ## At a glance
 
-| Option | Type | Default | Purpose |
-| :----- | :--- | :------ | :------ |
-| [`schema`](#schema) | `string` | `./schema.graphql` | Path, URL or introspection result of the schema |
-| [`loaders`](#loaders) | `object` | `{ }` | GraphQL schema loaders |
-| [`rootPath`](#rootpath) | `string` | `./docs` | Root folder for the generated documentation |
-| [`baseURL`](#baseurl) | `string` | `schema` | Base URL and output folder name under `rootPath` |
-| [`linkRoot`](#linkroot) | `string` | `/` | Root path used for type cross-links |
-| [`docOptions`](#docoptions) | `object` | - | Index pages, front matter, category sort, header IDs |
-| [`printTypeOptions`](#printtypeoptions) | `object` | - | Hierarchy, deprecated handling, badges, parent prefix |
-| [`groupByDirective`](#groupbydirective) | `string` | `undefined` | Group types by a directive: `@directive(field\|=fallback)` |
-| [`homepage`](#homepage) | `string` \| `false` | `generated.md` | Landing page file, `false` to disable |
-| [`id`](#id) | `string` | `default` | Identifier of the configuration instance |
-| [`onlyDocDirective`](#onlydocdirective) | `string[]` | `[]` | Include only types with these directives |
-| [`skipDocDirective`](#skipdocdirective) | `string[]` | `[]` | Exclude types with these directives |
-| [`customDirective`](#customdirective) | `object` | `undefined` | Deprecated, use `decorators` |
-| [`decorators`](#decorators) | `object` | `undefined` | Render custom content for schema nodes |
-| [`formatter`](#formatter) | `string` | `undefined` | Package name or path to a formatter module |
-| [`outputAdapter`](#outputadapter) | `object` | local filesystem | Write pages somewhere other than the filesystem |
-| [`metatags`](#metatags) | `object[]` | `[]` | Page `<head>` metadata |
-| [`pretty`](#pretty) | `boolean` | `false` | Format generated files with Prettier |
-| [`force`](#force) | `boolean` | `false` | Force regeneration of all files |
-| [`diffMethod`](#diffmethod) | `string` | `NONE` | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH` |
-| [`tmpDir`](#tmpdir) | `string` | _OS temp folder_ | Folder for the schema copy and signature |
-| [`telemetry`](#telemetry) | `boolean` | _on_ | Anonymous usage telemetry |
-| [`--config`](#--config) | flag | `null` | Print the resolved configuration |
+| Option                                  | Type                | Default            | Purpose                                                         |
+| :-------------------------------------- | :------------------ | :----------------- | :-------------------------------------------------------------- |
+| [`schema`](#schema)                     | `string`            | `./schema.graphql` | Path, URL or introspection result of the schema                 |
+| [`loaders`](#loaders)                   | `object`            | `{ }`              | GraphQL schema loaders                                          |
+| [`rootPath`](#rootpath)                 | `string`            | `./docs`           | Root folder for the generated documentation                     |
+| [`baseURL`](#baseurl)                   | `string`            | `schema`           | Base URL and output folder name under `rootPath`                |
+| [`linkRoot`](#linkroot)                 | `string`            | `/`                | Root path used for type cross-links                             |
+| [`docOptions`](#docoptions)             | `object`            | -                  | Index pages, front matter, category sort, header IDs            |
+| [`printTypeOptions`](#printtypeoptions) | `object`            | -                  | Hierarchy, deprecated handling, badges, parent prefix           |
+| [`groupByDirective`](#groupbydirective) | `string`            | `undefined`        | Group types by a directive: `@directive(field\|=fallback)`      |
+| [`homepage`](#homepage)                 | `string` \| `false` | `generated.md`     | Landing page file, `false` to disable                           |
+| [`id`](#id)                             | `string`            | `default`          | Identifier of the configuration instance                        |
+| [`onlyDocDirective`](#onlydocdirective) | `string[]`          | `[]`               | Include only types with these directives                        |
+| [`skipDocDirective`](#skipdocdirective) | `string[]`          | `[]`               | Exclude types with these directives                             |
+| [`customDirective`](#customdirective)   | `object`            | `undefined`        | Deprecated, use `decorators`                                    |
+| [`decorators`](#decorators)             | `object`            | `undefined`        | Render custom content for schema nodes                          |
+| [`formatter`](#formatter)               | `string`            | `undefined`        | Package name or path to a formatter module                      |
+| [`outputAdapter`](#outputadapter)       | `object`            | local filesystem   | Write pages somewhere other than the filesystem                 |
+| [`metatags`](#metatags)                 | `object[]`          | `[]`               | Page `<head>` metadata                                          |
+| [`pretty`](#pretty)                     | `boolean`           | `false`            | Format generated files with Prettier                            |
+| [`force`](#force)                       | `boolean`           | `false`            | Force regeneration of all files                                 |
+| [`diffMethod`](#diffmethod)             | `string`            | `NONE`             | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH` |
+| [`tmpDir`](#tmpdir)                     | `string`            | _OS temp folder_   | Folder for the schema copy and signature                        |
+| [`telemetry`](#telemetry)               | `boolean`           | _on_               | Anonymous usage telemetry                                       |
+| [`--config`](#--config)                 | flag                | `null`             | Print the resolved configuration                                |
 
 ## Input
 
@@ -399,8 +399,7 @@ Additionally, the module can export:
 
 The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/customize/hooks)**.
 
-
-```js title="docusaurus.config.js"
+````js title="docusaurus.config.js"
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -421,7 +420,7 @@ plugins: [
       },
     ],
   ],
-```
+````
 
 ### `outputAdapter`
 
@@ -461,7 +460,6 @@ Meta tags are provided as a list of metadata objects, eg `[{ name: "robots", con
 | Setting    | CLI flag        | Default |
 | ---------- | --------------- | ------- |
 | `metatags` | _not supported_ | `[]`    |
-
 
 ```js title="docusaurus.config.js"
 plugins: [
