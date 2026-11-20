@@ -15,7 +15,7 @@ GraphQL-Markdown reads your schema, parses every type and operation, and writes 
 
 ## Pipeline
 
-![pipeline](/img/docs/pipeline.png)
+![GraphQL-Markdown pipeline: a schema from local files, a remote endpoint or source code is parsed and printed into Markdown or MDX pages for your framework, shaped by decorators, hooks and a formatter](/img/docs/pipeline.svg)
 
 ### Input
 
