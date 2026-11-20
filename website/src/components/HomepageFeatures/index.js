@@ -8,8 +8,8 @@ const HowItWorksSteps = [
     title: "Set up",
     description: (
       <>
-        Scaffold a new Nuxt or Docusaurus site, or add the Docusaurus plugin or
-        a formatter preset to your existing docs.
+        Run the create command for a new site, or install the package in the
+        docs project you already have.
       </>
     ),
   },
@@ -27,10 +27,7 @@ const HowItWorksSteps = [
     step: "3",
     title: "Generate",
     description: (
-      <>
-        Run the CLI to get Markdown or MDX pages, ready for your docs site.{" "}
-        <Link to="/docs/guides/other-frameworks">Choose a path →</Link>
-      </>
+      <>Run the CLI to get Markdown or MDX pages, ready for your docs site.</>
     ),
   },
 ];
@@ -41,8 +38,8 @@ const FeatureList = [
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
-        Point it at SDL files, an introspection endpoint, GraphQL Config, or a
-        code-first schema, and get a page for every type and operation.
+        Get a page for every type, query, mutation, and subscription in your
+        schema, generated in one run.
       </>
     ),
     checklist: [
