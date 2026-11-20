@@ -13,6 +13,8 @@ keywords:
 
 # Try it
 
+Live demos and sandboxes for each supported framework. Open one to see the generated output, or fork it to try your own schema.
+
 ## Docusaurus
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docusaurus/).

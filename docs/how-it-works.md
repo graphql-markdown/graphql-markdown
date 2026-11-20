@@ -9,7 +9,7 @@ keywords:
   - how it works
 ---
 
-# How It Works
+# How it works
 
 GraphQL-Markdown reads your schema, parses every type and operation, and writes one MDX file per type category — ready to publish with Docusaurus or any MDX framework.
 

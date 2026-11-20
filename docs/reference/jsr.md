@@ -45,7 +45,7 @@ Some features load their package only when they are used, so a JSR install does 
 
 | Feature                                                             | Package                        |
 | ------------------------------------------------------------------- | ------------------------------ |
-| [Schema loaders](/docs/guides/schema-loading)                                   | `@graphql-tools/*-loader`      |
+| [Schema loaders](/docs/guides/schema-loading)                       | `@graphql-tools/*-loader`      |
 | [GraphQL Config](/docs/reference/configuration#graphql-config) file | `graphql-config`               |
 | [`pretty`](/docs/reference/settings#pretty)                         | `prettier`                     |
 | [`diffMethod`](/docs/reference/settings#diffmethod)                 | `@graphql-markdown/diff`       |

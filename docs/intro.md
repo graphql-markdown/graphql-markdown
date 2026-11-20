@@ -14,7 +14,7 @@ keywords:
 
 # Introduction
 
-GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command, add the official Docusaurus integration to an existing Docusaurus site, or use the CLI with formatter presets for other supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.
+GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command. You can also add the official Docusaurus integration to an existing site. For other ecosystems such as Hugo, MkDocs, DocFX, and mdBook, use the CLI with formatter presets.
 
 ## Why GraphQL Markdown?
 
@@ -36,7 +36,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Namespaced operations (nested query/mutation/subscription objects)
 - GraphQL config support
 
-## Quick Install
+## Quick install
 
 The recommended start is the scaffolder, which creates a **new site** (Nuxt by default, or Docusaurus):
 
