@@ -299,7 +299,7 @@ export const buildCustomDirectiveDecorators = (
  * Builds the example section as a decorator definition.
  *
  * The example section is a specialized decorator: it is driven by a schema
- * directive, named by [`printTypeOptions.exampleSection`](https://graphql-markdown.dev/docs/settings#printtypeoptions),
+ * directive, named by [`printTypeOptions.exampleSection`](https://graphql-markdown.dev/docs/reference/settings#printtypeoptions),
  * and rendered as a code block.
  *
  * It resolves its own value rather than gating on a directive by name,

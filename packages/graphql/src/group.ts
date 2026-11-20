@@ -1,7 +1,7 @@
 /**
  * Library supporting `groupByDirective` for grouping GraphQL schema entities.
  *
- * @see [Option `groupByDirective`](https://graphql-markdown.dev/docs/advanced/group-by-directive)
+ * @see [Option `groupByDirective`](https://graphql-markdown.dev/docs/guides/group-by-directive)
  *
  * @packageDocumentation
  */

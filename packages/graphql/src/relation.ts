@@ -1,7 +1,7 @@
 /**
  * Library for displaying relations between GraphQL schema entities.
  *
- * @see [Settings `printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+ * @see [Settings `printTypeOptions`](https://graphql-markdown.dev/docs/reference/settings#printtypeoptions)
  *
  * @packageDocumentation
  */
