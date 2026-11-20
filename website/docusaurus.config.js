@@ -75,6 +75,7 @@ const config = {
       {
         redirects: [
           { from: "/schema", to: "/docs/guides/docusaurus" },
+          { from: "/docs/category/advanced-settings", to: "/docs/guides/other-frameworks" },
           {
             from: "/docs/advanced/integration-with-frameworks",
             to: "/docs/guides/other-frameworks",

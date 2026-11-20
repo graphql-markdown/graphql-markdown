@@ -13,6 +13,18 @@ keywords:
 
 Every setting is a plugin option in your config file, and most have a CLI flag that overrides it. Run the CLI with `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone), and see [configuration](/docs/reference/configuration) for where the config lives.
 
+## CLI flags
+
+| Flag | Setting |
+| :--- | :------ |
+| `-s, --schema <schema>` | [`schema`](#schema) |
+| `-r, --root <rootPath>` | [`rootPath`](#rootpath) |
+| `-b, --base <baseURL>` | [`baseURL`](#baseurl) |
+| `-l, --link <linkRoot>` | [`linkRoot`](#linkroot) |
+| `-f, --force` | [`force`](#force) |
+| `-d, --diff <diffMethod>` | [`diffMethod`](#diffmethod) |
+| `--config` | [`--config`](#--config) |
+
 ## At a glance
 
 | Option                                  | Type                | Default            | Purpose                                                         |
@@ -399,8 +411,6 @@ Additionally, the module can export:
 
 The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/customize/hooks)**.
 
-````js title="docusaurus.config.js"
-
 ```js title="docusaurus.config.js"
 plugins: [
     [
@@ -420,7 +430,7 @@ plugins: [
       },
     ],
   ],
-````
+```
 
 ### `outputAdapter`
 
