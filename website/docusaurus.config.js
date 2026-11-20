@@ -15,7 +15,7 @@ const config = {
     "Markdown and MDX documentation for GraphQL schemas with Docusaurus and supported formatter presets.",
   url: "https://graphql-markdown.dev",
   baseUrl: "/",
-  onBrokenLinks: "warn",
+  onBrokenLinks: "throw",
   favicon: "img/favicon.ico",
   trailingSlash: false,
   // GitHub pages deployment config.
