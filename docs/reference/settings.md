@@ -68,6 +68,7 @@ Every flag below works with `npx docusaurus graphql-to-doc` (Docusaurus plugin) 
 | `--formatter <pkg>`         | [`formatter`](#formatter)                                | Formatter package name or path               |
 | `--mdxParser <pkg>`         | ~~`mdxParser`~~ (deprecated)                             | Deprecated alias for `formatter`             |
 | `--config`                  | [`--config`](#--config)                                  | Print resolved config (debug)                |
+| `--no-telemetry`            | [`telemetry`](#telemetry)                                | Disable anonymous usage telemetry            |
 
 `--formatter` and `--mdxParser` are only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
 
