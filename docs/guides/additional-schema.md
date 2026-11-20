@@ -1,4 +1,5 @@
 ---
+sidebar_position: 50
 pagination_prev: null
 pagination_next: null
 description: Configure multiple GraphQL schemas in a single project. Set up separate documentation instances for different APIs.
@@ -16,7 +17,7 @@ If you need to support multiple schemas, then you can set multiple projects, eac
 
 ## GraphQL Config
 
-Define `projects` with the same `id` (including `default`) using [GraphQL Config](/docs/configuration#graphql-config):
+Define `projects` with the same `id` (including `default`) using [GraphQL Config](/docs/reference/configuration#graphql-config):
 
 ```yaml title=".graphqlrc"
 projects:
@@ -44,4 +45,4 @@ projects:
 
 Each additional project gets its own generator command, e.g. `npx gqlmd graphql-to-doc:admin`.
 
-For a Docusaurus site using plugin instances instead of GraphQL Config, see [Docusaurus recipes](./docusaurus-recipes#multiple-schemas-docusaurus-plugin-instances).
+For a Docusaurus site using plugin instances instead of GraphQL Config, see [Docusaurus recipes](/docs/guides/docusaurus#multiple-schemas-docusaurus-plugin-instances).

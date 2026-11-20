@@ -4,7 +4,7 @@ Library for displaying relations between GraphQL schema entities.
 
 ## See
 
-[Settings `printTypeOptions`](https://graphql-markdown.dev/docs/settings#printtypeoptions)
+[Settings `printTypeOptions`](https://graphql-markdown.dev/docs/reference/settings#printtypeoptions)
 
 ## Variables
 

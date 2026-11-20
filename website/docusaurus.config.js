@@ -70,6 +70,65 @@ const config = {
       },
     ],
     ["docusaurus-plugin-llms", createLLMSPluginConfig()],
+    [
+      "@docusaurus/plugin-client-redirects",
+      {
+        redirects: [
+          { from: "/schema", to: "/docs/guides/docusaurus" },
+          {
+            from: "/docs/advanced/integration-with-frameworks",
+            to: "/docs/guides/other-frameworks",
+          },
+          {
+            from: "/docs/advanced/docusaurus-recipes",
+            to: "/docs/guides/docusaurus",
+          },
+          { from: "/docs/advanced/nuxt-theme", to: "/docs/guides/nuxt" },
+          { from: "/docs/advanced/hook-recipes", to: "/docs/customize/hooks" },
+          {
+            from: "/docs/advanced/schema-loading",
+            to: "/docs/guides/schema-loading",
+          },
+          {
+            from: "/docs/advanced/additional-schema",
+            to: "/docs/guides/additional-schema",
+          },
+          {
+            from: "/docs/advanced/group-by-directive",
+            to: "/docs/guides/group-by-directive",
+          },
+          {
+            from: "/docs/advanced/namespaced-operations",
+            to: "/docs/guides/namespaced-operations",
+          },
+          {
+            from: "/docs/advanced/custom-root-types",
+            to: "/docs/guides/custom-root-types",
+          },
+          { from: "/docs/advanced/examples", to: "/docs/guides/examples" },
+          {
+            from: "/docs/advanced/custom-directive",
+            to: "/docs/customize/custom-directive",
+          },
+          {
+            from: "/docs/advanced/decorators",
+            to: "/docs/customize/decorators",
+          },
+          {
+            from: "/docs/advanced/output-adapter",
+            to: "/docs/customize/output-adapter",
+          },
+          { from: "/docs/advanced/jsr", to: "/docs/reference/jsr" },
+          { from: "/docs/configuration", to: "/docs/reference/configuration" },
+          {
+            from: "/docs/configuration-cheatsheet",
+            to: "/docs/reference/configuration-cheatsheet",
+          },
+          { from: "/docs/settings", to: "/docs/reference/settings" },
+          { from: "/docs/telemetry", to: "/docs/reference/telemetry" },
+        ],
+      },
+    ],
     // Disabling due to known bug which causes slowdowns in the build process
     // https://github.com/facebook/docusaurus/discussions/11199
     function disableExpensiveBundlerOptimizationPlugin() {
@@ -121,7 +180,7 @@ const config = {
                 return { ...item, priority: 1.0, changefreq: "monthly" };
               }
               if (
-                /\/docs\/(get-started|intro|configuration|try-it)$/.test(
+                /\/docs\/(get-started|intro|reference\/configuration|try-it)$/.test(
                   item.url,
                 )
               ) {
@@ -298,7 +357,7 @@ const config = {
       ],
       announcementBar: {
         content:
-          '🚀 New: scaffold a full API reference site with <strong>npm create graphql-markdown-docs</strong> — see the <a href="/docs/advanced/nuxt-theme">Nuxt theme</a> 🚀',
+          '🚀 New: scaffold a full API reference site with <strong>npm create graphql-markdown-docs</strong> — see the <a href="/docs/guides/nuxt">Nuxt theme</a> 🚀',
         // content:
         //   'If you like GraphQL-Markdown, give it a ⭐️ on <a target="_blank" rel="noopener noreferrer" href="https://github.com/graphql-markdown/graphql-markdown">GitHub</a>!',
         backgroundColor: "#485e58",

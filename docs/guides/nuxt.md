@@ -1,4 +1,5 @@
 ---
+sidebar_position: 20
 description: Scaffold or extend a Nuxt-based GraphQL API reference site with the @graphql-markdown/nuxt-theme layer and its create-graphql-markdown-docs CLI.
 keywords:
   - GraphQL-Markdown Nuxt
@@ -12,7 +13,7 @@ keywords:
 
 `@graphql-markdown/nuxt-theme` is a [Nuxt layer](https://nuxt.com/docs/guide/going-further/layers) that turns a GraphQL schema into a full API reference site — the two-column layout (prose on the left, schema definitions and examples on the right), navigation, search, and generation are all provided. Extend it from your own Nuxt project instead of building a documentation site from scratch on top of the CLI's raw Markdown output.
 
-This is the recommended path if your documentation stack is [Nuxt](https://nuxt.com) — see [Integration with Frameworks](./integration-with-frameworks) for the other supported stacks.
+This is the recommended path if your documentation stack is [Nuxt](https://nuxt.com) — see [Integration with Frameworks](/docs/guides/other-frameworks) for the other supported stacks.
 
 ## Fastest path: the scaffolding CLI
 
@@ -64,7 +65,7 @@ export const generate = createGenerateDocs({
 
 ### Passing schema loading options
 
-`createGenerateDocs` accepts the same `printTypeOptions`, `decorators`, and `loaders` you'd pass to [`runGraphQLMarkdown`](./additional-schema) directly — the schema itself can be a local file, a URL, or anything else a [graphql-tools loader](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders) can read:
+`createGenerateDocs` accepts the same `printTypeOptions`, `decorators`, and `loaders` you'd pass to [`runGraphQLMarkdown`](/docs/guides/additional-schema) directly — the schema itself can be a local file, a URL, or anything else a [graphql-tools loader](https://github.com/ardatan/graphql-tools/tree/master/packages/loaders) can read:
 
 ```ts
 export const generate = createGenerateDocs({

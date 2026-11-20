@@ -29,9 +29,7 @@ const HowItWorksSteps = [
     description: (
       <>
         Run the CLI to get Markdown or MDX pages, ready for your docs site.{" "}
-        <Link to="/docs/advanced/integration-with-frameworks">
-          Choose a path →
-        </Link>
+        <Link to="/docs/guides/other-frameworks">Choose a path →</Link>
       </>
     ),
   },
@@ -61,7 +59,7 @@ const FeatureList = [
         the output for Docusaurus, Nuxt, Hugo, MkDocs, DocFX, mdBook, Astro,
         Next.js, and other supported targets while preserving each ecosystem's
         conventions.{" "}
-        <Link to="/docs/advanced/integration-with-frameworks">
+        <Link to="/docs/guides/other-frameworks">
           Explore formatter presets
         </Link>
         .

@@ -1,4 +1,5 @@
 ---
+sidebar_position: 80
 pagination_prev: null
 pagination_next: null
 description: Configure custom root types for Query, Mutation, and Subscription operations in your GraphQL schema documentation.
@@ -22,7 +23,7 @@ type RootTypes = { query?: string; mutation?: string; subscription?: string };
 - use an empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
 
-Add the option `rootTypes` to the loader options under the GraphQL-Markdown configuration (see also [schema loading](/docs/advanced/schema-loading)):
+Add the option `rootTypes` to the loader options under the GraphQL-Markdown configuration (see also [schema loading](/docs/guides/$1)):
 
 ```yaml title=".graphqlrc"
 schema: ./schema.graphql

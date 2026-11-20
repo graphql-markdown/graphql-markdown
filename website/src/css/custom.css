@@ -280,11 +280,11 @@ a.menu__link[href$="/docs/intro"]::before,
 a.menu__link[href$="/docs/try-it"]::before,
 a.menu__link[href$="/docs/get-started"]::before,
 a.menu__link[href$="/docs/how-it-works"]::before,
-a.menu__link[href$="/docs/configuration"]::before,
-a.menu__link[href$="/docs/configuration-cheatsheet"]::before,
-a.menu__link[href$="/docs/settings"]::before,
+a.menu__link[href$="/docs/reference/configuration"]::before,
+a.menu__link[href$="/docs/reference/configuration-cheatsheet"]::before,
+a.menu__link[href$="/docs/reference/settings"]::before,
 a.menu__link[href$="/docs/troubleshooting"]::before,
-a.menu__link[href$="/docs/telemetry"]::before,
+a.menu__link[href$="/docs/reference/telemetry"]::before,
 .sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
   content: "";
   display: inline-block;
@@ -323,17 +323,17 @@ a.menu__link[href$="/docs/how-it-works"]::before {
   -webkit-mask-image: url("/img/docs/icons/how-it-works.svg");
 }
 
-a.menu__link[href$="/docs/configuration"]::before {
+a.menu__link[href$="/docs/reference/configuration"]::before {
   mask-image: url("/img/docs/icons/configuration.svg");
   -webkit-mask-image: url("/img/docs/icons/configuration.svg");
 }
 
-a.menu__link[href$="/docs/configuration-cheatsheet"]::before {
+a.menu__link[href$="/docs/reference/configuration-cheatsheet"]::before {
   mask-image: url("/img/docs/icons/cheatsheet.svg");
   -webkit-mask-image: url("/img/docs/icons/cheatsheet.svg");
 }
 
-a.menu__link[href$="/docs/settings"]::before {
+a.menu__link[href$="/docs/reference/settings"]::before {
   mask-image: url("/img/docs/icons/settings.svg");
   -webkit-mask-image: url("/img/docs/icons/settings.svg");
 }
@@ -343,7 +343,7 @@ a.menu__link[href$="/docs/troubleshooting"]::before {
   -webkit-mask-image: url("/img/docs/icons/troubleshooting.svg");
 }
 
-a.menu__link[href$="/docs/telemetry"]::before {
+a.menu__link[href$="/docs/reference/telemetry"]::before {
   mask-image: url("/img/docs/icons/telemetry.svg");
   -webkit-mask-image: url("/img/docs/icons/telemetry.svg");
 }

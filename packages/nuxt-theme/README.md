@@ -92,7 +92,7 @@ These style the classes the default formatter emits (`gqlmd-mdx-badge-*`, `api-d
 
 ### `printTypeOptions`
 
-`createGenerateDocs`'s `printTypeOptions` is a generic passthrough to [`@graphql-markdown/core`](https://graphql-markdown.dev/docs/settings#printtypeoptions) — every documented option (`deprecated`, `exampleSection`, `hierarchy`, `parentTypePrefix`, `typeBadges`) works here exactly as described there. This layer only sets its own defaults for two of them (`parentTypePrefix: false`, `typeBadges: true`), which your own `printTypeOptions` can override like any other key.
+`createGenerateDocs`'s `printTypeOptions` is a generic passthrough to [`@graphql-markdown/core`](https://graphql-markdown.dev/docs/reference/settings#printtypeoptions) — every documented option (`deprecated`, `exampleSection`, `hierarchy`, `parentTypePrefix`, `typeBadges`) works here exactly as described there. This layer only sets its own defaults for two of them (`parentTypePrefix: false`, `typeBadges: true`), which your own `printTypeOptions` can override like any other key.
 
 `hierarchy` (`"api"` default, `"entity"`, `"flat"`) controls the generated folder structure — and this layer's navigation and landing-page grid adapt to it automatically. Under `"flat"`, where there's no folder to group by at all, every generated page's frontmatter carries a `kind` field (the GraphQL entity kind — `objects`, `scalars`, `queries`, `directives`, …), and the sidebar/landing grid group by that instead, so the site stays organized whichever `hierarchy` value you choose.
 

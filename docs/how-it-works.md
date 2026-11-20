@@ -95,6 +95,6 @@ Notice the cross-link on `Post` and the back-reference under "Returned by" — t
 
 ## Customization
 
-The generation pipeline exposes lifecycle hooks at every stage — before/after schema load, before/after rendering each type, before/after composing each page. See [hook recipes](/docs/advanced/hook-recipes) and [custom directives](/docs/advanced/custom-directive).
+The generation pipeline exposes lifecycle hooks at every stage — before/after schema load, before/after rendering each type, before/after composing each page. See [hook recipes](/docs/customize/hooks) and [custom directives](/docs/customize/$1).
 
 To see the full output in action, browse the [live examples](/examples/default).

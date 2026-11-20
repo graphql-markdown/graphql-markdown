@@ -1,4 +1,5 @@
 ---
+sidebar_position: 60
 pagination_prev: null
 pagination_next: null
 description: Organize GraphQL documentation into categories using directives. Group queries, mutations, and types for better navigation.

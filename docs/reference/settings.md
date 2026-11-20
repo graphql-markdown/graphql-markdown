@@ -1,5 +1,5 @@
 ---
-sidebar_position: 50
+sidebar_position: 20
 description: Complete reference of all GraphQL-Markdown settings, CLI flags, and configuration options with default values and examples.
 keywords:
   - GraphQL-Markdown settings
@@ -11,7 +11,7 @@ keywords:
 
 # Settings
 
-All settings can be set via plugin options in your config file and overridden with CLI flags. Use `formatter` when you want GraphQL-Markdown to target a supported formatter-based documentation ecosystem, and see [configuration](/docs/configuration) for the different config methods.
+All settings can be set via plugin options in your config file and overridden with CLI flags. Use `formatter` when you want GraphQL-Markdown to target a supported formatter-based documentation ecosystem, and see [configuration](/docs/reference/configuration) for the different config methods.
 
 ## `--config`
 
@@ -39,11 +39,11 @@ The base URL used by Docusaurus. It will also be used as the folder name under [
 
 :::caution
 
-Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/advanced/decorators#migrating-from-customdirective).
+Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/$1#migrating-from-customdirective).
 
 :::
 
-Use this option to render directive information for types (see [custom directive](/docs/advanced/custom-directive)).
+Use this option to render directive information for types (see [custom directive](/docs/customize/$1)).
 
 | Setting           | CLI flag        | Default     |
 | ----------------- | --------------- | ----------- |
@@ -51,7 +51,7 @@ Use this option to render directive information for types (see [custom directive
 
 ## `decorators`
 
-Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/advanced/decorators)). Supersedes [`customDirective`](#customdirective).
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/$1)). Supersedes [`customDirective`](#customdirective).
 
 | Setting      | CLI flag        | Default     |
 | ------------ | --------------- | ----------- |
@@ -168,7 +168,7 @@ Force generating documentation in an empty folder and set [`diffMethod`](#diffme
 
 ## `groupByDirective`
 
-Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/advanced/group-by-directive)).
+Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/guides/$1)).
 
 | Setting            | CLI flag                                                                  | Default     |
 | ------------------ | ------------------------------------------------------------------------- | ----------- |
@@ -176,7 +176,7 @@ Use a GraphQL directive for creating documentation categories (see [documentatio
 
 ## `homepage`
 
-The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/advanced/docusaurus-recipes#custom-homepage)). The file will be copied to the root folder of the generated documentation.
+The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/guides/docusaurus#custom-homepage)). The file will be copied to the root folder of the generated documentation.
 
 The plugin provides a default page in `assets/generated`.
 
@@ -200,7 +200,7 @@ The GraphQL-Markdown template for Docusaurus provides a customized homepage loca
 
 ## `id`
 
-The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/advanced/additional-schema): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/configuration#graphql-config) project of the same name.
+The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/guides/$1): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/reference/configuration#graphql-config) project of the same name.
 
 | Setting | CLI flag        | Default   |
 | ------- | --------------- | --------- |
@@ -216,7 +216,7 @@ The root for links in documentation. It depends on the entry for the schema main
 
 ## `loaders`
 
-GraphQL schema loaders to use (see [schema loading](/docs/advanced/schema-loading)).
+GraphQL schema loaders to use (see [schema loading](/docs/guides/$1)).
 
 | Setting   | CLI flag        | Default |
 | --------- | --------------- | ------- |
@@ -265,7 +265,7 @@ The custom module can export individual formatter functions:
 | `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links. Receives an absolute `http(s)` URL; encode it for where you write it (for example as an HTML attribute) |
 | `formatMDXTitle`           | `(title) => string`                        | Optional visible page title, printed after the frontmatter                                                                                 |
 
-For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/advanced/integration-with-frameworks)**.
+For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/guides/other-frameworks)**.
 
 Additionally, the module can export:
 
@@ -274,7 +274,7 @@ Additionally, the module can export:
 | `mdxDeclaration` | `string` | Import statements prepended to generated files |
 | `mdxExtension`   | `string` | Custom file extension (defaults to `.mdx`)     |
 
-The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/advanced/hook-recipes)**.
+The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/customize/hooks)**.
 
 <br/>
 
@@ -376,7 +376,7 @@ interface OutputAdapter {
 }
 ```
 
-See **[Output Adapter](/docs/advanced/output-adapter)** for the full contract and worked examples: [when each method is called](/docs/advanced/output-adapter#when-each-method-is-called), [how paths map onto keys](/docs/advanced/output-adapter#paths-are-keys), [which formatters read their output back](/docs/advanced/output-adapter#reading-back), why [omitting `ensureDir`](/docs/advanced/output-adapter#deleted-types) leaves pages for deleted types behind, and the [limitations](/docs/advanced/output-adapter#limitations) worth knowing before relying on one in a pipeline.
+See **[Output Adapter](/docs/customize/$1)** for the full contract and worked examples: [when each method is called](/docs/customize/$1#when-each-method-is-called), [how paths map onto keys](/docs/customize/$1#paths-are-keys), [which formatters read their output back](/docs/customize/$1#reading-back), why [omitting `ensureDir`](/docs/customize/$1#deleted-types) leaves pages for deleted types behind, and the [limitations](/docs/customize/$1#limitations) worth knowing before relying on one in a pipeline.
 
 ## `printTypeOptions`
 
@@ -386,12 +386,12 @@ Use these options to toggle the type of information rendered on pages:
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
-- `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/advanced/examples)).
+- `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/guides/$1)).
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
   - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)). Filenames are prefixed with the entity kind to keep them unique, e.g. `objects-user.mdx` and `queries-user.mdx` (since 1.38.0).
-  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/advanced/namespaced-operations))._
+  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/guides/$1))._
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `typeBadges`: add field type attributes badges.
 
@@ -407,7 +407,7 @@ Use these options to toggle the type of information rendered on pages:
 
 :::tip
 
-Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) to control section visibility and order.
+Use [`beforeComposePageTypeHook`](/docs/customize/hooks) to control section visibility and order.
 
 :::
 
@@ -494,7 +494,7 @@ plugins: [
 
 :::info
 
-See **[customize deprecated sections](/docs/advanced/docusaurus-recipes#customize-deprecated-sections)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
+See **[customize deprecated sections](/docs/guides/docusaurus#customize-deprecated-sections)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
 
 :::
 
@@ -559,7 +559,7 @@ Types with `@deprecated` directive can also be skipped using the setting **[`pri
 
 ## `telemetry`
 
-Enables or disables [anonymous usage telemetry](/docs/telemetry). Set it to `false` to opt out; `true` only enables telemetry for programmatic use of `@graphql-markdown/core`, and never overrides `DO_NOT_TRACK`, `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED` or `gqlmd telemetry disable`.
+Enables or disables [anonymous usage telemetry](/docs/reference/telemetry). Set it to `false` to opt out; `true` only enables telemetry for programmatic use of `@graphql-markdown/core`, and never overrides `DO_NOT_TRACK`, `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED` or `gqlmd telemetry disable`.
 
 | Setting     | CLI flag         | Default |
 | ----------- | ---------------- | ------- |

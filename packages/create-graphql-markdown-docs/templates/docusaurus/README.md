@@ -18,7 +18,7 @@ npm start
 
 ## Your GraphQL Schema
 
-The schema is configured in `.graphqlrc` (see the [documentation](https://graphql-markdown.dev/docs/configuration#graphql-config)). By default it reads the bundled `schema/example.graphql`:
+The schema is configured in `.graphqlrc` (see the [documentation](https://graphql-markdown.dev/docs/reference/configuration#graphql-config)). By default it reads the bundled `schema/example.graphql`:
 
 ```yaml
 schema: './schema/example.graphql'

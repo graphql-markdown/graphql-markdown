@@ -25,9 +25,9 @@ const DOC_SECTION_PATTERNS = [
   "get-started*",
   "try-it*",
   "how-it-works*",
-  "configuration*",
-  "advanced/**",
-  "settings*",
+  "guides/**",
+  "customize/**",
+  "reference/**",
   "troubleshooting*",
 ];
 

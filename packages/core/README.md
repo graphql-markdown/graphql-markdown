@@ -41,12 +41,12 @@ getEvents().on(SchemaEvents.AFTER_LOAD, (event) => {
 });
 ```
 
-See the [hooks recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes) for the full list of lifecycle events and their payloads.
+See the [hooks recipes](https://graphql-markdown.dev/docs/customize/hooks) for the full list of lifecycle events and their payloads.
 
 ## Documentation
 
-- [Configuration Options](https://graphql-markdown.dev/docs/settings)
-- [Hooks Recipes](https://graphql-markdown.dev/docs/advanced/hook-recipes)
+- [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
+- [Hooks Recipes](https://graphql-markdown.dev/docs/customize/hooks)
 
 ## License
 

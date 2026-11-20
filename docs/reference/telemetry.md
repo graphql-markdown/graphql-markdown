@@ -1,5 +1,5 @@
 ---
-sidebar_position: 60
+sidebar_position: 50
 description: What anonymous usage data GraphQL-Markdown collects, how custom values are masked, and how to opt out.
 keywords:
   - GraphQL-Markdown telemetry
@@ -160,7 +160,7 @@ Telemetry is disabled by any of the following. They are checked in this order, a
 1. `DO_NOT_TRACK=1` or `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED=1` environment variable.
 2. `gqlmd telemetry disable` (writes `telemetry.json`; undo with `gqlmd telemetry enable`).
 3. Automatically in test runners: `VITEST`, `JEST_WORKER_ID`, `NODE_TEST_CONTEXT` or `NODE_ENV=test`.
-4. [`telemetry: false`](/docs/settings#telemetry) in the GraphQL Config extension, the Docusaurus or Nuxt plugin options, or the programmatic options.
+4. [`telemetry: false`](/docs/reference/settings#telemetry) in the GraphQL Config extension, the Docusaurus or Nuxt plugin options, or the programmatic options.
 5. The `--no-telemetry` CLI flag.
 
 `telemetry: true` only enables telemetry for programmatic use of `@graphql-markdown/core`; it never overrides any opt-out above.
@@ -197,7 +197,7 @@ The first time telemetry runs (and when the notice version changes), this is pri
   Sent: package/Node versions, OS, schema loader type, the settings you use,
   and the page count, duration and error type of each run.
   Custom strings, URLs and paths are masked; schema content is never sent.
-  Details: https://graphql-markdown.dev/docs/telemetry
+  Details: https://graphql-markdown.dev/docs/reference/telemetry
   Opt out: `gqlmd telemetry disable` or DO_NOT_TRACK=1
 ```
 

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 41
+sidebar_position: 30
 description: Quickly look up in the most frequently used CLI flag and renderer options for GraphQL-Markdown in one place without digging through the longer Settings guide.
 keywords:
   - GraphQL-Markdown setup
@@ -10,7 +10,7 @@ keywords:
 # Configuration Cheat Sheet
 
 :::note
-This is a quick reference guide. All settings are thoroughly documented in the [**Settings** page](/docs/settings).
+This is a quick reference guide. All settings are thoroughly documented in the [**Settings** page](/docs/reference/settings).
 :::
 
 :::tip

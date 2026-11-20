@@ -1,4 +1,5 @@
 ---
+sidebar_position: 10
 id: custom-directive
 pagination_prev: null
 pagination_next: null
@@ -15,7 +16,7 @@ keywords:
 
 :::caution
 
-`customDirective` is deprecated in favor of [`decorators`](/docs/advanced/decorators), which supersedes it. See [migrating from `customDirective`](/docs/advanced/decorators#migrating-from-customdirective).
+`customDirective` is deprecated in favor of [`decorators`](/docs/customize/$1), which supersedes it. See [migrating from `customDirective`](/docs/customize/$1#migrating-from-customdirective).
 
 :::
 
@@ -40,7 +41,7 @@ type Query {
 
 ## Usage
 
-Add the option [`customDirective`](/docs/settings#customdirective) to the GraphQL-Markdown configuration.
+Add the option [`customDirective`](/docs/reference/settings#customdirective) to the GraphQL-Markdown configuration.
 
 The `descriptor` and `tag` functions receive 2 arguments:
 

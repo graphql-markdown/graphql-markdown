@@ -1,4 +1,5 @@
 ---
+sidebar_position: 40
 pagination_prev: null
 pagination_next: null
 description: Load GraphQL schemas from files, URLs, or introspection endpoints. Configure custom loaders for different schema sources.

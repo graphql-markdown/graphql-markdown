@@ -1,4 +1,5 @@
 ---
+sidebar_position: 20
 id: decorators
 pagination_prev: null
 pagination_next: null
@@ -15,7 +16,7 @@ keywords:
 
 A decorator selects **nodes** in the schema — a type, field, or argument the printer is about to render — with a **predicate** (by default, every node), and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
 
-`decorators` replaces the deprecated [`customDirective`](/docs/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
+`decorators` replaces the deprecated [`customDirective`](/docs/reference/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
@@ -210,13 +211,13 @@ A decorator using `into` is excluded from the page's section order entirely — 
 
 :::note
 
-`example` is itself a decorator, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `decorators`.
+`example` is itself a decorator, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/reference/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `decorators`.
 
 :::
 
 :::tip
 
-Use [`beforeComposePageTypeHook`](/docs/advanced/hook-recipes) when the placement has to be decided per type, rather than once in the configuration.
+Use [`beforeComposePageTypeHook`](/docs/customize/hooks) when the placement has to be decided per type, rather than once in the configuration.
 
 :::
 
@@ -334,11 +335,11 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 
 :::
 
-This mirrors the [`afterPrintCode` hook recipe](/docs/advanced/hook-recipes#display-response-types-for-operations), which achieves the same result by rewriting the generated code block directly. Prefer this decorator form when the content should be orderable via `position` or need not touch the code block itself; prefer the hook when you need to intercept `printCode`'s raw output.
+This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-response-types-for-operations), which achieves the same result by rewriting the generated code block directly. Prefer this decorator form when the content should be orderable via `position` or need not touch the code block itself; prefer the hook when you need to intercept `printCode`'s raw output.
 
 ## Migrating from `customDirective`
 
-[`customDirective`](/docs/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.
+[`customDirective`](/docs/reference/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.
 
 ```diff
 - customDirective: {

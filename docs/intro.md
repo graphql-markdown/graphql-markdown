@@ -44,7 +44,7 @@ The recommended start is the scaffolder, which creates a **new site** (Nuxt by d
 npm create graphql-markdown-docs@latest
 ```
 
-See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/advanced/nuxt-theme) for the Nuxt layer it uses.
+See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/guides/nuxt) for the Nuxt layer it uses.
 
 To add to an **existing Docusaurus** site instead:
 
@@ -58,4 +58,4 @@ For **formatter-based setups** (Hugo, MkDocs, DocFX, mdBook, Astro, Next.js, etc
 npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
 
-For the full list of supported formatter presets, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
+For the full list of supported formatter presets, see [Integration with Frameworks](/docs/guides/other-frameworks).

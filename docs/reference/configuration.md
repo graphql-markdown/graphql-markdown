@@ -1,5 +1,5 @@
 ---
-sidebar_position: 40
+sidebar_position: 10
 description: Learn how to configure GraphQL-Markdown using GraphQL Config, Docusaurus plugin options, or CLI arguments. Supports multiple frameworks.
 keywords:
   - GraphQL-Markdown configuration
@@ -40,7 +40,7 @@ extensions:
       deprecated: "group"
 ```
 
-For supported formatter presets, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
+For supported formatter presets, see [Integration with Frameworks](/docs/guides/other-frameworks).
 
 ## Docusaurus Integration
 
@@ -71,11 +71,11 @@ module.exports = {
 };
 ```
 
-All settings are described in the page **[settings](/docs/settings)**.
+All settings are described in the page **[settings](/docs/reference/settings)**.
 
 :::tip
 
-If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/advanced/additional-schema)**.
+If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/guides/$1)**.
 
 :::
 

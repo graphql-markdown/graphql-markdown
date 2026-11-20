@@ -1,4 +1,5 @@
 ---
+sidebar_position: 30
 description: Integrate GraphQL-Markdown with popular documentation frameworks using formatter presets or create custom formatters.
 keywords:
   - GraphQL-Markdown integration
@@ -15,13 +16,13 @@ GraphQL-Markdown supports multiple documentation frameworks through formatter pr
 
 Use the path that matches your documentation stack:
 
-| If you are using...                        | Recommended path                                                                                                                                                                                                                        |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Docusaurus**                             | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior. See [Docusaurus recipes](./docusaurus-recipes) for sidebar, styling, and hook recipes.       |
-| **Nuxt**                                   | Use the `@graphql-markdown/nuxt-theme` layer (or scaffold one with `npm create graphql-markdown-docs`) for a full reference site — layout, navigation and search included, not just formatted Markdown. See [Nuxt Theme](./nuxt-theme). |
-| **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems.                                                                                  |
-| **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                                                                                                  |
-| **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                                                                                                      |
+| If you are using...                        | Recommended path                                                                                                                                                                                                                             |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Docusaurus**                             | Use the `@graphql-markdown/docusaurus` plugin when you want the official Docusaurus integration and default Docusaurus formatter behavior. See [Docusaurus recipes](/docs/guides/docusaurus) for sidebar, styling, and hook recipes.         |
+| **Nuxt**                                   | Use the `@graphql-markdown/nuxt-theme` layer (or scaffold one with `npm create graphql-markdown-docs`) for a full reference site — layout, navigation and search included, not just formatted Markdown. See [Nuxt Theme](/docs/guides/nuxt). |
+| **Hugo, MkDocs, DocFX, mdBook, or HonKit** | Use `@graphql-markdown/cli` with a formatter preset from `@graphql-markdown/formatters`. This is the main path for non-TS/JS documentation ecosystems.                                                                                       |
+| **Starlight, Fumadocs, or Vocs**           | Use `@graphql-markdown/cli` with the matching formatter preset when you already have one of these frameworks in place.                                                                                                                       |
+| **Any unsupported framework**              | Start from the closest preset or create a custom formatter module.                                                                                                                                                                           |
 
 The quickest way to wire any supported framework is to run `npm create graphql-markdown-docs@latest` inside your existing site. It detects the framework, asks for your schema and output folder, and writes the configuration for you. See [Add to an existing site](/docs/get-started#with-the-scaffolder-recommended).
 
@@ -85,7 +86,7 @@ extensions:
 npx gqlmd graphql-to-doc
 ```
 
-The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/advanced/additional-schema#graphql-config).
+The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/guides/$1#graphql-config).
 
 You can also call the generator programmatically. `runGraphQLMarkdown` takes the configuration as first argument, and CLI-style overrides as second argument:
 
@@ -182,4 +183,4 @@ module.exports = {
 
 ### Lifecycle Hooks
 
-Custom MDX modules can also export lifecycle hooks to customize the generation process. See **[Hooks Recipes](/docs/advanced/hook-recipes#available-hooks)** for the full reference and examples.
+Custom MDX modules can also export lifecycle hooks to customize the generation process. See **[Hooks Recipes](/docs/customize/hooks#available-hooks)** for the full reference and examples.

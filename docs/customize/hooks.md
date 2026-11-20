@@ -1,4 +1,5 @@
 ---
+sidebar_position: 30
 description: Customize GraphQL-Markdown with lifecycle hooks. Examples for modifying output, adding custom processing, and integrating with build pipelines.
 keywords:
   - GraphQL-Markdown hooks
@@ -14,7 +15,7 @@ This page lists examples of usage of [hooks](/api/category/events).
 
 :::info
 
-Hooks are part of the [documentation frameworks integration](./integration-with-frameworks.md) API.
+Hooks are part of the [documentation frameworks integration](/docs/guides/other-frameworks) API.
 
 :::
 
@@ -63,7 +64,7 @@ For `beforeComposePageTypeHook`, `event.output` is the ordered list of section k
 
 ## Using Hooks with Docusaurus
 
-See [Docusaurus recipes](./docusaurus-recipes#using-hooks-with-docusaurus) for extending the default Docusaurus MDX module with custom hooks.
+See [Docusaurus recipes](/docs/guides/docusaurus#using-hooks-with-docusaurus) for extending the default Docusaurus MDX module with custom hooks.
 
 ## Generate index.md files
 
@@ -227,7 +228,7 @@ The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL typ
 
 :::tip
 
-The same result can be expressed as a [decorator](/docs/advanced/decorators#response-type-for-operations) instead of a hook, with no need for a custom `formatter` module. Reach for a decorator when the content just needs to be placed via `position`; reach for this hook when you need to intercept `printCode`'s raw output directly.
+The same result can be expressed as a [decorator](/docs/customize/$1#response-type-for-operations) instead of a hook, with no need for a custom `formatter` module. Reach for a decorator when the content just needs to be placed via `position`; reach for this hook when you need to intercept `printCode`'s raw output directly.
 
 :::
 
