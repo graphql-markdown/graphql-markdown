@@ -41,48 +41,51 @@ const FeatureList = [
     Svg: require("@site/static/img/website.svg").default,
     description: (
       <>
-        Supports SDL files, introspection endpoints, GraphQL config, and
-        code-first TS/JS schemas. Type cross-linking, deprecation notices, and
-        custom directive badges are included out of the box.{" "}
-        <Link to="/docs/get-started" className={styles.inlineCta}>
-          Get started →
-        </Link>
+        Point it at SDL files, an introspection endpoint, GraphQL Config, or a
+        code-first schema, and get a page for every type and operation.
       </>
     ),
+    checklist: [
+      "Cross-linked types",
+      "Deprecation notices",
+      "Custom directive badges",
+    ],
+    cta: { label: "Get started →", to: "/docs/get-started" },
   },
   {
     title: "Output adapted for your docs ecosystem",
     Svg: require("@site/static/img/mdx.svg").default,
     description: (
       <>
-        GraphQL-Markdown generates Markdown or MDX, and formatter presets adapt
-        the output for Docusaurus, Nuxt, Hugo, MkDocs, DocFX, mdBook, Astro,
-        Next.js, and other supported targets while preserving each ecosystem's
-        conventions.{" "}
-        <Link to="/docs/guides/other-frameworks">
-          Explore formatter presets
-        </Link>
-        .
+        Generate Markdown or MDX. Formatter presets follow the conventions of
+        Docusaurus, Nuxt, Hugo, MkDocs, and other targets.
       </>
     ),
+    cta: {
+      label: "Explore formatter presets →",
+      to: "/docs/guides/other-frameworks",
+    },
   },
   {
     title: "Free and open-source",
     Svg: require("@site/static/img/tree.svg").default,
     description: (
       <>
-        MIT licensed and actively maintained. Used in production by teams
-        worldwide. If it saves you time, consider{" "}
+        MIT licensed and actively maintained. If it saves you time, consider{" "}
         <a
           target="_blank"
           rel="noopener noreferrer"
           href="https://plant.treeware.earth/graphql-markdown/graphql-markdown"
         >
           planting a tree
-        </a>{" "}
-        to support the project.
+        </a>
+        .
       </>
     ),
+    cta: {
+      label: "View on GitHub →",
+      href: "https://github.com/graphql-markdown/graphql-markdown",
+    },
   },
 ];
 
@@ -96,14 +99,37 @@ function Step({ step, title, description }) {
   );
 }
 
-function Feature({ Svg, title, description }) {
+function Feature({ Svg, title, description, checklist, cta }) {
   return (
-    <div className={clsx("col col--4", styles.featureCard)}>
-      <div className={styles.iconWrap}>
-        <Svg className={styles.featureSvg} role="img" aria-label={title} />
+    <div className={clsx("col col--4", styles.featureCol)}>
+      <div className={styles.featureCard}>
+        <div className={styles.iconWrap}>
+          <Svg className={styles.featureSvg} aria-hidden="true" />
+        </div>
+        <h3 className={styles.featureTitle}>{title}</h3>
+        <p className={styles.featureText}>{description}</p>
+        {checklist && (
+          <ul className={styles.featureList}>
+            {checklist.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        )}
+        {cta.to ? (
+          <Link to={cta.to} className={styles.featureCta}>
+            {cta.label}
+          </Link>
+        ) : (
+          <a
+            href={cta.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.featureCta}
+          >
+            {cta.label}
+          </a>
+        )}
       </div>
-      <h2 className={styles.featureTitle}>{title}</h2>
-      <p className={styles.featureText}>{description}</p>
     </div>
   );
 }

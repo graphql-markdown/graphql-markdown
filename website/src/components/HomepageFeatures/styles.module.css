@@ -67,49 +67,87 @@
   padding: 3rem 0 3.5rem;
 }
 
+.featureCol {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
 .featureCard {
-  text-align: center;
-  padding: 2rem 1.5rem;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  padding: 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
   transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .featureCard:hover {
-  box-shadow: 0 6px 24px rgba(54, 196, 111, 0.1);
-  transform: translateY(-2px);
-}
-
-[data-theme="dark"] .featureCard:hover {
-  box-shadow: 0 6px 24px rgba(54, 196, 111, 0.15);
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 6px 24px rgb(54 196 111 / 10%);
 }
 
 .iconWrap {
   display: flex;
+  align-items: center;
   justify-content: center;
-  margin-bottom: 1.25rem;
+  width: 56px;
+  height: 56px;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  background: rgb(54 196 111 / 10%);
+}
+
+[data-theme="dark"] .iconWrap {
+  background: rgb(255 255 255 / 88%);
 }
 
 .featureSvg {
-  width: 80px;
-  height: 80px;
+  width: 36px;
+  height: 36px;
 }
 
 .featureTitle {
   font-size: 1.1rem;
   font-weight: 700;
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.5rem;
 }
 
 .featureText {
-  margin: 0;
-  line-height: 1.65;
+  margin: 0 0 1rem;
+  line-height: 1.6;
   font-size: 0.95rem;
 }
 
-.inlineCta {
-  white-space: nowrap;
+.featureList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+}
+
+.featureList li {
+  padding-left: 1.5rem;
+  margin-bottom: 0.35rem;
+  position: relative;
+}
+
+.featureList li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  font-weight: 700;
+  color: var(--ifm-color-primary);
+}
+
+.featureCta {
+  margin-top: auto;
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 /* ── Responsive ── */
@@ -131,12 +169,6 @@
   }
 
   .featureCard {
-    padding: 1.25rem 1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .featureSvg {
-    width: 64px;
-    height: 64px;
+    padding: 1.25rem;
   }
 }
