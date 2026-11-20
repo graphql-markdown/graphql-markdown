@@ -12,6 +12,9 @@ keywords:
   - schema documentation
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Introduction
 
 GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command. You can also add the official Docusaurus integration to an existing site. For other ecosystems such as Hugo, MkDocs, DocFX, and mdBook, use the CLI with formatter presets.
@@ -38,6 +41,9 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 
 ## Quick install
 
+<Tabs groupId="setup">
+<TabItem value="scaffolder" label="New site" default>
+
 The recommended start is the scaffolder, which creates a **new site** (Nuxt by default, or Docusaurus):
 
 ```bash
@@ -46,16 +52,25 @@ npm create graphql-markdown-docs@latest
 
 See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/guides/nuxt) for the Nuxt layer it uses.
 
+</TabItem>
+<TabItem value="docusaurus" label="Existing Docusaurus site">
+
 To add to an **existing Docusaurus** site instead:
 
 ```bash
 npm install @graphql-markdown/docusaurus graphql
 ```
 
+</TabItem>
+<TabItem value="formatters" label="Other frameworks">
+
 For **formatter-based setups** (Hugo, MkDocs, DocFX, mdBook, Astro, Next.js, etc.):
 
 ```bash
 npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
+
+</TabItem>
+</Tabs>
 
 For the full list of supported formatter presets, see [Integration with Frameworks](/docs/guides/other-frameworks).

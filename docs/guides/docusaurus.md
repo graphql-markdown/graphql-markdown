@@ -11,6 +11,9 @@ keywords:
   - Docusaurus hooks
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Docusaurus recipes
 
 These recipes only apply when generating documentation into a Docusaurus site with `@graphql-markdown/docusaurus`. For the framework-agnostic path (any other formatter), see [Integration with Frameworks](/docs/guides/other-frameworks). To install the plugin, see [Getting started](/docs/get-started#add-to-an-existing-site).
@@ -127,15 +130,69 @@ The above CSS will render the deprecated sections as the following
 
 In a Docusaurus site, build your website:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm run docusaurus build
 ```
 
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm docusaurus build
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn docusaurus build
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun run docusaurus build
+```
+
+</TabItem>
+</Tabs>
+
 Or run the documentation generator directly:
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm run docusaurus graphql-to-doc
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm docusaurus graphql-to-doc
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn docusaurus graphql-to-doc
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun run docusaurus graphql-to-doc
+```
+
+</TabItem>
+</Tabs>
 
 The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command flags are documented in [settings](/docs/reference/settings).
 
@@ -218,9 +275,36 @@ plugins: [
 
 Instance with an `id` will have their command line:
 
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
 ```shell
 npm run docusaurus graphql-to-doc:admin
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm docusaurus graphql-to-doc:admin
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn docusaurus graphql-to-doc:admin
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun run docusaurus graphql-to-doc:admin
+```
+
+</TabItem>
+</Tabs>
 
 If you also use [GraphQL Config](/docs/reference/configuration#graphql-config), you need to define `projects` with the same `id` (including `default`):
 

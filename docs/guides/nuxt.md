@@ -9,6 +9,9 @@ keywords:
   - create-graphql-markdown-docs
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Nuxt theme
 
 `@graphql-markdown/nuxt-theme` is a [Nuxt layer](https://nuxt.com/docs/guide/going-further/layers) that turns a GraphQL schema into a full API reference site. It provides a two-column layout (prose on the left, schema definitions and examples on the right), navigation, search, and generation.
@@ -17,17 +20,71 @@ Extend it from your own Nuxt project instead of building on the CLI's raw Markdo
 
 ## Fastest path: the scaffolding CLI
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm create graphql-markdown-docs@latest
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm create graphql-markdown-docs
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn create graphql-markdown-docs
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun create graphql-markdown-docs
+```
+
+</TabItem>
+</Tabs>
 
 It asks a few questions (project directory, schema source, package manager, optional title and color) and produces a ready-to-run project. See [Getting started](/docs/get-started#create-a-new-site) for the full prompt and flag reference, including non-interactive usage, or the [`create-graphql-markdown-docs` README](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs).
 
 ## Extending the layer directly
 
-```bash
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm install @graphql-markdown/nuxt-theme
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/nuxt-theme
+```
+
+</TabItem>
+</Tabs>
 
 ```ts
 // nuxt.config.ts

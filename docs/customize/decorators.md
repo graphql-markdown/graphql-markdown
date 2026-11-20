@@ -12,6 +12,9 @@ keywords:
   - documentation sections
 ---
 
+import Tabs from "@theme/Tabs";
+import TabItem from "@theme/TabItem";
+
 # Decorators
 
 Use decorators to add custom sections, badges, or description text to the generated pages. A decorator selects **nodes** in the schema (a type, field, or argument the printer is about to render) with a **predicate**, which defaults to every node.
@@ -377,9 +380,36 @@ The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide
 
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
-```shell title="shell"
+<Tabs groupId="package-manager" queryString>
+<TabItem value="npm" label="npm" default>
+
+```shell
 npm i @graphql-markdown/helpers
 ```
+
+</TabItem>
+<TabItem value="pnpm" label="pnpm">
+
+```shell
+pnpm add @graphql-markdown/helpers
+```
+
+</TabItem>
+<TabItem value="yarn" label="yarn">
+
+```shell
+yarn add @graphql-markdown/helpers
+```
+
+</TabItem>
+<TabItem value="bun" label="bun">
+
+```shell
+bun add @graphql-markdown/helpers
+```
+
+</TabItem>
+</Tabs>
 
 ### `@graphql-markdown/helpers`
 
