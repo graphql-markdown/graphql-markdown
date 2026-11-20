@@ -284,7 +284,12 @@ a.menu__link[href$="/docs/reference/configuration"]::before,
 a.menu__link[href$="/docs/reference/settings"]::before,
 a.menu__link[href$="/docs/troubleshooting"]::before,
 a.menu__link[href$="/docs/reference/telemetry"]::before,
-.sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
+a.menu__link[href*="/docs/guides/"]::before,
+a.menu__link[href*="/docs/customize/"]::before,
+a.menu__link[href$="/docs/reference/jsr"]::before,
+.sidebar-guides > .menu__list-item-collapsible > .menu__link::before,
+.sidebar-customize > .menu__list-item-collapsible > .menu__link::before,
+.sidebar-reference > .menu__list-item-collapsible > .menu__link::before {
   content: "";
   display: inline-block;
   width: 1rem;
@@ -342,7 +347,92 @@ a.menu__link[href$="/docs/reference/telemetry"]::before {
   -webkit-mask-image: url("/img/docs/icons/telemetry.svg");
 }
 
-.sidebar-advanced > .menu__list-item-collapsible > .menu__link::before {
-  mask-image: url("/img/docs/icons/advanced.svg");
-  -webkit-mask-image: url("/img/docs/icons/advanced.svg");
+.sidebar-guides > .menu__list-item-collapsible > .menu__link::before {
+  mask-image: url("/img/docs/icons/guides.svg");
+  -webkit-mask-image: url("/img/docs/icons/guides.svg");
+}
+
+.sidebar-customize > .menu__list-item-collapsible > .menu__link::before {
+  mask-image: url("/img/docs/icons/customize.svg");
+  -webkit-mask-image: url("/img/docs/icons/customize.svg");
+}
+
+.sidebar-reference > .menu__list-item-collapsible > .menu__link::before {
+  mask-image: url("/img/docs/icons/reference.svg");
+  -webkit-mask-image: url("/img/docs/icons/reference.svg");
+}
+
+a.menu__link[href$="/docs/guides/docusaurus"]::before {
+  mask-image: url("/img/docs/icons/docusaurus.svg");
+  -webkit-mask-image: url("/img/docs/icons/docusaurus.svg");
+}
+
+a.menu__link[href$="/docs/guides/nuxt"]::before {
+  mask-image: url("/img/docs/icons/nuxt.svg");
+  -webkit-mask-image: url("/img/docs/icons/nuxt.svg");
+}
+
+a.menu__link[href$="/docs/guides/other-frameworks"]::before {
+  mask-image: url("/img/docs/icons/other-frameworks.svg");
+  -webkit-mask-image: url("/img/docs/icons/other-frameworks.svg");
+}
+
+a.menu__link[href$="/docs/guides/schema-loading"]::before {
+  mask-image: url("/img/docs/icons/schema-loading.svg");
+  -webkit-mask-image: url("/img/docs/icons/schema-loading.svg");
+}
+
+a.menu__link[href$="/docs/guides/additional-schema"]::before {
+  mask-image: url("/img/docs/icons/additional-schema.svg");
+  -webkit-mask-image: url("/img/docs/icons/additional-schema.svg");
+}
+
+a.menu__link[href$="/docs/guides/group-by-directive"]::before {
+  mask-image: url("/img/docs/icons/group-by-directive.svg");
+  -webkit-mask-image: url("/img/docs/icons/group-by-directive.svg");
+}
+
+a.menu__link[href$="/docs/guides/namespaced-operations"]::before {
+  mask-image: url("/img/docs/icons/namespaced-operations.svg");
+  -webkit-mask-image: url("/img/docs/icons/namespaced-operations.svg");
+}
+
+a.menu__link[href$="/docs/guides/custom-root-types"]::before {
+  mask-image: url("/img/docs/icons/custom-root-types.svg");
+  -webkit-mask-image: url("/img/docs/icons/custom-root-types.svg");
+}
+
+a.menu__link[href$="/docs/guides/examples"]::before {
+  mask-image: url("/img/docs/icons/examples.svg");
+  -webkit-mask-image: url("/img/docs/icons/examples.svg");
+}
+
+a.menu__link[href$="/docs/customize/custom-directive"]::before {
+  mask-image: url("/img/docs/icons/custom-directive.svg");
+  -webkit-mask-image: url("/img/docs/icons/custom-directive.svg");
+}
+
+a.menu__link[href$="/docs/customize/decorators"]::before {
+  mask-image: url("/img/docs/icons/decorators.svg");
+  -webkit-mask-image: url("/img/docs/icons/decorators.svg");
+}
+
+a.menu__link[href$="/docs/customize/hooks"]::before {
+  mask-image: url("/img/docs/icons/hooks.svg");
+  -webkit-mask-image: url("/img/docs/icons/hooks.svg");
+}
+
+a.menu__link[href$="/docs/customize/custom-formatter"]::before {
+  mask-image: url("/img/docs/icons/custom-formatter.svg");
+  -webkit-mask-image: url("/img/docs/icons/custom-formatter.svg");
+}
+
+a.menu__link[href$="/docs/customize/output-adapter"]::before {
+  mask-image: url("/img/docs/icons/output-adapter.svg");
+  -webkit-mask-image: url("/img/docs/icons/output-adapter.svg");
+}
+
+a.menu__link[href$="/docs/reference/jsr"]::before {
+  mask-image: url("/img/docs/icons/jsr.svg");
+  -webkit-mask-image: url("/img/docs/icons/jsr.svg");
 }

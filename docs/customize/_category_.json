@@ -1,4 +1,5 @@
 {
   "label": "Customize the output",
-  "position": 70
+  "position": 70,
+  "className": "sidebar-customize"
 }

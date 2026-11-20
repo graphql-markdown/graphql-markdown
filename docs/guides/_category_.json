@@ -1,4 +1,5 @@
 {
   "label": "Guides",
-  "position": 60
+  "position": 60,
+  "className": "sidebar-guides"
 }
