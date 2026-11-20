@@ -14,7 +14,7 @@ keywords:
 
 # Introduction
 
-GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command, add the official Docusaurus integration to an existing Docusaurus site, or use the CLI with formatter presets for other supported documentation ecosystems such as Hugo, MkDocs, DocFX, and mdBook.
+GraphQL-Markdown generates Markdown and MDX documentation from a GraphQL schema. You can scaffold a complete Nuxt or Docusaurus site in one command. You can also add the official Docusaurus integration to an existing site. For other ecosystems such as Hugo, MkDocs, DocFX, and mdBook, use the CLI with formatter presets.
 
 ## Why GraphQL Markdown?
 
@@ -36,7 +36,7 @@ Managing API documentation can be time-consuming and prone to becoming outdated.
 - Namespaced operations (nested query/mutation/subscription objects)
 - GraphQL config support
 
-## Quick Install
+## Quick install
 
 The recommended start is the scaffolder, which creates a **new site** (Nuxt by default, or Docusaurus):
 
@@ -44,7 +44,7 @@ The recommended start is the scaffolder, which creates a **new site** (Nuxt by d
 npm create graphql-markdown-docs@latest
 ```
 
-See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/advanced/nuxt-theme) for the Nuxt layer it uses.
+See [Getting started](/docs/get-started#create-a-new-site) for the prompts and flags, and [Nuxt Theme](/docs/guides/nuxt) for the Nuxt layer it uses.
 
 To add to an **existing Docusaurus** site instead:
 
@@ -58,4 +58,4 @@ For **formatter-based setups** (Hugo, MkDocs, DocFX, mdBook, Astro, Next.js, etc
 npm install @graphql-markdown/cli @graphql-markdown/formatters graphql
 ```
 
-For the full list of supported formatter presets, see [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
+For the full list of supported formatter presets, see [Integration with Frameworks](/docs/guides/other-frameworks).

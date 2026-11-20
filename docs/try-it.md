@@ -13,6 +13,8 @@ keywords:
 
 # Try it
 
+Live demos and sandboxes for each supported framework. Open one to see the generated output, or fork it to try your own schema.
+
 ## Docusaurus
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docusaurus/).
@@ -33,7 +35,7 @@ Edit the configuration in `graphql.config.mjs`.
 
 See the generated docs in the [live demo](https://demo-astro-r2.edno.workers.dev/).
 
-Fork our [demo repo](https://github.com/graphql-markdown/demo-astro-r2) to see the [`outputAdapter`](/docs/settings#outputadapter) setting write the generated docs straight into a Cloudflare R2 bucket. It runs locally with Wrangler's R2 emulation, no Cloudflare account needed.
+Fork our [demo repo](https://github.com/graphql-markdown/demo-astro-r2) to see the [`outputAdapter`](/docs/reference/settings#outputadapter) setting write the generated docs straight into a Cloudflare R2 bucket. It runs locally with Wrangler's R2 emulation, no Cloudflare account needed.
 
 Edit the configuration in `graphql.config.ts`.
 

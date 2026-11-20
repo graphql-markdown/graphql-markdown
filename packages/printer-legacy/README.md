@@ -34,9 +34,9 @@ import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy
 
 ## Documentation
 
-- [Configuration Options](https://graphql-markdown.dev/docs/settings)
-- [Custom Directives](https://graphql-markdown.dev/docs/advanced/custom-directive)
-- [Integration with Frameworks](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks)
+- [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
+- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
+- [Integration with Frameworks](https://graphql-markdown.dev/docs/guides/other-frameworks)
 
 ## License
 

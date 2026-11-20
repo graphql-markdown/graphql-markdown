@@ -1,4 +1,5 @@
 ---
+sidebar_position: 70
 pagination_prev: null
 pagination_next: null
 description: Documents namespaced GraphQL operations for nested query, mutation, and subscription fields.
@@ -32,7 +33,7 @@ Generated operation pages include nested paths such as:
 - `operations/queries/analytics/semester-gpa`
 - `operations/queries/analytics/courses-by-department`
 
-When [`groupByDirective`](/docs/advanced/group-by-directive) is enabled, these namespaced operations are still grouped by their directive category.
+When [`groupByDirective`](/docs/guides/group-by-directive) is enabled, these namespaced operations are still grouped by their directive category.
 
 Generated code snippet for these namespaced operations will be wrapped in the namespace:
 
@@ -68,7 +69,7 @@ const beforePrintCodeHook = async (event) => {
 export { beforePrintCodeHook };
 ```
 
-Then register the module with `formatter` as described in [Hooks Recipes](/docs/advanced/hook-recipes) and [Integration with Frameworks](/docs/advanced/integration-with-frameworks).
+Then register the module with `formatter` as described in [Hooks Recipes](/docs/customize/hooks) and [Integration with Frameworks](/docs/guides/other-frameworks).
 
 With this hook enabled, a namespaced operation page can still be generated at `operations/queries/analytics/courses-by-department`, but its code block will render without the namespace wrapper:
 

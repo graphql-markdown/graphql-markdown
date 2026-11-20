@@ -166,11 +166,11 @@ const config = {
 await runGraphQLMarkdown(config);
 ```
 
-See [API documentation](https://graphql-markdown.dev/api/) and our [Framework Integration page](https://graphql-markdown.dev/docs/advanced/integration-with-frameworks) for the full list of supported formatter presets.
+See [API documentation](https://graphql-markdown.dev/api/) and our [Framework Integration page](https://graphql-markdown.dev/docs/guides/other-frameworks) for the full list of supported formatter presets.
 
 ## Configuration
 
-See [documentation configuration](https://graphql-markdown.dev/docs/configuration) page.
+See [documentation configuration](https://graphql-markdown.dev/docs/reference/configuration) page.
 
 ## Troubleshooting
 

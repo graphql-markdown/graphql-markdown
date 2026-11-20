@@ -4,7 +4,7 @@ Custom directive `tag` helper.
 
 ## See
 
-[Option `customDirective.[directive].tag`](https://graphql-markdown.dev/docs/advanced/custom-directive#tag)
+[Option `customDirective.[directive].tag`](https://graphql-markdown.dev/docs/customize/custom-directive#tag)
 
 ## Functions
 

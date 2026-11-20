@@ -9,7 +9,7 @@ keywords:
   - how it works
 ---
 
-# How It Works
+# How it works
 
 GraphQL-Markdown reads your schema, parses every type and operation, and writes one MDX file per type category — ready to publish with Docusaurus or any MDX framework.
 
@@ -95,6 +95,6 @@ Notice the cross-link on `Post` and the back-reference under "Returned by" — t
 
 ## Customization
 
-The generation pipeline exposes lifecycle hooks at every stage — before/after schema load, before/after rendering each type, before/after composing each page. See [hook recipes](/docs/advanced/hook-recipes) and [custom directives](/docs/advanced/custom-directive).
+The generation pipeline exposes lifecycle hooks at every stage — before/after schema load, before/after rendering each type, before/after composing each page. See [hook recipes](/docs/customize/hooks) and [custom directives](/docs/customize/custom-directive).
 
 To see the full output in action, browse the [live examples](/examples/default).

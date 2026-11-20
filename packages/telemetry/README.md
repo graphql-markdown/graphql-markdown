@@ -123,7 +123,7 @@ To print your own payload instead of sending it, set `GRAPHQL_MARKDOWN_TELEMETRY
 
 ## Documentation
 
-- [Telemetry](https://graphql-markdown.dev/docs/telemetry)
+- [Telemetry](https://graphql-markdown.dev/docs/reference/telemetry)
 
 ## License
 

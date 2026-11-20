@@ -46,7 +46,7 @@ if (!hasChanged) {
 
 ## Documentation
 
-- [Configuration Options](https://graphql-markdown.dev/docs/settings)
+- [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
 
 ## License
 

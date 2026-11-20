@@ -86,7 +86,7 @@ export default function NotFoundContent({ className }) {
             <Link to="/docs/get-started">Getting Started</Link>
           </li>
           <li>
-            <Link to="/docs/configuration">Configuration</Link>
+            <Link to="/docs/reference/configuration">Configuration</Link>
           </li>
           <li>
             <Link to="/api/">API Reference</Link>

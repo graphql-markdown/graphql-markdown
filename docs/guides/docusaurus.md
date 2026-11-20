@@ -1,4 +1,5 @@
 ---
+sidebar_position: 10
 pagination_prev: null
 pagination_next: null
 description: Docusaurus-only recipes for GraphQL-Markdown — custom homepage sidebar placement, styling deprecated sections, regenerating docs, extending hooks, and multiple schema instances.
@@ -12,7 +13,65 @@ keywords:
 
 # Docusaurus recipes
 
-These recipes only apply when generating documentation into a Docusaurus site with `@graphql-markdown/docusaurus`. For the framework-agnostic path (any other formatter), see [Integration with Frameworks](./integration-with-frameworks). For initial plugin setup, see [Getting started](/docs/get-started#docusaurus).
+These recipes only apply when generating documentation into a Docusaurus site with `@graphql-markdown/docusaurus`. For the framework-agnostic path (any other formatter), see [Integration with Frameworks](/docs/guides/other-frameworks). To install the plugin, see [Getting started](/docs/get-started#add-to-an-existing-site).
+
+## Requirements
+
+- Node.js version [22.18](https://nodejs.org/en/download/) or above
+- [Docusaurus](https://docusaurus.io/) 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
+- [GraphQL.js](https://graphql.org/graphql-js/) 16.0 or above
+
+A schema loader is also required. See [schema loading](/docs/guides/schema-loading).
+
+## Configuration
+
+Define the plugin settings in `docusaurus.config.js`. They take precedence over a GraphQL Config file and are overridden by CLI flags.
+
+```js title="docusaurus.config.js"
+module.exports = {
+  // ...
+  plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+      /** @type {import('@graphql-markdown/types').ConfigOptions} */
+      {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader", // local file schema
+        },
+        // Optional advanced settings
+        pretty: true,
+      },
+    ],
+  ],
+};
+```
+
+All settings are described in [settings](/docs/reference/settings). For several schemas, see [additional schemas](/docs/guides/additional-schema).
+
+### Site settings
+
+Add a link to the generated documentation in your site's `navbar`:
+
+```js title="docusaurus.config.js"
+module.exports = {
+  // ...
+  navbar: {
+    items: [
+      {
+        to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
+        label: "SWAPI Schema", // change the label with yours
+        position: "left",
+      },
+    ],
+  },
+};
+```
+
+For more details, see the Docusaurus [navbar documentation](https://docusaurus.io/docs/api/themes/configuration#navbar).
 
 ## Custom homepage
 
@@ -20,8 +79,6 @@ If you decide to use a custom homepage for the GraphQL-generated documentation, 
 
 ```markdown title="schema.md"
 ---
-id: schema
-slug: /schema
 title: Schema Documentation
 sidebar_position: 1
 ---
@@ -35,8 +92,6 @@ If you want to hide the homepage from the sidebar, then set the front matter `si
 
 ```markdown {6} title="schema.md"
 ---
-id: schema
-slug: /schema
 title: Schema Documentation
 sidebar_position: 1
 sidebar_class_name: navbar__toggle
@@ -47,7 +102,7 @@ sidebar_class_name: navbar__toggle
 
 ## Customize deprecated sections
 
-When using the option [`printTypeOptions.deprecated`](/docs/settings#printtypeoptions) set to `group`, the rendering can be customized using the CSS class `.deprecated`.
+When using the option [`printTypeOptions.deprecated`](/docs/reference/settings#printtypeoptions) set to `group`, the rendering can be customized using the CSS class `.deprecated`.
 
 Adding a `warning` emoji ⚠️ is done with a quick tweak of [Docusaurus CSS](https://docusaurus.io/docs/styling-layout).
 
@@ -82,7 +137,7 @@ Or run the documentation generator directly:
 npm run docusaurus graphql-to-doc
 ```
 
-The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command flags are documented in [settings](/docs/settings).
+The `npm run docusaurus graphql-to-doc` command generates MDX files locally from your GraphQL schema. The possible command flags are documented in [settings](/docs/reference/settings).
 
 ## Using hooks with Docusaurus
 
@@ -118,7 +173,7 @@ plugins: [
 ],
 ```
 
-See [Hooks Recipes](./hook-recipes) for the full framework-agnostic hook reference.
+See [Hooks Recipes](/docs/customize/hooks) for the full framework-agnostic hook reference.
 
 ## Multiple schemas (Docusaurus plugin instances)
 
@@ -167,7 +222,7 @@ Instance with an `id` will have their command line:
 npm run docusaurus graphql-to-doc:admin
 ```
 
-If you also use [GraphQL Config](/docs/configuration#graphql-config), you need to define `projects` with the same `id` (including `default`):
+If you also use [GraphQL Config](/docs/reference/configuration#graphql-config), you need to define `projects` with the same `id` (including `default`):
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -183,4 +238,4 @@ plugins: [
 ],
 ```
 
-For the full generic (non-Docusaurus-plugin) multi-schema setup via GraphQL Config, see [Additional schemas](./additional-schema#graphql-config).
+For the full generic (non-Docusaurus-plugin) multi-schema setup via GraphQL Config, see [Additional schemas](/docs/guides/additional-schema#graphql-config).

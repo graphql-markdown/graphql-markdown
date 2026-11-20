@@ -53,8 +53,8 @@ const decorator = withDirective("deprecated", (directive, options, context) => {
 
 ## Documentation
 
-- [Custom Directives](https://graphql-markdown.dev/docs/advanced/custom-directive)
-- [Decorators](https://graphql-markdown.dev/docs/advanced/decorators)
+- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
+- [Decorators](https://graphql-markdown.dev/docs/customize/decorators)
 
 ## License
 

@@ -16,7 +16,7 @@ npm install -g @graphql-markdown/cli
 
 ## Quick start
 
-Create a [GraphQL-Config file](https://graphql-markdown.dev/docs/configuration#graphql-config) and run:
+Create a [GraphQL-Config file](https://graphql-markdown.dev/docs/reference/configuration#graphql-config) and run:
 
 ```shell
 npx gqlmd graphql-to-doc
@@ -24,8 +24,8 @@ npx gqlmd graphql-to-doc
 
 ## Documentation
 
-- [Configuration Options](https://graphql-markdown.dev/docs/settings)
-- [CLI Flags](https://graphql-markdown.dev/docs/configuration-cheatsheet#cli-flags)
+- [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
+- [CLI Flags](https://graphql-markdown.dev/docs/reference/settings#cli-flags)
 - [Troubleshooting](https://graphql-markdown.dev/docs/troubleshooting)
 
 ## License

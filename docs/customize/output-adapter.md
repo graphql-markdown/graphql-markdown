@@ -1,4 +1,5 @@
 ---
+sidebar_position: 50
 description: Send generated GraphQL documentation somewhere other than the local filesystem. Write a custom output adapter for an object store, a CMS, or an in-memory map.
 keywords:
   - GraphQL-Markdown output adapter
@@ -8,11 +9,11 @@ keywords:
   - filesystem
 ---
 
-# Output Adapter
+# Output adapter
 
-By default every generated page is written to the local filesystem, under [`rootPath`](/docs/settings#rootpath)/[`baseURL`](/docs/settings#baseurl). The [`outputAdapter`](/docs/settings#outputadapter) setting replaces that destination with one of your own — an object store, a headless CMS, a database, an in-memory map in a test — without forking the renderer.
+By default every generated page is written to the local filesystem, under [`rootPath`](/docs/reference/settings#rootpath)/[`baseURL`](/docs/reference/settings#baseurl). The [`outputAdapter`](/docs/reference/settings#outputadapter) setting replaces that destination with one of your own — an object store, a headless CMS, a database, an in-memory map in a test — without forking the renderer.
 
-This page covers what the renderer expects from an adapter, with two worked examples. For the setting itself, see [`outputAdapter`](/docs/settings#outputadapter) in the settings reference.
+This page covers what the renderer expects from an adapter, with two worked examples. For the setting itself, see [`outputAdapter`](/docs/reference/settings#outputadapter) in the settings reference.
 
 ## The contract
 
@@ -43,13 +44,13 @@ An adapter is used for the whole run: there is no per-page opt-out.
 
 The paths handed to an adapter are the ones the filesystem writer would use. Two properties matter if you map them onto something that is not a filesystem:
 
-**They are relative to the working directory**, not absolute, unless [`rootPath`](/docs/settings#rootpath) is itself absolute. With the default `rootPath: "./docs"` and `baseURL: "schema"`, a page arrives as `docs/schema/types/objects/book.md`. Key off them directly, or make them relative to `outputDir` — do not assume a leading `/`.
+**They are relative to the working directory**, not absolute, unless [`rootPath`](/docs/reference/settings#rootpath) is itself absolute. With the default `rootPath: "./docs"` and `baseURL: "schema"`, a page arrives as `docs/schema/types/objects/book.md`. Key off them directly, or make them relative to `outputDir` — do not assume a leading `/`.
 
 Because they are relative, a key derived from them depends on the working directory the generator was started from. Resolve both sides before comparing them, and the two forms can no longer be mixed — a relative `rootPath` against an absolute path yields a key that climbs out of the tree with `..`.
 
 **One path sits outside the output directory.** mdBook requires `SUMMARY.md` one level above the generated pages, so an adapter computing keys with `path.relative(outputDir, filePath)` gets a leading `..` for that one file, which many object stores reject.
 
-Do not strip the `..`: that moves `SUMMARY.md` in among the pages, and the links it holds — `schema/index.md` and the like — then resolve one level too deep. Key off [`rootPath`](/docs/settings#rootpath) instead, which keeps every path inside the tree and preserves the layout:
+Do not strip the `..`: that moves `SUMMARY.md` in among the pages, and the links it holds — `schema/index.md` and the like — then resolve one level too deep. Key off [`rootPath`](/docs/reference/settings#rootpath) instead, which keeps every path inside the tree and preserves the layout:
 
 ```js
 const toKey = (location) =>
@@ -84,13 +85,13 @@ The first page that cannot be read back is reported once for that adapter, rathe
 
 ## Deleted types
 
-`ensureDir` receives `{ forceEmpty: true }` when [`force`](/docs/settings#force) is set, which is how a run clears out what a previous one left behind. Omit `ensureDir` and `force` has nothing to act on: pages for types deleted from the schema stay in the destination forever.
+`ensureDir` receives `{ forceEmpty: true }` when [`force`](/docs/reference/settings#force) is set, which is how a run clears out what a previous one left behind. Omit `ensureDir` and `force` has nothing to act on: pages for types deleted from the schema stay in the destination forever.
 
 A destination with no directories still usually wants `ensureDir` for exactly that reason — deleting by key prefix is the natural equivalent, as in the [Cloudflare R2 adapter](#a-cloudflare-r2-adapter) below. Leave it out only when the destination is disposable or pruned elsewhere.
 
 ## Formatting
 
-Content arrives already formatted, so an adapter never handles [`pretty`](/docs/settings#pretty) itself. Prettifying happens before the adapter is called, so every destination receives identical bytes.
+Content arrives already formatted, so an adapter never handles [`pretty`](/docs/reference/settings#pretty) itself. Prettifying happens before the adapter is called, so every destination receives identical bytes.
 
 ## An adapter for tests
 
@@ -235,7 +236,9 @@ Two things are worth knowing before you rely on an adapter in an automated pipel
 
 ### A failed hook does not fail the process
 
-If a formatter's post-processing throws — an adapter rejecting the write of mdBook's `SUMMARY.md`, say — the error is logged and the run reports that the output is incomplete, but the process still exits `0`. Handler errors are collected rather than raised, so one failing hook does not abort a generation that otherwise succeeded.
+If a formatter's post-processing throws — an adapter rejecting the write of mdBook's `SUMMARY.md`, say — the error is logged and the run reports that the output is incomplete, but the process still exits `0`.
+
+Handler errors are collected rather than raised, so one failing hook does not abort a generation that otherwise succeeded.
 
 A pipeline that must not publish incomplete documentation should not treat a zero exit status as sufficient. Check the log for the incomplete-output line, or assert on what actually landed in the destination — for an object store, that the page count matches the number of types, and that any navigation file the preset needs is present.
 
@@ -246,7 +249,9 @@ Two pieces of bookkeeping live for as long as the adapter object does, rather th
 - DocFX records which directories it has already given an "Overview" entry, so the check runs once per directory rather than once per page.
 - The first page that cannot be read back is reported once, so a write-only destination does not repeat the same error for every page.
 
-Generating once per process — which is what the CLI and every framework plugin do — is unaffected. Calling `generateDocFromSchema` repeatedly inside one process while passing the _same_ adapter object carries that state into the later runs: a second run over a directory cleared by [`force`](/docs/settings#force) can leave its `toc.yml` without the "Overview" entry, and a destination that still cannot serve reads stays quiet after the first report.
+Generating once per process — which is what the CLI and every framework plugin do — is unaffected.
+
+Calling `generateDocFromSchema` repeatedly inside one process while passing the _same_ adapter object carries that state into the later runs. A second run over a directory cleared by [`force`](/docs/reference/settings#force) can leave its `toc.yml` without the "Overview" entry, and a destination that still cannot serve reads stays quiet after the first report.
 
 Construct a new adapter object per run to avoid it. An adapter that holds an expensive client can keep the client in a shared scope and return a fresh wrapper object around it.
 

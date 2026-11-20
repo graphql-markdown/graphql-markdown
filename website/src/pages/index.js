@@ -93,7 +93,7 @@ function HomepageHeader() {
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
-            to="/docs/advanced/nuxt-theme"
+            to="/docs/guides/nuxt"
           >
             Nuxt →
           </Link>
@@ -113,7 +113,7 @@ function HomepageHeader() {
               styles.heroButton,
               styles.heroButtonSecondary,
             )}
-            to="/docs/advanced/integration-with-frameworks"
+            to="/docs/guides/other-frameworks"
           >
             Other ecosystems →
           </Link>

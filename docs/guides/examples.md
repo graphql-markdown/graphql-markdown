@@ -1,4 +1,5 @@
 ---
+sidebar_position: 90
 pagination_prev: null
 pagination_next: null
 description: Add usage examples to your GraphQL type documentation using the @example directive. Show real-world usage patterns.
@@ -12,7 +13,7 @@ keywords:
 
 # Examples
 
-Examples are added to types documentation as soon as the schema declares an `@example` directive. The option [`printTypeOptions.exampleSection`](/docs/settings#printtypeoptions) is only needed when the directive name, its field, or the value parsing has to be customized (see [advanced options](#advanced-options)).
+Examples are added to types documentation as soon as the schema declares an `@example` directive. The option [`printTypeOptions.exampleSection`](/docs/reference/settings#printtypeoptions) is only needed when the directive name, its field, or the value parsing has to be customized (see [advanced options](#advanced-options)).
 
 ## Usage
 

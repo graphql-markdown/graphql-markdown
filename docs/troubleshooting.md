@@ -13,6 +13,8 @@ keywords:
 
 # Troubleshooting
 
+Fixes for common errors when generating documentation. Find your error message below, or see the end of the page for how to get help.
+
 ## Duplicate "graphql" modules cannot be used at the same time
 
 Add a `resolutions` entry to your `package.json`:
@@ -26,7 +28,7 @@ Add a `resolutions` entry to your `package.json`:
 
 ## Unable to find any GraphQL type definitions
 
-There are several potential solutions:
+Try these solutions:
 
 1. Change the temporary folder location:
 
@@ -46,7 +48,7 @@ There are several potential solutions:
 
 1. Check file permissions on the temporary directory
 
-## Schema Loading Issues
+## Schema loading issues
 
 1. Ensure required loaders are installed:
 
@@ -74,7 +76,7 @@ Object literal may only specify known properties, and 'UrlLoader' does not exist
 core.d.ts(128, 3): The expected type comes from property 'loaders' which is declared here on type 'ConfigOptions'
 ```
 
-Cast the `loaders` as LoaderOption
+Cast the `loaders` as `LoaderOption`:
 
 ```ts
 loaders: {
@@ -89,17 +91,15 @@ loaders: {
 } as LoaderOption,
 ```
 
-## Memory Issues During Generation
+## Memory issues during generation
 
-For large schemas, try:
-
-1. Increase Node.js memory limit:
+For large schemas, increase the Node.js memory limit:
 
 ```shell
 NODE_OPTIONS=--max-old-space-size=4096 npx docusaurus graphql-to-doc
 ```
 
-## Getting Help
+## Getting help
 
 If you're still having issues:
 

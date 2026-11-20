@@ -1,4 +1,5 @@
 ---
+sidebar_position: 40
 description: Install the GraphQL-Markdown libraries from JSR for Deno, Node.js and Bun, and use them from your own code.
 keywords:
   - GraphQL-Markdown JSR
@@ -42,13 +43,13 @@ If your project uses GraphQL.js 16, install from npm instead. Installing from JS
 
 Some features load their package only when they are used, so a JSR install does not include it:
 
-| Feature                                                   | Package                        |
-| --------------------------------------------------------- | ------------------------------ |
-| [Schema loaders](/docs/advanced/schema-loading)           | `@graphql-tools/*-loader`      |
-| [GraphQL Config](/docs/configuration#graphql-config) file | `graphql-config`               |
-| [`pretty`](/docs/settings#pretty)                         | `prettier`                     |
-| [`diffMethod`](/docs/settings#diffmethod)                 | `@graphql-markdown/diff`       |
-| [`formatter`](/docs/settings#formatter) presets           | `@graphql-markdown/formatters` |
+| Feature                                                             | Package                        |
+| ------------------------------------------------------------------- | ------------------------------ |
+| [Schema loaders](/docs/guides/schema-loading)                       | `@graphql-tools/*-loader`      |
+| [GraphQL Config](/docs/reference/configuration#graphql-config) file | `graphql-config`               |
+| [`pretty`](/docs/reference/settings#pretty)                         | `prettier`                     |
+| [`diffMethod`](/docs/reference/settings#diffmethod)                 | `@graphql-markdown/diff`       |
+| [`formatter`](/docs/reference/settings#formatter) presets           | `@graphql-markdown/formatters` |
 
 - **Node.js and Bun**: install the packages for the features you use, for example `npm install graphql-config`.
 - **Deno**: the packages are fetched from JSR or npm the first time the feature runs. Allow it with `--allow-import` (or `-A`), see [Deno permissions for dynamic imports](https://docs.deno.com/runtime/fundamentals/modules/#dynamic-imports).

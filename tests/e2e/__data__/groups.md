@@ -12,7 +12,7 @@ sidebar_class_name: navbar__toggle
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-This is an example of documentation grouping with GraphQL directive using the `groupByDirective` option (see [documentation](/docs/advanced/group-by-directive)):
+This is an example of documentation grouping with GraphQL directive using the `groupByDirective` option (see [documentation](/docs/guides/group-by-directive)):
 
 <Tabs groupId="config">
 <TabItem value="docusaurus" label="Docusaurus (JS/TS)">
