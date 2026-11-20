@@ -22,19 +22,7 @@ The fastest way to start is the [`create-graphql-markdown-docs`](https://github.
 
 Node.js version [22.18](https://nodejs.org/en/download/) or above (which can be checked by running `node -v`) is required.
 
-:::info[Package managers]
-
-You can use either `npm`, `yarn`, `pnpm` or `bun` as your package manager. The examples in this documentation use `npm`, but you can substitute the commands with your preferred package manager.
-
-When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-:::
-
-:::tip
-
-You can use [nvm](https://github.com/nvm-sh/nvm), installed on a single machine, to manage multiple Node.js versions.
-
-:::
+You can use `npm`, `yarn`, `pnpm` or `bun` as your package manager. The examples use `npm`; substitute your own. To manage several Node.js versions on one machine, use [nvm](https://github.com/nvm-sh/nvm).
 
 ### Run the scaffolder
 
@@ -125,13 +113,7 @@ npm run start
 
 If you skipped the install step, run `npm install` first.
 
-:::tip
-
-The `npm run doc` command is a shortcut in the scaffolded Docusaurus site for command-line document generation: `npm run docusaurus graphql-to-doc`.
-
-:::
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
+The `npm run doc` command is a shortcut in the scaffolded site for `npm run docusaurus graphql-to-doc`. The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at [http://localhost:3000/](http://localhost:3000/).
 
 ### Non-interactive usage (CI)
 
@@ -173,11 +155,7 @@ To skip the prompts, for example in CI, pass the options explicitly:
 npm create graphql-markdown-docs@latest . -- --yes --schema ./schema.graphql --output src/content/docs/api --install
 ```
 
-:::info
-
 The scaffolder never edits your framework configuration files and never overwrites existing files. It installs nothing unless you pass `--install`. Use `--dry-run` to preview the changes first.
-
-:::
 
 For every option, see the [create-graphql-markdown-docs flags](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/create-graphql-markdown-docs#flags).
 
@@ -185,43 +163,23 @@ Prefer to set it up by hand? Follow the steps for your framework.
 
 ### Docusaurus
 
-#### Prerequisites
-
-:::note
-
-These requirements are specific to Docusaurus integration. See our [Framework Integration Guide](/docs/guides/other-frameworks) for formatter-based setups and their requirements.
-
-:::
-
-Your project needs to meet the following requirements:
-
-- Node.js version [22.18](https://nodejs.org/en/download/) or above
-- [Docusaurus](https://docusaurus.io/) instance version 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
-- [GraphQL.js](https://graphql.org/graphql-js/) version 16.0 or above
-
-#### Install the plugin
-
-Add the `@graphql-markdown/docusaurus` plugin to your site installation:
-
 ```shell title="shell"
 npm install @graphql-markdown/docusaurus graphql
 ```
 
-#### Add a schema loader
-
-See [schema loading](/docs/guides/schema-loading).
-
-#### Configure the plugin
-
-See [configuration](/docs/reference/configuration).
+Then add a schema loader and configure the plugin. See the [Docusaurus guide](/docs/guides/docusaurus) for requirements and configuration.
 
 ### Nuxt
 
-Add the `@graphql-markdown/nuxt-theme` layer to your Nuxt project and create `content.config.ts` and `generate-docs.ts`. See [extending the layer directly](/docs/guides/nuxt#extending-the-layer-directly).
+```shell title="shell"
+npm install @graphql-markdown/nuxt-theme
+```
+
+Then create `content.config.ts` and `generate-docs.ts`. See the [Nuxt guide](/docs/guides/nuxt#extending-the-layer-directly).
 
 ### Other frameworks
 
-For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integration with Frameworks](/docs/guides/other-frameworks).
+For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Other frameworks](/docs/guides/other-frameworks).
 
 ## Use the API
 
@@ -248,11 +206,7 @@ await generateDocFromSchema(config);
 
 Run it with any TypeScript-aware runtime, for example `node generate-docs.ts` (Node.js 22.18 or above), `bun generate-docs.ts` or `deno run -A generate-docs.ts`.
 
-:::tip
-
 `buildConfig` also reads a [GraphQL Config](/docs/reference/configuration#graphql-config) file when `graphql-config` is installed, and merges it with the options passed in code. Without it, the options in code are all that is needed.
-
-:::
 
 ## Install from JSR
 

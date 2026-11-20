@@ -24,7 +24,7 @@ const printType = (schema: GraphQLSchema, options: PrintTypeOptions) => {
 
 ## Documentation
 
-- [Custom Formatters](https://graphql-markdown.dev/docs/guides/other-frameworks#custom-mdx-formatter)
+- [Custom Formatters](https://graphql-markdown.dev/docs/customize/custom-formatter)
 - [Decorators](https://graphql-markdown.dev/docs/customize/decorators)
 
 ## License

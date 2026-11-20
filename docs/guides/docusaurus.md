@@ -13,7 +13,65 @@ keywords:
 
 # Docusaurus recipes
 
-These recipes only apply when generating documentation into a Docusaurus site with `@graphql-markdown/docusaurus`. For the framework-agnostic path (any other formatter), see [Integration with Frameworks](/docs/guides/other-frameworks). For initial plugin setup, see [Getting started](/docs/get-started#docusaurus).
+These recipes only apply when generating documentation into a Docusaurus site with `@graphql-markdown/docusaurus`. For the framework-agnostic path (any other formatter), see [Integration with Frameworks](/docs/guides/other-frameworks). To install the plugin, see [Getting started](/docs/get-started#add-to-an-existing-site).
+
+## Requirements
+
+- Node.js version [22.18](https://nodejs.org/en/download/) or above
+- [Docusaurus](https://docusaurus.io/) 2.0 or above with the [docs plugin](https://docusaurus.io/docs/docs-introduction) enabled
+- [GraphQL.js](https://graphql.org/graphql-js/) 16.0 or above
+
+A schema loader is also required. See [schema loading](/docs/guides/schema-loading).
+
+## Configuration
+
+Define the plugin settings in `docusaurus.config.js`. They take precedence over a GraphQL Config file and are overridden by CLI flags.
+
+```js title="docusaurus.config.js"
+module.exports = {
+  // ...
+  plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+      /** @type {import('@graphql-markdown/types').ConfigOptions} */
+      {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader", // local file schema
+        },
+        // Optional advanced settings
+        pretty: true,
+      },
+    ],
+  ],
+};
+```
+
+All settings are described in [settings](/docs/reference/settings). For several schemas, see [additional schemas](/docs/guides/additional-schema).
+
+### Site settings
+
+Add a link to the generated documentation in your site's `navbar`:
+
+```js title="docusaurus.config.js"
+module.exports = {
+  // ...
+  navbar: {
+    items: [
+      {
+        to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
+        label: "SWAPI Schema", // change the label with yours
+        position: "left",
+      },
+    ],
+  },
+};
+```
+
+For more details, see the Docusaurus [navbar documentation](https://docusaurus.io/docs/api/themes/configuration#navbar).
 
 ## Custom homepage
 

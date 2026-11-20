@@ -11,17 +11,11 @@ keywords:
 
 # Configuration
 
-GraphQL-Markdown supports three configuration methods. Use GraphQL Config for framework-agnostic setups, use Docusaurus plugin options for Docusaurus sites, and use CLI flags when you need temporary overrides. Later entries in this list take precedence over earlier ones.
+GraphQL-Markdown reads its settings from a GraphQL Config file, from framework options such as the Docusaurus plugin, and from CLI flags. Later sources take precedence over earlier ones.
 
-## Framework-agnostic Configuration
+## GraphQL Config
 
-### GraphQL Config
-
-:::tip
-GraphQL Config is the recommended way to configure GraphQL-Markdown across all frameworks.
-:::
-
-You can use a [GraphQL Config](https://the-guild.dev/graphql/config/docs/user/usage) file (multiple formats supported) to configure GraphQL-Markdown:
+GraphQL Config is the recommended way to configure GraphQL-Markdown across all frameworks. Use a [GraphQL Config](https://the-guild.dev/graphql/config/docs/user/usage) file (multiple formats supported) to configure GraphQL-Markdown:
 
 ```yaml title=".graphqlrc"
 schema: "https://graphql.anilist.co/"
@@ -40,78 +34,20 @@ extensions:
       deprecated: "group"
 ```
 
-For supported formatter presets, see [Integration with Frameworks](/docs/guides/other-frameworks).
+For supported formatter presets, see [Other frameworks](/docs/guides/other-frameworks).
 
-## Docusaurus Integration
+For Docusaurus plugin options and site settings, see the [Docusaurus guide](/docs/guides/docusaurus#configuration).
 
-### Plugin Configuration
-
-You can define plugin settings directly in your Docusaurus configuration file `docusaurus.config.js`:
-
-```js title="docusaurus.config.js"
-module.exports = {
-  // ...
-  plugins: [
-    [
-      "@graphql-markdown/docusaurus",
-      /** @type {import('@graphql-markdown/types').ConfigOptions} */
-      {
-        schema: "./schema/swapi.graphql",
-        rootPath: "./docs", // docs will be generated under './docs/swapi' (rootPath/baseURL)
-        baseURL: "swapi",
-        homepage: "./docs/swapi.md",
-        loaders: {
-          GraphQLFileLoader: "@graphql-tools/graphql-file-loader", // local file schema
-        },
-        // Optional advanced settings
-        pretty: true,
-      },
-    ],
-  ],
-};
-```
-
-All settings are described in the page **[settings](/docs/reference/settings)**.
-
-:::tip
-
-If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/guides/additional-schema)**.
-
-:::
-
-### Site Settings
-
-You will also need to add a link to your documentation on your site. One way to do it is to add it to your site's `navbar` in `docusaurus.config.js`:
-
-```js title="docusaurus.config.js"
-module.exports = {
-  // ...
-  navbar: {
-    items: [
-      {
-        to: "/swapi/homepage", // adjust the location depending on your baseURL (see configuration)
-        label: "SWAPI Schema", // change the label with yours
-        position: "left",
-      },
-    ],
-  },
-};
-```
-
-For more details about the `navbar`, please refer to Docusaurus [documentation](https://docusaurus.io/docs/api/themes/configuration#navbar).
-
-## Configuration Lifecycle
+## Configuration lifecycle
 
 GraphQL-Markdown processes configuration sources in the following priority order (later sources override earlier ones):
 
 1. **Default configuration**: Built-in default settings
 2. **GraphQL Config file** (`.graphqlrc`): Framework-agnostic project settings
-3. **Framework-specific configuration**: (e.g., Docusaurus plugin settings)
+3. **Framework-specific configuration**: for example, Docusaurus plugin settings
 4. **CLI flags**: Command-line arguments override all other settings
 
-:::tip
-For any framework, you can use CLI flags to temporarily override settings without modifying your configuration files.
-:::
+CLI flags let you override settings temporarily without editing your configuration files.
 
 **Current limitations:**
 

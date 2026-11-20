@@ -64,7 +64,7 @@ Each formatter has its own setup guide:
 
 ## Custom formatter
 
-For frameworks not listed above, create a custom MDX module. See the [Integration Guide](https://graphql-markdown.dev/docs/guides/other-frameworks#custom-mdx-formatter) for the full formatter contract, the `formatMDXDetails` `\r` delimiter invariant, and examples of extending a preset.
+For frameworks not listed above, create a custom MDX module. See the [Integration Guide](https://graphql-markdown.dev/docs/customize/custom-formatter) for the full formatter contract, the `formatMDXDetails` `\r` delimiter invariant, and examples of extending a preset.
 
 ## Documentation
 
@@ -85,7 +85,7 @@ For frameworks not listed above, create a custom MDX module. See the [Integratio
 
 A formatter module exports `createMDXFormatter` and any subset of the standard formatter functions (`formatMDXBadge`, `formatMDXAdmonition`, `formatMDXBullet`, `formatMDXDetails`, `formatMDXFrontmatter`, `formatMDXLink`, `formatMDXNameEntity`, `formatMDXPermalink`, `formatMDXSpecifiedByLink`). Optional exports include `formatMDXTitle` (a visible page title printed after the front matter), `mdxDeclaration`, `mdxExtension`, and lifecycle hooks.
 
-See the [Integration Guide](https://graphql-markdown.dev/docs/guides/other-frameworks#custom-mdx-formatter) for the full contract, type signatures, and the `formatMDXDetails` `\r` delimiter invariant.
+See the [Integration Guide](https://graphql-markdown.dev/docs/customize/custom-formatter) for the full contract, type signatures, and the `formatMDXDetails` `\r` delimiter invariant.
 
 ### Testing checklist
 
