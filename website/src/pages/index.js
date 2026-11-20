@@ -76,24 +76,22 @@ type Project implements Node {
 function HeroPreview() {
   return (
     <div className={styles.heroPreview}>
-      <figure className={styles.previewPanel}>
-        <figcaption className={styles.previewCaption}>Your schema</figcaption>
+      <figure className={styles.previewPane}>
+        <figcaption className={styles.paneTab}>schema.graphql</figcaption>
         <CodeBlock language="graphql" className={styles.previewCode}>
           {HERO_SDL}
         </CodeBlock>
       </figure>
-      <span className={styles.previewArrow} aria-hidden="true">
-        →
-      </span>
-      <figure className={styles.previewPanel}>
-        <figcaption className={styles.previewCaption}>
-          Generated docs ·{" "}
+      <figure className={clsx(styles.previewPane, styles.previewPaneOutput)}>
+        <figcaption className={styles.paneTab}>
+          <span>Generated page</span>
           <a
             href="https://graphql-markdown.dev/demo-nuxt/api-reference/#objects-project"
             target="_blank"
             rel="noopener noreferrer"
+            className={styles.paneLink}
           >
-            live demo
+            Live demo ↗
           </a>
         </figcaption>
         <ThemedImage
@@ -103,8 +101,8 @@ function HeroPreview() {
             light: useBaseUrl("/img/hero-output.webp"),
             dark: useBaseUrl("/img/hero-output-dark.webp"),
           }}
-          width={1200}
-          height={750}
+          width={1440}
+          height={1080}
           fetchPriority="high"
           decoding="async"
         />

@@ -174,48 +174,69 @@
 
 /* ── Preview image ── */
 .heroPreview {
+  --pane-height: 340px;
+
   display: grid;
-  grid-template-columns: minmax(0, 2fr) auto minmax(0, 3fr);
-  align-items: start;
-  gap: 1rem;
-  max-width: 1100px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  max-width: 1000px;
   margin: 2.5rem auto 0;
   text-align: left;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ifm-background-surface-color);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 12%);
 }
 
-.previewPanel {
+.previewPane {
   margin: 0;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
-.previewCaption {
+.previewPaneOutput {
+  border-left: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.paneTab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  height: 2.25rem;
+  padding: 0 1rem;
+  font-family: var(--ifm-font-family-monospace);
   font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-700);
+  background: var(--ifm-color-emphasis-100);
+  border-bottom: 1px solid var(--ifm-color-emphasis-300);
+}
+
+.paneLink {
+  font-family: var(--ifm-font-family-base);
   font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  opacity: 0.7;
-  margin-bottom: 0.5rem;
 }
 
 .previewCode {
-  margin-bottom: 0;
-  font-size: 0.8rem;
-  box-shadow: 0 2px 16px rgb(0 0 0 / 12%);
+  height: var(--pane-height);
+  margin: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 0.85rem;
 }
 
-.previewArrow {
-  align-self: center;
-  font-size: 1.75rem;
-  color: var(--ifm-color-primary);
+.previewCode pre {
+  height: 100%;
+  border-radius: 0;
 }
 
 .previewShot {
   display: block;
   width: 100%;
-  height: auto;
-  border: 1px solid var(--ifm-color-emphasis-300);
-  border-radius: 8px;
-  box-shadow: 0 2px 16px rgb(0 0 0 / 12%);
+  height: var(--pane-height);
+  object-fit: cover;
+  object-position: top left;
 }
 
 /* ── Trusted by strip ── */
@@ -301,9 +322,17 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .previewArrow {
-    justify-self: center;
-    transform: rotate(90deg);
+  .previewPaneOutput {
+    border-left: 0;
+    border-top: 1px solid var(--ifm-color-emphasis-300);
+  }
+
+  .previewCode {
+    height: auto;
+  }
+
+  .previewShot {
+    height: 260px;
   }
 
   .buttons {
