@@ -122,7 +122,7 @@ const config = {
           { from: "/docs/configuration", to: "/docs/reference/configuration" },
           {
             from: "/docs/configuration-cheatsheet",
-            to: "/docs/reference/configuration-cheatsheet",
+            to: "/docs/reference/settings",
           },
           { from: "/docs/settings", to: "/docs/reference/settings" },
           { from: "/docs/telemetry", to: "/docs/reference/telemetry" },

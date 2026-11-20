@@ -281,7 +281,6 @@ a.menu__link[href$="/docs/try-it"]::before,
 a.menu__link[href$="/docs/get-started"]::before,
 a.menu__link[href$="/docs/how-it-works"]::before,
 a.menu__link[href$="/docs/reference/configuration"]::before,
-a.menu__link[href$="/docs/reference/configuration-cheatsheet"]::before,
 a.menu__link[href$="/docs/reference/settings"]::before,
 a.menu__link[href$="/docs/troubleshooting"]::before,
 a.menu__link[href$="/docs/reference/telemetry"]::before,
@@ -326,11 +325,6 @@ a.menu__link[href$="/docs/how-it-works"]::before {
 a.menu__link[href$="/docs/reference/configuration"]::before {
   mask-image: url("/img/docs/icons/configuration.svg");
   -webkit-mask-image: url("/img/docs/icons/configuration.svg");
-}
-
-a.menu__link[href$="/docs/reference/configuration-cheatsheet"]::before {
-  mask-image: url("/img/docs/icons/cheatsheet.svg");
-  -webkit-mask-image: url("/img/docs/icons/cheatsheet.svg");
 }
 
 a.menu__link[href$="/docs/reference/settings"]::before {

@@ -11,23 +11,66 @@ keywords:
 
 # Settings
 
-All settings can be set via plugin options in your config file and overridden with CLI flags. Use `formatter` when you want GraphQL-Markdown to target a supported formatter-based documentation ecosystem, and see [configuration](/docs/reference/configuration) for the different config methods.
+Every setting is a plugin option in your config file, and most have a CLI flag that overrides it. Run the CLI with `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone), and see [configuration](/docs/reference/configuration) for where the config lives.
 
-## `--config`
+## At a glance
 
-Print the resolved configuration used for generating documentation. This CLI flag is used for debugging purposes.
+| Option | Type | Default | Purpose |
+| :----- | :--- | :------ | :------ |
+| [`schema`](#schema) | `string` | `./schema.graphql` | Path, URL or introspection result of the schema |
+| [`loaders`](#loaders) | `object` | `{ }` | GraphQL schema loaders |
+| [`rootPath`](#rootpath) | `string` | `./docs` | Root folder for the generated documentation |
+| [`baseURL`](#baseurl) | `string` | `schema` | Base URL and output folder name under `rootPath` |
+| [`linkRoot`](#linkroot) | `string` | `/` | Root path used for type cross-links |
+| [`docOptions`](#docoptions) | `object` | - | Index pages, front matter, category sort, header IDs |
+| [`printTypeOptions`](#printtypeoptions) | `object` | - | Hierarchy, deprecated handling, badges, parent prefix |
+| [`groupByDirective`](#groupbydirective) | `string` | `undefined` | Group types by a directive: `@directive(field\|=fallback)` |
+| [`homepage`](#homepage) | `string` \| `false` | `generated.md` | Landing page file, `false` to disable |
+| [`id`](#id) | `string` | `default` | Identifier of the configuration instance |
+| [`onlyDocDirective`](#onlydocdirective) | `string[]` | `[]` | Include only types with these directives |
+| [`skipDocDirective`](#skipdocdirective) | `string[]` | `[]` | Exclude types with these directives |
+| [`customDirective`](#customdirective) | `object` | `undefined` | Deprecated, use `decorators` |
+| [`decorators`](#decorators) | `object` | `undefined` | Render custom content for schema nodes |
+| [`formatter`](#formatter) | `string` | `undefined` | Package name or path to a formatter module |
+| [`outputAdapter`](#outputadapter) | `object` | local filesystem | Write pages somewhere other than the filesystem |
+| [`metatags`](#metatags) | `object[]` | `[]` | Page `<head>` metadata |
+| [`pretty`](#pretty) | `boolean` | `false` | Format generated files with Prettier |
+| [`force`](#force) | `boolean` | `false` | Force regeneration of all files |
+| [`diffMethod`](#diffmethod) | `string` | `NONE` | Change detection: `NONE`, `FORCE`, `SCHEMA-DIFF`, `SCHEMA-HASH` |
+| [`tmpDir`](#tmpdir) | `string` | _OS temp folder_ | Folder for the schema copy and signature |
+| [`telemetry`](#telemetry) | `boolean` | _on_ | Anonymous usage telemetry |
+| [`--config`](#--config) | flag | `null` | Print the resolved configuration |
 
-| Setting | CLI flag   | Default |
-| :------ | :--------- | :------ |
-|         | `--config` | `null`  |
+## Input
 
-Example:
+Where the schema comes from and how its pages are addressed.
 
-```bash
-npx docusaurus graphql-to-doc --config
-```
+### `schema`
 
-## `baseURL`
+The GraphQL schema location.
+
+| Setting  | CLI flag                | Default            |
+| -------- | ----------------------- | ------------------ |
+| `schema` | `-s, --schema <schema>` | `./schema.graphql` |
+
+### `loaders`
+
+GraphQL schema loaders to use (see [schema loading](/docs/guides/schema-loading)).
+
+| Setting   | CLI flag        | Default |
+| --------- | --------------- | ------- |
+| `loaders` | _not supported_ | `{ }`   |
+
+### `rootPath`
+
+The output root path for the generated documentation, relative to the current workspace.
+It works with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
+
+| Setting    | CLI flag                | Default  |
+| ---------- | ----------------------- | -------- |
+| `rootPath` | `-r, --root <rootPath>` | `./docs` |
+
+### `baseURL`
 
 The base URL used by Docusaurus. It will also be used as the folder name under [`rootPath`](#rootpath) for the generated documentation.
 
@@ -35,64 +78,32 @@ The base URL used by Docusaurus. It will also be used as the folder name under [
 | --------- | ---------------------- | -------- |
 | `baseURL` | `-b, --base <baseURL>` | `schema` |
 
-## `customDirective`
+### `linkRoot`
 
-:::caution
+The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.
 
-Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/$1#migrating-from-customdirective).
+| Setting    | CLI flag                | Default |
+| ---------- | ----------------------- | ------- |
+| `linkRoot` | `-l, --link <linkRoot>` | `/`     |
 
-:::
+## Output structure
 
-Use this option to render directive information for types (see [custom directive](/docs/customize/$1)).
+How generated pages are organized, named and linked.
 
-| Setting           | CLI flag        | Default     |
-| ----------------- | --------------- | ----------- |
-| `customDirective` | _not supported_ | `undefined` |
-
-## `decorators`
-
-Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/$1)). Supersedes [`customDirective`](#customdirective).
-
-| Setting      | CLI flag        | Default     |
-| ------------ | --------------- | ----------- |
-| `decorators` | _not supported_ | `undefined` |
-
-## `diffMethod`
-
-The method to be used for identifying changes in the schema for triggering the documentation generation.
-
-The possible values are:
-
-- `FORCE`: skip diff, always generate documentation, also triggered by [`force`](#force) setting.
-- `NONE`: skip diff (same as `FORCE`).
-- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) to identify changes in the schema (including description).
-- `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters).
-
-| Setting      | CLI flag                  | Default |
-| ------------ | ------------------------- | ------- |
-| `diffMethod` | `-d, --diff <diffMethod>` | `NONE`  |
-
-<br/>
-
-:::info
-
-The package `@graphql-markdown/diff` is required for using `diffMethod`.
-If the package is missing, then the change detection is always skipped.
-
-```shell
-npm install @graphql-markdown/diff
-```
-
-:::
-
-## `docOptions`
+### `docOptions`
 
 Use these options to tweak some of the static documentation generator features:
 
 - `categorySort`: control how categories are sorted in the sidebar. Can be `"natural"` for alphabetical sorting or a custom compare function. When enabled, folder names are automatically prefixed with zero-padded order numbers (e.g., `01-objects`, `02-queries`). When not set, the order depends on document generator folders sorting and no prefixes are added.
 - `frontMatter`: set custom front matter entries as key/value. If set to `false`, then it will disable the frontmatter and print a level 1 title as the page title.
 - `index`: enable/disable the index page for categories/groups, see [Docusaurus documentation](https://docusaurus.io/docs/sidebar/items#generated-index-page) &mdash; **ONLY FOR DOCUSAURUS**
-- `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. The syntax depends on the formatter: `### Section {/* #ID */}` for Docusaurus 3.10 and later (see [Strict Heading IDs](https://docusaurus.io/blog/releases/3.10#strict-heading-ids) and [heading IDs](https://docusaurus.io/docs/markdown-features/toc#heading-ids)), `### Section [#ID]` for Fumadocs, and the classic `### Section {#ID}` for the other formatters. Starlight and Vocs have no custom header ID syntax, so the classic one is escaped as `### Section \{#ID\}` to keep the page valid MDX, and is only resolved if a remark plugin such as `remark-custom-heading-id` is configured. DocFX does not support `{#ID}` by default, so its formatter appends an HTML anchor `<a id="ID"></a>` to the heading instead. Override `formatMDXPermalink` in a [custom formatter](#formatter) to change it. When disabled, field and argument names are printed without a link, since their headings have no known anchor.
+- `sectionHeaderId`: enable/disable the generation of custom header IDs for permalinks. When disabled, field and argument names are printed without a link, since their headings have no known anchor. The syntax depends on the formatter:
+  - Docusaurus 3.10 and later: `### Section {/* #ID */}` (see [Strict Heading IDs](https://docusaurus.io/blog/releases/3.10#strict-heading-ids) and [heading IDs](https://docusaurus.io/docs/markdown-features/toc#heading-ids)).
+  - Fumadocs: `### Section [#ID]`.
+  - Other formatters: the classic `### Section {#ID}`.
+  - Starlight and Vocs have no custom header ID syntax, so the classic one is escaped as `### Section \{#ID\}` to keep the page valid MDX. It is only resolved if a remark plugin such as `remark-custom-heading-id` is configured.
+  - DocFX does not support `{#ID}` by default, so its formatter appends an HTML anchor `<a id="ID"></a>` to the heading instead.
+  - Override `formatMDXPermalink` in a [custom formatter](#formatter) to change it.
 
 | Setting                      | CLI flag        | Default |
 | ---------------------------- | --------------- | ------- |
@@ -100,8 +111,6 @@ Use these options to tweak some of the static documentation generator features:
 | `docOptions.frontMatter`     | _not supported_ | `{}`    |
 | `docOptions.index`           | `--index`       | `false` |
 | `docOptions.sectionHeaderId` | `--noSectionId` | `true`  |
-
-<br/>
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -133,7 +142,7 @@ plugins: [
   ],
 ```
 
-:::info[Compatibility between options]
+#### Compatibility between options
 
 The `categorySort` option works seamlessly with:
 
@@ -141,7 +150,7 @@ The `categorySort` option works seamlessly with:
 - **`groupByDirective` option**: When using custom groups, categories are sorted based on group names and prefixed accordingly
 - **`deprecated` option**: Deprecated categories are sorted along with other categories
 
-**Example with groupByDirective:**
+Example with `groupByDirective`:
 
 ```js
 docOptions: {
@@ -156,229 +165,7 @@ groupByDirective: {
 
 This generates folder names like: `01-common`, `02-internal`, `03-public`
 
-:::
-
-## `force`
-
-Force generating documentation in an empty folder and set [`diffMethod`](#diffmethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
-
-| Setting | CLI flag      | Default |
-| ------- | ------------- | ------- |
-| `force` | `-f, --force` | `false` |
-
-## `groupByDirective`
-
-Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/guides/$1)).
-
-| Setting            | CLI flag                                                                  | Default     |
-| ------------------ | ------------------------------------------------------------------------- | ----------- |
-| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
-
-## `homepage`
-
-The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/guides/docusaurus#custom-homepage)). The file will be copied to the root folder of the generated documentation.
-
-The plugin provides a default page in `assets/generated`.
-
-| Setting    | CLI flag                    | Default        |
-| ---------- | --------------------------- | -------------- |
-| `homepage` | `-h, --homepage <homepage>` | `generated.md` |
-
-:::tip
-
-Set `homepage: false` to disable the homepage generation.
-
-:::
-
-<br/>
-
-:::info
-
-The GraphQL-Markdown template for Docusaurus provides a customized homepage located at `static/index.md`.
-
-:::
-
-## `id`
-
-The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/guides/$1): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/reference/configuration#graphql-config) project of the same name.
-
-| Setting | CLI flag        | Default   |
-| ------- | --------------- | --------- |
-| `id`    | _not supported_ | `default` |
-
-## `linkRoot`
-
-The root for links in documentation. It depends on the entry for the schema main page in the Docusaurus sidebar.
-
-| Setting    | CLI flag                | Default |
-| ---------- | ----------------------- | ------- |
-| `linkRoot` | `-l, --link <linkRoot>` | `/`     |
-
-## `loaders`
-
-GraphQL schema loaders to use (see [schema loading](/docs/guides/$1)).
-
-| Setting   | CLI flag        | Default |
-| --------- | --------------- | ------- |
-| `loaders` | _not supported_ | `{ }`   |
-
-## `formatter`
-
-Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters).
-
-| Setting     | CLI flag      | Default     |
-| ----------- | ------------- | ----------- |
-| `formatter` | `--formatter` | `undefined` |
-
-:::note
-
-The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning. Migrate to `formatter`.
-
-:::
-
-:::caution
-
-The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
-
-:::
-
-<br/>
-
-:::info
-
-`@graphql-markdown/docusaurus` comes with `@graphql-markdown/formatters/docusaurus` by default.
-
-:::
-
-The custom module can export individual formatter functions:
-
-| Export                     | Type                                       | Description                                                                                                                                |
-| -------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `formatMDXBadge`           | `(badge: { text, classname? }) => string`  | Format type badges                                                                                                                         |
-| `formatMDXAdmonition`      | `(admonition, meta?) => string`            | Format callout/warning blocks                                                                                                              |
-| `formatMDXBullet`          | `(text?: string) => string`                | Format bullet point separators                                                                                                             |
-| `formatMDXDetails`         | `(option) => string`                       | Format collapsible sections                                                                                                                |
-| `formatMDXFrontmatter`     | `(props?, formatted?, context?) => string` | Format page frontmatter                                                                                                                    |
-| `formatMDXLink`            | `(link) => { text, url }`                  | Transform type links                                                                                                                       |
-| `formatMDXNameEntity`      | `(name, parentType?) => string`            | Format named entity references                                                                                                             |
-| `formatMDXPermalink`       | `(id) => string`                           | Format section header permalinks                                                                                                           |
-| `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links. Receives an absolute `http(s)` URL; encode it for where you write it (for example as an HTML attribute) |
-| `formatMDXTitle`           | `(title) => string`                        | Optional visible page title, printed after the frontmatter                                                                                 |
-
-For detailed examples on formatter functions, see **[Integration with Frameworks](/docs/guides/other-frameworks)**.
-
-Additionally, the module can export:
-
-| Export           | Type     | Description                                    |
-| ---------------- | -------- | ---------------------------------------------- |
-| `mdxDeclaration` | `string` | Import statements prepended to generated files |
-| `mdxExtension`   | `string` | Custom file extension (defaults to `.mdx`)     |
-
-The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/customize/hooks)**.
-
-<br/>
-
-```js title="docusaurus.config.js"
-plugins: [
-    [
-      "@graphql-markdown/docusaurus",
-       /** @type {import('@graphql-markdown/types').ConfigOptions} */
-       {
-        schema: "./schema/swapi.graphql",
-        rootPath: "./docs",
-        baseURL: "swapi",
-        homepage: "./docs/swapi.md",
-        // highlight-start
-        formatter: "./lib/custom-mdx.cjs",
-        // highlight-end
-        loaders: {
-          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
-        }
-      },
-    ],
-  ],
-```
-
-## `metatags`
-
-Set page metadata in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
-
-Meta tags are provided as a list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
-
-| Setting    | CLI flag        | Default |
-| ---------- | --------------- | ------- |
-| `metatags` | _not supported_ | `[]`    |
-
-<br/>
-
-```js title="docusaurus.config.js"
-plugins: [
-    [
-      "@graphql-markdown/docusaurus",
-       /** @type {import('@graphql-markdown/types').ConfigOptions} */
-       {
-        schema: "./schema/swapi.graphql",
-        rootPath: "./docs",
-        baseURL: "swapi",
-        homepage: "./docs/swapi.md",
-        // highlight-start
-        metatags: [
-          { name: "robots", content: "noindex" }, // <meta name="robots" content="noindex" />
-          { charset: "utf-8" }, // <meta charset="utf-8" />
-        ],
-        // highlight-end
-        loaders: {
-          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
-        }
-      },
-    ],
-  ],
-```
-
-## `onlyDocDirective`
-
-The schema directive/s is used for selecting types to be rendered in the documentation.
-
-The CLI flag supports multiple values separated by a space character, eg `--only @stable @beta`.
-
-| Setting            | CLI flag                 | Default |
-| ------------------ | ------------------------ | ------- |
-| `onlyDocDirective` | `--only <@directive...>` | `[]`    |
-
-See also [`skipDocDirective`](#skipdocdirective).
-
-<br/>
-
-:::info
-
-It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`), then the type will be displayed.
-
-:::
-
-## `outputAdapter`
-
-The destination for generated documentation. By default pages are written to the local filesystem under [`rootPath`](#rootpath)/[`baseURL`](#baseurl). Set an adapter to send them somewhere else instead — a CMS storage API, an object store, an in-memory map — without forking the renderer.
-
-| Setting         | CLI flag | Default          |
-| --------------- | -------- | ---------------- |
-| `outputAdapter` | none     | local filesystem |
-
-An adapter must provide `writeFile` and `readFile`, and may provide `ensureDir`:
-
-```ts
-interface OutputAdapter {
-  writeFile: (filePath: string, content: string) => Promise<void>;
-  readFile: (filePath: string) => Promise<string | undefined>;
-  ensureDir?: (
-    dirPath: string,
-    options?: { forceEmpty?: boolean },
-  ) => Promise<void>;
-}
-```
-
-See **[Output Adapter](/docs/customize/$1)** for the full contract and worked examples: [when each method is called](/docs/customize/$1#when-each-method-is-called), [how paths map onto keys](/docs/customize/$1#paths-are-keys), [which formatters read their output back](/docs/customize/$1#reading-back), why [omitting `ensureDir`](/docs/customize/$1#deleted-types) leaves pages for deleted types behind, and the [limitations](/docs/customize/$1#limitations) worth knowing before relying on one in a pipeline.
-
-## `printTypeOptions`
+### `printTypeOptions`
 
 Use these options to toggle the type of information rendered on pages:
 
@@ -386,12 +173,12 @@ Use these options to toggle the type of information rendered on pages:
   - `default`: deprecated entities are displayed with other entities.
   - `group`: deprecated entities are grouped.
   - `skip`: deprecated entities are not displayed (same as [`skipDocDirective`](#skipdocdirective)).
-- `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/guides/$1)).
+- `exampleSection`: configure example rendering based on directive data (see [Examples](/docs/guides/examples)).
 - `hierarchy`: option for type folder structure:
   - `api`: folder structure by operations (`Operations` group) and types `Types` group based on GraphQL entity types.
   - `entity`: folder structure by GraphQL entity types (eg. queries, mutations, scalars, objects...).
   - `flat`: no folder structure (override [`groupByDirective`](#groupbydirective)). Filenames are prefixed with the entity kind to keep them unique, e.g. `objects-user.mdx` and `queries-user.mdx` (since 1.38.0).
-  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/guides/$1))._
+  - _Namespaced operations are supported by default and generated as nested operation paths (See [Namespaced Operations](/docs/guides/namespaced-operations))._
 - `parentTypePrefix`: prefix field names with the parent type name.
 - `typeBadges`: add field type attributes badges.
 
@@ -403,11 +190,11 @@ Use these options to toggle the type of information rendered on pages:
 | `printTypeOptions.parentTypePrefix` | `--noParentType`        | `true`    |
 | `printTypeOptions.typeBadges`       | `--noTypeBadges`        | `true`    |
 
-<br/>
+Use [`beforeComposePageTypeHook`](/docs/customize/hooks) to control section visibility and order. To customize the rendering of `printTypeOptions.deprecated: "group"`, see **[customize deprecated sections](/docs/guides/docusaurus#customize-deprecated-sections)**.
 
-:::tip
+:::danger
 
-Use [`beforeComposePageTypeHook`](/docs/customize/hooks) to control section visibility and order.
+Declaring a different option type in the CLI flag `hierarchy` and the config file `hierarchy` will generate an error.
 
 :::
 
@@ -457,17 +244,9 @@ module.exports = {
 };
 ```
 
-<br/>
+#### Custom group names
 
-:::danger
-
-Declaring a different option type in the CLI flag `hierarchy` and the config file `hierarchy` will generate an error.
-
-:::
-
-:::tip
-
-`api` option for `hierarchy` can use customized group names (defaults are `operations` and `types`) by passing an object instead of `api` using the group name as key for the new name:
+The `api` option for `hierarchy` can use customized group names (defaults are `operations` and `types`). Pass an object instead of `api`, using the group name as key for the new name:
 
 ```js title="docusaurus.config.js"
 plugins: [
@@ -490,48 +269,51 @@ plugins: [
   ],
 ```
 
-:::
+### `groupByDirective`
 
-:::info
+Use a GraphQL directive for creating documentation categories (see [documentation categories](/docs/guides/group-by-directive)).
 
-See **[customize deprecated sections](/docs/guides/docusaurus#customize-deprecated-sections)** to customize the rendering of `printTypeOptions.deprecated: "group"`.
+| Setting            | CLI flag                                                                  | Default     |
+| ------------------ | ------------------------------------------------------------------------- | ----------- |
+| `groupByDirective` | <code>--groupByDirective &lt;&#64;directive(field&#124;=fallback)></code> | `undefined` |
 
-:::
+### `homepage`
 
-## `pretty`
+The location of the landing page to be used for the documentation, relative to the current workspace (see [custom homepage](/docs/guides/docusaurus#custom-homepage)). The file will be copied to the root folder of the generated documentation.
 
-Use [`prettier`](https://prettier.io) to format generated files.
+The plugin provides a default page in `assets/generated`.
 
-| Setting  | CLI flag   | Default |
-| -------- | ---------- | ------- |
-| `pretty` | `--pretty` | `false` |
+| Setting    | CLI flag                    | Default        |
+| ---------- | --------------------------- | -------------- |
+| `homepage` | `-h, --homepage <homepage>` | `generated.md` |
 
-<br/>
+Set `homepage: false` to disable the homepage generation. The GraphQL-Markdown template for Docusaurus provides a customized homepage located at `static/index.md`.
 
-:::info
+### `id`
 
-The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
+The identifier of the configuration instance. It is used for supporting [additional schemas](/docs/guides/additional-schema): each instance gets its own command `graphql-to-doc:<id>`, and it maps to the [GraphQL Config](/docs/reference/configuration#graphql-config) project of the same name.
 
-:::
+| Setting | CLI flag        | Default   |
+| ------- | --------------- | --------- |
+| `id`    | _not supported_ | `default` |
 
-## `rootPath`
+## Content filtering
 
-The output root path for the generated documentation, relative to the current workspace.
-It works with [`baseURL`](#baseurl), and the final path will be `rootPath/baseURL`.
+Which types and directives end up in the documentation.
 
-| Setting    | CLI flag                | Default  |
-| ---------- | ----------------------- | -------- |
-| `rootPath` | `-r, --root <rootPath>` | `./docs` |
+### `onlyDocDirective`
 
-## `schema`
+The schema directive/s is used for selecting types to be rendered in the documentation.
 
-The GraphQL schema location.
+The CLI flag supports multiple values separated by a space character, eg `--only @stable @beta`.
 
-| Setting  | CLI flag                | Default            |
-| -------- | ----------------------- | ------------------ |
-| `schema` | `-s, --schema <schema>` | `./schema.graphql` |
+| Setting            | CLI flag                 | Default |
+| ------------------ | ------------------------ | ------- |
+| `onlyDocDirective` | `--only <@directive...>` | `[]`    |
 
-## `skipDocDirective`
+It only applies to types with a location compatible with the directive, i.e. if the `onlyDocDirective` cannot be applied to a type (e.g. `ENUM`), then the type will be displayed. See also [`skipDocDirective`](#skipdocdirective).
+
+### `skipDocDirective`
 
 The schema directive/s is used for skipping types from documentation.
 
@@ -541,9 +323,7 @@ The CLI flag supports multiple values separated by a space character, eg `--skip
 | ------------------ | ------------------------ | ------- |
 | `skipDocDirective` | `--skip <@directive...>` | `[]`    |
 
-See also [`onlyDocDirective`](#onlydocdirective).
-
-<br/>
+Types with `@deprecated` directive can also be skipped using the setting **[`printTypeOptions.deprecated: "skip"`](#printtypeoptions)** or the flag `--deprecated skip`. See also [`onlyDocDirective`](#onlydocdirective).
 
 :::danger
 
@@ -551,13 +331,212 @@ Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will g
 
 :::
 
-:::info
+### `customDirective`
 
-Types with `@deprecated` directive can also be skipped using the setting **[`printTypeOptions.deprecated: "skip"`](#printtypeoptions)** or the flag `--deprecated skip`.
+:::caution
+
+Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/decorators#migrating-from-customdirective).
 
 :::
 
-## `telemetry`
+Use this option to render directive information for types (see [custom directive](/docs/customize/custom-directive)).
+
+| Setting           | CLI flag        | Default     |
+| ----------------- | --------------- | ----------- |
+| `customDirective` | _not supported_ | `undefined` |
+
+### `decorators`
+
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/decorators)). Supersedes [`customDirective`](#customdirective).
+
+| Setting      | CLI flag        | Default     |
+| ------------ | --------------- | ----------- |
+| `decorators` | _not supported_ | `undefined` |
+
+## Rendering
+
+How pages are formatted, written and decorated.
+
+### `formatter`
+
+Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters). `@graphql-markdown/docusaurus` comes with `@graphql-markdown/formatters/docusaurus` by default.
+
+| Setting     | CLI flag      | Default     |
+| ----------- | ------------- | ----------- |
+| `formatter` | `--formatter` | `undefined` |
+
+The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning, so migrate to `formatter`.
+
+:::caution
+
+The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
+
+:::
+
+The custom module can export individual formatter functions:
+
+| Export                     | Type                                       | Description                                                                                                                                |
+| -------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `formatMDXBadge`           | `(badge: { text, classname? }) => string`  | Format type badges                                                                                                                         |
+| `formatMDXAdmonition`      | `(admonition, meta?) => string`            | Format callout/warning blocks                                                                                                              |
+| `formatMDXBullet`          | `(text?: string) => string`                | Format bullet point separators                                                                                                             |
+| `formatMDXDetails`         | `(option) => string`                       | Format collapsible sections                                                                                                                |
+| `formatMDXFrontmatter`     | `(props?, formatted?, context?) => string` | Format page frontmatter                                                                                                                    |
+| `formatMDXLink`            | `(link) => { text, url }`                  | Transform type links                                                                                                                       |
+| `formatMDXNameEntity`      | `(name, parentType?) => string`            | Format named entity references                                                                                                             |
+| `formatMDXPermalink`       | `(id) => string`                           | Format section header permalinks                                                                                                           |
+| `formatMDXSpecifiedByLink` | `(url) => string`                          | Format scalar specification links. Receives an absolute `http(s)` URL; encode it for where you write it (for example as an HTML attribute) |
+| `formatMDXTitle`           | `(title) => string`                        | Optional visible page title, printed after the frontmatter                                                                                 |
+
+For detailed examples on formatter functions, see **[Other frameworks](/docs/guides/other-frameworks)**.
+
+Additionally, the module can export:
+
+| Export           | Type     | Description                                    |
+| ---------------- | -------- | ---------------------------------------------- |
+| `mdxDeclaration` | `string` | Import statements prepended to generated files |
+| `mdxExtension`   | `string` | Custom file extension (defaults to `.mdx`)     |
+
+The custom module can also export lifecycle hooks for customizing the generation process, see **[Hooks Recipes](/docs/customize/hooks)**.
+
+
+```js title="docusaurus.config.js"
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        // highlight-start
+        formatter: "./lib/custom-mdx.cjs",
+        // highlight-end
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
+      },
+    ],
+  ],
+```
+
+### `outputAdapter`
+
+The destination for generated documentation. By default pages are written to the local filesystem under [`rootPath`](#rootpath)/[`baseURL`](#baseurl). Set an adapter to send them somewhere else instead — a CMS storage API, an object store, an in-memory map — without forking the renderer.
+
+| Setting         | CLI flag | Default          |
+| --------------- | -------- | ---------------- |
+| `outputAdapter` | none     | local filesystem |
+
+An adapter must provide `writeFile` and `readFile`, and may provide `ensureDir`:
+
+```ts
+interface OutputAdapter {
+  writeFile: (filePath: string, content: string) => Promise<void>;
+  readFile: (filePath: string) => Promise<string | undefined>;
+  ensureDir?: (
+    dirPath: string,
+    options?: { forceEmpty?: boolean },
+  ) => Promise<void>;
+}
+```
+
+See **[Output adapter](/docs/customize/output-adapter)** for the full contract and worked examples:
+
+- [when each method is called](/docs/customize/output-adapter#when-each-method-is-called)
+- [how paths map onto keys](/docs/customize/output-adapter#paths-are-keys)
+- [which formatters read their output back](/docs/customize/output-adapter#reading-back)
+- why [omitting `ensureDir`](/docs/customize/output-adapter#deleted-types) leaves pages for deleted types behind
+- the [limitations](/docs/customize/output-adapter#limitations) worth knowing before relying on one in a pipeline
+
+### `metatags`
+
+Set page metadata in `<html>`, `<head>` using [Docusaurus head metadata](https://docusaurus.io/docs/markdown-features/head-metadata).
+
+Meta tags are provided as a list of metadata objects, eg `[{ name: "robots", content: "noindex" }]` for `<meta name="robots" content="noindex" />`.
+
+| Setting    | CLI flag        | Default |
+| ---------- | --------------- | ------- |
+| `metatags` | _not supported_ | `[]`    |
+
+
+```js title="docusaurus.config.js"
+plugins: [
+    [
+      "@graphql-markdown/docusaurus",
+       /** @type {import('@graphql-markdown/types').ConfigOptions} */
+       {
+        schema: "./schema/swapi.graphql",
+        rootPath: "./docs",
+        baseURL: "swapi",
+        homepage: "./docs/swapi.md",
+        // highlight-start
+        metatags: [
+          { name: "robots", content: "noindex" }, // <meta name="robots" content="noindex" />
+          { charset: "utf-8" }, // <meta charset="utf-8" />
+        ],
+        // highlight-end
+        loaders: {
+          GraphQLFileLoader: "@graphql-tools/graphql-file-loader" // local file schema
+        }
+      },
+    ],
+  ],
+```
+
+### `pretty`
+
+Use [`prettier`](https://prettier.io) to format generated files. The `prettier` package has to be installed separately. If the package is not present locally, then the formatting will always be skipped.
+
+| Setting  | CLI flag   | Default |
+| -------- | ---------- | ------- |
+| `pretty` | `--pretty` | `false` |
+
+## Run behavior
+
+How and when generation runs.
+
+### `force`
+
+Force generating documentation in an empty folder and set [`diffMethod`](#diffmethod) to `FORCE`. If the folder located at `rootPath/baseURL` is not empty, then the plugin will delete the folder recursively and recreate it.
+
+| Setting | CLI flag      | Default |
+| ------- | ------------- | ------- |
+| `force` | `-f, --force` | `false` |
+
+### `diffMethod`
+
+The method to be used for identifying changes in the schema for triggering the documentation generation.
+
+The possible values are:
+
+- `FORCE`: skip diff, always generate documentation, also triggered by [`force`](#force) setting.
+- `NONE`: skip diff (same as `FORCE`).
+- `SCHEMA-DIFF`: use [GraphQL Inspector](https://graphql-inspector.com) to identify changes in the schema (including description).
+- `SCHEMA-HASH`: use the schema SHA-256 hash for identifying changes in the schema (this method is sensitive to white spaces and invisible characters).
+
+| Setting      | CLI flag                  | Default |
+| ------------ | ------------------------- | ------- |
+| `diffMethod` | `-d, --diff <diffMethod>` | `NONE`  |
+
+The package `@graphql-markdown/diff` is required for using `diffMethod`. If the package is missing, then the change detection is always skipped.
+
+```shell
+npm install @graphql-markdown/diff
+```
+
+### `tmpDir`
+
+The folder used for storing schema copy and signature is used by [`diffMethod`](#diffmethod) setting.
+
+| Setting  | CLI flag             | Default          |
+| -------- | -------------------- | ---------------- |
+| `tmpDir` | `-t, --tmp <tmpDir>` | _OS temp folder_ |
+
+### `telemetry`
 
 Enables or disables [anonymous usage telemetry](/docs/reference/telemetry). Set it to `false` to opt out; `true` only enables telemetry for programmatic use of `@graphql-markdown/core`, and never overrides `DO_NOT_TRACK`, `GRAPHQL_MARKDOWN_TELEMETRY_DISABLED` or `gqlmd telemetry disable`.
 
@@ -565,10 +544,16 @@ Enables or disables [anonymous usage telemetry](/docs/reference/telemetry). Set 
 | ----------- | ---------------- | ------- |
 | `telemetry` | `--no-telemetry` | _on_    |
 
-## `tmpDir`
+### `--config`
 
-The folder used for storing schema copy and signature is used by [`diffMethod`](#diffmethod) setting.
+Print the resolved configuration used for generating documentation. This CLI flag is used for debugging purposes.
 
-| Setting  | CLI flag             | Default          |
-| -------- | -------------------- | ---------------- |
-| `tmpDir` | `-t, --tmp <tmpDir>` | _OS temp folder_ |
+| Setting | CLI flag   | Default |
+| :------ | :--------- | :------ |
+|         | `--config` | `null`  |
+
+Example:
+
+```bash
+npx docusaurus graphql-to-doc --config
+```
