@@ -78,7 +78,7 @@
   padding: 0.65rem 1rem;
   margin: 1.25rem auto 0;
   max-width: min(660px, calc(100% - 2rem));
-  overflow-x: auto;
+  overflow: hidden;
   box-shadow: 0 2px 16px rgba(0, 0, 0, 0.18);
 }
 
@@ -105,6 +105,12 @@
   white-space: nowrap;
   flex: 1;
   min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.installCmd::-webkit-scrollbar {
+  display: none;
 }
 
 .copyBtn {
