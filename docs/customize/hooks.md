@@ -228,7 +228,7 @@ The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL typ
 
 :::tip
 
-The same result can be expressed as a [decorator](/docs/customize/$1#response-type-for-operations) instead of a hook, with no need for a custom `formatter` module. Reach for a decorator when the content just needs to be placed via `position`; reach for this hook when you need to intercept `printCode`'s raw output directly.
+The same result can be expressed as a [decorator](/docs/customize/decorators#response-type-for-operations) instead of a hook, with no need for a custom `formatter` module. Reach for a decorator when the content just needs to be placed via `position`; reach for this hook when you need to intercept `printCode`'s raw output directly.
 
 :::
 

@@ -4,7 +4,7 @@ Custom directive `descriptor` helper.
 
 ## See
 
-[Option `customDirective.[directive].descriptor`](https://graphql-markdown.dev/docs/customize/$1#descriptor)
+[Option `customDirective.[directive].descriptor`](https://graphql-markdown.dev/docs/customize/custom-directive#descriptor)
 
 ## Functions
 

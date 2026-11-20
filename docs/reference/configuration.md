@@ -75,7 +75,7 @@ All settings are described in the page **[settings](/docs/reference/settings)**.
 
 :::tip
 
-If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/guides/$1)**.
+If you want to use several GraphQL schemas, read our guide for **[additional schemas](/docs/guides/additional-schema)**.
 
 :::
 

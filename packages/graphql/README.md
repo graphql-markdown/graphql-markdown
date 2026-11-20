@@ -50,7 +50,7 @@ const isDeprecatedObject = and(
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
-- [Custom Directives](https://graphql-markdown.dev/docs/customize/$1)
+- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
 
 ## License
 

@@ -16,7 +16,7 @@ keywords:
 
 :::caution
 
-`customDirective` is deprecated in favor of [`decorators`](/docs/customize/$1), which supersedes it. See [migrating from `customDirective`](/docs/customize/$1#migrating-from-customdirective).
+`customDirective` is deprecated in favor of [`decorators`](/docs/customize/decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/decorators#migrating-from-customdirective).
 
 :::
 

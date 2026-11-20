@@ -86,7 +86,7 @@ extensions:
 npx gqlmd graphql-to-doc
 ```
 
-The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/guides/$1#graphql-config).
+The command name is `graphql-to-doc` for the default project, and `graphql-to-doc:<id>` for each additional [GraphQL Config project](/docs/guides/additional-schema#graphql-config).
 
 You can also call the generator programmatically. `runGraphQLMarkdown` takes the configuration as first argument, and CLI-style overrides as second argument:
 

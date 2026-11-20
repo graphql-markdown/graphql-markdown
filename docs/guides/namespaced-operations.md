@@ -33,7 +33,7 @@ Generated operation pages include nested paths such as:
 - `operations/queries/analytics/semester-gpa`
 - `operations/queries/analytics/courses-by-department`
 
-When [`groupByDirective`](/docs/guides/$1) is enabled, these namespaced operations are still grouped by their directive category.
+When [`groupByDirective`](/docs/guides/group-by-directive) is enabled, these namespaced operations are still grouped by their directive category.
 
 Generated code snippet for these namespaced operations will be wrapped in the namespace:
 

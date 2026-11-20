@@ -102,7 +102,7 @@ A schema loader is required to load your GraphQL schema. Without `--schema`, the
 
 A local SDL/JSON file is copied into the scaffolded project's `schema/` directory; a remote source is referenced as-is. Local code-first schemas are referenced in place rather than copied, so their imports keep working.
 
-See [schema loading](/docs/guides/$1) for other loaders and configuration options.
+See [schema loading](/docs/guides/schema-loading) for other loaders and configuration options.
 
 ### Start your site
 
@@ -209,7 +209,7 @@ npm install @graphql-markdown/docusaurus graphql
 
 #### Add a schema loader
 
-See [schema loading](/docs/guides/$1).
+See [schema loading](/docs/guides/schema-loading).
 
 #### Configure the plugin
 
@@ -225,7 +225,7 @@ For Hugo, MkDocs, DocFX, mdBook and other formatter-based setups, see [Integrati
 
 ## Use the API
 
-To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/reference/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages. The `loaders` option is required: it names the [schema loader](/docs/guides/$1) used to read the schema.
+To generate the documentation from your own script instead of the CLI or a framework plugin, call `@graphql-markdown/core` directly. `buildConfig` takes the same [settings](/docs/reference/settings) as the configuration file and fills in the defaults; `generateDocFromSchema` loads the schema and writes the pages. The `loaders` option is required: it names the [schema loader](/docs/guides/schema-loading) used to read the schema.
 
 ```shell title="shell"
 npm install @graphql-markdown/core graphql @graphql-tools/graphql-file-loader

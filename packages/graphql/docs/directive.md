@@ -4,7 +4,7 @@ Library supporting `customDirective` for directive based customization.
 
 ## See
 
-[Option `customDirective`](https://graphql-markdown.dev/docs/customize/$1)
+[Option `customDirective`](https://graphql-markdown.dev/docs/customize/custom-directive)
 
 ## Variables
 

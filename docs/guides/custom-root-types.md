@@ -23,7 +23,7 @@ type RootTypes = { query?: string; mutation?: string; subscription?: string };
 - use an empty string to disable the GraphQL standard type
 - unset root types will use the GraphQL standard type
 
-Add the option `rootTypes` to the loader options under the GraphQL-Markdown configuration (see also [schema loading](/docs/guides/$1)):
+Add the option `rootTypes` to the loader options under the GraphQL-Markdown configuration (see also [schema loading](/docs/guides/schema-loading)):
 
 ```yaml title=".graphqlrc"
 schema: ./schema.graphql
