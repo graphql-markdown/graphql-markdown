@@ -14,9 +14,11 @@ keywords:
 
 # Decorators
 
-A decorator selects **nodes** in the schema — a type, field, or argument the printer is about to render — with a **predicate** (by default, every node), and renders values produced by a **resolve** callback (by default, none) with a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page; one without renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
+Use decorators to add custom sections, badges, or description text to the generated pages. A decorator selects **nodes** in the schema (a type, field, or argument the printer is about to render) with a **predicate**, which defaults to every node.
 
-`decorators` replaces the deprecated [`customDirective`](/docs/reference/settings#customdirective) option — it is the recommended way to render directive-driven (and now non-directive) content going forward (see [migrating from `customDirective`](#migrating-from-customdirective) below). There is no built-in "this decorator's own directive" shortcut — a directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
+Values come from a **resolve** callback (default: none) and are rendered by a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page. One without a `title` renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
+
+`decorators` replaces the deprecated [`customDirective`](/docs/reference/settings#customdirective) option. It is the recommended way to render directive-driven (and now non-directive) content (see [migrating from `customDirective`](#migrating-from-customdirective) below). A directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
@@ -207,13 +209,11 @@ Another decorator can also be named, by its id, as long as it is declared earlie
 
 A decorator using `into` is excluded from the page's section order entirely — it never has a heading, regardless of `title`.
 
-`badges`, `permalink`, and `metadata` are only reachable from a member's line (a field, argument, or enum value) — there is no type-heading equivalent, so a decorator targeting one of them never renders for the type itself; use `description` or `tags` for type-level placement instead. Conversely, `description` and `tags` are shared between the heading and every member row: a predicate that isn't scoped tightly enough (matching, say, both a type and its own fields) renders the decorator in both places.
+`badges`, `permalink`, and `metadata` are only reachable from a member's line (a field, argument, or enum value). They have no type-heading equivalent, so a decorator targeting one of them never renders for the type itself. Use `description` or `tags` for type-level placement instead.
 
-:::note
+Conversely, `description` and `tags` are shared between the heading and every member row. A predicate that isn't scoped tightly enough (matching, say, both a type and its own fields) renders the decorator in both places.
 
-`example` is itself a decorator, specialized: it is built from the [`printTypeOptions.exampleSection`](/docs/reference/settings#printtypeoptions) option and rendered as a code block. It is configured through that option, not through `decorators`.
-
-:::
+The `example` section is itself a specialized decorator: it is built from the [`printTypeOptions.exampleSection`](/docs/reference/settings#printtypeoptions) option and rendered as a code block. Configure it through that option, not through `decorators`.
 
 :::tip
 
@@ -272,11 +272,7 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 }
 ```
 
-:::info
-
-[`Printer.printBadge`](/api/printer-legacy/printer#printbadge) renders a `Badge` object the same way the printer renders its own tags — escaping the text and falling back to the default formatter when `options.formatMDXBadge` isn't set — rather than calling `options.formatMDXBadge` directly.
-
-:::
+[`Printer.printBadge`](/api/printer-legacy/printer#printbadge) renders a `Badge` object the same way the printer renders its own tags. It escapes the text and falls back to the default formatter when `options.formatMDXBadge` isn't set, so prefer it to calling `options.formatMDXBadge` directly.
 
 ### Meta object
 
@@ -329,13 +325,9 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 }
 ```
 
-:::info
+`isOperation` only takes `type`, one argument fewer than `predicate`'s `(type, options)`. That is fine, since the extra argument is ignored. Any single-argument type guard from `@graphql-markdown/graphql` (`isObjectType`, `isEnumType`, …) can be passed directly as `predicate` the same way.
 
-`isOperation` only takes `type`, one argument fewer than `predicate`'s `(type, options)` — that's fine, since `predicate` is always called with both, and the extra one is simply ignored. Any single-argument type guard from `@graphql-markdown/graphql` (`isObjectType`, `isEnumType`, …) can be passed directly as `predicate` the same way.
-
-:::
-
-This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-response-types-for-operations), which achieves the same result by rewriting the generated code block directly. Prefer this decorator form when the content should be orderable via `position` or need not touch the code block itself; prefer the hook when you need to intercept `printCode`'s raw output.
+This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-response-types-for-operations), which rewrites the generated code block directly. Prefer the decorator when the content should be orderable via `position` or need not touch the code block. Prefer the hook when you need to intercept `printCode`'s raw output.
 
 ## Migrating from `customDirective`
 
@@ -367,21 +359,27 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-re
 + },
 ```
 
-`customDirective` escaped the `descriptor` output for you; a decorator's `render` output is printed as-is, so wrap `directiveDescriptor` in `escapeMDX` (from `@graphql-markdown/utils`) as shown. A `customDirective` entry's `descriptor`/`tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`; `descriptor` targets the `description` slot, `tag` the `tags` slot. `directiveDescriptor`/`directiveTag` (from `@graphql-markdown/helpers`) still work unchanged — only the surrounding wiring changes: `resolve` is not needed here, since `descriptor`/`tag` operate on the directive _definition_, not per-occurrence argument values. `withDirective` (also from `@graphql-markdown/helpers`) is `descriptor`/`tag`'s old implicit directive lookup, made explicit: it resolves the named directive and skips `render` entirely when the schema does not declare it, rather than every decorator repeating that `getDirectiveFromSchema` + null-check by hand. `directiveTag` still only builds the `Badge` object (`{ text, classname }`); turning it into Markdown is now the decorator's own job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`) — the same badge renderer the printer uses for its own tags, so custom badges stay visually consistent and keep working if the configured formatter changes.
+What changes:
+
+- **Escaping:** `customDirective` escaped the `descriptor` output for you. A decorator's `render` output is printed as-is, so wrap `directiveDescriptor` in `escapeMDX` (from `@graphql-markdown/utils`) as shown.
+- **One decorator each:** a `customDirective` entry's `descriptor` and `tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`. `descriptor` targets the `description` slot, `tag` the `tags` slot.
+- **No `resolve`:** `descriptor` and `tag` operate on the directive _definition_, not per-occurrence argument values, so `resolve` is not needed.
+
+What stays the same or is new:
+
+- `directiveDescriptor` and `directiveTag` (from `@graphql-markdown/helpers`) still work unchanged. Only the surrounding wiring changes.
+- `withDirective` (also from `@graphql-markdown/helpers`) is the old implicit directive lookup, made explicit. It resolves the named directive and skips `render` when the schema does not declare it, so decorators don't repeat the `getDirectiveFromSchema` null-check by hand.
+- `directiveTag` still only builds the `Badge` object (`{ text, classname }`). Turning it into Markdown is now the decorator's job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`). It is the badge renderer the printer uses for its own tags, so custom badges stay consistent if the configured formatter changes.
 
 ## Helpers
 
 The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide a few helper functions to quickly start.
-
-:::info
 
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
 ```shell title="shell"
 npm i @graphql-markdown/helpers
 ```
-
-:::
 
 ### `@graphql-markdown/helpers`
 

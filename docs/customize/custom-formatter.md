@@ -12,7 +12,7 @@ keywords:
 
 Use a custom formatter module for frameworks without a preset, or to change how a preset renders pages. It exports the formatter functions below and falls back to the defaults for the rest.
 
-## MDX Module Contract
+## MDX module contract
 
 A custom MDX module can export individual formatter functions:
 
@@ -38,7 +38,7 @@ Optional exports:
 
 You only need to export the formatter functions your framework requires. Any missing functions use the default HTML-like implementation.
 
-## `formatMDXDetails` Contract
+## `formatMDXDetails` contract
 
 The string returned by `formatMDXDetails` **must** contain a single `\r` (carriage return) character as a delimiter between the opening and closing parts. The printer splits on `"\r"` to wrap content, so reserve `\r` only for that separator and use `\n` for line breaks.
 
@@ -56,7 +56,7 @@ export const formatMDXDetails = ({ dataOpen }) =>
   `\r\n\r\n<MyDetails label="${dataOpen}">\r\n\r</MyDetails>\r\n\r\n`;
 ```
 
-## Extending a Preset
+## Extending a preset
 
 To customize a preset, spread its exports and override specific formatters:
 
@@ -75,6 +75,6 @@ module.exports = {
 };
 ```
 
-## Lifecycle Hooks
+## Lifecycle hooks
 
 Custom MDX modules can also export lifecycle hooks to customize the generation process. See [Hooks](/docs/customize/hooks#available-hooks) for the full reference and examples.

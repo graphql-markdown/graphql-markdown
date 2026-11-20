@@ -9,21 +9,15 @@ keywords:
   - documentation hooks
 ---
 
-# Hooks Recipes
+# Hooks recipes
 
-This page lists examples of usage of [hooks](/api/category/events).
+Use hooks to change the output or add custom processing at specific points of the generation. This page lists the available [hooks](/api/category/events) and examples of their usage. Hooks are part of the [documentation frameworks integration](/docs/guides/other-frameworks) API.
 
-:::info
-
-Hooks are part of the [documentation frameworks integration](/docs/guides/other-frameworks) API.
-
-:::
-
-## Available Hooks
+## Available hooks
 
 GraphQL-Markdown provides lifecycle hooks for customizing the documentation generation process.
 
-### Generation Hooks
+### Generation hooks
 
 | Hook                              | Description                                                                                                                                                                                              |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -42,7 +36,7 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 | `afterGenerateIndexMetafileHook`  | Called after generating index metafiles                                                                                                                                                                  |
 | `afterRenderFilesHook`            | Called once after all pages have been written — receives the full pages collection                                                                                                                       |
 
-### Printer Hooks
+### Printer hooks
 
 | Hook                        | Description                                                                             |
 | --------------------------- | --------------------------------------------------------------------------------------- |
@@ -52,17 +46,11 @@ GraphQL-Markdown provides lifecycle hooks for customizing the documentation gene
 | `afterPrintTypeHook`        | Called after generating type documentation — can modify the generated output            |
 | `beforeComposePageTypeHook` | Called before composing type page sections — can reorder, remove, or inject sections    |
 
-<br/>
-
-:::info
-
 All hooks receive an `event` object with a `data` property containing context-specific information. Printer hooks also have an `output` property that can be modified.
 
 For `beforeComposePageTypeHook`, `event.output` is the ordered list of section keys to render, and `event.data.sections` is the section content map.
 
-:::
-
-## Using Hooks with Docusaurus
+## Using hooks with Docusaurus
 
 See [Docusaurus recipes](/docs/guides/docusaurus#using-hooks-with-docusaurus) for extending the default Docusaurus MDX module with custom hooks.
 
@@ -214,17 +202,7 @@ const afterPrintCodeHook = async (event) => {
 export { afterPrintCodeHook };
 ```
 
-:::tip
-
-You can customize the heading level or text by changing `### Response Type` to match your documentation style.
-
-:::
-
-:::note
-
-The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL type wrappers like `NonNull` and `List`. For example, `[User!]!` becomes `User`.
-
-:::
+You can customize the heading level or text by changing `### Response Type` to match your documentation style. The `getNamedType` function from `@graphql-markdown/graphql` unwraps GraphQL type wrappers like `NonNull` and `List`: for example, `[User!]!` becomes `User`.
 
 :::tip
 

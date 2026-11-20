@@ -14,17 +14,17 @@ keywords:
 
 # Custom schema directives handling
 
+Use `customDirective` to render a custom description or badge for the directives applied in your schema.
+
 :::caution
 
 `customDirective` is deprecated in favor of [`decorators`](/docs/customize/decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/decorators#migrating-from-customdirective).
 
 :::
 
-For directives applied to the schema, you can select which ones to be rendered for the types or in the locations they are declared. Information about the custom directives includes a custom description.
+You can select which directives are rendered for the types or locations where they are declared, with a custom description for each.
 
-For example, we have one query called `searchRole`, and we want to limit access to `ADMIN` user roles only.
-
-We can accomplish this by adding a directive called `auth` with an argument `requires` to the query.
+For example, a query called `searchRole` should be limited to `ADMIN` user roles. We can express this by adding a directive called `auth` with an argument `requires` to the query.
 
 ```graphql
 directive @auth(requires: Roles = ADMIN) on OBJECT | FIELD_DEFINITION
@@ -154,15 +154,11 @@ module.exports = {
 
 The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide a few helper functions to quickly start.
 
-:::info
-
 `@graphql-markdown/helpers` is an optional peer dependency, and it needs to be installed before using it.
 
 ```shell title="shell"
 npm i @graphql-markdown/helpers
 ```
-
-:::
 
 ### `@graphql-markdown/helpers`
 
