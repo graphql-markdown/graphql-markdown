@@ -16,10 +16,13 @@ Remove deprecated configuration options `customDirective` and `mdxParser`.
   - Removed custom directive type definitions (`CustomDirective`, `CustomDirectiveMap`, `CustomDirectiveMapItem`, `CustomDirectiveOptions`, `CustomDirectiveFunction`, `CustomDirectiveResolver`) from `@graphql-markdown/types`.
   - Removed custom directive helpers (`isCustomDirective`, `getCustomDirectiveOptions`, `getCustomDirectives`, `getConstDirectiveMap`, `WILDCARD_DIRECTIVE`) from `@graphql-markdown/graphql`.
   - Removed `buildCustomDirectiveDecorators` from `@graphql-markdown/printer-legacy`.
-  - Removed `customDirective` and `customDirectives` sections and telemetry sanitization rules.
-  - Updated directive helpers in `@graphql-markdown/helpers` to reference `decorators`.
+  - Removed `PageSections.customDirectives` from `@graphql-markdown/types`, and the reserved section names `customDirectives`, `customDirective:description` and `customDirective:tags` from `@graphql-markdown/printer-legacy`.
+  - Removed `customDirective` telemetry sanitization rules from `@graphql-markdown/telemetry`.
+  - Updated doc comments in `@graphql-markdown/helpers` to drop `customDirective` references.
 - **`mdxParser`**:
   - Removed deprecated `mdxParser` option and `--mdx-parser` CLI flag; use `formatter` instead.
-  - Removed `mdxParser` references in `@graphql-markdown/formatters` and telemetry sanitization rules.
+  - Removed `mdxParser` from `ConfigOptions` and `CliOptions` in `@graphql-markdown/types`.
+  - Removed `mdxParser` telemetry sanitization rules from `@graphql-markdown/telemetry`.
+  - Updated doc comments in `@graphql-markdown/formatters` to reference `formatter` instead of `mdxParser`.
 - **Renderer Refactoring**:
-  - Refactored `renderer.ts` by extracting helper constants and functions into `rendererHelpers.ts`.
+  - Internal refactor: extracted helper constants and functions from `renderer.ts` into `rendererHelpers.ts`. `API_GROUPS` and `getApiGroupFolder` are still re-exported from `renderer.ts`.
