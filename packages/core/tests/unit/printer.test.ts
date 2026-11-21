@@ -56,7 +56,6 @@ describe("generator", () => {
           linkRoot: "root",
         },
         {
-          customDirectives: null,
           deprecated: null,
           groups: null,
           meta: null,
@@ -75,7 +74,6 @@ describe("generator", () => {
         "/",
         "root",
         {
-          customDirectives: null,
           deprecated: null,
           groups: null,
           meta: null,

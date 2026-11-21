@@ -8,8 +8,6 @@ import type {
   SchemaEntity,
 } from "./graphql.ts";
 
-import type { CustomDirective } from "./helpers.ts";
-
 import type { Maybe, MDXString, OutputAdapter } from "./utils.ts";
 import type { TelemetryTrigger } from "./telemetry.ts";
 import type {
@@ -386,13 +384,6 @@ export type Pointer = UnnormalizedTypeDefPointer;
 export interface ConfigOptions {
   /** Base URL for the documentation links */
   baseURL?: Maybe<string>;
-  /**
-   * List of custom directives to include in documentation.
-   *
-   * @deprecated Use `decorators` instead.
-   * @see decorators
-   */
-  customDirective?: Maybe<CustomDirective>;
   /**
    * Decorators: selects nodes with a predicate (a directive, an entity kind, or
    * any combination) and renders a titled section, a badge, or appended

@@ -177,11 +177,10 @@ api: object = {};
 
 ```ts
 const DEFAULT_OPTIONS: Readonly<
-  Pick<ConfigOptions, "customDirective" | "groupByDirective" | "loaders"> &
+  Pick<ConfigOptions, "groupByDirective" | "loaders"> &
     Required<
       Omit<
         ConfigOptions,
-        | "customDirective"
         | "formatter"
         | "groupByDirective"
         | "loaders"

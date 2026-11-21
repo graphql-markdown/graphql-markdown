@@ -3,7 +3,7 @@ sidebar_position: 20
 id: decorators
 pagination_prev: null
 pagination_next: null
-description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it — the successor to customDirective.
+description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it.
 keywords:
   - GraphQL decorators
   - custom directive
@@ -20,8 +20,6 @@ import TabItem from "@theme/TabItem";
 Use decorators to add custom sections, badges, or description text to the generated pages. A decorator selects **nodes** in the schema (a type, field, or argument the printer is about to render) with a **predicate**, which defaults to every node.
 
 Values come from a **resolve** callback (default: none) and are rendered by a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page. One without a `title` renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
-
-`decorators` replaces the deprecated [`customDirective`](/docs/reference/settings#customdirective) option. It is the recommended way to render directive-driven (and now non-directive) content (see [migrating from `customDirective`](#migrating-from-customdirective) below). A directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
@@ -182,7 +180,7 @@ render: (values, options, context) => {
 
 :::
 
-There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely — or with `@graphql-markdown/helpers`'s `withDirective`, which wraps exactly that lookup (see [migrating from `customDirective`](#migrating-from-customdirective) for a full example).
+There is no `context.directive`: a decorator that only needs a directive's _definition_ (not per-occurrence argument values), such as one wrapping `directiveDescriptor`/`directiveTag`, can resolve it directly in `render` with `getDirectiveFromSchema`, skipping `resolve` entirely — or with `@graphql-markdown/helpers`'s `withDirective`, which wraps exactly that lookup for a full example.
 
 Optional directive arguments that were omitted are absent from a resolved record rather than set to `undefined`, so give them a fallback.
 
@@ -332,48 +330,6 @@ const { Printer } = require("@graphql-markdown/printer-legacy");
 
 This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-response-types-for-operations), which rewrites the generated code block directly. Prefer the decorator when the content should be orderable via `position` or need not touch the code block. Prefer the hook when you need to intercept `printCode`'s raw output.
 
-## Migrating from `customDirective`
-
-[`customDirective`](/docs/reference/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.
-
-```diff
-- customDirective: {
--   auth: {
--     descriptor: (directive, node) =>
--       directiveDescriptor(directive, node, "Requires the `${requires}` role."),
--     tag: (directive) => ({ text: `@${directive.name}` }),
--   },
-- },
-+ decorators: {
-+   authDescription: {
-+     predicate: hasDirectiveNamed("auth"),
-+     position: { into: "description" },
-+     render: withDirective("auth", (directive, options, { type }) =>
-+       escapeMDX(directiveDescriptor(directive, type, "Requires the `${requires}` role.")),
-+     ),
-+   },
-+   authTag: {
-+     predicate: hasDirectiveNamed("auth"),
-+     position: { into: "tags" },
-+     render: withDirective("auth", (directive, options) =>
-+       Printer.printBadge(directiveTag(directive), options),
-+     ),
-+   },
-+ },
-```
-
-What changes:
-
-- **Escaping:** `customDirective` escaped the `descriptor` output for you. A decorator's `render` output is printed as-is, so wrap `directiveDescriptor` in `escapeMDX` (from `@graphql-markdown/utils`) as shown.
-- **One decorator each:** a `customDirective` entry's `descriptor` and `tag` each become their own decorator, both gated with `predicate: hasDirectiveNamed(<same name>)`. `descriptor` targets the `description` slot, `tag` the `tags` slot.
-- **No `resolve`:** `descriptor` and `tag` operate on the directive _definition_, not per-occurrence argument values, so `resolve` is not needed.
-
-What stays the same or is new:
-
-- `directiveDescriptor` and `directiveTag` (from `@graphql-markdown/helpers`) still work unchanged. Only the surrounding wiring changes.
-- `withDirective` (also from `@graphql-markdown/helpers`) is the old implicit directive lookup, made explicit. It resolves the named directive and skips `render` when the schema does not declare it, so decorators don't repeat the `getDirectiveFromSchema` null-check by hand.
-- `directiveTag` still only builds the `Badge` object (`{ text, classname }`). Turning it into Markdown is now the decorator's job, done with [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) (from `@graphql-markdown/printer-legacy`). It is the badge renderer the printer uses for its own tags, so custom badges stay consistent if the configured formatter changes.
-
 ## Helpers
 
 The packages `@graphql-markdown/helpers` and `@graphql-markdown/graphql` provide a few helper functions to quickly start.
@@ -415,7 +371,7 @@ bun add @graphql-markdown/helpers
 
 - [`directiveDescriptor`](/api/helpers/directives/descriptor)
 - [`directiveTag`](/api/helpers/directives/tag)
-- [`withDirective`](/api/helpers/directives/with-directive) — wraps a `render` that only needs a directive's definition (see [migrating from `customDirective`](#migrating-from-customdirective)).
+- [`withDirective`](/api/helpers/directives/with-directive) — wraps a `render` that only needs a directive's definition.
 
 ### `@graphql-markdown/graphql`
 
@@ -440,4 +396,4 @@ Directive-value helpers (see [Resolve](#resolve)):
 ### `@graphql-markdown/printer-legacy`
 
 - [`Printer.printCode`](/api/printer-legacy/printer#printcode) — renders a type's SDL as a code block, reused in [response type for operations](#response-type-for-operations).
-- [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) — formats a `Badge` object into Markdown, reused in [migrating from `customDirective`](#migrating-from-customdirective).
+- [`Printer.printBadge`](/api/printer-legacy/printer#printbadge) — formats a `Badge` object into Markdown.

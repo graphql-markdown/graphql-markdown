@@ -26,14 +26,11 @@ import type {
 import Logger, { log, LogLevel } from "@graphql-markdown/logger";
 
 import {
-  getCustomDirectives,
   getDocumentLoaders,
   getGroups,
   getSchemaMap,
   loadSchema,
 } from "@graphql-markdown/graphql";
-
-import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
 
 import { runtimeModuleSpecifier, toString } from "@graphql-markdown/utils";
 
@@ -369,7 +366,6 @@ const runGeneration = async (
 
   const {
     baseURL,
-    customDirective,
     decorators,
     diffMethod,
     docOptions,
@@ -442,17 +438,6 @@ const runGeneration = async (
   const rootTypes = getSchemaMap(schema);
   events.emit(SchemaEvents.AFTER_MAP, new SchemaEvent({ schema, rootTypes }));
 
-  // `customDirective` is schema-resolved here, then immediately converted
-  // into decorators and merged into `decorators` itself: the printer never
-  // sees `customDirective` or the resolved `CustomDirectiveMap` it produces,
-  // only the merged decorators (see `buildCustomDirectiveDecorators`).
-  const decoratorsWithCustomDirective = {
-    ...buildCustomDirectiveDecorators(
-      getCustomDirectives(rootTypes, customDirective),
-    ),
-    ...decorators,
-  };
-
   const groups = getGroups(rootTypes, groupByDirective);
 
   // Extract formatter from the MDX module (for direct function calls)
@@ -474,7 +459,7 @@ const runGeneration = async (
 
     // options
     {
-      decorators: decoratorsWithCustomDirective,
+      decorators,
       groups,
       meta: {
         generatorFrameworkName: docOptions?.generatorFrameworkName,

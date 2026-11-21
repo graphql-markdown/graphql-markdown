@@ -32,7 +32,6 @@ Every setting is a plugin option in your config file, and most have a CLI flag t
 | [`id`](#id)                             | `string`            | `default`          | Identifier of the configuration instance                        |
 | [`onlyDocDirective`](#onlydocdirective) | `string[]`          | `[]`               | Include only types with these directives                        |
 | [`skipDocDirective`](#skipdocdirective) | `string[]`          | `[]`               | Exclude types with these directives                             |
-| [`customDirective`](#customdirective)   | `object`            | `undefined`        | Deprecated, use `decorators`                                    |
 | [`decorators`](#decorators)             | `object`            | `undefined`        | Render custom content for schema nodes                          |
 | [`formatter`](#formatter)               | `string`            | `undefined`        | Package name or path to a formatter module                      |
 | [`outputAdapter`](#outputadapter)       | `object`            | local filesystem   | Write pages somewhere other than the filesystem                 |
@@ -364,23 +363,9 @@ Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will g
 
 :::
 
-### `customDirective`
-
-:::caution
-
-Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/decorators#migrating-from-customdirective).
-
-:::
-
-Use this option to render directive information for types (see [custom directive](/docs/customize/custom-directive)).
-
-| Setting           | CLI flag        | Default     |
-| ----------------- | --------------- | ----------- |
-| `customDirective` | _not supported_ | `undefined` |
-
 ### `decorators`
 
-Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/decorators)). Supersedes [`customDirective`](#customdirective).
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/decorators)).
 
 | Setting      | CLI flag        | Default     |
 | ------------ | --------------- | ----------- |

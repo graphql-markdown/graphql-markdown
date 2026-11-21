@@ -220,11 +220,6 @@ export type PrintTypeOptions = Partial<Formatter> & {
    * Decorators: selects nodes with a predicate and renders a titled section, a
    * badge, or appended description text for them. Supersedes `customDirective`.
    *
-   * `@graphql-markdown/core` merges the deprecated `customDirective` option's
-   * translated decorators (see `@graphql-markdown/printer-legacy`'s
-   * `buildCustomDirectiveDecorators`) directly into this option before it
-   * reaches the printer — `customDirective` itself, and the schema-resolved
-   * `CustomDirectiveMap` it produces, never do.
    */
   decorators?: Maybe<Decorators>;
   deprecated?: Maybe<TypeDeprecatedOption>;

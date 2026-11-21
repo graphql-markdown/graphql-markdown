@@ -622,9 +622,6 @@ export class Printer implements IPrinter {
     // See: https://github.com/graphql-markdown/graphql-markdown/issues/2954
     const code = await Printer.printCodeAsync(type, name, printTypeOptions);
 
-    // `customDirective`'s `tag` handlers reach this line via the decorators
-    // pipeline (`printSlotDecorators`, not a dedicated call) — see
-    // `buildCustomDirectiveDecorators` in `./decorator`.
     const tags = printSlotDecorators("tags", type, printTypeOptions)
       .filter(Boolean)
       .join(" ");
@@ -634,9 +631,7 @@ export class Printer implements IPrinter {
 
     // Create sections map for composition events. The built-in "Directives"
     // section reaches this map via the `...Printer.printDecorators(...)`
-    // spread below (it is `customDirective`'s adapter, unconditionally
-    // present under the reserved `customDirectives` id — see
-    // `buildCustomDirectiveDecorators`), not a dedicated field here.
+    // spread below, not a dedicated field here.
     const sections: PageSections = {
       header: { content: header },
       metatags: { content: metatags },

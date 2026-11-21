@@ -58,7 +58,6 @@ const enumOf = (values: readonly string[]): Rule => {
 const deprecated = enumOf(DEPRECATED_OPTIONS);
 export const CONFIG_RULES: Readonly<Record<keyof ConfigOptions, Rule>> = {
   baseURL: url,
-  customDirective: { kind: "map", value: any },
   decorators: { kind: "map", value: any },
   diffMethod: enumOf(DIFF_METHODS),
   docOptions: {

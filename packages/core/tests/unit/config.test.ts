@@ -2,11 +2,9 @@ import type {
   ClassName,
   CliOptions,
   ConfigOptions,
-  CustomDirective,
   Decorators,
   DirectiveName,
   ExtensionProjectConfig,
-  GraphQLDirective,
   Maybe,
   PackageName,
   TypeDeprecatedOption,
@@ -25,7 +23,6 @@ import {
   DiffMethod,
   getDiffMethod,
   getForcedDiffMethod,
-  getCustomDirectives,
   getDocDirective,
   getDocOptions,
   getOnlyDocDirectives,
@@ -53,8 +50,6 @@ vi.mock(
     };
   },
 );
-
-import { log } from "@graphql-markdown/logger";
 
 vi.mock("@graphql-markdown/utils");
 
@@ -280,7 +275,6 @@ describe("config", () => {
       expect(config).toEqual(
         expect.objectContaining({
           baseURL: DEFAULT_OPTIONS.baseURL,
-          customDirective: DEFAULT_OPTIONS.customDirective,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
           docOptions: {
             ...DEFAULT_OPTIONS.docOptions,
@@ -345,23 +339,12 @@ describe("config", () => {
           typeBadges: false,
         },
         skipDocDirective: ["@noDoc" as DirectiveName],
-        customDirective: {
-          ["test" as DirectiveName]: {
-            descriptor: (
-              directiveType?: GraphQLDirective,
-              node?: GraphQLDirective,
-            ): string => {
-              return `Test${node!.name}`;
-            },
-          } as CustomDirective,
-        },
       };
 
       const config = await buildConfig(configFileOpts, undefined);
 
       expect(config).toStrictEqual({
         baseURL: configFileOpts.baseURL,
-        customDirective: configFileOpts.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: configFileOpts.diffMethod,
         docOptions: {
@@ -477,7 +460,6 @@ describe("config", () => {
         },
         skipDocDirective: ["noDoc"],
         onlyDocDirective: ["public"],
-        customDirective: DEFAULT_OPTIONS.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
       });
     });
@@ -557,7 +539,6 @@ describe("config", () => {
         },
         skipDocDirective: [],
         onlyDocDirective: [],
-        customDirective: DEFAULT_OPTIONS.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
       });
     });
@@ -579,7 +560,6 @@ describe("config", () => {
 
       expect(input).toStrictEqual({
         baseURL: configFileOpts.baseURL,
-        customDirective: DEFAULT_OPTIONS.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DEFAULT_OPTIONS.diffMethod,
         docOptions: {
@@ -619,7 +599,6 @@ describe("config", () => {
 
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
-        customDirective: DEFAULT_OPTIONS.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
@@ -663,7 +642,6 @@ describe("config", () => {
 
       expect(input).toStrictEqual({
         baseURL: DEFAULT_OPTIONS.baseURL,
-        customDirective: DEFAULT_OPTIONS.customDirective,
         decorators: DEFAULT_OPTIONS.decorators,
         diffMethod: DiffMethod.FORCE as TypeDiffMethod,
         docOptions: {
@@ -1017,111 +995,6 @@ describe("config", () => {
     );
   });
 
-  describe("getCustomDirectives", () => {
-    test("returns undefined if not configured", () => {
-      expect.hasAssertions();
-
-      expect(getCustomDirectives(undefined, undefined)).toBeUndefined();
-    });
-
-    test("returns undefined if empty", () => {
-      expect.hasAssertions();
-
-      expect(getCustomDirectives({}, undefined)).toBeUndefined();
-    });
-
-    test("returns undefined if specified directives are skipped", () => {
-      expect.hasAssertions();
-
-      const options = {
-        test: {},
-      };
-
-      expect(
-        getCustomDirectives(options, ["test" as DirectiveName]),
-      ).toBeUndefined();
-    });
-
-    test.each([
-      {
-        case: "undefined",
-        options: {
-          test: {},
-        },
-      },
-
-      {
-        case: "descriptor is not a function",
-        options: {
-          test: {
-            descriptor: {},
-          },
-        },
-      },
-
-      {
-        case: "tag is is not a function",
-        options: {
-          test: {
-            descriptor: (): void => {},
-            tag: {},
-          },
-        },
-      },
-    ])("throws an error if format is $case", ({ options }) => {
-      expect.assertions(1);
-
-      expect(() => {
-        getCustomDirectives(options as Maybe<CustomDirective>);
-      }).toThrow(
-        `Wrong format for plugin custom directive "test".\nPlease refer to https://graphql-markdown.dev/docs/customize/custom-directive`,
-      );
-    });
-
-    test("returns custom directive maps", () => {
-      expect.hasAssertions();
-
-      const descriptor = (
-        _: GraphQLDirective,
-        constDirectiveType: GraphQLDirective,
-      ): string => {
-        return `Test${constDirectiveType.name}`;
-      };
-      const options = {
-        testA: { descriptor },
-        testB: { descriptor },
-      };
-
-      expect(getCustomDirectives(options, ["testB" as DirectiveName]))
-        .toMatchInlineSnapshot(`
-      {
-        "testA": {
-          "descriptor": [Function],
-        },
-      }
-      `);
-    });
-
-    test("logs a deprecation warning when configured", () => {
-      expect.hasAssertions();
-
-      getCustomDirectives({ test: { descriptor: (): void => {} } });
-
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"customDirective"'),
-        "warn",
-      );
-    });
-
-    test("does not log when not configured", () => {
-      expect.hasAssertions();
-
-      getCustomDirectives(undefined);
-
-      expect(log).not.toHaveBeenCalled();
-    });
-  });
-
   describe("getDocOptions()", () => {
     test("returns object with default index and default frontMatter", () => {
       expect.assertions(2);
@@ -1372,35 +1245,6 @@ describe("config", () => {
       expect(uppercase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
       expect(mixedcase).toStrictEqual({ [TypeHierarchy.ENTITY]: {} });
     });
-
-    test("getCustomDirectives validates all directive format conditions", () => {
-      expect.assertions(1);
-
-      // Test case where neither tag nor descriptor is present
-      const options = {
-        test: {
-          someOtherProp: "value",
-        } as Maybe<CustomDirective>,
-      };
-
-      expect(() => {
-        getCustomDirectives(options as Maybe<CustomDirective>);
-      }).toThrow();
-    });
-
-    test("getCustomDirectives filters skipped directives correctly", () => {
-      expect.assertions(1);
-
-      const options = {
-        test1: { descriptor: (): void => {} },
-        test2: { descriptor: (): void => {} },
-        test3: { descriptor: (): void => {} },
-      };
-
-      const result = getCustomDirectives(options, ["test2" as DirectiveName]);
-
-      expect(result).not.toHaveProperty("test2");
-    });
   });
 });
 
@@ -1499,161 +1343,6 @@ describe("mutation test: ensure all hierarchy types are tested", () => {
     const result = getTypeHierarchyOption(undefined, config);
 
     expect(result).toStrictEqual(config);
-  });
-});
-
-describe("mutation test: getCustomDirectives edge cases", () => {
-  test("returns undefined when all directives are filtered by skipDocDirective", () => {
-    expect.assertions(1);
-
-    const options = {
-      testA: { descriptor: (): void => {} },
-      testB: { descriptor: (): void => {} },
-    };
-
-    const result = getCustomDirectives(options, [
-      "testA" as DirectiveName,
-      "testB" as DirectiveName,
-    ]);
-
-    expect(result).toBeUndefined();
-  });
-
-  test("returns remaining directives when some are filtered", () => {
-    expect.assertions(2);
-
-    const descriptor = (): void => {};
-    const options = {
-      testA: { descriptor },
-      testB: { descriptor },
-      testC: { descriptor },
-    };
-
-    const result = getCustomDirectives(options, [
-      "testA" as DirectiveName,
-      "testB" as DirectiveName,
-    ]);
-
-    expect(result).toHaveProperty("testC");
-    expect(result).not.toHaveProperty("testA");
-  });
-
-  test("throws when descriptor exists but is not a function", () => {
-    expect.assertions(1);
-
-    const options = {
-      test: {
-        descriptor: "not a function",
-      } as Maybe<CustomDirective>,
-    };
-
-    expect(() => {
-      getCustomDirectives(options);
-    }).toThrow("Wrong format for plugin custom directive");
-  });
-
-  test("throws when tag exists but is not a function", () => {
-    expect.assertions(1);
-
-    const options = {
-      test: {
-        tag: "not a function",
-      } as Maybe<CustomDirective>,
-    };
-
-    expect(() => {
-      getCustomDirectives(options);
-    }).toThrow("Wrong format for plugin custom directive");
-  });
-
-  test("throws when neither tag nor descriptor exists", () => {
-    expect.assertions(1);
-
-    const options = {
-      test: {
-        invalid: true,
-      } as Maybe<CustomDirective>,
-    };
-
-    expect(() => {
-      getCustomDirectives(options);
-    }).toThrow("Wrong format for plugin custom directive");
-  });
-
-  test("returns custom directive with valid tag function", () => {
-    expect.assertions(1);
-
-    const tag = (): string => {
-      return "test";
-    };
-    const options = {
-      test: { tag },
-    };
-
-    const result = getCustomDirectives(options);
-
-    expect(result).toStrictEqual({ test: { tag } });
-  });
-
-  test("returns custom directive with valid descriptor function", () => {
-    expect.assertions(1);
-
-    const descriptor = (): string => {
-      return "test";
-    };
-    const options = {
-      test: { descriptor },
-    };
-
-    const result = getCustomDirectives(options);
-
-    expect(result).toStrictEqual({ test: { descriptor } });
-  });
-
-  test("returns custom directive with both tag and descriptor functions", () => {
-    expect.assertions(1);
-
-    const tag = (): string => {
-      return "tag";
-    };
-    const descriptor = (): string => {
-      return "descriptor";
-    };
-    const options = {
-      test: { tag, descriptor },
-    };
-
-    const result = getCustomDirectives(options);
-
-    expect(result).toStrictEqual({ test: { tag, descriptor } });
-  });
-
-  test("respects skipDocDirective for first directive but validates others", () => {
-    expect.assertions(1);
-
-    const options = {
-      testA: { descriptor: (): void => {} },
-      testB: { invalid: true } as Maybe<CustomDirective>,
-    };
-
-    expect(() => {
-      getCustomDirectives(options, ["testA" as DirectiveName]);
-    }).toThrow('Wrong format for plugin custom directive "testB"');
-  });
-
-  test("validates conflict detection message format", () => {
-    expect.assertions(1);
-
-    expect(() => {
-      getVisibilityDirectives(
-        { only: ["@admin" as DirectiveName] },
-        {
-          skipDocDirective: ["@admin" as DirectiveName],
-        },
-      );
-    }).toThrow(
-      "The same directive cannot be declared in 'onlyDocDirective' and 'skipDocDirective'.",
-    );
   });
 });
 

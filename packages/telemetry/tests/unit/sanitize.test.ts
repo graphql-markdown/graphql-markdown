@@ -112,12 +112,6 @@ describe("sanitizeConfig masking table", () => {
     });
   });
 
-  test("user-defined keys become <key:n>", () => {
-    expect(
-      run({ customDirective: { myDirective: { descriptor: "x" } } }).value,
-    ).toEqual({ customDirective: { "<key:0>": { "<key:0>": "<string>" } } });
-  });
-
   test("functions and class instances", () => {
     class Adapter {}
     expect(
