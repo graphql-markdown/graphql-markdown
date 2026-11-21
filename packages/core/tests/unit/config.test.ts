@@ -33,7 +33,6 @@ import {
   getTypeHierarchyOption,
   getVisibilityDirectives,
   parseDeprecatedDocOptions,
-  parseDeprecatedFormatterOption,
   parseDeprecatedPrintTypeOptions,
   parseGroupByOption,
   parseHomepageOption,
@@ -1176,102 +1175,6 @@ describe("config", () => {
 
       expect(generatorFrameworkName).toBe("docusaurus");
       expect(generatorFrameworkVersion).toBe("3.10.2");
-    });
-  });
-
-  describe("parseDeprecatedFormatterOption", () => {
-    test("returns undefined when neither formatter nor mdxParser is set", () => {
-      expect.hasAssertions();
-      expect(parseDeprecatedFormatterOption({}, {})).toBeUndefined();
-      expect(log).not.toHaveBeenCalled();
-    });
-
-    test("returns formatter value without warning when only formatter is set", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption({ formatter: "my-formatter" }, {}),
-      ).toBe("my-formatter");
-      expect(log).not.toHaveBeenCalled();
-    });
-
-    test("returns mdxParser value and emits deprecation warning when mdxParser is set in config", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption({}, { mdxParser: "my-parser" }),
-      ).toBe("my-parser");
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"mdxParser" is deprecated'),
-        "warn",
-      );
-    });
-
-    test("returns mdxParser value and emits deprecation warning when mdxParser is set in CLI opts", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption({ mdxParser: "my-parser" }, {}),
-      ).toBe("my-parser");
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"mdxParser" is deprecated'),
-        "warn",
-      );
-    });
-
-    test("formatter takes precedence over mdxParser and still emits deprecation warning", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption(
-          { formatter: "new-formatter", mdxParser: "old-parser" },
-          {},
-        ),
-      ).toBe("new-formatter");
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"mdxParser" is deprecated'),
-        "warn",
-      );
-    });
-
-    test("returns configOptions.formatter when no CLI opts and no mdxParser", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption({}, { formatter: "config-formatter" }),
-      ).toBe("config-formatter");
-      expect(log).not.toHaveBeenCalled();
-    });
-
-    test("mdxParser in CLI takes precedence over configOptions.formatter and emits warning", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption(
-          { mdxParser: "cli-parser" },
-          { formatter: "config-formatter" },
-        ),
-      ).toBe("cli-parser");
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"mdxParser" is deprecated'),
-        "warn",
-      );
-    });
-
-    test("configOptions.formatter takes precedence over configOptions.mdxParser and emits warning", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption(
-          {},
-          { formatter: "config-formatter", mdxParser: "config-parser" },
-        ),
-      ).toBe("config-formatter");
-      expect(log).toHaveBeenCalledWith(
-        expect.stringContaining('"mdxParser" is deprecated'),
-        "warn",
-      );
-    });
-
-    test("does not emit warning when mdxParser is null", () => {
-      expect.hasAssertions();
-      expect(
-        parseDeprecatedFormatterOption({ mdxParser: null }, {}),
-      ).toBeUndefined();
-      expect(log).not.toHaveBeenCalled();
     });
   });
 

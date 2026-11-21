@@ -82,7 +82,6 @@ export const CONFIG_RULES: Readonly<Record<keyof ConfigOptions, Rule>> = {
   linkRoot: path,
   loaders: { kind: "loaders" },
   formatter,
-  mdxParser: formatter,
   metatags: { kind: "opaque" }, // the number and shape of tags are not sent
   onlyDocDirective: string,
   outputAdapter: { kind: "opaque" },
@@ -116,7 +115,6 @@ export const CLI_RULES: Readonly<Record<keyof CliOptions, Rule>> = {
   link: path,
   hierarchy: enumOf(HIERARCHIES),
   formatter,
-  mdxParser: formatter,
   noParentType: scalar,
   noTypeBadges: scalar,
   noSectionId: scalar,

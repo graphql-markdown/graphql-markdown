@@ -417,11 +417,6 @@ export interface ConfigOptions {
   loaders?: Maybe<LoaderOption>;
   /** Package to be used for formatting MDX output */
   formatter?: Maybe<PackageName | string>;
-  /**
-   * @deprecated Use `formatter` instead.
-   * @see formatter
-   */
-  mdxParser?: Maybe<PackageName | string>;
   /** Metadata tags to include in documentation */
   metatags?: Record<string, string>[];
   /** Only document types with these directives */
@@ -492,11 +487,6 @@ export interface CliOptions {
   hierarchy?: TypeHierarchyValueType;
   /** Formatter package */
   formatter?: string;
-  /**
-   * @deprecated Use `formatter` instead.
-   * @see formatter
-   */
-  mdxParser?: string;
   /** Disable parent type prefix flag */
   noParentType?: boolean;
   /** Disable type badges flag */

@@ -69,11 +69,10 @@ Every flag below works with `npx docusaurus graphql-to-doc` (Docusaurus plugin) 
 | `--groupByDirective <expr>` | [`groupByDirective`](#groupbydirective)                  | Group by directive: `@dir(field\|=fallback)` |
 | `--pretty`                  | [`pretty`](#pretty)                                      | Format output with Prettier                  |
 | `--formatter <pkg>`         | [`formatter`](#formatter)                                | Formatter package name or path               |
-| `--mdxParser <pkg>`         | ~~`mdxParser`~~ (deprecated)                             | Deprecated alias for `formatter`             |
 | `--config`                  | [`--config`](#--config)                                  | Print resolved config (debug)                |
 | `--no-telemetry`            | [`telemetry`](#telemetry)                                | Disable anonymous usage telemetry            |
 
-`--formatter` and `--mdxParser` are only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
+`--formatter` is only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
 
 ## Input
 
@@ -399,11 +398,9 @@ Provide a custom module for formatting output content. You can also use built-in
 | ----------- | ------------- | ----------- |
 | `formatter` | `--formatter` | `undefined` |
 
-The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning, so migrate to `formatter`.
-
 :::caution
 
-The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
+The `--formatter` CLI flag is only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
 
 :::
 

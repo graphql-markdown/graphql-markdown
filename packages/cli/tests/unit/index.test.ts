@@ -513,27 +513,6 @@ describe("CLI Module", () => {
             "short": undefined,
             "variadic": false,
           },
-          Option {
-            "argChoices": undefined,
-            "conflictsWith": [],
-            "defaultValue": undefined,
-            "defaultValueDescription": undefined,
-            "description": "[deprecated] Use --formatter instead",
-            "envVar": undefined,
-            "flags": "--mdxParser <mdxParser>",
-            "helpGroupHeading": undefined,
-            "hidden": false,
-            "implied": undefined,
-            "long": "--mdxParser",
-            "mandatory": false,
-            "negate": false,
-            "optional": false,
-            "parseArg": undefined,
-            "presetArg": undefined,
-            "required": true,
-            "short": undefined,
-            "variadic": false,
-          },
         ]
       `);
     });

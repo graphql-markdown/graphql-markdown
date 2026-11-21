@@ -2,14 +2,14 @@
  * Formatter presets for documentation frameworks.
  *
  * Each preset implements the {@link Formatter} interface and can be used
- * as the `mdxParser` config value in graphql-markdown.
+ * as the `formatter` config value in graphql-markdown.
  *
  * @example
  * ```yaml
  * # .graphqlrc.yml
  * extensions:
  *   graphql-markdown:
- *     mdxParser: "@graphql-markdown/formatters/mkdocs"
+ *     formatter: "@graphql-markdown/formatters/mkdocs"
  * ```
  *
  * @packageDocumentation

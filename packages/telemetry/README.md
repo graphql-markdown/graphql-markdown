@@ -111,7 +111,7 @@ Masking rules:
 
 - `<url>`, `<git>`, `<github>`: the kind of a schema pointer, or a URL value (for example `baseURL`). The host, path and any headers are never sent.
 - `<file:sdl>`, `<file:json>`, `<file:code>`, `<glob>`, `<inline-sdl>`, `<unknown>`: the kind of a schema pointer (for example `schema`). The pointer itself is never sent. Several pointers of one kind are sent as a single token (`"<glob>"`), and mixed kinds as a list of distinct tokens, so the number of pointers is not sent either; `loader` follows the same rule.
-- `<custom-formatter>`: a third-party or local `formatter` or `mdxParser`. Only presets and `@graphql-markdown/*` packages are kept as-is.
+- `<custom-formatter>`: a third-party or local `formatter`. Only presets and `@graphql-markdown/*` packages are kept as-is.
 - `<path>`: a filesystem path (for example `rootPath`, `linkRoot`, `homepage`).
 - `<string>`: a custom string (for example directive names, field names, fallback labels).
 - `<key:n>`: a custom object key, replaced by its position. Only present when a custom key is used.

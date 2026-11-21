@@ -163,7 +163,6 @@ export const DEFAULT_OPTIONS: Readonly<
         | "groupByDirective"
         | "homepage"
         | "loaders"
-        | "mdxParser"
         | "outputAdapter"
         | "printTypeOptions"
         | "telemetry"
@@ -628,27 +627,6 @@ export const getTypeHierarchyOption = (
 };
 
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const parseDeprecatedFormatterOption = (
-  cliOpts?: Maybe<CliOptions>,
-  configOptions?: Maybe<ConfigOptions>,
-): Maybe<string> => {
-  const legacyCli = cliOpts?.mdxParser ?? null; // NOSONAR typescript:S1874
-  const legacyConfig = configOptions?.mdxParser; // NOSONAR typescript:S1874
-  if (
-    legacyCli !== null ||
-    (legacyConfig !== undefined && legacyConfig !== null)
-  ) {
-    log(
-      `Setting "mdxParser" is deprecated and will be removed in a future version. Use "formatter" instead.`,
-      LogLevel.warn,
-    );
-  }
-  return (
-    cliOpts?.formatter ?? legacyCli ?? configOptions?.formatter ?? legacyConfig
-  );
-};
-
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const parseDeprecatedPrintTypeOptions = (
   _cliOpts?: Maybe<CliOptions>,
   _configOptions?: Maybe<ConfigPrintTypeOptions>,
@@ -1101,7 +1079,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot,
     loaders: config.loaders,
-    formatter: parseDeprecatedFormatterOption(cliOpts, config),
+    formatter: cliOpts.formatter ?? config.formatter,
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
     outputAdapter,

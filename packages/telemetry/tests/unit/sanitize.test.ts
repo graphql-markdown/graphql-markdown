@@ -75,9 +75,8 @@ describe("sanitizeConfig masking table", () => {
       "/abs/f.js",
       "https://x.test/f.js",
     ]) {
-      expect(run({ formatter: f, mdxParser: f }).value).toEqual({
+      expect(run({ formatter: f }).value).toEqual({
         formatter: "<custom-formatter>",
-        mdxParser: "<custom-formatter>",
       });
     }
   });
