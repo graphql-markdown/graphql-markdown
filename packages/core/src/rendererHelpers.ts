@@ -49,9 +49,5 @@ export const isHierarchy = (
   options: Maybe<RendererDocOptions>,
   hierarchy: TypeHierarchyValueType,
 ): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return (
-    !!options &&
-    typeof (options as any).hierarchy === "object" &&
-    hierarchy in (options as any).hierarchy
-  );
+  return options?.hierarchy?.[hierarchy] !== undefined;
 };

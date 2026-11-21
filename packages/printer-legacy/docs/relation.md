@@ -11,7 +11,7 @@ including return types, member fields, and implementations, in a formatted MDX s
 function getRootTypeLocaleFromString(text): Maybe<TypeLocale>;
 ```
 
-Defined in: [printer-legacy/src/relation.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L42)
+Defined in: [printer-legacy/src/relation.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L41)
 
 Converts a string representation of a root type to its corresponding `TypeLocale`
 
@@ -48,7 +48,7 @@ function printRelationOf<T>(
 ): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/relation.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L69)
+Defined in: [printer-legacy/src/relation.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L67)
 
 Prints the relation section for a specific type and relation category
 
@@ -110,7 +110,7 @@ const mdx = printRelationOf(type, "Member Of", getRelationOfField, options);
 function printRelations(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/relation.ts:138](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L138)
+Defined in: [printer-legacy/src/relation.ts:136](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/relation.ts#L136)
 
 Prints all relations (return types, member fields, and implementations) for a given type
 

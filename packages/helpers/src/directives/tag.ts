@@ -1,11 +1,3 @@
-/**
- * Custom directive `tag` helper.
- *
- * @see [Option `customDirective.[directive].tag`](https://graphql-markdown.dev/docs/customize/custom-directive#tag)
- *
- * @packageDocumentation
- */
-
 import type { Badge, GraphQLDirective } from "@graphql-markdown/types";
 
 /**

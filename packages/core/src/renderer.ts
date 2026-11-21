@@ -512,11 +512,19 @@ export class Renderer {
       );
 
       if (operationNamespaceParts && operationNamespaceParts.length > 0) {
+        const metafileTargets: { dir: string; name: string }[] = [];
+
         for (const namespace of operationNamespaceParts) {
           const formattedNamespace = slugify(namespace);
           dirPath = join(dirPath, formattedNamespace);
-          void this.generateIndexMetafile(dirPath, namespace);
+          metafileTargets.push({ dir: dirPath, name: namespace });
         }
+
+        await Promise.all(
+          metafileTargets.map(async ({ dir, name }) => {
+            return this.generateIndexMetafile(dir, name);
+          }),
+        );
       }
     }
 

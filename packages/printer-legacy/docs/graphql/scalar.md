@@ -10,7 +10,7 @@ Provides utility functions for handling GraphQL scalar types in markdown generat
 function printCodeScalar(type, options?): string;
 ```
 
-Defined in: [printer-legacy/src/graphql/scalar.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L62)
+Defined in: [printer-legacy/src/graphql/scalar.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L75)
 
 Generates the GraphQL SDL representation of a scalar type.
 
@@ -42,7 +42,7 @@ SDL string representation of the scalar type
 function printScalarMetadata(type, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/graphql/scalar.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L49)
+Defined in: [printer-legacy/src/graphql/scalar.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L62)
 
 Prints metadata information for a scalar type.
 Currently only includes the specification URL if available.
@@ -75,9 +75,12 @@ A scalar metadata PageSection, or undefined when not available
 function printSpecification(type, options): Maybe<PageSection>;
 ```
 
-Defined in: [printer-legacy/src/graphql/scalar.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L21)
+Defined in: [printer-legacy/src/graphql/scalar.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/graphql/scalar.ts#L25)
 
 Generates markdown documentation for a scalar type's specification URL.
+Only absolute http(s) URLs are printed; the URL is normalized (`URL#href`, which
+percent-encodes characters such as `"`, `<`, `>` and spaces). Any other value
+prints no specification section.
 
 #### Parameters
 
@@ -97,4 +100,4 @@ Options for printing type information
 
 `Maybe`&lt;[`PageSection`](../events.md#pagesection)&gt;
 
-A specification PageSection, or undefined when no URL exists
+A specification PageSection, or undefined when no valid http(s) URL exists

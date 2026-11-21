@@ -13,7 +13,7 @@ using Badge, Bullet, SpecifiedBy components and native admonition syntax.
 const mdxDeclaration: MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L36)
+Defined in: [docusaurus/index.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L44)
 
 MDX component definitions prepended to every generated file.
 
@@ -25,7 +25,7 @@ MDX component definitions prepended to every generated file.
 function createMDXFormatter(meta?): Formatter;
 ```
 
-Defined in: [docusaurus/index.ts:162](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L162)
+Defined in: [docusaurus/index.ts:203](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L203)
 
 Creates a Docusaurus formatter.
 Captures `meta` in closure so `formatMDXAdmonition` can detect the Docusaurus version.
@@ -52,7 +52,7 @@ A complete Formatter implementation for Docusaurus MDX output
 function formatMDXAdmonition(admonition, meta): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L65)
+Defined in: [docusaurus/index.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L73)
 
 Formats an admonition using Docusaurus native `:::type` callout syntax.
 Detects Docusaurus v2 (via `meta`) and uses `:::caution` instead of `:::warning`.
@@ -85,7 +85,7 @@ Formatted admonition string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L52)
+Defined in: [docusaurus/index.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L60)
 
 Formats a badge using the inline `<Badge>` component defined in `mdxDeclaration`.
 Appends a CSS class derived from `classname` (e.g. `badge--deprecated`).
@@ -112,7 +112,7 @@ Formatted Badge component string
 function formatMDXBullet(text?): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L82)
+Defined in: [docusaurus/index.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L91)
 
 Formats a bullet point using the inline `<Bullet/>` component defined in `mdxDeclaration`.
 
@@ -138,7 +138,7 @@ Formatted Bullet component string
 function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L93)
+Defined in: [docusaurus/index.ts:102](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L102)
 
 Formats a collapsible block as an HTML `<details>` element with
 toggle labels that swap via the `hidden` attribute.
@@ -166,7 +166,7 @@ Formatted details element string
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:145](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L145)
+Defined in: [docusaurus/index.ts:155](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L155)
 
 Formats YAML front matter wrapped in `---` delimiters.
 
@@ -198,7 +198,7 @@ Formatted front matter block, or empty string if no lines provided
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [docusaurus/index.ts:132](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L132)
+Defined in: [docusaurus/index.ts:142](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L142)
 
 Appends `.mdx` to internal link URLs.
 
@@ -224,7 +224,7 @@ Link with `.mdx` extension appended to the URL
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:119](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L119)
+Defined in: [docusaurus/index.ts:129](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L129)
 
 Formats a named entity as an inline `<code>` element with the parent type
 in normal weight and the entity name in bold.
@@ -252,15 +252,58 @@ Formatted JSX code element string
 
 ---
 
+### formatMDXPermalink()
+
+```ts
+function formatMDXPermalink(id, meta?): MDXString;
+```
+
+Defined in: [docusaurus/index.ts:181](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L181)
+
+Formats a permalink for a section header.
+
+Docusaurus 3.10 introduced a heading id syntax based on a native MDX comment,
+and deprecated the classic one. The braces of the comment must NOT be escaped:
+the heading id is extracted from a real MDX expression node, so an escaped
+token would be rendered as text. Older versions only support the classic
+syntax, whose braces must be escaped to remain valid MDX.
+
+#### Parameters
+
+##### id
+
+`string`
+
+The ID of the section header
+
+##### meta?
+
+`Maybe`&lt;`MetaInfo`&gt;
+
+Optional metadata used to detect the Docusaurus version
+
+#### Returns
+
+`MDXString`
+
+Formatted permalink string
+
+#### See
+
+https://docusaurus.io/blog/releases/3.10#strict-heading-ids
+
+---
+
 ### formatMDXSpecifiedByLink()
 
 ```ts
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [docusaurus/index.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L107)
+Defined in: [docusaurus/index.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docusaurus/index.ts#L117)
 
 Formats a "specified by" link using the inline `<SpecifiedBy>` component.
+The URL is encoded as HTML character references for the `url` attribute.
 
 #### Parameters
 

@@ -10,7 +10,7 @@ Internal library for prettifying files using `prettier`.
 function prettify(content, parser): Promise<string | undefined>;
 ```
 
-Defined in: [prettier.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L25)
+Defined in: [prettier.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L37)
 
 **`Internal`**
 
@@ -53,7 +53,7 @@ This function logs a warning message on error.
 function prettifyMarkdown(content): Promise<string | undefined>;
 ```
 
-Defined in: [prettier.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L67)
+Defined in: [prettier.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/prettier.ts#L86)
 
 **`Internal`**
 

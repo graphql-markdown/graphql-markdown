@@ -387,7 +387,7 @@ export interface ConfigOptions {
   /**
    * Decorators: selects nodes with a predicate (a directive, an entity kind, or
    * any combination) and renders a titled section, a badge, or appended
-   * description text for them. Supersedes `customDirective`.
+   * description text for them.
    */
   decorators?: Maybe<Decorators>;
   /** Method to use for diffing schema changes */

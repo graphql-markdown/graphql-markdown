@@ -4,5 +4,6 @@
 
 - [directives/descriptor](directives/descriptor.md)
 - [directives/tag](directives/tag.md)
+- [directives/with-directive](directives/with-directive.md)
 - [formatters/markdown](formatters/markdown.md)
 - [utils/interpolate](utils/interpolate.md)

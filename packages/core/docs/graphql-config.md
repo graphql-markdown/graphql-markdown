@@ -9,7 +9,7 @@ using the graphql-config package.
 
 ### ThrowOptions
 
-Defined in: [packages/core/src/graphql-config.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L58)
+Defined in: [packages/core/src/graphql-config.ts:74](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L74)
 
 Options for controlling throw behavior when loading configuration.
 
@@ -20,20 +20,20 @@ ThrowOptions
 ##### throwOnEmpty?
 
 ```ts
-optional throwOnEmpty?: boolean;
+throwOnEmpty?: boolean;
 ```
 
-Defined in: [packages/core/src/graphql-config.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L60)
+Defined in: [packages/core/src/graphql-config.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L76)
 
 Whether to throw when the config is empty.
 
 ##### throwOnMissing?
 
 ```ts
-optional throwOnMissing?: boolean;
+throwOnMissing?: boolean;
 ```
 
-Defined in: [packages/core/src/graphql-config.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L59)
+Defined in: [packages/core/src/graphql-config.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L75)
 
 Whether to throw when the config file is missing.
 
@@ -45,7 +45,7 @@ Whether to throw when the config file is missing.
 const graphQLConfigExtension: GraphQLExtensionDeclaration;
 ```
 
-Defined in: [packages/core/src/graphql-config.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L47)
+Defined in: [packages/core/src/graphql-config.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L63)
 
 GraphQL extension declaration for graphql-config.
 
@@ -74,7 +74,7 @@ function loadConfiguration(
 ): Promise<Maybe<Readonly<ExtensionProjectConfig>>>;
 ```
 
-Defined in: [packages/core/src/graphql-config.ts:144](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L144)
+Defined in: [packages/core/src/graphql-config.ts:160](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L160)
 
 Loads the GraphQL Markdown configuration from graphql-config.
 
@@ -135,7 +135,7 @@ const config = await loadConfiguration(
 function setLoaderOptions(loaders, options): LoaderOption;
 ```
 
-Defined in: [packages/core/src/graphql-config.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L96)
+Defined in: [packages/core/src/graphql-config.ts:112](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/graphql-config.ts#L112)
 
 Sets loader options for GraphQL Markdown loaders.
 

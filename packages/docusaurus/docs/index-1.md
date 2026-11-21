@@ -10,11 +10,10 @@ Docusaurus integration for running GraphQL-Markdown and wiring CLI commands.
 function default(_, options): Promise<Plugin>;
 ```
 
-Defined in: [docusaurus/src/index.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/index.ts#L61)
+Defined in: [docusaurus/src/index.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/index.ts#L59)
 
-Docusaurus plugin wrapper that wires GraphQL-Markdown into the build,
-optionally running the CLI during `docusaurus build` and registering
-the `graphql-to-doc` command on the local CLI.
+Docusaurus plugin wrapper that registers the GraphQL-Markdown
+`graphql-to-doc` command on the local CLI.
 
 #### Parameters
 

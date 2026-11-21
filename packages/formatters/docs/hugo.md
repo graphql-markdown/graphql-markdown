@@ -86,7 +86,7 @@ Requires Hugo 0.132 or later.
 
 `AdmonitionType`
 
-Admonition data with text, optional title, and type (e.g. `note`, `warning`, `danger`) mapped via ALERT_TYPE_MAP
+Admonition data with text, optional title, and type (e.g. `note`, `warning`, `danger`) mapped via ALERT\_TYPE\_MAP
 
 ##### \_meta
 

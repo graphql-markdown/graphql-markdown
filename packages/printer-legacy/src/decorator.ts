@@ -62,9 +62,6 @@ export const RESERVED_SECTION_NAMES: readonly string[] = [
   "tags",
   "description",
   "code",
-  "customDirectives",
-  "customDirective:description",
-  "customDirective:tags",
   "metadata",
   "example",
   "relations",
@@ -238,13 +235,6 @@ export const printDecorator = (
  * Returns the decorators to build, in declaration order, from the top-level
  * `decorators` option.
  *
- * Every entry is filtered against reserved ids, except the adapter's own —
- * see {@link CUSTOM_DIRECTIVE_DECORATOR_IDS} — since those are assigned by
- * the converter, not user config, and are reserved specifically to keep user
- * config from claiming them. A user-declared decorator claiming any other
- * reserved id is still dropped: the printer is reachable directly through
- * its public API, bypassing configuration validation, and such a decorator
- * would otherwise overwrite a built-in section.
  *
  * @internal
  *

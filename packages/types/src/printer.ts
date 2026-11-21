@@ -51,8 +51,6 @@ export interface PageSections {
   description?: PageSection;
   /** GraphQL code block */
   code?: PageSection;
-  /** Custom directives */
-  customDirectives?: PageSection;
   /** Type metadata (fields, arguments, etc.) */
   metadata?: PageSection;
   /** Usage examples */
@@ -218,7 +216,7 @@ export type PrintTypeOptions = Partial<Formatter> & {
   collapsible?: Maybe<CollapsibleOption>;
   /**
    * Decorators: selects nodes with a predicate and renders a titled section, a
-   * badge, or appended description text for them. Supersedes `customDirective`.
+   * badge, or appended description text for them.
    *
    */
   decorators?: Maybe<Decorators>;
@@ -422,12 +420,7 @@ export interface PrinterConfig {
  * Extended printer options for customizing documentation generation
  */
 export interface PrinterOptions {
-  /**
-   * Predicate-driven decorators, resolved by the configuration layer.
-   * `@graphql-markdown/core` merges the deprecated `customDirective` option's
-   * translated decorators directly into this field; `customDirective` itself
-   * never reaches the printer.
-   */
+  /** Predicate-driven decorators, resolved by the configuration layer */
   decorators?: Maybe<Decorators>;
   /** Configuration for handling deprecated types and fields */
   deprecated?: Maybe<TypeDeprecatedOption>;

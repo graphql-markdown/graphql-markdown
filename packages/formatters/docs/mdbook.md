@@ -15,7 +15,7 @@ Exports `afterRenderFilesHook` to build `SUMMARY.md` after all pages are written
 const afterRenderFilesHook: RenderFilesHook;
 ```
 
-Defined in: [mdbook/index.ts:208](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L208)
+Defined in: [mdbook/index.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L200)
 
 Builds `src/SUMMARY.md` after all pages have been written.
 
@@ -31,7 +31,7 @@ by top-level section (Operations / Types) and category, then writes the file.
 const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook;
 ```
 
-Defined in: [mdbook/index.ts:163](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L163)
+Defined in: [mdbook/index.ts:154](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L154)
 
 Rewrites absolute generated doc links to page-relative `.md` paths after each page is rendered.
 
@@ -50,7 +50,7 @@ work correctly regardless of where the book is hosted.
 const mdxExtension: ".md" = ".md";
 ```
 
-Defined in: [mdbook/index.ts:104](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L104)
+Defined in: [mdbook/index.ts:116](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L116)
 
 mdBook expects `.md` files; override the default `.mdx` extension.
 
@@ -62,7 +62,7 @@ mdBook expects `.md` files; override the default `.mdx` extension.
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [mdbook/index.ts:174](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L174)
+Defined in: [mdbook/index.ts:165](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L165)
 
 Creates an mdBook formatter.
 
@@ -88,7 +88,7 @@ A complete Formatter implementation for mdBook output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [mdbook/index.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L63)
+Defined in: [mdbook/index.ts:65](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L65)
 
 Formats an admonition using mdBook's native admonition syntax (`> [!TYPE]`).
 Uses `type` for the admonition tag and `title` as an optional override label.
@@ -121,7 +121,7 @@ Formatted admonition string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [mdbook/index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L52)
+Defined in: [mdbook/index.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L54)
 
 Formats a badge as Markdown bold text — mdBook has no badge component.
 
@@ -147,7 +147,7 @@ Formatted bold text string
 function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [mdbook/index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L84)
+Defined in: [mdbook/index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L86)
 
 Renders a deprecated section as a bold inline label.
 
@@ -177,14 +177,14 @@ Bold label + split marker
 ### formatMDXFrontmatter()
 
 ```ts
-function formatMDXFrontmatter(_props, formatted): MDXString;
+function formatMDXFrontmatter(_props, _formatted): MDXString;
 ```
 
-Defined in: [mdbook/index.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L96)
+Defined in: [mdbook/index.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L98)
 
-Replaces front matter with an H1 title heading.
+Suppresses front matter.
 mdBook renders `---` YAML blocks as literal content, so front matter is
-suppressed entirely. The page title is emitted as `# Title` instead.
+suppressed entirely. The page title is printed by [formatMDXTitle](#formatmdxtitle).
 
 #### Parameters
 
@@ -192,7 +192,7 @@ suppressed entirely. The page title is emitted as `# Title` instead.
 
 `Maybe`&lt;`FrontMatterOptions`&gt;
 
-##### formatted
+##### \_formatted
 
 `Maybe`&lt;`string`[]&gt;
 
@@ -200,7 +200,7 @@ suppressed entirely. The page title is emitted as `# Title` instead.
 
 `MDXString`
 
-`# Title\n` when a title is available, otherwise an empty string
+An empty string
 
 ---
 
@@ -210,7 +210,7 @@ suppressed entirely. The page title is emitted as `# Title` instead.
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [mdbook/index.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L111)
+Defined in: [mdbook/index.ts:123](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L123)
 
 Returns the link unchanged — mdBook resolves `.md` links natively.
 
@@ -227,3 +227,30 @@ Link data with URL and text
 `TypeLink`
 
 The link with `.md` appended to extensionless absolute paths
+
+---
+
+### formatMDXTitle()
+
+```ts
+function formatMDXTitle(title): MDXString;
+```
+
+Defined in: [mdbook/index.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/index.ts#L111)
+
+Formats the page title as a visible `# Title` heading, since front matter
+is suppressed.
+
+#### Parameters
+
+##### title
+
+`string`
+
+The page title
+
+#### Returns
+
+`MDXString`
+
+`# Title` heading

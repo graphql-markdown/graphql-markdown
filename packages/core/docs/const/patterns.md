@@ -7,19 +7,19 @@ and simplify maintenance when patterns need to be updated.
 
 ## Variables
 
-### CONFIG_CONSTANTS
+### CONFIG\_CONSTANTS
 
 ```ts
 const CONFIG_CONSTANTS: object;
 ```
 
-Defined in: [core/src/const/patterns.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L115)
+Defined in: [packages/core/src/const/patterns.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L115)
 
 String constants used for configuration parsing and defaults.
 
 #### Type Declaration
 
-##### DEFAULT_GROUP
+##### DEFAULT\_GROUP
 
 ```ts
 readonly DEFAULT_GROUP: "Miscellaneous";
@@ -36,13 +36,13 @@ Items without the grouping directive are assigned to this group.
 const PATTERNS: object;
 ```
 
-Defined in: [core/src/const/patterns.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L20)
+Defined in: [packages/core/src/const/patterns.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/const/patterns.ts#L20)
 
 Central repository of regex patterns used for configuration parsing and string transformation.
 
 #### Type Declaration
 
-##### CASE_TRANSITION
+##### CASE\_TRANSITION
 
 ```ts
 readonly CASE_TRANSITION: RegExp;
@@ -63,7 +63,7 @@ Used to insert spaces in camelCase strings (e.g., "userId" → "user Id").
 - "get2Users" matches → insert space between "2" and "U" → "get 2 Users"
 ```
 
-##### DIGIT_LETTER_TRANSITION
+##### DIGIT\_LETTER\_TRANSITION
 
 ```ts
 readonly DIGIT_LETTER_TRANSITION: RegExp;
@@ -84,7 +84,7 @@ Used to insert spaces between numbers and letters (e.g., "2k" → "2 k").
 - "2K" does not match (K is uppercase)
 ```
 
-##### DIRECTIVE_NAME
+##### DIRECTIVE\_NAME
 
 ```ts
 readonly DIRECTIVE_NAME: RegExp;
@@ -106,7 +106,7 @@ Captures the directive name after the @ symbol.
 - "tag" does not match
 ```
 
-##### GROUP_BY_DIRECTIVE
+##### GROUP\_BY\_DIRECTIVE
 
 ```ts
 readonly GROUP_BY_DIRECTIVE: RegExp;
@@ -128,7 +128,7 @@ Groups: (1) directive name, (2) field name, (3) optional fallback
 - "tag(name)" does not match
 ```
 
-##### LETTER_DIGIT_TRANSITION
+##### LETTER\_DIGIT\_TRANSITION
 
 ```ts
 readonly LETTER_DIGIT_TRANSITION: RegExp;
@@ -149,7 +149,7 @@ Used to insert spaces between letters and numbers (e.g., "user1" → "user 1").
 - "U1" does not match (U is uppercase)
 ```
 
-##### NUMERIC_PREFIX
+##### NUMERIC\_PREFIX
 
 ```ts
 readonly NUMERIC_PREFIX: RegExp;
@@ -169,7 +169,7 @@ Pattern: `^\d{2}-`
 - "1-query" does not match (only 1 digit)
 ```
 
-##### WORD_BOUNDARY
+##### WORD\_BOUNDARY
 
 ```ts
 readonly WORD_BOUNDARY: RegExp;

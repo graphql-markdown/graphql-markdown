@@ -10,13 +10,13 @@ Schema loading event constants.
 const SchemaEvents: object;
 ```
 
-Defined in: [core/src/events/schema-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/schema-events.ts#L10)
+Defined in: [packages/core/src/events/schema-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/schema-events.ts#L10)
 
 Event names for schema loading lifecycle.
 
 #### Type Declaration
 
-##### AFTER_LOAD
+##### AFTER\_LOAD
 
 ```ts
 readonly AFTER_LOAD: "schema:afterLoad" = "schema:afterLoad";
@@ -24,7 +24,7 @@ readonly AFTER_LOAD: "schema:afterLoad" = "schema:afterLoad";
 
 Emitted after loading GraphQL schema
 
-##### AFTER_MAP
+##### AFTER\_MAP
 
 ```ts
 readonly AFTER_MAP: "schema:afterMap" = "schema:afterMap";
@@ -32,7 +32,7 @@ readonly AFTER_MAP: "schema:afterMap" = "schema:afterMap";
 
 Emitted after mapping GraphQL schema
 
-##### BEFORE_LOAD
+##### BEFORE\_LOAD
 
 ```ts
 readonly BEFORE_LOAD: "schema:beforeLoad" = "schema:beforeLoad";
@@ -40,7 +40,7 @@ readonly BEFORE_LOAD: "schema:beforeLoad" = "schema:beforeLoad";
 
 Emitted before loading GraphQL schema
 
-##### BEFORE_MAP
+##### BEFORE\_MAP
 
 ```ts
 readonly BEFORE_MAP: "schema:beforeMap" = "schema:beforeMap";

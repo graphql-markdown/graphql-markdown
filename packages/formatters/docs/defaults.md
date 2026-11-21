@@ -13,7 +13,7 @@ Individual formatters import what they need and override only what differs.
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [defaults.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L45)
+Defined in: [defaults.ts:47](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L47)
 
 Formats an admonition as an HTML `<fieldset>` element with `gqlmd-mdx-admonition-*` CSS classes.
 
@@ -45,7 +45,7 @@ Formatted admonition string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [defaults.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L35)
+Defined in: [defaults.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L37)
 
 Formats a badge using an HTML `<mark>` element with a `gqlmd-mdx-badge` CSS class.
 
@@ -71,7 +71,7 @@ Formatted badge string
 function formatMDXBullet(text?): MDXString;
 ```
 
-Defined in: [defaults.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L57)
+Defined in: [defaults.ts:59](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L59)
 
 Formats a bullet point separator using a `<span>` with a `gqlmd-mdx-bullet` CSS class.
 
@@ -97,7 +97,7 @@ Formatted bullet string
 function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [defaults.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L67)
+Defined in: [defaults.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L69)
 
 Formats a collapsible block as an HTML `<details>` element with a `gqlmd-mdx-details` CSS class.
 The summary label is uppercase; the close label is rendered as `<em>`.
@@ -124,7 +124,7 @@ Formatted details element string
 function formatMDXEscapedPermalink(id): MDXString;
 ```
 
-Defined in: [defaults.ts:159](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L159)
+Defined in: [defaults.ts:163](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L163)
 
 Formats a permalink for a section header using the classic `{#id}` syntax,
 escaped so that it stays valid MDX.
@@ -160,7 +160,7 @@ formatMDXEscapedPermalink("my-id"); // \{#my-id\}
 function formatMDXFrontmatter(_props, formatted): MDXString;
 ```
 
-Defined in: [defaults.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L80)
+Defined in: [defaults.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L82)
 
 Formats YAML front matter wrapped in `---` delimiters.
 
@@ -192,7 +192,7 @@ Formatted front matter block, or empty string if no lines provided
 function formatMDXFrontmatterTitleOnly(formatted, trailingEol?): MDXString;
 ```
 
-Defined in: [defaults.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L98)
+Defined in: [defaults.ts:100](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L100)
 
 Formats the page title as a visible H1 heading, for frameworks that render
 YAML front matter as literal page content and so must suppress it entirely.
@@ -225,7 +225,7 @@ Whether to append a trailing end-of-line after the heading
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [defaults.ts:114](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L114)
+Defined in: [defaults.ts:116](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L116)
 
 Formats a type link — returns the link unchanged (identity passthrough).
 
@@ -251,7 +251,7 @@ The unmodified `TypeLink` object
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [defaults.ts:124](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L124)
+Defined in: [defaults.ts:126](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L126)
 
 Formats a named entity using `<span>` and `<code>` elements with `gqlmd-mdx-entity-*` CSS classes.
 
@@ -283,12 +283,12 @@ Formatted entity reference string
 function formatMDXPermalink(id): MDXString;
 ```
 
-Defined in: [defaults.ts:173](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L173)
+Defined in: [defaults.ts:177](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L177)
 
 Formats a permalink for a section header using the classic `{#id}` syntax.
 
 This is the syntax supported by most Markdown-based generators (Hugo,
-mdBook, DocFX, MkDocs with `attr_list`). Presets targeting a framework that
+mdBook, MkDocs with `attr_list`). Presets targeting a framework that
 expects another syntax override this function.
 
 #### Parameters
@@ -313,10 +313,11 @@ Formatted permalink string
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [defaults.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L140)
+Defined in: [defaults.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/defaults.ts#L143)
 
 Formats a "specified by" link as an HTML `<span>` with a `gqlmd-mdx-specifiedby` CSS class
 containing an anchor that opens in a new tab.
+The URL is encoded as HTML character references for the `href` and `title` attributes.
 
 #### Parameters
 

@@ -1,11 +1,5 @@
 # directives/descriptor
 
-Custom directive `descriptor` helper.
-
-## See
-
-[Option `customDirective.[directive].descriptor`](https://graphql-markdown.dev/docs/customize/custom-directive#descriptor)
-
 ## Functions
 
 ### directiveDescriptor()
@@ -14,7 +8,7 @@ Custom directive `descriptor` helper.
 function directiveDescriptor(directive, type?, descriptionTemplate?): string;
 ```
 
-Defined in: [directives/descriptor.ts:83](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L83)
+Defined in: [directives/descriptor.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/descriptor.ts#L75)
 
 Helper for rendering custom description from schema directive on type.
 This is an example on how to build a custom `descriptor` callback.

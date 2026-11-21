@@ -13,7 +13,7 @@ The default formatter produces HTML-like markup suitable for most Markdown proce
 function createDefaultFormatter(): Formatter;
 ```
 
-Defined in: [printer-legacy/src/formatter.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/formatter.ts#L40)
+Defined in: [printer-legacy/src/formatter.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/formatter.ts#L41)
 
 Creates a default formatter for documentation output.
 

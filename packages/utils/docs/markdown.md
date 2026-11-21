@@ -4,7 +4,7 @@ Shared Markdown constants used across packages.
 
 ## Variables
 
-### FRONT_MATTER_DELIMITER
+### FRONT\_MATTER\_DELIMITER
 
 ```ts
 const FRONT_MATTER_DELIMITER: "---";
@@ -16,7 +16,7 @@ Frontmatter delimiter for YAML frontmatter blocks.
 
 ---
 
-### MARKDOWN_CODE_INDENTATION
+### MARKDOWN\_CODE\_INDENTATION
 
 ```ts
 const MARKDOWN_CODE_INDENTATION: "  ";
@@ -28,10 +28,10 @@ Standard indentation for code blocks (2 spaces).
 
 ---
 
-### MARKDOWN_CODE_SNIPPET
+### MARKDOWN\_CODE\_SNIPPET
 
 ```ts
-const MARKDOWN_CODE_SNIPPET: "``";
+const MARKDOWN_CODE_SNIPPET:  "" `;
 ```
 
 Defined in: [markdown.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/markdown.ts#L25)
@@ -40,7 +40,7 @@ Code snippet delimiter for fenced code blocks.
 
 ---
 
-### MARKDOWN_EOL
+### MARKDOWN\_EOL
 
 ```ts
 const MARKDOWN_EOL: "\n";
@@ -52,7 +52,7 @@ End of line character for Markdown.
 
 ---
 
-### MARKDOWN_EOP
+### MARKDOWN\_EOP
 
 ```ts
 const MARKDOWN_EOP: string;

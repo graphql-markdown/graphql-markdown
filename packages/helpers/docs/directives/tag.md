@@ -1,11 +1,5 @@
 # directives/tag
 
-Custom directive `tag` helper.
-
-## See
-
-[Option `customDirective.[directive].tag`](https://graphql-markdown.dev/docs/customize/custom-directive#tag)
-
 ## Functions
 
 ### directiveTag()
@@ -14,7 +8,7 @@ Custom directive `tag` helper.
 function directiveTag(directive, type?, classname?): Badge;
 ```
 
-Defined in: [directives/tag.ts:51](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L51)
+Defined in: [directives/tag.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/helpers/src/directives/tag.ts#L43)
 
 Helper for rendering custom description from schema directive on type.
 This is an example on how to build a custom `tag` callback.

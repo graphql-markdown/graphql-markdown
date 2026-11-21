@@ -26,16 +26,10 @@ await Printer.init(schema, baseURL, linkRoot, options);
 const page = await Printer.printType("query", queryType, options);
 ```
 
-### Custom directive decorators
-
-```ts
-import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
-```
-
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
-- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
+- [Decorators](https://graphql-markdown.dev/docs/customize/decorators)
 - [Integration with Frameworks](https://graphql-markdown.dev/docs/guides/other-frameworks)
 
 ## License

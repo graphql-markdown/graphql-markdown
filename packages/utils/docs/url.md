@@ -6,7 +6,7 @@ Alias `path.posix` to normalize URL handling on Windows.
 
 ### RelativeGeneratedDocLinkOptions
 
-Defined in: [url.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L15)
+Defined in: [url.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L16)
 
 #### Properties
 
@@ -16,7 +16,7 @@ Defined in: [url.ts:15](https://github.com/graphql-markdown/graphql-markdown/blo
 baseURL: string;
 ```
 
-Defined in: [url.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L16)
+Defined in: [url.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L17)
 
 ##### currentFilePath
 
@@ -24,15 +24,35 @@ Defined in: [url.ts:16](https://github.com/graphql-markdown/graphql-markdown/blo
 currentFilePath: string;
 ```
 
-Defined in: [url.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L17)
+Defined in: [url.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L18)
 
 ##### extension?
 
 ```ts
-optional extension?: string;
+extension?: string;
 ```
 
-Defined in: [url.ts:18](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L18)
+Defined in: [url.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L19)
+
+##### knownDocPaths?
+
+```ts
+knownDocPaths?: ReadonlySet<string>;
+```
+
+Defined in: [url.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L23)
+
+Root-level generated doc paths (without extensions), known before they are written.
+
+##### linkRoot?
+
+```ts
+linkRoot?: string;
+```
+
+Defined in: [url.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L21)
+
+Optional URL prefix (e.g. `/docs`) the printer puts before generated paths.
 
 ##### outputDir
 
@@ -40,7 +60,7 @@ Defined in: [url.ts:18](https://github.com/graphql-markdown/graphql-markdown/blo
 outputDir: string;
 ```
 
-Defined in: [url.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L19)
+Defined in: [url.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L24)
 
 ##### targetUrlPath
 
@@ -48,7 +68,7 @@ Defined in: [url.ts:19](https://github.com/graphql-markdown/graphql-markdown/blo
 targetUrlPath: string;
 ```
 
-Defined in: [url.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L20)
+Defined in: [url.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L25)
 
 ## Functions
 
@@ -58,7 +78,7 @@ Defined in: [url.ts:20](https://github.com/graphql-markdown/graphql-markdown/blo
 function toRelativeGeneratedDocLink(__namedParameters): string | undefined;
 ```
 
-Defined in: [url.ts:34](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L34)
+Defined in: [url.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/url.ts#L91)
 
 Converts a generated absolute GraphQL-Markdown doc URL into a page-relative file path.
 Returns `undefined` when the target URL does not belong to the configured `baseURL`.

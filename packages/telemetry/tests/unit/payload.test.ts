@@ -55,7 +55,6 @@ const buildPlantedInputs = () => {
   };
   const config = {
     baseURL: planted(0),
-    customDirective: { [planted(1)]: { descriptor: planted(2) } },
     decorators: { [planted(3)]: planted(4) },
     diffMethod: planted(5),
     docOptions: {

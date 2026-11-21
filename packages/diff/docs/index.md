@@ -90,7 +90,7 @@ A promise resolving to a boolean indicating whether the schema has changed
 
 ---
 
-### SCHEMA_HASH_FILE
+### SCHEMA\_HASH\_FILE
 
 ```ts
 const SCHEMA_HASH_FILE: ".schema";
@@ -102,7 +102,7 @@ File name for storing schema hash
 
 ---
 
-### SCHEMA_REF
+### SCHEMA\_REF
 
 ```ts
 const SCHEMA_REF: "schema.graphql";

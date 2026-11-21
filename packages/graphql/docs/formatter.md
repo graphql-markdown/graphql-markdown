@@ -10,7 +10,7 @@ Internal library of helpers for formatting GraphQL values.
 function getFormattedDefaultValue<T>(entity): Maybe<string | T>;
 ```
 
-Defined in: [packages/graphql/src/formatter.ts:130](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L130)
+Defined in: [packages/graphql/src/formatter.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/formatter.ts#L200)
 
 Returns a printable formatted value for a GraphQL type.
 This is the generic function.

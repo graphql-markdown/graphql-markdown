@@ -74,9 +74,7 @@ Gets the default action function if one was provided.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.defaultAction;
-```
+`ICancellableEvent.defaultAction`
 
 ##### defaultPrevented
 
@@ -116,9 +114,7 @@ Allows setting defaultPrevented to true directly.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.defaultPrevented;
-```
+`ICancellableEvent.defaultPrevented`
 
 ##### propagationStopped
 
@@ -158,9 +154,7 @@ Allows setting propagationStopped to true directly.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.propagationStopped;
-```
+`ICancellableEvent.propagationStopped`
 
 #### Methods
 
@@ -181,9 +175,7 @@ Only works if the event is cancellable.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.preventDefault;
-```
+`ICancellableEvent.preventDefault`
 
 ##### runDefaultAction()
 
@@ -201,9 +193,7 @@ Executes the default action for an event if it hasn't been prevented.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.runDefaultAction;
-```
+`ICancellableEvent.runDefaultAction`
 
 ##### stopPropagation()
 
@@ -222,9 +212,7 @@ Handlers registered after the current one will not execute.
 
 ###### Implementation of
 
-```ts
-ICancellableEvent.stopPropagation;
-```
+`ICancellableEvent.stopPropagation`
 
 ---
 
@@ -484,7 +472,8 @@ Type of the mutable output value.
 new DataOutputEvent<TData, TOutput>(
    data,
    initialOutput,
-   options?): DataOutputEvent<TData, TOutput>;
+   options?
+): DataOutputEvent<TData, TOutput>;
 ```
 
 Defined in: [events.ts:193](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/events.ts#L193)
@@ -709,7 +698,7 @@ Defined in: [events.ts:39](https://github.com/graphql-markdown/graphql-markdown/
 ##### cancellable?
 
 ```ts
-optional cancellable?: boolean;
+cancellable?: boolean;
 ```
 
 Defined in: [events.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/events.ts#L41)
@@ -717,7 +706,7 @@ Defined in: [events.ts:41](https://github.com/graphql-markdown/graphql-markdown/
 ##### defaultAction?
 
 ```ts
-optional defaultAction?: DefaultAction;
+defaultAction?: DefaultAction;
 ```
 
 Defined in: [events.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/events.ts#L40)

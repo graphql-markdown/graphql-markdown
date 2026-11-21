@@ -6,7 +6,7 @@ Generate index metafile event class.
 
 ### GenerateIndexMetafileEvent
 
-Defined in: [core/src/events/generate-index-metafile.ts:15](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L15)
+Defined in: [packages/core/src/events/generate-index-metafile.ts:16](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L16)
 
 Event emitted before/after generating index metafile.
 
@@ -16,6 +16,7 @@ Event emitted before/after generating index metafile.
   `category`: `string`;
   `dirPath`: `string`;
   `options?`: `Record`&lt;`string`, `unknown`&gt;;
+  `outputAdapter?`: `OutputAdapter`;
   \}&gt;
 
 #### Constructors
@@ -26,7 +27,7 @@ Event emitted before/after generating index metafile.
 new GenerateIndexMetafileEvent(data, options?): GenerateIndexMetafileEvent;
 ```
 
-Defined in: [core/src/events/generate-index-metafile.ts:20](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L20)
+Defined in: [packages/core/src/events/generate-index-metafile.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile.ts#L23)
 
 ###### Parameters
 
@@ -44,6 +45,10 @@ Defined in: [core/src/events/generate-index-metafile.ts:20](https://github.com/g
 
 `Record`&lt;`string`, `unknown`&gt;
 
+###### outputAdapter?
+
+`OutputAdapter`
+
 ###### options?
 
 `CancellableEventOptions`
@@ -54,13 +59,7 @@ Defined in: [core/src/events/generate-index-metafile.ts:20](https://github.com/g
 
 ###### Overrides
 
-```ts
-DataEvent<{
-  dirPath: string;
-  category: string;
-  options?: Record<string, unknown>;
-}>.constructor
-```
+`DataEvent<{ dirPath: string; category: string; /** Destination the metafile must be written to. */ outputAdapter?: OutputAdapter; options?: Record<string, unknown>; }>.constructor`
 
 #### Properties
 
@@ -70,7 +69,7 @@ DataEvent<{
 readonly data: object;
 ```
 
-Defined in: utils/dist/events.d.ts:111
+Defined in: packages/utils/dist/events.d.ts:111
 
 Read-only event data payload.
 
@@ -89,14 +88,20 @@ dirPath: string;
 ###### options?
 
 ```ts
-optional options?: Record<string, unknown>;
+options?: Record<string, unknown>;
 ```
+
+###### outputAdapter?
+
+```ts
+outputAdapter?: OutputAdapter;
+```
+
+Destination the metafile must be written to.
 
 ###### Inherited from
 
-```ts
-DataEvent.data;
-```
+`DataEvent.data`
 
 #### Accessors
 
@@ -108,7 +113,7 @@ DataEvent.data;
 get defaultAction(): DefaultAction | undefined;
 ```
 
-Defined in: utils/dist/events.d.ts:78
+Defined in: packages/utils/dist/events.d.ts:78
 
 Gets the default action function if one was provided.
 
@@ -118,9 +123,7 @@ Gets the default action function if one was provided.
 
 ###### Inherited from
 
-```ts
-DataEvent.defaultAction;
-```
+`DataEvent.defaultAction`
 
 ##### defaultPrevented
 
@@ -130,7 +133,7 @@ DataEvent.defaultAction;
 get defaultPrevented(): boolean;
 ```
 
-Defined in: utils/dist/events.d.ts:70
+Defined in: packages/utils/dist/events.d.ts:70
 
 Gets whether the default action has been prevented.
 
@@ -144,7 +147,7 @@ Gets whether the default action has been prevented.
 set defaultPrevented(value): void;
 ```
 
-Defined in: utils/dist/events.d.ts:82
+Defined in: packages/utils/dist/events.d.ts:82
 
 Allows setting defaultPrevented to true directly.
 
@@ -160,9 +163,7 @@ Allows setting defaultPrevented to true directly.
 
 ###### Inherited from
 
-```ts
-DataEvent.defaultPrevented;
-```
+`DataEvent.defaultPrevented`
 
 ##### propagationStopped
 
@@ -172,7 +173,7 @@ DataEvent.defaultPrevented;
 get propagationStopped(): boolean;
 ```
 
-Defined in: utils/dist/events.d.ts:74
+Defined in: packages/utils/dist/events.d.ts:74
 
 Gets whether propagation has been stopped.
 
@@ -186,7 +187,7 @@ Gets whether propagation has been stopped.
 set propagationStopped(value): void;
 ```
 
-Defined in: utils/dist/events.d.ts:86
+Defined in: packages/utils/dist/events.d.ts:86
 
 Allows setting propagationStopped to true directly.
 
@@ -202,9 +203,7 @@ Allows setting propagationStopped to true directly.
 
 ###### Inherited from
 
-```ts
-DataEvent.propagationStopped;
-```
+`DataEvent.propagationStopped`
 
 #### Methods
 
@@ -214,7 +213,7 @@ DataEvent.propagationStopped;
 preventDefault(): void;
 ```
 
-Defined in: utils/dist/events.d.ts:91
+Defined in: packages/utils/dist/events.d.ts:91
 
 Prevents the default action from executing.
 Only works if the event is cancellable.
@@ -225,9 +224,7 @@ Only works if the event is cancellable.
 
 ###### Inherited from
 
-```ts
-DataEvent.preventDefault;
-```
+`DataEvent.preventDefault`
 
 ##### runDefaultAction()
 
@@ -235,7 +232,7 @@ DataEvent.preventDefault;
 runDefaultAction(): Promise<void>;
 ```
 
-Defined in: utils/dist/events.d.ts:100
+Defined in: packages/utils/dist/events.d.ts:100
 
 Executes the default action for an event if it hasn't been prevented.
 
@@ -245,9 +242,7 @@ Executes the default action for an event if it hasn't been prevented.
 
 ###### Inherited from
 
-```ts
-DataEvent.runDefaultAction;
-```
+`DataEvent.runDefaultAction`
 
 ##### stopPropagation()
 
@@ -255,7 +250,7 @@ DataEvent.runDefaultAction;
 stopPropagation(): void;
 ```
 
-Defined in: utils/dist/events.d.ts:96
+Defined in: packages/utils/dist/events.d.ts:96
 
 Stops propagation to remaining event handlers.
 Handlers registered after the current one will not execute.
@@ -266,6 +261,4 @@ Handlers registered after the current one will not execute.
 
 ###### Inherited from
 
-```ts
-DataEvent.stopPropagation;
-```
+`DataEvent.stopPropagation`

@@ -37,7 +37,7 @@ events.on(
 
 #### Extends
 
-- `DataOutputEvent`&lt;[`ComposePageTypeEventData`](#composepagetypeeventdata), keyof [`PageSections`](#pagesections)[]&gt;
+- `DataOutputEvent`&lt;[`ComposePageTypeEventData`](#composepagetypeeventdata), (keyof [`PageSections`](#pagesections))[]&gt;
 
 #### Constructors
 
@@ -47,7 +47,8 @@ events.on(
 new BeforeComposePageTypeEvent(
    data,
    initialOutput,
-   options?): BeforeComposePageTypeEvent;
+   options?
+): BeforeComposePageTypeEvent;
 ```
 
 Defined in: [printer-legacy/src/events.ts:118](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/events.ts#L118)
@@ -60,7 +61,7 @@ Defined in: [printer-legacy/src/events.ts:118](https://github.com/graphql-markdo
 
 ###### initialOutput
 
-keyof [`PageSections`](#pagesections)[]
+(keyof [`PageSections`](#pagesections))[]
 
 ###### options?
 
@@ -72,12 +73,7 @@ keyof [`PageSections`](#pagesections)[]
 
 ###### Overrides
 
-```ts
-DataOutputEvent<
-  ComposePageTypeEventData,
-  (keyof PageSections)[]
->.constructor
-```
+`DataOutputEvent<ComposePageTypeEventData, (keyof PageSections)[]>.constructor`
 
 #### Properties
 
@@ -93,14 +89,12 @@ Read-only event data payload.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.data;
-```
+`DataOutputEvent.data`
 
 ##### output
 
 ```ts
-output: keyof PageSections[];
+output: (keyof PageSections)[];
 ```
 
 Defined in: utils/dist/events.d.ts:127
@@ -110,9 +104,7 @@ Handlers can modify this property to change the final result.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.output;
-```
+`DataOutputEvent.output`
 
 #### Accessors
 
@@ -134,9 +126,7 @@ Gets the default action function if one was provided.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.defaultAction;
-```
+`DataOutputEvent.defaultAction`
 
 ##### defaultPrevented
 
@@ -176,9 +166,7 @@ Allows setting defaultPrevented to true directly.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.defaultPrevented;
-```
+`DataOutputEvent.defaultPrevented`
 
 ##### propagationStopped
 
@@ -218,9 +206,7 @@ Allows setting propagationStopped to true directly.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.propagationStopped;
-```
+`DataOutputEvent.propagationStopped`
 
 #### Methods
 
@@ -241,9 +227,7 @@ Only works if the event is cancellable.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.preventDefault;
-```
+`DataOutputEvent.preventDefault`
 
 ##### runDefaultAction()
 
@@ -261,9 +245,7 @@ Executes the default action for an event if it hasn't been prevented.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.runDefaultAction;
-```
+`DataOutputEvent.runDefaultAction`
 
 ##### stopPropagation()
 
@@ -282,9 +264,7 @@ Handlers registered after the current one will not execute.
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.stopPropagation;
-```
+`DataOutputEvent.stopPropagation`
 
 ---
 
@@ -322,7 +302,8 @@ events.on(PrintTypeEvents.AFTER_PRINT_CODE, (event: PrintCodeEvent) => {
 new PrintCodeEvent(
    data,
    initialOutput,
-   options?): PrintCodeEvent;
+   options?
+): PrintCodeEvent;
 ```
 
 Defined in: [printer-legacy/src/events.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/events.ts#L52)
@@ -347,9 +328,7 @@ Defined in: [printer-legacy/src/events.ts:52](https://github.com/graphql-markdow
 
 ###### Overrides
 
-```ts
-DataOutputEvent<PrintCodeEventData, string>.constructor
-```
+`DataOutputEvent<PrintCodeEventData, string>.constructor`
 
 #### Properties
 
@@ -365,15 +344,11 @@ Read-only event data payload.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.data;
-```
+`IPrintCodeEvent.data`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.data;
-```
+`DataOutputEvent.data`
 
 ##### output
 
@@ -388,15 +363,11 @@ Handlers can modify this property to change the final result.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.output;
-```
+`IPrintCodeEvent.output`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.output;
-```
+`DataOutputEvent.output`
 
 #### Accessors
 
@@ -418,9 +389,7 @@ Gets the default action function if one was provided.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.defaultAction;
-```
+`IPrintCodeEvent.defaultAction`
 
 ###### Inherited from
 
@@ -464,15 +433,11 @@ Allows setting defaultPrevented to true directly.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.defaultPrevented;
-```
+`IPrintCodeEvent.defaultPrevented`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.defaultPrevented;
-```
+`DataOutputEvent.defaultPrevented`
 
 ##### propagationStopped
 
@@ -512,15 +477,11 @@ Allows setting propagationStopped to true directly.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.propagationStopped;
-```
+`IPrintCodeEvent.propagationStopped`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.propagationStopped;
-```
+`DataOutputEvent.propagationStopped`
 
 #### Methods
 
@@ -541,15 +502,11 @@ Only works if the event is cancellable.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.preventDefault;
-```
+`IPrintCodeEvent.preventDefault`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.preventDefault;
-```
+`DataOutputEvent.preventDefault`
 
 ##### runDefaultAction()
 
@@ -567,15 +524,11 @@ Executes the default action for an event if it hasn't been prevented.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.runDefaultAction;
-```
+`IPrintCodeEvent.runDefaultAction`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.runDefaultAction;
-```
+`DataOutputEvent.runDefaultAction`
 
 ##### stopPropagation()
 
@@ -594,15 +547,11 @@ Handlers registered after the current one will not execute.
 
 ###### Implementation of
 
-```ts
-IPrintCodeEvent.stopPropagation;
-```
+`IPrintCodeEvent.stopPropagation`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.stopPropagation;
-```
+`DataOutputEvent.stopPropagation`
 
 ---
 
@@ -640,7 +589,8 @@ events.on(PrintTypeEvents.AFTER_PRINT_TYPE, (event: PrintTypeEvent) => {
 new PrintTypeEvent(
    data,
    initialOutput,
-   options?): PrintTypeEvent;
+   options?
+): PrintTypeEvent;
 ```
 
 Defined in: [printer-legacy/src/events.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/events.ts#L81)
@@ -665,9 +615,7 @@ Defined in: [printer-legacy/src/events.ts:81](https://github.com/graphql-markdow
 
 ###### Overrides
 
-```ts
-DataOutputEvent<PrintTypeEventData, Maybe<MDXString>>.constructor
-```
+`DataOutputEvent<PrintTypeEventData, Maybe<MDXString>>.constructor`
 
 #### Properties
 
@@ -683,15 +631,11 @@ Read-only event data payload.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.data;
-```
+`IPrintTypeEvent.data`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.data;
-```
+`DataOutputEvent.data`
 
 ##### output
 
@@ -706,15 +650,11 @@ Handlers can modify this property to change the final result.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.output;
-```
+`IPrintTypeEvent.output`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.output;
-```
+`DataOutputEvent.output`
 
 #### Accessors
 
@@ -736,15 +676,11 @@ Gets the default action function if one was provided.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.defaultAction;
-```
+`IPrintTypeEvent.defaultAction`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.defaultAction;
-```
+`DataOutputEvent.defaultAction`
 
 ##### defaultPrevented
 
@@ -784,15 +720,11 @@ Allows setting defaultPrevented to true directly.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.defaultPrevented;
-```
+`IPrintTypeEvent.defaultPrevented`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.defaultPrevented;
-```
+`DataOutputEvent.defaultPrevented`
 
 ##### propagationStopped
 
@@ -832,15 +764,11 @@ Allows setting propagationStopped to true directly.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.propagationStopped;
-```
+`IPrintTypeEvent.propagationStopped`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.propagationStopped;
-```
+`DataOutputEvent.propagationStopped`
 
 #### Methods
 
@@ -861,15 +789,11 @@ Only works if the event is cancellable.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.preventDefault;
-```
+`IPrintTypeEvent.preventDefault`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.preventDefault;
-```
+`DataOutputEvent.preventDefault`
 
 ##### runDefaultAction()
 
@@ -887,15 +811,11 @@ Executes the default action for an event if it hasn't been prevented.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.runDefaultAction;
-```
+`IPrintTypeEvent.runDefaultAction`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.runDefaultAction;
-```
+`DataOutputEvent.runDefaultAction`
 
 ##### stopPropagation()
 
@@ -914,21 +834,17 @@ Handlers registered after the current one will not execute.
 
 ###### Implementation of
 
-```ts
-IPrintTypeEvent.stopPropagation;
-```
+`IPrintTypeEvent.stopPropagation`
 
 ###### Inherited from
 
-```ts
-DataOutputEvent.stopPropagation;
-```
+`DataOutputEvent.stopPropagation`
 
 ## Other
 
 ### ComposePageTypeEventData
 
-Defined in: [types/src/printer.d.ts:109](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L109)
+Defined in: types/dist/printer.d.ts:92
 
 Data payload for compose page type events.
 
@@ -940,7 +856,7 @@ Data payload for compose page type events.
 readonly name: Maybe<string>;
 ```
 
-Defined in: [types/src/printer.d.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L113)
+Defined in: types/dist/printer.d.ts:96
 
 The name identifier for the type
 
@@ -950,7 +866,7 @@ The name identifier for the type
 readonly options: PrintTypeOptions;
 ```
 
-Defined in: [types/src/printer.d.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L115)
+Defined in: types/dist/printer.d.ts:98
 
 The print options in effect
 
@@ -960,7 +876,7 @@ The print options in effect
 readonly sections: PageSections;
 ```
 
-Defined in: [types/src/printer.d.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L117)
+Defined in: types/dist/printer.d.ts:100
 
 The map of all page sections (mutable in BEFORE event)
 
@@ -970,7 +886,7 @@ The map of all page sections (mutable in BEFORE event)
 readonly type: unknown;
 ```
 
-Defined in: [types/src/printer.d.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L111)
+Defined in: types/dist/printer.d.ts:94
 
 The GraphQL type being composed
 
@@ -978,7 +894,7 @@ The GraphQL type being composed
 
 ### PageSection
 
-Defined in: [types/src/printer.d.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L24)
+Defined in: types/dist/printer.d.ts:14
 
 Represents a single section of a page with optional title and content.
 
@@ -987,34 +903,34 @@ Represents a single section of a page with optional title and content.
 ##### content?
 
 ```ts
-optional content?:
+content?:
   | string
   | MDXString
   | PageSection
   | PageSection[];
 ```
 
-Defined in: [types/src/printer.d.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L30)
+Defined in: types/dist/printer.d.ts:20
 
 The section content
 
 ##### level?
 
 ```ts
-optional level?: number;
+level?: number;
 ```
 
-Defined in: [types/src/printer.d.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L28)
+Defined in: types/dist/printer.d.ts:18
 
 Optional section level for hierarchical structuring
 
 ##### title?
 
 ```ts
-optional title?: string | MDXString;
+title?: string | MDXString;
 ```
 
-Defined in: [types/src/printer.d.ts:26](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L26)
+Defined in: types/dist/printer.d.ts:16
 
 Optional title/heading for the section
 
@@ -1022,7 +938,7 @@ Optional title/heading for the section
 
 ### PageSections
 
-Defined in: [types/src/printer.d.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L36)
+Defined in: types/dist/printer.d.ts:25
 
 Map of all available sections in a type page.
 
@@ -1039,108 +955,108 @@ Additional custom sections can be added by event handlers
 ##### code?
 
 ```ts
-optional code?: PageSection;
+code?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L50)
+Defined in: types/dist/printer.d.ts:41
 
 GraphQL code block
-
-##### customDirectives?
-
-```ts
-optional customDirectives?: PageSection;
-```
-
-Defined in: [types/src/printer.d.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L52)
-
-Custom directives
 
 ##### description?
 
 ```ts
-optional description?: PageSection;
+description?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L48)
+Defined in: types/dist/printer.d.ts:39
 
 Type description from GraphQL comments
 
 ##### example?
 
 ```ts
-optional example?: PageSection;
+example?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L56)
+Defined in: types/dist/printer.d.ts:45
 
 Usage examples
 
 ##### header?
 
 ```ts
-optional header?: PageHeader;
+header?: PageHeader;
 ```
 
-Defined in: [types/src/printer.d.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L40)
+Defined in: types/dist/printer.d.ts:29
 
 YAML frontmatter or top-level heading
 
 ##### mdxDeclaration?
 
 ```ts
-optional mdxDeclaration?: PageHeader;
+mdxDeclaration?: PageHeader;
 ```
 
-Defined in: [types/src/printer.d.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L44)
+Defined in: types/dist/printer.d.ts:33
 
 MDX import declarations
 
 ##### metadata?
 
 ```ts
-optional metadata?: PageSection;
+metadata?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L54)
+Defined in: types/dist/printer.d.ts:43
 
 Type metadata (fields, arguments, etc.)
 
 ##### metatags?
 
 ```ts
-optional metatags?: PageHeader;
+metatags?: PageHeader;
 ```
 
-Defined in: [types/src/printer.d.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L42)
+Defined in: types/dist/printer.d.ts:31
 
 HTML meta tags
 
 ##### relations?
 
 ```ts
-optional relations?: PageSection;
+relations?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L58)
+Defined in: types/dist/printer.d.ts:47
 
 Related types
 
 ##### tags?
 
 ```ts
-optional tags?: PageSection;
+tags?: PageSection;
 ```
 
-Defined in: [types/src/printer.d.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L46)
+Defined in: types/dist/printer.d.ts:37
 
 Custom tags (e.g., @deprecated)
+
+##### title?
+
+```ts
+title?: PageHeader;
+```
+
+Defined in: types/dist/printer.d.ts:35
+
+Visible page title, see `Formatter.formatMDXTitle`
 
 ---
 
 ### PrintCodeEventData
 
-Defined in: [types/src/printer.d.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L64)
+Defined in: types/dist/printer.d.ts:52
 
 Data payload for print code events.
 
@@ -1152,7 +1068,7 @@ Data payload for print code events.
 readonly options: PrintTypeOptions;
 ```
 
-Defined in: [types/src/printer.d.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L70)
+Defined in: types/dist/printer.d.ts:58
 
 The print options in effect
 
@@ -1162,7 +1078,7 @@ The print options in effect
 readonly type: unknown;
 ```
 
-Defined in: [types/src/printer.d.ts:66](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L66)
+Defined in: types/dist/printer.d.ts:54
 
 The GraphQL type being printed
 
@@ -1172,7 +1088,7 @@ The GraphQL type being printed
 readonly typeName: string;
 ```
 
-Defined in: [types/src/printer.d.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L68)
+Defined in: types/dist/printer.d.ts:56
 
 The name of the type
 
@@ -1180,7 +1096,7 @@ The name of the type
 
 ### PrintTypeEventData
 
-Defined in: [types/src/printer.d.ts:76](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L76)
+Defined in: types/dist/printer.d.ts:63
 
 Data payload for print type events.
 
@@ -1192,7 +1108,7 @@ Data payload for print type events.
 readonly name: Maybe<string>;
 ```
 
-Defined in: [types/src/printer.d.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L80)
+Defined in: types/dist/printer.d.ts:67
 
 The name identifier for the type
 
@@ -1202,7 +1118,7 @@ The name identifier for the type
 readonly options: PrintTypeOptions;
 ```
 
-Defined in: [types/src/printer.d.ts:82](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L82)
+Defined in: types/dist/printer.d.ts:69
 
 The print options in effect
 
@@ -1212,6 +1128,6 @@ The print options in effect
 readonly type: unknown;
 ```
 
-Defined in: [types/src/printer.d.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/types/src/printer.d.ts#L78)
+Defined in: types/dist/printer.d.ts:65
 
 The GraphQL type being printed

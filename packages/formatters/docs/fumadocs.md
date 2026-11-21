@@ -13,7 +13,7 @@ Callout component for admonitions and Material UI Chip for badges.
 const mdxDeclaration: MDXString;
 ```
 
-Defined in: [fumadocs/index.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L33)
+Defined in: [fumadocs/index.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L44)
 
 MDX import statement prepended to every generated file to register Fumadocs and MUI components.
 
@@ -25,7 +25,7 @@ MDX import statement prepended to every generated file to register Fumadocs and 
 const mdxExtension: ".mdx";
 ```
 
-Defined in: [fumadocs/index.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L30)
+Defined in: [fumadocs/index.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L41)
 
 File extension used for generated pages.
 
@@ -37,7 +37,7 @@ File extension used for generated pages.
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [fumadocs/index.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L89)
+Defined in: [fumadocs/index.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L98)
 
 Creates a Fumadocs formatter.
 
@@ -63,7 +63,7 @@ A complete Formatter implementation for Fumadocs MDX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [fumadocs/index.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L56)
+Defined in: [fumadocs/index.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L67)
 
 Formats an admonition using the Fumadocs `<Callout>` component.
 Maps `warning` type to `warn`; all other types use `info`.
@@ -96,7 +96,7 @@ Formatted Fumadocs Callout component string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [fumadocs/index.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L44)
+Defined in: [fumadocs/index.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L55)
 
 Formats a badge using the Material UI `<Chip>` component.
 Maps `DEPRECATED` classname to `warning` color; all others use `info`.
@@ -123,9 +123,10 @@ Formatted MUI Chip component string
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [fumadocs/index.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L69)
+Defined in: [fumadocs/index.ts:81](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L81)
 
-Appends `.mdx` to internal link URLs.
+Returns the link unchanged — Fumadocs routes `page.mdx` to `page` so
+links must not include the `.mdx` extension.
 
 #### Parameters
 
@@ -139,4 +140,34 @@ Link data with URL and text
 
 `TypeLink`
 
-Link with `.mdx` extension appended to the URL
+Unmodified link
+
+---
+
+### formatMDXPermalink()
+
+```ts
+function formatMDXPermalink(id): MDXString;
+```
+
+Defined in: [fumadocs/index.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/index.ts#L36)
+
+Formats a permalink for a section header using the Fumadocs `[#id]` syntax.
+
+#### Parameters
+
+##### id
+
+`string`
+
+The ID of the section header
+
+#### Returns
+
+`MDXString`
+
+Formatted permalink string
+
+#### See
+
+https://www.fumadocs.dev/docs/headless/mdx/headings

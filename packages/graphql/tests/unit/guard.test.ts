@@ -2,7 +2,8 @@ import { loadSchema as gqlToolsLoadSchema } from "@graphql-tools/load";
 import { GraphQLFileLoader } from "@graphql-tools/graphql-file-loader";
 
 import type { GraphQLSchema } from "graphql/type";
-import { GraphQLObjectType } from "graphql/type";
+import { GraphQLDirective, GraphQLObjectType } from "graphql/type";
+import { DirectiveLocation } from "graphql/language";
 import { buildSchema } from "graphql/utilities";
 
 import { getOperation, getTypeFromSchema } from "../../src/introspection";
@@ -12,6 +13,8 @@ import {
   isGraphQLFieldType,
   isApiType,
   isSystemType,
+  executableDirectiveLocation,
+  typeSystemDirectiveLocation,
 } from "../../src/guard";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -197,6 +200,63 @@ describe("graphql", () => {
           expect.assertions(1);
 
           expect(isSystemType(gqlType)).not.toBe(isApi);
+        },
+      );
+    });
+  });
+
+  describe("DirectiveLocation", () => {
+    const locations = [
+      { locations: [DirectiveLocation.QUERY], executable: true },
+      { locations: [DirectiveLocation.MUTATION], executable: true },
+      { locations: [DirectiveLocation.SUBSCRIPTION], executable: true },
+      { locations: [DirectiveLocation.FIELD], executable: true },
+      { locations: [DirectiveLocation.FRAGMENT_DEFINITION], executable: true },
+      { locations: [DirectiveLocation.FRAGMENT_SPREAD], executable: true },
+      { locations: [DirectiveLocation.INLINE_FRAGMENT], executable: true },
+      { locations: [DirectiveLocation.VARIABLE_DEFINITION], executable: true },
+      {
+        locations: [DirectiveLocation.QUERY, DirectiveLocation.ENUM],
+        executable: true,
+      },
+      {
+        locations: [DirectiveLocation.ENUM],
+        executable: false,
+      },
+      {
+        locations: [],
+        executable: false,
+      },
+    ];
+
+    describe("executableDirectiveLocation()", () => {
+      test.each(locations)(
+        "returns $executable if location is $locations",
+        ({ locations, executable }) => {
+          expect.assertions(1);
+
+          const directive = new GraphQLDirective({
+            name: "testExecutableDirectiveLocation",
+            locations,
+          });
+
+          expect(executableDirectiveLocation(directive)).toBe(executable);
+        },
+      );
+    });
+
+    describe("typeSystemDirectiveLocation()", () => {
+      test.each(locations)(
+        "returns !$executable if location is $locations",
+        ({ locations, executable }) => {
+          expect.assertions(1);
+
+          const directive = new GraphQLDirective({
+            name: "testExecutableDirectiveLocation",
+            locations,
+          });
+
+          expect(typeSystemDirectiveLocation(directive)).not.toBe(executable);
         },
       );
     });

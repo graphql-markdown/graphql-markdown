@@ -19,18 +19,11 @@ import { GraphQLDirective } from "graphql/type";
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
   return {
-    // `always()` is invoked eagerly at module load by
-    // `@graphql-markdown/printer-legacy`'s decorator.ts (building its
-    // customDirective-adapter decorator constants), which this file reaches
-    // transitively through `../../src/generator` — so it must exist even
-    // though generator.test.ts never exercises decorator rendering itself
-    // (`../../src/printer` is mocked below).
     always: vi.fn(() => {
       return (): boolean => {
         return true;
       };
     }),
-    getCustomDirectives: vi.fn(),
     getDocumentLoaders: vi.fn(),
     getGroups: vi.fn(),
     getSchemaMap: vi.fn(),
@@ -203,7 +196,6 @@ describe("generator", () => {
           objects: {},
         } as SchemaMap);
         vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-        vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
 
         const getPrinterSpy = vi
           .spyOn(CorePrinter, "getPrinter")
@@ -631,7 +623,7 @@ describe("generator", () => {
         objects: {},
       } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
       const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
@@ -1007,6 +999,25 @@ describe("generator", () => {
 
       expect(result[0]).toEqual([]);
       expect(result[1]).toEqual([]);
+    });
+
+    test("looks up directives in schema", () => {
+      expect.assertions(2);
+
+      const directive = new GraphQLDirective({
+        name: "testDirective",
+        locations: [],
+      });
+      (mockSchema.getDirective as Mock).mockReturnValue(directive);
+
+      resolveSkipAndOnlyDirectives(
+        "testDirective" as DirectiveName,
+        undefined,
+        mockSchema,
+      );
+
+      expect(mockSchema.getDirective).toHaveBeenCalledWith("testDirective");
+      expect(mockSchema.getDirective).toHaveBeenCalledTimes(1);
     });
 
     test("filters out directives not found in schema", () => {

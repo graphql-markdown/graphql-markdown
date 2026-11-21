@@ -8,7 +8,7 @@
 const createMDXFormatter: (meta?) => Formatter;
 ```
 
-Defined in: formatters/dist/docusaurus/index.d.ts:75
+Defined in: formatters/dist/docusaurus/index.d.ts:92
 
 Creates a Docusaurus formatter.
 Captures `meta` in closure so `formatMDXAdmonition` can detect the Docusaurus version.
@@ -143,7 +143,7 @@ Formatted details element string
 const formatMDXFrontmatter: (_props, formatted) => MDXString;
 ```
 
-Defined in: formatters/dist/docusaurus/index.d.ts:68
+Defined in: formatters/dist/docusaurus/index.d.ts:69
 
 Formats YAML front matter wrapped in `---` delimiters.
 
@@ -175,7 +175,7 @@ Formatted front matter block, or empty string if no lines provided
 const formatMDXLink: ({ text, url }) => TypeLink;
 ```
 
-Defined in: formatters/dist/docusaurus/index.d.ts:61
+Defined in: formatters/dist/docusaurus/index.d.ts:62
 
 Appends `.mdx` to internal link URLs.
 
@@ -199,7 +199,7 @@ Link with `.mdx` extension appended to the URL
 const formatMDXNameEntity: (name, parentType?) => MDXString;
 ```
 
-Defined in: formatters/dist/docusaurus/index.d.ts:55
+Defined in: formatters/dist/docusaurus/index.d.ts:56
 
 Formats a named entity as an inline `<code>` element with the parent type
 in normal weight and the entity name in bold.
@@ -233,9 +233,10 @@ Formatted JSX code element string
 const formatMDXSpecifiedByLink: (url) => MDXString;
 ```
 
-Defined in: formatters/dist/docusaurus/index.d.ts:46
+Defined in: formatters/dist/docusaurus/index.d.ts:47
 
 Formats a "specified by" link using the inline `<SpecifiedBy>` component.
+The URL is encoded as HTML character references for the `url` attribute.
 
 #### Parameters
 

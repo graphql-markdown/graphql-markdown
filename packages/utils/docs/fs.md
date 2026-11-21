@@ -2,6 +2,30 @@
 
 Library of helper functions for handling files and folders.
 
+## Variables
+
+### fsOutputAdapter
+
+```ts
+const fsOutputAdapter: OutputAdapter;
+```
+
+Defined in: [fs.ts:124](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L124)
+
+The default output destination: the local filesystem.
+
+Used whenever no custom `outputAdapter` is configured, so the out-of-the-box
+behaviour is unchanged. Content arrives already prettified - prettifying is
+the renderer's job, not the destination's.
+
+#### Example
+
+```js
+import { fsOutputAdapter } from "@graphql-markdown/utils/fs";
+
+await fsOutputAdapter.writeFile("./docs/api/query.md", "# Query");
+```
+
 ## Functions
 
 ### ensureDir()
@@ -10,7 +34,7 @@ Library of helper functions for handling files and folders.
 function ensureDir(location, options?): Promise<void>;
 ```
 
-Defined in: [fs.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L60)
+Defined in: [fs.ts:61](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L61)
 
 Asynchronously create a folder structure if it does not exist.
 
@@ -48,7 +72,7 @@ await ensureDir("./.temp/local");
 function fileExists(location): Promise<boolean>;
 ```
 
-Defined in: [fs.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L35)
+Defined in: [fs.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L36)
 
 Asynchronously check if a file or folder exists at the path location.
 
@@ -84,7 +108,7 @@ await fileExists("./.temp/local");
 function saveFile(location, content, prettify?): Promise<void>;
 ```
 
-Defined in: [fs.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L97)
+Defined in: [fs.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/utils/src/fs.ts#L98)
 
 Asynchronously save a file with a string content at specified location in local FS.
 Override the file content if the file already exists.

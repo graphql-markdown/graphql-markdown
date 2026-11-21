@@ -3,9 +3,40 @@
 Vocs formatter for GraphQL documentation output.
 
 Produces MDX compatible with Vite/Vocs using its native callout syntax
-and Material UI Chip components for badges.
 
 ## Variables
+
+### formatMDXPermalink
+
+```ts
+const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
+```
+
+Defined in: [vocs/index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L40)
+
+Formats a permalink for a section header, using the classic `{#id}` syntax
+escaped to remain valid MDX.
+
+Vocs has no custom header id syntax, so the permalink is inert unless a
+remark plugin is configured. Turn it off with
+`docOptions.sectionHeaderId: false`.
+
+#### See
+
+https://vocs.dev/docs/markdown
+
+#### Param
+
+**id**
+
+The ID of the section header
+
+#### Returns
+
+Formatted permalink string
+
+---
 
 ### mdxDeclaration
 
@@ -13,7 +44,7 @@ and Material UI Chip components for badges.
 const mdxDeclaration: MDXString;
 ```
 
-Defined in: [vocs/index.ts:28](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L28)
+Defined in: [vocs/index.ts:44](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L44)
 
 MDX import statement and inline component definitions prepended to every generated file.
 
@@ -25,7 +56,7 @@ MDX import statement and inline component definitions prepended to every generat
 const mdxExtension: ".mdx";
 ```
 
-Defined in: [vocs/index.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L35)
+Defined in: [vocs/index.ts:49](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L49)
 
 File extension used for generated pages.
 
@@ -37,7 +68,7 @@ File extension used for generated pages.
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [vocs/index.ts:111](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L111)
+Defined in: [vocs/index.ts:141](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L141)
 
 Creates a Vocs formatter.
 
@@ -63,7 +94,7 @@ A complete Formatter implementation for Vocs MDX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [vocs/index.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L55)
+Defined in: [vocs/index.ts:85](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L85)
 
 Formats an admonition using Vocs native callout syntax (`:::type[title]`).
 Maps `warning` type to `warning`; all other types use `info`.
@@ -96,10 +127,10 @@ Formatted Vocs callout string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [vocs/index.ts:43](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L43)
+Defined in: [vocs/index.ts:73](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L73)
 
-Formats a badge using the Material UI `<Chip>` component.
-Maps `DEPRECATED` classname to `warning` color; all others use `info`.
+Formats a badge using Vocs native text directive (`:badge[...]`).
+Maps `DEPRECATED` classname to `warning` color; all others use default.
 
 #### Parameters
 
@@ -113,7 +144,7 @@ Badge data containing text and optional classname
 
 `MDXString`
 
-Formatted MUI Chip component string
+Formatted Vocs badge string
 
 ---
 
@@ -123,7 +154,7 @@ Formatted MUI Chip component string
 function formatMDXBullet(text?): MDXString;
 ```
 
-Defined in: [vocs/index.ts:68](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L68)
+Defined in: [vocs/index.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L98)
 
 Formats a bullet point using the inline `<Bullet/>` component defined in `mdxDeclaration`.
 
@@ -149,7 +180,7 @@ Formatted Bullet component string
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [vocs/index.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L77)
+Defined in: [vocs/index.ts:107](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L107)
 
 Appends `.mdx` to internal link URLs.
 
@@ -175,7 +206,7 @@ Link with `.mdx` extension appended to the URL
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [vocs/index.ts:90](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L90)
+Defined in: [vocs/index.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L120)
 
 Formats a named entity as a JSX span with styled code elements.
 
@@ -198,3 +229,37 @@ Optional parent type name for qualified references
 `MDXString`
 
 Formatted JSX entity reference string
+
+---
+
+### formatMDXTitle()
+
+```ts
+function formatMDXTitle(title): MDXString;
+```
+
+Defined in: [vocs/index.ts:63](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/index.ts#L63)
+
+Formats the page title as a visible `# Title` heading.
+
+Vocs only uses the front matter `title` for the document `<title>`; the
+page heading must be written in Markdown, so without it generated pages
+have no visible title.
+
+#### Parameters
+
+##### title
+
+`string`
+
+The page title
+
+#### Returns
+
+`MDXString`
+
+`# Title` heading
+
+#### See
+
+https://vocs.dev/docs/markdown

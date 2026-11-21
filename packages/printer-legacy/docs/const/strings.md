@@ -17,7 +17,7 @@ Label used when a schema element is flagged as deprecated.
 
 ---
 
-### MARKDOWN_CODE_INDENTATION
+### MARKDOWN\_CODE\_INDENTATION
 
 ```ts
 const MARKDOWN_CODE_INDENTATION: "  ";
@@ -29,19 +29,7 @@ Standard indentation for code blocks (2 spaces).
 
 ---
 
-### MARKDOWN_EOC
-
-```ts
-const MARKDOWN_EOC: "\n``\n";
-```
-
-Defined in: [printer-legacy/src/const/strings.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L46)
-
-Helper for inserting the code-block end delimiter in generated Markdown.
-
----
-
-### MARKDOWN_EOL
+### MARKDOWN\_EOL
 
 ```ts
 const MARKDOWN_EOL: "\n";
@@ -53,7 +41,7 @@ End of line character for Markdown.
 
 ---
 
-### MARKDOWN_EOP
+### MARKDOWN\_EOP
 
 ```ts
 const MARKDOWN_EOP: string;
@@ -65,19 +53,7 @@ End of paragraph (double newline) for Markdown.
 
 ---
 
-### MARKDOWN_SOC
-
-```ts
-const MARKDOWN_SOC: "\n``graphql\n";
-```
-
-Defined in: [printer-legacy/src/const/strings.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L50)
-
-Helper for inserting the code-block start delimiter targeting GraphQL syntax.
-
----
-
-### NO_DESCRIPTION_TEXT
+### NO\_DESCRIPTION\_TEXT
 
 ```ts
 const NO_DESCRIPTION_TEXT: "No description";
@@ -89,7 +65,7 @@ Default placeholder when no schema description is provided.
 
 ---
 
-### NON_NULL
+### NON\_NULL
 
 ```ts
 const NON_NULL: "non-null";
@@ -101,7 +77,7 @@ Copy fragment describing a non-null GraphQL modifier.
 
 ---
 
-### ROOT_TYPE_LOCALE
+### ROOT\_TYPE\_LOCALE
 
 ```ts
 const ROOT_TYPE_LOCALE: RootTypeLocale;
@@ -110,3 +86,36 @@ const ROOT_TYPE_LOCALE: RootTypeLocale;
 Defined in: [printer-legacy/src/const/strings.ts:19](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L19)
 
 Human-readable labels for each GraphQL root type used when rendering copy or badges.
+
+## Functions
+
+### printCodeBlock()
+
+```ts
+function printCodeBlock(code, language?): string;
+```
+
+Defined in: [printer-legacy/src/const/strings.ts:54](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/strings.ts#L54)
+
+Wraps code in a fenced code block. The fence is longer than any run of
+backticks in the code, so schema text inside cannot close it early.
+
+#### Parameters
+
+##### code
+
+`string`
+
+the code to wrap.
+
+##### language?
+
+`string` = `GRAPHQL`
+
+the fence language, defaults to `graphql`.
+
+#### Returns
+
+`string`
+
+the fenced code block, surrounded by line breaks.

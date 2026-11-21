@@ -4,45 +4,13 @@ Common printer utility functions for handling descriptions, directives, and warn
 
 ## Functions
 
-### getCustomDirectivesText()
-
-```ts
-function getCustomDirectivesText(type, options?): string;
-```
-
-Defined in: [printer-legacy/src/common.ts:35](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L35)
-
-Prints documentation for custom directives applied to a type.
-
-#### Parameters
-
-##### type
-
-`unknown`
-
-GraphQL type to get directives from
-
-##### options?
-
-`PrintTypeOptions`
-
-Printer configuration options
-
-#### Returns
-
-`string`
-
-Formatted directive documentation string
-
----
-
 ### printDeprecation()
 
 ```ts
 function printDeprecation(type, options): string;
 ```
 
-Defined in: [printer-legacy/src/common.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L120)
+Defined in: [printer-legacy/src/common.ts:77](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L77)
 
 Prints deprecation information for a GraphQL type if it is deprecated.
 
@@ -74,7 +42,7 @@ Formatted deprecation warning as MDX string, or empty string if not deprecated
 function printDescription(type, options, noText?): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/common.ts:146](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L146)
+Defined in: [printer-legacy/src/common.ts:103](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L103)
 
 Prints the complete description for a GraphQL type, including deprecation warnings and custom directives.
 
@@ -112,7 +80,7 @@ Combined description, deprecation notices, and custom directives as MDX content
 function printWarning(warningConfig, options): string;
 ```
 
-Defined in: [printer-legacy/src/common.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L97)
+Defined in: [printer-legacy/src/common.ts:55](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/common.ts#L55)
 
 Generates a warning message block in MDX format.
 

@@ -7,6 +7,26 @@ It exports utilities to run the documentation generator both programmatically an
 
 [GraphQL Markdown Documentation](https://graphql-markdown.dev)
 
+## Interfaces
+
+### RunContext
+
+Defined in: [index.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L38)
+
+Internal context set by GraphQL-Markdown entry points.
+
+#### Properties
+
+##### trigger?
+
+```ts
+trigger?: TelemetryTrigger;
+```
+
+Defined in: [index.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L40)
+
+Entry point reported by anonymous telemetry.
+
 ## Type Aliases
 
 ### GraphQLMarkdownCliType
@@ -15,7 +35,7 @@ It exports utilities to run the documentation generator both programmatically an
 type GraphQLMarkdownCliType = Command;
 ```
 
-Defined in: [index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L32)
+Defined in: [index.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L33)
 
 Type representing the GraphQL Markdown CLI.
 
@@ -32,10 +52,11 @@ function getGraphQLMarkdownCli(
   options,
   loggerModule?,
   customFormatter?,
+  context?,
 ): Command;
 ```
 
-Defined in: [index.ts:89](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L89)
+Defined in: [index.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L101)
 
 Configures and returns the GraphQL Markdown CLI.
 
@@ -58,7 +79,13 @@ Optional logger module to use.
 `string`
 
 Optional default formatter package name. When provided, registers
-`--formatter` and `--mdxParser` (deprecated) flags with this value as the default.
+`--formatter` flag with this value as the default.
+
+##### context?
+
+[`RunContext`](#runcontext)
+
+Optional internal context (telemetry trigger).
 
 #### Returns
 
@@ -82,10 +109,15 @@ await cli.parseAsync(process.argv);
 ### runGraphQLMarkdown()
 
 ```ts
-function runGraphQLMarkdown(options, cliOptions, loggerModule?): Promise<void>;
+function runGraphQLMarkdown(
+  options,
+  cliOptions?,
+  loggerModule?,
+  context?,
+): Promise<void>;
 ```
 
-Defined in: [index.ts:50](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L50)
+Defined in: [index.ts:60](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/cli/src/index.ts#L60)
 
 Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
 
@@ -97,17 +129,23 @@ Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
 
 Options for configuring the GraphQL Markdown CLI.
 
-##### cliOptions
+##### cliOptions?
 
 `CliOptions`
 
-Command-line options passed to the CLI.
+Optional command-line options passed to the CLI.
 
 ##### loggerModule?
 
 `string`
 
 Optional logger module to use.
+
+##### context?
+
+[`RunContext`](#runcontext)
+
+Optional internal context (telemetry trigger).
 
 #### Returns
 

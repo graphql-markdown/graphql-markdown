@@ -22,8 +22,5 @@ export type * from "./logger.ts";
 // @graphql-markdown/graphql
 export type * from "./graphql.ts";
 
-// @graphql-markdown/helpers
-export type * from "./helpers.ts";
-
 // @graphql-markdown/telemetry
 export type * from "./telemetry.ts";
