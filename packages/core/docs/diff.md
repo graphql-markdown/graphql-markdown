@@ -10,7 +10,7 @@ Diff utilities for detecting schema changes between builds.
 function hasChanges(schema, tmpDir, diffMethod, diffModule?): Promise<boolean>;
 ```
 
-Defined in: [core/src/diff.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L67)
+Defined in: [packages/core/src/diff.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/diff.ts#L70)
 
 Determines if there are changes in the GraphQL schema by using a specified diff method and module.
 
@@ -49,7 +49,7 @@ A promise that resolves to `true` if changes are detected or if the diff method/
 #### Examples
 
 ```typescript
-import { hasChanges } from "./diff";
+import { hasChanges } from "./diff.ts";
 import { buildSchema } from "graphql";
 
 const schema = buildSchema(`
@@ -65,7 +65,7 @@ console.log(changesDetected); // true or false
 **Using with a custom diff module**
 
 ```typescript
-import { hasChanges } from "./diff";
+import { hasChanges } from "./diff.ts";
 
 const schema = getMySchema();
 const result = await hasChanges(

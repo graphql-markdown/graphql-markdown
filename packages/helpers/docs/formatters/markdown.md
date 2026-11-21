@@ -122,7 +122,7 @@ Frontmatter delimiter marker.
 
 ##### eol?
 
-`string` = "\n"
+`string` = "\\n"
 
 End-of-line separator.
 
@@ -160,7 +160,7 @@ Number of spaces to prepend to non-empty lines.
 
 ##### eol?
 
-`string` = "\n"
+`string` = "\\n"
 
 Line separator used to split and join lines.
 
@@ -256,7 +256,7 @@ Multiline text to transform into blockquote content.
 
 ##### eol?
 
-`string` = "\n"
+`string` = "\\n"
 
 Line separator used to split and join lines.
 

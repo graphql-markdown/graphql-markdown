@@ -83,7 +83,7 @@ export const runGraphQLMarkdown = async (
  * @param options - Options for configuring the GraphQL Markdown CLI.
  * @param loggerModule - Optional logger module to use.
  * @param customFormatter - Optional default formatter package name. When provided, registers
- *   `--formatter` and `--mdxParser` (deprecated) flags with this value as the default.
+ *   `--formatter` flag with this value as the default.
  * @param context - Optional internal context (telemetry trigger).
  *
  * @returns The configured CLI instance.
@@ -155,16 +155,11 @@ export const getGraphQLMarkdownCli = (
     .option("--no-telemetry", "Disable anonymous usage telemetry");
 
   if (typeof customFormatter === "string") {
-    command
-      .option(
-        "--formatter <formatter>",
-        "Set formatter package",
-        customFormatter,
-      )
-      .option(
-        "--mdxParser <mdxParser>",
-        "[deprecated] Use --formatter instead",
-      );
+    command.option(
+      "--formatter <formatter>",
+      "Set formatter package",
+      customFormatter,
+    );
   }
 
   command.action(async (cliOptions: CliOptions) => {

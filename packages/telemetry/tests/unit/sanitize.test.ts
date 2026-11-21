@@ -75,9 +75,8 @@ describe("sanitizeConfig masking table", () => {
       "/abs/f.js",
       "https://x.test/f.js",
     ]) {
-      expect(run({ formatter: f, mdxParser: f }).value).toEqual({
+      expect(run({ formatter: f }).value).toEqual({
         formatter: "<custom-formatter>",
-        mdxParser: "<custom-formatter>",
       });
     }
   });
@@ -111,12 +110,6 @@ describe("sanitizeConfig masking table", () => {
         fallback: "<string>",
       },
     });
-  });
-
-  test("user-defined keys become <key:n>", () => {
-    expect(
-      run({ customDirective: { myDirective: { descriptor: "x" } } }).value,
-    ).toEqual({ customDirective: { "<key:0>": { "<key:0>": "<string>" } } });
   });
 
   test("functions and class instances", () => {

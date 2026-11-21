@@ -27,7 +27,7 @@ Features:
 new CancellableEventEmitter(options?): CancellableEventEmitter;
 ```
 
-Defined in: node_modules/.bun/@types+node@26.4.1/node_modules/@types/node/events.d.ts:54
+Defined in: node\_modules/.bun/@types+node@26.6.6/node\_modules/@types/node/events.d.ts:54
 
 ###### Parameters
 
@@ -41,9 +41,7 @@ Defined in: node_modules/.bun/@types+node@26.4.1/node_modules/@types/node/events
 
 ###### Inherited from
 
-```ts
-EventEmitter.constructor;
-```
+`EventEmitter.constructor`
 
 #### Methods
 
@@ -146,7 +144,7 @@ Handlers continue executing even if previous handlers throw errors.
 function getEvents(): CancellableEventEmitter;
 ```
 
-Defined in: [packages/core/src/event-emitter.ts:172](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L172)
+Defined in: [packages/core/src/event-emitter.ts:174](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L174)
 
 Get the singleton event emitter instance.
 
@@ -179,7 +177,7 @@ await events.emitAsync("beforeLoadSchema", event);
 function resetEvents(): void;
 ```
 
-Defined in: [packages/core/src/event-emitter.ts:196](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L196)
+Defined in: [packages/core/src/event-emitter.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-emitter.ts#L198)
 
 Reset the event emitter singleton.
 

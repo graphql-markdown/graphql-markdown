@@ -14,17 +14,11 @@ Uses DocFX alert syntax for admonitions and injects the required
 const afterRenderTypeEntitiesHook: RenderTypeEntitiesHook;
 ```
 
-Defined in: [docfx/index.ts:284](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L284)
-
-Builds DocFX `toc.yml` navigation files as each entity page is written.
-
-Walks up from the generated file to the graphql output root (`outputDir`),
-writing or updating a `toc.yml` at every directory level. Section index pages
-are prepended as an "Overview" entry on first encounter.
+Defined in: [docfx/index.ts:498](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L498)
 
 ---
 
-### BADGE_CLASS_MAP
+### BADGE\_CLASS\_MAP
 
 ```ts
 const BADGE_CLASS_MAP: Record<string, string>;
@@ -42,7 +36,9 @@ Maps graphql-markdown badge classnames to Bootstrap 5 contextual badge classes.
 const mdxExtension: ".md";
 ```
 
-Defined in: [docfx/index.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L149)
+Defined in: [docfx/index.ts:201](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L201)
+
+The file extension used for MDX files in DocFX output.
 
 ## Functions
 
@@ -52,7 +48,7 @@ Defined in: [docfx/index.ts:149](https://github.com/graphql-markdown/graphql-mar
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [docfx/index.ts:136](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L136)
+Defined in: [docfx/index.ts:183](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L183)
 
 Creates a DocFX formatter.
 
@@ -78,9 +74,14 @@ A complete Formatter implementation for DocFX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [docfx/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L78)
+Defined in: [docfx/index.ts:86](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L86)
 
 Formats an admonition using DocFX alert syntax (`> [!TYPE]`).
+
+DocFX renders its own heading for each alert type (Note, Warning, ...), and
+the syntax has no slot for a custom title, so the admonition title is not
+printed. Blank lines around the text are dropped and blank lines within it
+collapse to a single `>` paragraph separator.
 
 #### Parameters
 
@@ -88,7 +89,7 @@ Formats an admonition using DocFX alert syntax (`> [!TYPE]`).
 
 `AdmonitionType`
 
-Admonition data with text, title, and type
+Admonition data with text and type
 
 ##### \_meta
 
@@ -101,6 +102,10 @@ Unused metadata parameter
 `MDXString`
 
 Formatted admonition string
+
+#### See
+
+https://dotnet.github.io/docfx/docs/markdown.html#alerts
 
 ---
 
@@ -136,7 +141,7 @@ Formatted badge string
 function formatMDXFrontmatter(props, formatted): MDXString;
 ```
 
-Defined in: [docfx/index.ts:94](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L94)
+Defined in: [docfx/index.ts:110](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L110)
 
 Formats YAML front matter, injecting a `uid` field required by DocFX
 for cross-reference resolution between pages.
@@ -169,7 +174,7 @@ Formatted front matter block, or empty string if no lines provided
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [docfx/index.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L120)
+Defined in: [docfx/index.ts:152](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L152)
 
 Returns the link unchanged — DocFX resolves `.md` links natively.
 
@@ -186,3 +191,68 @@ Link data with URL and text
 `TypeLink`
 
 The link unchanged
+
+---
+
+### formatMDXPermalink()
+
+```ts
+function formatMDXPermalink(id): MDXString;
+```
+
+Defined in: [docfx/index.ts:167](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L167)
+
+Formats a permalink for a section header as an empty HTML anchor.
+
+DocFX does not support the `{#id}` heading id syntax unless the Markdig
+`attributes` extension is enabled: the braces are printed as text, and the
+heading id is generated from the whole heading, badges included. An inline
+anchor gives every field and argument a stable id derived from its name only.
+
+#### Parameters
+
+##### id
+
+`string`
+
+The ID of the section header
+
+#### Returns
+
+`MDXString`
+
+Formatted permalink string
+
+---
+
+### formatMDXTitle()
+
+```ts
+function formatMDXTitle(title): MDXString;
+```
+
+Defined in: [docfx/index.ts:143](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/index.ts#L143)
+
+Formats the page title as a visible `# Title` heading.
+
+DocFX only uses the front matter `title` for the document `<title>`; the
+page heading comes from the Markdown H1, so without it generated pages
+have no visible title.
+
+#### Parameters
+
+##### title
+
+`string`
+
+The page title
+
+#### Returns
+
+`MDXString`
+
+`# Title` heading
+
+#### See
+
+https://dotnet.github.io/docfx/docs/markdown.html

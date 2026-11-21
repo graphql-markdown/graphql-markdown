@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/member-ordering */
 import type {
-  ApiGroupOverrideType,
   Category,
   CategorySortFn,
   Maybe,
@@ -9,13 +9,11 @@ import type {
   RendererDocOptions,
   SchemaEntitiesGroupMap,
   SchemaEntity,
-  TypeHierarchyObjectType,
-  TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
 import { basename, join, relative, normalize } from "node:path";
 
-import { isApiType, isDeprecated } from "@graphql-markdown/graphql";
+import { isDeprecated } from "@graphql-markdown/graphql";
 
 import {
   fsOutputAdapter,
@@ -32,7 +30,7 @@ import {
   DEFAULT_HOMEPAGE_FILENAME,
   DEFAULT_HOMEPAGE_TEMPLATE,
 } from "./const/homepage.ts";
-import { isGroupsObject, isPath } from "./directives/validation.ts";
+import { isPath } from "./directives/validation.ts";
 import { getEvents } from "./event-emitter.ts";
 import {
   GenerateIndexMetafileEvent,
@@ -41,165 +39,25 @@ import {
   RenderTypeEntitiesEvents,
 } from "./events/index.ts";
 
-/**
- * Constant representing the string literal for deprecated entities.
- * Used for grouping deprecated schema entities when the deprecated option is set to "group".
- *
- * @example
- * ```typescript
- * // When using the deprecated grouping option
- * if (isDeprecated(type)) {
- *   const groupName = DEPRECATED;
- *   // Handle deprecated type
- * }
- * ```
- */
-const DEPRECATED = "deprecated" as const;
+export {
+  DEPRECATED,
+  CATEGORY_STYLE_CLASS,
+  SidebarPosition,
+  API_GROUPS,
+  getApiGroupFolder,
+  stripNumericPrefix,
+  isHierarchy,
+} from "./rendererHelpers.ts";
 
-/**
- * CSS class names used for styling different categories in the generated documentation.
- * These are applied to the generated index metafiles for different section types.
- *
- * @example
- * ```typescript
- * // When generating API section metafiles
- * await generateIndexMetafile(dirPath, typeCat, {
- *   styleClass: CATEGORY_STYLE_CLASS.API
- * });
- * ```
- */
-enum CATEGORY_STYLE_CLASS {
-  /**
-   * CSS class applied to API sections (operations)
-   */
-  API = "graphql-markdown-api-section",
-
-  /**
-   * CSS class applied to deprecated entity sections
-   */
-  DEPRECATED = "graphql-markdown-deprecated-section",
-}
-
-/**
- * Enum defining sidebar position values for ordering categories in the documentation sidebar.
- * Used to control the relative position of categories in the navigation.
- *
- * @example
- * ```typescript
- * // Position deprecated entities at the end of the sidebar
- * await generateIndexMetafile(dirPath, DEPRECATED, {
- *   sidebarPosition: SidebarPosition.LAST
- * });
- * ```
- */
-enum SidebarPosition {
-  /**
-   * Position at the beginning of the sidebar
-   */
-  FIRST = 1,
-
-  /**
-   * Position at the end of the sidebar
-   */
-  LAST = 999,
-}
-
-/**
- * Default group names for API types and non-API types.
- * This constant provides the base folder structure for organizing GraphQL schema entities.
- * Can be overridden via ApiGroupOverrideType in configuration.
- *
- * @property operations Folder name for GraphQL operations (queries, mutations, subscriptions)
- * @property types Folder name for GraphQL type definitions
- *
- * @example
- * ```typescript
- * // Default structure
- * const defaultGroups = API_GROUPS;
- * // { operations: "operations", types: "types" }
- *
- * // With custom override
- * const customGroups = { ...API_GROUPS, operations: "queries-and-mutations" };
- * ```
- *
- * @see {@link getApiGroupFolder} For usage with type categorization
- */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const API_GROUPS: Required<ApiGroupOverrideType> = {
-  operations: "operations",
-  types: "types",
-} as const;
-
-/**
- * Determines the appropriate folder for a GraphQL schema entity based on its type.
- *
- * @param type - The GraphQL schema entity to categorize
- * @param groups - Optional custom group naming configuration
- * @returns The folder name where the entity should be placed
- *
- * @example
- * ```typescript
- * // With default groups
- * const folder = getApiGroupFolder(queryType); // Returns "operations"
- *
- * // With custom groups
- * const folder = getApiGroupFolder(objectType, { operations: "queries" }); // Returns appropriate folder
- * ```
- */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const getApiGroupFolder = (
-  type: unknown,
-  groups?: Maybe<ApiGroupOverrideType | boolean>,
-): string => {
-  let folderNames = API_GROUPS;
-  if (isGroupsObject(groups)) {
-    folderNames = { ...API_GROUPS, ...groups };
-  }
-  return isApiType(type) ? folderNames.operations : folderNames.types;
-};
-
-/**
- * Strips numeric prefix from a folder name if categorySort is enabled.
- * Converts folder names like "01-query" back to "query" for category identification.
- *
- * This is needed when extracting category names from file paths that were created
- * with categorySort enabled. The regex matches leading two-digit numbers
- * followed by a hyphen.
- *
- * @param folderName - The folder name to strip (e.g., "01-query", "02-mutations")
- * @returns The folder name without prefix (e.g., "query", "mutations")
- *
- * @example
- * ```typescript
- * stripNumericPrefix("01-query");      // Returns "query"
- * stripNumericPrefix("02-mutations");  // Returns "mutations"
- * stripNumericPrefix("objects");       // Returns "objects" (no prefix to strip)
- * ```
- */
-const stripNumericPrefix = (folderName: string): string => {
-  return folderName.replace(/^\d{2}-/, "");
-};
-
-/**
- * Type guard function that checks if the provided options include a specific hierarchy configuration.
- *
- * @param options - The renderer options to check
- * @param hierarchy - The hierarchy type to check for
- * @returns True if the options contain the specified hierarchy configuration
- *
- * @example
- * ```typescript
- * if (isHierarchy(options, TypeHierarchy.FLAT)) {
- *   // Handle flat hierarchy structure
- * }
- * ```
- */
-const isHierarchy = (
-  options: Maybe<RendererDocOptions>,
-  hierarchy: TypeHierarchyValueType,
-): options is RendererDocOptions & { hierarchy: TypeHierarchyObjectType } => {
-  return options?.hierarchy?.[hierarchy] !== undefined;
-};
+import {
+  DEPRECATED,
+  CATEGORY_STYLE_CLASS,
+  SidebarPosition,
+  API_GROUPS,
+  getApiGroupFolder,
+  stripNumericPrefix,
+  isHierarchy,
+} from "./rendererHelpers.ts";
 
 /**
  * Configuration options for category metafiles in the documentation.
@@ -608,46 +466,74 @@ export class Renderer {
 
     return Promise.all(
       Object.keys(type).map(async (name) => {
-        let dirPath = this.outputDir;
-        let entityName = name;
-        let operationNamespaceParts: string[] | undefined;
-
-        if (isOperationRootType && name.includes(".")) {
-          const namespaceParts = name.split(".").filter(Boolean);
-
-          if (namespaceParts.length > 1) {
-            operationNamespaceParts = namespaceParts.slice(0, -1);
-
-            if (!isFlat) {
-              entityName = namespaceParts.at(-1) ?? entityName;
-            }
-          }
-        }
-
-        if (!isFlat) {
-          dirPath = await this.generateCategoryMetafileType(
-            (type as Record<string, unknown>)[name],
-            name,
-            rootTypeName,
-          );
-
-          if (operationNamespaceParts && operationNamespaceParts.length > 0) {
-            for (const namespace of operationNamespaceParts) {
-              const formattedNamespace = slugify(namespace);
-              dirPath = join(dirPath, formattedNamespace);
-              await this.generateIndexMetafile(dirPath, namespace);
-            }
-          }
-        }
-
-        return this.renderTypeEntities(
-          dirPath,
-          entityName,
-          (type as Record<string, unknown>)[name],
-          operationNamespaceParts,
+        return this.renderRootTypeItem(
+          name,
+          type,
+          isFlat,
+          isOperationRootType,
           rootTypeName,
         );
       }),
+    );
+  }
+
+  /**
+   * Handles rendering of a single root type entry.
+   * Extracted from `renderRootTypes` for clarity.
+   */
+  private async renderRootTypeItem(
+    name: string,
+    type: unknown,
+    isFlat: boolean,
+    isOperationRootType: boolean,
+    rootTypeName: SchemaEntity,
+  ): Promise<Maybe<Category>> {
+    let dirPath = this.outputDir;
+    let entityName = name;
+    let operationNamespaceParts: string[] | undefined;
+
+    const SEPARATOR = ".";
+
+    if (isOperationRootType && name.includes(SEPARATOR)) {
+      const namespaceParts = name.split(SEPARATOR).filter(Boolean);
+      if (namespaceParts.length > 1) {
+        operationNamespaceParts = namespaceParts.slice(0, -1);
+        if (!isFlat) {
+          entityName = namespaceParts.at(-1) ?? entityName;
+        }
+      }
+    }
+
+    if (!isFlat) {
+      dirPath = await this.generateCategoryMetafileType(
+        (type as Record<string, unknown>)[name],
+        name,
+        rootTypeName,
+      );
+
+      if (operationNamespaceParts && operationNamespaceParts.length > 0) {
+        const metafileTargets: { dir: string; name: string }[] = [];
+
+        for (const namespace of operationNamespaceParts) {
+          const formattedNamespace = slugify(namespace);
+          dirPath = join(dirPath, formattedNamespace);
+          metafileTargets.push({ dir: dirPath, name: namespace });
+        }
+
+        await Promise.all(
+          metafileTargets.map(async ({ dir, name }) => {
+            return this.generateIndexMetafile(dir, name);
+          }),
+        );
+      }
+    }
+
+    return this.renderTypeEntities(
+      dirPath,
+      entityName,
+      (type as Record<string, unknown>)[name],
+      operationNamespaceParts,
+      rootTypeName,
     );
   }
 

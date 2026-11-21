@@ -55,7 +55,6 @@ const buildPlantedInputs = () => {
   };
   const config = {
     baseURL: planted(0),
-    customDirective: { [planted(1)]: { descriptor: planted(2) } },
     decorators: { [planted(3)]: planted(4) },
     diffMethod: planted(5),
     docOptions: {
@@ -81,7 +80,6 @@ const buildPlantedInputs = () => {
       Another: planted(2),
     },
     formatter: planted(3),
-    mdxParser: planted(4),
     metatags: [{ [planted(5)]: planted(6) }],
     onlyDocDirective: [planted(0), planted(1)],
     skipDocDirective: planted(2),
@@ -113,7 +111,6 @@ const buildPlantedInputs = () => {
     link: planted(5),
     hierarchy: planted(6),
     formatter: planted(0),
-    mdxParser: planted(1),
     root: planted(2),
     schema: planted(3),
     skip: [planted(4)],

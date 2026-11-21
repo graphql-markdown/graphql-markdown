@@ -10,13 +10,13 @@ Render files event constants.
 const RenderFilesEvents: object;
 ```
 
-Defined in: [core/src/events/render-files-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-files-events.ts#L10)
+Defined in: [packages/core/src/events/render-files-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-files-events.ts#L10)
 
 Event names fired once after all output files (entities + homepage) are written.
 
 #### Type Declaration
 
-##### AFTER_RENDER
+##### AFTER\_RENDER
 
 ```ts
 readonly AFTER_RENDER: "render:afterRenderFiles" = "render:afterRenderFiles";

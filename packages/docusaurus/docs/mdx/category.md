@@ -8,7 +8,7 @@
 function beforeGenerateIndexMetafileHook(event): Promise<void>;
 ```
 
-Defined in: [docusaurus/src/mdx/category.ts:31](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L31)
+Defined in: [docusaurus/src/mdx/category.ts:27](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/docusaurus/src/mdx/category.ts#L27)
 
 Hook that materializes a `_category_.yml` file before Docusaurus indexes
 a directory, ensuring generated bundles have labels, ordering, and
@@ -26,6 +26,7 @@ Hook payload containing the target directory, category name, and generator optio
 `category`: `string`;
 `dirPath`: `string`;
 `options?`: `Record`&lt;`string`, `unknown`&gt;;
+`outputAdapter?`: `OutputAdapter`;
 \}
 
 ###### data.category
@@ -39,6 +40,10 @@ Hook payload containing the target directory, category name, and generator optio
 ###### data.options?
 
 `Record`&lt;`string`, `unknown`&gt;
+
+###### data.outputAdapter?
+
+`OutputAdapter`
 
 #### Returns
 

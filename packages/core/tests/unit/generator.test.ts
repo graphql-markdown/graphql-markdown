@@ -19,18 +19,11 @@ import { GraphQLDirective } from "graphql/type";
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
   return {
-    // `always()` is invoked eagerly at module load by
-    // `@graphql-markdown/printer-legacy`'s decorator.ts (building its
-    // customDirective-adapter decorator constants), which this file reaches
-    // transitively through `../../src/generator` — so it must exist even
-    // though generator.test.ts never exercises decorator rendering itself
-    // (`../../src/printer` is mocked below).
     always: vi.fn(() => {
       return (): boolean => {
         return true;
       };
     }),
-    getCustomDirectives: vi.fn(),
     getDocumentLoaders: vi.fn(),
     getGroups: vi.fn(),
     getSchemaMap: vi.fn(),
@@ -203,7 +196,6 @@ describe("generator", () => {
           objects: {},
         } as SchemaMap);
         vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-        vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
 
         const getPrinterSpy = vi
           .spyOn(CorePrinter, "getPrinter")
@@ -221,7 +213,7 @@ describe("generator", () => {
             schema: mockSchema,
           },
           {
-            decorators: {},
+            decorators: undefined,
             groups: undefined,
             meta: {
               generatorFrameworkName: undefined,
@@ -257,14 +249,6 @@ describe("generator", () => {
     );
 
     test("forwards the top-level decorators option to the printer", async () => {
-      // Regression test: `decorators` reached `buildConfig`'s return value
-      // (Options.decorators) but `generateDocFromSchema` never destructured
-      // or forwarded it to `getPrinter`, so the whole feature was inert for
-      // any real config/CLI user — only unit tests that hand-built
-      // `PrintTypeOptions` directly exercised it. `generateDocFromSchema`
-      // merges `customDirective`'s translated decorators into a new object
-      // (see `buildCustomDirectiveDecorators`), so the forwarded value is no
-      // longer the same reference — deep-equal, not `toBe`, is what matters.
       expect.assertions(1);
 
       const mockSchema = { getDirective } as unknown as GraphQLSchema;
@@ -275,8 +259,6 @@ describe("generator", () => {
         objects: {},
       } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
-
       const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
@@ -314,7 +296,6 @@ describe("generator", () => {
         objects: {},
       } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
       vi.spyOn(CorePrinter, "getPrinter").mockResolvedValueOnce(
         {} as unknown as typeof IPrinter,
       );
@@ -606,7 +587,7 @@ describe("generator", () => {
           schema: expect.anything(),
         }),
         expect.objectContaining({
-          decorators: {},
+          decorators: undefined,
           groups: undefined,
           meta: expect.any(Object),
           metatags: expect.any(Array),
@@ -642,7 +623,7 @@ describe("generator", () => {
         objects: {},
       } as SchemaMap);
       vi.spyOn(GraphQL, "getGroups").mockReturnValueOnce(undefined);
-      vi.spyOn(GraphQL, "getCustomDirectives").mockReturnValueOnce(undefined);
+
       const getPrinterSpy = vi
         .spyOn(CorePrinter, "getPrinter")
         .mockResolvedValueOnce({} as unknown as typeof IPrinter);
@@ -1024,18 +1005,18 @@ describe("generator", () => {
       expect.assertions(2);
 
       const directive = new GraphQLDirective({
-        name: "customDirective",
+        name: "testDirective",
         locations: [],
       });
       (mockSchema.getDirective as Mock).mockReturnValue(directive);
 
       resolveSkipAndOnlyDirectives(
-        "customDirective" as DirectiveName,
+        "testDirective" as DirectiveName,
         undefined,
         mockSchema,
       );
 
-      expect(mockSchema.getDirective).toHaveBeenCalledWith("customDirective");
+      expect(mockSchema.getDirective).toHaveBeenCalledWith("testDirective");
       expect(mockSchema.getDirective).toHaveBeenCalledTimes(1);
     });
 

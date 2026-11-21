@@ -23,7 +23,7 @@ Defined in: [packages/graphql/src/loader.ts:20](https://github.com/graphql-markd
 ##### rootTypes?
 
 ```ts
-optional rootTypes?: Partial<Record<OperationTypeNode, string>>;
+rootTypes?: Partial<Record<OperationTypeNode, string>>;
 ```
 
 Defined in: [packages/graphql/src/loader.ts:21](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/loader.ts#L21)

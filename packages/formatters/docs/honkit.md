@@ -13,31 +13,21 @@ Internal links are converted to .html paths.
 const __default: object;
 ```
 
-Defined in: [honkit/index.ts:30](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L30)
+Defined in: [honkit/index.ts:32](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L32)
 
 #### Type Declaration
 
 ##### formatMDXBullet
 
 ```ts
-formatMDXBullet: (text) => MDXString;
+formatMDXBullet: typeof formatMDXBullet;
 ```
 
-Formats a bullet point separator using a `<span>` with a `gqlmd-mdx-bullet` CSS class.
+##### formatMDXPermalink
 
-###### Parameters
-
-###### text?
-
-`string` = `""`
-
-Optional text to append after the bullet
-
-###### Returns
-
-`MDXString`
-
-Formatted bullet string
+```ts
+formatMDXPermalink: typeof formatMDXPermalink;
+```
 
 ---
 
@@ -47,7 +37,7 @@ Formatted bullet string
 const mdxExtension: ".md";
 ```
 
-Defined in: [honkit/index.ts:33](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L33)
+Defined in: [honkit/index.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L38)
 
 File extension used for generated pages — HonKit renders plain Markdown to HTML.
 
@@ -59,7 +49,7 @@ File extension used for generated pages — HonKit renders plain Markdown to HTM
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [honkit/index.ts:171](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L171)
+Defined in: [honkit/index.ts:183](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L183)
 
 Creates a HonKit formatter.
 
@@ -85,7 +75,7 @@ A complete Formatter implementation for HonKit output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [honkit/index.ts:62](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L62)
+Defined in: [honkit/index.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L67)
 
 Formats an admonition as a Markdown blockquote with a bold prefix label.
 Maps `warning` type to `WARNING`; all other types use `INFO`.
@@ -118,7 +108,7 @@ Formatted blockquote string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [honkit/index.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L48)
+Defined in: [honkit/index.ts:53](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L53)
 
 Formats a badge as an inline HTML `<span>` with a shared default style.
 Users can customize badge colors by providing their own `formatMDXBadge` implementation.
@@ -145,7 +135,7 @@ Formatted inline HTML span string
 function formatMDXDetails(option): MDXString;
 ```
 
-Defined in: [honkit/index.ts:75](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L75)
+Defined in: [honkit/index.ts:80](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L80)
 
 Formats a collapsible block as an HTML `<details>` element.
 
@@ -171,9 +161,9 @@ Formatted details element string
 function formatMDXFrontmatter(props, formatted): MDXString;
 ```
 
-Defined in: [honkit/index.ts:91](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L91)
+Defined in: [honkit/index.ts:96](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L96)
 
-Formats YAML front matter and appends an H1 heading derived from the `title` prop.
+Formats YAML front matter.
 Merges `props` entries with `formatted` lines (formatted lines take precedence).
 Returns empty string if `props` is empty or absent — HonKit renders front matter
 without a title as literal YAML content.
@@ -184,7 +174,7 @@ without a title as literal YAML content.
 
 `Maybe`&lt;`FrontMatterOptions`&gt;
 
-Front matter options; `title` is used to generate the H1 heading
+Front matter options
 
 ##### formatted
 
@@ -196,7 +186,7 @@ Pre-formatted front matter lines that override props values
 
 `MDXString`
 
-Formatted front matter block with optional H1, or empty string
+Formatted front matter block, or empty string
 
 ---
 
@@ -206,7 +196,7 @@ Formatted front matter block with optional H1, or empty string
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [honkit/index.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L120)
+Defined in: [honkit/index.ts:132](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L132)
 
 Converts internal link URLs to `.html` paths for HonKit static output.
 Absolute paths without an `.html` extension are suffixed with `.html`.
@@ -234,7 +224,7 @@ Link with `.html` extension applied to absolute internal paths
 function formatMDXNameEntity(name, parentType?): MDXString;
 ```
 
-Defined in: [honkit/index.ts:149](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L149)
+Defined in: [honkit/index.ts:161](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L161)
 
 Formats a named entity as plain text (no markup).
 HonKit renders plain Markdown — no JSX or code spans needed.
@@ -267,9 +257,9 @@ Formatted entity reference string
 function formatMDXSpecifiedByLink(url): MDXString;
 ```
 
-Defined in: [honkit/index.ts:162](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L162)
+Defined in: [honkit/index.ts:174](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L174)
 
-Formats a "specified by" link as plain text with the raw URL.
+Formats a "specified by" link as plain text with the URL percent-encoded.
 HonKit does not render custom JSX components.
 
 #### Parameters
@@ -285,3 +275,31 @@ URL to the specification
 `MDXString`
 
 Formatted specification text string
+
+---
+
+### formatMDXTitle()
+
+```ts
+function formatMDXTitle(title): MDXString;
+```
+
+Defined in: [honkit/index.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/index.ts#L120)
+
+Formats the page title as a visible H1 heading.
+Line breaks are collapsed to spaces and surrounding whitespace is trimmed,
+so the heading stays on a single line.
+
+#### Parameters
+
+##### title
+
+`string`
+
+The page title
+
+#### Returns
+
+`MDXString`
+
+`# Title` heading, or empty string if the title is blank

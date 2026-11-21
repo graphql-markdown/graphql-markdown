@@ -3,6 +3,7 @@
 ## Modules
 
 - [config](config.md)
+- [const/homepage](const/homepage.md)
 - [const/patterns](const/patterns.md)
 - [diff](diff.md)
 - [directives/validation](directives/validation.md)
@@ -10,6 +11,8 @@
 - [event-handlers](event-handlers.md)
 - [event-map](event-map.md)
 - [events](events.md)
+- [events/config-build](events/config-build.md)
+- [events/config-build-events](events/config-build-events.md)
 - [events/diff-check](events/diff-check.md)
 - [events/diff-events](events/diff-events.md)
 - [events/generate-index-metafile](events/generate-index-metafile.md)
@@ -27,6 +30,10 @@
 - [events/schema-load](events/schema-load.md)
 - [generator](generator.md)
 - [graphql-config](graphql-config.md)
+- [optional-dependencies](optional-dependencies.md)
 - [options/builder](options/builder.md)
 - [printer](printer.md)
 - [renderer](renderer.md)
+- [rendererHelpers](rendererHelpers.md)
+- [telemetry](telemetry.md)
+- [version](version.md)

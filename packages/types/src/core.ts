@@ -8,8 +8,6 @@ import type {
   SchemaEntity,
 } from "./graphql.ts";
 
-import type { CustomDirective } from "./helpers.ts";
-
 import type { Maybe, MDXString, OutputAdapter } from "./utils.ts";
 import type { TelemetryTrigger } from "./telemetry.ts";
 import type {
@@ -387,16 +385,9 @@ export interface ConfigOptions {
   /** Base URL for the documentation links */
   baseURL?: Maybe<string>;
   /**
-   * List of custom directives to include in documentation.
-   *
-   * @deprecated Use `decorators` instead.
-   * @see decorators
-   */
-  customDirective?: Maybe<CustomDirective>;
-  /**
    * Decorators: selects nodes with a predicate (a directive, an entity kind, or
    * any combination) and renders a titled section, a badge, or appended
-   * description text for them. Supersedes `customDirective`.
+   * description text for them.
    */
   decorators?: Maybe<Decorators>;
   /** Method to use for diffing schema changes */
@@ -417,11 +408,6 @@ export interface ConfigOptions {
   loaders?: Maybe<LoaderOption>;
   /** Package to be used for formatting MDX output */
   formatter?: Maybe<PackageName | string>;
-  /**
-   * @deprecated Use `formatter` instead.
-   * @see formatter
-   */
-  mdxParser?: Maybe<PackageName | string>;
   /** Metadata tags to include in documentation */
   metatags?: Record<string, string>[];
   /** Only document types with these directives */
@@ -492,11 +478,6 @@ export interface CliOptions {
   hierarchy?: TypeHierarchyValueType;
   /** Formatter package */
   formatter?: string;
-  /**
-   * @deprecated Use `formatter` instead.
-   * @see formatter
-   */
-  mdxParser?: string;
   /** Disable parent type prefix flag */
   noParentType?: boolean;
   /** Disable type badges flag */

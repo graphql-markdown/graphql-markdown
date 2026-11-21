@@ -7,7 +7,7 @@
 - [common](common.md)
 - [const/options](const/options.md)
 - [const/strings](const/strings.md)
-- [directive](directive.md)
+- [decorator](decorator.md)
 - [events](events.md)
 - [example](example.md)
 - [formatter](formatter.md)

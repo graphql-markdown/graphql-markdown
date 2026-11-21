@@ -56,7 +56,7 @@ a GraphQL named type from the GraphQL schema.
 
 ##### type
 
-() => `T`
+new () => `T`
 
 the GraphQL type `T`.
 

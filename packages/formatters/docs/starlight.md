@@ -8,13 +8,41 @@ index files for each category directory.
 
 ## Variables
 
+### formatMDXPermalink
+
+```ts
+const formatMDXPermalink: typeof formatMDXEscapedPermalink =
+  formatMDXEscapedPermalink;
+```
+
+Defined in: [starlight/index.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L41)
+
+Formats a permalink for a section header, using the classic `{#id}` syntax
+escaped to remain valid MDX.
+
+Starlight has no built-in custom header id syntax, so the permalink is inert
+unless a remark plugin such as `remark-custom-heading-id` is configured. Turn
+it off with `docOptions.sectionHeaderId: false`.
+
+#### Param
+
+**id**
+
+The ID of the section header
+
+#### Returns
+
+Formatted permalink string
+
+---
+
 ### mdxDeclaration
 
 ```ts
 const mdxDeclaration: MDXString;
 ```
 
-Defined in: [starlight/index.ts:42](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L42)
+Defined in: [starlight/index.ts:48](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L48)
 
 MDX import statement prepended to every generated file to register Starlight components.
 
@@ -26,87 +54,11 @@ MDX import statement prepended to every generated file to register Starlight com
 const mdxExtension: ".mdx";
 ```
 
-Defined in: [starlight/index.ts:39](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L39)
+Defined in: [starlight/index.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L45)
 
 File extension used for generated pages.
 
 ## Functions
-
-### afterRenderTypeEntitiesHook()
-
-```ts
-function afterRenderTypeEntitiesHook(event): Promise<void>;
-```
-
-Defined in: [starlight/index.ts:117](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L117)
-
-Lifecycle hook that appends a link entry to the category `index.md`
-after each type entity page is rendered.
-
-#### Parameters
-
-##### event
-
-Hook payload containing the entity name and its output file path
-
-###### data
-
-\{
-`filePath`: `string`;
-`name`: `string`;
-\}
-
-###### data.filePath
-
-`string`
-
-###### data.name
-
-`string`
-
-#### Returns
-
-`Promise`&lt;`void`&gt;
-
----
-
-### beforeGenerateIndexMetafileHook()
-
-```ts
-function beforeGenerateIndexMetafileHook(event): Promise<void>;
-```
-
-Defined in: [starlight/index.ts:97](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L97)
-
-Lifecycle hook that creates an `index.md` file for a category directory
-before Starlight indexes it. Skips creation if the file already exists.
-
-#### Parameters
-
-##### event
-
-Hook payload containing the target directory and category name
-
-###### data
-
-\{
-`category`: `string`;
-`dirPath`: `string`;
-\}
-
-###### data.category
-
-`string`
-
-###### data.dirPath
-
-`string`
-
-#### Returns
-
-`Promise`&lt;`void`&gt;
-
----
 
 ### createMDXFormatter()
 
@@ -114,7 +66,7 @@ Hook payload containing the target directory and category name
 function createMDXFormatter(_meta?): Formatter;
 ```
 
-Defined in: [starlight/index.ts:134](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L134)
+Defined in: [starlight/index.ts:101](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L101)
 
 Creates an Astro Starlight formatter.
 
@@ -140,7 +92,7 @@ A complete Formatter implementation for Starlight MDX output
 function formatMDXAdmonition(admonition, _meta): MDXString;
 ```
 
-Defined in: [starlight/index.ts:64](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L64)
+Defined in: [starlight/index.ts:70](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L70)
 
 Formats an admonition using the Starlight `<Aside>` component.
 Maps `warning` type to `caution`; all other types use `note`.
@@ -173,7 +125,7 @@ Formatted Starlight Aside component string
 function formatMDXBadge(badge): MDXString;
 ```
 
-Defined in: [starlight/index.ts:52](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L52)
+Defined in: [starlight/index.ts:58](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L58)
 
 Formats a badge using the Starlight `<Badge>` component.
 Maps `DEPRECATED` classname to the `caution` variant; all others use `default`.
@@ -200,7 +152,7 @@ Formatted Starlight Badge component string
 function formatMDXLink(link): TypeLink;
 ```
 
-Defined in: [starlight/index.ts:78](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L78)
+Defined in: [starlight/index.ts:84](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/starlight/index.ts#L84)
 
 Returns the link unchanged — Starlight routes `page.mdx` to `page/` so
 links must not include the `.mdx` extension.

@@ -6,7 +6,7 @@ and their properties like deprecation status, nullability, and relationships.
 
 ## Variables
 
-### CSS_BADGE_CLASSNAME
+### CSS\_BADGE\_CLASSNAME
 
 ```ts
 const CSS_BADGE_CLASSNAME: object;
@@ -22,7 +22,7 @@ Defined in: [printer-legacy/src/badge.ts:32](https://github.com/graphql-markdown
 DEPRECATED: string = "DEPRECATED";
 ```
 
-##### NON_NULL
+##### NON\_NULL
 
 ```ts
 NON_NULL: string = "NON_NULL";
@@ -42,7 +42,7 @@ RELATION: string = "RELATION";
 function formatBadges(badges, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/badge.ts:121](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L121)
+Defined in: [printer-legacy/src/badge.ts:120](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L120)
 
 Formats an array of badges into a space-joined MDX string.
 
@@ -74,7 +74,7 @@ Space-joined MDX string of all badges, or empty string if none
 function getTypeBadges(type, groups?): Badge[];
 ```
 
-Defined in: [printer-legacy/src/badge.ts:46](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L46)
+Defined in: [printer-legacy/src/badge.ts:45](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L45)
 
 Gets an array of badges for a given GraphQL type.
 
@@ -106,7 +106,7 @@ Array of Badge objects containing text and optional classnames
 function printBadge(badge, options): MDXString;
 ```
 
-Defined in: [printer-legacy/src/badge.ts:99](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L99)
+Defined in: [printer-legacy/src/badge.ts:98](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L98)
 
 Formats a single badge into MDX string format.
 
@@ -138,7 +138,7 @@ Formatted MDX string representation of the badge
 function printBadges(type, options): string | MDXString;
 ```
 
-Defined in: [printer-legacy/src/badge.ts:141](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L141)
+Defined in: [printer-legacy/src/badge.ts:140](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/badge.ts#L140)
 
 Generates and formats all applicable badges for a GraphQL type.
 

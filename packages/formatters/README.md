@@ -43,8 +43,6 @@ await runGraphQLMarkdown({
 });
 ```
 
-The legacy `mdxParser` setting still works as a deprecated alias, but new configurations should use `formatter`.
-
 ## Supported formatters
 
 Each formatter has its own setup guide:

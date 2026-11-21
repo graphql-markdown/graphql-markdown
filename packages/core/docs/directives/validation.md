@@ -15,7 +15,7 @@ function hasDescriptor(
 ): config is Record<"descriptor", (args: unknown[]) => unknown>;
 ```
 
-Defined in: [core/src/directives/validation.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L41)
+Defined in: [packages/core/src/directives/validation.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L40)
 
 Type guard to check if an object has a `descriptor` function property.
 
@@ -52,7 +52,7 @@ if (hasDescriptor(option)) {
 function hasTag(config): config is Record<"tag", (args: unknown[]) => unknown>;
 ```
 
-Defined in: [core/src/directives/validation.ts:69](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L69)
+Defined in: [packages/core/src/directives/validation.ts:67](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L67)
 
 Type guard to check if an object has a `tag` function property.
 
@@ -89,7 +89,7 @@ if (hasTag(option)) {
 function isGroupsObject(groups): groups is Record<string, string>;
 ```
 
-Defined in: [core/src/directives/validation.ts:157](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L157)
+Defined in: [packages/core/src/directives/validation.ts:155](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L155)
 
 Type guard to check if a value is a configuration group object.
 
@@ -129,7 +129,7 @@ function isInvalidFunctionProperty(
 ): config is Record<string, unknown>;
 ```
 
-Defined in: [core/src/directives/validation.ts:200](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L200)
+Defined in: [packages/core/src/directives/validation.ts:198](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L198)
 
 Type guard to check if a descriptor or tag property is NOT a function.
 
@@ -172,7 +172,7 @@ if (isInvalidFunctionProperty(option, "descriptor")) {
 function isLoaderString(loader): loader is string;
 ```
 
-Defined in: [core/src/directives/validation.ts:179](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L179)
+Defined in: [packages/core/src/directives/validation.ts:177](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L177)
 
 Type guard to check if a value is a loader module name (string).
 
@@ -209,7 +209,7 @@ if (isLoaderString(loaders[name])) {
 function isPath(path): path is string;
 ```
 
-Defined in: [core/src/directives/validation.ts:137](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L137)
+Defined in: [packages/core/src/directives/validation.ts:135](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L135)
 
 Type guard to check if a value is a valid non-empty path string.
 
@@ -246,7 +246,7 @@ if (isPath(folderPath)) {
 function isSchemaObject(schema): schema is Record<string, unknown>;
 ```
 
-Defined in: [core/src/directives/validation.ts:115](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L115)
+Defined in: [packages/core/src/directives/validation.ts:113](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L113)
 
 Type guard to check if a value is a schema object (key-value mapping).
 
@@ -283,7 +283,7 @@ if (isSchemaObject(projectConfig.schema)) {
 function isSchemaString(schema): schema is string;
 ```
 
-Defined in: [core/src/directives/validation.ts:95](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L95)
+Defined in: [packages/core/src/directives/validation.ts:93](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/directives/validation.ts#L93)
 
 Type guard to check if a value is a schema string.
 

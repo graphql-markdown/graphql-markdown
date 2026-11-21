@@ -105,7 +105,6 @@ describe("renderer", () => {
       metatags: [],
       onlyDocDirective: [],
       prettify: false,
-      printer: "@graphql-markdown/printer-legacy" as PackageName,
       skipDocDirective: [],
     } satisfies Partial<GeneratorOptions>;
 
@@ -150,7 +149,6 @@ describe("renderer", () => {
 
       const config: GeneratorOptions = {
         baseURL: "graphql",
-        customDirective: undefined,
         diffMethod: "SCHEMA-HASH" as TypeDiffMethod,
         docOptions: {},
         homepageLocation: "/assets/generated.md",
@@ -164,7 +162,6 @@ describe("renderer", () => {
         onlyDocDirective: [],
         outputDir: "/output",
         prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           deprecated: DeprecatedOption.DEFAULT,
@@ -254,7 +251,6 @@ describe("renderer", () => {
         onlyDocDirective: [],
         outputDir: "/output-nested-namespace",
         prettify: false,
-        printer: "@graphql-markdown/printer-legacy" as PackageName,
         printTypeOptions: {
           ...DEFAULT_OPTIONS.printTypeOptions,
           hierarchy: { [TypeHierarchy.API]: {} },

@@ -7,7 +7,7 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=graphql-markdown_printer-legacy&metric=coverage)](https://sonarcloud.io/summary/new_code?id=graphql-markdown_printer-legacy)
 [![Mutation Score](https://img.shields.io/endpoint?label=mutation%20score&style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fgraphql-markdown%2Fgraphql-markdown%2Fmain%3Fmodule%3Dprinter-legacy)](https://dashboard.stryker-mutator.io/reports/github.com/graphql-markdown/graphql-markdown/main?module=printer-legacy)
 
-Legacy Docusaurus-flavored MDX printer for GraphQL-Markdown. Converts GraphQL schema types into MDX pages, and is the printer used by default when no `formatter` is configured. New setups should prefer a formatter preset from [`@graphql-markdown/formatters`](https://www.npmjs.com/package/@graphql-markdown/formatters); this package is kept for backward compatibility with existing Docusaurus configurations and for `customDirective`-based decorators.
+Legacy Docusaurus-flavored MDX printer for GraphQL-Markdown. Converts GraphQL schema types into MDX pages, and is the printer used by default when no `formatter` is configured. New setups should prefer a formatter preset from [`@graphql-markdown/formatters`](https://www.npmjs.com/package/@graphql-markdown/formatters); this package is kept for backward compatibility with existing Docusaurus configurations and for its built-in decorators support.
 
 ## Installation
 
@@ -26,16 +26,10 @@ await Printer.init(schema, baseURL, linkRoot, options);
 const page = await Printer.printType("query", queryType, options);
 ```
 
-### Custom directive decorators
-
-```ts
-import { buildCustomDirectiveDecorators } from "@graphql-markdown/printer-legacy";
-```
-
 ## Documentation
 
 - [Configuration Options](https://graphql-markdown.dev/docs/reference/settings)
-- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
+- [Decorators](https://graphql-markdown.dev/docs/customize/decorators)
 - [Integration with Frameworks](https://graphql-markdown.dev/docs/guides/other-frameworks)
 
 ## License

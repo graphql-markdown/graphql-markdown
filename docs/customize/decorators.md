@@ -3,7 +3,7 @@ sidebar_position: 20
 id: decorators
 pagination_prev: null
 pagination_next: null
-description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it — the successor to customDirective.
+description: Select any node in your schema with a predicate and render a custom section, badge, or description text for it.
 keywords:
   - GraphQL decorators
   - custom directive
@@ -20,8 +20,6 @@ import TabItem from "@theme/TabItem";
 Use decorators to add custom sections, badges, or description text to the generated pages. A decorator selects **nodes** in the schema (a type, field, or argument the printer is about to render) with a **predicate**, which defaults to every node.
 
 Values come from a **resolve** callback (default: none) and are rendered by a **render** callback you provide. A decorator with a `title` becomes its own top-level section of the type page. One without a `title` renders bare content into a named slot instead, such as a badge next to the heading or a line appended to the description.
-
-`decorators` replaces the deprecated [`customDirective`](/docs/reference/settings#customdirective) option. It is the recommended way to render directive-driven (and now non-directive) content (see [migrating from `customDirective`](#migrating-from-customdirective) below). A directive-driven decorator opts in explicitly with `predicate: hasDirectiveNamed("name")`, as the walkthrough below shows.
 
 ## Usage
 
@@ -334,7 +332,7 @@ This mirrors the [`afterPrintCode` hook recipe](/docs/customize/hooks#display-re
 
 ## Migrating from `customDirective`
 
-[`customDirective`](/docs/reference/settings#customdirective) is deprecated in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.
+From release [1.44.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.44.0) of GraphQL-Markdown, the `customDirective` setting has been removed in favor of `decorators`; both flow through the same rendering pipeline, but `decorators` selects nodes with any predicate, not only a directive's presence, and lets a decorator target any section position or slot rather than only a description line, a tag, or the built-in "Directives" section.
 
 ```diff
 - customDirective: {

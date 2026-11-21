@@ -32,7 +32,6 @@ Every setting is a plugin option in your config file, and most have a CLI flag t
 | [`id`](#id)                             | `string`            | `default`          | Identifier of the configuration instance                        |
 | [`onlyDocDirective`](#onlydocdirective) | `string[]`          | `[]`               | Include only types with these directives                        |
 | [`skipDocDirective`](#skipdocdirective) | `string[]`          | `[]`               | Exclude types with these directives                             |
-| [`customDirective`](#customdirective)   | `object`            | `undefined`        | Deprecated, use `decorators`                                    |
 | [`decorators`](#decorators)             | `object`            | `undefined`        | Render custom content for schema nodes                          |
 | [`formatter`](#formatter)               | `string`            | `undefined`        | Package name or path to a formatter module                      |
 | [`outputAdapter`](#outputadapter)       | `object`            | local filesystem   | Write pages somewhere other than the filesystem                 |
@@ -69,11 +68,10 @@ Every flag below works with `npx docusaurus graphql-to-doc` (Docusaurus plugin) 
 | `--groupByDirective <expr>` | [`groupByDirective`](#groupbydirective)                  | Group by directive: `@dir(field\|=fallback)` |
 | `--pretty`                  | [`pretty`](#pretty)                                      | Format output with Prettier                  |
 | `--formatter <pkg>`         | [`formatter`](#formatter)                                | Formatter package name or path               |
-| `--mdxParser <pkg>`         | ~~`mdxParser`~~ (deprecated)                             | Deprecated alias for `formatter`             |
 | `--config`                  | [`--config`](#--config)                                  | Print resolved config (debug)                |
 | `--no-telemetry`            | [`telemetry`](#telemetry)                                | Disable anonymous usage telemetry            |
 
-`--formatter` and `--mdxParser` are only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
+`--formatter` is only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
 
 ## Input
 
@@ -365,23 +363,9 @@ Declaring the same type in both `onlyDocDirective` and `skipDocDirective` will g
 
 :::
 
-### `customDirective`
-
-:::caution
-
-Deprecated in favor of [`decorators`](#decorators), which supersedes it. See [migrating from `customDirective`](/docs/customize/decorators#migrating-from-customdirective).
-
-:::
-
-Use this option to render directive information for types (see [custom directive](/docs/customize/custom-directive)).
-
-| Setting           | CLI flag        | Default     |
-| ----------------- | --------------- | ----------- |
-| `customDirective` | _not supported_ | `undefined` |
-
 ### `decorators`
 
-Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/decorators)). Supersedes [`customDirective`](#customdirective).
+Select any node in the schema with a predicate and render a custom section, badge, or description text for it (see [decorators](/docs/customize/decorators)).
 
 | Setting      | CLI flag        | Default     |
 | ------------ | --------------- | ----------- |
@@ -399,11 +383,9 @@ Provide a custom module for formatting output content. You can also use built-in
 | ----------- | ------------- | ----------- |
 | `formatter` | `--formatter` | `undefined` |
 
-The `mdxParser` setting and `--mdxParser` CLI flag are deprecated aliases for `formatter` / `--formatter`. They still work but emit a deprecation warning, so migrate to `formatter`.
-
 :::caution
 
-The `--formatter` and `--mdxParser` CLI flags are only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
+The `--formatter` CLI flag is only registered when the CLI is set up with a default formatter package, which is what `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command does not expose them, so set `formatter` in your configuration file instead.
 
 :::
 

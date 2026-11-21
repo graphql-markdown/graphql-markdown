@@ -10,13 +10,13 @@ Render homepage event constants.
 const RenderHomepageEvents: object;
 ```
 
-Defined in: [core/src/events/render-homepage-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-homepage-events.ts#L10)
+Defined in: [packages/core/src/events/render-homepage-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/render-homepage-events.ts#L10)
 
 Event names for rendering homepage.
 
 #### Type Declaration
 
-##### AFTER_RENDER
+##### AFTER\_RENDER
 
 ```ts
 readonly AFTER_RENDER: "render:afterRenderHomepage" = "render:afterRenderHomepage";
@@ -24,7 +24,7 @@ readonly AFTER_RENDER: "render:afterRenderHomepage" = "render:afterRenderHomepag
 
 Emitted after rendering homepage
 
-##### BEFORE_RENDER
+##### BEFORE\_RENDER
 
 ```ts
 readonly BEFORE_RENDER: "render:beforeRenderHomepage" = "render:beforeRenderHomepage";

@@ -17,30 +17,6 @@ npm install @graphql-markdown/helpers
 
 ## Usage
 
-### Custom directive description
-
-```js
-import { directiveDescriptor } from "@graphql-markdown/helpers";
-
-// customDirective.version.descriptor in your GraphQL-Config
-export default (directive, type) =>
-  directiveDescriptor(
-    directive,
-    type,
-    "${description} is ${major}.${minor}.${patch}",
-  );
-```
-
-### Custom directive badge
-
-```js
-import { directiveTag } from "@graphql-markdown/helpers";
-
-// customDirective.auth.tag in your GraphQL-Config
-export default (directive, type) =>
-  directiveTag(directive, type, "badge--warning");
-```
-
 ### Directive-based decorators
 
 ```ts
@@ -51,9 +27,30 @@ const decorator = withDirective("deprecated", (directive, options, context) => {
 });
 ```
 
+### Directive description helper
+
+```js
+import { directiveDescriptor } from "@graphql-markdown/helpers";
+
+export default (directive, type) =>
+  directiveDescriptor(
+    directive,
+    type,
+    "${description} is ${major}.${minor}.${patch}",
+  );
+```
+
+### Directive badge helper
+
+```js
+import { directiveTag } from "@graphql-markdown/helpers";
+
+export default (directive, type) =>
+  directiveTag(directive, type, "badge--warning");
+```
+
 ## Documentation
 
-- [Custom Directives](https://graphql-markdown.dev/docs/customize/custom-directive)
 - [Decorators](https://graphql-markdown.dev/docs/customize/decorators)
 
 ## License

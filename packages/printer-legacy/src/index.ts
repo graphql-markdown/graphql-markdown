@@ -1,8 +1,5 @@
 export { Printer } from "./printer.ts";
-export {
-  buildCustomDirectiveDecorators,
-  RESERVED_SECTION_NAMES,
-} from "./decorator.ts";
+export { RESERVED_SECTION_NAMES } from "./decorator.ts";
 export {
   PrintCodeEvent,
   PrintTypeEvent,

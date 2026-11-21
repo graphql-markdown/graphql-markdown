@@ -26,7 +26,6 @@ import type {
   ConfigDocOptions,
   ConfigOptions,
   ConfigPrintTypeOptions,
-  CustomDirective,
   DecoratorDefinition,
   DecoratorPosition,
   Decorators,
@@ -42,14 +41,12 @@ import type {
   TypeHierarchyValueType,
 } from "@graphql-markdown/types";
 
-import { log, LogLevel } from "@graphql-markdown/logger";
 import { RESERVED_SECTION_NAMES as PrinterReservedSectionNames } from "@graphql-markdown/printer-legacy";
 
 import { loadConfiguration } from "./graphql-config.ts";
 import { reportTelemetry, resolveTelemetryContext } from "./telemetry.ts";
 import type { BuildConfigContext } from "./telemetry.ts";
 import { PATTERNS, CONFIG_CONSTANTS } from "./const/patterns.ts";
-import { isInvalidFunctionProperty } from "./directives/validation.ts";
 import { OptionBuilder } from "./options/builder.ts";
 
 /**
@@ -148,22 +145,16 @@ let defaultTmpDir: string | undefined;
 export const DEFAULT_OPTIONS: Readonly<
   Pick<
     ConfigOptions,
-    | "customDirective"
-    | "decorators"
-    | "groupByDirective"
-    | "loaders"
-    | "outputAdapter"
+    "decorators" | "groupByDirective" | "loaders" | "outputAdapter"
   > &
     Required<
       Omit<
         ConfigOptions,
-        | "customDirective"
         | "decorators"
         | "formatter"
         | "groupByDirective"
         | "homepage"
         | "loaders"
-        | "mdxParser"
         | "outputAdapter"
         | "printTypeOptions"
         | "telemetry"
@@ -180,7 +171,6 @@ export const DEFAULT_OPTIONS: Readonly<
 } = {
   id: "default" as const,
   baseURL: "schema" as const,
-  customDirective: undefined,
   decorators: undefined,
   diffMethod: DiffMethod.NONE,
   docOptions: {
@@ -384,75 +374,6 @@ export const getVisibilityDirectives = (
 };
 
 /**
- * Processes custom directives, filtering out any that should be skipped.
- * Validates that each custom directive has the correct format with required functions.
- *
- * @param customDirectiveOptions - The custom directive configuration object
- * @param skipDocDirective - Array of directive names that should be skipped
- * @returns The filtered custom directives object, or `undefined` if empty/invalid
- * @throws Error if a custom directive has an invalid format
- * @example
- * ```typescript
- * // Valid custom directive with descriptor function
- * const customDirectives = {
- *   example: {
- *     tag: (value) => `Example: ${value}`
- *   },
- *   note: {
- *     descriptor: () => "Note items"
- *   }
- * };
- *
- * // Filter out the "example" directive, keeping "note"
- * const filteredDirectives = getCustomDirectives(customDirectives, ["example"]);
- * console.log(filteredDirectives); // { note: { descriptor: [Function] } }
- *
- * // Invalid format - will throw an error
- * getCustomDirectives({ example: { invalid: true } }, []);
- * // Error: Wrong format for plugin custom directive "example"...
- * ```
- * @see {@link DOCS_URL}/customize/custom-directive for custom directive format documentation
- */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const getCustomDirectives = (
-  customDirectiveOptions: Maybe<CustomDirective>,
-  skipDocDirective?: Maybe<DirectiveName[]>,
-): Maybe<CustomDirective> => {
-  if (
-    !customDirectiveOptions ||
-    Object.keys(customDirectiveOptions).length === 0
-  ) {
-    return undefined;
-  }
-
-  log(
-    `Setting "customDirective" is deprecated and will be removed in a future version. Use "decorators" instead.`,
-    LogLevel.warn,
-  );
-
-  for (const [name, option] of Object.entries(customDirectiveOptions)) {
-    if (
-      Array.isArray(skipDocDirective) &&
-      skipDocDirective.includes(name as DirectiveName)
-    ) {
-      delete customDirectiveOptions[name as DirectiveName];
-    } else if (
-      isInvalidFunctionProperty(option, "descriptor") ||
-      isInvalidFunctionProperty(option, "tag") ||
-      !("tag" in option || "descriptor" in option)
-    ) {
-      throw new Error(
-        `Wrong format for plugin custom directive "${name}".\nPlease refer to ${DOCS_URL}/customize/custom-directive`,
-      );
-    }
-  }
-
-  return Object.keys(customDirectiveOptions).length > 0
-    ? customDirectiveOptions
-    : undefined;
-};
-
-/**
  * Returns FORCE as the diff method.
  * This function is used when documentation should be forcefully regenerated.
  *
@@ -625,27 +546,6 @@ export const getTypeHierarchyOption = (
   }
 
   return cliHierarchy ?? configHierarchy ?? DEFAULT_HIERARCHY;
-};
-
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
-export const parseDeprecatedFormatterOption = (
-  cliOpts?: Maybe<CliOptions>,
-  configOptions?: Maybe<ConfigOptions>,
-): Maybe<string> => {
-  const legacyCli = cliOpts?.mdxParser ?? null; // NOSONAR typescript:S1874
-  const legacyConfig = configOptions?.mdxParser; // NOSONAR typescript:S1874
-  if (
-    legacyCli !== null ||
-    (legacyConfig !== undefined && legacyConfig !== null)
-  ) {
-    log(
-      `Setting "mdxParser" is deprecated and will be removed in a future version. Use "formatter" instead.`,
-      LogLevel.warn,
-    );
-  }
-  return (
-    cliOpts?.formatter ?? legacyCli ?? configOptions?.formatter ?? legacyConfig
-  );
 };
 
 // Used only by unit tests for direct whitebox coverage; not part of the production public API.
@@ -1085,10 +985,6 @@ export const buildConfig = async (
 
   return {
     baseURL,
-    customDirective: getCustomDirectives(
-      config.customDirective,
-      skipDocDirective,
-    ),
     decorators: getDecoratorsOption(config.decorators),
     diffMethod: force
       ? getForcedDiffMethod()
@@ -1101,7 +997,7 @@ export const buildConfig = async (
     id: id ?? DEFAULT_OPTIONS.id,
     linkRoot,
     loaders: config.loaders,
-    formatter: parseDeprecatedFormatterOption(cliOpts, config),
+    formatter: cliOpts.formatter ?? config.formatter,
     metatags: config.metatags ?? DEFAULT_OPTIONS.metatags,
     onlyDocDirective,
     outputAdapter,

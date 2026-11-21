@@ -7,13 +7,13 @@ callback names in MDX modules. Kept separate to avoid circular dependencies.
 
 ## Variables
 
-### EVENT_CALLBACK_MAP
+### EVENT\_CALLBACK\_MAP
 
 ```ts
 const EVENT_CALLBACK_MAP: object;
 ```
 
-Defined in: [core/src/event-map.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L25)
+Defined in: [packages/core/src/event-map.ts:17](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/event-map.ts#L17)
 
 Event callback mapping configuration.
 Maps event names to their corresponding callback names in mdxModule.
@@ -23,110 +23,116 @@ They are pure transformations handled via the Formatter interface, not events.
 
 #### Type Declaration
 
+##### config:afterBuild
+
+```ts
+readonly "config:afterBuild": "afterConfigBuildHook" = "afterConfigBuildHook";
+```
+
 ##### diff:afterCheck
 
 ```ts
-readonly diff:afterCheck: "afterCheckDiffHook" = "afterCheckDiffHook";
+readonly "diff:afterCheck": "afterCheckDiffHook" = "afterCheckDiffHook";
 ```
 
 ##### diff:beforeCheck
 
 ```ts
-readonly diff:beforeCheck: "beforeCheckDiffHook" = "beforeCheckDiffHook";
+readonly "diff:beforeCheck": "beforeCheckDiffHook" = "beforeCheckDiffHook";
 ```
 
 ##### print:afterPrintCode
 
 ```ts
-readonly print:afterPrintCode: "afterPrintCodeHook" = "afterPrintCodeHook";
+readonly "print:afterPrintCode": "afterPrintCodeHook" = "afterPrintCodeHook";
 ```
 
 ##### print:afterPrintType
 
 ```ts
-readonly print:afterPrintType: "afterPrintTypeHook" = "afterPrintTypeHook";
+readonly "print:afterPrintType": "afterPrintTypeHook" = "afterPrintTypeHook";
 ```
 
 ##### print:beforeComposePageType
 
 ```ts
-readonly print:beforeComposePageType: "beforeComposePageTypeHook" = "beforeComposePageTypeHook";
+readonly "print:beforeComposePageType": "beforeComposePageTypeHook" = "beforeComposePageTypeHook";
 ```
 
 ##### print:beforePrintCode
 
 ```ts
-readonly print:beforePrintCode: "beforePrintCodeHook" = "beforePrintCodeHook";
+readonly "print:beforePrintCode": "beforePrintCodeHook" = "beforePrintCodeHook";
 ```
 
 ##### print:beforePrintType
 
 ```ts
-readonly print:beforePrintType: "beforePrintTypeHook" = "beforePrintTypeHook";
+readonly "print:beforePrintType": "beforePrintTypeHook" = "beforePrintTypeHook";
 ```
 
 ##### render:afterGenerateIndexMetafile
 
 ```ts
-readonly render:afterGenerateIndexMetafile: "afterGenerateIndexMetafileHook" = "afterGenerateIndexMetafileHook";
+readonly "render:afterGenerateIndexMetafile": "afterGenerateIndexMetafileHook" = "afterGenerateIndexMetafileHook";
 ```
 
 ##### render:afterRenderFiles
 
 ```ts
-readonly render:afterRenderFiles: "afterRenderFilesHook" = "afterRenderFilesHook";
+readonly "render:afterRenderFiles": "afterRenderFilesHook" = "afterRenderFilesHook";
 ```
 
 ##### render:afterRenderHomepage
 
 ```ts
-readonly render:afterRenderHomepage: "afterRenderHomepageHook" = "afterRenderHomepageHook";
+readonly "render:afterRenderHomepage": "afterRenderHomepageHook" = "afterRenderHomepageHook";
 ```
 
 ##### render:afterRenderRootTypes
 
 ```ts
-readonly render:afterRenderRootTypes: "afterRenderRootTypesHook" = "afterRenderRootTypesHook";
+readonly "render:afterRenderRootTypes": "afterRenderRootTypesHook" = "afterRenderRootTypesHook";
 ```
 
 ##### render:afterRenderTypeEntities
 
 ```ts
-readonly render:afterRenderTypeEntities: "afterRenderTypeEntitiesHook" = "afterRenderTypeEntitiesHook";
+readonly "render:afterRenderTypeEntities": "afterRenderTypeEntitiesHook" = "afterRenderTypeEntitiesHook";
 ```
 
 ##### render:beforeGenerateIndexMetafile
 
 ```ts
-readonly render:beforeGenerateIndexMetafile: "beforeGenerateIndexMetafileHook" = "beforeGenerateIndexMetafileHook";
+readonly "render:beforeGenerateIndexMetafile": "beforeGenerateIndexMetafileHook" = "beforeGenerateIndexMetafileHook";
 ```
 
 ##### render:beforeRenderHomepage
 
 ```ts
-readonly render:beforeRenderHomepage: "beforeRenderHomepageHook" = "beforeRenderHomepageHook";
+readonly "render:beforeRenderHomepage": "beforeRenderHomepageHook" = "beforeRenderHomepageHook";
 ```
 
 ##### render:beforeRenderRootTypes
 
 ```ts
-readonly render:beforeRenderRootTypes: "beforeRenderRootTypesHook" = "beforeRenderRootTypesHook";
+readonly "render:beforeRenderRootTypes": "beforeRenderRootTypesHook" = "beforeRenderRootTypesHook";
 ```
 
 ##### render:beforeRenderTypeEntities
 
 ```ts
-readonly render:beforeRenderTypeEntities: "beforeRenderTypeEntitiesHook" = "beforeRenderTypeEntitiesHook";
+readonly "render:beforeRenderTypeEntities": "beforeRenderTypeEntitiesHook" = "beforeRenderTypeEntitiesHook";
 ```
 
 ##### schema:afterLoad
 
 ```ts
-readonly schema:afterLoad: "afterLoadSchemaHook" = "afterLoadSchemaHook";
+readonly "schema:afterLoad": "afterLoadSchemaHook" = "afterLoadSchemaHook";
 ```
 
 ##### schema:beforeLoad
 
 ```ts
-readonly schema:beforeLoad: "beforeLoadSchemaHook" = "beforeLoadSchemaHook";
+readonly "schema:beforeLoad": "beforeLoadSchemaHook" = "beforeLoadSchemaHook";
 ```

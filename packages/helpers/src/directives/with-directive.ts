@@ -1,8 +1,6 @@
 /**
  * `decorators` render helper for directive-definition-only content.
  *
- * @see [Migrating from `customDirective`](https://graphql-markdown.dev/docs/customize/decorators#migrating-from-customdirective)
- *
  * @packageDocumentation
  */
 

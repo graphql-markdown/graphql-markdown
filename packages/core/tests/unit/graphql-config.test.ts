@@ -336,7 +336,6 @@ describe("config", () => {
         expect.objectContaining({
           id: DEFAULT_OPTIONS.id,
           baseURL: graphqlConfig.extensions["graphql-markdown"].baseURL,
-          customDirective: DEFAULT_OPTIONS.customDirective,
           diffMethod: DEFAULT_OPTIONS.diffMethod,
           docOptions: DEFAULT_OPTIONS.docOptions,
           groupByDirective: DEFAULT_OPTIONS.groupByDirective,

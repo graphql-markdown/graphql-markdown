@@ -1,5 +1,4 @@
 import { GraphQLDirective, GraphQLScalarType } from "graphql/type";
-import { DirectiveLocation } from "graphql/language";
 
 import {
   printDeprecation,
@@ -8,7 +7,6 @@ import {
 } from "../../src/common";
 
 import { DEFAULT_OPTIONS } from "../../src/const/options";
-import { buildCustomDirectiveDecorators } from "../../src/decorator";
 
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", async (importOriginal) => {
@@ -140,51 +138,6 @@ describe("common", () => {
 
 Lorem ipsum"
 `);
-    });
-
-    test("return custom directive description if applied", () => {
-      expect.hasAssertions();
-
-      const directiveType = new GraphQLDirective({
-        name: "testDirective",
-        locations: [DirectiveLocation.OBJECT],
-      });
-
-      const type = {
-        name: "TestType",
-        description: "Lorem ipsum",
-        astNode: {
-          directives: [
-            {
-              name: {
-                value: "testDirective",
-              },
-            },
-          ],
-        },
-      };
-
-      const options = {
-        ...DEFAULT_OPTIONS,
-        decorators: buildCustomDirectiveDecorators({
-          testDirective: {
-            type: directiveType,
-            descriptor: (directive: GraphQLDirective): string => {
-              return `Test ${directive.name}`;
-            },
-          },
-        } as never),
-      };
-
-      const description = printDescription(type, options);
-
-      expect(description).toMatchInlineSnapshot(`
-        "
-
-        Lorem ipsum
-
-        Test testDirective"
-      `);
     });
   });
 

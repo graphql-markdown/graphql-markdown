@@ -10,13 +10,13 @@ Generate index metafile event constants.
 const GenerateIndexMetafileEvents: object;
 ```
 
-Defined in: [core/src/events/generate-index-metafile-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile-events.ts#L10)
+Defined in: [packages/core/src/events/generate-index-metafile-events.ts:10](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/core/src/events/generate-index-metafile-events.ts#L10)
 
 Event names for generating index metafile.
 
 #### Type Declaration
 
-##### AFTER_GENERATE
+##### AFTER\_GENERATE
 
 ```ts
 readonly AFTER_GENERATE: "render:afterGenerateIndexMetafile" = "render:afterGenerateIndexMetafile";
@@ -24,7 +24,7 @@ readonly AFTER_GENERATE: "render:afterGenerateIndexMetafile" = "render:afterGene
 
 Emitted after generating index metafile
 
-##### BEFORE_GENERATE
+##### BEFORE\_GENERATE
 
 ```ts
 readonly BEFORE_GENERATE: "render:beforeGenerateIndexMetafile" = "render:beforeGenerateIndexMetafile";

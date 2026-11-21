@@ -14,7 +14,7 @@ Defined in: [printer-legacy/src/const/options.ts:31](https://github.com/graphql-
 LEVEL: "#";
 ```
 
-Defined in: [printer-legacy/src/const/options.ts:38](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L38)
+Defined in: [printer-legacy/src/const/options.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L37)
 
 ##### ~~NONE~~
 
@@ -22,7 +22,7 @@ Defined in: [printer-legacy/src/const/options.ts:38](https://github.com/graphql-
 NONE: "";
 ```
 
-Defined in: [printer-legacy/src/const/options.ts:37](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L37)
+Defined in: [printer-legacy/src/const/options.ts:36](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L36)
 
 ###### Deprecated
 
@@ -32,7 +32,7 @@ Use `SectionLevels.LEVEL` instead.
 
 ### TypeHierarchy
 
-Defined in: [printer-legacy/src/const/options.ts:23](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L23)
+Defined in: [printer-legacy/src/const/options.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L24)
 
 #### Enumeration Members
 
@@ -42,7 +42,7 @@ Defined in: [printer-legacy/src/const/options.ts:23](https://github.com/graphql-
 API: "api";
 ```
 
-Defined in: [printer-legacy/src/const/options.ts:24](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L24)
+Defined in: [printer-legacy/src/const/options.ts:25](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L25)
 
 ##### ENTITY
 
@@ -62,15 +62,18 @@ Defined in: [printer-legacy/src/const/options.ts:28](https://github.com/graphql-
 
 ## Variables
 
-### DEFAULT_OPTIONS
+### DEFAULT\_OPTIONS
 
 ```ts
 const DEFAULT_OPTIONS: Required<
   Omit<
     PrintTypeOptions,
     | "collapsible"
+    | "decorators"
+    | "entity"
     | "exampleSection"
     | "formatCategoryFolderName"
+    | "formatMDXTitle"
     | "groups"
     | "level"
     | "meta"
@@ -83,7 +86,7 @@ const DEFAULT_OPTIONS: Required<
   object;
 ```
 
-Defined in: [printer-legacy/src/const/options.ts:57](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L57)
+Defined in: [printer-legacy/src/const/options.ts:56](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L56)
 
 Clean runtime options passed through the printer.
 
@@ -95,10 +98,28 @@ Clean runtime options passed through the printer.
 collapsible: Maybe<CollapsibleOption>;
 ```
 
+##### decorators
+
+```ts
+decorators: PrintTypeOptions["decorators"];
+```
+
+##### entity
+
+```ts
+entity: PrintTypeOptions["entity"];
+```
+
 ##### exampleSection
 
 ```ts
 exampleSection: PrintTypeOptions["exampleSection"];
+```
+
+##### formatMDXTitle
+
+```ts
+formatMDXTitle: PrintTypeOptions["formatMDXTitle"];
 ```
 
 ##### groups
@@ -139,7 +160,7 @@ skipDocDirectives: GraphQLDirective[];
 
 ---
 
-### PRINT_TYPE_DEFAULT_OPTIONS
+### PRINT\_TYPE\_DEFAULT\_OPTIONS
 
 ```ts
 const PRINT_TYPE_DEFAULT_OPTIONS: Required<
@@ -148,7 +169,7 @@ const PRINT_TYPE_DEFAULT_OPTIONS: Required<
   object;
 ```
 
-Defined in: [printer-legacy/src/const/options.ts:41](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L41)
+Defined in: [printer-legacy/src/const/options.ts:40](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/printer-legacy/src/const/options.ts#L40)
 
 #### Type Declaration
 

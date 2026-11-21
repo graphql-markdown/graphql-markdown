@@ -29,7 +29,7 @@ Use the path that matches your documentation stack:
 
 The quickest way to wire any supported framework is to run `npm create graphql-markdown-docs@latest` inside your existing site. It detects the framework, asks for your schema and output folder, and writes the configuration for you. See [Add to an existing site](/docs/get-started#with-the-scaffolder-recommended).
 
-For new configurations, use the `formatter` setting. The legacy `mdxParser` setting still works as a deprecated alias.
+For new configurations, use the `formatter` setting.
 
 ## Common setup
 

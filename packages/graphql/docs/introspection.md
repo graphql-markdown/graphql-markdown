@@ -27,7 +27,7 @@ Defined in: [packages/graphql/src/introspection.ts:51](https://github.com/graphq
 new IntrospectionError(message?): IntrospectionError;
 ```
 
-Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.es5.d.ts:1080
+Defined in: node\_modules/.bun/typescript@6.0.3/node\_modules/typescript/lib/lib.es5.d.ts:1080
 
 ###### Parameters
 
@@ -41,9 +41,7 @@ Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.e
 
 ###### Inherited from
 
-```ts
-Error.constructor;
-```
+`Error.constructor`
 
 ##### Constructor
 
@@ -51,7 +49,7 @@ Error.constructor;
 new IntrospectionError(message?, options?): IntrospectionError;
 ```
 
-Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.es5.d.ts:1080
+Defined in: node\_modules/.bun/typescript@6.0.3/node\_modules/typescript/lib/lib.es5.d.ts:1080
 
 ###### Parameters
 
@@ -69,9 +67,7 @@ Defined in: node_modules/.bun/typescript@6.0.3/node_modules/typescript/lib/lib.e
 
 ###### Inherited from
 
-```ts
-Error.constructor;
-```
+`Error.constructor`
 
 ## Functions
 
@@ -85,7 +81,7 @@ function _getFields<T, V>(
 ): Record<string, unknown> | V;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:340](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L340)
+Defined in: [packages/graphql/src/introspection.ts:421](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L421)
 
 **`Internal`**
 
@@ -183,13 +179,45 @@ Defined in: [packages/graphql/src/introspection.ts:169](https://github.com/graph
 
 ---
 
+### getDirectivesHolder()
+
+```ts
+function getDirectivesHolder(type): Maybe<{
+  directives?: readonly DirectiveNode[];
+}>;
+```
+
+Defined in: [packages/graphql/src/introspection.ts:282](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L282)
+
+**`Internal`**
+
+Returns the AST node holding the directives for a GraphQL schema type.
+
+#### Parameters
+
+##### type
+
+`unknown`
+
+the GraphQL schema type to parse.
+
+#### Returns
+
+`Maybe`&lt;\{
+`directives?`: readonly `DirectiveNode`[];
+\}&gt;
+
+the AST node carrying the `directives` list.
+
+---
+
 ### getFields()
 
 ```ts
 function getFields(type): unknown[];
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:604](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L604)
+Defined in: [packages/graphql/src/introspection.ts:681](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L681)
 
 Returns fields map for a GraphQL schema type.
 
@@ -220,7 +248,7 @@ function getOperation(
 ): Record<string, GraphQLOperationType>;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:567](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L567)
+Defined in: [packages/graphql/src/introspection.ts:644](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L644)
 
 **`Internal`**
 
@@ -256,7 +284,7 @@ a map of fields as k/v records.
 function getSchemaMap(schema): SchemaMap;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:682](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L682)
+Defined in: [packages/graphql/src/introspection.ts:759](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L759)
 
 Returns an introspection map of the GraphQL schema.
 This is the entry point for GraphQL-Markdown schema parsing features.
@@ -347,7 +375,7 @@ function getTypeDirectiveArgValue(
 ): Maybe<string | Record<string, unknown>>;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:312](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L312)
+Defined in: [packages/graphql/src/introspection.ts:393](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L393)
 
 Returns one directive's argument's value linked to a GraphQL schema type.
 It calls [getTypeDirectiveValues](#gettypedirectivevalues) and returns a matching record.
@@ -389,7 +417,7 @@ function getTypeDirectiveValues(
 ): Maybe<Record<string, unknown>>;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:281](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L281)
+Defined in: [packages/graphql/src/introspection.ts:307](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L307)
 
 Returns all directive's arguments' values linked to a GraphQL schema type.
 
@@ -412,6 +440,57 @@ the GraphQL schema type to parse.
 `Maybe`&lt;`Record`&lt;`string`, `unknown`&gt;&gt;
 
 a record k/v with arguments' name as keys and arguments' value.
+
+---
+
+### getTypeDirectiveValuesList()
+
+```ts
+function getTypeDirectiveValuesList(directive, type): Record<string, unknown>[];
+```
+
+Defined in: [packages/graphql/src/introspection.ts:352](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L352)
+
+Returns the arguments' values of every occurrence of a directive on a GraphQL schema type.
+
+Unlike [getTypeDirectiveValues](#gettypedirectivevalues), which resolves only the first occurrence,
+this returns one record per occurrence, in schema declaration order. This is
+required for [repeatable directives](https://spec.graphql.org/draft/#sec-Type-System.Directives).
+
+#### Parameters
+
+##### directive
+
+`GraphQLDirective`
+
+a GraphQL directive defined in the schema.
+
+##### type
+
+`unknown`
+
+the GraphQL schema type to parse.
+
+#### Returns
+
+`Record`&lt;`string`, `unknown`&gt;[]
+
+a list of records k/v with arguments' name as keys and arguments' value, empty if the directive is not present.
+
+#### Example
+
+```graphql
+type Query {
+  user(id: ID!): User
+    @httpResponse(code: 200, description: "OK")
+    @httpResponse(code: 404, description: "User not found")
+}
+```
+
+```js
+getTypeDirectiveValuesList(httpResponseDirective, queryUserField);
+// [ { code: 200, description: "OK" }, { code: 404, description: "User not found" } ]
+```
 
 ---
 
@@ -466,7 +545,7 @@ a map of GraphQL named types for the matching GraphQL type, or `undefined` if no
 function getTypeName(type, defaultName?): string;
 ```
 
-Defined in: [packages/graphql/src/introspection.ts:402](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L402)
+Defined in: [packages/graphql/src/introspection.ts:481](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/graphql/src/introspection.ts#L481)
 
 Resolves the name of a GraphQL schema type.
 
