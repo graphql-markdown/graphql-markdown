@@ -43,12 +43,12 @@ jobs:
           git config user.email "41898233+github-actions[bot]@users.noreply.github.com"
           git switch -c "changelog-$TAG"
           git add CHANGELOG.md
-          git commit -m "update changelog for $TAG changes"
+          git commit -m "📝 docs(changelog): update the changelog for $TAG"
           git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "changelog-$TAG"
           # A re-run force-pushes onto the PR that is already open.
           if gh pr view "changelog-$TAG" --json state --jq .state 2>/dev/null | grep -q OPEN; then
             exit 0
           fi
           gh pr create --base main --head "changelog-$TAG" \
-            --title "update changelog for $TAG changes" \
+            --title "📝 docs(changelog): update the changelog for $TAG" \
             --body "Automated changelog update for $TAG."
