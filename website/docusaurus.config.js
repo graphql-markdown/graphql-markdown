@@ -123,8 +123,11 @@ const config = {
           },
           { from: "/docs/advanced/examples", to: "/docs/guides/examples" },
           {
-            from: "/docs/advanced/custom-directive",
-            to: "/docs/customize/custom-directive",
+            from: [
+              "/docs/advanced/custom-directive",
+              "/docs/customize/custom-directive",
+            ],
+            to: "/docs/customize/decorators",
           },
           {
             from: "/docs/advanced/decorators",

@@ -16,6 +16,8 @@ import TabItem from "@theme/TabItem";
 
 Every setting is a plugin option in your config file, and most have a CLI flag that overrides it. Run the CLI with `npx docusaurus graphql-to-doc` (Docusaurus plugin) or `npx gqlmd graphql-to-doc` (standalone), and see [configuration](/docs/reference/configuration) for where the config lives.
 
+A setting that is not listed on this page is rejected with an error. The error names each unsupported setting and suggests the closest supported one for a likely typo. If you are upgrading from an earlier version, see [Upgrade to 1.44](/docs/guides/upgrade-1-44).
+
 ## At a glance
 
 | Option                                  | Type                | Default            | Purpose                                                         |
@@ -71,7 +73,7 @@ Every flag below works with `npx docusaurus graphql-to-doc` (Docusaurus plugin) 
 | `--config`                  | [`--config`](#--config)                                  | Print resolved config (debug)                |
 | `--no-telemetry`            | [`telemetry`](#telemetry)                                | Disable anonymous usage telemetry            |
 
-`--formatter` is only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose them, so set `formatter` in your configuration file instead.
+`--formatter` is only registered when the CLI has a default formatter package, as `@graphql-markdown/docusaurus` does. The standalone `gqlmd` command doesn't expose it, so set `formatter` in your configuration file instead.
 
 ## Input
 
