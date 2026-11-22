@@ -6,7 +6,7 @@ Versions of `@graphql-markdown/types`. Each version links to the GraphQL-Markdow
 
 ### Minor Changes
 
-- [#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649) [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158) - **⚠️ Breaking change:** remove the deprecated configuration options `customDirective` and `mdxParser`. Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead.
+- [#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649) [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158) - **⚠️ Breaking change:** remove the deprecated configuration options `customDirective` and `mdxParser`. Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead, as shown in [Upgrade to 1.44](https://graphql-markdown.dev/docs/guides/upgrade-1-44).
   
   - **`customDirective`**:
     - Removed deprecated `customDirective` setting from configuration and CLI options; use `decorators` instead.
@@ -17,7 +17,7 @@ Versions of `@graphql-markdown/types`. Each version links to the GraphQL-Markdow
     - Removed `customDirective` telemetry sanitization rules from `@graphql-markdown/telemetry`.
     - Updated doc comments in `@graphql-markdown/helpers` to drop `customDirective` references.
   - **`mdxParser`**:
-    - Removed deprecated `mdxParser` option and `--mdx-parser` CLI flag; use `formatter` instead.
+    - Removed deprecated `mdxParser` option and `--mdxParser` CLI flag; use `formatter` instead.
     - Removed `mdxParser` from `ConfigOptions` and `CliOptions` in `@graphql-markdown/types`.
     - Removed `mdxParser` telemetry sanitization rules from `@graphql-markdown/telemetry`.
     - Updated doc comments in `@graphql-markdown/formatters` to reference `formatter` instead of `mdxParser`.
