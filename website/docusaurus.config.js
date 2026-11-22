@@ -411,16 +411,36 @@ const config = {
             label: "Demos",
             items: [
               {
-                href: "https://graphql-markdown.dev/demo-docusaurus/",
-                label: "Docusaurus",
-              },
-              {
                 href: "https://graphql-markdown.dev/demo-astro-starlight/",
                 label: "Astro / Starlight",
               },
               {
                 href: "https://demo-astro-r2.edno.workers.dev/",
                 label: "Astro / Starlight on Cloudflare R2",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-docfx/",
+                label: "DocFX",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-docusaurus/",
+                label: "Docusaurus",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-honkit/",
+                label: "HonKit",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-hugo/",
+                label: "Hugo",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-mdbook/",
+                label: "mdBook",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-mkdocs/",
+                label: "MkDocs",
               },
               {
                 href: "https://graphql-markdown.dev/demo-nextjs-fumadocs/",
@@ -437,26 +457,6 @@ const config = {
               {
                 href: "https://graphql-markdown.dev/demo-vite-vocs/",
                 label: "Vite / Vocs",
-              },
-              {
-                href: "https://graphql-markdown.dev/demo-hugo/",
-                label: "Hugo",
-              },
-              {
-                href: "https://graphql-markdown.dev/demo-mkdocs/",
-                label: "MkDocs",
-              },
-              {
-                href: "https://graphql-markdown.dev/demo-mdbook/",
-                label: "mdBook",
-              },
-              {
-                href: "https://graphql-markdown.dev/demo-honkit/",
-                label: "HonKit",
-              },
-              {
-                href: "https://graphql-markdown.dev/demo-docfx/",
-                label: "DocFX",
               },
               {
                 type: "doc",
