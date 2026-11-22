@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/member-ordering */
 import type {
   Category,
   CategorySortFn,
@@ -39,6 +38,8 @@ import {
   RenderTypeEntitiesEvents,
 } from "./events/index.ts";
 
+// Re-exported only for unit tests (direct whitebox coverage); not part of the
+// production public API.
 export {
   DEPRECATED,
   CATEGORY_STYLE_CLASS,
@@ -478,59 +479,6 @@ export class Renderer {
   }
 
   /**
-   * Handles rendering of a single root type entry.
-   * Extracted from `renderRootTypes` for clarity.
-   */
-  private async renderRootTypeItem(
-    name: string,
-    type: unknown,
-    isFlat: boolean,
-    isOperationRootType: boolean,
-    rootTypeName: SchemaEntity,
-  ): Promise<Maybe<Category>> {
-    let dirPath = this.outputDir;
-    let entityName = name;
-    let operationNamespaceParts: string[] | undefined;
-
-    const SEPARATOR = ".";
-
-    if (isOperationRootType && name.includes(SEPARATOR)) {
-      const namespaceParts = name.split(SEPARATOR).filter(Boolean);
-      if (namespaceParts.length > 1) {
-        operationNamespaceParts = namespaceParts.slice(0, -1);
-        if (!isFlat) {
-          entityName = namespaceParts.at(-1) ?? entityName;
-        }
-      }
-    }
-
-    if (!isFlat) {
-      dirPath = await this.generateCategoryMetafileType(
-        (type as Record<string, unknown>)[name],
-        name,
-        rootTypeName,
-      );
-
-      if (operationNamespaceParts && operationNamespaceParts.length > 0) {
-        // Sequential on purpose: write each parent namespace index before its
-        // child, so output adapters and event handlers see folders in order.
-        for (const namespace of operationNamespaceParts) {
-          dirPath = join(dirPath, slugify(namespace));
-          await this.generateIndexMetafile(dirPath, namespace); // NOSONAR: S9382
-        }
-      }
-    }
-
-    return this.renderTypeEntities(
-      dirPath,
-      entityName,
-      (type as Record<string, unknown>)[name],
-      operationNamespaceParts,
-      rootTypeName,
-    );
-  }
-
-  /**
    * Renders documentation for a specific type entity and saves it to a file.
    *
    * @param dirPath - The directory path where the file should be saved
@@ -810,6 +758,59 @@ export class Renderer {
         LogLevel.warn,
       );
     }
+  }
+
+  /**
+   * Handles rendering of a single root type entry.
+   * Extracted from `renderRootTypes` for clarity.
+   */
+  private async renderRootTypeItem(
+    name: string,
+    type: unknown,
+    isFlat: boolean,
+    isOperationRootType: boolean,
+    rootTypeName: SchemaEntity,
+  ): Promise<Maybe<Category>> {
+    let dirPath = this.outputDir;
+    let entityName = name;
+    let operationNamespaceParts: string[] | undefined;
+
+    const SEPARATOR = ".";
+
+    if (isOperationRootType && name.includes(SEPARATOR)) {
+      const namespaceParts = name.split(SEPARATOR).filter(Boolean);
+      if (namespaceParts.length > 1) {
+        operationNamespaceParts = namespaceParts.slice(0, -1);
+        if (!isFlat) {
+          entityName = namespaceParts.at(-1) ?? entityName;
+        }
+      }
+    }
+
+    if (!isFlat) {
+      dirPath = await this.generateCategoryMetafileType(
+        (type as Record<string, unknown>)[name],
+        name,
+        rootTypeName,
+      );
+
+      if (operationNamespaceParts && operationNamespaceParts.length > 0) {
+        // Sequential on purpose: write each parent namespace index before its
+        // child, so output adapters and event handlers see folders in order.
+        for (const namespace of operationNamespaceParts) {
+          dirPath = join(dirPath, slugify(namespace));
+          await this.generateIndexMetafile(dirPath, namespace); // NOSONAR: S9382
+        }
+      }
+    }
+
+    return this.renderTypeEntities(
+      dirPath,
+      entityName,
+      (type as Record<string, unknown>)[name],
+      operationNamespaceParts,
+      rootTypeName,
+    );
   }
 
   /**
