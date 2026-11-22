@@ -81,6 +81,9 @@ describe("Fixture app", () => {
       join(FIXTURE_DIR, ".nuxt"),
       join(FIXTURE_DIR, ".output"),
       join(FIXTURE_DIR, "content"),
+      // Written by the swizzle step below; untracked, so the cold build
+      // always starts from the theme's own SiteHeader.
+      join(FIXTURE_DIR, "app/components/SiteHeader.vue"),
     ]) {
       if (existsSync(dir)) rmSync(dir, { recursive: true, force: true });
     }

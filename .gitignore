@@ -22,6 +22,8 @@ website/docs
 .output
 .data
 packages/*/tests/fixture*/content/
+# written by the nuxt-theme fixture test's swizzle step
+packages/nuxt-theme/tests/fixture/app/components/SiteHeader.vue
 
 # istanbul code coverage
 .nyc_output
