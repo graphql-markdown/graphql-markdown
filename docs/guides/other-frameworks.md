@@ -121,6 +121,7 @@ Then select your framework:
 | **Next.js + Fumadocs** | `@graphql-markdown/formatters/fumadocs`   | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/fumadocs/README.md)   |
 | **Vocs**               | `@graphql-markdown/formatters/vocs`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/vocs/README.md)       |
 | **HonKit**             | `@graphql-markdown/formatters/honkit`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/README.md)     |
+| **Docsify**            | `@graphql-markdown/formatters/docsify`    | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docsify/README.md)    |
 | **Hugo**               | `@graphql-markdown/formatters/hugo`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/README.md)       |
 | **MkDocs**             | `@graphql-markdown/formatters/mkdocs`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/README.md)     |
 | **DocFX**              | `@graphql-markdown/formatters/docfx`      | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md)      |
