@@ -480,6 +480,44 @@ const config = {
       },
       footer: {
         style: "light",
+        links: [
+          {
+            title: "Docs",
+            items: [
+              { label: "Get started", to: "/docs/get-started" },
+              { label: "Guides", to: "/docs/category/guides" },
+              { label: "Reference", to: "/docs/category/reference" },
+            ],
+          },
+          {
+            title: "Community",
+            items: [
+              {
+                label: "GitHub",
+                href: "https://github.com/graphql-markdown/graphql-markdown",
+              },
+              { label: "Showcase", to: "/showcase" },
+              {
+                label: "Release notes",
+                href: "https://github.com/graphql-markdown/graphql-markdown/releases",
+              },
+            ],
+          },
+          {
+            title: "More",
+            items: [
+              {
+                label: "npm",
+                href: "https://www.npmjs.com/package/@graphql-markdown/cli",
+              },
+              { label: "Demos", to: "/#demos" },
+              {
+                label: "Plant a tree",
+                href: "https://plant.treeware.earth/graphql-markdown/graphql-markdown",
+              },
+            ],
+          },
+        ],
         copyright: `Copyright © 2020-${new Date().getFullYear()} Grégory Heitz. Built with Docusaurus.`,
       },
       prism: {
