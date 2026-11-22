@@ -89,17 +89,17 @@ Same generator, your framework. Click any screenshot to explore the live site.
       <br /><b>HonKit</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-zola/graphql/types/objects/project/"><img src=".github/assets/demos/demo-zola.jpg" alt="Zola demo" /></a>
+      <a href="https://graphql-markdown.dev/demo-zola/"><img src=".github/assets/demos/demo-zola.jpg" alt="Zola demo" /></a>
       <br /><b>Zola</b>
     </td>
   </tr>
   <tr>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-docsify/#/graphql/types/objects/project"><img src=".github/assets/demos/demo-docsify.jpg" alt="Docsify demo" /></a>
+      <a href="https://graphql-markdown.dev/demo-docsify/"><img src=".github/assets/demos/demo-docsify.jpg" alt="Docsify demo" /></a>
       <br /><b>Docsify</b>
     </td>
     <td align="center" width="33%">
-      <a href="https://graphql-markdown.dev/demo-pelican/graphql/types/objects/project/"><img src=".github/assets/demos/demo-pelican.jpg" alt="Pelican demo" /></a>
+      <a href="https://graphql-markdown.dev/demo-pelican/"><img src=".github/assets/demos/demo-pelican.jpg" alt="Pelican demo" /></a>
       <br /><b>Pelican</b><br /><sub>custom formatter</sub>
     </td>
     <td align="center" width="33%">
