@@ -125,19 +125,17 @@ describe("common", () => {
       const description = printDescription(type, DEFAULT_OPTIONS);
 
       expect(description).toMatchInlineSnapshot(`
-"
+        "
 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
-&#x007B; Foobar &#x007D;
+        &#x007B; Foobar &#x007D;
 
-</span>
-</fieldset>
+        </fieldset>
 
-Lorem ipsum"
-`);
+        Lorem ipsum"
+      `);
     });
   });
 
@@ -154,15 +152,15 @@ Lorem ipsum"
       const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toMatchInlineSnapshot(`
-"
+        "
 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
-</span>
-</fieldset>"
-`);
+
+
+        </fieldset>"
+      `);
     });
 
     test("prints deprecation reason if type is deprecated with reason", () => {
@@ -178,17 +176,15 @@ Lorem ipsum"
       const deprecation = printDeprecation(type, DEFAULT_OPTIONS);
 
       expect(deprecation).toMatchInlineSnapshot(`
-"
+        "
 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
-&#x007B; foobar &#x007D;
+        &#x007B; foobar &#x007D;
 
-</span>
-</fieldset>"
-`);
+        </fieldset>"
+      `);
     });
 
     test("does not print deprecated badge if type is not deprecated", () => {
@@ -213,17 +209,15 @@ Lorem ipsum"
       expect(
         printWarning({ text: "test", title: "DEPRECATED" }, DEFAULT_OPTIONS),
       ).toMatchInlineSnapshot(`
-"
+        "
 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
-test
+        test
 
-</span>
-</fieldset>"
-`);
+        </fieldset>"
+      `);
     });
   });
 });
