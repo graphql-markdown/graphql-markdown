@@ -16,6 +16,7 @@ import type {
 import { join } from "node:path";
 
 import {
+  assertSupportedOptions,
   buildConfig,
   DEFAULT_HIERARCHY,
   ASSET_HOMEPAGE_LOCATION,
@@ -245,6 +246,76 @@ describe("config", () => {
     });
   });
 
+  describe("assertSupportedOptions()", () => {
+    test("throws for an unknown key and names it", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        return assertSupportedOptions({ foo: 1 });
+      }).toThrow('Unsupported setting "foo"');
+    });
+
+    test.each(["customDirective", "mdxParser"])(
+      "throws for the removed option %s as an unknown key",
+      (name) => {
+        expect.assertions(1);
+
+        expect(() => {
+          return assertSupportedOptions({ [name]: {} });
+        }).toThrow(`Unsupported setting "${name}". See`);
+      },
+    );
+
+    test("accepts every known key", () => {
+      expect.assertions(1);
+
+      const known = Object.fromEntries(
+        [
+          "baseURL",
+          "decorators",
+          "diffMethod",
+          "docOptions",
+          "force",
+          "formatter",
+          "groupByDirective",
+          "homepage",
+          "id",
+          "linkRoot",
+          "loaders",
+          "metatags",
+          "onlyDocDirective",
+          "outputAdapter",
+          "pretty",
+          "printTypeOptions",
+          "rootPath",
+          "schema",
+          "skipDocDirective",
+          "telemetry",
+          "tmpDir",
+        ].map((key) => {
+          return [key, true];
+        }),
+      );
+
+      expect(() => {
+        return assertSupportedOptions(known);
+      }).not.toThrow();
+    });
+
+    test("accepts the keys added by graphql-config", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        return assertSupportedOptions({
+          schema: "a",
+          documents: [],
+          include: [],
+          exclude: [],
+        });
+      }).not.toThrow();
+    });
+  });
+
   describe("buildConfig()", () => {
     test("preserves the methods of a class based outputAdapter", async () => {
       expect.assertions(2);
@@ -265,6 +336,14 @@ describe("config", () => {
       // deepmerge would rebuild it as a prototype-less copy, dropping writeFile
       expect(config.outputAdapter).toBe(outputAdapter);
       expect(typeof config.outputAdapter!.writeFile).toBe("function");
+    });
+
+    test("rejects a config with an unknown option", async () => {
+      expect.assertions(1);
+
+      await expect(
+        buildConfig({ foo: 1 } as unknown as ConfigOptions),
+      ).rejects.toThrow('Unsupported setting "foo"');
     });
 
     test("returns default options is no config set", async () => {

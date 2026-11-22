@@ -111,6 +111,74 @@ export enum DeprecatedOption {
 export const DOCS_URL = "https://graphql-markdown.dev/docs" as const;
 
 /**
+ * Every supported top-level configuration key. Typed against `ConfigOptions`
+ * so the compiler flags a key added to or removed from the interface.
+ * @internal
+ */
+const CONFIG_OPTION_KEYS = {
+  baseURL: true,
+  decorators: true,
+  diffMethod: true,
+  docOptions: true,
+  force: true,
+  formatter: true,
+  groupByDirective: true,
+  homepage: true,
+  id: true,
+  linkRoot: true,
+  loaders: true,
+  metatags: true,
+  onlyDocDirective: true,
+  outputAdapter: true,
+  pretty: true,
+  printTypeOptions: true,
+  rootPath: true,
+  schema: true,
+  skipDocDirective: true,
+  telemetry: true,
+  tmpDir: true,
+} as const satisfies Record<keyof ConfigOptions, true>;
+
+/**
+ * Keys that `graphql-config` adds to every project extension object, on top of
+ * the supported options.
+ * @internal
+ */
+const GRAPHQL_CONFIG_PROJECT_KEYS = [
+  "schema",
+  "documents",
+  "include",
+  "exclude",
+] as const;
+
+/**
+ * Throws when a configuration contains a top-level key that is not a supported setting.
+ *
+ * @param config - the merged configuration object to check.
+ * @throws Error naming the first unsupported setting and the docs page listing supported ones.
+ *
+ * @example
+ * ```typescript
+ * assertSupportedOptions({ mdxParser: "./parser.js" });
+ * // Error: Unsupported setting "mdxParser". See ...
+ * ```
+ * @public
+ */
+export const assertSupportedOptions = (config: unknown): void => {
+  const supported = new Set<string>([
+    ...Object.keys(CONFIG_OPTION_KEYS),
+    ...GRAPHQL_CONFIG_PROJECT_KEYS,
+  ]);
+  for (const key of Object.keys((config ?? {}) as Record<string, unknown>)) {
+    if (!supported.has(key)) {
+      throw new Error(
+        `Unsupported setting "${key}". See ${DOCS_URL}/reference/settings for the list of supported settings.`,
+      );
+    }
+  }
+};
+
+/**
  * Default package name used for temporary directory creation and identification.
  * @public
  */
@@ -916,6 +984,8 @@ export const buildConfig = async (
     { ...DEFAULT_OPTIONS, ...graphqlConfig },
     configFileOpts ?? {},
   );
+
+  assertSupportedOptions(config);
 
   // deepmerge rebuilds objects as prototype-less plain copies, which strips the
   // methods off a class-based adapter. Take it from the raw sources instead, so
