@@ -123,6 +123,7 @@ Then select your framework:
 | **HonKit**             | `@graphql-markdown/formatters/honkit`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/honkit/README.md)     |
 | **Docsify**            | `@graphql-markdown/formatters/docsify`    | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docsify/README.md)    |
 | **Hugo**               | `@graphql-markdown/formatters/hugo`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/hugo/README.md)       |
+| **Zola**               | `@graphql-markdown/formatters/zola`       | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/zola/README.md)       |
 | **MkDocs**             | `@graphql-markdown/formatters/mkdocs`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mkdocs/README.md)     |
 | **DocFX**              | `@graphql-markdown/formatters/docfx`      | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/docfx/README.md)      |
 | **mdBook**             | `@graphql-markdown/formatters/mdbook`     | [Guide](https://github.com/graphql-markdown/graphql-markdown/blob/main/packages/formatters/src/mdbook/README.md)     |
