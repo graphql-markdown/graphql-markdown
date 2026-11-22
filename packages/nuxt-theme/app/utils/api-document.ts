@@ -210,14 +210,40 @@ export const withoutDeprecationNotice = (
 };
 
 /**
- * Field-level deprecations are emitted as a raw `<aside>`. Swap them for the
- * same UAlert the type-level notice uses so both render identically.
+ * The message of a deprecation notice, as renderable nodes: the children of
+ * the `::api-deprecation` block (a lone paragraph is unwrapped so the alert
+ * text stays inline), or, for the legacy `<aside>` shape, the children of the
+ * message span. The badge is never part of it.
+ */
+const deprecationMessageNodes = (node: MdcElement): MdcNode[] | undefined => {
+  if (node[0] === "api-deprecation") {
+    const children = childrenOf(node);
+    const [only] = children;
+
+    return children.length === 1 && isElement(only, "p")
+      ? childrenOf(only)
+      : children;
+  }
+
+  if (hasClass(node, "api-deprecation-callout")) {
+    const message = findByClass(node, "api-deprecation-message");
+
+    return message ? childrenOf(message) : [];
+  }
+
+  return undefined;
+};
+
+/**
+ * Deprecation notices are emitted as an `::api-deprecation` block (or, in older
+ * output, a raw `<aside>`). Swap them for the same UAlert the type-level
+ * notice uses, keeping the message's links and inline code as slot content.
  */
 const promoteDeprecationCallout = (node: MdcNode): MdcNode => {
-  if (!isElement(node) || !hasClass(node, "api-deprecation-callout"))
-    return node;
+  if (!isElement(node)) return node;
 
-  const message = findByClass(node, "api-deprecation-message");
+  const message = deprecationMessageNodes(node);
+  if (!message) return node;
 
   return [
     "UAlert",
@@ -225,9 +251,9 @@ const promoteDeprecationCallout = (node: MdcNode): MdcNode => {
       color: "error",
       variant: "subtle",
       icon: "i-lucide-triangle-alert",
-      description: nodeText(message ?? node),
       class: "my-4",
     },
+    ["template", { "v-slot:description": "" }, ...message],
   ];
 };
 

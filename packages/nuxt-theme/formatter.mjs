@@ -54,7 +54,9 @@ export const formatMDXAdmonition = ({ text, title, type }) => {
     type.toLowerCase() === "warning" &&
     title?.toLowerCase() === "deprecated"
   ) {
-    return `<aside class="api-deprecation-callout not-prose mb-8"><span class="api-deprecated-badge">deprecated</span><span class="api-deprecation-message">${text.trim()}</span></aside>`;
+    // An MDC block component, not raw HTML: MDC does not parse Markdown inside
+    // raw HTML, so links and code spans in the reason would stay literal.
+    return `::api-deprecation\n${text.trim()}\n::`;
   }
 
   return `<fieldset class="gqlmd-mdx-admonition-fieldset"><legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLowerCase()}">${title}</span></legend><span>${text}</span></fieldset>`;

@@ -123,3 +123,53 @@ describe("extractAnchor", () => {
     expect(Date.now() - start).toBeLessThan(1000);
   });
 });
+
+describe("toRenderableNode deprecation callout", () => {
+  const badge = ["span", { className: ["api-deprecated-badge"] }, "deprecated"];
+  const slotOf = (node: any) => {
+    expect(node[0]).toBe("UAlert");
+    expect(node[1].description).toBeUndefined();
+    expect(node[2][0]).toBe("template");
+    expect(node[2][1]).toEqual({ "v-slot:description": "" });
+
+    return node[2].slice(2);
+  };
+
+  it("keeps links and inline code of a block notice", () => {
+    const link = ["a", { href: "/url" }, ["code", {}, "ProjectStatus"]];
+    const node = [
+      "api-deprecation",
+      {},
+      ["p", {}, "Replaced by ", link, " enum, or ", ["code", {}, "X"]],
+    ];
+    const slot = slotOf(apiDocument.toRenderableNode(node as never));
+
+    expect(slot).toContainEqual(link);
+    expect(slot).toContainEqual(["code", {}, "X"]);
+  });
+
+  it("keeps plain text and never includes the badge", () => {
+    const slot = slotOf(
+      apiDocument.toRenderableNode([
+        "aside",
+        { className: ["api-deprecation-callout"] },
+        badge,
+        ["span", { className: ["api-deprecation-message"] }, "Use B"],
+      ] as never),
+    );
+
+    expect(slot).toEqual(["Use B"]);
+  });
+
+  it("does not leak the badge text when the message is missing", () => {
+    const slot = slotOf(
+      apiDocument.toRenderableNode([
+        "aside",
+        { className: ["api-deprecation-callout"] },
+        badge,
+      ] as never),
+    );
+
+    expect(slot).toEqual([]);
+  });
+});

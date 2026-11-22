@@ -73,9 +73,7 @@ describe("formatMDXAdmonition", () => {
         title: "Deprecated",
         type: "WARNING",
       }),
-    ).toBe(
-      '<aside class="api-deprecation-callout not-prose mb-8"><span class="api-deprecated-badge">deprecated</span><span class="api-deprecation-message">Use `newField` instead.</span></aside>',
-    );
+    ).toBe("::api-deprecation\nUse `newField` instead.\n::");
   });
 
   it("renders a typed fieldset for any other admonition", () => {
