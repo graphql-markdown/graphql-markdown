@@ -20,17 +20,28 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  changes:
+    name: Changes
+    permissions:
+      contents: read
+    uses: ./.github/workflows/changes.yml
+
   preview:
     name: Publish preview packages
     runs-on: ubuntu-latest
+    needs: changes
     # The pkg-pr-new app posts the PR comment itself, so GITHUB_TOKEN stays read-only.
     permissions:
       contents: read
     # Gated at job level on purpose (not `paths:`): fork PRs get no app install
-    # token, so they are skipped here rather than failing the workflow.
+    # token, so they are skipped here rather than failing the workflow. Only
+    # changes that affect a package publish a preview (docs- or CI-only PRs
+    # would publish identical builds); a broken gate publishes anyway.
     if: >-
-      github.event_name == 'push'
-      || github.event.pull_request.head.repo.full_name == github.repository
+      !cancelled()
+      && (github.event_name == 'push'
+        || github.event.pull_request.head.repo.full_name == github.repository)
+      && (needs.changes.result != 'success' || needs.changes.outputs.code == 'true')
 
     steps:
       - name: Checkout Code Base
