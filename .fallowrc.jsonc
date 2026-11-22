@@ -114,6 +114,159 @@
     "jsr",
   ],
 
+  // Architecture boundaries: one zone per workspace package's shipped code (tests,
+  // mocks and fixtures are left out). Each package may import only the workspace
+  // packages it declares in its package.json (dependencies, peerDependencies or
+  // optionalDependencies), so the declared dependency graph is enforced and a new
+  // cross-package import must be declared, which also blocks layering cycles.
+  // Update a rule together with the package.json it mirrors.
+  "boundaries": {
+    "zones": [
+      {
+        "name": "cli",
+        "patterns": ["packages/cli/src/**"],
+      },
+      {
+        "name": "core",
+        "patterns": ["packages/core/src/**"],
+      },
+      {
+        "name": "create-graphql-markdown-docs",
+        "patterns": [
+          "packages/create-graphql-markdown-docs/bin/**",
+          "packages/create-graphql-markdown-docs/lib/**",
+        ],
+      },
+      {
+        "name": "diff",
+        "patterns": ["packages/diff/src/**"],
+      },
+      {
+        "name": "docusaurus",
+        "patterns": ["packages/docusaurus/src/**"],
+      },
+      {
+        "name": "formatters",
+        "patterns": ["packages/formatters/src/**"],
+      },
+      {
+        "name": "graphql",
+        "patterns": ["packages/graphql/src/**"],
+      },
+      {
+        "name": "helpers",
+        "patterns": ["packages/helpers/src/**"],
+      },
+      {
+        "name": "logger",
+        "patterns": ["packages/logger/src/**"],
+      },
+      {
+        "name": "nuxt-theme",
+        "patterns": [
+          "packages/nuxt-theme/app/**",
+          "packages/nuxt-theme/bin/**",
+          "packages/nuxt-theme/modules/**",
+          "packages/nuxt-theme/{constants,content.config,generate,generate-docs,nuxt.config,swizzle.manifest}.ts",
+          "packages/nuxt-theme/{formatter,swizzle.manifest}.mjs",
+        ],
+      },
+      {
+        "name": "printer-legacy",
+        "patterns": ["packages/printer-legacy/src/**"],
+      },
+      {
+        "name": "telemetry",
+        "patterns": ["packages/telemetry/src/**"],
+      },
+      {
+        "name": "tooling-config",
+        "patterns": [
+          "packages/tooling-config/{eslint,husky,prettier,scripts,vitest}/**",
+        ],
+      },
+      {
+        "name": "types",
+        "patterns": ["packages/types/src/**"],
+      },
+      {
+        "name": "utils",
+        "patterns": ["packages/utils/src/**"],
+      },
+    ],
+    "rules": [
+      {
+        "from": "cli",
+        "allow": ["core", "logger", "telemetry", "types"],
+      },
+      {
+        "from": "core",
+        "allow": [
+          "diff",
+          "graphql",
+          "helpers",
+          "logger",
+          "printer-legacy",
+          "telemetry",
+          "types",
+          "utils",
+        ],
+      },
+      {
+        "from": "create-graphql-markdown-docs",
+        "allow": ["telemetry"],
+      },
+      {
+        "from": "diff",
+        "allow": ["graphql", "types", "utils"],
+      },
+      {
+        "from": "docusaurus",
+        "allow": ["cli", "formatters", "logger", "types", "utils"],
+      },
+      {
+        "from": "formatters",
+        "allow": ["helpers", "types", "utils"],
+      },
+      {
+        "from": "graphql",
+        "allow": ["types", "utils"],
+      },
+      {
+        "from": "helpers",
+        "allow": ["graphql", "types", "utils"],
+      },
+      {
+        "from": "logger",
+        "allow": ["types"],
+      },
+      {
+        "from": "nuxt-theme",
+        "allow": ["cli"],
+      },
+      {
+        "from": "printer-legacy",
+        "allow": ["formatters", "graphql", "types", "utils"],
+      },
+      {
+        "from": "telemetry",
+        "allow": ["types"],
+      },
+      {
+        "from": "tooling-config",
+        "allow": [],
+      },
+      {
+        "from": "types",
+        "allow": [],
+      },
+      {
+        "from": "utils",
+        "allow": ["types"],
+      },
+    ],
+  },
+
   // Class member false-positive suppressions.
   // IPrinter methods define an interface contract — no caller invokes them
   //   on the interface type directly.
