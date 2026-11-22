@@ -31,9 +31,16 @@
         color="error"
         variant="subtle"
         icon="i-lucide-triangle-alert"
-        :description="deprecationReason"
         class="mb-8"
-      />
+      >
+        <template #description>
+          <ContentRenderer
+            v-if="deprecationReason"
+            :value="deprecationReason.document"
+            tag="span"
+          />
+        </template>
+      </UAlert>
 
       <template v-if="isLandingPage">
         <template v-if="isFlat">

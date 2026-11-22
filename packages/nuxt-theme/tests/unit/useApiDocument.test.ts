@@ -85,16 +85,49 @@ describe("useApiDocument", () => {
     ).toEqual(["fields"]);
   });
 
-  it("exposes the deprecation reason", () => {
+  it("exposes a structurally detected deprecation reason", () => {
+    const link = ["a", { href: "/p" }, ["code", {}, "Project"]];
+    const notice = ["api-deprecation", {}, ["p", {}, "Use ", link, "."]];
     const page = {
       body: body(
-        ["p", {}, "Replaced by B"],
+        ["p", {}, "Lead"],
+        notice,
         ["pre", { language: "graphql", code: "type A" }],
+        ["p", {}, "after"],
       ),
     };
-    const { deprecationReason } = useApiDocument({ value: page });
+    const { deprecationReason, document } = useApiDocument({ value: page });
 
-    expect(deprecationReason.value).toContain("Replaced by");
+    expect(deprecationReason.value?.text).toBe("Use Project.");
+    expect(deprecationReason.value?.nodes).toContainEqual(link);
+    expect(
+      document.value.lead?.body.value.some((node: unknown) => {
+        return Array.isArray(node) && node[0] === "UAlert";
+      }),
+    ).toBe(false);
+    expect(document.value.lead?.body.value).toHaveLength(3);
+  });
+
+  it("detects the legacy aside without the badge text", () => {
+    const aside = [
+      "aside",
+      { className: ["api-deprecation-callout"] },
+      ["span", { className: ["api-deprecated-badge"] }, "deprecated"],
+      ["span", { className: ["api-deprecation-message"] }, "Use B"],
+    ];
+    const found = apiDocument.findDeprecationNotice({
+      value: [aside, ["pre", {}]] as never,
+    });
+
+    expect(found?.text).toBe("Use B");
+  });
+
+  it("finds no notice without a deprecation element", () => {
+    expect(
+      useApiDocument({
+        value: { body: body(["p", {}, "Replaced by B"], ["pre", {}]) },
+      }).deprecationReason.value,
+    ).toBeUndefined();
   });
 });
 
@@ -121,5 +154,55 @@ describe("extractAnchor", () => {
     const start = Date.now();
     expect(apiDocument.extractAnchor(evil)).toBeNull();
     expect(Date.now() - start).toBeLessThan(1000);
+  });
+});
+
+describe("toRenderableNode deprecation callout", () => {
+  const badge = ["span", { className: ["api-deprecated-badge"] }, "deprecated"];
+  const slotOf = (node: any) => {
+    expect(node[0]).toBe("UAlert");
+    expect(node[1].description).toBeUndefined();
+    expect(node[2][0]).toBe("template");
+    expect(node[2][1]).toEqual({ "v-slot:description": "" });
+
+    return node[2].slice(2);
+  };
+
+  it("keeps links and inline code of a block notice", () => {
+    const link = ["a", { href: "/url" }, ["code", {}, "ProjectStatus"]];
+    const node = [
+      "api-deprecation",
+      {},
+      ["p", {}, "Replaced by ", link, " enum, or ", ["code", {}, "X"]],
+    ];
+    const slot = slotOf(apiDocument.toRenderableNode(node as never));
+
+    expect(slot).toContainEqual(link);
+    expect(slot).toContainEqual(["code", {}, "X"]);
+  });
+
+  it("keeps plain text and never includes the badge", () => {
+    const slot = slotOf(
+      apiDocument.toRenderableNode([
+        "aside",
+        { className: ["api-deprecation-callout"] },
+        badge,
+        ["span", { className: ["api-deprecation-message"] }, "Use B"],
+      ] as never),
+    );
+
+    expect(slot).toEqual(["Use B"]);
+  });
+
+  it("does not leak the badge text when the message is missing", () => {
+    const slot = slotOf(
+      apiDocument.toRenderableNode([
+        "aside",
+        { className: ["api-deprecation-callout"] },
+        badge,
+      ] as never),
+    );
+
+    expect(slot).toEqual([]);
   });
 });

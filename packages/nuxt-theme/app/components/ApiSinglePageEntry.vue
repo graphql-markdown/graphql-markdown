@@ -13,9 +13,16 @@
         color="error"
         variant="subtle"
         icon="i-lucide-triangle-alert"
-        :description="entry.deprecationReason"
         class="mb-8"
-      />
+      >
+        <template #description>
+          <ContentRenderer
+            v-if="entry.deprecationReason"
+            :value="entry.deprecationReason.document"
+            tag="span"
+          />
+        </template>
+      </UAlert>
 
       <ContentRenderer
         v-if="entry.lead"

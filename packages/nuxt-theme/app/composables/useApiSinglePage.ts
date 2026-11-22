@@ -1,6 +1,7 @@
 import { isLandingDocPath } from "../../constants";
 import {
   codeColumnNodeIndexes,
+  type DeprecationNotice,
   findDeprecationNotice,
   isOperationCategory,
   schemaKindLabel,
@@ -32,7 +33,7 @@ export interface ApiSinglePageEntry {
   title: string;
   kindLabel: string;
   isDeprecated: boolean;
-  deprecationReason?: string;
+  deprecationReason?: DeprecationNotice;
   lead?: Record<string, any>;
   sections: { id: string; title: string; document: Record<string, any> }[];
   definitionCard?: CodeCard;

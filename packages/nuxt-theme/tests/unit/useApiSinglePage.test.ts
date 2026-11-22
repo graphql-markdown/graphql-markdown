@@ -32,7 +32,7 @@ const { useApiSinglePage, useApiSinglePageNavigation } =
 const pageBody = (
   definitionCode: string,
   description: string,
-  options: { deprecatedNotice?: string } = {},
+  options: { deprecatedNotice?: unknown } = {},
 ) => {
   const value: unknown[] = [];
   if (options.deprecatedNotice) value.push(options.deprecatedNotice);
@@ -239,7 +239,11 @@ describe("useApiSinglePage", () => {
         title: "LegacyProject",
         kind: "objects",
         body: pageBody("type LegacyProject { id: ID! }", "An old project.", {
-          deprecatedNotice: "Replaced by `Project`.",
+          deprecatedNotice: [
+            "api-deprecation",
+            {},
+            ["p", {}, "Replaced by ", ["code", {}, "Project"], "."],
+          ],
         }),
       },
     ]);
@@ -248,7 +252,7 @@ describe("useApiSinglePage", () => {
     const entry = buckets.value[0]!.entries[0]!;
 
     expect(entry.isDeprecated).toBe(true);
-    expect(entry.deprecationReason).toBe("Replaced by `Project`.");
+    expect(entry.deprecationReason?.text).toBe("Replaced by Project.");
   });
 
   it("highlights the SDL definition into a definition card", async () => {
