@@ -170,6 +170,7 @@ mask tokens. Shared with the Worker, which rejects anything else.
 ```ts
 const FORMATTER_PRESETS: readonly [
   "docfx",
+  "docsify",
   "docusaurus",
   "fumadocs",
   "honkit",

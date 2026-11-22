@@ -3,6 +3,7 @@ import { markdown, mdx } from "./markdown.mjs";
 import { nuxt } from "./nuxt.mjs";
 import {
   docfx,
+  docsify,
   fumadocs,
   generic,
   honkit,
@@ -45,6 +46,7 @@ export const WIRE_FRAMEWORKS = {
   vocs,
   honkit,
   hugo,
+  docsify,
   mkdocs,
   docfx,
   mdbook,

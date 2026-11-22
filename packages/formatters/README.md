@@ -53,6 +53,7 @@ Each formatter has its own setup guide:
 | DocFX              | `@graphql-markdown/formatters/docfx`      | [Guide](src/docfx/README.md)      |
 | Docusaurus         | `@graphql-markdown/formatters/docusaurus` | [Guide](src/docusaurus/README.md) |
 | HonKit             | `@graphql-markdown/formatters/honkit`     | [Guide](src/honkit/README.md)     |
+| Docsify            | `@graphql-markdown/formatters/docsify`    | [Guide](src/docsify/README.md)    |
 | Hugo               | `@graphql-markdown/formatters/hugo`       | [Guide](src/hugo/README.md)       |
 | mdBook             | `@graphql-markdown/formatters/mdbook`     | [Guide](src/mdbook/README.md)     |
 | Generic MDX        | `@graphql-markdown/formatters/mdx`        | [Guide](src/mdx/README.md)        |

@@ -8,6 +8,7 @@
     "./docusaurus": "./src/docusaurus/index.ts",
     "./fumadocs": "./src/fumadocs/index.ts",
     "./honkit": "./src/honkit/index.ts",
+    "./docsify": "./src/docsify/index.ts",
     "./hugo": "./src/hugo/index.ts",
     "./mdbook": "./src/mdbook/index.ts",
     "./mdx": "./src/mdx/index.ts",
