@@ -155,12 +155,15 @@ const GRAPHQL_CONFIG_PROJECT_KEYS = [
  * Throws when a configuration contains a top-level key that is not a supported setting.
  *
  * @param config - the merged configuration object to check.
- * @throws Error naming the first unsupported setting and the docs page listing supported ones.
+ * @throws Error naming every unsupported setting and the docs page listing supported ones.
  *
  * @example
  * ```typescript
  * assertSupportedOptions({ mdxParser: "./parser.js" });
  * // Error: Unsupported setting "mdxParser". See ...
+ *
+ * assertSupportedOptions({ foo: 1, mdxParser: "./parser.js" });
+ * // Error: Unsupported settings "foo", "mdxParser". See ...
  * ```
  * @public
  */
@@ -169,13 +172,23 @@ export const assertSupportedOptions = (config: unknown): void => {
     ...Object.keys(CONFIG_OPTION_KEYS),
     ...GRAPHQL_CONFIG_PROJECT_KEYS,
   ]);
-  for (const key of Object.keys((config ?? {}) as Record<string, unknown>)) {
-    if (!supported.has(key)) {
-      throw new Error(
-        `Unsupported setting "${key}". See ${DOCS_URL}/reference/settings for the list of supported settings.`,
-      );
-    }
+  const unsupported = Object.keys(
+    (config ?? {}) as Record<string, unknown>,
+  ).filter((key) => {
+    return !supported.has(key);
+  });
+  if (unsupported.length === 0) {
+    return;
   }
+  const label = unsupported.length === 1 ? "setting" : "settings";
+  const names = unsupported
+    .map((key) => {
+      return `"${key}"`;
+    })
+    .join(", ");
+  throw new Error(
+    `Unsupported ${label} ${names}. See ${DOCS_URL}/reference/settings for the list of supported settings.`,
+  );
 };
 
 /**

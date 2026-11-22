@@ -255,6 +255,19 @@ describe("config", () => {
       }).toThrow('Unsupported setting "foo"');
     });
 
+    test("names every unknown key in a single error", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        return assertSupportedOptions({
+          foo: 1,
+          baseURL: ".",
+          bar: 2,
+          mdxParser: "./parser.js",
+        });
+      }).toThrow('Unsupported settings "foo", "bar", "mdxParser". See');
+    });
+
     test.each(["customDirective", "mdxParser"])(
       "throws for the removed option %s as an unknown key",
       (name) => {
