@@ -116,6 +116,52 @@ describe("createGenerateDocs", () => {
     expect(rename).not.toHaveBeenCalled();
   });
 
+  it("forwards `telemetry: false` to runGraphQLMarkdown", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      telemetry: false,
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.telemetry).toBe(false);
+  });
+
+  it("omits `telemetry` from options when not provided", async () => {
+    const generate = createGenerateDocs({ schema: "./schema.graphql" });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options).not.toHaveProperty("telemetry");
+  });
+
+  it("forwards `pretty` and `groupByDirective` to runGraphQLMarkdown", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      pretty: true,
+      groupByDirective: { directive: "group", field: "name" },
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.pretty).toBe(true);
+    expect(options.groupByDirective).toEqual({
+      directive: "group",
+      field: "name",
+    });
+  });
+
+  it("keeps the theme's linkRoot even when a cast option tries to override it", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      linkRoot: "/other/",
+    } as never);
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.linkRoot).toBe("/");
+  });
+
   it("returns a callable function", () => {
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
     expect(typeof generate).toBe("function");
