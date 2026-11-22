@@ -21,6 +21,7 @@ import type {
 
 import {
   getDirectivesHolder,
+  getNamedType,
   getTypeDirectiveValues,
   getTypeDirectiveValuesList,
   GraphQLSchema,
@@ -44,33 +45,40 @@ import {
  * otherwise, which cover every kind but the operations.
  *
  * @param type - the GraphQL type being printed.
- * @param options - the print options in effect.
+ * @param options - optional print options in effect.
  *
  * @returns the schema entity kind, or `undefined` when it cannot be determined.
  *
  */
 export const getSchemaEntity = (
   type: unknown,
-  options: PrintTypeOptions,
+  options?: Maybe<Partial<PrintTypeOptions>>,
 ): Maybe<SchemaEntity> => {
-  if (options.entity) {
+  if (options?.entity) {
     return options.entity;
   }
 
+  const namedType: unknown =
+    typeof type === "object" && type !== null
+      ? // GraphQL overload resolution can include a void branch in this monorepo; runtime value is a named type here.
+        // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+        getNamedType(type as never)
+      : type;
+
   switch (true) {
-    case isDirectiveType(type):
+    case isDirectiveType(namedType):
       return "directives";
-    case isEnumType(type):
+    case isEnumType(namedType):
       return "enums";
-    case isInputType(type):
+    case isInputType(namedType):
       return "inputs";
-    case isInterfaceType(type):
+    case isInterfaceType(namedType):
       return "interfaces";
-    case isObjectType(type):
+    case isObjectType(namedType):
       return "objects";
-    case isScalarType(type):
+    case isScalarType(namedType):
       return "scalars";
-    case isUnionType(type):
+    case isUnionType(namedType):
       return "unions";
     default:
       return undefined;
