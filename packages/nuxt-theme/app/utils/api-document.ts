@@ -122,12 +122,49 @@ export const sectionCode = (
 };
 
 /**
- * A type retired with `@deprecatedType` states its replacement as prose above
- * the definition rather than through the standard `@deprecated` directive.
+ * The message of a deprecation notice, as renderable nodes: the children of
+ * the `::api-deprecation` block (a lone paragraph is unwrapped so the alert
+ * text stays inline), or, for the legacy `<aside>` shape, the children of the
+ * message span. The badge is never part of it.
+ */
+const deprecationMessageNodes = (node: MdcElement): MdcNode[] | undefined => {
+  if (node[0] === "api-deprecation") {
+    const children = childrenOf(node);
+    const [only] = children;
+
+    return children.length === 1 && isElement(only, "p")
+      ? childrenOf(only)
+      : children;
+  }
+
+  if (hasClass(node, "api-deprecation-callout")) {
+    const message = findByClass(node, "api-deprecation-message");
+
+    return message ? childrenOf(message) : [];
+  }
+
+  return undefined;
+};
+
+export interface DeprecationNotice {
+  /** The notice node as it sits in the page body. */
+  node: MdcElement;
+  /** The message as renderable nodes, links and inline code included. */
+  nodes: MdcNode[];
+  /** Plain text of the message, without the badge. */
+  text: string;
+  /** A minimal document, so the message can go through `ContentRenderer`. */
+  document: { body: { type: "minimark"; value: MdcNode[] } };
+}
+
+/**
+ * A type-level `@deprecated` is emitted as an `::api-deprecation` block (or a
+ * legacy `<aside>`) in the description, before the definition. Detected by
+ * structure, so any reason text is recognised.
  */
 export const findDeprecationNotice = (
   body: { value?: MdcNode[] } | null | undefined,
-): string | undefined => {
+): DeprecationNotice | undefined => {
   const nodes: MdcNode[] = body?.value ?? [];
   const definitionIndex = nodes.findIndex((node) => {
     return isElement(node, "pre");
@@ -135,9 +172,19 @@ export const findDeprecationNotice = (
   const metadataNodes =
     definitionIndex >= 0 ? nodes.slice(0, definitionIndex) : [];
 
-  return metadataNodes.map(nodeText).find((text) => {
-    return text.includes("Replaced by");
-  });
+  for (const node of metadataNodes) {
+    const message = isElement(node) ? deprecationMessageNodes(node) : undefined;
+    if (isElement(node) && message) {
+      return {
+        node,
+        nodes: message,
+        text: message.map(nodeText).join("").trim(),
+        document: { body: { type: "minimark", value: message } },
+      };
+    }
+  }
+
+  return undefined;
 };
 
 // --- Transforms ----------------------------------------------------------
@@ -192,9 +239,9 @@ export const codeColumnNodeIndexes = (nodes: MdcNode[]): Set<number> => {
  */
 export const withoutDeprecationNotice = (
   nodes: MdcNode[],
-  reason?: string,
+  notice?: DeprecationNotice,
 ): MdcNode[] => {
-  if (!reason) return nodes;
+  if (!notice) return nodes;
 
   let isInDirectivesSection = false;
 
@@ -205,33 +252,8 @@ export const withoutDeprecationNotice = (
 
     if (isInDirectivesSection) return false;
 
-    return !nodeText(node).includes(reason);
+    return node !== notice.node;
   });
-};
-
-/**
- * The message of a deprecation notice, as renderable nodes: the children of
- * the `::api-deprecation` block (a lone paragraph is unwrapped so the alert
- * text stays inline), or, for the legacy `<aside>` shape, the children of the
- * message span. The badge is never part of it.
- */
-const deprecationMessageNodes = (node: MdcElement): MdcNode[] | undefined => {
-  if (node[0] === "api-deprecation") {
-    const children = childrenOf(node);
-    const [only] = children;
-
-    return children.length === 1 && isElement(only, "p")
-      ? childrenOf(only)
-      : children;
-  }
-
-  if (hasClass(node, "api-deprecation-callout")) {
-    const message = findByClass(node, "api-deprecation-message");
-
-    return message ? childrenOf(message) : [];
-  }
-
-  return undefined;
 };
 
 /**
