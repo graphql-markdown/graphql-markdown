@@ -18,6 +18,14 @@ says "never", a maintainer merges the PR by hand.
   `packages/*/jsr.json`, consumed changesets, or `CHANGELOG.md` updates written
   by `changeset version` (`bun run release:version`).
 - **Release and supply-chain files.**
+  - `.github/workflows/publish.yml`, `.github/workflows/publish-docs.yaml`,
+    `.github/workflows/changelog.yml`,
+    `.github/workflows/bot-approve-merge.yml` and
+    `.github/workflows/actions.lock`.
+  - Any workflow change that adds a repository secret other than
+    `GITHUB_TOKEN`, or changes the steps that receive one (today `BOT_PAT`,
+    `SONAR_TOKEN` and `STRYKER_DASHBOARD_API_KEY`), or widens a workflow's
+    `permissions`.
   - `.github/actions/**` (composite actions used by the publish workflows).
   - Everything under `packages/tooling-config/scripts/` (release scripts and
     the `shared/` and `build-packages.mts` modules they import).
