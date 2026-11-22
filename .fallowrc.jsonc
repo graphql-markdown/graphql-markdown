@@ -119,6 +119,9 @@
     "mutation-testing-metrics",
     "better-sqlite3",
     "shiki",
+    // nuxt-theme's ts:check runs `nuxi typecheck`, which runs the vue-tsc binary
+    // and never imports it.
+    "vue-tsc",
     // Pinned JSR CLI and Deno runtime: publish-release.mts runs their binaries
     // from node_modules (Deno via DENO_BIN_PATH) and never imports them.
     "deno",
