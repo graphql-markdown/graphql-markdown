@@ -383,7 +383,7 @@ const config = {
           {
             to: "/api/",
             position: "right",
-            label: "API",
+            label: "API reference",
           },
           {
             to: "showcase",
