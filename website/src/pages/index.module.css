@@ -276,7 +276,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  opacity: 0.45;
+  opacity: 0.7;
   white-space: nowrap;
 }
 
@@ -322,10 +322,14 @@ a.trustedByChip:hover {
 }
 
 .trustedByMore {
-  font-size: 0.82rem;
+  font-size: 0.875rem;
   font-weight: 600;
   white-space: nowrap;
-  opacity: 0.7;
+  color: #b01f80;
+}
+
+[data-theme="dark"] .trustedByMore {
+  color: #f17ccb;
 }
 
 .trustedBySep {
@@ -338,9 +342,13 @@ a.trustedByChip:hover {
 .downloadsChip {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #36c46f !important;
+  color: #1e7a44 !important;
   white-space: nowrap;
   text-decoration: none !important;
+}
+
+[data-theme="dark"] .downloadsChip {
+  color: #36c46f !important;
 }
 
 .downloadsChip:hover {
