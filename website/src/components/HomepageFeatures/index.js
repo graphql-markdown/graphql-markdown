@@ -164,6 +164,14 @@ export default function HomepageFeatures() {
                 </div>
               </li>
             ))}
+            <li className={clsx(styles.demoCard, styles.demoYourStack)}>
+              <h3 className={styles.demoName}>Your stack?</h3>
+              <p className={styles.demoText}>
+                Use the generic <code>mdx</code> preset, or{" "}
+                <Link to="/docs/try-it">fork a demo</Link> and try it with your
+                own schema.
+              </p>
+            </li>
           </ul>
         </div>
       </section>
