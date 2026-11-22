@@ -29,6 +29,7 @@
   "main": "./nuxt.config.ts",
   "exports": {
     ".": "./nuxt.config.ts",
+    "./formatter": "./formatter.mjs",
     "./generate": "./generate.ts",
     "./package.json": "./package.json"
   },
