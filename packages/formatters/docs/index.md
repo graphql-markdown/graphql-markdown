@@ -17,3 +17,4 @@
 - [starlight](starlight.md)
 - [version](version.md)
 - [vocs](vocs.md)
+- [zola](zola.md)

@@ -55,6 +55,7 @@ const rows: Row[] = [
   ["docsify", "docs/api", "/repo", "docs", "api", "/"],
   ["honkit", "api", "/demo-honkit", ".", "api", "/demo-honkit"],
   ["mdbook", "src/api", undefined, "src", "api", undefined],
+  ["zola", "content/api", undefined, "content", "api", "/"],
   ["mkdocs", "docs", undefined, "docs", ".", undefined],
   ["docfx", "docs/api", undefined, "docs", "api", undefined],
   ["mdx", "docs/api", undefined, "docs", "api", undefined],
