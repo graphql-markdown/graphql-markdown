@@ -159,6 +159,20 @@ const config = {
           editUrl:
             "https://github.com/graphql-markdown/graphql-markdown/tree/main/",
           exclude: ["**/__*.md"],
+          async sidebarItemsGenerator({
+            defaultSidebarItemsGenerator,
+            ...args
+          }) {
+            const items = await defaultSidebarItemsGenerator(args);
+            return items.flatMap((item) =>
+              item.type === "category" && item.label === "Reference"
+                ? [
+                    item,
+                    { type: "link", label: "TypeScript API", href: "/api/" },
+                  ]
+                : [item],
+            );
+          },
         },
         theme: {
           customCss: ["./src/css/custom.css"],
@@ -381,11 +395,6 @@ const config = {
             label: "Docs",
           },
           {
-            to: "/api/",
-            position: "right",
-            label: "API reference",
-          },
-          {
             to: "showcase",
             position: "right",
             label: "Showcase",
@@ -487,6 +496,7 @@ const config = {
               { label: "Get started", to: "/docs/get-started" },
               { label: "Guides", to: "/docs/category/guides" },
               { label: "Reference", to: "/docs/category/reference" },
+              { label: "TypeScript API", to: "/api/" },
             ],
           },
           {
