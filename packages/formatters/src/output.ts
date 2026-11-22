@@ -190,7 +190,6 @@ export const rewriteRenderedPage = async (
  * holding the start-cased category, followed by the lines returned from
  * `frontMatter`, then a matching `# title` heading.
  *
- * @internal
  * @param fileName - Name of the index file written in each section directory
  * @param frontMatter - Returns the front matter lines placed after the `title` line
  * @returns A {@link GenerateIndexMetafileHook} implementation
