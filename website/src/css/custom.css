@@ -287,6 +287,7 @@ a.menu__link[href$="/docs/reference/telemetry"]::before,
 a.menu__link[href*="/docs/guides/"]::before,
 a.menu__link[href*="/docs/customize/"]::before,
 a.menu__link[href$="/docs/reference/jsr"]::before,
+a.menu__link[href$="/api"]::before,
 .sidebar-guides > .menu__list-item-collapsible > .menu__link::before,
 .sidebar-customize > .menu__list-item-collapsible > .menu__link::before,
 .sidebar-reference > .menu__list-item-collapsible > .menu__link::before {
@@ -435,4 +436,9 @@ a.menu__link[href$="/docs/customize/output-adapter"]::before {
 a.menu__link[href$="/docs/reference/jsr"]::before {
   mask-image: url("/img/docs/icons/jsr.svg");
   -webkit-mask-image: url("/img/docs/icons/jsr.svg");
+}
+
+a.menu__link[href$="/api"]::before {
+  mask-image: url("/img/docs/icons/api.svg");
+  -webkit-mask-image: url("/img/docs/icons/api.svg");
 }
