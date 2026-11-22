@@ -1261,11 +1261,15 @@ describe("generator", () => {
       expect(result).toBeUndefined();
     });
 
-    test("prefers createMDXFormatter over individual functions", () => {
-      expect.assertions(2);
+    test("own functions override the factory ones, others come from the factory", () => {
+      expect.assertions(4);
 
-      const factoryFormatter = { formatMDXBadge: vi.fn() };
-      const createMDXFormatter = vi.fn().mockReturnValue(factoryFormatter);
+      const factoryBadge = vi.fn();
+      const factoryBullet = vi.fn();
+      const createMDXFormatter = vi.fn().mockReturnValue({
+        formatMDXBadge: factoryBadge,
+        formatMDXBullet: factoryBullet,
+      });
       const individualBadge = vi.fn();
       const mdxModule = {
         createMDXFormatter,
@@ -1275,7 +1279,28 @@ describe("generator", () => {
       const result = getFormatterFromMDXModule(mdxModule);
 
       expect(createMDXFormatter).toHaveBeenCalled();
-      expect(result).toBe(factoryFormatter);
+      expect(result!.formatMDXBadge).toBe(individualBadge);
+      expect(result!.formatMDXBullet).toBe(factoryBullet);
+      expect(result!.formatMDXBadge).not.toBe(factoryBadge);
+    });
+
+    test("own function on default export overrides factory on default export", () => {
+      expect.assertions(2);
+
+      const factoryBullet = vi.fn();
+      const createMDXFormatter = vi.fn().mockReturnValue({
+        formatMDXBadge: vi.fn(),
+        formatMDXBullet: factoryBullet,
+      });
+      const individualBadge = vi.fn();
+      const mdxModule = {
+        default: { createMDXFormatter, formatMDXBadge: individualBadge },
+      };
+
+      const result = getFormatterFromMDXModule(mdxModule);
+
+      expect(result!.formatMDXBadge).toBe(individualBadge);
+      expect(result!.formatMDXBullet).toBe(factoryBullet);
     });
 
     test("detects all 10 formatter function types", () => {

@@ -187,47 +187,43 @@ export const getFormatterFromMDXModule = (
   }
 
   const module = mdxModule as Record<string, unknown>;
-
-  // Check for createMDXFormatter on the module directly (internal/advanced usage)
-  if (
-    "createMDXFormatter" in module &&
-    typeof module.createMDXFormatter === "function"
-  ) {
-    return (module.createMDXFormatter as (meta?: MetaInfo) => Formatter)(meta);
-  }
-
-  // Check for createMDXFormatter on module.default (ESM default export)
   const defaultExport = module.default as Record<string, unknown> | undefined;
-  if (
-    defaultExport &&
-    "createMDXFormatter" in defaultExport &&
-    typeof defaultExport.createMDXFormatter === "function"
-  ) {
-    return (defaultExport.createMDXFormatter as (meta?: MetaInfo) => Formatter)(
-      meta,
-    );
-  }
 
-  // Check for individual formatter functions
-  const formatter: Partial<Formatter> = {};
+  // Collect individual formatter functions (module takes precedence over module.default)
+  const ownFunctions: Partial<Formatter> = {};
   let hasFormatter = false;
 
   for (const funcName of FORMATTER_FUNCTION_NAMES) {
     if (funcName in module && typeof module[funcName] === "function") {
-      (formatter as Record<string, unknown>)[funcName] = module[funcName];
+      (ownFunctions as Record<string, unknown>)[funcName] = module[funcName];
       hasFormatter = true;
     } else if (
       defaultExport &&
       funcName in defaultExport &&
       typeof defaultExport[funcName] === "function"
     ) {
-      (formatter as Record<string, unknown>)[funcName] =
+      (ownFunctions as Record<string, unknown>)[funcName] =
         defaultExport[funcName];
       hasFormatter = true;
     }
   }
 
-  return hasFormatter ? formatter : undefined;
+  // Check for createMDXFormatter on the module, then on module.default (ESM)
+  const factory = [module, defaultExport].find((source) => {
+    return (
+      source &&
+      "createMDXFormatter" in source &&
+      typeof source.createMDXFormatter === "function"
+    );
+  })?.createMDXFormatter as ((meta?: MetaInfo) => Formatter) | undefined;
+
+  if (factory) {
+    // Own exported functions override the ones built by the factory, so that
+    // `{ ...preset, formatMDXBadge }` works despite spreading `createMDXFormatter`.
+    return hasFormatter ? { ...factory(meta), ...ownFunctions } : factory(meta);
+  }
+
+  return hasFormatter ? ownFunctions : undefined;
 };
 
 /**
