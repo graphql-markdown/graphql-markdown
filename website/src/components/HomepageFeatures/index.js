@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import Link from "@docusaurus/Link";
+import demos from "@site/src/data/demos.json";
 import styles from "./styles.module.css";
 
 const HowItWorksSteps = [
@@ -142,6 +143,28 @@ export default function HomepageFeatures() {
               <Step key={idx} {...props} />
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className={styles.demos}>
+        <div className="container">
+          <h2 className={styles.sectionHeading}>See it on your framework</h2>
+          <ul className={styles.demoGrid}>
+            {demos.map((demo) => (
+              <li key={demo.name} className={styles.demoCard}>
+                <h3 className={styles.demoName}>{demo.name}</h3>
+                <p className={styles.demoText}>{demo.description}</p>
+                <div className={styles.demoLinks}>
+                  <Link href={demo.live} className={styles.demoLive}>
+                    Live demo →
+                  </Link>
+                  <Link href={demo.source} className={styles.demoSource}>
+                    Source
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Docusaurus",
+    "description": "MDX pages with the Docusaurus formatter and sidebar categories.",
+    "live": "https://graphql-markdown.dev/demo-docusaurus/",
+    "source": "https://github.com/graphql-markdown/demo-docusaurus"
+  },
+  {
+    "name": "Astro / Starlight",
+    "description": "Starlight content collections generated from the schema.",
+    "live": "https://graphql-markdown.dev/demo-astro-starlight/",
+    "source": "https://github.com/graphql-markdown/demo-astro-starlight"
+  },
+  {
+    "name": "Astro / Starlight on Cloudflare R2",
+    "description": "Starlight docs written to R2 with an output adapter.",
+    "live": "https://demo-astro-r2.edno.workers.dev/",
+    "source": "https://github.com/graphql-markdown/demo-astro-r2"
+  },
+  {
+    "name": "Next.js / Fumadocs",
+    "description": "Fumadocs MDX pages for a Next.js app.",
+    "live": "https://graphql-markdown.dev/demo-nextjs-fumadocs/",
+    "source": "https://github.com/graphql-markdown/demo-nextjs-fumadocs"
+  },
+  {
+    "name": "Nuxt",
+    "description": "The scaffolder's default Nuxt site with the GraphQL-Markdown theme.",
+    "live": "https://graphql-markdown.dev/demo-nuxt/",
+    "source": "https://github.com/graphql-markdown/demo-nuxt"
+  },
+  {
+    "name": "Nuxt / Docus",
+    "description": "Nuxt Content pages rendered by Docus.",
+    "live": "https://graphql-markdown.dev/demo-docus/",
+    "source": "https://github.com/graphql-markdown/demo-docus"
+  },
+  {
+    "name": "Vite / Vocs",
+    "description": "Vocs MDX pages built with Vite.",
+    "live": "https://graphql-markdown.dev/demo-vite-vocs/",
+    "source": "https://github.com/graphql-markdown/demo-vite-vocs"
+  },
+  {
+    "name": "Hugo",
+    "description": "Hugo-ready Markdown with front matter and shortcodes.",
+    "live": "https://graphql-markdown.dev/demo-hugo/",
+    "source": "https://github.com/graphql-markdown/demo-hugo"
+  },
+  {
+    "name": "MkDocs",
+    "description": "Material for MkDocs pages with admonitions.",
+    "live": "https://graphql-markdown.dev/demo-mkdocs/",
+    "source": "https://github.com/graphql-markdown/demo-mkdocs"
+  },
+  {
+    "name": "mdBook",
+    "description": "Plain Markdown chapters for a Rust mdBook.",
+    "live": "https://graphql-markdown.dev/demo-mdbook/",
+    "source": "https://github.com/graphql-markdown/demo-mdbook"
+  },
+  {
+    "name": "HonKit",
+    "description": "GitBook-style Markdown built with HonKit.",
+    "live": "https://graphql-markdown.dev/demo-honkit/",
+    "source": "https://github.com/graphql-markdown/demo-honkit"
+  },
+  {
+    "name": "DocFX",
+    "description": "DocFX Markdown with a generated table of contents.",
+    "live": "https://graphql-markdown.dev/demo-docfx/",
+    "source": "https://github.com/graphql-markdown/demo-docfx"
+  }
+]
