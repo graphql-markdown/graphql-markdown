@@ -222,6 +222,7 @@
     "markdownlint-cli2": "^0.24.0",
     "memfs": "4.80.1",
     "mutation-testing-metrics": "3.9.0",
+    "pkg-pr-new": "^0.0.94",
     "prettier": "catalog:",
     "stylelint": "^18.0.0",
     "stylelint-config-standard": "^41.0.0",
