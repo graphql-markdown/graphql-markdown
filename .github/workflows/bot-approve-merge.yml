@@ -29,7 +29,12 @@ jobs:
       GH_REPO: ${{ github.repository }}
       GITHUB_TOKEN: ${{ secrets.BOT_PAT }}
     steps:
+      # BOT_PAT is graphql-markdown-bot's token, and GitHub never lets an
+      # account approve its own pull request, so the bot's PRs (such as the
+      # changelog PR opened on each release) get their approval from Gitar or a
+      # maintainer instead.
       - name: Auto approve
+        if: github.actor != 'graphql-markdown-bot'
         run: gh pr review --approve "$PR_URL"
       - name: Add label "automerge"
         run: gh pr edit --add-label "automerge" "$PR_URL"
