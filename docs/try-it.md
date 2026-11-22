@@ -1,6 +1,6 @@
 ---
 sidebar_position: 20
-description: Browse live demos and try GraphQL-Markdown instantly with our demo repositories for Docusaurus, Astro, Next.js, Nuxt, Docus, Vocs, HonKit, Hugo, MkDocs, mdBook and DocFX.
+description: Browse live demos and try GraphQL-Markdown instantly with our demo repositories for Docusaurus, Astro, Next.js, Nuxt, Docus, Vocs, HonKit, Hugo, MkDocs, mdBook, DocFX, Zola, Docsify and Pelican.
 keywords:
   - GraphQL-Markdown demo
   - live demo
@@ -110,3 +110,21 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docf
 Fork our [demo repo](https://github.com/graphql-markdown/demo-docfx) to try with your own GraphQL schema.
 
 Edit the configuration in `scripts/generate-docs.mjs`.
+
+## Zola
+
+See the generated docs in the [live demo](https://graphql-markdown.dev/demo-zola/).
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-zola) to try with your own GraphQL schema.
+
+## Docsify
+
+See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docsify/).
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-docsify) to try with your own GraphQL schema.
+
+## Pelican
+
+See the generated docs in the [live demo](https://graphql-markdown.dev/demo-pelican/).
+
+Fork our [demo repo](https://github.com/graphql-markdown/demo-pelican) to try with your own GraphQL schema. It shows how to target a framework without a preset, using a custom formatter.

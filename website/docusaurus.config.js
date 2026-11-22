@@ -444,6 +444,10 @@ const config = {
                 label: "DocFX",
               },
               {
+                href: "https://graphql-markdown.dev/demo-docsify/",
+                label: "Docsify",
+              },
+              {
                 href: "https://graphql-markdown.dev/demo-docusaurus/",
                 label: "Docusaurus",
               },
@@ -476,8 +480,16 @@ const config = {
                 label: "Nuxt / Docus",
               },
               {
+                href: "https://graphql-markdown.dev/demo-pelican/",
+                label: "Pelican",
+              },
+              {
                 href: "https://graphql-markdown.dev/demo-vite-vocs/",
                 label: "Vite / Vocs",
+              },
+              {
+                href: "https://graphql-markdown.dev/demo-zola/",
+                label: "Zola",
               },
               {
                 type: "doc",
