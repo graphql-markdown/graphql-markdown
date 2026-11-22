@@ -1,8 +1,8 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.1.1/schema.json",
   "changelog": [
-    "@changesets/changelog-github",
-    { "repo": "graphql-markdown/graphql-markdown" }
+    "../packages/tooling-config/scripts/changelog.mts",
+    { "repo": "graphql-markdown/graphql-markdown", "skipThanks": ["edno"] }
   ],
   "commit": false,
   "access": "public",
