@@ -2,6 +2,32 @@
 
 Versions of `@graphql-markdown/helpers`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.2.7
+
+### Patch Changes
+
+- [#3636](https://github.com/graphql-markdown/graphql-markdown/pull/3636) [`20ac5f5`](https://github.com/graphql-markdown/graphql-markdown/commit/20ac5f5e59c465dfd2db2aeb452ab9b0371fc145) - Point documentation links at the reorganized graphql-markdown.dev pages (`/docs/customize/…`, `/docs/guides/…`, `/docs/reference/…`), so the CLI telemetry notice, the custom directive error message and the API reference no longer go through redirects.
+
+- [#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649) [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158) - **⚠️ Breaking change:** remove the deprecated configuration options `customDirective` and `mdxParser`. Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead.
+  
+  - **`customDirective`**:
+    - Removed deprecated `customDirective` setting from configuration and CLI options; use `decorators` instead.
+    - Removed custom directive type definitions (`CustomDirective`, `CustomDirectiveMap`, `CustomDirectiveMapItem`, `CustomDirectiveOptions`, `CustomDirectiveFunction`, `CustomDirectiveResolver`) from `@graphql-markdown/types`.
+    - Removed custom directive helpers (`isCustomDirective`, `getCustomDirectiveOptions`, `getCustomDirectives`, `getConstDirectiveMap`, `WILDCARD_DIRECTIVE`) from `@graphql-markdown/graphql`.
+    - Removed `buildCustomDirectiveDecorators` from `@graphql-markdown/printer-legacy`.
+    - Removed `PageSections.customDirectives` from `@graphql-markdown/types`, and the reserved section names `customDirectives`, `customDirective:description` and `customDirective:tags` from `@graphql-markdown/printer-legacy`.
+    - Removed `customDirective` telemetry sanitization rules from `@graphql-markdown/telemetry`.
+    - Updated doc comments in `@graphql-markdown/helpers` to drop `customDirective` references.
+  - **`mdxParser`**:
+    - Removed deprecated `mdxParser` option and `--mdx-parser` CLI flag; use `formatter` instead.
+    - Removed `mdxParser` from `ConfigOptions` and `CliOptions` in `@graphql-markdown/types`.
+    - Removed `mdxParser` telemetry sanitization rules from `@graphql-markdown/telemetry`.
+    - Updated doc comments in `@graphql-markdown/formatters` to reference `formatter` instead of `mdxParser`.
+- Updated dependencies [[`3ce5fef`](https://github.com/graphql-markdown/graphql-markdown/commit/3ce5fefd46bea700cb694e15b3e783963d979dd9), [`20ac5f5`](https://github.com/graphql-markdown/graphql-markdown/commit/20ac5f5e59c465dfd2db2aeb452ab9b0371fc145), [`d3bf5c6`](https://github.com/graphql-markdown/graphql-markdown/commit/d3bf5c6358c07fd1e857aa83e84f52eace8a9cd8), [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158)]:
+  - @graphql-markdown/graphql@1.4.0
+  - @graphql-markdown/types@1.19.0
+  - @graphql-markdown/utils@1.14.4
+
 ## 1.2.6
 
 ### Patch Changes

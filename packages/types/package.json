@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/types",
-  "version": "1.18.0",
+  "version": "1.19.0",
   "description": "TypeScript types shared by the GraphQL-Markdown packages.",
   "repository": {
     "type": "git",
