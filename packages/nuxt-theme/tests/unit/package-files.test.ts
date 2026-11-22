@@ -65,3 +65,30 @@ describe("package.json files", () => {
     expect(unresolved).toStrictEqual([]);
   });
 });
+
+describe("package.json exports", () => {
+  const exportsMap = (
+    JSON.parse(readFileSync(join(packageRoot, "package.json"), "utf-8")) as {
+      exports: Record<string, string>;
+    }
+  ).exports;
+
+  it("exposes ./formatter pointing at formatter.mjs", () => {
+    expect(exportsMap["./formatter"]).toBe("./formatter.mjs");
+  });
+
+  it("ships the ./formatter target and it exports the theme formatters", async () => {
+    const target = exportsMap["./formatter"];
+    expect(packageJson.files).toContain("formatter.mjs");
+    expect(
+      shippedFiles.has(relative(packageRoot, join(packageRoot, target))),
+    ).toBe(true);
+
+    const formatter = await import(join(packageRoot, target));
+    expect(formatter.formatMDXAdmonition).toBeTypeOf("function");
+    expect(formatter.formatMDXBadge).toBeTypeOf("function");
+    expect(formatter.formatMDXBullet).toBeTypeOf("function");
+    expect(formatter.formatMDXFrontmatter).toBeTypeOf("function");
+    expect(formatter.mdxExtension).toBe(".md");
+  });
+});
