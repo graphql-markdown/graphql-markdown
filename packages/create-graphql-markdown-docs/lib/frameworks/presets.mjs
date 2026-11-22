@@ -146,7 +146,7 @@ export const zola = {
   label: "Zola",
   formatter: "@graphql-markdown/formatters/zola",
   createCommand: "zola init <dir>",
-  links: "absolute",
+  links: "router",
   contentRoot: "content",
   contentRoute: "/",
   outputHint: "Zola reads content from content/",

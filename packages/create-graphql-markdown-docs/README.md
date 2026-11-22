@@ -70,7 +70,7 @@ With `--yes`, `--schema` and `--output` are required, and so is `--framework` wh
 | MkDocs          | `docs/api`             | Links relative to pages.                                                             |
 | DocFX           | `docs/api`             | Links relative to pages.                                                             |
 | mdBook          | `src/api`              | Links relative to pages.                                                             |
-| Zola            | `content/api`          | Set `--site-base` if the site is served under a sub-path.                            |
+| Zola            | `content/api`          | Router links; no `--site-base`. Sub-paths: set `base_url` in config.toml.            |
 | Generic MDX     | Any folder you choose  | Framework-neutral `.mdx` pages (plain HTML, no components); links relative to pages. |
 | Generic         | Any folder you choose  | Any Markdown/MDX site — you set the link root.                                       |
 
