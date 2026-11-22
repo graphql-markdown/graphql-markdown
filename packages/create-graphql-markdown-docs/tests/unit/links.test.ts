@@ -51,6 +51,8 @@ const rows: Row[] = [
   ["vocs", "docs/pages", undefined, "docs/pages", ".", "/"],
   ["nuxt", "content/docs", undefined, "content", "docs", "/"],
   ["hugo", "content/api", "/demo-hugo", "content", "api", "/demo-hugo"],
+  ["docsify", "docs/api", undefined, "docs", "api", "/"],
+  ["docsify", "docs/api", "/repo", "docs", "api", "/"],
   ["honkit", "api", "/demo-honkit", ".", "api", "/demo-honkit"],
   ["mdbook", "src/api", undefined, "src", "api", undefined],
   ["mkdocs", "docs", undefined, "docs", ".", undefined],
@@ -81,6 +83,12 @@ describe("resolveLinkWiring", () => {
       });
     },
   );
+});
+
+describe("docsify router mode", () => {
+  it("uses router links so no site base is needed", () => {
+    expect(WIRE_FRAMEWORKS.docsify.links).toBe("router");
+  });
 });
 
 describe("joinRoute", () => {

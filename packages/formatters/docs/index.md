@@ -4,6 +4,7 @@
 
 - [defaults](defaults.md)
 - [docfx](docfx.md)
+- [docsify](docsify.md)
 - [docusaurus](docusaurus.md)
 - [escape](escape.md)
 - [fumadocs](fumadocs.md)
