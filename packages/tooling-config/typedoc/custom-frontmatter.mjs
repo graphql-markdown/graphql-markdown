@@ -17,11 +17,17 @@ export function load(app) {
   app.renderer.on(MarkdownPageEvent.BEGIN, (event) => {
     const isProjectPage =
       event.isReflectionEvent() && event.model.kind === ReflectionKind.Project;
+    const isPackageModule =
+      event.isReflectionEvent() &&
+      event.model.kind === ReflectionKind.Module &&
+      event.model.parent?.kind === ReflectionKind.Project;
 
     // Update event.frontmatter object using information from the page model as JSON
     event.frontmatter = {
       // add a title
-      title: path.basename(event.model?.name),
+      title: isPackageModule
+        ? event.model.name
+        : path.basename(event.model?.name),
       // add sidebar position for root project page
       ...(isProjectPage && {
         sidebar_position: 1,

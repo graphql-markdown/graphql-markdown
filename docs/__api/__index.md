@@ -8,11 +8,14 @@ GraphQL-Markdown is organized into several packages:
 
 - [@graphql-markdown/cli](/api/category/graphql-markdowncli/) - Command-line interface for generating documentation
 - [@graphql-markdown/core](/api/category/graphql-markdowncore/) - Core functionality and base classes
+- [@graphql-markdown/diff](/api/diff) - Detects schema changes so only changed documentation is regenerated
 - [@graphql-markdown/docusaurus](/api/category/graphql-markdowndocusaurus/) - Docusaurus plugin integration
 - [@graphql-markdown/formatters](/api/category/graphql-markdownformatters/) - Formatter presets for all supported documentation frameworks
 - [@graphql-markdown/graphql](/api/category/graphql-markdowngraphql/) - GraphQL schema utilities and helpers
 - [@graphql-markdown/helpers](/api/category/graphql-markdownhelpers/) - Helper functions for documentation generation
+- [@graphql-markdown/logger](/api/logger) - Logger used by the GraphQL-Markdown packages
 - [@graphql-markdown/printer-legacy](/api/category/graphql-markdownprinter-legacy/) - Legacy markdown printer implementation
+- [@graphql-markdown/telemetry](/api/category/graphql-markdowntelemetry/) - Anonymous, opt-out usage telemetry for the CLI
 - [@graphql-markdown/utils](/api/category/graphql-markdownutils/) - Utility functions and helpers
 
 ## Installation
