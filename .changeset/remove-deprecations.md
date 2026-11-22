@@ -1,9 +1,9 @@
 ---
-"@graphql-markdown/cli": major
-"@graphql-markdown/core": major
-"@graphql-markdown/graphql": major
-"@graphql-markdown/printer-legacy": major
-"@graphql-markdown/types": major
+"@graphql-markdown/cli": minor
+"@graphql-markdown/core": minor
+"@graphql-markdown/graphql": minor
+"@graphql-markdown/printer-legacy": minor
+"@graphql-markdown/types": minor
 "@graphql-markdown/formatters": patch
 "@graphql-markdown/helpers": patch
 "@graphql-markdown/telemetry": patch
