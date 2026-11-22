@@ -199,3 +199,7 @@ Some frameworks have dedicated integration packages beyond the basic formatters:
 ## Custom formatter
 
 For frameworks not listed above, write your own formatter module. See [Custom formatter](/docs/customize/custom-formatter).
+
+Examples:
+
+- **Pelican**: a custom formatter built on the `mkdocs` preset (Pelican also uses Python-Markdown). See the [Pelican demo](https://github.com/graphql-markdown/demo-pelican#using-graphql-markdown-with-pelican) for the formatter, the `pelicanconf.py` settings and a docs theme.
