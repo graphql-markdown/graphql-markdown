@@ -13,7 +13,7 @@ keywords:
 
 # Upgrade to 1.44
 
-GraphQL-Markdown 1.44 removes two settings that were deprecated in earlier releases, `mdxParser` and `customDirective`, and stops ignoring settings it does not support. A configuration that ran on 1.43 can fail on 1.44, so check it before you upgrade.
+GraphQL-Markdown 1.44 removes two deprecated settings, `mdxParser` (deprecated in [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0)) and `customDirective` (deprecated in [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0)), and stops ignoring settings it does not support. A configuration that ran on 1.43 can fail on 1.44, so check it before you upgrade.
 
 ## Check your configuration
 
@@ -29,7 +29,7 @@ The `schema`, `documents`, `include` and `exclude` keys that `graphql-config` ad
 
 ## Replace `mdxParser` with `formatter`
 
-`mdxParser` was renamed to [`formatter`](/docs/reference/settings#formatter). The value is the same: a package name or a path to a formatter module.
+`mdxParser` was renamed to [`formatter`](/docs/reference/settings#formatter) in [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0), which kept `mdxParser` as a deprecated alias until 1.44. The value is the same: a package name or a path to a formatter module.
 
 ```diff title=".graphqlrc.js"
  module.exports = {
@@ -52,7 +52,7 @@ On the command line, replace the `--mdxParser` flag with `--formatter`:
 
 ## Replace `customDirective` with `decorators`
 
-[`decorators`](/docs/customize/decorators) replace `customDirective`. Each `customDirective` entry becomes one decorator for its `descriptor` and one for its `tag`, both selected with `hasDirectiveNamed`:
+[`decorators`](/docs/customize/decorators) replaced `customDirective` in [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0), which kept `customDirective` working as a deprecated setting until 1.44. Each `customDirective` entry becomes one decorator for its `descriptor` and one for its `tag`, both selected with `hasDirectiveNamed`:
 
 ```diff
 - customDirective: {
