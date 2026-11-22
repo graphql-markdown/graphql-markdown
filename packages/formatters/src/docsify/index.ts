@@ -208,8 +208,21 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     return heading ? heading[1].trim() : fallback;
   };
 
+  // The docs root is the output folder climbed once per baseURL segment
+  // (rootDir is only one level up, which is wrong for nested baseURLs).
+  const baseSegments = baseURL.split("/").filter(Boolean);
+  const docsRoot =
+    baseSegments.length > 0
+      ? join(
+          outputDir,
+          ...baseSegments.map(() => {
+            return "..";
+          }),
+        )
+      : rootDir;
+
   const toRoute = (path: string): string => {
-    return `/${relative(rootDir, path).replaceAll("\\", "/")}`;
+    return `/${relative(docsRoot, path).replaceAll("\\", "/")}`;
   };
 
   const walk = async (
@@ -264,5 +277,5 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     "",
   ].join(MARKDOWN_EOL);
 
-  await writeOutput(join(rootDir, "_sidebar.md"), sidebar, outputAdapter);
+  await writeOutput(join(docsRoot, "_sidebar.md"), sidebar, outputAdapter);
 };

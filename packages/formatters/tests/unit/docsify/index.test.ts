@@ -212,6 +212,52 @@ describe("afterRenderFilesHook", () => {
     );
   });
 
+  test("resolves the docs root from a nested baseURL", async () => {
+    const nestedOutputDir = "/site/docs/api/graphql";
+    const nestedRootDir = "/site/docs/api";
+    const { adapter, files } = createAdapter({
+      [`${nestedOutputDir}/types/objects/user.md`]: "# User\n",
+    });
+
+    await afterRenderFilesHook({
+      data: {
+        baseURL: "api/graphql",
+        outputDir: nestedOutputDir,
+        rootDir: nestedRootDir,
+        outputAdapter: adapter,
+        pages: [
+          [
+            {
+              category: "Objects",
+              filePath: `${nestedOutputDir}/types/objects/user.md`,
+              name: "User",
+            },
+          ],
+        ],
+      },
+    } as never);
+
+    expect(files["/site/docs/_sidebar.md"]).toBe(
+      [
+        "* [Home](/)",
+        "* [GraphQL API](/api/graphql/README.md)",
+        "* Types",
+        "  * Objects",
+        "    * [User](/api/graphql/types/objects/user.md)",
+        "",
+      ].join("\n"),
+    );
+    expect(files[`${nestedRootDir}/_sidebar.md`]).toBeUndefined();
+    expect(files[`${nestedOutputDir}/types/objects/README.md`]).toBe(
+      [
+        "# Objects",
+        "",
+        "* [User](/api/graphql/types/objects/user.md)",
+        "",
+      ].join("\n"),
+    );
+  });
+
   test("ignores README pages and non-markdown files", async () => {
     const { adapter, files } = createAdapter();
     await afterRenderFilesHook({
