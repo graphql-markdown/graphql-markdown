@@ -1,4 +1,5 @@
 import { buildSchema } from "graphql/utilities";
+import { GraphQLList, GraphQLNonNull } from "graphql/type";
 import type { PrintTypeOptions } from "@graphql-markdown/types";
 
 import {
@@ -7,6 +8,7 @@ import {
   directiveOccurrence,
   directiveOccurrences,
   getDirectiveFromSchema,
+  getSchemaEntity,
   hasAnyDirective,
   hasDirectiveNamed,
   isEntity,
@@ -201,6 +203,50 @@ describe("isEntity", () => {
         entity: "mutations",
       }),
     ).toBe(true);
+  });
+});
+
+describe("getSchemaEntity", () => {
+  test("resolves entity kind without options", () => {
+    expect.assertions(7);
+
+    expect(getSchemaEntity(withDirective)).toBe("objects");
+    expect(getSchemaEntity(status)).toBe("enums");
+    expect(getSchemaEntity(date)).toBe("scalars");
+    expect(getSchemaEntity(filter)).toBe("inputs");
+    expect(getSchemaEntity(node)).toBe("interfaces");
+    expect(getSchemaEntity(searchResult)).toBe("unions");
+    expect(getSchemaEntity(httpResponseDirective)).toBe("directives");
+  });
+
+  test("unwraps NonNull and List types", () => {
+    expect.assertions(2);
+
+    const nonNullStatus = new GraphQLNonNull(status);
+    const listStatus = new GraphQLList(nonNullStatus);
+
+    expect(getSchemaEntity(nonNullStatus)).toBe("enums");
+    expect(getSchemaEntity(listStatus)).toBe("enums");
+  });
+
+  test("prefers options.entity when provided", () => {
+    expect.assertions(1);
+
+    expect(
+      getSchemaEntity(withDirective, {
+        ...baseOptions,
+        entity: "mutations",
+      }),
+    ).toBe("mutations");
+  });
+
+  test("returns undefined for unknown or non-type values", () => {
+    expect.assertions(4);
+
+    expect(getSchemaEntity({ name: "NotAType" })).toBeUndefined();
+    expect(getSchemaEntity(null)).toBeUndefined();
+    expect(getSchemaEntity(undefined)).toBeUndefined();
+    expect(getSchemaEntity("string")).toBeUndefined();
   });
 });
 
