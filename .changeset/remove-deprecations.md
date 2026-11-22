@@ -9,7 +9,7 @@
 "@graphql-markdown/telemetry": patch
 ---
 
-Remove deprecated configuration options `customDirective` and `mdxParser`.
+**⚠️ Breaking change:** remove the deprecated configuration options `customDirective` and `mdxParser`. Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead.
 
 - **`customDirective`**:
   - Removed deprecated `customDirective` setting from configuration and CLI options; use `decorators` instead.
