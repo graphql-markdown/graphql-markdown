@@ -53,12 +53,16 @@ function InstallCommand() {
         <span className={styles.installPrompt}>$</span>
         <code className={styles.installCmd}>{cmd}</code>
         <button
+          type="button"
           className={styles.copyBtn}
           onClick={handleCopy}
           aria-label="Copy install command"
         >
           {copied ? "✓ Copied" : "Copy"}
         </button>
+        <span className={styles.srOnly} aria-live="polite">
+          {copied ? "Copied to clipboard" : ""}
+        </span>
       </div>
     </>
   );
