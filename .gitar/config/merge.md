@@ -18,12 +18,9 @@ says "never", a maintainer merges the PR by hand.
   `packages/*/jsr.json`, consumed changesets, or `CHANGELOG.md` updates written
   by `changeset version` (`bun run release:version`).
 - **Release and supply-chain files.**
-  - `.github/workflows/publish.yml`, `.github/workflows/publish-docs.yaml`,
-    `.github/workflows/bot-approve-merge.yml` and
-    `.github/workflows/actions.lock`.
-  - The release scripts in `packages/tooling-config/scripts/`:
-    `publish-release.mts`, `jsr-publish.mts`, `jsr-sync.mts`,
-    `template-ranges.mts` and `tarball-check.mts`.
+  - `.github/actions/**` (composite actions used by the publish workflows).
+  - Everything under `packages/tooling-config/scripts/` (release scripts and
+    the `shared/` and `build-packages.mts` modules they import).
   - This file, `.gitar/config/merge.md`.
 - **Security-sensitive code.**
   - Output escaping: `escapeMDX` and the other helpers in
@@ -38,8 +35,9 @@ says "never", a maintainer merges the PR by hand.
 
 ## Fine to auto-merge, once the requirements above are met
 
-- Dependabot PRs for patch and minor updates of devDependencies and GitHub
-  Actions.
+- Dependabot and Renovate PRs for patch and minor updates of devDependencies
+  and GitHub Actions. Major updates, or updates to runtime dependencies, from
+  either bot are never auto-merged.
 - Docs-only PRs (`docs/**`, Markdown files, website content) and
   changeset-only PRs.
 - Test-only PRs (`tests/**`, `**/*.test.ts`, `**/*.spec.ts`).
