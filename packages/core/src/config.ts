@@ -152,10 +152,57 @@ const GRAPHQL_CONFIG_PROJECT_KEYS = [
 ] as const;
 
 /**
+ * Levenshtein distance between two strings, compared case-insensitively.
+ * @internal
+ */
+const editDistance = (a: string, b: string): number => {
+  const left = a.toLowerCase();
+  const right = b.toLowerCase();
+  let previous = Array.from({ length: right.length + 1 }, (_, index) => {
+    return index;
+  });
+  for (let i = 1; i <= left.length; i++) {
+    const current = [i];
+    for (let j = 1; j <= right.length; j++) {
+      const cost = left[i - 1] === right[j - 1] ? 0 : 1;
+      current[j] = Math.min(
+        previous[j] + 1,
+        current[j - 1] + 1,
+        previous[j - 1] + cost,
+      );
+    }
+    previous = current;
+  }
+  return previous[right.length];
+};
+
+/**
+ * Returns the supported setting closest to `key` when it looks like a typo,
+ * i.e. within one edit for short names and two for longer ones.
+ * @internal
+ */
+const suggestSetting = (
+  key: string,
+  supported: ReadonlySet<string>,
+): string | undefined => {
+  const maxDistance = key.length > 4 ? 2 : 1;
+  let best: string | undefined;
+  let bestDistance = maxDistance + 1;
+  for (const candidate of supported) {
+    const distance = editDistance(key, candidate);
+    if (distance < bestDistance) {
+      best = candidate;
+      bestDistance = distance;
+    }
+  }
+  return best;
+};
+
+/**
  * Throws when a configuration contains a top-level key that is not a supported setting.
  *
  * @param config - the merged configuration object to check.
- * @throws Error naming every unsupported setting and the docs page listing supported ones.
+ * @throws Error naming every unsupported setting, with a suggestion for likely typos, and the docs page listing supported ones.
  *
  * @example
  * ```typescript
@@ -164,6 +211,9 @@ const GRAPHQL_CONFIG_PROJECT_KEYS = [
  *
  * assertSupportedOptions({ foo: 1, mdxParser: "./parser.js" });
  * // Error: Unsupported settings "foo", "mdxParser". See ...
+ *
+ * assertSupportedOptions({ fromatter: "nuxt" });
+ * // Error: Unsupported setting "fromatter" (did you mean "formatter"?). See ...
  * ```
  * @public
  */
@@ -183,7 +233,10 @@ export const assertSupportedOptions = (config: unknown): void => {
   const label = unsupported.length === 1 ? "setting" : "settings";
   const names = unsupported
     .map((key) => {
-      return `"${key}"`;
+      const suggestion = suggestSetting(key, supported);
+      return suggestion === undefined
+        ? `"${key}"`
+        : `"${key}" (did you mean "${suggestion}"?)`;
     })
     .join(", ");
   throw new Error(

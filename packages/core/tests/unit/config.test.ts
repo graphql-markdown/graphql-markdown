@@ -268,6 +268,32 @@ describe("config", () => {
       }).toThrow('Unsupported settings "foo", "bar", "mdxParser". See');
     });
 
+    test.each([
+      ["fromatter", "formatter"],
+      ["baseUrl", "baseURL"],
+      ["linkroot", "linkRoot"],
+      ["pretyy", "pretty"],
+      ["frce", "force"],
+    ])("suggests the closest setting for the typo %s", (typo, setting) => {
+      expect.assertions(1);
+
+      expect(() => {
+        return assertSupportedOptions({ [typo]: true });
+      }).toThrow(
+        `Unsupported setting "${typo}" (did you mean "${setting}"?). See`,
+      );
+    });
+
+    test("suggests settings only for likely typos", () => {
+      expect.assertions(1);
+
+      expect(() => {
+        return assertSupportedOptions({ fromatter: "x", foo: 1 });
+      }).toThrow(
+        'Unsupported settings "fromatter" (did you mean "formatter"?), "foo". See',
+      );
+    });
+
     test.each(["customDirective", "mdxParser"])(
       "throws for the removed option %s as an unknown key",
       (name) => {
