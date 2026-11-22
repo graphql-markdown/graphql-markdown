@@ -6,6 +6,8 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -121,13 +123,17 @@ jobs:
         if: env.RUN_CODE_CHECKS == 'true'
         run: bun run knip --no-config-hints --reporter github-actions
 
+      # `GITHUB_BASE_REF` is empty in a merge group: fallow diffs against the
+      # group's base commit there (already present, the checkout is full depth).
       - name: Fetch base branch for fallow
-        if: env.RUN_CODE_CHECKS == 'true'
+        if: env.RUN_CODE_CHECKS == 'true' && github.event_name == 'pull_request'
         run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
 
       - name: Run fallow
         if: env.RUN_CODE_CHECKS == 'true'
-        run: bun run fallow -- audit --base "origin/${GITHUB_BASE_REF}"
+        env:
+          FALLOW_BASE: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
+        run: bun run fallow -- audit --base "$FALLOW_BASE"
 
   actions-lock:
     name: Actions lock
