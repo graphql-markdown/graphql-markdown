@@ -6,9 +6,9 @@ Versions of `@graphql-markdown/nuxt-theme`. Each version links to the GraphQL-Ma
 
 ### Patch Changes
 
-- [#3621](https://github.com/graphql-markdown/graphql-markdown/pull/3621) [`c5c1448`](https://github.com/graphql-markdown/graphql-markdown/commit/c5c14480eeebf565022e862b004c17cf9b46e1c4) Thanks [@edno](https://github.com/edno)! - Render type badges and deprecation callouts as Nuxt UI components in production builds instead of raw `<UBadge>`/`<UAlert>` tags.
+- [#3621](https://github.com/graphql-markdown/graphql-markdown/pull/3621) [`c5c1448`](https://github.com/graphql-markdown/graphql-markdown/commit/c5c14480eeebf565022e862b004c17cf9b46e1c4) - Render type badges and deprecation callouts as Nuxt UI components in production builds instead of raw `<UBadge>`/`<UAlert>` tags.
 
-- [#3620](https://github.com/graphql-markdown/graphql-markdown/pull/3620) [`b17ec24`](https://github.com/graphql-markdown/graphql-markdown/commit/b17ec24c1f2840f3ac4eb9e0b411de29d7989313) Thanks [@edno](https://github.com/edno)! - Fix search finding nothing on the single-page reference by matching results to the sidebar anchors and cleaning the search index.
+- [#3620](https://github.com/graphql-markdown/graphql-markdown/pull/3620) [`b17ec24`](https://github.com/graphql-markdown/graphql-markdown/commit/b17ec24c1f2840f3ac4eb9e0b411de29d7989313) - Fix search finding nothing on the single-page reference by matching results to the sidebar anchors and cleaning the search index.
   Stop the code-group kind badge from covering the first line of a snippet.
   Group directives in their own "Directives" sidebar section instead of under "Types".
 
