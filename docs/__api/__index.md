@@ -1,4 +1,4 @@
-# API
+# TypeScript API
 
 This section provides documentation of the GraphQL-Markdown API for NodeJS. For more details about each individual module, refer to the specific package documentation below.
 
