@@ -492,9 +492,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> {#entity-type-name} 
 <fieldset class="gqlmd-mdx-admonition-fieldset">
 <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
-<span>
 
-</span>
+
+
 </fieldset>
 ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name} 
 

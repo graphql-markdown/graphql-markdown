@@ -40,6 +40,8 @@ export const formatMDXBadge = (badge: Badge): MDXString => {
 
 /**
  * Formats an admonition as an HTML `<fieldset>` element with `gqlmd-mdx-admonition-*` CSS classes.
+ * The text is emitted as a Markdown paragraph between blank lines, so inline code and links render
+ * inside the fieldset (an HTML block would otherwise pass them through raw).
  * @param admonition - Admonition data with text, title, type, and optional icon
  * @param _meta - Unused metadata parameter
  * @returns Formatted admonition string
@@ -48,7 +50,7 @@ export const formatMDXAdmonition = (
   { text, title, type, icon }: AdmonitionType,
   _meta: Maybe<MetaInfo>,
 ): MDXString => {
-  return `${MARKDOWN_EOP}<fieldset class="gqlmd-mdx-admonition-fieldset">${MARKDOWN_EOL}<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLocaleLowerCase()}">${icon ?? type.toUpperCase()} ${title}</span></legend>${MARKDOWN_EOL}<span>${text}</span>${MARKDOWN_EOL}</fieldset>` as MDXString;
+  return `${MARKDOWN_EOP}<fieldset class="gqlmd-mdx-admonition-fieldset">${MARKDOWN_EOL}<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-${type.toLocaleLowerCase()}">${icon ?? type.toUpperCase()} ${title}</span></legend>${MARKDOWN_EOP}${text.trim()}${MARKDOWN_EOP}</fieldset>` as MDXString;
 };
 
 /**
