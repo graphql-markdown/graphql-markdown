@@ -47,6 +47,11 @@ const DEMOS = [
     waitFor: ".markdown-section h1",
   },
   { id: "demo-pelican", page: "graphql/types/objects/project/" },
+  // Served by its own Cloudflare Worker, not under graphql-markdown.dev.
+  {
+    id: "demo-astro-r2",
+    url: "https://demo-astro-r2.edno.workers.dev/types/objects/project/",
+  },
 ];
 
 const selected = process.argv.slice(2);
@@ -62,8 +67,8 @@ const context = await browser.newContext({
 });
 
 let failures = 0;
-for (const { id, page: path, waitFor } of demos) {
-  const url = `${BASE_URL}/${id}/${path}`;
+for (const { id, page: path, url: fullUrl, waitFor } of demos) {
+  const url = fullUrl ?? `${BASE_URL}/${id}/${path}`;
   const page = await context.newPage();
   try {
     const response = await page.goto(url, {
