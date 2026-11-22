@@ -45,6 +45,12 @@
       "file": "packages/nuxt-theme/swizzle.manifest.ts",
       "exports": ["SwizzleEntry"],
     },
+    // Logger is both a named and the default export: the CLI and core import the
+    // default, other consumers the named export.
+    {
+      "file": "packages/logger/src/index.ts",
+      "exports": ["default"],
+    },
   ],
 
   // website/ is a Docusaurus app outside the packages/* workspace —
@@ -60,65 +66,45 @@
     "packages/create-graphql-markdown-docs/templates/**",
   ],
 
-  // All @graphql-markdown/* workspace packages are resolved through their
-  // dist/ entries (e.g. "main": "dist/index.js"), which is excluded via
-  // ignorePatterns. This causes every cross-workspace import to appear
-  // unresolvable, making the packages look unused. Marking them as always-
-  // available suppresses the false positives without hiding real issues in
-  // external dependencies.
-  //
-  // The entries below are used via dynamic import strings or config strings,
-  // not static import statements, so fallow cannot trace them:
+  // These dependencies are used without a static import that fallow can trace:
   //   @docusaurus/logger              — dynamically imported in logger tests via import(moduleName)
   //   cz-emoji                        — commitizen adapter (config.commitizen.path)
-  //   custom-mdx-parser                — not a real package: a `vi.mock("custom-mdx-parser", ...)`
-  //                                      virtual module name/fixture `formatter` value in
-  //                                      packages/core/tests/unit/generator.test.ts, standing in
-  //                                      for a user-loaded MDX formatter module
-  //   jest-environment-node           — jest testEnvironment: "node"
   //   typedoc-docusaurus-theme        — TypeDoc plugin string in typedoc config
+  //   better-sqlite3, shiki           — declared by the nuxt-theme test fixture apps, which
+  //                                     use them at runtime through the theme layer
+  //                                     (Nuxt Content's SQLite driver, the layer's Shiki
+  //                                     highlighting) without importing them
   //
-  // diff, lodash.filter are used only by dangerfile.js (Danger CI tooling). dangerfile.js is
-  // declared above as an `entry` point so fallow doesn't flag it as an unused file, but that
-  // makes it "reachable production code" and flags these dev-only deps as
-  // dev-dependencies-in-production. The root package.json is private with no `dependencies`
-  // field and is never installed with `--prod`, so this is a false positive.
-  // mutation-testing-metrics is the same case: it is only read by dangerfile.js.
+  // custom-mdx-parser and mdx-parser-mock are not real packages: they are `vi.mock(...)`
+  // virtual module names and fixture `formatter` values in the core generator tests,
+  // standing in for a user-loaded formatter module.
   //
-  // memfs is declared once in the root package.json, like every other test tool, and is
-  // hoisted to the workspace packages that mock the filesystem in their tests. fallow reads
-  // each package.json on its own and so reports it as unlisted for packages/core, /diff and
-  // /utils; the packages deliberately declare no test tooling of their own.
+  // diff, lodash.filter and mutation-testing-metrics are used only by dangerfile.js
+  // (Danger CI tooling). dangerfile.js is declared above as an `entry` point, which makes
+  // it "reachable production code" and flags these dev-only deps. The root package.json
+  // is private and never installed with `--prod`, so this is a false positive.
   //
-  // graphql is the same case: it is declared in the root package.json (catalog:) and hoisted
-  // to the packages whose tests build schemas with it. Only tests import it directly in
-  // packages/printer-legacy, so it is neither a dependency nor a peer dependency there.
+  // @stryker-mutator/api is declared once in the root package.json, like the other test
+  // tools. Each package's stryker.conf.mjs only imports its types in a JSDoc comment.
+  // vite is the same case: packages/tooling-config/vitest only imports its types, and
+  // it is installed with vitest.
+  //
+  // playwright is installed on demand (`npm install --no-save playwright`) by whoever
+  // runs .github/scripts/demo-screenshots.mjs, as its header explains.
   "ignoreDependencies": [
-    "@graphql-markdown/cli",
-    "@graphql-markdown/core",
-    "@graphql-markdown/diff",
-    "@graphql-markdown/docusaurus",
-    "@graphql-markdown/formatters",
-    "@graphql-markdown/graphql",
-    "@graphql-markdown/helpers",
-    "@graphql-markdown/logger",
-    "@graphql-markdown/nuxt-theme",
-    "@graphql-markdown/printer-legacy",
-    "@graphql-markdown/tooling-config",
-    "@graphql-markdown/types",
-    "@graphql-markdown/utils",
     "@docusaurus/logger",
     "cz-emoji",
     "custom-mdx-parser",
-    "jest-environment-node",
+    "mdx-parser-mock",
     "typedoc-docusaurus-theme",
     "diff",
     "lodash.filter",
-    "graphql",
-    "memfs",
     "mutation-testing-metrics",
     "better-sqlite3",
     "shiki",
+    "@stryker-mutator/api",
+    "vite",
+    "playwright",
     // nuxt-theme's ts:check runs `nuxi typecheck`, which runs the vue-tsc binary
     // and never imports it.
     "vue-tsc",
