@@ -12,6 +12,12 @@
     "source": "https://github.com/graphql-markdown/demo-docfx"
   },
   {
+    "name": "Docsify",
+    "description": "Client-rendered Docsify v5 site with a generated sidebar.",
+    "live": "https://graphql-markdown.dev/demo-docsify/",
+    "source": "https://github.com/graphql-markdown/demo-docsify"
+  },
+  {
     "name": "Docusaurus",
     "description": "MDX pages with the Docusaurus formatter and sidebar categories.",
     "live": "https://graphql-markdown.dev/demo-docusaurus/",
@@ -60,9 +66,21 @@
     "source": "https://github.com/graphql-markdown/demo-docus"
   },
   {
+    "name": "Pelican",
+    "description": "Python-Markdown pages from a custom formatter on the mkdocs preset.",
+    "live": "https://graphql-markdown.dev/demo-pelican/",
+    "source": "https://github.com/graphql-markdown/demo-pelican"
+  },
+  {
     "name": "Vite / Vocs",
     "description": "Vocs MDX pages built with Vite.",
     "live": "https://graphql-markdown.dev/demo-vite-vocs/",
     "source": "https://github.com/graphql-markdown/demo-vite-vocs"
+  },
+  {
+    "name": "Zola",
+    "description": "Zola sections with build-checked internal links.",
+    "live": "https://graphql-markdown.dev/demo-zola/",
+    "source": "https://github.com/graphql-markdown/demo-zola"
   }
 ]

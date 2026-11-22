@@ -5,7 +5,7 @@
 <h1 align="center">API docs from your GraphQL schema, in the docs site you already use</h1>
 
 <p align="center">
-  GraphQL-Markdown generates <b>Markdown and MDX documentation</b> from <b>GraphQL schemas</b> for Docusaurus, Nuxt, Starlight, Fumadocs, Vocs, Hugo, MkDocs, mdBook, DocFX and more.
+  GraphQL-Markdown generates <b>Markdown and MDX documentation</b> from <b>GraphQL schemas</b> for Docusaurus, Nuxt, Starlight, Fumadocs, Vocs, Hugo, MkDocs, mdBook, DocFX, Zola, Docsify and more.
 </p>
 
 <p align="center">
@@ -89,6 +89,20 @@ Same generator, your framework. Click any screenshot to explore the live site.
       <br /><b>HonKit</b>
     </td>
     <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-zola/graphql/types/objects/project/"><img src=".github/assets/demos/demo-zola.jpg" alt="Zola demo" /></a>
+      <br /><b>Zola</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-docsify/#/graphql/types/objects/project"><img src=".github/assets/demos/demo-docsify.jpg" alt="Docsify demo" /></a>
+      <br /><b>Docsify</b>
+    </td>
+    <td align="center" width="33%">
+      <a href="https://graphql-markdown.dev/demo-pelican/graphql/types/objects/project/"><img src=".github/assets/demos/demo-pelican.jpg" alt="Pelican demo" /></a>
+      <br /><b>Pelican</b><br /><sub>custom formatter</sub>
+    </td>
+    <td align="center" width="33%">
       <b>Your stack?</b>
       <br />Use the generic <code>mdx</code> preset, or <a href="https://graphql-markdown.dev/docs/try-it">fork a demo</a> and try it with your own schema.
     </td>
@@ -102,7 +116,7 @@ Used in production by [30+ teams](https://graphql-markdown.dev/showcase) includi
 To set it up by hand instead of using the scaffolder, there are two main setup paths:
 
 - use the official Docusaurus integration for Docusaurus sites
-- use the CLI with formatter presets for other supported ecosystems such as Starlight, Fumadocs, Vocs, Hugo, MkDocs, DocFX, mdBook and HonKit, or the generic `mdx` preset for any MDX-based site
+- use the CLI with formatter presets for other supported ecosystems such as Starlight, Fumadocs, Vocs, Hugo, MkDocs, DocFX, mdBook, HonKit, Zola and Docsify, or the generic `mdx` preset for any MDX-based site
 
 Choose your preferred package based on your documentation stack:
 
