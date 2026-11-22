@@ -67,6 +67,18 @@ const config = {
         path: "./api",
         routeBasePath: "api",
         versions: { current: { noIndex: true } },
+        async sidebarItemsGenerator({ defaultSidebarItemsGenerator, ...args }) {
+          const items = await defaultSidebarItemsGenerator(args);
+          return [
+            {
+              type: "link",
+              label: "← Back to Docs",
+              href: "/docs/intro",
+              className: "sidebar-back-link",
+            },
+            ...items,
+          ];
+        },
       },
     ],
     ["docusaurus-plugin-llms", createLLMSPluginConfig()],

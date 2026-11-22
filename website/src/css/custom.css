@@ -308,6 +308,10 @@ a.menu__link[href$="/api"]::before,
   -webkit-mask-position: center;
 }
 
+.sidebar-back-link > a.menu__link[href]::before {
+  content: none;
+}
+
 a.menu__link[href$="/docs/intro"]::before {
   mask-image: url("/img/docs/icons/intro.svg");
   -webkit-mask-image: url("/img/docs/icons/intro.svg");
