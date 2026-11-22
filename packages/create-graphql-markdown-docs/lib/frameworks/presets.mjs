@@ -139,6 +139,21 @@ export const mdbook = {
     "List the generated pages in src/SUMMARY.md — mdBook only builds listed pages.",
 };
 
+/** Zola preset. */
+export const zola = {
+  id: "zola",
+  name: "Zola",
+  label: "Zola",
+  formatter: "@graphql-markdown/formatters/zola",
+  createCommand: "zola init <dir>",
+  links: "router",
+  contentRoot: "content",
+  contentRoute: "/",
+  outputHint: "Zola reads content from content/",
+  nextSteps: ({ route }) =>
+    `Link \`${route}\` from your templates or menu; every section needs an _index.md (written by the preset).`,
+};
+
 /** Generic Markdown fallback (no formatter preset). */
 export const generic = {
   id: "generic",

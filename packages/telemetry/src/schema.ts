@@ -63,6 +63,7 @@ export const FORMATTER_PRESETS = [
   "mkdocs",
   "starlight",
   "vocs",
+  "zola",
 ] as const;
 export const KNOWN_LOADERS = [
   "UrlLoader",

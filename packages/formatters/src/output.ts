@@ -9,9 +9,18 @@
  * @packageDocumentation
  */
 
-import type { Maybe, OutputAdapter } from "@graphql-markdown/types";
+import { join } from "node:path";
+
+import type {
+  GenerateIndexMetafileHook,
+  Maybe,
+  OutputAdapter,
+} from "@graphql-markdown/types";
 import {
+  FRONT_MATTER_DELIMITER,
+  MARKDOWN_EOL,
   fsOutputAdapter,
+  startCase,
   toRelativeGeneratedDocLink,
 } from "@graphql-markdown/utils";
 
@@ -172,6 +181,46 @@ export const rewriteRenderedPage = async (
   if (rewritten !== content) {
     await writeOutput(filePath, rewritten, outputAdapter);
   }
+};
+
+/**
+ * Creates a lifecycle hook that writes a section `_index.md` file.
+ *
+ * The file is written on every run with YAML front matter: a `title` line
+ * holding the start-cased category, followed by the lines returned from
+ * `frontMatter`, then a matching `# title` heading.
+ *
+ * @internal
+ * @param fileName - Name of the index file written in each section directory
+ * @param frontMatter - Returns the front matter lines placed after the `title` line
+ * @returns A {@link GenerateIndexMetafileHook} implementation
+ */
+export const createSectionIndexHook = (
+  fileName: string,
+  frontMatter: (label: string) => string[],
+): GenerateIndexMetafileHook => {
+  return async (event): Promise<void> => {
+    const { dirPath, category, outputAdapter } = (
+      event as {
+        data: {
+          dirPath: string;
+          category: string;
+          outputAdapter?: OutputAdapter;
+        };
+      }
+    ).data;
+    const filePath = join(dirPath, fileName);
+    const label = startCase(category);
+    const lines = [
+      FRONT_MATTER_DELIMITER,
+      `title: "${label}"`,
+      ...frontMatter(label),
+      FRONT_MATTER_DELIMITER,
+    ];
+    const content = `${lines.join(MARKDOWN_EOL)}${MARKDOWN_EOL}${MARKDOWN_EOL}# ${label}${MARKDOWN_EOL}${MARKDOWN_EOL}`;
+
+    await writeOutput(filePath, content, outputAdapter, dirPath);
+  };
 };
 
 /**

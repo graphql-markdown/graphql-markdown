@@ -8,8 +8,6 @@
  * @packageDocumentation
  */
 
-import { join } from "node:path";
-
 import type {
   AdmonitionType,
   Badge,
@@ -18,7 +16,6 @@ import type {
   FrontMatterOptions,
   GenerateIndexMetafileHook,
   Maybe,
-  OutputAdapter,
   MDXString,
   MetaInfo,
   TypeLink,
@@ -32,7 +29,6 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   formatFrontMatterObject,
-  startCase,
 } from "@graphql-markdown/utils";
 import {
   formatMDXBullet,
@@ -40,7 +36,7 @@ import {
   formatMDXPermalink,
   formatMDXSpecifiedByLink,
 } from "../defaults.ts";
-import { writeOutput } from "../output.ts";
+import { createSectionIndexHook } from "../output.ts";
 
 /**
  * Maps graphql-markdown admonition types to Hugo GitHub-style alert types (Hugo 0.132+).
@@ -176,19 +172,6 @@ export const mdxExtension = ".md" as const;
  * @param event - Hook event whose `data` contains `dirPath` (target directory) and `category` (section name)
  */
 export const beforeGenerateIndexMetafileHook: GenerateIndexMetafileHook =
-  async (event): Promise<void> => {
-    const { dirPath, category, outputAdapter } = (
-      event as {
-        data: {
-          dirPath: string;
-          category: string;
-          outputAdapter?: OutputAdapter;
-        };
-      }
-    ).data;
-    const filePath = join(dirPath, "_index.md");
-    const label = startCase(category);
-    const content = `${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}title: "${label}"${MARKDOWN_EOL}type: docs${MARKDOWN_EOL}bookCollapseSection: true${MARKDOWN_EOL}${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}${MARKDOWN_EOL}# ${label}${MARKDOWN_EOL}${MARKDOWN_EOL}`;
-
-    await writeOutput(filePath, content, outputAdapter, dirPath);
-  };
+  createSectionIndexHook("_index.md", () => {
+    return ["type: docs", "bookCollapseSection: true"];
+  });
