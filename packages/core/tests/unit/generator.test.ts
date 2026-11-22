@@ -1158,7 +1158,7 @@ describe("generator", () => {
 
       expect(warnSpy).toHaveBeenCalledWith(
         expect.stringContaining(
-          `An error occurred while loading MDX formatter "${invalidModule}"`,
+          `An error occurred while loading formatter "${invalidModule}"`,
         ),
       );
       expect(result).toBeUndefined();
