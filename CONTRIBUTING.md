@@ -147,6 +147,15 @@ Then:
 
 If your change touches package sources but does not need a release note (for example an internal refactor), ask a maintainer to add the `no-changeset` label to your pull request to silence the warning.
 
+### Trying a pull request build
+
+Every same-repository pull request gets a comment from [pkg.pr.new](https://pkg.pr.new) with install URLs for each public package. To test one in a demo, point every `@graphql-markdown` package at the preview URLs in pnpm `overrides` (in the demo's `pnpm-workspace.yaml`) so they resolve together, for example:
+
+```yaml
+overrides:
+  "@graphql-markdown/core": https://pkg.pr.new/graphql-markdown/graphql-markdown/@graphql-markdown/core@<pr-number>
+```
+
 ## Coding style
 
 > You will certainly find awkward constructions and patterns, and you should feel free to improve the existing code.
