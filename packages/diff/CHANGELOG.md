@@ -2,6 +2,15 @@
 
 Versions of `@graphql-markdown/diff`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.1.26
+
+### Patch Changes
+
+- Updated dependencies [[`3ce5fef`](https://github.com/graphql-markdown/graphql-markdown/commit/3ce5fefd46bea700cb694e15b3e783963d979dd9), [`20ac5f5`](https://github.com/graphql-markdown/graphql-markdown/commit/20ac5f5e59c465dfd2db2aeb452ab9b0371fc145), [`d3bf5c6`](https://github.com/graphql-markdown/graphql-markdown/commit/d3bf5c6358c07fd1e857aa83e84f52eace8a9cd8), [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158)]:
+  - @graphql-markdown/graphql@1.4.0
+  - @graphql-markdown/types@1.19.0
+  - @graphql-markdown/utils@1.14.4
+
 ## 1.1.25
 
 ### Patch Changes

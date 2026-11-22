@@ -2,6 +2,25 @@
 
 Versions of `@graphql-markdown/nuxt-theme`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 0.3.0
+
+### Minor Changes
+
+- [#3676](https://github.com/graphql-markdown/graphql-markdown/pull/3676) [`6871ecf`](https://github.com/graphql-markdown/graphql-markdown/commit/6871ecf36e8068824d6f46fab449540f523ecbd2) - Export the theme formatter as `@graphql-markdown/nuxt-theme/formatter`, so custom formatters can wrap it.
+
+### Patch Changes
+
+- [#3678](https://github.com/graphql-markdown/graphql-markdown/pull/3678) [`57afe9e`](https://github.com/graphql-markdown/graphql-markdown/commit/57afe9e70f5aa56406886136e1ffa5604353e4d0) - Deprecation notices keep their links and inline code, and type-level notices no longer repeat the badge text.
+
+- [#3625](https://github.com/graphql-markdown/graphql-markdown/pull/3625) [`7c94b94`](https://github.com/graphql-markdown/graphql-markdown/commit/7c94b94e3d819bd5a8f0b686d6c9af7eebcfc495) - - Keep straight quotes and other entity-producing characters out of search snippets.
+    - Search now drops straight double quotes and indexes `'`, `&`, `<` and `>` as `’`, `+`, `‹` and `›`, so a search for those exact characters no longer matches.
+  - Name deprecated sidebar entries for screen readers with an `aria-label`.
+  - Add the site title to reference page titles.
+
+- [#3675](https://github.com/graphql-markdown/graphql-markdown/pull/3675) [`035fb6f`](https://github.com/graphql-markdown/graphql-markdown/commit/035fb6f8e642a9c926c2816ae679906860efff66) - `createGenerateDocs` now forwards every GraphQL-Markdown option it doesn't set itself (for example `telemetry: false`, `pretty`, `force`), instead of silently dropping them.
+- Updated dependencies [[`8152a72`](https://github.com/graphql-markdown/graphql-markdown/commit/8152a72e53a35a6daa8e76ee75722fabfb6a196c), [`9a3b479`](https://github.com/graphql-markdown/graphql-markdown/commit/9a3b479b10338f40612a779c022b685cd1a50998), [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158)]:
+  - @graphql-markdown/cli@1.3.0
+
 ## 0.2.4
 
 ### Patch Changes

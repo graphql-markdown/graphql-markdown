@@ -2,6 +2,13 @@
 
 Versions of `@graphql-markdown/utils`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.14.4
+
+### Patch Changes
+
+- Updated dependencies [[`d3bf5c6`](https://github.com/graphql-markdown/graphql-markdown/commit/d3bf5c6358c07fd1e857aa83e84f52eace8a9cd8), [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158)]:
+  - @graphql-markdown/types@1.19.0
+
 ## 1.14.3
 
 ### Patch Changes

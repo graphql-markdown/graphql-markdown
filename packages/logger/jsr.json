@@ -1,12 +1,12 @@
 {
   "name": "@graphql-markdown/logger",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts"
   },
   "imports": {
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.18.0"
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.19.0"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],
