@@ -309,6 +309,20 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 `);
     });
 
+    test("forwards meta to formatMDXPermalink", () => {
+      expect.hasAssertions();
+
+      const meta = { generatorFrameworkName: "docusaurus" };
+      const formatMDXPermalink = vi.fn().mockReturnValue("{#custom}");
+
+      printSectionItem(
+        { name: "EntityTypeName" },
+        { ...DEFAULT_OPTIONS, sectionHeaderId: true, formatMDXPermalink, meta },
+      );
+
+      expect(formatMDXPermalink).toHaveBeenCalledWith("entity-type-name", meta);
+    });
+
     test("returns Markdown #### link section with field parameters", () => {
       expect.hasAssertions();
 

@@ -115,9 +115,10 @@ export interface Formatter {
    * Formats a permalink for a section header.
    *
    * @param id - The ID of the section header
+   * @param meta - Optional generator metadata (e.g. framework name and version)
    * @returns Formatted permalink string
    */
-  formatMDXPermalink: (id: string) => MDXString;
+  formatMDXPermalink: (id: string, meta?: Maybe<MetaInfo>) => MDXString;
 
   /**
    * Formats the visible page title, printed as the `title` page section after

@@ -54,7 +54,7 @@ const printPermalink = (
   const format =
     options.formatMDXPermalink ?? DEFAULT_OPTIONS.formatMDXPermalink;
 
-  return format(id);
+  return format(id, options.meta);
 };
 
 /**
