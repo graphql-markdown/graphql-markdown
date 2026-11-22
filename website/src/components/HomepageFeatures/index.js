@@ -146,7 +146,7 @@ export default function HomepageFeatures() {
         </div>
       </section>
 
-      <section className={styles.demos}>
+      <section id="demos" className={styles.demos}>
         <div className="container">
           <h2 className={styles.sectionHeading}>See it on your framework</h2>
           <ul className={styles.demoGrid}>
