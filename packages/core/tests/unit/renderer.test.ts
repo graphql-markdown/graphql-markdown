@@ -954,6 +954,47 @@ describe("renderer", () => {
         );
       });
 
+      test("writes nested namespace index metafiles parent first", async () => {
+        expect.assertions(3);
+
+        vi.spyOn(Printer, "printType").mockResolvedValue(
+          "content" as MDXString,
+        );
+        vi.spyOn(GraphQL, "isApiType").mockReturnValueOnce(true);
+        const order: string[] = [];
+        const indexSpy = vi
+          .spyOn(rendererInstance, "generateIndexMetafile")
+          .mockImplementation(async (dir: string) => {
+            // Parent resolves later than the child would, so only sequential
+            // writing keeps the parent first.
+            if (dir.endsWith("analytics")) {
+              await new Promise((resolve) => {
+                setTimeout(resolve, 5);
+              });
+            }
+            order.push(dir);
+          });
+
+        await rendererInstance.renderRootTypes("queries", {
+          "analytics.reports.aggregateTournaments": {
+            type: new GraphQLScalarType({ name: "String" }),
+          },
+        });
+
+        const dirs = indexSpy.mock.calls.map((call) => {
+          return call[0];
+        });
+        expect(dirs).toContain("/output/operations/queries/analytics");
+        expect(dirs).toContain("/output/operations/queries/analytics/reports");
+        const namespaceOrder = order.filter((dir) => {
+          return dir.includes("/analytics");
+        });
+        expect(namespaceOrder).toEqual([
+          "/output/operations/queries/analytics",
+          "/output/operations/queries/analytics/reports",
+        ]);
+      });
+
       test("passes full namespace chain for deeply namespaced operations", async () => {
         expect.assertions(2);
 
