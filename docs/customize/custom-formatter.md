@@ -79,4 +79,4 @@ Formatter functions you export override the ones built by the preset's `createMD
 
 ## Lifecycle hooks
 
-Custom MDX modules can also export lifecycle hooks to customize the generation process. See [Hooks](/docs/customize/hooks#available-hooks) for the full reference and examples.
+Custom MDX modules can also export lifecycle hooks to customize the generation process. See [Hooks](/docs/customize/hooks#available-hooks) for the full reference and examples. See [Link entities in deprecation reasons](/docs/customize/hooks#link-entities-in-deprecation-reasons) for an example combining a formatter override with a hook.

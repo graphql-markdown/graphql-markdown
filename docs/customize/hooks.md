@@ -210,6 +210,97 @@ The same result can be expressed as a [decorator](/docs/customize/decorators#res
 
 :::
 
+## Link entities in deprecation reasons
+
+Turn schema type names written as inline code in a `@deprecated` reason into links to their pages.
+
+**Before (default output):**
+
+```graphql
+type Project {
+  status: String
+    @deprecated(reason: "Replaced by the `ProjectStatus` enum on status.")
+}
+```
+
+**After (with hook):**
+
+```md
+Replaced by the [`ProjectStatus`](/docs/graphql/types/enums/project-status.mdx) enum on status.
+```
+
+Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
+
+```js title="custom-mdx.mjs"
+// Replace with the preset of your framework, e.g. "@graphql-markdown/formatters/starlight"
+import * as preset from "@graphql-markdown/formatters/docusaurus";
+import { toLink } from "@graphql-markdown/printer-legacy";
+
+// Pages render concurrently, so this may hold another page's options: only read
+// settings shared by every page (schema, basePath, hierarchy, groups, deprecated, formatMDXLink).
+let printOptions;
+
+/**
+ * Hook that captures the resolved print options before each page is printed.
+ */
+const beforePrintTypeHook = (event) => {
+  printOptions = event.data.options;
+};
+
+/**
+ * Replaces inline code names matching a schema type with a link to its page.
+ */
+const linkEntities = (text) => {
+  const schema = printOptions?.schema;
+  const rootTypes = [
+    schema?.getQueryType(),
+    schema?.getMutationType(),
+    schema?.getSubscriptionType(),
+  ];
+
+  return text.replaceAll(/`([_A-Za-z][_0-9A-Za-z]*)`/g, (match, name) => {
+    const type = schema?.getType(name);
+    if (!type || name.startsWith("__") || rootTypes.includes(type)) {
+      return match;
+    }
+    const { url } = toLink(type, name, undefined, printOptions);
+    return url === "#" ? match : `[\`${name}\`](${url})`;
+  });
+};
+
+/**
+ * Formatter override that links entities in DEPRECATED admonitions.
+ */
+const formatMDXAdmonition = (admonition, meta) => {
+  const text =
+    admonition.title === "DEPRECATED" && admonition.text
+      ? linkEntities(admonition.text)
+      : admonition.text;
+  return preset.formatMDXAdmonition({ ...admonition, text }, meta);
+};
+
+// Drop the preset factory, otherwise it takes precedence over the overrides
+const { createMDXFormatter, default: _default, ...formatter } = preset;
+
+export default { ...formatter, beforePrintTypeHook, formatMDXAdmonition };
+```
+
+How it works:
+
+- `beforePrintTypeHook` captures the resolved print options before each page. It is used rather than `afterConfigBuildHook` because that hook only exposes the raw `baseURL`, so you would have to rebuild the link rules yourself (`linkRoot`, `hierarchy` layouts, `groupByDirective` and deprecated folders, the preset's `formatMDXLink`). The print options carry all of that already resolved, plus the `schema`.
+- `toLink` from `@graphql-markdown/printer-legacy` builds the same URL as the generated pages, for every `hierarchy`.
+- The `formatMDXAdmonition` override runs after the reason has been escaped by `escapeMDX`, so the Markdown link is kept as-is.
+- Names that are not schema types, root operation types (they have no page), introspection types (`__Type`, …), and types hidden by `skipDocDirective`/`onlyDocDirective` (for those `toLink` returns `#`) stay as inline code.
+- Pages render concurrently, so the captured variable may hold another page's options. Only rely on settings shared by every page (`schema`, `basePath`, `hierarchy`, `groups`, `deprecated`, `formatMDXLink`), not on per-page fields such as `entity` or `parentType`.
+- Backtick names inside a fenced code block in the reason are linked as well. Keep reasons with code blocks in mind, or skip the fenced regions if you need them left alone.
+- `createMDXFormatter` is removed from the spread because core prefers a preset's factory over individually exported formatters.
+
+:::tip
+
+`getSchemaEntity(type)` from `@graphql-markdown/graphql` returns the entity kind (`"enums"`, `"objects"`, …) and unwraps `List`/`NonNull`. It is also the default category folder name in the `entity` and `api` hierarchies, but on-disk folders can differ (the flat hierarchy has none, `formatCategoryFolderName` may add prefixes). Use `toLink` for real URLs.
+
+:::
+
 ## Reorder or hide sections before page composition
 
 Use `beforeComposePageTypeHook` to customize the final section order for each type page. This is the recommended approach for section visibility and ordering.
