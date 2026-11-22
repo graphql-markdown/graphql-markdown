@@ -516,7 +516,7 @@ export class Renderer {
         // child, so output adapters and event handlers see folders in order.
         for (const namespace of operationNamespaceParts) {
           dirPath = join(dirPath, slugify(namespace));
-          await this.generateIndexMetafile(dirPath, namespace);
+          await this.generateIndexMetafile(dirPath, namespace); // NOSONAR: S9382
         }
       }
     }
