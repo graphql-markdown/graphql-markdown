@@ -40,6 +40,13 @@ const DEMOS = [
   { id: "demo-mdbook", page: "graphql/types/objects/project.html" },
   { id: "demo-docfx", page: "docs/graphql/types/objects/project.html" },
   { id: "demo-honkit", page: "graphql/objects-project.html" },
+  { id: "demo-zola", page: "graphql/types/objects/project/" },
+  {
+    id: "demo-docsify",
+    page: "#/graphql/types/objects/project",
+    waitFor: ".markdown-section h1",
+  },
+  { id: "demo-pelican", page: "graphql/types/objects/project/" },
 ];
 
 const selected = process.argv.slice(2);
@@ -55,13 +62,19 @@ const context = await browser.newContext({
 });
 
 let failures = 0;
-for (const { id, page: path } of demos) {
+for (const { id, page: path, waitFor } of demos) {
   const url = `${BASE_URL}/${id}/${path}`;
   const page = await context.newPage();
   try {
-    const response = await page.goto(url, { waitUntil: "networkidle", timeout: 60_000 });
+    const response = await page.goto(url, {
+      waitUntil: "networkidle",
+      timeout: 60_000,
+    });
     if (!response?.ok()) {
       throw new Error(`HTTP ${response?.status() ?? "no response"}`);
+    }
+    if (waitFor) {
+      await page.waitForSelector(waitFor, { timeout: 60_000 });
     }
     await page.waitForTimeout(1_000); // let fonts and client-side rendering settle
     const file = join(OUTPUT_DIR, `${id}.jpg`);
