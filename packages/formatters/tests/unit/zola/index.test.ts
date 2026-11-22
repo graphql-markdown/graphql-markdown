@@ -1,3 +1,4 @@
+import { createSectionIndexHook } from "../../../src/output";
 import {
   beforeGenerateIndexMetafileHook,
   createMDXFormatter,
@@ -123,6 +124,29 @@ describe("beforeGenerateIndexMetafileHook", () => {
       '---\ntitle: "My Types"\nsort_by: "title"\n---\n\n# My Types\n\n',
     );
     expect(content).not.toContain("bookCollapseSection");
+  });
+});
+
+describe("createSectionIndexHook", () => {
+  test("writes the file name given with the front matter lines given", async () => {
+    const outputAdapter = {
+      writeFile: vi.fn(),
+      readFile: vi.fn(),
+      mkdir: vi.fn(),
+    };
+    const hook = createSectionIndexHook("_index.md", (label) => {
+      return [`alias: "${label}"`];
+    });
+    await hook({
+      data: { dirPath: "/out/api", category: "my-types", outputAdapter },
+    } as never);
+
+    expect(outputAdapter.writeFile).toHaveBeenCalledTimes(1);
+    const [path, content] = outputAdapter.writeFile.mock.calls[0];
+    expect(path).toBe("/out/api/_index.md");
+    expect(content).toBe(
+      '---\ntitle: "My Types"\nalias: "My Types"\n---\n\n# My Types\n\n',
+    );
   });
 });
 

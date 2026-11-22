@@ -10,8 +10,6 @@
  * @packageDocumentation
  */
 
-import { join } from "node:path";
-
 import type {
   AdmonitionType,
   Formatter,
@@ -20,7 +18,6 @@ import type {
   Maybe,
   MDXString,
   MetaInfo,
-  OutputAdapter,
   TypeLink,
 } from "@graphql-markdown/types";
 import {
@@ -32,16 +29,9 @@ import {
   MARKDOWN_EOL,
   MARKDOWN_EOP,
   formatFrontMatterObject,
-  startCase,
 } from "@graphql-markdown/utils";
-import {
-  formatMDXBullet,
-  formatMDXNameEntity,
-  formatMDXPermalink,
-  formatMDXSpecifiedByLink,
-} from "../defaults.ts";
-import { writeOutput } from "../output.ts";
-import { formatMDXBadge, formatMDXDetails } from "../hugo/index.ts";
+import { createSectionIndexHook } from "../output.ts";
+import { createMDXFormatter as createHugoFormatter } from "../hugo/index.ts";
 
 /** Top-level front matter keys accepted by Zola pages. */
 const ZOLA_PAGE_KEYS = new Set([
@@ -101,7 +91,7 @@ export const formatMDXFrontmatter = (
       Math.min(baseIndent, /^\s*/.exec(rawLine)![0].length),
     );
     if (/^\s/.test(line) && entries.length > 0) {
-      entries[entries.length - 1].lines.push(line);
+      entries.at(-1)!.lines.push(line);
       continue;
     }
     const match = /^([A-Za-z0-9_-]+):/.exec(line);
@@ -169,15 +159,10 @@ export {
  */
 export const createMDXFormatter = (_meta?: Maybe<MetaInfo>): Formatter => {
   return {
-    formatMDXBadge,
+    ...createHugoFormatter(_meta),
     formatMDXAdmonition,
-    formatMDXBullet,
-    formatMDXDetails,
     formatMDXFrontmatter,
     formatMDXLink,
-    formatMDXNameEntity,
-    formatMDXPermalink,
-    formatMDXSpecifiedByLink,
   };
 };
 
@@ -190,19 +175,6 @@ export const mdxExtension = ".md" as const;
  * @param event - Hook event whose `data` contains `dirPath` and `category`
  */
 export const beforeGenerateIndexMetafileHook: GenerateIndexMetafileHook =
-  async (event): Promise<void> => {
-    const { dirPath, category, outputAdapter } = (
-      event as {
-        data: {
-          dirPath: string;
-          category: string;
-          outputAdapter?: OutputAdapter;
-        };
-      }
-    ).data;
-    const filePath = join(dirPath, "_index.md");
-    const label = startCase(category);
-    const content = `${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}title: "${label}"${MARKDOWN_EOL}sort_by: "title"${MARKDOWN_EOL}${FRONT_MATTER_DELIMITER}${MARKDOWN_EOL}${MARKDOWN_EOL}# ${label}${MARKDOWN_EOL}${MARKDOWN_EOL}`;
-
-    await writeOutput(filePath, content, outputAdapter, dirPath);
-  };
+  createSectionIndexHook("_index.md", () => {
+    return ['sort_by: "title"'];
+  });
