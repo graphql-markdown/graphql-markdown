@@ -180,6 +180,7 @@ const FORMATTER_PRESETS: readonly [
   "mkdocs",
   "starlight",
   "vocs",
+  "zola",
 ];
 ```
 
