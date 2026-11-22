@@ -1,4 +1,5 @@
 import * as docfx from "../../src/docfx";
+import * as docsify from "../../src/docsify";
 import * as docusaurus from "../../src/docusaurus";
 import * as fumadocs from "../../src/fumadocs";
 import * as honkit from "../../src/honkit";
@@ -11,6 +12,7 @@ import * as vocs from "../../src/vocs";
 
 const presets = {
   docfx,
+  docsify,
   docusaurus,
   fumadocs,
   honkit,

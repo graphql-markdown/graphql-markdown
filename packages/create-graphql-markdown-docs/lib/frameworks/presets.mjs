@@ -82,6 +82,22 @@ export const hugo = {
     `Add a menu entry in your Hugo config pointing to \`${route}\`.`,
 };
 
+/** Docsify preset. */
+export const docsify = {
+  id: "docsify",
+  name: "Docsify",
+  label: "Docsify",
+  formatter: "@graphql-markdown/formatters/docsify",
+  createCommand: "npx docsify-cli init <dir>",
+  detect: ["docsify-cli"],
+  links: "absolute",
+  contentRoot: "docs",
+  contentRoute: "/",
+  outputHint: "Docsify serves content from docs/",
+  nextSteps: () =>
+    'In docs/index.html set loadSidebar: true and alias: { "/.*/_sidebar.md": "/_sidebar.md" }, and load the Docsify v5 dist/ bundles (needed for callouts).',
+};
+
 /** MkDocs preset. */
 export const mkdocs = {
   id: "mkdocs",

@@ -118,6 +118,20 @@
         "default": "./dist/hugo/index.js"
       }
     },
+    "./docsify": {
+      "require": {
+        "types": "./dist/docsify/index.d.ts",
+        "default": "./dist/docsify/index.js"
+      },
+      "import": {
+        "types": "./dist/docsify/index.d.ts",
+        "default": "./dist/docsify/index.js"
+      },
+      "default": {
+        "types": "./dist/docsify/index.d.ts",
+        "default": "./dist/docsify/index.js"
+      }
+    },
     "./mdbook": {
       "require": {
         "types": "./dist/mdbook/index.d.ts",
