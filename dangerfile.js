@@ -145,6 +145,8 @@ if (!isBot && !isValidPrTitle(pr.title, CZ_EMOJI_TYPES)) {
 // `.changeset/README.md` is documentation, not a changeset.
 const SRC_FILE = /^packages\/[^/]+\/src\//;
 const CHANGESET_FILE = /^\.changeset\/(?!README\.md$)[^/]+\.md$/;
+// Also named in .github/workflows/danger-js.yml, which reruns Danger when this
+// label is added or removed: rename both together.
 const NO_CHANGESET_LABEL = "no-changeset";
 
 const isMissingChangeset = (files) =>
