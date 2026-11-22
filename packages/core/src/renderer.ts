@@ -512,19 +512,12 @@ export class Renderer {
       );
 
       if (operationNamespaceParts && operationNamespaceParts.length > 0) {
-        const metafileTargets: { dir: string; name: string }[] = [];
-
+        // Sequential on purpose: write each parent namespace index before its
+        // child, so output adapters and event handlers see folders in order.
         for (const namespace of operationNamespaceParts) {
-          const formattedNamespace = slugify(namespace);
-          dirPath = join(dirPath, formattedNamespace);
-          metafileTargets.push({ dir: dirPath, name: namespace });
+          dirPath = join(dirPath, slugify(namespace));
+          await this.generateIndexMetafile(dirPath, namespace); // NOSONAR: S9382
         }
-
-        await Promise.all(
-          metafileTargets.map(async ({ dir, name }) => {
-            return this.generateIndexMetafile(dir, name);
-          }),
-        );
       }
     }
 
