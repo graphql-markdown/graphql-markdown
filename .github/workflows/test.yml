@@ -7,6 +7,8 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
   push:
     branches:
       - main
@@ -82,9 +84,12 @@ jobs:
       # listed in their package.json `files` instead.
       - name: Compute Sonar sources
         id: sonar-sources
+        # Not on merge_group: the PR and the push to main are analysed already,
+        # and a queue branch would only add a throwaway SonarCloud branch.
         if: >-
-          github.event_name != 'pull_request'
-          || github.event.pull_request.head.repo.full_name == github.repository
+          github.event_name != 'merge_group'
+          && (github.event_name != 'pull_request'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         env:
           PACKAGE: ${{ matrix.package }}
         run: |
@@ -100,9 +105,12 @@ jobs:
 
       - name: SonarCloud Scan
         id: sonarcloud
+        # Not on merge_group: the PR and the push to main are analysed already,
+        # and a queue branch would only add a throwaway SonarCloud branch.
         if: >-
-          github.event_name != 'pull_request'
-          || github.event.pull_request.head.repo.full_name == github.repository
+          github.event_name != 'merge_group'
+          && (github.event_name != 'pull_request'
+            || github.event.pull_request.head.repo.full_name == github.repository)
         uses: SonarSource/sonarqube-scan-action@v8.5.0
         with:
           projectBaseDir: ${{ github.workspace }}

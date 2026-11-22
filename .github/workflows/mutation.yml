@@ -7,6 +7,8 @@ env:
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
+  merge_group:
+    types: [checks_requested]
   # PRs only run the packages they change (see the `if` below), so the full
   # matrix runs on a schedule to keep every Stryker dashboard module's score
   # fresh. Weekly rather than per-merge: a quality dashboard does not need
@@ -62,7 +64,11 @@ jobs:
             dir=${conf#packages/}
             echo "${dir%%/*}"
           done | jq -Rnc '[inputs]')
-          if [ "$CHANGES_RESULT" != "success" ] || [ "$EVENT_NAME" != "pull_request" ]; then
+          if [ "$EVENT_NAME" = "merge_group" ]; then
+            # Already mutation-tested on the PR; an empty matrix makes the
+            # `mutation` job skip, which `Mutation Gate` accepts as success.
+            packages='[]'
+          elif [ "$CHANGES_RESULT" != "success" ] || [ "$EVENT_NAME" != "pull_request" ]; then
             # Fail-open (gate errored) or a non-PR trigger (schedule/workflow_dispatch):
             # run the full matrix. PRs only run the packages they directly change (see
             # DIRECT_PACKAGES below), so the full matrix runs on a schedule to keep every
