@@ -38,6 +38,8 @@ import {
   RenderTypeEntitiesEvents,
 } from "./events/index.ts";
 
+// Re-exported only for unit tests (direct whitebox coverage); not part of the
+// production public API.
 export {
   DEPRECATED,
   CATEGORY_STYLE_CLASS,

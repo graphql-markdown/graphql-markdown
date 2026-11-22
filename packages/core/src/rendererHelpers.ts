@@ -91,7 +91,6 @@ export enum SidebarPosition {
  *
  * @see {@link getApiGroupFolder} For usage with type categorization
  */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const API_GROUPS: Required<ApiGroupOverrideType> = {
   operations: "operations",
   types: "types",
@@ -113,7 +112,6 @@ export const API_GROUPS: Required<ApiGroupOverrideType> = {
  * const folder = getApiGroupFolder(objectType, { operations: "queries" }); // Returns appropriate folder
  * ```
  */
-// Used only by unit tests for direct whitebox coverage; not part of the production public API.
 export const getApiGroupFolder = (
   type: unknown,
   groups?: Maybe<ApiGroupOverrideType | boolean>,
