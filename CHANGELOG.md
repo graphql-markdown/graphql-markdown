@@ -1,3 +1,82 @@
+<a id="1.44.0"></a>
+# [1.44.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.44.0) - 2026-11-22
+
+1.44.0 removes two deprecated settings, `mdxParser` (deprecated in [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0)) and `customDirective` (deprecated in [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0)), and stops ignoring settings it doesn't support, so a misspelled option now fails loudly instead of silently doing nothing. It also adds Zola and Docsify formatter presets, and it fixes how deprecation notices render in CommonMark output and in the Nuxt theme.
+
+### ⚠️ Breaking changes
+
+**Check your configuration before upgrading.** A configuration that ran on 1.43 can fail on 1.44. [Upgrade to 1.44](https://graphql-markdown.dev/docs/guides/upgrade-1-44) walks through each change.
+
+- **`mdxParser` is removed** (deprecated since [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0)). Use `formatter`, which takes the same value. Replace the `--mdxParser` CLI flag with `--formatter` ([#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649)).
+
+  ```diff
+  - mdxParser: "@graphql-markdown/formatters/hugo",
+  + formatter: "@graphql-markdown/formatters/hugo",
+  ```
+
+- **`customDirective` is removed** (deprecated since [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0)). Use [`decorators`](https://graphql-markdown.dev/docs/customize/decorators): each `customDirective` entry becomes one decorator for its description and one for its tag. See [migrating from `customDirective`](https://graphql-markdown.dev/docs/customize/decorators#migrating-from-customdirective) ([#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649)).
+
+  ```diff
+  - customDirective: {
+  -   auth: { descriptor: (directive, node) => directiveDescriptor(directive, node, "Requires the `${requires}` role.") },
+  - },
+  + decorators: {
+  +   authDescription: {
+  +     predicate: hasDirectiveNamed("auth"),
+  +     position: { into: "description" },
+  +     render: withDirective("auth", (directive, options, { type }) =>
+  +       escapeMDX(directiveDescriptor(directive, type, "Requires the `${requires}` role.")),
+  +     ),
+  +   },
+  + },
+  ```
+
+  The related TypeScript exports are removed too: the `CustomDirective*` types from `@graphql-markdown/types`, the custom directive helpers (`isCustomDirective`, `getCustomDirectives`, `WILDCARD_DIRECTIVE`, …) from `@graphql-markdown/graphql`, and `buildCustomDirectiveDecorators` from `@graphql-markdown/printer-legacy`. The upgrade guide lists each one with its replacement.
+
+- **Unsupported settings are rejected.** Earlier releases silently ignored a setting they did not know. Generation now stops with an error that names every unsupported setting at once and suggests the closest supported one for a likely typo ([#3683](https://github.com/graphql-markdown/graphql-markdown/pull/3683), [#3695](https://github.com/graphql-markdown/graphql-markdown/pull/3695)):
+
+  ```text
+  Error: Unsupported settings "mdxParser", "fromatter" (did you mean "formatter"?). See https://graphql-markdown.dev/docs/reference/settings for the list of supported settings.
+  ```
+
+### New features ✨
+
+- **Zola and Docsify presets** in `@graphql-markdown/formatters`, and `npm create graphql-markdown-docs` can wire both frameworks ([#3667](https://github.com/graphql-markdown/graphql-markdown/pull/3667), [#3668](https://github.com/graphql-markdown/graphql-markdown/pull/3668)). See the [supported formatters](https://graphql-markdown.dev/docs/guides/other-frameworks#supported-formatters):
+
+  ```js
+  formatter: "@graphql-markdown/formatters/zola", // or "@graphql-markdown/formatters/docsify"
+  ```
+
+- **Link entities in deprecation reasons.** `@graphql-markdown/printer-legacy` exports `toLink`, so a custom formatter can turn a type name in a deprecation reason into the same link the printer builds. See the [recipe](https://graphql-markdown.dev/docs/customize/hooks#link-entities-in-deprecation-reasons) ([#3663](https://github.com/graphql-markdown/graphql-markdown/pull/3663)).
+- **Wrap the Nuxt theme formatter.** It is exported as `@graphql-markdown/nuxt-theme/formatter`, so a custom formatter can extend it instead of starting over ([#3676](https://github.com/graphql-markdown/graphql-markdown/pull/3676)):
+
+  ```js
+  import * as preset from "@graphql-markdown/nuxt-theme/formatter";
+  ```
+
+- **`getSchemaEntity` resolves wrapped types.** It no longer needs print options, and `isEntity` predicates and the decorator context `entity` now resolve `List`/`NonNull` types instead of returning `undefined` ([#3663](https://github.com/graphql-markdown/graphql-markdown/pull/3663)).
+
+### Bug fixes 🐛
+
+- **Formatter presets:** functions exported next to a spread preset (`{ ...preset, formatMDXBadge }`) now override the preset's own, and spread Docusaurus presets keep version-aware permalinks ([#3664](https://github.com/graphql-markdown/graphql-markdown/pull/3664)).
+- **CommonMark output:** the default admonition renders its text as Markdown, so inline code and links in deprecation reasons are no longer printed literally ([#3680](https://github.com/graphql-markdown/graphql-markdown/pull/3680)).
+- **Nested namespaces:** category index files of nested operation namespaces are written parent folder first, so output adapters and event handlers receive them in order ([#3684](https://github.com/graphql-markdown/graphql-markdown/pull/3684)).
+- **Nuxt theme** 0.3.0:
+  - Deprecation notices keep their links and inline code, and type-level notices no longer repeat the badge text ([#3678](https://github.com/graphql-markdown/graphql-markdown/pull/3678)).
+  - `createGenerateDocs` forwards every option it doesn't set itself, such as `telemetry: false`, `pretty` or `force`, instead of dropping them ([#3675](https://github.com/graphql-markdown/graphql-markdown/pull/3675)).
+  - Search snippets no longer show HTML entities for quotes and similar characters, deprecated sidebar entries have an accessible name, and reference page titles include the site title ([#3625](https://github.com/graphql-markdown/graphql-markdown/pull/3625)).
+- **Messages:** the formatter load error names the `formatter` setting ([#3685](https://github.com/graphql-markdown/graphql-markdown/pull/3685))
+
+### Upgrading
+
+- Update your `@graphql-markdown/*` packages, then run generation once. If it reports unsupported settings, follow [Upgrade to 1.44](https://graphql-markdown.dev/docs/guides/upgrade-1-44).
+- Nuxt sites: update `@graphql-markdown/nuxt-theme` to `^0.3.0`. A `^0.2.x` range does not pick up 0.3.0.
+
+
+
+[Changes][1.44.0]
+
+
 <a id="1.43.1"></a>
 # [1.43.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.43.1) - 2026-11-19
 
@@ -2927,6 +3006,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.44.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.43.1...1.44.0
 [1.43.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.43.0...1.43.1
 [1.43.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.42.0...1.43.0
 [1.42.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.41.0...1.42.0
