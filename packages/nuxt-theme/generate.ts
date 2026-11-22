@@ -13,6 +13,9 @@ import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants.ts";
  */
 type GraphQLMarkdownOptions = Parameters<typeof runGraphQLMarkdown>[0];
 
+/** Options the theme sets itself; users cannot override them via `createGenerateDocs`. */
+type ThemeControlledKeys = "linkRoot";
+
 /** Default loaders: GraphQL file loader. */
 const DEFAULT_LOADERS = {
   GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
@@ -36,20 +39,32 @@ const DEFAULT_LOADERS = {
  *   - homepage: Path to a markdown template rendered as the intro of the API
  *     reference, or `false` to disable it (default: GraphQL-Markdown's built-in
  *     homepage). Whatever its file name, it is stored as `generated.md`.
- *   - telemetry: Set to `false` to disable anonymous usage telemetry
+ *   - any other GraphQL-Markdown option (for example `telemetry`, `pretty`, `force`) is forwarded as-is; `linkRoot` is set by the theme
  * @returns A function that generates the documentation when called
  */
-export const createGenerateDocs = (userOptions: {
-  schema: string;
-  rootPath?: string;
-  baseURL?: string;
-  printTypeOptions?: Partial<GraphQLMarkdownOptions["printTypeOptions"]>;
-  decorators?: NonNullable<GraphQLMarkdownOptions["decorators"]>;
-  formatter?: string;
-  loaders?: NonNullable<GraphQLMarkdownOptions["loaders"]>;
-  homepage?: string | false;
-  telemetry?: boolean;
-}): (() => Promise<void>) => {
+export const createGenerateDocs = (
+  userOptions: Omit<
+    Partial<GraphQLMarkdownOptions>,
+    | ThemeControlledKeys
+    | "schema"
+    | "printTypeOptions"
+    | "decorators"
+    | "formatter"
+    | "loaders"
+    | "homepage"
+    | "rootPath"
+    | "baseURL"
+  > & {
+    schema: string;
+    rootPath?: string;
+    baseURL?: string;
+    printTypeOptions?: Partial<GraphQLMarkdownOptions["printTypeOptions"]>;
+    decorators?: NonNullable<GraphQLMarkdownOptions["decorators"]>;
+    formatter?: string;
+    loaders?: NonNullable<GraphQLMarkdownOptions["loaders"]>;
+    homepage?: string | false;
+  },
+): (() => Promise<void>) => {
   const {
     schema,
     rootPath = "./content",
@@ -59,7 +74,7 @@ export const createGenerateDocs = (userOptions: {
     formatter = new URL("./formatter.mjs", import.meta.url).href,
     loaders = DEFAULT_LOADERS,
     homepage,
-    telemetry,
+    ...rest
   } = userOptions;
 
   const logger = useLogger("gqlmd-generate");
@@ -72,6 +87,10 @@ export const createGenerateDocs = (userOptions: {
   };
 
   const options: GraphQLMarkdownOptions = {
+    // Forward every other GraphQL-Markdown option untouched; the theme's own
+    // values below win over anything passed through here
+    ...rest,
+
     // Core paths
     schema,
     rootPath,
@@ -90,9 +109,6 @@ export const createGenerateDocs = (userOptions: {
 
     // Homepage template (or `false` to disable), only when set
     ...(homepage !== undefined && { homepage }),
-
-    // Telemetry opt-out, only when set
-    ...(telemetry !== undefined && { telemetry }),
   };
 
   return async () => {
