@@ -232,30 +232,46 @@ export const afterRenderFilesHook: RenderFilesHook = async (
     label: string,
   ): Promise<string[]> => {
     const indent = "  ".repeat(depth);
+    const dirNames = [...node.dirs.keys()].sort(byName);
+    const fileNames = [...node.files.keys()].sort(byName);
+
+    const [childLines, titles] = await Promise.all([
+      Promise.all(
+        dirNames.map(async (name) => {
+          return walk(
+            node.dirs.get(name)!,
+            join(dirPath, name),
+            depth + 1,
+            toTitle(name),
+          );
+        }),
+      ),
+      Promise.all(
+        fileNames.map(async (name) => {
+          return pageTitle(node.files.get(name)!, toTitle(name));
+        }),
+      ),
+    ]);
+
     const lines: string[] = [];
     const indexLinks: string[] = [];
 
-    for (const name of [...node.dirs.keys()].sort(byName)) {
-      const childPath = join(dirPath, name);
-      const childLabel = toTitle(name);
-      const children = await walk(
-        node.dirs.get(name)!,
-        childPath,
-        depth + 1,
-        childLabel,
-      );
+    dirNames.forEach((name, index) => {
+      const children = childLines[index];
       if (children.length > 0) {
+        const childLabel = toTitle(name);
         lines.push(`${indent}* ${childLabel}`, ...children);
-        indexLinks.push(`* [${childLabel}](${toRoute(childPath)}/README.md)`);
+        indexLinks.push(
+          `* [${childLabel}](${toRoute(join(dirPath, name))}/README.md)`,
+        );
       }
-    }
+    });
 
-    for (const name of [...node.files.keys()].sort(byName)) {
-      const title = await pageTitle(node.files.get(name)!, toTitle(name));
-      const link = `* [${title}](${toRoute(join(dirPath, name))})`;
+    fileNames.forEach((name, index) => {
+      const link = `* [${titles[index]}](${toRoute(join(dirPath, name))})`;
       lines.push(`${indent}${link}`);
       indexLinks.push(link);
-    }
+    });
 
     if (indexLinks.length > 0) {
       await writeOutput(
