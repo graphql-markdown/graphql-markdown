@@ -14,7 +14,7 @@ Versions of `@graphql-markdown/formatters`. Each version links to the GraphQL-Ma
 
 - [#3680](https://github.com/graphql-markdown/graphql-markdown/pull/3680) [`05ebd51`](https://github.com/graphql-markdown/graphql-markdown/commit/05ebd518ab487c8aa1ab4e76eabefa3de0825076) - The default admonition renders its text as Markdown, so inline code and links in deprecation reasons are no longer shown literally in CommonMark renderers.
 
-- [#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649) [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158) - **⚠️ Breaking change:** remove the deprecated configuration options `customDirective` and `mdxParser`. Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead, as shown in [Upgrade to 1.44](https://graphql-markdown.dev/docs/guides/upgrade-1-44).
+- [#3649](https://github.com/graphql-markdown/graphql-markdown/pull/3649) [`169ca39`](https://github.com/graphql-markdown/graphql-markdown/commit/169ca39cddd9ef95687065cb70f6ff15aad6e158) - **⚠️ Breaking change:** remove the configuration options `customDirective` (deprecated in [1.37.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.37.0)) and `mdxParser` (deprecated in [1.35.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.35.0)). Configurations that still set them now fail with an unsupported setting error. Use `decorators` and `formatter` instead, as shown in [Upgrade to 1.44](https://graphql-markdown.dev/docs/guides/upgrade-1-44).
   
   - **`customDirective`**:
     - Removed deprecated `customDirective` setting from configuration and CLI options; use `decorators` instead.
