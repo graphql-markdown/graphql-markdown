@@ -8,6 +8,7 @@ const projectRoot = join(import.meta.dirname, "../../..");
 export default {
   ...typedocBaseOptions,
   ...typedocApiOptions,
+  name: "TypeScript API",
   plugin: [
     "typedoc-plugin-markdown",
     "typedoc-plugin-frontmatter",

@@ -389,8 +389,8 @@ const config = {
         },
         items: [
           {
-            type: "doc",
-            docId: "intro",
+            to: "/docs/intro",
+            activeBaseRegex: "^/(docs|api)(/|$)",
             position: "right",
             label: "Docs",
           },
