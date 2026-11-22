@@ -36,6 +36,7 @@ const DEFAULT_LOADERS = {
  *   - homepage: Path to a markdown template rendered as the intro of the API
  *     reference, or `false` to disable it (default: GraphQL-Markdown's built-in
  *     homepage). Whatever its file name, it is stored as `generated.md`.
+ *   - telemetry: Set to `false` to disable anonymous usage telemetry
  * @returns A function that generates the documentation when called
  */
 export const createGenerateDocs = (userOptions: {
@@ -47,6 +48,7 @@ export const createGenerateDocs = (userOptions: {
   formatter?: string;
   loaders?: NonNullable<GraphQLMarkdownOptions["loaders"]>;
   homepage?: string | false;
+  telemetry?: boolean;
 }): (() => Promise<void>) => {
   const {
     schema,
@@ -57,6 +59,7 @@ export const createGenerateDocs = (userOptions: {
     formatter = new URL("./formatter.mjs", import.meta.url).href,
     loaders = DEFAULT_LOADERS,
     homepage,
+    telemetry,
   } = userOptions;
 
   const logger = useLogger("gqlmd-generate");
@@ -87,6 +90,9 @@ export const createGenerateDocs = (userOptions: {
 
     // Homepage template (or `false` to disable), only when set
     ...(homepage !== undefined && { homepage }),
+
+    // Telemetry opt-out, only when set
+    ...(telemetry !== undefined && { telemetry }),
   };
 
   return async () => {

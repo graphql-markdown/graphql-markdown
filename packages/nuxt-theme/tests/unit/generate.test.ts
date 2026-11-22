@@ -116,6 +116,25 @@ describe("createGenerateDocs", () => {
     expect(rename).not.toHaveBeenCalled();
   });
 
+  it("forwards `telemetry: false` to runGraphQLMarkdown", async () => {
+    const generate = createGenerateDocs({
+      schema: "./schema.graphql",
+      telemetry: false,
+    });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options.telemetry).toBe(false);
+  });
+
+  it("omits `telemetry` from options when not provided", async () => {
+    const generate = createGenerateDocs({ schema: "./schema.graphql" });
+    await generate();
+
+    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    expect(options).not.toHaveProperty("telemetry");
+  });
+
   it("returns a callable function", () => {
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
     expect(typeof generate).toBe("function");
