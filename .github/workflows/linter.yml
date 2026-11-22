@@ -129,11 +129,16 @@ jobs:
         if: env.RUN_CODE_CHECKS == 'true' && github.event_name == 'pull_request'
         run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
 
+      # The action installs the fallow version pinned in package.json, so CI and
+      # local runs agree, and reports findings as inline annotations. Its
+      # automatic base only covers pull requests, so `changed-since` is set for
+      # merge groups too.
       - name: Run fallow
         if: env.RUN_CODE_CHECKS == 'true'
-        env:
-          FALLOW_BASE: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
-        run: bun run fallow -- audit --base "$FALLOW_BASE"
+        uses: fallow-rs/fallow@v3.45.0
+        with:
+          command: audit
+          changed-since: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
 
   actions-lock:
     name: Actions lock
