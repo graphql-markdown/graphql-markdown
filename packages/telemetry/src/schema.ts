@@ -53,6 +53,7 @@ export const DEPRECATED_OPTIONS = ["default", "group", "skip"] as const;
 export const HIERARCHIES = ["api", "entity", "flat"] as const;
 export const FORMATTER_PRESETS = [
   "docfx",
+  "docsify",
   "docusaurus",
   "fumadocs",
   "honkit",
