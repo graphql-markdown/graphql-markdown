@@ -412,9 +412,9 @@ a.menu__link[href$="/docs/guides/examples"]::before {
   -webkit-mask-image: url("/img/docs/icons/examples.svg");
 }
 
-a.menu__link[href$="/docs/customize/custom-directive"]::before {
-  mask-image: url("/img/docs/icons/custom-directive.svg");
-  -webkit-mask-image: url("/img/docs/icons/custom-directive.svg");
+a.menu__link[href$="/docs/guides/upgrade-1-44"]::before {
+  mask-image: url("/img/docs/icons/upgrade.svg");
+  -webkit-mask-image: url("/img/docs/icons/upgrade.svg");
 }
 
 a.menu__link[href$="/docs/customize/decorators"]::before {
