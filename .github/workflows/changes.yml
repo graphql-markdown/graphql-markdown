@@ -80,7 +80,13 @@ jobs:
       - name: Compute affected packages
         id: affected
         env:
-          BASE_REF: ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref) || format('{0}^', github.sha) }}
+          # pull_request: the PR's target branch.
+          # merge_group: the base of the whole queue group (it may hold several PRs).
+          # push: the parent of the pushed commit.
+          BASE_REF: >-
+            ${{ github.event_name == 'pull_request' && format('origin/{0}', github.base_ref)
+              || github.event_name == 'merge_group' && github.event.merge_group.base_sha
+              || format('{0}^', github.sha) }}
         run: .github/scripts/changed-files.sh "$BASE_REF" | node .github/scripts/affected-packages.mts
 
       - name: Summary
