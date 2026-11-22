@@ -10,6 +10,7 @@
     "./honkit": "./src/honkit/index.ts",
     "./docsify": "./src/docsify/index.ts",
     "./hugo": "./src/hugo/index.ts",
+    "./zola": "./src/zola/index.ts",
     "./mdbook": "./src/mdbook/index.ts",
     "./mdx": "./src/mdx/index.ts",
     "./mkdocs": "./src/mkdocs/index.ts",

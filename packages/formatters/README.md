@@ -55,6 +55,7 @@ Each formatter has its own setup guide:
 | HonKit             | `@graphql-markdown/formatters/honkit`     | [Guide](src/honkit/README.md)     |
 | Docsify            | `@graphql-markdown/formatters/docsify`    | [Guide](src/docsify/README.md)    |
 | Hugo               | `@graphql-markdown/formatters/hugo`       | [Guide](src/hugo/README.md)       |
+| Zola               | `@graphql-markdown/formatters/zola`       | [Guide](src/zola/README.md)       |
 | mdBook             | `@graphql-markdown/formatters/mdbook`     | [Guide](src/mdbook/README.md)     |
 | Generic MDX        | `@graphql-markdown/formatters/mdx`        | [Guide](src/mdx/README.md)        |
 | MkDocs             | `@graphql-markdown/formatters/mkdocs`     | [Guide](src/mkdocs/README.md)     |

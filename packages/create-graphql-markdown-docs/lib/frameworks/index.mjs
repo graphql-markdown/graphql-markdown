@@ -12,6 +12,7 @@ import {
   mkdocs,
   starlight,
   vocs,
+  zola,
 } from "./presets.mjs";
 
 /**
@@ -52,6 +53,7 @@ export const WIRE_FRAMEWORKS = {
   mdbook,
   nuxt,
   mdx,
+  zola,
   generic,
 };
 
