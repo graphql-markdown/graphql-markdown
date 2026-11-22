@@ -11,9 +11,13 @@ keywords:
   - Nuxt demo
 ---
 
+import DemoCard from "@site/src/components/DemoCard";
+
 # Try it
 
 Live demos and sandboxes for each supported framework. Open one to see the generated output, or fork it to try your own schema.
+
+<DemoCard name="Docusaurus" screenshot="demo-docusaurus" live="https://graphql-markdown.dev/demo-docusaurus/">
 
 ## Docusaurus
 
@@ -23,6 +27,10 @@ Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-m
 
 Edit the configuration in `.graphqlrc`.
 
+</DemoCard>
+
+<DemoCard name="Astro/Starlight" screenshot="demo-astro-starlight" live="https://graphql-markdown.dev/demo-astro-starlight/">
+
 ## Astro/Starlight
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-astro-starlight/).
@@ -30,6 +38,10 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-astr
 Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-markdown/demo-astro-starlight/tree/main?file=/graphql.config.mjs) or fork our [demo repo](https://github.com/graphql-markdown/demo-astro-starlight) to try with your own GraphQL schema.
 
 Edit the configuration in `graphql.config.mjs`.
+
+</DemoCard>
+
+<DemoCard name="Astro/Starlight on Cloudflare R2" screenshot="demo-astro-r2" live="https://demo-astro-r2.edno.workers.dev/">
 
 ## Astro/Starlight on Cloudflare R2
 
@@ -39,6 +51,10 @@ Fork our [demo repo](https://github.com/graphql-markdown/demo-astro-r2) to see t
 
 Edit the configuration in `graphql.config.ts`.
 
+</DemoCard>
+
+<DemoCard name="Next.js/Fumadocs" screenshot="demo-nextjs-fumadocs" live="https://graphql-markdown.dev/demo-nextjs-fumadocs/">
+
 ## Next.js/Fumadocs
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-nextjs-fumadocs/).
@@ -46,6 +62,10 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-next
 Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-markdown/demo-nextjs-fumadocs/tree/main?file=/graphql.config.mjs) or fork our [demo repo](https://github.com/graphql-markdown/demo-nextjs-fumadocs) to try with your own GraphQL schema.
 
 Edit the configuration in `graphql.config.mjs`.
+
+</DemoCard>
+
+<DemoCard name="Nuxt" screenshot="demo-nuxt" live="https://graphql-markdown.dev/demo-nuxt/">
 
 ## Nuxt
 
@@ -55,6 +75,10 @@ Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-m
 
 Edit the configuration in `generate-docs.ts`.
 
+</DemoCard>
+
+<DemoCard name="Nuxt/Docus" screenshot="demo-docus" live="https://graphql-markdown.dev/demo-docus/">
+
 ## Nuxt/Docus
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docus/).
@@ -62,6 +86,10 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docu
 Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-markdown/demo-docus/tree/main?file=/graphql.config.mjs) or fork our [demo repo](https://github.com/graphql-markdown/demo-docus) to try with your own GraphQL schema.
 
 Edit the configuration in `graphql.config.mjs`.
+
+</DemoCard>
+
+<DemoCard name="Vite/Vocs" screenshot="demo-vite-vocs" live="https://graphql-markdown.dev/demo-vite-vocs/">
 
 ## Vite/Vocs
 
@@ -71,6 +99,10 @@ Use the [CodeSandbox template](https://codesandbox.io/p/sandbox/github/graphql-m
 
 Edit the configuration in `graphql.config.mjs`.
 
+</DemoCard>
+
+<DemoCard name="HonKit / GitBook legacy" screenshot="demo-honkit" live="https://graphql-markdown.dev/demo-honkit/">
+
 ## HonKit / GitBook legacy
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-honkit/).
@@ -78,6 +110,10 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-honk
 Fork our [demo repo](https://github.com/graphql-markdown/demo-honkit) to try with your own GraphQL schema.
 
 Edit the configuration in `graphql.config.mjs`.
+
+</DemoCard>
+
+<DemoCard name="Hugo" screenshot="demo-hugo" live="https://graphql-markdown.dev/demo-hugo/">
 
 ## Hugo
 
@@ -87,6 +123,10 @@ Fork our [demo repo](https://github.com/graphql-markdown/demo-hugo) to try with 
 
 Edit the configuration in `.graphqlrc.yml`.
 
+</DemoCard>
+
+<DemoCard name="MkDocs" screenshot="demo-mkdocs" live="https://graphql-markdown.dev/demo-mkdocs/">
+
 ## MkDocs
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-mkdocs/).
@@ -94,6 +134,10 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-mkdo
 Fork our [demo repo](https://github.com/graphql-markdown/demo-mkdocs) to try with your own GraphQL schema.
 
 Edit the configuration in `scripts/generate-docs.mjs`.
+
+</DemoCard>
+
+<DemoCard name="mdBook" screenshot="demo-mdbook" live="https://graphql-markdown.dev/demo-mdbook/">
 
 ## mdBook
 
@@ -103,6 +147,10 @@ Fork our [demo repo](https://github.com/graphql-markdown/demo-mdbook) to try wit
 
 Edit the configuration in `scripts/generate-docs.mjs`.
 
+</DemoCard>
+
+<DemoCard name="DocFX" screenshot="demo-docfx" live="https://graphql-markdown.dev/demo-docfx/">
+
 ## DocFX
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docfx/).
@@ -111,11 +159,19 @@ Fork our [demo repo](https://github.com/graphql-markdown/demo-docfx) to try with
 
 Edit the configuration in `scripts/generate-docs.mjs`.
 
+</DemoCard>
+
+<DemoCard name="Zola" screenshot="demo-zola" live="https://graphql-markdown.dev/demo-zola/">
+
 ## Zola
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-zola/).
 
 Fork our [demo repo](https://github.com/graphql-markdown/demo-zola) to try with your own GraphQL schema.
+
+</DemoCard>
+
+<DemoCard name="Docsify" screenshot="demo-docsify" live="https://graphql-markdown.dev/demo-docsify/">
 
 ## Docsify
 
@@ -123,8 +179,18 @@ See the generated docs in the [live demo](https://graphql-markdown.dev/demo-docs
 
 Fork our [demo repo](https://github.com/graphql-markdown/demo-docsify) to try with your own GraphQL schema.
 
+</DemoCard>
+
+<DemoCard name="Pelican" screenshot="demo-pelican" live="https://graphql-markdown.dev/demo-pelican/">
+
 ## Pelican
 
 See the generated docs in the [live demo](https://graphql-markdown.dev/demo-pelican/).
 
 Fork our [demo repo](https://github.com/graphql-markdown/demo-pelican) to try with your own GraphQL schema. It shows how to target a framework without a preset, using a custom formatter.
+
+</DemoCard>
+
+## Your stack?
+
+Use the generic `mdx` preset from [`@graphql-markdown/formatters`](/docs/guides/other-frameworks#supported-formatters), or fork one of the demos above and try it with your own schema.

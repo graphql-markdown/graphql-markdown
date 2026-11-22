@@ -1,0 +1,66 @@
+/* The section heading is the first element of the text column, so the
+   screenshot lines up with its top. The card takes over the heading's top
+   margin, which a grid item would not collapse. */
+.demo {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 1.5rem;
+  align-items: start;
+  margin-top: calc(var(--ifm-h2-vertical-rhythm-top, 2) * var(--ifm-leading));
+  margin-bottom: var(--ifm-leading);
+}
+
+.body > :first-child {
+  margin-top: 0;
+}
+
+/* Infima sizes only direct `.markdown > h2` children, so the heading nested in
+   the card mirrors those rules, including the small-screen size below, to match
+   the page's other sections at every width. */
+.body > h2 {
+  --ifm-h2-font-size: 2rem;
+
+  margin-bottom: calc(
+    var(--ifm-heading-vertical-rhythm-bottom) * var(--ifm-leading)
+  );
+}
+
+.shot {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: var(--ifm-global-radius);
+  transition:
+    border-color var(--ifm-transition-fast) ease,
+    box-shadow var(--ifm-transition-fast) ease;
+}
+
+.shot:hover,
+.shot:focus-visible {
+  border-color: var(--ifm-color-primary);
+  box-shadow: var(--ifm-global-shadow-md);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+}
+
+.body > :last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .demo {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .body > h2 {
+    --ifm-h2-font-size: 1.5rem;
+  }
+}
