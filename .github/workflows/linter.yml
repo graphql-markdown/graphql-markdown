@@ -126,14 +126,23 @@ jobs:
       # `GITHUB_BASE_REF` is empty in a merge group: fallow diffs against the
       # group's base commit there (already present, the checkout is full depth).
       - name: Fetch base branch for fallow
-        if: env.RUN_CODE_CHECKS == 'true' && github.event_name == 'pull_request'
+        if: >-
+          (env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true')
+          && github.event_name == 'pull_request'
         run: git fetch --no-tags origin "${GITHUB_BASE_REF}:refs/remotes/origin/${GITHUB_BASE_REF}"
 
+      # The action installs the fallow version pinned in package.json, so CI and
+      # local runs agree, and reports findings as inline annotations. Its
+      # automatic base only covers pull requests, so `changed-since` is set for
+      # merge groups too. It also runs for workflow changes: fallow analyzes
+      # `.github/scripts` as entry points, and an edit to this step must be
+      # exercised by its own pull request.
       - name: Run fallow
-        if: env.RUN_CODE_CHECKS == 'true'
-        env:
-          FALLOW_BASE: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
-        run: bun run fallow -- audit --base "$FALLOW_BASE"
+        if: env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
+        uses: fallow-rs/fallow@v3.45.0
+        with:
+          command: audit
+          changed-since: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
 
   actions-lock:
     name: Actions lock
