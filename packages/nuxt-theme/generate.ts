@@ -45,6 +45,7 @@ const DEFAULT_LOADERS = {
 export const createGenerateDocs = (
   userOptions: Omit<
     Partial<GraphQLMarkdownOptions>,
+    | ThemeControlledKeys
     | "baseURL"
     | "decorators"
     | "formatter"
@@ -53,7 +54,6 @@ export const createGenerateDocs = (
     | "printTypeOptions"
     | "rootPath"
     | "schema"
-    | ThemeControlledKeys
   > & {
     schema: string;
     rootPath?: string;
