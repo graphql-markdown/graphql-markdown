@@ -37,7 +37,7 @@
   },
   {
     "name": "MkDocs",
-    "description": "Material for MkDocs pages with admonitions.",
+    "description": "MkDocs site on the Read the Docs theme, with deprecations as admonitions.",
     "live": "https://graphql-markdown.dev/demo-mkdocs/",
     "source": "https://github.com/graphql-markdown/demo-mkdocs"
   },
