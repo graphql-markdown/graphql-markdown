@@ -231,6 +231,12 @@ Replaced by the [`ProjectStatus`](/docs/graphql/types/enums/project-status.mdx) 
 
 Declare the custom module in GraphQL-Markdown configuration `formatter: "./custom-mdx.mjs"`.
 
+:::info
+
+With the Nuxt theme, import the theme formatter instead: `import * as preset from "@graphql-markdown/nuxt-theme/formatter";`, and pass the module path with the `formatter` option of `createGenerateDocs` in `generate-docs.ts`: `formatter: new URL("./custom-mdx.mjs", import.meta.url).href`.
+
+:::
+
 ```js title="custom-mdx.mjs"
 // Replace with the preset of your framework, e.g. "@graphql-markdown/formatters/starlight"
 import * as preset from "@graphql-markdown/formatters/docusaurus";
@@ -269,11 +275,11 @@ const linkEntities = (text) => {
 };
 
 /**
- * Formatter override that links entities in DEPRECATED admonitions.
+ * Formatter override that links entities in deprecation admonitions, whatever the title case.
  */
 const formatMDXAdmonition = (admonition, meta) => {
   const text =
-    admonition.title === "DEPRECATED" && admonition.text
+    admonition.title?.toLowerCase() === "deprecated" && admonition.text
       ? linkEntities(admonition.text)
       : admonition.text;
   return preset.formatMDXAdmonition({ ...admonition, text }, meta);
@@ -290,6 +296,7 @@ How it works:
 - `beforePrintTypeHook` captures the resolved print options before each page. It is used rather than `afterConfigBuildHook` because that hook only exposes the raw `baseURL`, so you would have to rebuild the link rules yourself (`linkRoot`, `hierarchy` layouts, `groupByDirective` and deprecated folders, the preset's `formatMDXLink`). The print options carry all of that already resolved, plus the `schema`.
 - `toLink` from `@graphql-markdown/printer-legacy` builds the same URL as the generated pages, for every `hierarchy`.
 - The `formatMDXAdmonition` override runs after the reason has been escaped by `escapeMDX`, so the Markdown link is kept as-is.
+- The title check is case-insensitive, so decorator notices titled "Deprecated" (for example a `@deprecatedType` directive rendered with a decorator) are linked too.
 - Names that are not schema types, root operation types (they have no page), introspection types (`__Type`, …), and types hidden by `skipDocDirective`/`onlyDocDirective` (for those `toLink` returns `#`) stay as inline code.
 - Pages render concurrently, so the captured variable may hold another page's options. Only rely on settings shared by every page (`schema`, `basePath`, `hierarchy`, `groups`, `deprecated`, `formatMDXLink`), not on per-page fields such as `entity` or `parentType`.
 - Backtick names inside a fenced code block in the reason are linked as well. Keep reasons with code blocks in mind, or skip the fenced regions if you need them left alone.
