@@ -24,5 +24,3 @@ Remove deprecated configuration options `customDirective` and `mdxParser`.
   - Removed `mdxParser` from `ConfigOptions` and `CliOptions` in `@graphql-markdown/types`.
   - Removed `mdxParser` telemetry sanitization rules from `@graphql-markdown/telemetry`.
   - Updated doc comments in `@graphql-markdown/formatters` to reference `formatter` instead of `mdxParser`.
-- **Renderer Refactoring**:
-  - Internal refactor: extracted helper constants and functions from `renderer.ts` into `rendererHelpers.ts`. `API_GROUPS` and `getApiGroupFolder` are still re-exported from `renderer.ts`.
