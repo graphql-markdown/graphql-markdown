@@ -90,7 +90,7 @@ export const docsify = {
   formatter: "@graphql-markdown/formatters/docsify",
   createCommand: "npx docsify-cli init <dir>",
   detect: ["docsify-cli"],
-  links: "absolute",
+  links: "router",
   contentRoot: "docs",
   contentRoute: "/",
   outputHint: "Docsify serves content from docs/",

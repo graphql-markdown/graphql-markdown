@@ -66,7 +66,7 @@ With `--yes`, `--schema` and `--output` are required, and so is `--framework` wh
 | Vocs            | `docs/pages/api`       | Router links; the suggested link root follows the route.                             |
 | HonKit          | `api`                  | Set `--site-base` if the site is served under a sub-path.                            |
 | Hugo            | `content/api`          | Set `--site-base` if the site is served under a sub-path.                            |
-| Docsify         | `docs/api`             | Set `--site-base` if the site is served under a sub-path.                            |
+| Docsify         | `docs/api`             | Router links; no `--site-base` needed, Docsify routes relative to `index.html`.      |
 | MkDocs          | `docs/api`             | Links relative to pages.                                                             |
 | DocFX           | `docs/api`             | Links relative to pages.                                                             |
 | mdBook          | `src/api`              | Links relative to pages.                                                             |
