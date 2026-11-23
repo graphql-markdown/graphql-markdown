@@ -1,5 +1,9 @@
 /* eslint "no-control-regex": "off" */
 
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import * as Logger from "../../src";
 import type { LoggerType } from "@graphql-markdown/types";
 
@@ -207,6 +211,30 @@ describe("logger", () => {
       );
 
       expect(outputNoColor).toBe("[INFO] test");
+    });
+
+    test("loads a relative logger module from the current working directory", async () => {
+      expect.hasAssertions();
+
+      const projectDir = await mkdtemp(join(tmpdir(), "gqlmd-logger-"));
+      vi.spyOn(process, "cwd").mockReturnValue(projectDir);
+      try {
+        await mkdir(join(projectDir, "lib"));
+        await writeFile(
+          join(projectDir, "lib", "local-logger.mjs"),
+          "export const info = (message) => { globalThis.localLoggerMessage = message; };\n",
+        );
+
+        await Logger.Logger("./lib/local-logger.mjs");
+        Logger.log("test", "info");
+
+        expect((globalThis as Record<string, unknown>).localLoggerMessage).toBe(
+          "test",
+        );
+      } finally {
+        delete (globalThis as Record<string, unknown>).localLoggerMessage;
+        await rm(projectDir, { recursive: true, force: true });
+      }
     });
   });
 

@@ -8,12 +8,16 @@
 
 import type { LoggerType } from "@graphql-markdown/types";
 
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
 /**
  * Resolves a module specifier for dynamic `import()` at runtime.
  *
  * @remarks
  * Inlined from `runtimeModuleSpecifier` in `@graphql-markdown/utils` (logger must not depend on utils).
- * On Deno, bare specifiers are not resolved from inside a JSR package and need a prefix:
+ * A relative path (`./` or `../`) is resolved from the current working directory and returned as
+ * a `file:` URL, since `import()` would otherwise resolve it from this package's folder. On Deno, bare specifiers are not resolved from inside a JSR package and need a prefix:
  * `@graphql-markdown/*` names get `jsr:`, other bare names get `npm:`.
  *
  * @param name - the module specifier.
@@ -22,9 +26,12 @@ import type { LoggerType } from "@graphql-markdown/types";
  * @internal
  */
 export const runtimeModuleSpecifier = (name: string): string => {
+  if (/^\.{1,2}[/\\]/.test(name)) {
+    return pathToFileURL(resolve(process.cwd(), name)).href;
+  }
   if (
     !("Deno" in globalThis) ||
-    /^(?:\.{1,2}\/|\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
+    /^(?:\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
   ) {
     return name;
   }
