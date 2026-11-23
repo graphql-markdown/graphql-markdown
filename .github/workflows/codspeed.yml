@@ -61,7 +61,7 @@ jobs:
       # aliases (see packages/tooling-config/vitest/base.mjs), so no build step
       # is needed.
       - name: Run benchmarks
-        uses: CodSpeedHQ/action@v5.6.3
+        uses: CodSpeedHQ/action@v5.8.0
         with:
           mode: simulation
           run: bun run bench
