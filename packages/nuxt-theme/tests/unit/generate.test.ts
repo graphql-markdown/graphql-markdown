@@ -147,12 +147,21 @@ describe("createGenerateDocs", () => {
     expect(options.telemetry).toBe(false);
   });
 
-  it("omits `telemetry` from options when not provided", async () => {
+  // Unset options are omitted, so core applies GraphQL Config or the theme defaults
+  it.each([
+    "telemetry",
+    "decorators",
+    "baseURL",
+    "rootPath",
+    "formatter",
+    "loaders",
+    "printTypeOptions",
+  ])("omits `%s` from options when not provided", async (key) => {
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options).not.toHaveProperty("telemetry");
+    expect(options).not.toHaveProperty(key);
   });
 
   it("forwards `pretty` and `groupByDirective` to runGraphQLMarkdown", async () => {
@@ -220,7 +229,7 @@ describe("createGenerateDocs", () => {
     });
   });
 
-  it("passes through hierarchy untouched, ", async () => {
+  it("passes through hierarchy untouched", async () => {
     const generate = createGenerateDocs({
       schema: "./schema.graphql",
       printTypeOptions: { hierarchy: "entity" },
@@ -269,14 +278,6 @@ describe("createGenerateDocs", () => {
     expect(options.decorators).toBe(decorators);
   });
 
-  it("omits `decorators` entirely from options when not provided", async () => {
-    const generate = createGenerateDocs({ schema: "./schema.graphql" });
-    await generate();
-
-    const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options).not.toHaveProperty("decorators");
-  });
-
   it("respects an explicit rootPath, loaders, and formatter override", async () => {
     const generate = createGenerateDocs({
       schema: "./schema.graphql",
@@ -310,13 +311,5 @@ describe("createGenerateDocs", () => {
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
     expect(options.baseURL).toBe("custom-root");
-  });
-
-  it("omits baseURL when not provided", async () => {
-    const generate = createGenerateDocs({ schema: "./schema.graphql" });
-    await generate();
-
-    const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options).not.toHaveProperty("baseURL");
   });
 });
