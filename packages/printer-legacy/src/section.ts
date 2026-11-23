@@ -113,17 +113,21 @@ export const printSectionItem = <T>(
   ]
     .filter(Boolean)
     .join(" ");
-  const title =
-    `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink} ${metadata} ${MARKDOWN_EOL}` as MDXString;
+  const title = [
+    `${SectionLevels.LEVEL.repeat(level)} ${typeNameLink}${parentTypeLink}`,
+    metadata,
+  ]
+    .filter(Boolean)
+    .join(" ") as MDXString;
 
   const description = printDescription(type, options, "")
     .trim()
     .replaceAll("\n", `${MARKDOWN_EOL}`);
 
-  let section = `${title}${description}${MARKDOWN_EOL}`;
+  const parts: string[] = [title, description];
   if (isGraphQLFieldType(type)) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    section += printSectionItems(type.args as GraphQLArgument[], {
+    const args = printSectionItems(type.args as GraphQLArgument[], {
       ...options,
       level: 5 as SectionLevelValue,
       parentType:
@@ -131,9 +135,10 @@ export const printSectionItem = <T>(
           ? type.name
           : `${options.parentType}.${type.name}`,
     });
+    parts.push(args);
   }
 
-  return section;
+  return parts.filter(Boolean).join(MARKDOWN_EOP);
 };
 
 /**
@@ -158,12 +163,15 @@ export const printSectionItems = <V>(
     "level" in options && typeof options.level === "number" ? options.level : 4
   ) as SectionLevelValue;
 
-  const items = values.filter(Boolean).map((v: V) => {
-    return printSectionItem(v, {
-      ...options,
-      level,
-    });
-  });
+  const items = values
+    .filter(Boolean)
+    .map((v: V) => {
+      return printSectionItem(v, {
+        ...options,
+        level,
+      });
+    })
+    .filter(Boolean);
 
   return items.join(MARKDOWN_EOP);
 };
@@ -198,7 +206,7 @@ export const printSection = <V>(
     ) {
       return options.formatMDXDetails!(options.collapsible).split(`\r`);
     }
-    return ["", MARKDOWN_EOP];
+    return ["", ""];
   })();
 
   const items = printSectionItems(values, {
@@ -279,7 +287,7 @@ export const printMetadataSection = <T, V>(
         .filter((entry): entry is string => {
           return typeof entry === "string";
         })
-        .join("");
+        .join(MARKDOWN_EOP);
 
       if (content.trim().length === 0) {
         return undefined;

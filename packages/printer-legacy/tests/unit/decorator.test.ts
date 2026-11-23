@@ -209,12 +209,7 @@ describe("decorator", () => {
       expect(page).toMatchInlineSnapshot(`
         "# Test
 
-
-
-
-
         No description
-
 
         \`\`\`graphql
         type Test {
@@ -222,13 +217,10 @@ describe("decorator", () => {
         }
         \`\`\`
 
-
         ### Responses
 
         - \`200\` OK
         - \`404\` Not found
-
-
 
         ### Fields
 

@@ -13,6 +13,10 @@ describe("formatters markdown helpers", () => {
     test("quotes each line", () => {
       expect(quoteMarkdownLines("one\ntwo")).toBe("> one\n> two");
     });
+
+    test("does not leave trailing spaces on empty lines", () => {
+      expect(quoteMarkdownLines("one\n\n  \ntwo")).toBe("> one\n>\n>\n> two");
+    });
   });
 
   describe("parseFrontmatterTitleLine", () => {

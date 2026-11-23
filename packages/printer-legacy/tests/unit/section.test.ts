@@ -31,17 +31,13 @@ describe("section", () => {
 
       const section = printSection(content, title, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-{
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
-
-
-
-",
-  "level": 3,
-  "title": "section title",
-}
-`);
+      expect(section).toMatchInlineSnapshot(`
+        {
+          "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content}",
+          "level": 3,
+          "title": "section title",
+        }
+      `);
     });
 
     test("returns Markdown ### section with collapsible content", () => {
@@ -65,9 +61,7 @@ describe("section", () => {
         <details class="gqlmd-mdx-details">
         <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
-
-
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content}
 
         <em>deprecated</em>
         </details>
@@ -90,17 +84,13 @@ describe("section", () => {
         level: 1 as SectionLevelValue,
       });
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-{
-  "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content} 
-
-
-
-",
-  "level": 1,
-  "title": "section title",
-}
-`);
+      expect(section).toMatchInlineSnapshot(`
+        {
+          "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content}",
+          "level": 1,
+          "title": "section title",
+        }
+      `);
     });
 
     test("returns undefined if content is empty", () => {
@@ -158,19 +148,13 @@ describe("section", () => {
 
       const section = printSectionItems(itemList, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">one</code></span>](#one) {#one} 
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">one</code></span>](#one) {#one}
 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">two</code></span>](#two) {#two}
 
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">two</code></span>](#two) {#two} 
-
-
-
-#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">three</code></span>](#three) {#three} 
-
-"
-`);
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">three</code></span>](#three) {#three}"
+      `);
     });
 
     test("returns empty text if not a list", () => {
@@ -201,11 +185,11 @@ describe("section", () => {
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
-Lorem ipsum
-"
-`);
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark>
+
+        Lorem ipsum"
+      `);
     });
 
     test("returns Markdown #### link section with multi-lines description", () => {
@@ -228,20 +212,20 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.`,
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark> 
-Lorem ipsum dolor sit amet, 
-consectetur adipiscing elit, 
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](/types/objects/entity-type-name) <mark class="gqlmd-mdx-badge">object</mark>
 
-Ut enim ad minim veniam, 
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Lorem ipsum dolor sit amet, 
+        consectetur adipiscing elit, 
+        sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
 
-Excepteur sint occaecat cupidatat non proident, 
-sunt in culpa qui officia deserunt mollit anim id est laborum.
-"
-`);
+        Ut enim ad minim veniam, 
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+        Excepteur sint occaecat cupidatat non proident, 
+        sunt in culpa qui officia deserunt mollit anim id est laborum."
+      `);
     });
 
     test("returns Markdown #### link section with sub type is non-nullable", () => {
@@ -259,11 +243,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name} 
-
-"
-`);
+      expect(section).toMatchInlineSnapshot(
+        `"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">NonNullableObjectType!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name}"`,
+      );
     });
 
     test("returns Markdown #### link section with sub type list and non-nullable", () => {
@@ -283,11 +265,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name} 
-
-"
-`);
+      expect(section).toMatchInlineSnapshot(
+        `"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[NonNullableObjectType]!</code></span>](/types/objects/non-nullable-object-type) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">object</mark> {#entity-type-name}"`,
+      );
     });
 
     test("returns Markdown #### link section with parent type prefix", () => {
@@ -302,11 +282,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         parentType: "parentTypePrefix",
       });
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name} 
-
-"
-`);
+      expect(section).toMatchInlineSnapshot(
+        `"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">parentTypePrefix</code>.<code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name}"`,
+      );
     });
 
     test("forwards meta to formatMDXPermalink", () => {
@@ -337,13 +315,11 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
       };
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name} 
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) {#entity-type-name}
 
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name} 
-
-"
-`);
+        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name}"
+      `);
     });
 
     test("generates unique anchor ids for same argument name under different parents", () => {
@@ -389,11 +365,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list} 
-
-"
-`);
+      expect(section).toMatchInlineSnapshot(
+        `"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">list</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list}"`,
+      );
     });
 
     test("returns Markdown #### link section with non empty no nullable list [!]!", () => {
@@ -408,11 +382,9 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
 
       const section = printSectionItem(type, DEFAULT_OPTIONS);
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list} 
-
-"
-`);
+      expect(section).toMatchInlineSnapshot(
+        `"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeNameList</code></span>](#entity-type-name-list)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">[Int!]!</code></span>](/types/scalars/int) <mark class="gqlmd-mdx-badge">non-null</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#entity-type-name-list}"`,
+      );
     });
 
     test("returns no section if item matches skipDocDirective", () => {
@@ -488,20 +460,18 @@ sunt in culpa qui officia deserunt mollit anim id est laborum.
         skipDocDirectives: [noDoc],
       });
 
-      expect(section).toMatchInlineSnapshot(String.raw`
-"#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> {#entity-type-name} 
-<fieldset class="gqlmd-mdx-admonition-fieldset">
-<legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
+      expect(section).toMatchInlineSnapshot(`
+        "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">EntityTypeName</code></span>](#entity-type-name) <mark class="gqlmd-mdx-badge">deprecated</mark> {#entity-type-name}
+
+        <fieldset class="gqlmd-mdx-admonition-fieldset">
+        <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
 
 
-</fieldset>
-##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name} 
+        </fieldset>
 
-
-
-"
-`);
+        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">EntityTypeName</code>.<code class="gqlmd-mdx-entity-name">ParameterTypeName</code></span>](#parameter-type-name)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#parameter-type-name}"
+      `);
     });
   });
 });

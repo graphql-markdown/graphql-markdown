@@ -69,7 +69,11 @@ import {
   isScalarType,
   isUnionType,
 } from "@graphql-markdown/graphql";
-import { pathUrl } from "@graphql-markdown/utils";
+import {
+  normalizeMarkdownWhitespace,
+  pathUrl,
+  trimBlankLines,
+} from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation.ts";
 import { printBadge } from "./badge.ts";
@@ -679,13 +683,14 @@ export class Printer implements IPrinter {
     ];
     let output = pageSections
       .map((key) => {
-        return Printer.renderPageSection(sections[key]);
+        return trimBlankLines(Printer.renderPageSection(sections[key]));
       })
       .filter((section) => {
         return section.length > 0;
       })
       .join(MARKDOWN_EOP)
       .trim() as MDXString;
+    output = normalizeMarkdownWhitespace(output) as MDXString;
 
     // Emit AFTER_PRINT_TYPE event if emitter is configured
     if (Printer.eventEmitter) {
@@ -734,6 +739,7 @@ export class Printer implements IPrinter {
         .map((entry) => {
           return Printer.renderPageSection(entry);
         })
+        .map(trimBlankLines)
         .filter((entry) => {
           return entry.length > 0;
         })
@@ -767,7 +773,7 @@ export class Printer implements IPrinter {
       return title;
     }
 
-    return `${title}${content}`;
+    return `${title}${trimBlankLines(content)}`;
   };
 
   /**

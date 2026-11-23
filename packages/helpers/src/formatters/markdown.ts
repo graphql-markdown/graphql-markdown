@@ -17,7 +17,7 @@ export const quoteMarkdownLines = (text: string, eol = "\n"): string => {
   return text
     .split(eol)
     .map((line) => {
-      return `> ${line}`;
+      return line.trim() === "" ? ">" : `> ${line}`;
     })
     .join(eol);
 };
