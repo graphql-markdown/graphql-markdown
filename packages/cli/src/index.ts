@@ -40,7 +40,7 @@ export interface RunContext {
   /** Entry point reported by anonymous telemetry. */
   trigger?: TelemetryTrigger;
   /** Defaults applied when neither the CLI flags nor any configuration set them. */
-  defaults?: BuildConfigContext["defaults"];
+  defaults?: NonNullable<BuildConfigContext["defaults"]>;
 }
 
 /**
@@ -50,6 +50,8 @@ export interface RunContext {
  * @param cliOptions - Optional command-line options passed to the CLI.
  * @param loggerModule - Optional logger module to use.
  * @param context - Optional internal context (telemetry trigger, entry-point defaults).
+ *
+ * @returns The resolved configuration the documentation was generated with.
  *
  * @example
  * ```typescript
@@ -65,19 +67,21 @@ export const runGraphQLMarkdown = async (
   cliOptions?: CliOptions,
   loggerModule?: string,
   context?: RunContext,
-): Promise<void> => {
+): Promise<Awaited<ReturnType<typeof buildConfig>>> => {
   await Logger(loggerModule);
   const config = await buildConfig(options, cliOptions, options.id, context);
 
   if (cliOptions?.config) {
     console.dir(config, { depth: null });
-    return;
+    return config;
   }
 
   await generateDocFromSchema({
     ...config,
     loggerModule,
   });
+
+  return config;
 };
 
 /**

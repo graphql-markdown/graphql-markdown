@@ -5,6 +5,7 @@ import { basename, join } from "node:path";
 import { useLogger } from "@nuxt/kit";
 
 import { runGraphQLMarkdown } from "@graphql-markdown/cli";
+import type { RunContext } from "@graphql-markdown/cli";
 import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants.ts";
 
 /**
@@ -15,6 +16,9 @@ type GraphQLMarkdownOptions = Parameters<typeof runGraphQLMarkdown>[0];
 
 /** Options the theme sets itself; users cannot override them via `createGenerateDocs`. */
 type ThemeControlledKeys = "linkRoot";
+
+/** Default root directory for generated content. */
+const DEFAULT_ROOT_PATH = "./content";
 
 /** Default loaders: GraphQL file loader. */
 const DEFAULT_LOADERS = {
@@ -30,7 +34,7 @@ const DEFAULT_LOADERS = {
  *
  * @param userOptions - Configuration options for the generator:
  *   - schema: Path to the GraphQL schema file (required)
- *   - rootPath: Root directory for generated content (default: "./content")
+ *   - rootPath: Root directory for generated content (default: "./content"; GraphQL Config overrides the default)
  *   - baseURL: Base URL for the API reference (default: "api-reference")
  *   - printTypeOptions: Formatting options merged with defaults
  *   - decorators: Custom decorators for the schema output
@@ -40,6 +44,8 @@ const DEFAULT_LOADERS = {
  *     reference, or `false` to disable it (default: GraphQL-Markdown's built-in
  *     homepage). Whatever its file name, it is stored as `generated.md`.
  *   - any other GraphQL-Markdown option (for example `telemetry`, `pretty`, `force`) is forwarded as-is; `linkRoot` is set by the theme
+ * Theme defaults only apply when neither these options nor GraphQL Config set them.
+ *
  * @returns A function that generates the documentation when called
  */
 export const createGenerateDocs = (
@@ -67,44 +73,41 @@ export const createGenerateDocs = (
 ): (() => Promise<void>) => {
   const {
     schema,
-    rootPath = "./content",
-    baseURL = DEFAULT_BASE_URL,
+    rootPath,
+    baseURL,
     printTypeOptions,
     decorators,
-    formatter = new URL("./formatter.mjs", import.meta.url).href,
-    loaders = DEFAULT_LOADERS,
+    formatter,
+    loaders,
     homepage,
     ...rest
   } = userOptions;
 
   const logger = useLogger("gqlmd-generate");
 
-  // Merge printTypeOptions with the layer's own defaults
-  const mergedPrintTypeOptions: GraphQLMarkdownOptions["printTypeOptions"] = {
-    parentTypePrefix: false,
-    typeBadges: true,
-    ...printTypeOptions,
+  // The theme's own defaults: applied by GraphQL-Markdown below GraphQL Config
+  // and the options passed here, so neither of them is overridden.
+  const defaults: NonNullable<RunContext["defaults"]> = {
+    rootPath: DEFAULT_ROOT_PATH,
+    baseURL: DEFAULT_BASE_URL,
+    formatter: new URL("./formatter.mjs", import.meta.url).href,
+    loaders: DEFAULT_LOADERS,
+    printTypeOptions: { parentTypePrefix: false, typeBadges: true },
   };
 
+  // Only what the user actually passed: unset keys are omitted, not undefined
   const options: GraphQLMarkdownOptions = {
-    // Forward every other GraphQL-Markdown option untouched; the theme's own
-    // values below win over anything passed through here
+    // Forward every other GraphQL-Markdown option untouched; only the
+    // theme-controlled `linkRoot` below wins over anything passed through here
     ...rest,
 
-    // Core paths
     schema,
-    rootPath,
-    baseURL,
     linkRoot: "/",
-    formatter,
-
-    // Formatting fallback options to bypass the internal configuration setup
-    loaders,
-
-    // Layout extraction flags with defaults merged with user options
-    printTypeOptions: mergedPrintTypeOptions,
-
-    // Custom decorators, if provided
+    ...(rootPath !== undefined && { rootPath }),
+    ...(baseURL !== undefined && { baseURL }),
+    ...(formatter !== undefined && { formatter }),
+    ...(loaders !== undefined && { loaders }),
+    ...(printTypeOptions !== undefined && { printTypeOptions }),
     ...(decorators && { decorators }),
 
     // Homepage template (or `false` to disable), only when set
@@ -113,9 +116,13 @@ export const createGenerateDocs = (
 
   return async () => {
     try {
-      await runGraphQLMarkdown(options, {}, import.meta.resolve("consola"), {
-        trigger: "nuxt",
-      });
+      // The resolved config, so a rootPath/baseURL set in GraphQL Config is used
+      const { outputDir } = await runGraphQLMarkdown(
+        options,
+        {},
+        import.meta.resolve("consola"),
+        { trigger: "nuxt", defaults },
+      );
 
       // The theme finds the landing doc by name, so a custom template keeps
       // working whatever it's called: GraphQL-Markdown copies it under its own
@@ -126,8 +133,8 @@ export const createGenerateDocs = (
       ) {
         try {
           await rename(
-            join(rootPath, baseURL, basename(homepage)),
-            join(rootPath, baseURL, `${LANDING_DOC_NAME}.md`),
+            join(outputDir, basename(homepage)),
+            join(outputDir, `${LANDING_DOC_NAME}.md`),
           );
         } catch (error) {
           if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
@@ -135,7 +142,7 @@ export const createGenerateDocs = (
         }
       }
 
-      logger.info(`GraphQL Markdown generated in ${rootPath}/${baseURL}/`);
+      logger.info(`GraphQL Markdown generated in ${outputDir}`);
     } catch (error) {
       logger.error("Generation failed");
       throw new Error("GraphQL Markdown generation failed", { cause: error });
