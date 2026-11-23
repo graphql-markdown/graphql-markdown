@@ -2,7 +2,7 @@
 sidebar_position: 55
 pagination_prev: null
 pagination_next: null
-description: Publish a plain Markdown copy of every generated GraphQL page at `<page-url>.md`, for readers who want the source and for LLM agents, with a second GraphQL Config project.
+description: Publish a plain Markdown copy of every generated GraphQL page at `<page-url>.md`, for readers who want the source and for LLM agents, with a second GraphQL Config project and a hook.
 keywords:
   - Markdown copy
   - view as Markdown
@@ -13,19 +13,15 @@ keywords:
 
 # Markdown copies
 
-Generated pages are framework pages, such as Docusaurus MDX with components. Readers can't download the Markdown version of one type, and LLM agents have to scrape the rendered HTML.
+Generated pages are framework pages, such as MDX with framework components. Readers can't download the Markdown version of one type, and LLM agents have to scrape the rendered HTML.
 
-This guide publishes a plain Markdown copy of every generated page next to it, at `<page-url>.md`, the same convention [llms.txt](https://llmstxt.org/) uses. For example, `/types/objects/project` gets `/types/objects/project.md`. The copies are plain GitHub-flavored Markdown: no MDX, no framework components, no front matter, and links between copies point to the other `.md` files.
+This guide publishes a plain Markdown copy of every generated page next to it, at `<page-url>.md`, the same convention [llms.txt](https://llmstxt.org/) uses. For example, the page `/types/objects/project` gets the copy `/types/objects/project.md`. The copies are plain GitHub-flavored Markdown: no MDX, no framework components, no front matter, and links between copies point to the other `.md` files.
 
-No new setting is needed: a second project renders the same schema with a plain-Markdown formatter into a folder the framework serves as static files.
+No new setting is needed, and the same steps work with every framework:
 
-## How it works
-
-1. The first project generates the documentation pages as usual.
-2. A second project generates the same schema with a formatter that prints plain Markdown and links pages with relative `.md` paths.
-3. Its `rootPath` is a folder the framework copies as-is into the build, so each copy lands next to its page.
-
-The example below uses Docusaurus. The same pattern works with any framework that serves a static folder: point the second project's `rootPath` to it.
+1. A second GraphQL Config project renders the same schema with a plain-Markdown formatter into a folder of its own.
+2. After the site build, that folder is copied into the build output, so each copy lands next to its page.
+3. Optionally, a hook adds a "View as Markdown" link to every generated page.
 
 ## Formatter
 
@@ -55,103 +51,98 @@ npm install @graphql-markdown/formatters
 
 See [custom formatter](/docs/customize/custom-formatter) for the functions a formatter can override.
 
-## Docusaurus
+## GraphQL Config
 
-### GraphQL Config
+Add a `markdown` project next to your existing one, with the same schema and the same `baseURL`:
 
-Add a `markdown` project next to the `default` one, with the same schema:
+```js title="graphql.config.mjs"
+// Formatter paths must be absolute: a relative path is not resolved from the project folder
+const local = (path) => new URL(path, import.meta.url).href;
 
-```yaml title=".graphqlrc"
-projects:
-  default:
-    schema: "./schema.graphql"
-    extensions:
-      graphql-markdown:
-        rootPath: "./docs"
-        baseURL: "schema"
-  # highlight-start
-  markdown:
-    schema: "./schema.graphql"
-    extensions:
-      graphql-markdown:
-        rootPath: "./static-md/docs"
-        baseURL: "schema"
-        homepage: false
-        docOptions:
-          sectionHeaderId: false
-  # highlight-end
-```
-
-- **`rootPath`**: a dedicated static folder followed by the docs plugin's [`routeBasePath`](https://docusaurus.io/docs/api/plugins/@docusaurus/plugin-content-docs#routeBasePath), `docs` by default. A page at `/docs/schema/types/objects/project` then gets its copy at `/docs/schema/types/objects/project.md`. If `routeBasePath` is `/`, use `./static-md`. Don't use `static/` itself: a forced run (`--force`) cleans the output folder and would delete your images.
-- **`baseURL`**: the same as the `default` project.
-- **`homepage: false`**: the default homepage is a Docusaurus page, not needed in the copies.
-- **`docOptions.sectionHeaderId: false`**: no `{#id}` heading IDs, which plain Markdown doesn't support.
-
-Keep the other settings that change the content, such as `printTypeOptions`, the same in both projects.
-
-### Plugin instances
-
-Declare a second plugin instance whose `id` matches the project name, and serve the copies folder as a static directory:
-
-```js title="docusaurus.config.js"
-module.exports = {
-  // ...
-  plugins: [
-    "@graphql-markdown/docusaurus",
-    // highlight-start
-    [
-      "@graphql-markdown/docusaurus",
-      {
-        id: "markdown",
-        formatter: require.resolve("./lib/markdown-copy.cjs"),
+export default {
+  projects: {
+    default: {
+      schema: "./schema.graphql",
+      extensions: {
+        "graphql-markdown": {
+          // your existing settings, for example:
+          rootPath: "./docs",
+          baseURL: "schema",
+        },
       },
-    ],
+    },
+    // highlight-start
+    markdown: {
+      schema: "./schema.graphql",
+      extensions: {
+        "graphql-markdown": {
+          rootPath: "./.markdown-copies",
+          baseURL: "schema",
+          formatter: local("./lib/markdown-copy.cjs"),
+          homepage: false,
+          docOptions: { sectionHeaderId: false },
+        },
+      },
+    },
     // highlight-end
-  ],
-  // highlight-next-line
-  staticDirectories: ["static", "static-md"],
+  },
 };
 ```
 
-:::note
+- **`rootPath`**: a folder used only for the copies. Don't point it to a folder that holds other files, such as `public/` or `static/`: a forced run (`--force`) empties the output folder (`rootPath` and `baseURL`) first.
+- **`baseURL`**: the same as the main project, so a copy has the same path as its page.
+- **`homepage: false`**: the homepage is a page of your site, not a schema entity.
+- **`docOptions.sectionHeaderId: false`**: no `{#id}` heading IDs, which plain Markdown doesn't support.
 
-Set `formatter` in the plugin options, as above. Up to `@graphql-markdown/cli` 1.3.0, the Docusaurus plugin ignores a `formatter` set in GraphQL Config.
+Keep the settings that change the content, such as `printTypeOptions`, the same in both projects. Add `.markdown-copies/` to `.gitignore` if you don't commit the generated docs.
 
-:::
+## Generate and publish
 
-### Generate
-
-Each plugin instance has its own command. Run both before building the site:
+Each project has its own command: `gqlmd graphql-to-doc` for the `default` project, and `gqlmd graphql-to-doc:markdown` for the `markdown` project. Run both, build the site, then copy the copies into the build output, under the URL path where the site serves the main project's `rootPath`:
 
 ```json title="package.json"
 {
   "scripts": {
-    "doc": "docusaurus graphql-to-doc && docusaurus graphql-to-doc:markdown"
+    "doc": "gqlmd graphql-to-doc && gqlmd graphql-to-doc:markdown",
+    "build": "<your site build> && node -e \"require('node:fs').cpSync('.markdown-copies', 'dist', { recursive: true })\""
   }
 }
 ```
 
-Add the copies folder to `.gitignore` if you don't commit the generated docs:
+Replace `dist` with your framework's build output. The defaults are:
 
-```text title=".gitignore"
-/static-md/
-```
+| Framework                             | Copy `.markdown-copies` into                                          |
+| ------------------------------------- | --------------------------------------------------------------------- |
+| Astro, Starlight                      | `dist/`                                                               |
+| Docusaurus                            | `build/docs/` (`docs` is the docs plugin's default `routeBasePath`)   |
+| DocFX                                 | `_site/`                                                              |
+| HonKit                                | `_book/`                                                              |
+| Hugo, Zola                            | `public/`                                                             |
+| mdBook                                | `book/`                                                               |
+| MkDocs                                | `site/`                                                               |
+| Next.js, Nuxt and other server builds | `public/`, before the build: the server only serves that folder as-is |
 
-After `docusaurus build`, each copy sits next to its page, for example `build/docs/schema/types/objects/project.md`, and is served as `text/markdown`. The site's `baseUrl` applies to the copies too.
+The copy uses Node.js, so it runs on every operating system. The site's base path, such as Astro's `base` or Docusaurus's `baseUrl`, is not part of the build output: don't add it.
+
+:::tip
+
+Frameworks that serve a folder as-is, such as `public/` or `static/`, also serve the copies in development when you copy them there before starting the dev server.
+
+:::
 
 ## Link from each page
 
-To add a "View as Markdown" link at the bottom of every generated page, add an `afterRenderTypeEntitiesHook` to the formatter of the main project. The hook runs after each page is written: it takes the page's path in the generated folder and appends a link to the copy with the same path. It needs no framework code, so it works with any preset.
+To add a "View as Markdown" link at the bottom of every generated page, add an `afterRenderTypeEntitiesHook` to the formatter of the main project. The hook runs after each page is written: it takes the page's path in the generated folder and appends a link to the copy with the same path.
 
 ```js title="lib/page-link.cjs"
 const { readFile, writeFile } = require("node:fs/promises");
 const { relative, sep } = require("node:path");
 
-// The preset of the main project, e.g. "@graphql-markdown/formatters/starlight"
-const preset = require("@graphql-markdown/docusaurus/mdx");
+// The formatter of your main project
+const preset = require("@graphql-markdown/formatters/starlight");
 
-// Public URL of the copies' generated folder (see below)
-const COPIES_URL = "pathname:///docs/schema";
+// Public URL of your generated pages' folder, origin included
+const COPIES_URL = "https://example.com/schema";
 
 const afterRenderTypeEntitiesHook = async (event) => {
   // Keep the preset's own hook, if any
@@ -177,13 +168,23 @@ const afterRenderTypeEntitiesHook = async (event) => {
 module.exports = { ...preset, afterRenderTypeEntitiesHook };
 ```
 
-`COPIES_URL` is the URL where the site serves the copies' generated folder: the copies' `rootPath` and `baseURL` as seen from the browser, including the site's base path. In the Docusaurus example above, the copies of `static-md/docs/schema` are served at `/docs/schema`.
+Then make it the formatter of the main project, in `graphql.config.mjs`:
 
-With Docusaurus, prefix the URL with `pathname://` and include the site's `baseUrl`, for example `pathname:///my-site/docs/schema` for `baseUrl: "/my-site/"`. Docusaurus would otherwise resolve a link ending in `.md` as a link to a doc, and fail the build on a link to a static file. Then set the formatter on the main plugin instance:
+```js
+// highlight-next-line
+formatter: local("./lib/page-link.cjs"),
+```
+
+`COPIES_URL` is the full URL where the site serves your generated pages, for example `https://example.com/docs/schema`. Use an absolute URL with the origin: frameworks leave such links alone, whereas several of them rewrite or check links ending in `.md` as links to their own pages.
+
+See [hooks](/docs/customize/hooks) for the other hooks a formatter can export.
+
+## Docusaurus
+
+With `@graphql-markdown/docusaurus`, run each project with its own plugin instance instead of `gqlmd`, and set the formatters in the plugin options:
 
 ```js title="docusaurus.config.js"
 plugins: [
-  // highlight-next-line
   ["@graphql-markdown/docusaurus", { formatter: require.resolve("./lib/page-link.cjs") }],
   [
     "@graphql-markdown/docusaurus",
@@ -195,4 +196,10 @@ plugins: [
 ],
 ```
 
-See [hooks](/docs/customize/hooks) for the other hooks a formatter can export.
+The commands are `docusaurus graphql-to-doc` and `docusaurus graphql-to-doc:markdown`. In `lib/page-link.cjs`, use the Docusaurus preset: `require("@graphql-markdown/docusaurus/mdx")`.
+
+:::note
+
+Up to `@graphql-markdown/cli` 1.3.0, the Docusaurus plugin ignores a `formatter` set in GraphQL Config: set it in the plugin options, as above.
+
+:::
