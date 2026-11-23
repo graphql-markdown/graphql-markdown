@@ -19,6 +19,7 @@ import type {
 import { Command } from "commander";
 
 import { generateDocFromSchema, buildConfig } from "@graphql-markdown/core";
+import type { BuildConfigContext } from "@graphql-markdown/core";
 import Logger from "@graphql-markdown/logger";
 
 const COMMAND = "graphql-to-doc" as const;
@@ -38,6 +39,8 @@ export type GraphQLMarkdownCliType = Command;
 export interface RunContext {
   /** Entry point reported by anonymous telemetry. */
   trigger?: TelemetryTrigger;
+  /** Defaults applied when neither the CLI flags nor any configuration set them. */
+  defaults?: BuildConfigContext["defaults"];
 }
 
 /**
@@ -46,7 +49,7 @@ export interface RunContext {
  * @param options - Options for configuring the GraphQL Markdown CLI.
  * @param cliOptions - Optional command-line options passed to the CLI.
  * @param loggerModule - Optional logger module to use.
- * @param context - Optional internal context (telemetry trigger).
+ * @param context - Optional internal context (telemetry trigger, entry-point defaults).
  *
  * @example
  * ```typescript
@@ -82,8 +85,8 @@ export const runGraphQLMarkdown = async (
  *
  * @param options - Options for configuring the GraphQL Markdown CLI.
  * @param loggerModule - Optional logger module to use.
- * @param customFormatter - Optional default formatter package name. When provided, registers
- *   `--formatter` flag with this value as the default.
+ * @param customFormatter - Optional formatter package name used as the fallback when no CLI
+ *   flag or configuration sets a formatter. When provided, registers the `--formatter` flag.
  * @param context - Optional internal context (telemetry trigger).
  *
  * @returns The configured CLI instance.
@@ -157,8 +160,7 @@ export const getGraphQLMarkdownCli = (
   if (typeof customFormatter === "string") {
     command.option(
       "--formatter <formatter>",
-      "Set formatter package",
-      customFormatter,
+      `Set formatter package (default: "${customFormatter}")`,
     );
   }
 
@@ -167,7 +169,14 @@ export const getGraphQLMarkdownCli = (
     if (cliOptions.telemetry !== false) {
       delete cliOptions.telemetry;
     }
-    await runGraphQLMarkdown(options, cliOptions, loggerModule, context);
+    const defaults =
+      customFormatter === undefined
+        ? context?.defaults
+        : { ...context?.defaults, formatter: customFormatter };
+    await runGraphQLMarkdown(options, cliOptions, loggerModule, {
+      ...context,
+      ...(defaults && { defaults }),
+    });
   });
 
   // When used as a subcommand of an older commander version (e.g. Docusaurus

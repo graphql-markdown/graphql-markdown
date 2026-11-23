@@ -17,6 +17,12 @@ import type {
 /** Internal context passed by our own entry points. */
 export interface BuildConfigContext {
   trigger?: TelemetryTrigger;
+  /**
+   * Entry-point defaults (e.g. a framework package's formatter), applied below
+   * GraphQL Config and configuration-file options but above GraphQL-Markdown's
+   * built-in defaults.
+   */
+  defaults?: Partial<ConfigOptions>;
 }
 
 export interface TelemetryReport {

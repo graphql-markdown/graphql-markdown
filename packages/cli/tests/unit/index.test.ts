@@ -495,9 +495,9 @@ describe("CLI Module", () => {
           Option {
             "argChoices": undefined,
             "conflictsWith": [],
-            "defaultValue": "@graphql-markdown/docusaurus/mdx",
+            "defaultValue": undefined,
             "defaultValueDescription": undefined,
-            "description": "Set formatter package",
+            "description": "Set formatter package (default: "@graphql-markdown/docusaurus/mdx")",
             "envVar": undefined,
             "flags": "--formatter <formatter>",
             "helpGroupHeading": undefined,
@@ -989,7 +989,7 @@ describe("CLI Module", () => {
       options,
       expect.objectContaining({ config: true }),
       undefined,
-      undefined,
+      {},
     );
   });
 
@@ -1148,6 +1148,43 @@ describe("CLI Module", () => {
 
       expect(vi.mocked(core.buildConfig).mock.calls[0][1]).not.toHaveProperty(
         "telemetry",
+      );
+    });
+  });
+
+  describe("formatter option", () => {
+    const customFormatter = "@graphql-markdown/custom/formatter";
+
+    test("passes customFormatter as a default, not as a CLI option", async () => {
+      expect.assertions(2);
+
+      const command = getGraphQLMarkdownCli(
+        { schema: "./schema.graphql" },
+        undefined,
+        customFormatter,
+      );
+
+      await command.parseAsync(["node", "graphql-to-doc"]);
+
+      const call = vi.mocked(core.buildConfig).mock.calls[0];
+
+      expect(call[1]).not.toHaveProperty("formatter");
+      expect(call[3]).toEqual({ defaults: { formatter: customFormatter } });
+    });
+
+    test("passes the --formatter flag to buildConfig", async () => {
+      expect.assertions(1);
+
+      const command = getGraphQLMarkdownCli(
+        { schema: "./schema.graphql" },
+        undefined,
+        customFormatter,
+      );
+
+      await command.parseAsync(["node", "graphql-to-doc", "--formatter", "x"]);
+
+      expect(vi.mocked(core.buildConfig).mock.calls[0][1]).toEqual(
+        expect.objectContaining({ formatter: "x" }),
       );
     });
   });

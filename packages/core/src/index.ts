@@ -4,6 +4,7 @@
 
 export { generateDocFromSchema } from "./generator.ts";
 export { buildConfig } from "./config.ts";
+export type { BuildConfigContext } from "./telemetry.ts";
 
 // Event system exports
 export {
