@@ -63,8 +63,8 @@ interface CodeFence {
 }
 
 /**
- * Returns the code fence opened by a line (` ``` ` or `~~~`, 3+ characters,
- * up to 3 spaces of indentation), or `undefined`.
+ * Returns the code fence opened by a line (3+ backticks or tildes, up to 3
+ * spaces of indentation), or `undefined`.
  */
 const openingFence = (line: string): CodeFence | undefined => {
   const match = /^ {0,3}(`{3,}|~{3,})/.exec(line);
