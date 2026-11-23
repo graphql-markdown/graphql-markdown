@@ -683,7 +683,7 @@ export class Printer implements IPrinter {
     ];
     let output = pageSections
       .map((key) => {
-        return trimBlankLines(Printer.renderPageSection(sections[key]));
+        return Printer.renderPageSection(sections[key]);
       })
       .filter((section) => {
         return section.length > 0;
@@ -715,6 +715,8 @@ export class Printer implements IPrinter {
    * Content can be a string, a nested section object, or an array of nested entries.
    * Nested content is rendered recursively by calling `renderPageSection` for each child.
    * Invalid, unsupported, or effectively empty inputs return an empty string.
+   * The result never starts or ends with a blank line, so callers can join
+   * sections with a single blank line.
    *
    * @param section - A nullable page section value to render. Supports nested structures.
    * @returns The rendered markdown for the section, or an empty string when nothing renderable exists.
@@ -736,9 +738,9 @@ export class Printer implements IPrinter {
     }
 
     const level = Math.max(1, section.level ?? 3);
-    const title = `${SectionLevels.LEVEL.repeat(level)} ${section.title}${MARKDOWN_EOP}`;
+    const heading = `${SectionLevels.LEVEL.repeat(level)} ${section.title}`;
 
-    return hasContent ? `${title}${content}` : title;
+    return hasContent ? `${heading}${MARKDOWN_EOP}${content}` : heading;
   };
 
   /**
@@ -777,7 +779,7 @@ export class Printer implements IPrinter {
 
     return content
       .map((entry) => {
-        return trimBlankLines(Printer.renderPageSection(entry));
+        return Printer.renderPageSection(entry);
       })
       .filter((entry) => {
         return entry.length > 0;
