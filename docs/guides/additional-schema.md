@@ -46,3 +46,5 @@ projects:
 Each additional project gets its own generator command, e.g. `npx gqlmd graphql-to-doc:admin`.
 
 For a Docusaurus site using plugin instances instead of GraphQL Config, see [Docusaurus recipes](/docs/guides/docusaurus#multiple-schemas-docusaurus-plugin-instances).
+
+To publish a plain Markdown copy of every page with a second project, see [Markdown copies](/docs/guides/markdown-copies).
