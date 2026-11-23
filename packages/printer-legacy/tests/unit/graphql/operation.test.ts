@@ -49,11 +49,7 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         [
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark>",
             "level": 3,
             "title": "Type",
           },
@@ -80,20 +76,12 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         [
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#arg-foo-bar} 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">ArgFooBar</code></span>](#arg-foo-bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#arg-foo-bar}",
             "level": 3,
             "title": "Arguments",
           },
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark>",
             "level": 3,
             "title": "Type",
           },
@@ -128,16 +116,15 @@ describe("operation", () => {
       expect(metadata).toMatchInlineSnapshot(`
         [
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#foo} 
-
-
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Foo</code></span>](#foo)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#foo}
 
 
 
         <details class="gqlmd-mdx-details">
         <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#bar} 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestQuery</code>.<code class="gqlmd-mdx-entity-name">Bar</code></span>](#bar)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#bar}
+
         <fieldset class="gqlmd-mdx-admonition-fieldset">
         <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
@@ -154,11 +141,7 @@ describe("operation", () => {
             "title": "Arguments",
           },
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark> 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Test</code></span>](/types/objects/test) <mark class="gqlmd-mdx-badge">object</mark>",
             "level": 3,
             "title": "Type",
           },

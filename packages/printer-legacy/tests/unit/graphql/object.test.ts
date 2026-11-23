@@ -43,11 +43,10 @@ describe("object", () => {
       expect(metadata).toMatchInlineSnapshot(`
         [
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#one} 
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#one}
 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#two}
 
-
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#two} 
         <fieldset class="gqlmd-mdx-admonition-fieldset">
         <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
@@ -55,23 +54,14 @@ describe("object", () => {
 
         </fieldset>
 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#three}
 
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#three} 
-
-        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#test-name-three-four} 
-
-
-
-        ",
+        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#test-name-three-four}",
             "level": 3,
             "title": "Fields",
           },
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark> 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark>",
             "level": 3,
             "title": "Interfaces",
           },
@@ -90,22 +80,19 @@ describe("object", () => {
       expect(metadata).toMatchInlineSnapshot(`
         [
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#one} 
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">one</code></span>](#one)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#one}
 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#three}
 
-
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">three</code></span>](#three)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#three} 
-
-        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#test-name-three-four} 
-
-
+        ##### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName.three</code>.<code class="gqlmd-mdx-entity-name">four</code></span>](#test-name-three-four)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">String</code></span>](/types/scalars/string) <mark class="gqlmd-mdx-badge">scalar</mark> {#test-name-three-four}
 
 
 
         <details class="gqlmd-mdx-details">
         <summary class="gqlmd-mdx-details-summary"><span class="gqlmd-mdx-details-summary-open">DEPRECATED</span></summary>
 
-        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#two} 
+        #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">TestName</code>.<code class="gqlmd-mdx-entity-name">two</code></span>](#two)<span class="gqlmd-mdx-bullet">&nbsp;●&nbsp;</span>[<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">Boolean</code></span>](/types/scalars/boolean) <mark class="gqlmd-mdx-badge">deprecated</mark> <mark class="gqlmd-mdx-badge">scalar</mark> {#two}
+
         <fieldset class="gqlmd-mdx-admonition-fieldset">
         <legend class="gqlmd-mdx-admonition-legend"><span class="gqlmd-mdx-admonition-legend-type gqlmd-mdx-admonition-legend-type-warning">⚠️ DEPRECATED</span></legend>
 
@@ -122,11 +109,7 @@ describe("object", () => {
             "title": "Fields",
           },
           {
-            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark> 
-
-
-
-        ",
+            "content": "#### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">TestInterfaceName</code></span>](/types/interfaces/test-interface-name) <mark class="gqlmd-mdx-badge">interface</mark>",
             "level": 3,
             "title": "Interfaces",
           },

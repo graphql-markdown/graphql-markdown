@@ -69,7 +69,11 @@ import {
   isScalarType,
   isUnionType,
 } from "@graphql-markdown/graphql";
-import { pathUrl } from "@graphql-markdown/utils";
+import {
+  normalizeMarkdownWhitespace,
+  pathUrl,
+  trimBlankLines,
+} from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation.ts";
 import { printBadge } from "./badge.ts";
@@ -686,6 +690,7 @@ export class Printer implements IPrinter {
       })
       .join(MARKDOWN_EOP)
       .trim() as MDXString;
+    output = normalizeMarkdownWhitespace(output) as MDXString;
 
     // Emit AFTER_PRINT_TYPE event if emitter is configured
     if (Printer.eventEmitter) {
@@ -710,6 +715,8 @@ export class Printer implements IPrinter {
    * Content can be a string, a nested section object, or an array of nested entries.
    * Nested content is rendered recursively by calling `renderPageSection` for each child.
    * Invalid, unsupported, or effectively empty inputs return an empty string.
+   * The result never starts or ends with a blank line, so callers can join
+   * sections with a single blank line.
    *
    * @param section - A nullable page section value to render. Supports nested structures.
    * @returns The rendered markdown for the section, or an empty string when nothing renderable exists.
@@ -717,57 +724,67 @@ export class Printer implements IPrinter {
   private static readonly renderPageSection = (
     section: Maybe<PageSections[keyof PageSections]>,
   ): string => {
-    if (
-      !section ||
-      typeof section !== "object" ||
-      Array.isArray(section) ||
-      (!("content" in section) && !("title" in section))
-    ) {
+    if (!Printer.isRenderablePageSection(section)) {
       return "";
     }
 
-    let content: string;
-    if (!("content" in section) || !section.content) {
-      content = "";
-    } else if (Array.isArray(section.content)) {
-      content = section.content
-        .map((entry) => {
-          return Printer.renderPageSection(entry);
-        })
-        .filter((entry) => {
-          return entry.length > 0;
-        })
-        .join(MARKDOWN_EOP);
-    } else if (typeof section.content === "string") {
-      content = section.content;
-    } else {
-      content = Printer.renderPageSection(section.content);
-    }
+    const content = trimBlankLines(
+      Printer.renderPageSectionContent(section.content),
+    );
+    const hasContent = content.trim().length > 0;
 
-    if (!("title" in section) || typeof section.title !== "string") {
-      if (!content || content.trim().length === 0) {
-        return "";
-      }
-
-      return content;
-    }
-
-    if (!section.title || section.title.trim().length === 0) {
-      if (!content || content.trim().length === 0) {
-        return "";
-      }
-
-      return content;
+    if (typeof section.title !== "string" || section.title.trim() === "") {
+      return hasContent ? content : "";
     }
 
     const level = Math.max(1, section.level ?? 3);
-    const title = `${SectionLevels.LEVEL.repeat(level)} ${section.title}${MARKDOWN_EOP}`;
+    const heading = `${SectionLevels.LEVEL.repeat(level)} ${section.title}`;
 
-    if (!content || content.trim().length === 0) {
-      return title;
+    return hasContent ? `${heading}${MARKDOWN_EOP}${content}` : heading;
+  };
+
+  /**
+   * Type guard for values `renderPageSection` can render: a non-array object
+   * with a `content` or a `title` property.
+   */
+  private static readonly isRenderablePageSection = (
+    section: unknown,
+  ): section is PageSection => {
+    return (
+      typeof section === "object" &&
+      section !== null &&
+      !Array.isArray(section) &&
+      ("content" in section || "title" in section)
+    );
+  };
+
+  /**
+   * Renders the content of a page section: a string as-is, a nested section
+   * recursively, and an array of nested sections joined by one blank line.
+   */
+  private static readonly renderPageSectionContent = (
+    content: PageSection["content"],
+  ): string => {
+    if (!content) {
+      return "";
     }
 
-    return `${title}${content}`;
+    if (typeof content === "string") {
+      return content;
+    }
+
+    if (!Array.isArray(content)) {
+      return Printer.renderPageSection(content);
+    }
+
+    return content
+      .map((entry) => {
+        return Printer.renderPageSection(entry);
+      })
+      .filter((entry) => {
+        return entry.length > 0;
+      })
+      .join(MARKDOWN_EOP);
   };
 
   /**
