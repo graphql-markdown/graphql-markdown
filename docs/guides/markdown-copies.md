@@ -139,49 +139,60 @@ Add the copies folder to `.gitignore` if you don't commit the generated docs:
 
 After `docusaurus build`, each copy sits next to its page, for example `build/docs/schema/types/objects/project.md`, and is served as `text/markdown`. The site's `baseUrl` applies to the copies too.
 
-### Link from the page
+## Link from each page
 
-To add a "View as Markdown" link at the bottom of each generated page, wrap the doc footer:
+To add a "View as Markdown" link at the bottom of every generated page, add an `afterRenderTypeEntitiesHook` to the formatter of the main project. The hook runs after each page is written: it takes the page's path in the generated folder and appends a link to the copy with the same path. It needs no framework code, so it works with any preset.
 
-```shell
-npm run swizzle @docusaurus/theme-classic DocItem/Footer -- --wrap --typescript
+```js title="lib/page-link.cjs"
+const { readFile, writeFile } = require("node:fs/promises");
+const { relative, sep } = require("node:path");
+
+// The preset of the main project, e.g. "@graphql-markdown/formatters/starlight"
+const preset = require("@graphql-markdown/docusaurus/mdx");
+
+// Public URL of the copies' generated folder (see below)
+const COPIES_URL = "pathname:///docs/schema";
+
+const afterRenderTypeEntitiesHook = async (event) => {
+  // Keep the preset's own hook, if any
+  await preset.afterRenderTypeEntitiesHook?.(event);
+
+  const { filePath, outputDir, outputAdapter } = event.data;
+  const path = relative(outputDir, filePath)
+    .split(sep)
+    .join("/")
+    .replace(/\.mdx?$/, "");
+  const link = `\n\n[View as Markdown](${COPIES_URL}/${path}.md)\n`;
+
+  // Use the output adapter when one is configured, the file system otherwise
+  const page = outputAdapter?.readFile
+    ? await outputAdapter.readFile(filePath)
+    : await readFile(filePath, "utf8");
+  const content = `${page.trimEnd()}${link}`;
+  await (outputAdapter?.writeFile
+    ? outputAdapter.writeFile(filePath, content)
+    : writeFile(filePath, content));
+};
+
+module.exports = { ...preset, afterRenderTypeEntitiesHook };
 ```
 
-```tsx title="src/theme/DocItem/Footer/index.tsx"
-import React, { type ReactNode } from "react";
-import Footer from "@theme-original/DocItem/Footer";
-import type FooterType from "@theme/DocItem/Footer";
-import type { WrapperProps } from "@docusaurus/types";
-import { useLocation } from "@docusaurus/router";
+`COPIES_URL` is the URL where the site serves the copies' generated folder: the copies' `rootPath` and `baseURL` as seen from the browser, including the site's base path. In the Docusaurus example above, the copies of `static-md/docs/schema` are served at `/docs/schema`.
 
-type Props = WrapperProps<typeof FooterType>;
+With Docusaurus, prefix the URL with `pathname://` and include the site's `baseUrl`, for example `pathname:///my-site/docs/schema` for `baseUrl: "/my-site/"`. Docusaurus would otherwise resolve a link ending in `.md` as a link to a doc, and fail the build on a link to a static file. Then set the formatter on the main plugin instance:
 
-// Generated pages: <category>/<group>/<page>, with the default `api` hierarchy
-const GENERATED = /\/(types|operations)\/[^/]+\/[^/]+\/?$/;
-
-export default function FooterWrapper(props: Props): ReactNode {
-  const { pathname } = useLocation();
-  const href = GENERATED.test(pathname)
-    ? `${pathname.replace(/\/$/, "")}.md`
-    : undefined;
-
-  return (
-    <>
-      {href && (
-        <p className="margin-top--lg">
-          <a href={href} target="_blank" rel="noopener">
-            View as Markdown
-          </a>
-          {" · "}
-          <a href={href} download>
-            Download
-          </a>
-        </p>
-      )}
-      <Footer {...props} />
-    </>
-  );
-}
+```js title="docusaurus.config.js"
+plugins: [
+  // highlight-next-line
+  ["@graphql-markdown/docusaurus", { formatter: require.resolve("./lib/page-link.cjs") }],
+  [
+    "@graphql-markdown/docusaurus",
+    {
+      id: "markdown",
+      formatter: require.resolve("./lib/markdown-copy.cjs"),
+    },
+  ],
+],
 ```
 
-`GENERATED` matches the default [`hierarchy`](/docs/reference/settings#printtypeoptions) (`api`). Adjust it to your hierarchy so that only generated pages get the link.
+See [hooks](/docs/customize/hooks) for the other hooks a formatter can export.
