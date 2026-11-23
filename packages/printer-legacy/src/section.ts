@@ -220,9 +220,15 @@ export const printSection = <V>(
     return undefined; // do not print section is no items printed
   }
 
+  // Items carry no trailing newline: start a collapsible's close half on its
+  // own line, since some formatters' close half has no leading newline.
+  const content = closeSection
+    ? `${openSection}${items}${MARKDOWN_EOL}${closeSection}`
+    : `${openSection}${items}`;
+
   return {
     title: section,
-    content: `${openSection}${items}${closeSection}`,
+    content,
     level,
   };
 };

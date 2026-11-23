@@ -30,6 +30,13 @@ export const MARKDOWN_CODE_SNIPPET = "```" as const;
 export const MARKDOWN_CODE_INDENTATION = "  " as const;
 
 /**
+ * Whether a line is empty or contains only whitespace.
+ */
+const isBlankLine = (line: string): boolean => {
+  return line.trim() === "";
+};
+
+/**
  * Removes leading and trailing blank lines (empty or whitespace-only) from a text.
  * Indentation of the first non-blank line is preserved.
  *
@@ -37,7 +44,56 @@ export const MARKDOWN_CODE_INDENTATION = "  " as const;
  * @returns Text without leading/trailing blank lines.
  */
 export const trimBlankLines = (text: string): string => {
-  return text.replace(/^(?:[ \t]*\r?\n)+/, "").replace(/(?:\r?\n[ \t]*)+$/, "");
+  const lines = text.split("\n");
+  let start = 0;
+  let end = lines.length;
+  while (start < end && isBlankLine(lines[start])) {
+    start++;
+  }
+  while (end > start && isBlankLine(lines[end - 1])) {
+    end--;
+  }
+  return lines.slice(start, end).join("\n");
+};
+
+/** An open fenced code block: its fence character and length. */
+interface CodeFence {
+  char: string;
+  length: number;
+}
+
+/**
+ * Returns the code fence opened by a line (` ``` ` or `~~~`, 3+ characters,
+ * up to 3 spaces of indentation), or `undefined`.
+ */
+const openingFence = (line: string): CodeFence | undefined => {
+  const match = /^ {0,3}(`{3,}|~{3,})/.exec(line);
+  return match ? { char: match[1][0], length: match[1].length } : undefined;
+};
+
+/**
+ * Whether a line closes the given code fence: same character, at least as
+ * long, and nothing but whitespace after it.
+ */
+const closesFence = (line: string, fence: CodeFence): boolean => {
+  const match = /^ {0,3}(`{3,}|~{3,})[ \t]*$/.exec(line);
+  return (
+    match !== null &&
+    match[1].startsWith(fence.char) &&
+    match[1].length >= fence.length
+  );
+};
+
+/**
+ * Cleans a line outside code blocks: a whitespace-only line becomes empty and
+ * a single trailing space or tab is removed (2+ trailing spaces are kept, as
+ * they may be a Markdown hard line break).
+ */
+const cleanLine = (line: string): string => {
+  if (isBlankLine(line)) {
+    return "";
+  }
+  return /[^ \t][ \t]$/.test(line) ? line.slice(0, -1) : line;
 };
 
 /**
@@ -54,46 +110,19 @@ export const trimBlankLines = (text: string): string => {
  */
 export const normalizeMarkdownWhitespace = (text: string): string => {
   const out: string[] = [];
-  let fence: { char: string; length: number } | undefined;
-  let previousBlank = false;
+  let fence: CodeFence | undefined;
 
   for (const line of text.split("\n")) {
     if (fence) {
       out.push(line);
-      const close = /^ {0,3}(`{3,}|~{3,})[ \t]*$/.exec(line);
-      if (
-        close &&
-        close[1].startsWith(fence.char) &&
-        close[1].length >= fence.length
-      ) {
-        fence = undefined;
-      }
-      previousBlank = false;
+      fence = closesFence(line, fence) ? undefined : fence;
       continue;
     }
 
-    const open = /^ {0,3}(`{3,}|~{3,})/.exec(line);
-    if (open) {
-      fence = { char: open[1][0], length: open[1].length };
-      out.push(line);
-      previousBlank = false;
+    fence = openingFence(line);
+    const cleaned = fence ? line : cleanLine(line);
+    if (cleaned === "" && out.at(-1) === "") {
       continue;
-    }
-
-    let cleaned = line;
-    if (cleaned.trim() === "") {
-      cleaned = "";
-    } else if (/[^ \t][ \t]$/.test(cleaned)) {
-      cleaned = cleaned.slice(0, -1);
-    }
-
-    if (cleaned === "") {
-      if (previousBlank) {
-        continue;
-      }
-      previousBlank = true;
-    } else {
-      previousBlank = false;
     }
     out.push(cleaned);
   }

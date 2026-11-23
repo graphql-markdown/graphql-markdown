@@ -63,6 +63,7 @@ describe("enum", () => {
 
         </fieldset>
 
+
         <em>deprecated</em>
         </details>
 

@@ -722,58 +722,67 @@ export class Printer implements IPrinter {
   private static readonly renderPageSection = (
     section: Maybe<PageSections[keyof PageSections]>,
   ): string => {
-    if (
-      !section ||
-      typeof section !== "object" ||
-      Array.isArray(section) ||
-      (!("content" in section) && !("title" in section))
-    ) {
+    if (!Printer.isRenderablePageSection(section)) {
       return "";
     }
 
-    let content: string;
-    if (!("content" in section) || !section.content) {
-      content = "";
-    } else if (Array.isArray(section.content)) {
-      content = section.content
-        .map((entry) => {
-          return Printer.renderPageSection(entry);
-        })
-        .map(trimBlankLines)
-        .filter((entry) => {
-          return entry.length > 0;
-        })
-        .join(MARKDOWN_EOP);
-    } else if (typeof section.content === "string") {
-      content = section.content;
-    } else {
-      content = Printer.renderPageSection(section.content);
-    }
+    const content = trimBlankLines(
+      Printer.renderPageSectionContent(section.content),
+    );
+    const hasContent = content.trim().length > 0;
 
-    if (!("title" in section) || typeof section.title !== "string") {
-      if (!content || content.trim().length === 0) {
-        return "";
-      }
-
-      return content;
-    }
-
-    if (!section.title || section.title.trim().length === 0) {
-      if (!content || content.trim().length === 0) {
-        return "";
-      }
-
-      return content;
+    if (typeof section.title !== "string" || section.title.trim() === "") {
+      return hasContent ? content : "";
     }
 
     const level = Math.max(1, section.level ?? 3);
     const title = `${SectionLevels.LEVEL.repeat(level)} ${section.title}${MARKDOWN_EOP}`;
 
-    if (!content || content.trim().length === 0) {
-      return title;
+    return hasContent ? `${title}${content}` : title;
+  };
+
+  /**
+   * Type guard for values `renderPageSection` can render: a non-array object
+   * with a `content` or a `title` property.
+   */
+  private static readonly isRenderablePageSection = (
+    section: unknown,
+  ): section is PageSection => {
+    return (
+      typeof section === "object" &&
+      section !== null &&
+      !Array.isArray(section) &&
+      ("content" in section || "title" in section)
+    );
+  };
+
+  /**
+   * Renders the content of a page section: a string as-is, a nested section
+   * recursively, and an array of nested sections joined by one blank line.
+   */
+  private static readonly renderPageSectionContent = (
+    content: PageSection["content"],
+  ): string => {
+    if (!content) {
+      return "";
     }
 
-    return `${title}${trimBlankLines(content)}`;
+    if (typeof content === "string") {
+      return content;
+    }
+
+    if (!Array.isArray(content)) {
+      return Printer.renderPageSection(content);
+    }
+
+    return content
+      .map((entry) => {
+        return trimBlankLines(Printer.renderPageSection(entry));
+      })
+      .filter((entry) => {
+        return entry.length > 0;
+      })
+      .join(MARKDOWN_EOP);
   };
 
   /**

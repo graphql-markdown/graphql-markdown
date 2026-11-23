@@ -63,6 +63,7 @@ describe("section", () => {
 
         #### [<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">section content</code></span>](#section-content) {#section-content}
 
+
         <em>deprecated</em>
         </details>
 
@@ -71,6 +72,27 @@ describe("section", () => {
           "title": "",
         }
       `);
+    });
+
+    test("starts a collapsible close half on its own line when it has no leading newline", () => {
+      expect.hasAssertions();
+
+      // HonKit-style details: the close half starts right after the `\r` marker
+      const section = printSection(["section content"], "", {
+        ...DEFAULT_OPTIONS,
+        level: 0 as SectionLevelValue,
+        formatMDXDetails: ({ dataOpen, dataClose }) => {
+          return `\n<details>\n<summary>${dataOpen}</summary>\n\r${dataClose}\n</details>\n`;
+        },
+        collapsible: {
+          dataOpen: DEPRECATED,
+          dataClose: DEPRECATED,
+        },
+      });
+
+      expect(section?.content).toMatch(
+        /\{#section-content\}\ndeprecated\n<\/details>/,
+      );
     });
 
     test("returns Markdown custom section level", () => {
