@@ -1,7 +1,9 @@
 import { join } from "node:path";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const runGraphQLMarkdown = vi.fn(async () => {});
+const runGraphQLMarkdown = vi.fn(async (..._args: unknown[]) => {
+  return { outputDir: join("./content", "api-reference") };
+});
 
 vi.mock("@graphql-markdown/cli", () => {
   return {
@@ -40,7 +42,9 @@ describe("createGenerateDocs", () => {
   it("passes the nuxt telemetry trigger", async () => {
     await createGenerateDocs({ schema: "./schema.graphql" })();
 
-    expect(runGraphQLMarkdown.mock.calls[0]![3]).toEqual({ trigger: "nuxt" });
+    expect(runGraphQLMarkdown.mock.calls[0]![3]).toMatchObject({
+      trigger: "nuxt",
+    });
   });
 
   it("forwards a custom homepage and stores it as generated.md", async () => {
@@ -56,6 +60,22 @@ describe("createGenerateDocs", () => {
     expect(rename).toHaveBeenCalledWith(
       join("./content", "api-reference", "intro.md"),
       join("./content", "api-reference", "generated.md"),
+    );
+  });
+
+  it("renames the homepage in the output directory resolved by GraphQL-Markdown", async () => {
+    // e.g. rootPath/baseURL set in GraphQL Config rather than in the module options
+    runGraphQLMarkdown.mockResolvedValueOnce({
+      outputDir: join("./docs", "graphql"),
+    });
+    await createGenerateDocs({
+      schema: "./schema.graphql",
+      homepage: "./docs/intro.md",
+    })();
+
+    expect(rename).toHaveBeenCalledWith(
+      join("./docs", "graphql", "intro.md"),
+      join("./docs", "graphql", "generated.md"),
     );
   });
 
@@ -167,28 +187,27 @@ describe("createGenerateDocs", () => {
     expect(typeof generate).toBe("function");
   });
 
-  it("produces the documented defaults when called with only `schema`", async () => {
+  it("passes the theme defaults as context defaults, not as options", async () => {
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
     await generate();
 
     expect(runGraphQLMarkdown).toHaveBeenCalledTimes(1);
-    const [options] = runGraphQLMarkdown.mock.calls[0]!;
+    const [options, , , context] = runGraphQLMarkdown.mock.calls[0]!;
 
-    expect(options).toMatchObject({
-      schema: "./schema.graphql",
+    expect(options).toEqual({ schema: "./schema.graphql", linkRoot: "/" });
+    expect(context.defaults).toMatchObject({
       rootPath: "./content",
       baseURL: "api-reference",
-      linkRoot: "/",
       loaders: { GraphQLFileLoader: "@graphql-tools/graphql-file-loader" },
       printTypeOptions: { parentTypePrefix: false, typeBadges: true },
     });
     // Loaded by a native import() from node_modules, where Node will not strip
     // types — the default must stay plain JS.
-    expect(options.formatter).toMatch(/formatter\.mjs$/);
-    expect(options.formatter).toMatch(/^file:\/\//);
+    expect(context.defaults.formatter).toMatch(/formatter\.mjs$/);
+    expect(context.defaults.formatter).toMatch(/^file:\/\//);
   });
 
-  it("merges printTypeOptions with the layer's defaults instead of replacing them", async () => {
+  it("forwards only the user printTypeOptions (defaults are merged by core)", async () => {
     const generate = createGenerateDocs({
       schema: "./schema.graphql",
       printTypeOptions: { exampleSection: { directive: "example" } },
@@ -196,14 +215,12 @@ describe("createGenerateDocs", () => {
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options.printTypeOptions).toMatchObject({
-      parentTypePrefix: false,
-      typeBadges: true,
+    expect(options.printTypeOptions).toEqual({
       exampleSection: { directive: "example" },
     });
   });
 
-  it("passes through hierarchy untouched, alongside the layer's own printTypeOptions defaults", async () => {
+  it("passes through hierarchy untouched, ", async () => {
     const generate = createGenerateDocs({
       schema: "./schema.graphql",
       printTypeOptions: { hierarchy: "entity" },
@@ -211,9 +228,7 @@ describe("createGenerateDocs", () => {
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options.printTypeOptions).toMatchObject({
-      parentTypePrefix: false,
-      typeBadges: true,
+    expect(options.printTypeOptions).toEqual({
       hierarchy: "entity",
     });
   });
@@ -227,9 +242,7 @@ describe("createGenerateDocs", () => {
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options.printTypeOptions).toMatchObject({
-      parentTypePrefix: false,
-      typeBadges: true,
+    expect(options.printTypeOptions).toEqual({
       hierarchy,
     });
   });
@@ -299,11 +312,11 @@ describe("createGenerateDocs", () => {
     expect(options.baseURL).toBe("custom-root");
   });
 
-  it("uses the default baseURL when not provided", async () => {
+  it("omits baseURL when not provided", async () => {
     const generate = createGenerateDocs({ schema: "./schema.graphql" });
     await generate();
 
     const [options] = runGraphQLMarkdown.mock.calls[0]!;
-    expect(options.baseURL).toBe("api-reference");
+    expect(options).not.toHaveProperty("baseURL");
   });
 });

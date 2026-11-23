@@ -1009,6 +1009,17 @@ describe("CLI Module", () => {
       expect(vi.mocked(core.generateDocFromSchema)).toHaveBeenCalled();
     });
 
+    test("returns the resolved configuration", async () => {
+      expect.assertions(1);
+
+      const resolved = { outputDir: "./docs/graphql" } as unknown as Options;
+      vi.mocked(core.buildConfig).mockResolvedValueOnce(resolved);
+
+      await expect(
+        runGraphQLMarkdown({ schema: "./schema.graphql" }, {}),
+      ).resolves.toBe(resolved);
+    });
+
     test("initializes logger before buildConfig", async () => {
       expect.assertions(2);
 
