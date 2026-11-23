@@ -6,7 +6,8 @@
     ".": "./src/index.ts"
   },
   "imports": {
-    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.19.0"
+    "@graphql-markdown/types": "jsr:@graphql-markdown/types@^1.19.0",
+    "@graphql-markdown/utils": "jsr:@graphql-markdown/utils@^1.14.4"
   },
   "publish": {
     "include": ["src", "README.md", "LICENSE*"],

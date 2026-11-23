@@ -12,5 +12,7 @@
       "@graphql-markdown/types": ["../types/dist/index.d.ts"],
       "@graphql-markdown/*": ["../*/dist/index.d.ts"]
     }
-  }
+  },
+
+  "references": [{ "path": "../utils" }]
 }
