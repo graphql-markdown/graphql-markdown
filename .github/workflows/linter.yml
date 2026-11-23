@@ -139,7 +139,7 @@ jobs:
       # exercised by its own pull request.
       - name: Run fallow
         if: env.RUN_CODE_CHECKS == 'true' || env.RUN_WORKFLOW_CHECKS == 'true'
-        uses: fallow-rs/fallow@v3.45.0
+        uses: fallow-rs/fallow@v3.46.0
         with:
           command: audit
           changed-since: ${{ github.event_name == 'merge_group' && github.event.merge_group.base_sha || format('origin/{0}', github.base_ref) }}
