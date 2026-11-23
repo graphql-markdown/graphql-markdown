@@ -4,6 +4,9 @@
  * @packageDocumentation
  */
 
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
 const PASSTHROUGH = /^(?:\.{1,2}\/|\/|(?:file|http|https|jsr|npm|node|data):)/;
 
 /**
@@ -43,4 +46,38 @@ export const runtimeModuleSpecifier = (
     return `/${segment}`;
   });
   return `${prefix}${pkg}@${range}${subpath.join("")}`;
+};
+
+/**
+ * Matches a relative path (`./` or `../`, with `/` or `\\` separators).
+ */
+const RELATIVE_PATH = /^\.{1,2}[/\\]/;
+
+/**
+ * Resolves a relative module path from a base folder, for dynamic `import()`.
+ *
+ * `import()` resolves a relative specifier from the importing module, which is a file inside
+ * the installed package. A relative path is turned into an absolute `file:` URL resolved from
+ * `base`, so that a path set in the user's configuration is read from their project folder.
+ * Package names, absolute paths and URLs are returned unchanged.
+ *
+ * @param specifier - the module specifier.
+ * @param base - the folder relative paths are resolved from. Defaults to `process.cwd()`.
+ *
+ * @returns the specifier to pass to `import()`.
+ *
+ * @example
+ * ```ts
+ * resolveRelativeSpecifier("./lib/custom-mdx.cjs"); // "file:///<cwd>/lib/custom-mdx.cjs"
+ * resolveRelativeSpecifier("@graphql-markdown/formatters/mdx"); // unchanged
+ * ```
+ */
+export const resolveRelativeSpecifier = (
+  specifier: string,
+  base: string = process.cwd(),
+): string => {
+  if (!RELATIVE_PATH.test(specifier)) {
+    return specifier;
+  }
+  return pathToFileURL(resolve(base, specifier)).href;
 };

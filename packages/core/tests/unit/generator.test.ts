@@ -18,8 +18,7 @@ import { GraphQLDirective } from "graphql/type";
 
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
-import { join, resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { join } from "node:path";
 
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
@@ -106,7 +105,6 @@ const {
   resolveSkipAndOnlyDirectives,
   getFormatterFromMDXModule,
   getMDXModuleProperty,
-  resolveFormatterPath,
 } = GeneratorModule;
 
 const mockRenderer = {
@@ -1191,39 +1189,6 @@ describe("generator", () => {
         vi.mocked(process.cwd).mockRestore();
         await rm(projectDir, { recursive: true, force: true });
       }
-    });
-  });
-
-  describe("resolveFormatterPath()", () => {
-    afterEach(() => {
-      vi.restoreAllMocks();
-    });
-
-    test.each([
-      "./lib/custom-mdx.cjs",
-      "../lib/custom-mdx.cjs",
-      ".\\lib\\custom-mdx.cjs",
-    ])("resolves %s from the current working directory", (formatter) => {
-      expect.assertions(1);
-
-      const projectDir = join(tmpdir(), "project", "docs");
-      vi.spyOn(process, "cwd").mockReturnValue(projectDir);
-
-      expect(resolveFormatterPath(formatter)).toBe(
-        pathToFileURL(resolve(projectDir, formatter)).href,
-      );
-    });
-
-    test.each([
-      "@graphql-markdown/formatters/docusaurus",
-      "custom-mdx-parser",
-      "/abs/path/custom-mdx.cjs",
-      "file:///abs/path/custom-mdx.cjs",
-      ".hidden-package",
-    ])("returns %s unchanged", (formatter) => {
-      expect.assertions(1);
-
-      expect(resolveFormatterPath(formatter)).toBe(formatter);
     });
   });
 

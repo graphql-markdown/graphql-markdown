@@ -1,6 +1,13 @@
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 
-import { runtimeModuleSpecifier } from "../../src/module";
+import { tmpdir } from "node:os";
+import { join, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
+
+import {
+  resolveRelativeSpecifier,
+  runtimeModuleSpecifier,
+} from "../../src/module";
 
 const g = globalThis as Record<string, unknown>;
 
@@ -62,5 +69,41 @@ describe("runtimeModuleSpecifier", () => {
       );
       expect(runtimeModuleSpecifier("pkg/sub", "^1")).toBe("npm:pkg@^1/sub");
     });
+  });
+});
+
+describe("resolveRelativeSpecifier", () => {
+  const projectDir = join(tmpdir(), "project", "docs");
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  test.each([
+    "./lib/custom-mdx.cjs",
+    "../lib/custom-mdx.cjs",
+    ".\\lib\\custom-mdx.cjs",
+  ])("resolves %s from the current working directory", (specifier) => {
+    vi.spyOn(process, "cwd").mockReturnValue(projectDir);
+
+    expect(resolveRelativeSpecifier(specifier)).toBe(
+      pathToFileURL(resolve(projectDir, specifier)).href,
+    );
+  });
+
+  test("resolves a relative path from the given base folder", () => {
+    expect(resolveRelativeSpecifier("./custom-mdx.mjs", projectDir)).toBe(
+      pathToFileURL(join(projectDir, "custom-mdx.mjs")).href,
+    );
+  });
+
+  test.each([
+    "@graphql-markdown/formatters/docusaurus",
+    "custom-mdx-parser",
+    "/abs/path/custom-mdx.cjs",
+    "file:///abs/path/custom-mdx.cjs",
+    ".hidden-package",
+  ])("returns %s unchanged", (specifier) => {
+    expect(resolveRelativeSpecifier(specifier)).toBe(specifier);
   });
 });
