@@ -34,7 +34,8 @@ import {
 
 import { runtimeModuleSpecifier, toString } from "@graphql-markdown/utils";
 
-import { dirname } from "node:path";
+import { dirname, resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { DiffMethod } from "./config.ts";
 import { hasChanges } from "./diff.ts";
@@ -85,9 +86,35 @@ const NS_PER_SEC = 1e9 as const;
 const SEC_DECIMALS = 3 as const;
 
 /**
+ * Matches a relative path (`./` or `../`, with `/` or `\` separators).
+ */
+const RELATIVE_PATH = /^\.{1,2}[/\\]/;
+
+/**
+ * Resolves a relative formatter path from the current working directory.
+ *
+ * `import()` resolves a relative specifier from the importing module, which is this
+ * package's `dist` folder. A relative path is turned into an absolute `file:` URL so that it
+ * is resolved from the project folder, like `rootPath` and `homepage`. Package names,
+ * absolute paths and URLs are returned unchanged.
+ *
+ * @param formatter - The formatter package name or path.
+ * @returns The formatter specifier, with relative paths resolved from `process.cwd()`.
+ *
+ * @internal
+ */
+export const resolveFormatterPath = (formatter: string): string => {
+  if (!RELATIVE_PATH.test(formatter)) {
+    return formatter;
+  }
+  return pathToFileURL(resolve(process.cwd(), formatter)).href;
+};
+
+/**
  * Asynchronously loads an MDX module dynamically.
  *
  * @param formatter - The formatter package name or path to import. Can be null or undefined.
+ *   A relative path is resolved from the current working directory.
  * @returns A promise that resolves to the imported module, or undefined if:
  *   - The formatter parameter is null or undefined
  *   - An error occurs during import (logs a warning and returns undefined)
@@ -103,7 +130,7 @@ export const loadMDXModule = async (
   // Specifier is only known at runtime (user-configured formatter package).
   // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
   // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
-  const specifier = runtimeModuleSpecifier(formatter);
+  const specifier = runtimeModuleSpecifier(resolveFormatterPath(formatter));
   return import(specifier).catch((error: unknown) => {
     const errorMessage = error instanceof Error ? error.message : String(error);
     log(
