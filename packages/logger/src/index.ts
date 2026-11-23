@@ -8,36 +8,14 @@
 
 import type { LoggerType } from "@graphql-markdown/types";
 
-import { resolve } from "node:path";
-import { pathToFileURL } from "node:url";
+import { runtimeModuleSpecifier } from "@graphql-markdown/utils";
 
 /**
- * Resolves a module specifier for dynamic `import()` at runtime.
- *
- * @remarks
- * Inlined from `runtimeModuleSpecifier` in `@graphql-markdown/utils` (logger must not depend on utils).
- * A relative path (`./` or `../`) is resolved from the current working directory and returned as
- * a `file:` URL, since `import()` would otherwise resolve it from this package's folder. On Deno, bare specifiers are not resolved from inside a JSR package and need a prefix:
- * `@graphql-markdown/*` names get `jsr:`, other bare names get `npm:`.
- *
- * @param name - the module specifier.
- * @returns the specifier to pass to `import()`.
+ * Re-exported from `@graphql-markdown/utils` for backward compatibility.
  *
  * @internal
  */
-export const runtimeModuleSpecifier = (name: string): string => {
-  if (/^\.{1,2}[/\\]/.test(name)) {
-    return pathToFileURL(resolve(process.cwd(), name)).href;
-  }
-  if (
-    !("Deno" in globalThis) ||
-    /^(?:\/|(?:file|http|https|jsr|npm|node|data):)/.test(name)
-  ) {
-    return name;
-  }
-  const prefix = name.startsWith("@graphql-markdown/") ? "jsr:" : "npm:";
-  return `${prefix}${name}`;
-};
+export { runtimeModuleSpecifier };
 
 type GlobalWithLogger = typeof globalThis & { logger?: LoggerType | null };
 const globalScope = globalThis as GlobalWithLogger;
