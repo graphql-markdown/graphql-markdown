@@ -88,6 +88,7 @@ const SEC_DECIMALS = 3 as const;
  * Asynchronously loads an MDX module dynamically.
  *
  * @param formatter - The formatter package name or path to import. Can be null or undefined.
+ *   A relative path is resolved from the current working directory.
  * @returns A promise that resolves to the imported module, or undefined if:
  *   - The formatter parameter is null or undefined
  *   - An error occurs during import (logs a warning and returns undefined)

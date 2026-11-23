@@ -16,6 +16,10 @@ import type {
 
 import { GraphQLDirective } from "graphql/type";
 
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import * as GraphQL from "@graphql-markdown/graphql";
 vi.mock("@graphql-markdown/graphql", () => {
   return {
@@ -1162,6 +1166,29 @@ describe("generator", () => {
         ),
       );
       expect(result).toBeUndefined();
+    });
+
+    test("loads a relative formatter path from the current working directory", async () => {
+      expect.assertions(2);
+
+      const projectDir = await mkdtemp(join(tmpdir(), "gqlmd-formatter-"));
+      try {
+        await mkdir(join(projectDir, "lib"));
+        await writeFile(
+          join(projectDir, "lib", "custom-mdx.mjs"),
+          'export const mdxExtension = ".md";\n',
+        );
+        vi.spyOn(process, "cwd").mockReturnValue(projectDir);
+        const warnSpy = vi.spyOn(console, "warn");
+
+        const result = await loadMDXModule("./lib/custom-mdx.mjs");
+
+        expect(result).toHaveProperty("mdxExtension", ".md");
+        expect(warnSpy).not.toHaveBeenCalled();
+      } finally {
+        vi.mocked(process.cwd).mockRestore();
+        await rm(projectDir, { recursive: true, force: true });
+      }
     });
   });
 

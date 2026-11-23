@@ -91,6 +91,8 @@ The GraphQL schema location.
 
 GraphQL schema loaders to use (see [schema loading](/docs/guides/schema-loading)).
 
+Each loader is a package name, an absolute path or file URL, or a path relative to the current working directory (for example `./lib/my-loader.mjs`).
+
 | Setting   | CLI flag        | Default |
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
@@ -380,6 +382,8 @@ How pages are formatted, written and decorated.
 ### `formatter`
 
 Provide a custom module for formatting output content. You can also use built-in formatter presets from [`@graphql-markdown/formatters`](https://github.com/graphql-markdown/graphql-markdown/tree/main/packages/formatters). `@graphql-markdown/docusaurus` comes with `@graphql-markdown/formatters/docusaurus` by default.
+
+The value is a package name, an absolute path or file URL, or a path relative to the current working directory (for example `./lib/custom-mdx.cjs`).
 
 | Setting     | CLI flag      | Default     |
 | ----------- | ------------- | ----------- |

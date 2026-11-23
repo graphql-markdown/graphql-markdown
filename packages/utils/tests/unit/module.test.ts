@@ -1,22 +1,50 @@
-import { afterEach, describe, expect, test } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
+
+import { tmpdir } from "node:os";
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { runtimeModuleSpecifier } from "../../src/module";
 
 const g = globalThis as Record<string, unknown>;
 
+const projectDir = resolve(tmpdir(), "project", "docs");
+
 describe("runtimeModuleSpecifier", () => {
   afterEach(() => {
     delete g.Deno;
+    vi.restoreAllMocks();
+  });
+
+  describe("relative paths", () => {
+    test.each([
+      "./lib/custom-mdx.cjs",
+      "../lib/custom-mdx.cjs",
+      ".\\lib\\custom-mdx.cjs",
+    ])("resolves %s from the current working directory", (name) => {
+      vi.spyOn(process, "cwd").mockReturnValue(projectDir);
+      const expected = pathToFileURL(resolve(projectDir, name)).href;
+
+      expect(runtimeModuleSpecifier(name)).toBe(expected);
+      g.Deno = {};
+      expect(runtimeModuleSpecifier(name, "^1.0.0")).toBe(expected);
+    });
+
+    test("does not treat a dot-prefixed package name as a path", () => {
+      expect(runtimeModuleSpecifier(".hidden-package")).toBe(".hidden-package");
+    });
   });
 
   describe("without Deno", () => {
-    test.each(["graphql-config", "@graphql-markdown/diff", "./x.js"])(
-      "returns %s unchanged",
-      (name) => {
-        expect(runtimeModuleSpecifier(name)).toBe(name);
-        expect(runtimeModuleSpecifier(name, "^1.0.0")).toBe(name);
-      },
-    );
+    test.each([
+      "graphql-config",
+      "@graphql-markdown/diff",
+      "/abs/x.js",
+      "file:///x.js",
+    ])("returns %s unchanged", (name) => {
+      expect(runtimeModuleSpecifier(name)).toBe(name);
+      expect(runtimeModuleSpecifier(name, "^1.0.0")).toBe(name);
+    });
   });
 
   describe("with Deno", () => {
@@ -30,8 +58,6 @@ describe("runtimeModuleSpecifier", () => {
     });
 
     test.each([
-      "./x.js",
-      "../x.js",
       "/abs/x.js",
       "file:///x.js",
       "http://x/y.js",
