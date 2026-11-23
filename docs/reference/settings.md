@@ -91,6 +91,8 @@ The GraphQL schema location.
 
 GraphQL schema loaders to use (see [schema loading](/docs/guides/schema-loading)).
 
+Each loader is a package name, an absolute path or file URL, or a path relative to the current working directory (for example `./lib/my-loader.mjs`).
+
 | Setting   | CLI flag        | Default |
 | --------- | --------------- | ------- |
 | `loaders` | _not supported_ | `{ }`   |
