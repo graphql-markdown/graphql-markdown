@@ -4,6 +4,10 @@ import type { GraphQLSchema } from "graphql/type";
 
 import type { LoaderOption } from "@graphql-markdown/types";
 
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+
 import { getDocumentLoaders, loadSchema } from "../../src/loader";
 
 const SCHEMA_FILE = require.resolve("../__data__/tweet.graphql");
@@ -122,6 +126,30 @@ describe("loader", () => {
       expect(loaderOptions).toMatchObject({
         option1: true,
       });
+    });
+
+    test("loads a relative loader path from the current working directory", async () => {
+      expect.hasAssertions();
+
+      const projectDir = await mkdtemp(join(tmpdir(), "gqlmd-loader-"));
+      const cwdSpy = vi.spyOn(process, "cwd").mockReturnValue(projectDir);
+      try {
+        await mkdir(join(projectDir, "lib"));
+        await writeFile(
+          join(projectDir, "lib", "local-loader.mjs"),
+          'export class LocalLoader { loaderId() { return "local"; } }\n',
+        );
+
+        const documentLoaders = await getDocumentLoaders({
+          LocalLoader: "./lib/local-loader.mjs",
+        } as LoaderOption);
+
+        expect(documentLoaders?.loaders).toHaveLength(1);
+        expect(documentLoaders?.loaders[0]).toHaveProperty("loaderId");
+      } finally {
+        cwdSpy.mockRestore();
+        await rm(projectDir, { recursive: true, force: true });
+      }
     });
 
     test("throw an error when loader list is invalid", async () => {

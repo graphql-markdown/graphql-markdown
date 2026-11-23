@@ -32,11 +32,7 @@ import {
   loadSchema,
 } from "@graphql-markdown/graphql";
 
-import {
-  resolveRelativeSpecifier,
-  runtimeModuleSpecifier,
-  toString,
-} from "@graphql-markdown/utils";
+import { runtimeModuleSpecifier, toString } from "@graphql-markdown/utils";
 
 import { dirname } from "node:path";
 
@@ -108,7 +104,7 @@ export const loadMDXModule = async (
   // Specifier is only known at runtime (user-configured formatter package).
   // Resolved into a variable first: tsgo's CJS emit of `import(fn(x))` with
   // rewriteRelativeImportExtensions leaves `fn` unqualified (ReferenceError).
-  const specifier = runtimeModuleSpecifier(resolveRelativeSpecifier(formatter));
+  const specifier = runtimeModuleSpecifier(formatter);
   return import(specifier).catch((error: unknown) => {
     const errorMessage = error instanceof Error ? error.message : String(error);
     log(
