@@ -40,7 +40,7 @@ export interface RunContext {
   /** Entry point reported by anonymous telemetry. */
   trigger?: TelemetryTrigger;
   /** Defaults applied when neither the CLI flags nor any configuration set them. */
-  defaults?: BuildConfigContext["defaults"];
+  defaults?: NonNullable<BuildConfigContext["defaults"]>;
 }
 
 /**
