@@ -836,6 +836,84 @@ describe("config", () => {
     });
   });
 
+  describe("buildConfig() entry-point defaults", () => {
+    const defaults = { formatter: "from-defaults", rootPath: "./defaults" };
+
+    test("uses the defaults when nothing else sets the key", async () => {
+      expect.assertions(2);
+
+      const config = await buildConfig(undefined, undefined, undefined, {
+        defaults,
+      });
+
+      expect(config.formatter).toBe("from-defaults");
+      expect(config.outputDir).toContain("defaults");
+    });
+
+    test("deep-merges nested defaults with the built-in defaults", async () => {
+      expect.assertions(2);
+
+      const config = await buildConfig(undefined, undefined, undefined, {
+        defaults: { printTypeOptions: { typeBadges: false } },
+      });
+
+      expect(config.printTypeOptions?.typeBadges).toBe(false);
+      expect(config.printTypeOptions?.parentTypePrefix).toBe(
+        DEFAULT_OPTIONS.printTypeOptions.parentTypePrefix,
+      );
+    });
+
+    test("GraphQL Config overrides the defaults", async () => {
+      expect.assertions(2);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        formatter: "from-graphql-config",
+        rootPath: "./graphql-config",
+      } as never);
+      const config = await buildConfig(undefined, undefined, undefined, {
+        defaults,
+      });
+
+      expect(config.formatter).toBe("from-graphql-config");
+      expect(config.outputDir).toContain("graphql-config");
+    });
+
+    test("configuration file options override the defaults and GraphQL Config", async () => {
+      expect.assertions(2);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        formatter: "from-graphql-config",
+        rootPath: "./graphql-config",
+      } as never);
+      const config = await buildConfig(
+        { formatter: "from-file", rootPath: "./file" } as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.formatter).toBe("from-file");
+      expect(config.outputDir).toContain("file");
+    });
+
+    test("CLI options override everything", async () => {
+      expect.assertions(2);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        formatter: "from-graphql-config",
+      } as never);
+      const config = await buildConfig(
+        { formatter: "from-file", rootPath: "./file" } as ConfigOptions,
+        { formatter: "from-cli", root: "./cli" },
+        undefined,
+        { defaults },
+      );
+
+      expect(config.formatter).toBe("from-cli");
+      expect(config.outputDir).toContain("cli");
+    });
+  });
+
   describe("parseGroupByOption()", () => {
     test("returns object with groupBy config", () => {
       expect.assertions(3);

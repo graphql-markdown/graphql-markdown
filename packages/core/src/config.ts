@@ -1046,8 +1046,13 @@ export const buildConfig = async (
     ...configFileOpts?.printTypeOptions,
   });
 
-  const config = deepmerge()(
-    { ...DEFAULT_OPTIONS, ...graphqlConfig },
+  // Precedence (lowest first): built-in defaults, entry-point defaults (for
+  // example a framework package's formatter), GraphQL Config, config file.
+  const merge = deepmerge();
+  const config = merge(
+    merge(merge({ ...DEFAULT_OPTIONS }, context?.defaults ?? {}), {
+      ...graphqlConfig,
+    }),
     configFileOpts ?? {},
   );
 
