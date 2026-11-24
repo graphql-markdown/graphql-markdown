@@ -1048,13 +1048,14 @@ export const buildConfig = async (
 
   // Precedence (lowest first): built-in defaults, entry-point defaults (for
   // example a framework package's formatter), GraphQL Config, config file.
-  const merge = deepmerge();
-  const config = merge(
-    merge(merge({ ...DEFAULT_OPTIONS }, context?.defaults ?? {}), {
-      ...graphqlConfig,
-    }),
+  // An option set to `undefined` is ignored: it does not override a
+  // lower-precedence value.
+  const config = deepmerge({ all: true, onlyDefinedProperties: true })(
+    DEFAULT_OPTIONS,
+    context?.defaults ?? {},
+    graphqlConfig ?? {},
     configFileOpts ?? {},
-  );
+  ) as unknown as ConfigOptions;
 
   assertSupportedOptions(config);
 
