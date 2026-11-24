@@ -36,6 +36,26 @@ export const formatMDXBullet = (text = "") => {
 };
 
 /**
+ * Same markup as the default entity formatter, with `[` and `]` written as
+ * character references. MDC still parses Markdown inside raw HTML, and reads
+ * `[Project!]` as an inline span, so a list type like `[Project!]!` would
+ * otherwise render as `Project!!`.
+ *
+ * @param {string} name
+ * @param {string | null} [parentType]
+ * @returns {string}
+ */
+export const formatMDXNameEntity = (name, parentType) => {
+  const escape = (/** @type {string} */ text) =>
+    text.replaceAll("[", "&#91;").replaceAll("]", "&#93;");
+  const parentName = parentType
+    ? `<code class="gqlmd-mdx-entity-parent">${escape(parentType)}</code>.`
+    : "";
+
+  return `<span class="gqlmd-mdx-entity">${parentName}<code class="gqlmd-mdx-entity-name">${escape(name)}</code></span>`;
+};
+
+/**
  * @param {Badge} badge
  * @returns {string}
  */
