@@ -2,6 +2,16 @@
 
 Versions of `@graphql-markdown/docusaurus`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.39.5
+
+### Patch Changes
+
+- Updated dependencies [[`17df16b`](https://github.com/graphql-markdown/graphql-markdown/commit/17df16b2859d58b9185f15dc838fc9c451ff7558), [`84a00af`](https://github.com/graphql-markdown/graphql-markdown/commit/84a00af79bfb58c7dfeb08e07c97f67e39b3e4db), [`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53), [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2), [`7ecbda9`](https://github.com/graphql-markdown/graphql-markdown/commit/7ecbda98f65ac7e7b25485afb93be3bc362bb003)]:
+  - @graphql-markdown/cli@1.3.1
+  - @graphql-markdown/utils@1.14.5
+  - @graphql-markdown/logger@1.1.7
+  - @graphql-markdown/formatters@1.3.1
+
 ## 1.39.4
 
 ### Patch Changes

@@ -2,6 +2,14 @@
 
 Versions of `@graphql-markdown/nuxt-theme`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 0.3.1
+
+### Patch Changes
+
+- [#3709](https://github.com/graphql-markdown/graphql-markdown/pull/3709) [`84a00af`](https://github.com/graphql-markdown/graphql-markdown/commit/84a00af79bfb58c7dfeb08e07c97f67e39b3e4db) - Fix GraphQL Config settings being ignored by the Nuxt theme: its default `formatter`, `rootPath`, `baseURL`, `loaders` and `printTypeOptions` now apply only when neither GraphQL Config nor the module options set them. `runGraphQLMarkdown` now returns the resolved configuration.
+- Updated dependencies [[`17df16b`](https://github.com/graphql-markdown/graphql-markdown/commit/17df16b2859d58b9185f15dc838fc9c451ff7558), [`84a00af`](https://github.com/graphql-markdown/graphql-markdown/commit/84a00af79bfb58c7dfeb08e07c97f67e39b3e4db)]:
+  - @graphql-markdown/cli@1.3.1
+
 ## 0.3.0
 
 ### Minor Changes

@@ -2,6 +2,15 @@
 
 Versions of `@graphql-markdown/helpers`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.2.8
+
+### Patch Changes
+
+- [#3711](https://github.com/graphql-markdown/graphql-markdown/pull/3711) [`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53) - Generated pages now separate blocks with exactly one blank line and no longer leave trailing spaces on headings and quote lines. Rendered output is unchanged.
+- Updated dependencies [[`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53), [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2)]:
+  - @graphql-markdown/utils@1.14.5
+  - @graphql-markdown/graphql@1.4.1
+
 ## 1.2.7
 
 ### Patch Changes

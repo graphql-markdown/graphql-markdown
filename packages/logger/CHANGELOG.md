@@ -2,6 +2,16 @@
 
 Versions of `@graphql-markdown/logger`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.1.7
+
+### Patch Changes
+
+- [#3720](https://github.com/graphql-markdown/graphql-markdown/pull/3720) [`7ecbda9`](https://github.com/graphql-markdown/graphql-markdown/commit/7ecbda98f65ac7e7b25485afb93be3bc362bb003) - A relative logger module path, such as `./lib/my-logger.mjs`, is now resolved from the current working directory, like `formatter` and `loaders`. It used to be resolved from the `@graphql-markdown/logger` package folder, so the import failed and the run stopped.
+  
+  `@graphql-markdown/logger` now depends on `@graphql-markdown/utils` and re-exports its `runtimeModuleSpecifier()` instead of keeping its own copy.
+- Updated dependencies [[`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53), [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2)]:
+  - @graphql-markdown/utils@1.14.5
+
 ## 1.1.6
 
 ### Patch Changes

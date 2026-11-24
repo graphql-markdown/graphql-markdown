@@ -2,6 +2,16 @@
 
 Versions of `@graphql-markdown/utils`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.14.5
+
+### Patch Changes
+
+- [#3711](https://github.com/graphql-markdown/graphql-markdown/pull/3711) [`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53) - Generated pages now separate blocks with exactly one blank line and no longer leave trailing spaces on headings and quote lines. Rendered output is unchanged.
+
+- [#3717](https://github.com/graphql-markdown/graphql-markdown/pull/3717) [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2) - Relative module paths in the configuration are now resolved from the current working directory, like `rootPath` and `homepage`. This applies to `formatter` (for example `formatter: "./lib/custom-mdx.cjs"`), `loaders` and a custom diff module. They used to be resolved from the installed package folder, so the module failed to load: the default formatter was used, the loader failed, or the diff check was skipped.
+  
+  `runtimeModuleSpecifier()` in `@graphql-markdown/utils` now returns a relative path as a `file:` URL resolved from `process.cwd()`.
+
 ## 1.14.4
 
 ### Patch Changes
