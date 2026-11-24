@@ -989,7 +989,7 @@ describe("CLI Module", () => {
       options,
       expect.objectContaining({ config: true }),
       undefined,
-      {},
+      { defaults: { formatter: undefined } },
     );
   });
 
@@ -1146,7 +1146,7 @@ describe("CLI Module", () => {
         options,
         expect.objectContaining({ telemetry: false }),
         undefined,
-        { trigger: "cli" },
+        { trigger: "cli", defaults: { formatter: undefined } },
       );
     });
 
