@@ -11,6 +11,9 @@
  * `MDXString` return type is opaque and cannot be produced from here.
  */
 
+import { formatMDXNameEntity as defaultFormatMDXNameEntity } from "@graphql-markdown/formatters/defaults";
+import { toHTMLUnicode } from "@graphql-markdown/utils";
+
 /**
  * @typedef {object} Badge
  * @property {string} text
@@ -33,6 +36,23 @@
  */
 export const formatMDXBullet = (text = "") => {
   return `&nbsp;·&nbsp;${text}`;
+};
+
+/**
+ * The default entity formatter, with `[` and `]` in the name written as
+ * character references. MDC still parses Markdown inside raw HTML, and reads
+ * `[Project!]` as an inline span, so a list type like `[Project!]!` would
+ * otherwise render as `Project!!`.
+ *
+ * @param {string} name
+ * @param {string | null} [parentType]
+ * @returns {string}
+ */
+export const formatMDXNameEntity = (name, parentType) => {
+  return defaultFormatMDXNameEntity(
+    name.replaceAll(/[[\]]/g, toHTMLUnicode),
+    parentType,
+  );
 };
 
 /**

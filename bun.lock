@@ -218,6 +218,8 @@
       "dependencies": {
         "@clack/prompts": "^1.0.0",
         "@graphql-markdown/cli": "workspace:^",
+        "@graphql-markdown/formatters": "workspace:^",
+        "@graphql-markdown/utils": "workspace:^",
         "@nuxt/content": "^3.16.2",
         "@nuxt/kit": "^4.6.4",
         "@nuxt/ui": "^4.11.0",

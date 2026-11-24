@@ -4,6 +4,7 @@ import {
   formatMDXBadge,
   formatMDXBullet,
   formatMDXFrontmatter,
+  formatMDXNameEntity,
   mdxExtension,
 } from "../../formatter.mjs";
 
@@ -61,6 +62,20 @@ describe("formatMDXBadge", () => {
   it("adds a lowercase modifier class derived from the text", () => {
     expect(formatMDXBadge({ text: "NON-NULL" })).toBe(
       '<mark class="gqlmd-mdx-badge gqlmd-mdx-badge-non-null">NON-NULL</mark>',
+    );
+  });
+});
+
+describe("formatMDXNameEntity", () => {
+  it("writes list brackets as character references so MDC keeps them", () => {
+    expect(formatMDXNameEntity("[Project!]!")).toBe(
+      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">&#x005B;Project!&#x005D;!</code></span>',
+    );
+  });
+
+  it("prefixes the parent type when one is given", () => {
+    expect(formatMDXNameEntity("nodes", "ProjectConnection")).toBe(
+      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-parent">ProjectConnection</code>.<code class="gqlmd-mdx-entity-name">nodes</code></span>',
     );
   });
 });
