@@ -8,3 +8,6 @@ export const LANDING_DOC_NAME = "generated";
 export const isLandingDocPath = (path: string): boolean => {
   return path.split("/").findLast(Boolean) === LANDING_DOC_NAME;
 };
+
+/** Default root directory for generated content. */
+export const DEFAULT_ROOT_PATH = "./content";

@@ -863,6 +863,34 @@ describe("config", () => {
       );
     });
 
+    test("a config file option set to undefined keeps lower-precedence values", async () => {
+      expect.assertions(2);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        formatter: "from-graphql-config",
+      } as never);
+      const config = await buildConfig(
+        { formatter: undefined, rootPath: undefined } as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.formatter).toBe("from-graphql-config");
+      expect(config.outputDir).toContain("defaults");
+    });
+
+    test("defaults with an undefined formatter do not clear anything", async () => {
+      expect.assertions(2);
+
+      const config = await buildConfig(undefined, undefined, undefined, {
+        defaults: { formatter: undefined, rootPath: "./defaults" },
+      });
+
+      expect(config.formatter).toBe(DEFAULT_OPTIONS.formatter);
+      expect(config.outputDir).toContain("defaults");
+    });
+
     test("GraphQL Config overrides the defaults", async () => {
       expect.assertions(2);
 
@@ -876,6 +904,39 @@ describe("config", () => {
 
       expect(config.formatter).toBe("from-graphql-config");
       expect(config.outputDir).toContain("graphql-config");
+    });
+
+    test("an undefined outputAdapter keeps the GraphQL Config adapter", async () => {
+      expect.assertions(1);
+
+      const graphqlAdapter = { writeFile: vi.fn() };
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        outputAdapter: graphqlAdapter,
+      } as never);
+      const config = await buildConfig(
+        { outputAdapter: undefined } as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.outputAdapter).toBe(graphqlAdapter);
+    });
+
+    test("a null outputAdapter disables the GraphQL Config adapter", async () => {
+      expect.assertions(1);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        outputAdapter: { writeFile: vi.fn() },
+      } as never);
+      const config = await buildConfig(
+        { outputAdapter: null } as unknown as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.outputAdapter).toBeNull();
     });
 
     test("configuration file options override the defaults and GraphQL Config", async () => {

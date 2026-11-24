@@ -6,7 +6,11 @@ import { useLogger } from "@nuxt/kit";
 
 import { runGraphQLMarkdown } from "@graphql-markdown/cli";
 import type { RunContext } from "@graphql-markdown/cli";
-import { DEFAULT_BASE_URL, LANDING_DOC_NAME } from "./constants.ts";
+import {
+  DEFAULT_BASE_URL,
+  DEFAULT_ROOT_PATH,
+  LANDING_DOC_NAME,
+} from "./constants.ts";
 
 /**
  * `@graphql-markdown/types` is a transitive dependency, so the option shape is
@@ -16,9 +20,6 @@ type GraphQLMarkdownOptions = Parameters<typeof runGraphQLMarkdown>[0];
 
 /** Options the theme sets itself; users cannot override them via `createGenerateDocs`. */
 type ThemeControlledKeys = "linkRoot";
-
-/** Default root directory for generated content. */
-const DEFAULT_ROOT_PATH = "./content";
 
 /** Default loaders: GraphQL file loader. */
 const DEFAULT_LOADERS = {
@@ -71,18 +72,6 @@ export const createGenerateDocs = (
     homepage?: string | false;
   },
 ): (() => Promise<void>) => {
-  const {
-    schema,
-    rootPath,
-    baseURL,
-    printTypeOptions,
-    decorators,
-    formatter,
-    loaders,
-    homepage,
-    ...rest
-  } = userOptions;
-
   const logger = useLogger("gqlmd-generate");
 
   // The theme's own defaults: applied by GraphQL-Markdown below GraphQL Config
@@ -95,24 +84,9 @@ export const createGenerateDocs = (
     printTypeOptions: { parentTypePrefix: false, typeBadges: true },
   };
 
-  // Only what the user actually passed: unset keys are omitted, not undefined
-  const options: GraphQLMarkdownOptions = {
-    // Forward every other GraphQL-Markdown option untouched; only the
-    // theme-controlled `linkRoot` below wins over anything passed through here
-    ...rest,
-
-    schema,
-    linkRoot: "/",
-    ...(rootPath !== undefined && { rootPath }),
-    ...(baseURL !== undefined && { baseURL }),
-    ...(formatter !== undefined && { formatter }),
-    ...(loaders !== undefined && { loaders }),
-    ...(printTypeOptions !== undefined && { printTypeOptions }),
-    ...(decorators && { decorators }),
-
-    // Homepage template (or `false` to disable), only when set
-    ...(homepage !== undefined && { homepage }),
-  };
+  // Undefined values are skipped by GraphQL-Markdown's config merge, so user
+  // options are forwarded as-is; only the theme-controlled `linkRoot` wins.
+  const options: GraphQLMarkdownOptions = { ...userOptions, linkRoot: "/" };
 
   return async () => {
     try {
@@ -128,17 +102,19 @@ export const createGenerateDocs = (
       // working whatever it's called: GraphQL-Markdown copies it under its own
       // file name, which is renamed (overwriting) to the expected one.
       if (
-        typeof homepage === "string" &&
-        basename(homepage) !== `${LANDING_DOC_NAME}.md`
+        typeof userOptions.homepage === "string" &&
+        basename(userOptions.homepage) !== `${LANDING_DOC_NAME}.md`
       ) {
         try {
           await rename(
-            join(outputDir, basename(homepage)),
+            join(outputDir, basename(userOptions.homepage)),
             join(outputDir, `${LANDING_DOC_NAME}.md`),
           );
         } catch (error) {
           if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
-          logger.warn(`Homepage ${homepage} was not rendered; skipping rename`);
+          logger.warn(
+            `Homepage ${userOptions.homepage} was not rendered; skipping rename`,
+          );
         }
       }
 

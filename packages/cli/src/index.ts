@@ -9,7 +9,6 @@
 import type {
   CliOptions,
   GraphQLMarkdownCliOptions,
-  TelemetryTrigger,
 } from "@graphql-markdown/types";
 
 // Commander v15 is ESM-only; this package requires Node.js >=22.12.0 which
@@ -36,12 +35,7 @@ export type GraphQLMarkdownCliType = Command;
 /**
  * Internal context set by GraphQL-Markdown entry points.
  */
-export interface RunContext {
-  /** Entry point reported by anonymous telemetry. */
-  trigger?: TelemetryTrigger;
-  /** Defaults applied when neither the CLI flags nor any configuration set them. */
-  defaults?: NonNullable<BuildConfigContext["defaults"]>;
-}
+export type RunContext = BuildConfigContext;
 
 /**
  * Runs the GraphQL Markdown CLI to generate documentation from a GraphQL schema.
@@ -173,13 +167,9 @@ export const getGraphQLMarkdownCli = (
     if (cliOptions.telemetry !== false) {
       delete cliOptions.telemetry;
     }
-    const defaults =
-      customFormatter === undefined
-        ? context?.defaults
-        : { ...context?.defaults, formatter: customFormatter };
     await runGraphQLMarkdown(options, cliOptions, loggerModule, {
       ...context,
-      ...(defaults && { defaults }),
+      defaults: { ...context?.defaults, formatter: customFormatter },
     });
   });
 
