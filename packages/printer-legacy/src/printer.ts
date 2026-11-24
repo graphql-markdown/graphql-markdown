@@ -69,11 +69,7 @@ import {
   isScalarType,
   isUnionType,
 } from "@graphql-markdown/graphql";
-import {
-  normalizeMarkdownWhitespace,
-  pathUrl,
-  trimBlankLines,
-} from "@graphql-markdown/utils";
+import { normalizeMarkdownWhitespace, pathUrl } from "@graphql-markdown/utils";
 
 import { printRelations } from "./relation.ts";
 import { printBadge } from "./badge.ts";
@@ -715,8 +711,6 @@ export class Printer implements IPrinter {
    * Content can be a string, a nested section object, or an array of nested entries.
    * Nested content is rendered recursively by calling `renderPageSection` for each child.
    * Invalid, unsupported, or effectively empty inputs return an empty string.
-   * The result never starts or ends with a blank line, so callers can join
-   * sections with a single blank line.
    *
    * @param section - A nullable page section value to render. Supports nested structures.
    * @returns The rendered markdown for the section, or an empty string when nothing renderable exists.
@@ -728,9 +722,7 @@ export class Printer implements IPrinter {
       return "";
     }
 
-    const content = trimBlankLines(
-      Printer.renderPageSectionContent(section.content),
-    );
+    const content = Printer.renderPageSectionContent(section.content);
     const hasContent = content.trim().length > 0;
 
     if (typeof section.title !== "string" || section.title.trim() === "") {
