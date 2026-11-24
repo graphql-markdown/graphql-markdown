@@ -1,3 +1,53 @@
+<a id="1.44.1"></a>
+# [1.44.1](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.44.1) - 2026-11-24
+
+1.44.1 is a bug-fix release. GraphQL Config settings are no longer overridden by the Docusaurus plugin's or the Nuxt theme's defaults. Relative module paths now resolve from your project instead of the installed package, and an option set to `undefined` no longer overrides a default. There are no breaking changes.
+
+### 🐛 Fixes
+
+- **GraphQL Config settings are respected by the Docusaurus plugin and the Nuxt theme.** A `formatter` set in GraphQL Config was replaced by the Docusaurus plugin's default formatter ([#3708](https://github.com/graphql-markdown/graphql-markdown/pull/3708)). The Nuxt theme did the same with `formatter`, `rootPath`, `baseURL`, `loaders` and `printTypeOptions` ([#3709](https://github.com/graphql-markdown/graphql-markdown/pull/3709)). Their defaults now apply only when neither GraphQL Config nor the plugin or module options set the value.
+
+  ```yaml
+  # .graphqlrc.yml — now honoured by the Docusaurus plugin and the Nuxt theme
+  schema: ./schema.graphql
+  extensions:
+    graphql-markdown:
+      formatter: "@graphql-markdown/formatters/mdx"
+      rootPath: ./content
+  ```
+
+- **Relative module paths resolve from the working directory**, like `rootPath` and `homepage`. This applies to `formatter`, `loaders`, a custom diff module ([#3717](https://github.com/graphql-markdown/graphql-markdown/pull/3717)) and the logger module ([#3720](https://github.com/graphql-markdown/graphql-markdown/pull/3720)). They used to be resolved from the installed package folder, so the module failed to load: the default formatter was used, the loader or logger import failed, or the diff check was skipped.
+
+  ```js
+  formatter: "./lib/custom-mdx.cjs", // resolved from process.cwd()
+  ```
+
+- **An option set to `undefined` is ignored**, for example one read from an unset environment variable. It used to override the default or the GraphQL Config value with `undefined`. `outputAdapter: null` still disables an adapter set in GraphQL Config ([#3722](https://github.com/graphql-markdown/graphql-markdown/pull/3722)).
+
+  ```ts
+  const config = await buildConfig({
+    schema: "./schema.graphql",
+    // When DOCS_ROOT is not set, rootPath comes from GraphQL Config or the default
+    rootPath: process.env.DOCS_ROOT,
+  });
+  ```
+
+- **Cleaner generated Markdown.** Blocks are separated by exactly one blank line, and headings and quote lines no longer have trailing spaces. Rendered pages look the same, but the source is tidier and diffs between regenerations are smaller ([#3711](https://github.com/graphql-markdown/graphql-markdown/pull/3711)).
+
+### 📝 Documentation
+
+- New guide, [Markdown copies](https://graphql-markdown.dev/docs/guides/markdown-copies): publish a plain Markdown copy of every generated page at `<page-url>.md`, for readers and LLM agents ([#3712](https://github.com/graphql-markdown/graphql-markdown/pull/3712), [#3713](https://github.com/graphql-markdown/graphql-markdown/pull/3713), [#3714](https://github.com/graphql-markdown/graphql-markdown/pull/3714)).
+
+
+### 📦 Packages
+
+`@graphql-markdown/cli` 1.3.1 · `core` 1.28.1 · `diff` 1.1.27 · `docusaurus` 1.39.5 · `formatters` 1.3.1 · `graphql` 1.4.1 · `helpers` 1.2.8 · `logger` 1.1.7 · `nuxt-theme` 0.3.1 · `printer-legacy` 1.21.1 · `utils` 1.14.5 · `create-graphql-markdown-docs` 1.2.1
+
+
+
+[Changes][1.44.1]
+
+
 <a id="1.44.0"></a>
 # [1.44.0](https://github.com/graphql-markdown/graphql-markdown/releases/tag/1.44.0) - 2026-11-22
 
@@ -3006,6 +3056,7 @@ Then open the URL [`http://localhost:8080/docs/schema`](http://localhost:8080/do
 [Changes][1.0.0-beta]
 
 
+[1.44.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.44.0...1.44.1
 [1.44.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.43.1...1.44.0
 [1.43.1]: https://github.com/graphql-markdown/graphql-markdown/compare/1.43.0...1.43.1
 [1.43.0]: https://github.com/graphql-markdown/graphql-markdown/compare/1.42.0...1.43.0
