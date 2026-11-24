@@ -44,6 +44,35 @@ type RelationOfCallbackFunction<T> = (
 ) => T[];
 
 /**
+ * Creates a relation callback that collects, once per name, the relation types
+ * for which `isRelated` holds for the processed named type.
+ *
+ * @internal
+ *
+ * @param isRelated - membership check between the type name and a relation type.
+ *
+ * @returns a callback usable with {@link mapRelationOf}.
+ */
+const createRelationOfCallback = <T>(
+  isRelated: (typeName: string, relationType: unknown) => boolean,
+): RelationOfCallbackFunction<T> => {
+  return (type, relationName, relationType, results) => {
+    if (isNamedType(type) && isRelated(type.name, relationType)) {
+      if (
+        !results.some((r) => {
+          return (
+            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
+          );
+        })
+      ) {
+        results.push(relationType as T);
+      }
+    }
+    return results;
+  };
+};
+
+/**
  * Generic method for fetching relations for a given GraphQL schema type.
  *
  * @internal
@@ -260,31 +289,16 @@ export const getRelationOfUnion: IGetRelation<GraphQLUnionType> = <T>(
     unions: [],
   };
 
-  const parserCallback: RelationOfCallbackFunction<GraphQLUnionType> = (
-    type,
-    relationName,
-    relationType,
-    results,
-  ) => {
-    if (
-      isNamedType(type) &&
-      isUnionType(relationType) &&
-      relationType.getTypes().some((subType) => {
-        return subType.name === type.name;
-      })
-    ) {
-      if (
-        !results.some((r) => {
-          return (
-            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
-          );
+  const parserCallback = createRelationOfCallback<GraphQLUnionType>(
+    (typeName, relationType) => {
+      return (
+        isUnionType(relationType) &&
+        relationType.getTypes().some((subType) => {
+          return subType.name === typeName;
         })
-      ) {
-        results.push(relationType);
-      }
-    }
-    return results;
-  };
+      );
+    },
+  );
 
   return mapRelationOf<GraphQLUnionType>(
     type,
@@ -317,31 +331,16 @@ export const getRelationOfInterface: IGetRelation<RelationOfInterface> = <T>(
     interfaces: [],
   };
 
-  const parserCallback: RelationOfCallbackFunction<RelationOfInterface> = (
-    type,
-    relationName,
-    relationType,
-    results,
-  ) => {
-    if (
-      isNamedType(type) &&
-      (isObjectType(relationType) || isInterfaceType(relationType)) &&
-      relationType.getInterfaces().some((subType) => {
-        return subType.name === type.name;
-      })
-    ) {
-      if (
-        !results.some((r) => {
-          return (
-            isTypeObject(r) && hasProperty(r, "name") && r.name === relationName
-          );
+  const parserCallback = createRelationOfCallback<RelationOfInterface>(
+    (typeName, relationType) => {
+      return (
+        (isObjectType(relationType) || isInterfaceType(relationType)) &&
+        relationType.getInterfaces().some((subType) => {
+          return subType.name === typeName;
         })
-      ) {
-        results.push(relationType);
-      }
-    }
-    return results;
-  };
+      );
+    },
+  );
 
   return mapRelationOf<RelationOfInterface>(
     type,
