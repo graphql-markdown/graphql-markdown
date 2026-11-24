@@ -2,6 +2,33 @@
 
 Versions of `@graphql-markdown/core`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.28.1
+
+### Patch Changes
+
+- [#3708](https://github.com/graphql-markdown/graphql-markdown/pull/3708) [`17df16b`](https://github.com/graphql-markdown/graphql-markdown/commit/17df16b2859d58b9185f15dc838fc9c451ff7558) - Fix `formatter` set in GraphQL Config being ignored by the Docusaurus plugin: its default formatter now applies only when neither GraphQL Config nor the plugin options set one.
+
+- [#3722](https://github.com/graphql-markdown/graphql-markdown/pull/3722) [`076f153`](https://github.com/graphql-markdown/graphql-markdown/commit/076f153f247d53570c808c183b21a865b2594966) - An option set to `undefined`, for example from an unset environment variable, no longer overrides a default or a value set in GraphQL Config. It is now ignored, as if the option were not set.
+  
+  ```ts
+  const config = await buildConfig({
+    schema: "./schema.graphql",
+    // When DOCS_ROOT is not set, rootPath comes from GraphQL Config or the default
+    rootPath: process.env.DOCS_ROOT,
+  });
+  ```
+
+- [#3717](https://github.com/graphql-markdown/graphql-markdown/pull/3717) [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2) - Relative module paths in the configuration are now resolved from the current working directory, like `rootPath` and `homepage`. This applies to `formatter` (for example `formatter: "./lib/custom-mdx.cjs"`), `loaders` and a custom diff module. They used to be resolved from the installed package folder, so the module failed to load: the default formatter was used, the loader failed, or the diff check was skipped.
+  
+  `runtimeModuleSpecifier()` in `@graphql-markdown/utils` now returns a relative path as a `file:` URL resolved from `process.cwd()`.
+- Updated dependencies [[`1f860eb`](https://github.com/graphql-markdown/graphql-markdown/commit/1f860eb10a3e522f5ccc9718c05efea95df4dc53), [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2), [`7ecbda9`](https://github.com/graphql-markdown/graphql-markdown/commit/7ecbda98f65ac7e7b25485afb93be3bc362bb003)]:
+  - @graphql-markdown/printer-legacy@1.21.1
+  - @graphql-markdown/helpers@1.2.8
+  - @graphql-markdown/utils@1.14.5
+  - @graphql-markdown/graphql@1.4.1
+  - @graphql-markdown/logger@1.1.7
+  - @graphql-markdown/diff@1.1.27
+
 ## 1.28.0
 
 ### Minor Changes

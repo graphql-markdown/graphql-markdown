@@ -2,6 +2,17 @@
 
 Versions of `@graphql-markdown/cli`. Each version links to the GraphQL-Markdown release that shipped it; see the [full changelog](https://github.com/graphql-markdown/graphql-markdown/blob/main/CHANGELOG.md) for everything else.
 
+## 1.3.1
+
+### Patch Changes
+
+- [#3708](https://github.com/graphql-markdown/graphql-markdown/pull/3708) [`17df16b`](https://github.com/graphql-markdown/graphql-markdown/commit/17df16b2859d58b9185f15dc838fc9c451ff7558) - Fix `formatter` set in GraphQL Config being ignored by the Docusaurus plugin: its default formatter now applies only when neither GraphQL Config nor the plugin options set one.
+
+- [#3709](https://github.com/graphql-markdown/graphql-markdown/pull/3709) [`84a00af`](https://github.com/graphql-markdown/graphql-markdown/commit/84a00af79bfb58c7dfeb08e07c97f67e39b3e4db) - Fix GraphQL Config settings being ignored by the Nuxt theme: its default `formatter`, `rootPath`, `baseURL`, `loaders` and `printTypeOptions` now apply only when neither GraphQL Config nor the module options set them. `runGraphQLMarkdown` now returns the resolved configuration.
+- Updated dependencies [[`17df16b`](https://github.com/graphql-markdown/graphql-markdown/commit/17df16b2859d58b9185f15dc838fc9c451ff7558), [`076f153`](https://github.com/graphql-markdown/graphql-markdown/commit/076f153f247d53570c808c183b21a865b2594966), [`074bd7c`](https://github.com/graphql-markdown/graphql-markdown/commit/074bd7c388f687c2efb8d928ba9c62732bf581a2), [`7ecbda9`](https://github.com/graphql-markdown/graphql-markdown/commit/7ecbda98f65ac7e7b25485afb93be3bc362bb003)]:
+  - @graphql-markdown/core@1.28.1
+  - @graphql-markdown/logger@1.1.7
+
 ## 1.3.0
 
 ### Minor Changes

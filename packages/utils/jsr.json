@@ -1,6 +1,6 @@
 {
   "name": "@graphql-markdown/utils",
-  "version": "1.14.4",
+  "version": "1.14.5",
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
