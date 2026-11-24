@@ -95,7 +95,7 @@ export const formatMDXAdmonition = (
     })
     .filter(Boolean);
   const body = paragraphs.length
-    ? `${MARKDOWN_EOL}${quoteMarkdownLines(paragraphs.join(MARKDOWN_EOP), MARKDOWN_EOL).replaceAll(/^> $/gm, ">")}`
+    ? `${MARKDOWN_EOL}${quoteMarkdownLines(paragraphs.join(MARKDOWN_EOP), MARKDOWN_EOL)}`
     : "";
   return `${MARKDOWN_EOP}> [!${alertType}]${body}${MARKDOWN_EOP}` as MDXString;
 };
