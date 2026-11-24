@@ -69,7 +69,7 @@ describe("formatMDXBadge", () => {
 describe("formatMDXNameEntity", () => {
   it("writes list brackets as character references so MDC keeps them", () => {
     expect(formatMDXNameEntity("[Project!]!")).toBe(
-      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">&#91;Project!&#93;!</code></span>',
+      '<span class="gqlmd-mdx-entity"><code class="gqlmd-mdx-entity-name">&#x005B;Project!&#x005D;!</code></span>',
     );
   });
 

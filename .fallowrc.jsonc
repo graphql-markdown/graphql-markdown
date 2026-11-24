@@ -242,7 +242,7 @@
       },
       {
         "from": "nuxt-theme",
-        "allow": ["cli"],
+        "allow": ["cli", "formatters", "utils"],
       },
       {
         "from": "printer-legacy",
