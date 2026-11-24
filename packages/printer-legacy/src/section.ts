@@ -120,9 +120,7 @@ export const printSectionItem = <T>(
     .filter(Boolean)
     .join(" ") as MDXString;
 
-  const description = printDescription(type, options, "")
-    .trim()
-    .replaceAll("\n", `${MARKDOWN_EOL}`);
+  const description = printDescription(type, options, "").trim();
 
   const parts: string[] = [title, description];
   if (isGraphQLFieldType(type)) {
