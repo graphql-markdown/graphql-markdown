@@ -1,23 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  normalizeMarkdownWhitespace,
-  trimBlankLines,
-} from "../../src/markdown";
+import { normalizeMarkdownWhitespace } from "../../src/markdown";
 
 describe("markdown whitespace helpers", () => {
-  describe("trimBlankLines", () => {
-    test("removes leading and trailing blank lines only", () => {
-      expect(trimBlankLines("\n \n  code\n\ntext\n\t\n")).toBe(
-        "  code\n\ntext",
-      );
-    });
-
-    test("returns empty string for blank input", () => {
-      expect(trimBlankLines("\n\n  \n")).toBe("");
-    });
-  });
-
   describe("normalizeMarkdownWhitespace", () => {
     test("collapses blank line runs", () => {
       expect(normalizeMarkdownWhitespace("a\n\n\n\nb\n \n\nc")).toBe(

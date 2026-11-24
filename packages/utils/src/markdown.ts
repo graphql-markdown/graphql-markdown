@@ -36,26 +36,6 @@ const isBlankLine = (line: string): boolean => {
   return line.trim() === "";
 };
 
-/**
- * Removes leading and trailing blank lines (empty or whitespace-only) from a text.
- * Indentation of the first non-blank line is preserved.
- *
- * @param text - Text to trim.
- * @returns Text without leading/trailing blank lines.
- */
-export const trimBlankLines = (text: string): string => {
-  const lines = text.split("\n");
-  let start = 0;
-  let end = lines.length;
-  while (start < end && isBlankLine(lines[start])) {
-    start++;
-  }
-  while (end > start && isBlankLine(lines[end - 1])) {
-    end--;
-  }
-  return lines.slice(start, end).join("\n");
-};
-
 /** An open fenced code block: its fence character and length. */
 interface CodeFence {
   char: string;
