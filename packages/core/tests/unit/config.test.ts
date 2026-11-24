@@ -906,6 +906,39 @@ describe("config", () => {
       expect(config.outputDir).toContain("graphql-config");
     });
 
+    test("an undefined outputAdapter keeps the GraphQL Config adapter", async () => {
+      expect.assertions(1);
+
+      const graphqlAdapter = { writeFile: vi.fn() };
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        outputAdapter: graphqlAdapter,
+      } as never);
+      const config = await buildConfig(
+        { outputAdapter: undefined } as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.outputAdapter).toBe(graphqlAdapter);
+    });
+
+    test("a null outputAdapter disables the GraphQL Config adapter", async () => {
+      expect.assertions(1);
+
+      vi.mocked(graphqlConfigModule.loadConfiguration).mockResolvedValueOnce({
+        outputAdapter: { writeFile: vi.fn() },
+      } as never);
+      const config = await buildConfig(
+        { outputAdapter: null } as unknown as ConfigOptions,
+        undefined,
+        undefined,
+        { defaults },
+      );
+
+      expect(config.outputAdapter).toBeNull();
+    });
+
     test("configuration file options override the defaults and GraphQL Config", async () => {
       expect.assertions(2);
 

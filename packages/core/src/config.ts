@@ -1062,13 +1062,13 @@ export const buildConfig = async (
   // deepmerge rebuilds objects as prototype-less plain copies, which strips the
   // methods off a class-based adapter. Take it from the raw sources instead, so
   // `new MyAdapter()` keeps working as well as an object literal.
-  // `??` would let a config file that sets `outputAdapter: null` to disable an
-  // adapter inherited from GraphQL Config fall back to that adapter instead, so
-  // precedence is decided on the property being present, not on its value.
+  // Like the merge above, an `undefined` adapter counts as unset. `??` is not
+  // used: it would also skip `null`, which a config file sets to disable an
+  // adapter inherited from GraphQL Config.
   const outputAdapter =
-    configFileOpts && "outputAdapter" in configFileOpts
-      ? configFileOpts.outputAdapter
-      : (graphqlConfig as Maybe<ConfigOptions>)?.outputAdapter;
+    configFileOpts?.outputAdapter === undefined
+      ? (graphqlConfig as Maybe<ConfigOptions>)?.outputAdapter
+      : configFileOpts.outputAdapter;
 
   const { onlyDocDirective, skipDocDirective } = getVisibilityDirectives(
     cliOpts,
