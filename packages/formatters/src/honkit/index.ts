@@ -22,6 +22,7 @@ import {
   appendExtensionToAbsolutePathWithoutExtension,
   formatMarkdownFrontmatter,
   mergeFrontmatterLines,
+  quoteMarkdownLines,
 } from "@graphql-markdown/helpers";
 import { FRONT_MATTER_DELIMITER, MARKDOWN_EOL } from "@graphql-markdown/utils";
 import { formatMDXBullet, formatMDXPermalink } from "../defaults.ts";
@@ -69,7 +70,7 @@ export const formatMDXAdmonition = (
   _meta: Maybe<MetaInfo>,
 ): MDXString => {
   const prefix = type === "warning" ? "WARNING" : "INFO";
-  return `> **${prefix} - ${title}**\n>\n> ${text}` as MDXString;
+  return `> **${prefix} - ${title}**${MARKDOWN_EOL}>${MARKDOWN_EOL}${quoteMarkdownLines(text.trim(), MARKDOWN_EOL)}` as MDXString;
 };
 
 /**
