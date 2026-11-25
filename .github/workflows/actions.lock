@@ -25,7 +25,7 @@ workflows:
     '.github/workflows/linter.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
-        - 'fallow-rs/fallow@v3.46.0'
+        - 'fallow-rs/fallow@v3.47.0'
         - 'oven-sh/setup-bun@v2.2.0'
     '.github/workflows/mutation.yml':
         - 'actions/cache@v6.1.0'
@@ -106,9 +106,9 @@ dependencies:
         uses:
             - 'actions/cache@668228422ae6a00e4ad889ee87cd7109ec5666a7'
             - 'actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd'
-    'fallow-rs/fallow@v3.46.0':
-        ref: 'v3.46.0'
-        commit: 'sha1-965f068ca91c11d6ab2a631101bcd3709569c422'
+    'fallow-rs/fallow@v3.47.0':
+        ref: 'v3.47.0'
+        commit: 'sha1-3631c7d79610266cfbef7524dec1cc0b3fbdaccf'
         owner_id: 269229952
         repo_id: 1184090452
         uses:
