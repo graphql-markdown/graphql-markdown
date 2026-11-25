@@ -253,14 +253,24 @@ describe("Printer", () => {
       `);
     });
 
-    test("does nothing is options is defined", async () => {
+    test("replaces existing options on subsequent init calls", async () => {
       expect.hasAssertions();
 
-      Printer.options = {} as PrintTypeOptions;
+      await Printer.init(undefined, "first", "/", undefined, {
+        formatMDXBadge: () => {
+          return "first-badge";
+        },
+      } as never);
+      await Printer.init(undefined, "second", "/", undefined, {
+        formatMDXBadge: () => {
+          return "second-badge";
+        },
+      } as never);
 
-      await Printer.init(undefined);
-
-      expect(Printer.options).toMatchInlineSnapshot(`{}`);
+      expect(Printer.options?.basePath).toBe("/second");
+      expect(Printer.options?.formatMDXBadge?.({ text: "x" } as never)).toBe(
+        "second-badge",
+      );
     });
 
     test("override values on init when options is undefined", async () => {
