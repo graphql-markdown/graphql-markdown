@@ -264,41 +264,39 @@ export class Printer implements IPrinter {
     // Always update eventEmitter regardless of initialization state
     Printer.eventEmitter = eventEmitter ?? null;
 
-    if (Printer.options === undefined) {
-      Printer.options = {
-        ...DEFAULT_OPTIONS,
-        basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
-        decorators,
-        exampleSection:
-          typeof printTypeOptions?.exampleSection === "object"
-            ? printTypeOptions.exampleSection
-            : undefined,
-        groups,
-        parentTypePrefix:
-          printTypeOptions?.parentTypePrefix ??
-          PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
-        deprecated:
-          printTypeOptions?.deprecated ??
-          deprecated ??
-          PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
-        schema,
-        onlyDocDirectives: onlyDocDirectives ?? [],
-        skipDocDirectives: skipDocDirectives ?? [],
-        sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
-        typeBadges:
-          printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
-        metatags: metatags ?? [],
-        hierarchy:
-          normalizeHierarchy(printTypeOptions?.hierarchy) ??
-          PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
-        meta: meta,
-        // Merge formatter functions: default formatter with any overrides
-        ...createDefaultFormatter(),
-        ...formatter,
-      };
+    Printer.options = {
+      ...DEFAULT_OPTIONS,
+      basePath: pathUrl.join(linkRoot ?? "", baseURL ?? ""),
+      decorators,
+      exampleSection:
+        typeof printTypeOptions?.exampleSection === "object"
+          ? printTypeOptions.exampleSection
+          : undefined,
+      groups,
+      parentTypePrefix:
+        printTypeOptions?.parentTypePrefix ??
+        PRINT_TYPE_DEFAULT_OPTIONS.parentTypePrefix,
+      deprecated:
+        printTypeOptions?.deprecated ??
+        deprecated ??
+        PRINT_TYPE_DEFAULT_OPTIONS.deprecated,
+      schema,
+      onlyDocDirectives: onlyDocDirectives ?? [],
+      skipDocDirectives: skipDocDirectives ?? [],
+      sectionHeaderId: sectionHeaderId ?? DEFAULT_OPTIONS.sectionHeaderId,
+      typeBadges:
+        printTypeOptions?.typeBadges ?? PRINT_TYPE_DEFAULT_OPTIONS.typeBadges,
+      metatags: metatags ?? [],
+      hierarchy:
+        normalizeHierarchy(printTypeOptions?.hierarchy) ??
+        PRINT_TYPE_DEFAULT_OPTIONS.hierarchy,
+      meta: meta,
+      // Merge formatter functions: default formatter with any overrides
+      ...createDefaultFormatter(),
+      ...formatter,
+    };
 
-      Printer.mdxDeclaration = mdxDeclaration ?? "";
-    }
+    Printer.mdxDeclaration = mdxDeclaration ?? "";
   }
 
   /**
