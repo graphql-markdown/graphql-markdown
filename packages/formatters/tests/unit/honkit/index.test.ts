@@ -80,6 +80,22 @@ describe("formatMDXAdmonition", () => {
     );
     expect(result).toContain("> **WARNING - Watch out**");
   });
+
+  test("quotes every line of multi-line text and trims leading/trailing blank lines", () => {
+    const result = formatMDXAdmonition(
+      {
+        text: "\n\nReplaced by the `X` enum.\n\nSecond paragraph.",
+        title: "Deprecated",
+        type: "warning",
+      },
+      null,
+    );
+    expect(result).toBe(`> **WARNING - Deprecated**
+>
+> Replaced by the \`X\` enum.
+>
+> Second paragraph.`);
+  });
 });
 
 describe("formatMDXBullet", () => {
