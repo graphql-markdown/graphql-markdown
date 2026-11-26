@@ -90,6 +90,12 @@
     "featured": false
   },
   {
+    "name": "Cyanite.ai",
+    "href": "https://api-docs.cyanite.ai/docs/graphql/schema/",
+    "image": "1a330323-7377-43c9-8e3a-de6d2eeb1149",
+    "featured": false
+  },
+  {
     "name": "Embrace",
     "href": "https://docs.api.dev.embrace.ai/docs/schema",
     "image": "ba4b6922-210f-4dde-9703-967251985434",
@@ -99,6 +105,12 @@
     "name": "epilot",
     "href": "https://docs.epilot.io/graphql/sharing",
     "image": "437687077-1e69a5c0-0cec-40d4-8204-4b6bd678475b",
+    "featured": false
+  },
+  {
+    "name": "ESL Gaming",
+    "href": "https://docs.api.prodb.eslgaming.com/2025-08-28/graphql",
+    "image": "5f0309a7-f736-43af-ad2a-590b962c999a",
     "featured": false
   },
   {
@@ -162,6 +174,12 @@
     "featured": false
   },
   {
+    "name": "Lumar",
+    "href": "https://api-docs.lumar.io/docs/schema/",
+    "image": "4c2c58ab-efdd-4fc4-b683-b60f119d7fd4",
+    "featured": false
+  },
+  {
     "name": "Machine Identity Management",
     "href": "https://mim.pan.dev/api-endpoints",
     "image": "6402dc47-05fa-4e37-8bc4-0378f56a1468",
@@ -204,6 +222,24 @@
     "featured": false
   },
   {
+    "name": "Pera",
+    "href": "https://developer.getpera.com/schema",
+    "image": "02a0a964-35f5-4d4b-aa4d-696e699e05e4",
+    "featured": false
+  },
+  {
+    "name": "Podchaser",
+    "href": "https://api-docs.podchaser.com/docs/reference/schema/",
+    "image": "12a41b8d-7ce0-4527-b630-9ceca7bfa938",
+    "featured": false
+  },
+  {
+    "name": "Propeller Commerce",
+    "href": "https://docs.propeller-commerce.com/reference/graphql/",
+    "image": "b6da19e7-5812-47bc-9906-f0832012220b",
+    "featured": false
+  },
+  {
     "name": "Resonance",
     "href": "https://docs.buildresonance.com",
     "image": "352631689-39cfc74f-ac93-4c2b-bcd6-c6f5eeb89153",
@@ -234,6 +270,12 @@
     "featured": false
   },
   {
+    "name": "Stitch",
+    "href": "https://docs.stitch.money/api",
+    "image": "a89c1ff5-8885-4f95-8ee0-6335d0f5f346",
+    "featured": false
+  },
+  {
     "name": "Sui",
     "href": "https://docs.sui.io/",
     "image": "352625287-cabd94bc-3c5e-474d-a731-ce9c594806c2",
@@ -252,6 +294,12 @@
     "featured": false
   },
   {
+    "name": "The Traide",
+    "href": "https://guide.thetraide.com/docs/api/",
+    "image": "ed28a7dc-4dd0-4e01-91f5-47ba3053bff9",
+    "featured": false
+  },
+  {
     "name": "Thought Industries",
     "href": "https://developer.thoughtindustries.com/graphql/",
     "image": "a3e8a2f8-608d-4589-ab1a-3cfde882cb4f",
@@ -261,6 +309,12 @@
     "name": "TravelGate",
     "href": "https://docs.travelgate.com",
     "image": "352623653-1ebe0250-8ebd-4557-a636-38c82d8adee9",
+    "featured": false
+  },
+  {
+    "name": "Webex Events",
+    "href": "https://public-api.socio.events/docs/2024-06/api",
+    "image": "6a1e9388-04b5-4c7b-b106-de963750e8fb",
     "featured": false
   },
   {
