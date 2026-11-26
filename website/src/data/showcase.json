@@ -327,7 +327,7 @@
     "name": "Webex Events",
     "href": "https://public-api.socio.events/docs/2024-06/api",
     "image": "6a1e9388-04b5-4c7b-b106-de963750e8fb",
-    "featured": false
+    "featured": true
   },
   {
     "name": "Zeet",
