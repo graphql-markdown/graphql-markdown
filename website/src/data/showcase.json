@@ -234,6 +234,12 @@
     "featured": false
   },
   {
+    "name": "PRISMO",
+    "href": "https://doc.prismo.io/api-references/generated",
+    "image": "b97168c8-69ec-4277-8641-a57f49b253a7",
+    "featured": false
+  },
+  {
     "name": "Propeller Commerce",
     "href": "https://docs.propeller-commerce.com/reference/graphql/",
     "image": "b6da19e7-5812-47bc-9906-f0832012220b",
@@ -261,6 +267,12 @@
     "name": "Scribe",
     "href": "https://developer.scribelabs.ai/overview/introduction",
     "image": "a455c3d2-1b82-426f-a28b-76c3ee014e6b",
+    "featured": false
+  },
+  {
+    "name": "SHOPLINE",
+    "href": "https://developer.shopline.com/docs/admin-graph-ql-api/schema-documentation",
+    "image": "e9f2d8e2-c1ac-40e5-97b7-c10cb1217812",
     "featured": false
   },
   {
@@ -315,7 +327,7 @@
     "name": "Webex Events",
     "href": "https://public-api.socio.events/docs/2024-06/api",
     "image": "6a1e9388-04b5-4c7b-b106-de963750e8fb",
-    "featured": false
+    "featured": true
   },
   {
     "name": "Zeet",
